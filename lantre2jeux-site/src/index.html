@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>L’Antre 2 Jeux – Escape game à Soissons</title>
+<meta name="description" content="Escape game à Soissons : Route 66, La Planque des Corleone et Alerte Rouge. Trois salles de 60 à 75 minutes, de 3 à 6 joueurs, dès 15 ans.">
+<meta name="theme-color" content="#07101A">
+<script>document.documentElement.classList.add('js');</script>
+<!--STYLES-->
+</head>
+<body>
+<a class="skip" href="#salles">Aller aux salles</a>
+
+<header class="nav" data-nav>
+  <div class="nav__bar wrap">
+    <a class="wordmark" href="#haut" aria-label="L'Antre 2 Jeux, retour en haut">
+      <span>L’Antre</span><span class="wordmark__two">2</span><span>Jeux</span>
+    </a>
+    <nav class="nav__links" aria-label="Navigation principale">
+      <a href="#salles">Salles</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#infos">Infos</a>
+    </nav>
+    <a class="btn btn--light btn--small nav__cta" href="https://www.lantre2jeux-escapegame.com" target="_blank" rel="noopener" data-booking data-glow>Réserver</a>
+    <button class="nav__burger" type="button" aria-expanded="false" aria-controls="menu" data-burger>
+      <span class="visually-hidden">Menu</span><span class="nav__burger-lines" aria-hidden="true"></span>
+    </button>
+  </div>
+  <div class="menu" id="menu" data-menu hidden>
+    <nav class="menu__links wrap" aria-label="Menu mobile">
+      <a href="#salles">Les salles</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#infos">Infos pratiques</a>
+      <a href="https://www.lantre2jeux-escapegame.com" target="_blank" rel="noopener" data-booking>Réserver</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- 1. Le noir. La lampe torche révèle le mur. -->
+  <section class="hero" id="haut" data-hero aria-labelledby="hero-title">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="hero__inner wrap" data-hero-inner>
+      <h1 class="hero__title" id="hero-title">
+        <span class="hero__l1">Entrez.</span>
+        <span class="hero__l2">On ferme derrière vous.</span>
+      </h1>
+      <div class="hero__foot">
+        <p class="hero__lede">Trois salles d’escape game à Soissons&#8239;: une enquête, un casse et une mission. De&nbsp;3 à 6&nbsp;joueurs, dès 15&nbsp;ans.</p>
+        <div class="hero__actions">
+          <a class="btn btn--light" href="https://www.lantre2jeux-escapegame.com" target="_blank" rel="noopener" data-booking data-glow>Réserver une salle</a>
+          <a class="btn btn--ghost" href="#salles" data-glow>Voir les salles</a>
+        </div>
+      </div>
+      <ol class="hero__index" aria-label="Les trois salles, de la plus accessible à la plus difficile">
+        <li><a href="#route-66"><span class="hero__room">Route 66</span><span class="hero__meta">Enquête, niveau intermédiaire, 60&nbsp;min</span></a></li>
+        <li><a href="#corleone"><span class="hero__room">La Planque des Corleone</span><span class="hero__meta">Casse, niveau avancé, 60&nbsp;min</span></a></li>
+        <li><a href="#alerte-rouge"><span class="hero__room">Alerte Rouge</span><span class="hero__meta">Mission, niveau expert, 75&nbsp;min</span></a></li>
+      </ol>
+    </div>
+
+    <!-- Calque éclairé : ce que la torche révèle (copie du titre + indices sur le mur) -->
+    <div class="hero__lit" aria-hidden="true" data-hero-lit>
+      <div class="hero__wall"></div>
+      <div class="clues">
+        <span class="clue clue--tally">
+          <svg viewBox="0 0 120 60" width="120" height="60"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M10 8v44M24 6v46M38 9v43M52 7v45M4 44 60 14"/><path d="M78 8v44M92 7v45"/></g></svg>
+        </span>
+        <span class="clue clue--diner">Jeff’s Diner<br>1958</span>
+        <span class="clue clue--chicago">Chicago, 1938</span>
+        <span class="clue clue--kalin">Kaliningrad</span>
+        <span class="clue clue--timer">75:00
+          <svg viewBox="0 0 200 110" preserveAspectRatio="none"><path d="M18 60C10 22 70 6 118 10s82 22 72 54-80 44-124 38S22 88 18 60z" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+        </span>
+        <span class="clue clue--note">La sortie&#8239;? Le bouton «&nbsp;Réserver&nbsp;».
+          <svg viewBox="0 0 160 90"><path d="M8 10c40 4 92 18 128 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M118 70l20 8-2-22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="clue clue--x" aria-hidden="true">✕</span>
+      </div>
+    </div>
+    <canvas class="hero__dust" data-dust aria-hidden="true"></canvas>
+    <p class="hero__hint" data-hint aria-hidden="true"><span class="hint--fine">Bougez la souris pour éclairer</span><span class="hint--touch">Glissez le doigt pour éclairer</span></p>
+  </section>
+
+  <!-- 2. Les mots s'allument au scroll -->
+  <section class="manifesto wrap" aria-label="L'Antre 2 Jeux en quelques mots">
+    <p class="manifesto__text" data-words>Trois salles, trois époques&#8239;: le Nevada de 1958, le Chicago de 1938 et une base militaire à Kaliningrad. Vous entrez à trois, quatre, cinq ou six. Vous avez une heure, un quart d’heure de plus pour la mission la plus difficile. La suite dépend de vous.</p>
+  </section>
+
+  <!-- 3. Les salles : chaque porte s'ouvre sur un univers -->
+  <div id="salles" class="rooms">
+    <h2 class="visually-hidden">Les salles</h2>
+
+    <section class="room room--r66" id="route-66" data-room aria-labelledby="r66-title">
+      <div class="room__stage" data-stage>
+        <div class="room__slit" aria-hidden="true"><span>Une enquête</span></div>
+        <div class="room__scene" data-scene>
+          <div class="room__art art-r66" aria-hidden="true" data-art>
+            <div class="r66-sky"></div>
+            <div class="r66-stars" data-stars></div>
+            <svg class="r66-mesa" viewBox="0 0 1600 400" preserveAspectRatio="none"><path d="M0 400V250l120-20 60-70h140l40 60 160 10 90-110h180l50 90 210 20 70-60h120l80 70 160 10 120-40v190z" fill="#0a1d29"/><path d="M0 400V310l220-14 120-36 200 30 260-20 180 26 240-30 220 24 160-10v120z" fill="#071722"/></svg>
+            <div class="r66-road"><div class="r66-dash"></div></div>
+            <div class="r66-sign" data-neon>
+              <span class="r66-sign__jeffs">Jeff’s</span>
+              <span class="r66-sign__diner">Diner</span>
+              <span class="r66-sign__open">Open</span>
+            </div>
+          </div>
+          <div class="room__content wrap">
+            <p class="room__kicker">Crystal Springs, Nevada, 1958</p>
+            <h3 class="room__title" id="r66-title" data-title>Route 66</h3>
+            <p class="room__pitch">Le Jeff’s Diner est dans le viseur du FBI. Depuis son rachat par un mystérieux investisseur, les disparitions se multiplient dans la région. Ses clients auraient-ils vu ce qu’ils n’auraient pas dû voir&#8239;? À vous de découvrir ce qui se cache derrière les murs du diner.</p>
+            <dl class="facts">
+              <div><dt>Niveau</dt><dd><span class="level" style="--lv:2" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Intermédiaire</dd></div>
+              <div><dt>Durée</dt><dd>60&nbsp;min</dd></div>
+              <div><dt>Joueurs</dt><dd>3 à 6</dd></div>
+              <div><dt>Âge</dt><dd>Dès 15&nbsp;ans</dd></div>
+              <div><dt>Avis</dt><dd>4,6/5 <small>(21)</small></dd></div>
+            </dl>
+            <div class="room__side">
+              <div class="mix" aria-label="Répartition des énigmes">
+              <div class="mix__bar" aria-hidden="true"><span style="--w:28"></span><span style="--w:40"></span><span style="--w:32"></span></div>
+              <ul class="mix__legend"><li>Fouille 28&nbsp;%</li><li>Réflexion 40&nbsp;%</li><li>Manipulation 32&nbsp;%</li></ul>
+              </div>
+              <a class="btn btn--accent" href="https://www.lantre2jeux-escapegame.com" target="_blank" rel="noopener" data-booking data-glow>Réserver Route 66</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="room room--corleone" id="corleone" data-room aria-labelledby="corleone-title">
+      <div class="room__stage" data-stage>
+        <div class="room__slit" aria-hidden="true"><span>Un casse</span></div>
+        <div class="room__scene" data-scene>
+          <div class="room__art art-corleone" aria-hidden="true" data-art>
+            <div class="co-wall"></div>
+            <div class="co-blinds" data-blinds></div>
+            <div class="co-smoke"><i></i><i></i><i></i></div>
+            <canvas class="co-diamond" data-diamond></canvas>
+            <span class="co-year">1938</span>
+          </div>
+          <div class="room__content wrap">
+            <p class="room__kicker">Chicago, 1938</p>
+            <h3 class="room__title" id="corleone-title" data-title><span>La Planque</span> <span>des Corleone</span></h3>
+            <p class="room__pitch">La famille Corleone règne sur Chicago et s’enrichit un peu plus chaque jour. Ce soir, le clan assiste à des funérailles. Vous avez une heure pour entrer dans sa planque, trouver le diamant et ressortir avant son retour.</p>
+            <dl class="facts">
+              <div><dt>Niveau</dt><dd><span class="level" style="--lv:3" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Avancé</dd></div>
+              <div><dt>Durée</dt><dd>60&nbsp;min</dd></div>
+              <div><dt>Joueurs</dt><dd>3 à 6</dd></div>
+              <div><dt>Âge</dt><dd>Dès 15&nbsp;ans</dd></div>
+              <div><dt>Avis</dt><dd>4,5/5 <small>(20)</small></dd></div>
+            </dl>
+            <div class="room__side">
+              <div class="mix" aria-label="Répartition des énigmes">
+              <div class="mix__bar" aria-hidden="true"><span style="--w:31"></span><span style="--w:39"></span><span style="--w:30"></span></div>
+              <ul class="mix__legend"><li>Fouille 31&nbsp;%</li><li>Réflexion 39&nbsp;%</li><li>Manipulation 30&nbsp;%</li></ul>
+              </div>
+              <a class="btn btn--accent" href="https://www.lantre2jeux-escapegame.com" target="_blank" rel="noopener" data-booking data-glow>Réserver La Planque</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="room room--alerte" id="alerte-rouge" data-room aria-labelledby="alerte-title">
+      <div class="room__stage" data-stage>
+        <div class="room__slit" aria-hidden="true"><span>Une mission</span></div>
+        <div class="room__scene" data-scene>
+          <div class="room__art art-alerte" aria-hidden="true" data-art>
+            <div class="al-grid"></div>
+            <div class="al-radar"><div class="al-sweep"></div></div>
+            <div class="al-beacon"></div>
+            <div class="al-clock" data-countdown="4500">75:00</div>
+            <span class="al-stamp">Accès restreint</span>
+            <span class="al-coords">54°43′ N&ensp;20°31′ E</span>
+          </div>
+          <div class="room__content wrap">
+            <p class="room__kicker">Mission Kaliningrad</p>
+            <h3 class="room__title" id="alerte-title" data-title>Alerte Rouge</h3>
+            <p class="room__pitch">Espions d’élite, vous infiltrez une base militaire ennemie où des alliés sont retenus en otage. L’opération tourne mal et vous voilà enfermés dans une cellule. L’ennemi se sait découvert et active une bombe. Deux objectifs&#8239;: sortir, et la désamorcer.</p>
+            <dl class="facts">
+              <div><dt>Niveau</dt><dd><span class="level" style="--lv:4" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Expert</dd></div>
+              <div><dt>Durée</dt><dd>75&nbsp;min</dd></div>
+              <div><dt>Joueurs</dt><dd>3 à 6</dd></div>
+              <div><dt>Âge</dt><dd>Dès 15&nbsp;ans</dd></div>
+              <div><dt>Avis</dt><dd>4,8/5 <small>(19)</small></dd></div>
+            </dl>
+            <div class="room__side">
+              <div class="mix" aria-label="Répartition des énigmes">
+              <div class="mix__bar" aria-hidden="true"><span style="--w:28"></span><span style="--w:41"></span><span style="--w:31"></span></div>
+              <ul class="mix__legend"><li>Fouille 28&nbsp;%</li><li>Réflexion 41&nbsp;%</li><li>Manipulation 31&nbsp;%</li></ul>
+              </div>
+              <a class="btn btn--accent" href="https://www.lantre2jeux-escapegame.com" target="_blank" rel="noopener" data-booking data-glow>Réserver Alerte Rouge</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 4. La confiance : ce que disent les joueurs -->
+  <section class="verdict wrap" aria-labelledby="verdict-title">
+    <h2 class="visually-hidden" id="verdict-title">Les avis des joueurs</h2>
+    <div class="verdict__score">
+      <p class="verdict__big"><span class="visually-hidden">4,6 sur 5</span><span class="verdict__digits" aria-hidden="true"><span data-roll="4">4</span><span class="verdict__comma">,</span><span data-roll="6">6</span><span class="verdict__out">/5</span></span></p>
+      <p class="verdict__caption">Note moyenne laissée par les joueurs sur The Escapers, sur 62&nbsp;avis.</p>
+    </div>
+    <div class="verdict__body">
+      <p class="verdict__quote">Dans les avis, il est question d’un accueil très amical, d’animateurs au top, et de joueurs qui ont testé deux salles et adoré les deux.</p>
+      <ul class="scores">
+        <li><span class="scores__name">Alerte Rouge</span><span class="scores__bar" style="--s:4.8" aria-hidden="true"></span><span class="scores__val">4,8</span></li>
+        <li><span class="scores__name">Route 66</span><span class="scores__bar" style="--s:4.6" aria-hidden="true"></span><span class="scores__val">4,6</span></li>
+        <li><span class="scores__name">La Planque des Corleone</span><span class="scores__bar" style="--s:4.5" aria-hidden="true"></span><span class="scores__val">4,5</span></li>
+      </ul>
+      <a class="link" href="https://www.the-escapers.com/escape-game/soissons/lantre-2-jeux" target="_blank" rel="noopener">Lire les avis sur The Escapers</a>
+    </div>
+  </section>
+
+  <!-- 5. Tarifs : le cadenas à code -->
+  <section class="pricing wrap" id="tarifs" aria-labelledby="pricing-title" data-pricing>
+    <div class="pricing__intro">
+      <h2 class="section-title" id="pricing-title">Combien êtes-vous&#8239;?</h2>
+      <p>Le tarif par joueur baisse quand l’équipe s’agrandit. Tournez la molette.</p>
+    </div>
+    <div class="pricing__lock">
+      <div class="lock" data-lock>
+        <button class="lock__step" type="button" data-step="-1" aria-label="Un joueur de moins">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+        <div class="lock__drum" data-drum aria-hidden="true">
+          <div class="lock__cyl" data-cyl><span>3</span><span>4</span><span>5</span><span>6</span></div>
+          <div class="lock__window"></div>
+        </div>
+        <button class="lock__step" type="button" data-step="1" aria-label="Un joueur de plus">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <fieldset class="team">
+        <legend>Joueurs</legend>
+        <label><input type="radio" name="team" id="team-3" value="3"><span>3</span></label>
+        <label><input type="radio" name="team" id="team-4" value="4" checked><span>4</span></label>
+        <label><input type="radio" name="team" id="team-5" value="5"><span>5</span></label>
+        <label><input type="radio" name="team" id="team-6" value="6"><span>6</span></label>
+      </fieldset>
+    </div>
+    <div class="pricing__out" aria-live="polite">
+      <p class="price"><span class="price__num" data-price>25</span><span class="price__unit">€</span></p>
+      <p class="price__label">par joueur</p>
+      <p class="price__total"><span data-total>100</span>&nbsp;€ pour l’équipe de <span data-team>4</span></p>
+    </div>
+    <div class="pricing__notes">
+      <table class="grid">
+        <caption class="visually-hidden">Tarifs par joueur selon la taille de l’équipe</caption>
+        <tbody>
+          <tr data-row="3"><th scope="row">3 joueurs</th><td>29&nbsp;€</td><td>87&nbsp;€ l’équipe</td></tr>
+          <tr data-row="4"><th scope="row">4 joueurs</th><td>25&nbsp;€</td><td>100&nbsp;€ l’équipe</td></tr>
+          <tr data-row="5"><th scope="row">5 joueurs</th><td>23&nbsp;€</td><td>115&nbsp;€ l’équipe</td></tr>
+          <tr data-row="6"><th scope="row">6 joueurs</th><td>21&nbsp;€</td><td>126&nbsp;€ l’équipe</td></tr>
+        </tbody>
+      </table>
+      <p class="pricing__fine">À la réservation, vous réglez un acompte de 50&nbsp;% en ligne. Le solde se paie sur place, en espèces ou par carte, ou en ligne avec le lien reçu après la réservation.</p>
+    </div>
+  </section>
+
+  <!-- 6. Infos pratiques -->
+  <section class="infos wrap" id="infos" aria-labelledby="infos-title">
+    <h2 class="section-title" id="infos-title">Avant de venir</h2>
+    <div class="infos__grid">
+      <div class="infos__col">
+        <h3>Adresse</h3>
+        <p class="infos__big">4 avenue de Château-Thierry<br>02200 Soissons</p>
+        <a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=4%20avenue%20de%20Ch%C3%A2teau-Thierry%2002200%20Soissons" target="_blank" rel="noopener">Ouvrir l’itinéraire</a>
+      </div>
+      <div class="infos__col">
+        <h3>Horaires</h3>
+        <dl class="hours">
+          <div><dt>Mardi</dt><dd>10h30 – 23h30</dd></div>
+          <div><dt>Mercredi, jeudi</dt><dd>10h30 – 23h</dd></div>
+          <div><dt>Vendredi, samedi</dt><dd>10h30 – minuit</dd></div>
+          <div><dt>Dimanche</dt><dd>12h30 – 20h</dd></div>
+          <div><dt>Lundi</dt><dd>Fermé</dd></div>
+        </dl>
+      </div>
+      <div class="infos__col">
+        <h3>Téléphone</h3>
+        <p class="infos__big"><span class="phone" data-phone>07 44 93 66 79</span></p>
+        <button class="link link--button" type="button" data-copy="07 44 93 66 79">Copier le numéro</button>
+        <h3 class="infos__sub">Pour qui&#8239;?</h3>
+        <p>Équipes de 3 à 6&nbsp;joueurs, dès 15&nbsp;ans.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. La sortie : la porte s'ouvre sur la lumière -->
+  <section class="exit" id="reserver" aria-labelledby="exit-title" data-exit>
+    <div class="exit__stage" data-exit-stage>
+      <div class="exit__slit" aria-hidden="true"></div>
+      <div class="exit__light" data-exit-light>
+        <div class="exit__inner wrap">
+          <h2 class="exit__title" id="exit-title">La porte est ouverte.</h2>
+          <p class="exit__lede">Choisissez votre salle et votre créneau en ligne.</p>
+          <div class="exit__actions">
+            <a class="btn btn--ink" href="https://www.lantre2jeux-escapegame.com" target="_blank" rel="noopener" data-booking>Réserver en ligne</a>
+            <p class="exit__phone">ou appelez le <span>07&nbsp;44&nbsp;93&nbsp;66&nbsp;79</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <p class="footer__mark" aria-hidden="true"><span>L’Antre</span><span class="wordmark__two">2</span><span>Jeux</span></p>
+    <div class="footer__cols">
+      <p>Escape game à Soissons<br>4 avenue de Château-Thierry, 02200 Soissons</p>
+      <ul class="footer__links">
+        <li><a href="https://www.lantre2jeux-escapegame.com/termes-et-conditions" target="_blank" rel="noopener">Termes et conditions</a></li>
+        <li><a href="https://www.facebook.com/people/Lantre-2-Jeux/61558259534195/" target="_blank" rel="noopener">Facebook</a></li>
+        <li><a href="#haut">Revenir en haut</a></li>
+      </ul>
+      <p class="footer__legal">L’Antre 2 Jeux (A2J), SIRET 928&nbsp;331&nbsp;065&nbsp;00013<br>Maquette de refonte non officielle, octobre 2026</p>
+    </div>
+  </div>
+</footer>
+
+<p class="toast" data-toast role="status" aria-live="polite"></p>
+<!--SCRIPTS-->
+</body>
+</html>
