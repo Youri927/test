@@ -345,7 +345,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   color: rgba(255, 198, 110, .9);
   transform: rotate(-3deg);
 }
-.clue--note svg { width: 110px; height: 62px; left: -10%; top: 130%; color: rgba(255, 198, 110, .7); transform: scaleX(-1) rotate(-20deg); }
+/* position finale calculée en JS : la pointe de la flèche tombe sur le bouton « Réserver une salle » */
+.clue--note svg { width: 96px; height: 54px; left: calc(100% - 36px); top: 118%; color: rgba(255, 198, 110, .75); }
 .clue--x { top: 49%; left: 87%; font-family: var(--body); font-size: 44px; color: rgba(255, 75, 110, .7); transform: rotate(8deg); }
 
 .hero__dust {
@@ -1131,6 +1132,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
 
 /* ——— Responsive ——— */
+@media (max-width: 1240px) {
+  .clue--tally { display: none; }
+}
+
 @media (max-width: 1180px) {
   .room__content { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "kicker kicker" "title title" "pitch facts" "pitch cta"; row-gap: 26px; }
   .room__title { margin-bottom: 4px; }

@@ -358,7 +358,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   color: rgba(255, 198, 110, .9);
   transform: rotate(-3deg);
 }
-.clue--note svg { width: 110px; height: 62px; left: -10%; top: 130%; color: rgba(255, 198, 110, .7); transform: scaleX(-1) rotate(-20deg); }
+/* position finale calculée en JS : la pointe de la flèche tombe sur le bouton « Réserver une salle » */
+.clue--note svg { width: 96px; height: 54px; left: calc(100% - 36px); top: 118%; color: rgba(255, 198, 110, .75); }
 .clue--x { top: 49%; left: 87%; font-family: var(--body); font-size: 44px; color: rgba(255, 75, 110, .7); transform: rotate(8deg); }
 
 .hero__dust {
@@ -1144,6 +1145,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
 
 /* ——— Responsive ——— */
+@media (max-width: 1240px) {
+  .clue--tally { display: none; }
+}
+
 @media (max-width: 1180px) {
   .room__content { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "kicker kicker" "title title" "pitch facts" "pitch cta"; row-gap: 26px; }
   .room__title { margin-bottom: 4px; }
@@ -1781,7 +1786,27 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
         a: Math.random() * 0.55 + 0.3,
         p: Math.random() * Math.PI * 2,
       }));
+      placeNote();
     };
+    // L'indice « La sortie ? » pointe toujours vers le vrai bouton, quelle que soit la largeur d'écran
+    const note = lit.querySelector('.clue--note');
+    const cta = heroInner.querySelector('.hero__actions .btn--light');
+    function placeNote() {
+      if (!note || !cta || getComputedStyle(note).display === 'none') return;
+      note.style.right = 'auto';
+      note.style.bottom = 'auto';
+      note.style.left = '0px';
+      note.style.top = '0px';
+      const path = note.querySelector('path');
+      const end = path.getPointAtLength(path.getTotalLength());
+      const m = path.getScreenCTM();
+      if (!m) return;
+      const tipX = m.a * end.x + m.c * end.y + m.e;
+      const tipY = m.b * end.x + m.d * end.y + m.f;
+      const br = cta.getBoundingClientRect();
+      note.style.left = `${br.left + br.width * 0.4 - tipX}px`;
+      note.style.top = `${br.top - 10 - tipY}px`;
+    }
     measure();
     window.addEventListener('resize', measure);
     if (document.fonts) document.fonts.ready.then(measure);

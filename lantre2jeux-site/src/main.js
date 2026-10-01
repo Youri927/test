@@ -149,7 +149,27 @@
         a: Math.random() * 0.55 + 0.3,
         p: Math.random() * Math.PI * 2,
       }));
+      placeNote();
     };
+    // L'indice « La sortie ? » pointe toujours vers le vrai bouton, quelle que soit la largeur d'écran
+    const note = lit.querySelector('.clue--note');
+    const cta = heroInner.querySelector('.hero__actions .btn--light');
+    function placeNote() {
+      if (!note || !cta || getComputedStyle(note).display === 'none') return;
+      note.style.right = 'auto';
+      note.style.bottom = 'auto';
+      note.style.left = '0px';
+      note.style.top = '0px';
+      const path = note.querySelector('path');
+      const end = path.getPointAtLength(path.getTotalLength());
+      const m = path.getScreenCTM();
+      if (!m) return;
+      const tipX = m.a * end.x + m.c * end.y + m.e;
+      const tipY = m.b * end.x + m.d * end.y + m.f;
+      const br = cta.getBoundingClientRect();
+      note.style.left = `${br.left + br.width * 0.4 - tipX}px`;
+      note.style.top = `${br.top - 10 - tipY}px`;
+    }
     measure();
     window.addEventListener('resize', measure);
     if (document.fonts) document.fonts.ready.then(measure);
