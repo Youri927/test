@@ -837,6 +837,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   letter-spacing: -.02em;
 }
 .verdict__lines li { text-wrap: balance; }
+.verdict__lines q { quotes: "«\00A0" "\00A0»"; }
+.verdict__lines q::before, .verdict__lines q::after { color: var(--tungsten); font-style: normal; }
 .verdict__source { font-size: 14px; color: var(--mist); }
 .scores { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-width: 640px; }
 .scores li {
