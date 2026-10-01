@@ -436,8 +436,20 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   margin-left: -.07em;
   filter: drop-shadow(0 0 30px rgba(255, 198, 110, .18));
 }
-.era__year .roll { transition: color .3s; }
-.era.is-secret .era__year .roll:nth-child(n + 3) { color: var(--alarm); }
+.era__year .roll { transition: opacity .3s; }
+.era.is-secret .era__year .roll:nth-child(n + 3) { opacity: 0; }
+.era__mosaic {
+  position: absolute;
+  left: 50%;
+  top: .03em;
+  width: 50%;
+  height: .97em;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  opacity: 0;
+  transition: opacity .35s;
+}
+.era.is-secret .era__mosaic { opacity: 1; transition-delay: .2s; }
 /* libellé hors du calcul de largeur : le bloc ne change pas de taille d'une époque à l'autre */
 .era__place { position: absolute; left: 0; bottom: 0; width: max-content; max-width: 18em; font-size: 15px; font-weight: 500; color: var(--neon); transition: opacity .25s; }
 .era__place.is-out { opacity: 0; }
@@ -1912,28 +1924,74 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
     let idx = 0;
     let timer = 0;
     let swap = 0;
-    // Date classée secrète : les deux derniers chiffres défilent au hasard, en rouge, sans jamais se fixer
+    // Date classée secrète : les deux derniers chiffres sont floutés en mosaïque rouge (pixels qui scintillent)
+    const mosaic = document.createElement('canvas');
+    mosaic.className = 'era__mosaic';
+    yearEl.appendChild(mosaic);
+    const COLS = 8;
+    const ROWS = 8;
+    mosaic.width = COLS;
+    mosaic.height = ROWS;
+    const mctx = mosaic.getContext('2d');
+    const probe = document.createElement('canvas');
+    probe.width = 160;
+    probe.height = 160;
+    const pctx = probe.getContext('2d', { willReadFrequently: true });
+    let coverage = [];
     let scramble = 0;
-    const stopScramble = () => {
-      clearInterval(scramble);
-      scramble = 0;
-      cols.slice(2).forEach((col) => { col.style.transition = ''; });
+    let tick = 0;
+    const sample = () => {
+      const digits = String(Math.floor(Math.random() * 90) + 10);
+      pctx.clearRect(0, 0, 160, 160);
+      pctx.fillStyle = '#fff';
+      pctx.textAlign = 'center';
+      pctx.textBaseline = 'middle';
+      pctx.font = '800 168px "Big Shoulders", Impact, sans-serif';
+      pctx.fillText(digits, 80, 88);
+      const data = pctx.getImageData(0, 0, 160, 160).data;
+      const cw = 160 / COLS;
+      const ch = 160 / ROWS;
+      coverage = [];
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          let sum = 0;
+          let n = 0;
+          for (let y = Math.floor(r * ch); y < (r + 1) * ch; y += 2) {
+            for (let x = Math.floor(c * cw); x < (c + 1) * cw; x += 2) { sum += data[(y * 160 + x) * 4 + 3]; n++; }
+          }
+          coverage.push(sum / n / 255);
+        }
+      }
     };
+    const paint = () => {
+      for (let i = 0; i < coverage.length; i++) {
+        const k = Math.min(1, Math.max(0, coverage[i] * 0.85 + (Math.random() - 0.5) * 0.22));
+        // du rouge sombre (fond) au rouge alarme (chiffres)
+        const r = Math.round(58 + (255 - 58) * k);
+        const g = Math.round(14 + (70 - 14) * k * k);
+        const b = Math.round(20 + (52 - 20) * k * k);
+        mctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        mctx.fillRect(i % COLS, Math.floor(i / COLS), 1, 1);
+      }
+    };
+    const stopScramble = () => { clearInterval(scramble); scramble = 0; };
     const startScramble = () => {
       stopScramble();
+      tick = 0;
+      sample();
+      paint();
       scramble = setInterval(() => {
-        cols.slice(2).forEach((col) => {
-          col.style.transition = 'none';
-          col.style.transform = `translateY(${-Math.floor(Math.random() * 10)}em)`;
-        });
-      }, 70);
+        tick += 1;
+        if (tick % 5 === 0) sample();
+        paint();
+      }, 140);
     };
     const show = (i) => {
       const e = ERAS[i];
       stopScramble();
       e.y.split('').forEach((d, k) => { cols[k].style.transform = `translateY(${-Number(d)}em)`; });
       era.classList.toggle('is-secret', Boolean(e.secret));
-      if (e.secret) setTimeout(startScramble, 350);
+      if (e.secret) startScramble();
       placeEl.classList.add('is-out');
       clearTimeout(swap);
       swap = setTimeout(() => {

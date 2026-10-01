@@ -423,8 +423,20 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   margin-left: -.07em;
   filter: drop-shadow(0 0 30px rgba(255, 198, 110, .18));
 }
-.era__year .roll { transition: color .3s; }
-.era.is-secret .era__year .roll:nth-child(n + 3) { color: var(--alarm); }
+.era__year .roll { transition: opacity .3s; }
+.era.is-secret .era__year .roll:nth-child(n + 3) { opacity: 0; }
+.era__mosaic {
+  position: absolute;
+  left: 50%;
+  top: .03em;
+  width: 50%;
+  height: .97em;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  opacity: 0;
+  transition: opacity .35s;
+}
+.era.is-secret .era__mosaic { opacity: 1; transition-delay: .2s; }
 /* libellé hors du calcul de largeur : le bloc ne change pas de taille d'une époque à l'autre */
 .era__place { position: absolute; left: 0; bottom: 0; width: max-content; max-width: 18em; font-size: 15px; font-weight: 500; color: var(--neon); transition: opacity .25s; }
 .era__place.is-out { opacity: 0; }
