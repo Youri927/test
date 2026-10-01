@@ -1,5 +1,24 @@
 # L'Antre 2 Jeux — motion design 9:16
 
+## Pub verticale v2 (charte du nouveau site) — `npm run build:pub`
+
+| Fichier | Usage |
+| --- | --- |
+| `renders/pub-lantre2jeux-9x16.mp4` | pub 15 s avec son (−14 LUFS, prête pour Meta / TikTok) |
+| `renders/pub-lantre2jeux-9x16-muet.mp4` | même pub sans son |
+
+| Temps | Séquence | Levier |
+| --- | --- | --- |
+| 0 – 1,8 s | Le noir, la torche révèle « Entrez. », « On ferme derrière vous. », la porte claque, la lumière meurt | accroche, curiosité, défi |
+| 1,8 – 8,4 s | Couloir de trois portes de lumière : Route 66 (néon), La Planque des Corleone (diamant 3D), Alerte Rouge (radar, compte à rebours, date pixelisée) ; le compteur remonte le temps de 2026 à 1958, 1938, puis « 19▒▒ » | variété du choix, désir |
+| 8,4 – 10,6 s | 4,6/5 sur 62 avis, « Accueil très amical », « Animateurs au top » | preuve sociale |
+| 10,6 – 12,6 s | « Combien êtes-vous ? » : le cadenas passe de 3 à 6 joueurs, le prix descend de 29 € à 21 € | ancrage prix, réassurance |
+| 12,6 – 15 s | La porte s'ouvre sur la lumière : « La porte est ouverte. », bouton « Réservez votre salle », URL, dès 21 € | appel à l'action, soulagement |
+
+Bande-son : nappe grave et battements de cœur qui accélèrent jusqu'à l'ouverture de la dernière porte, puis accord majeur de délivrance. Tous les sons sont synthétisés (`public/sfx/ad/`), sans droits tiers. Code : `src/ad/`.
+
+## Vidéo v1 (charte provisoire)
+
 Vidéo promo verticale (1080×1920, 30 i/s, **15 s**) pour [L'Antre 2 Jeux](https://www.lantre2jeux-escapegame.com), escape game à Soissons. Réalisée avec [Remotion](https://www.remotion.dev).
 
 | Fichier | Usage |

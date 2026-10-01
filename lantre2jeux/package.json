@@ -9,7 +9,10 @@
     "finalize": "mkdir -p renders && ffmpeg -v error -y -i out/lantre2jeux-9x16.mp4 -c:v copy -af 'aresample=44100,atrim=end=14.99,afade=t=out:st=14.85:d=0.14' -c:a aac -b:a 192k -movflags +faststart renders/lantre2jeux-9x16.mp4 && ffmpeg -v error -y -i renders/lantre2jeux-9x16.mp4 -an -c:v copy -movflags +faststart renders/lantre2jeux-9x16-muet.mp4",
     "build": "npm run render && npm run finalize",
     "still": "remotion still Lantre2Jeux out/still.png",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "render:pub": "remotion render Pub-Lantre2Jeux out/pub-lantre2jeux.mp4",
+    "finalize:pub": "mkdir -p renders && ffmpeg -v error -y -i out/pub-lantre2jeux.mp4 -c:v copy -af 'volume=-0.8dB,alimiter=limit=0.84:attack=5:release=60:level=disabled,aresample=44100,atrim=end=14.99,afade=t=out:st=14.8:d=0.19' -c:a aac -b:a 192k -movflags +faststart renders/pub-lantre2jeux-9x16.mp4 && ffmpeg -v error -y -i renders/pub-lantre2jeux-9x16.mp4 -an -c:v copy -movflags +faststart renders/pub-lantre2jeux-9x16-muet.mp4",
+    "build:pub": "npm run render:pub && npm run finalize:pub"
   },
   "dependencies": {
     "@remotion/cli": "4.0.532",
