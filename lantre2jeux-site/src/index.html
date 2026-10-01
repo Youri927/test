@@ -83,9 +83,35 @@
     <p class="hero__hint" data-hint aria-hidden="true"><span class="hint--fine">Bougez la souris pour éclairer</span><span class="hint--touch">Glissez le doigt pour éclairer</span></p>
   </section>
 
-  <!-- 2. Les mots s'allument au scroll -->
-  <section class="manifesto wrap" aria-label="L'Antre 2 Jeux en quelques mots">
-    <p class="manifesto__text" data-words>Trois salles, trois époques&#8239;: le Nevada de 1958, le Chicago de 1938 et une base militaire à Kaliningrad. Vous entrez à trois, quatre, cinq ou six. Vous avez une heure, un quart d’heure de plus pour la mission la plus difficile. La suite dépend de vous.</p>
+  <!-- 2. L’affiche : trois salles, trois époques, une heure -->
+  <section class="teaser wrap" aria-labelledby="teaser-title" data-teaser>
+    <h2 class="visually-hidden" id="teaser-title">L’Antre 2 Jeux en bref</h2>
+    <div class="teaser__row">
+      <p class="teaser__line" data-sweep>Trois salles.</p>
+      <ul class="teaser__rooms">
+        <li><a href="#route-66">Route 66</a></li>
+        <li><a href="#corleone">La Planque des Corleone</a></li>
+        <li><a href="#alerte-rouge">Alerte Rouge</a></li>
+      </ul>
+    </div>
+    <div class="teaser__row teaser__row--shift">
+      <p class="teaser__line" data-sweep>Trois époques.</p>
+      <div class="era" data-era>
+        <div class="era__dial" aria-hidden="true">
+          <p class="era__year" data-era-year>1958</p>
+          <p class="era__place" data-era-place>Crystal Springs, Nevada</p>
+        </div>
+        <ul class="era__list">
+          <li><b>1958</b>Crystal Springs, Nevada</li>
+          <li><b>1938</b>Chicago</li>
+          <li><b>19<span class="redact-inline" aria-hidden="true"></span></b>Kaliningrad<span class="visually-hidden">, date classée secrète</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="teaser__row">
+      <p class="teaser__line" data-sweep>Une heure<br>pour sortir.</p>
+      <p class="teaser__note">75&nbsp;minutes pour Alerte Rouge, la plus difficile. Équipes de 3 à 6&nbsp;joueurs, dès 15&nbsp;ans.</p>
+    </div>
   </section>
 
   <!-- 3. Les salles : chaque porte s'ouvre sur un univers -->
@@ -211,7 +237,14 @@
       <p class="verdict__caption">Note moyenne laissée par les joueurs sur The Escapers, sur 62&nbsp;avis.</p>
     </div>
     <div class="verdict__body">
-      <p class="verdict__quote">Dans les avis, il est question d’un accueil très amical, d’animateurs au top, et de joueurs qui ont testé deux salles et adoré les deux.</p>
+      <div class="verdict__said">
+        <ul class="verdict__lines">
+          <li>Un accueil très amical.</li>
+          <li>Des animateurs au top.</li>
+          <li>Des joueurs qui ont testé deux salles, et adoré les deux.</li>
+        </ul>
+        <p class="verdict__source">Ce qui revient le plus souvent dans les avis des joueurs.</p>
+      </div>
       <ul class="scores">
         <li><span class="scores__name">Alerte Rouge</span><span class="scores__bar" style="--s:4.8" aria-hidden="true"></span><span class="scores__val">4,8</span></li>
         <li><span class="scores__name">Route 66</span><span class="scores__bar" style="--s:4.6" aria-hidden="true"></span><span class="scores__val">4,6</span></li>

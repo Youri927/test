@@ -17,6 +17,7 @@
     ST.config({ ignoreMobileResize: true });
   }
 
+  const DIGITS = '0123456789'.split('').map((d) => `<span>${d}</span>`).join('');
   const escapeHTML = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const whenVisible = (el, onIn, onOut, threshold = 0.01) => {
     if (!el || !('IntersectionObserver' in window)) { onIn && onIn(); return; }
@@ -161,6 +162,7 @@
 
     let idleTimer = 0;
     let dragging = false;
+    let lastPointer = null;
     let hintShown = false;
     const hideHint = () => hint.classList.remove('is-visible');
     const follow = (e) => {
@@ -169,9 +171,17 @@
       const r = hero.getBoundingClientRect();
       T.tx = e.clientX - r.left;
       T.ty = e.clientY - r.top;
+      lastPointer = { x: e.clientX, y: e.clientY };
       T.mode = 'follow';
       hideHint();
     };
+    // au défilement, la lumière reste sous le curseur (puis s'éteint en douceur en bas du hero)
+    window.addEventListener('scroll', () => {
+      if (T.mode !== 'follow' || !lastPointer) return;
+      const r = hero.getBoundingClientRect();
+      T.tx = lastPointer.x - r.left;
+      T.ty = lastPointer.y - r.top;
+    }, { passive: true });
     hero.addEventListener('pointermove', (e) => { if (e.pointerType !== 'touch' || dragging) follow(e); });
     hero.addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') { dragging = true; follow(e); } });
     const release = () => {
@@ -253,19 +263,52 @@
     requestAnimationFrame(tick);
   }
 
-  /* ——— 2. Manifeste : les mots s'allument ——— */
-  const words = $('[data-words]');
-  if (words) {
-    const parts = words.textContent.trim().split(/(\s+)/);
-    words.innerHTML = parts.map((p) => (/^\s+$/.test(p) ? p : `<span class="w">${escapeHTML(p)}</span>`)).join('');
-    if (hasGsap && !reduce) {
-      gsap.fromTo($$('.w', words), { opacity: 0.13 }, {
-        opacity: 1,
+  /* ——— 2. L'affiche : la lumière balaie chaque ligne, les années défilent ——— */
+  const teaser = $('[data-teaser]');
+  if (teaser && hasGsap && !reduce) {
+    $$('[data-sweep]', teaser).forEach((line) => {
+      gsap.fromTo(line, { backgroundPosition: '100% 0%' }, {
+        backgroundPosition: '0% 0%',
         ease: 'none',
-        stagger: 0.1,
-        scrollTrigger: { trigger: words, start: 'top 82%', end: 'bottom 46%', scrub: 0.6 },
+        scrollTrigger: { trigger: line, start: 'top 88%', end: 'top 42%', scrub: 0.6 },
       });
-    }
+    });
+  }
+  const era = $('[data-era]');
+  if (era && !reduce) {
+    const yearEl = $('[data-era-year]', era);
+    const placeEl = $('[data-era-place]', era);
+    const ERAS = [
+      { y: '1958', place: 'Crystal Springs, Nevada', c: 'var(--neon)' },
+      { y: '1938', place: 'Chicago', c: 'var(--gold)' },
+      { y: '1938', place: 'Kaliningrad, date classée secrète', c: 'var(--alarm)', secret: true },
+    ];
+    yearEl.innerHTML = '1958'.split('').map(() => `<span class="roll"><span class="roll__col">${DIGITS}</span></span>`).join('') + '<span class="era__redact"></span>';
+    const cols = $$('.roll__col', yearEl);
+    // position de départ (1958) sans animation
+    cols.forEach((col, k) => { col.style.transition = 'none'; col.style.transform = `translateY(${-Number(ERAS[0].y[k])}em)`; });
+    void yearEl.offsetWidth;
+    cols.forEach((col) => { col.style.transition = ''; });
+    let idx = 0;
+    let timer = 0;
+    let swap = 0;
+    const show = (i) => {
+      const e = ERAS[i];
+      e.y.split('').forEach((d, k) => { cols[k].style.transform = `translateY(${-Number(d)}em)`; });
+      era.classList.toggle('is-secret', Boolean(e.secret));
+      placeEl.classList.add('is-out');
+      clearTimeout(swap);
+      swap = setTimeout(() => {
+        placeEl.textContent = e.place;
+        placeEl.style.color = e.c;
+        placeEl.classList.remove('is-out');
+      }, 260);
+    };
+    const next = () => { idx = (idx + 1) % ERAS.length; show(idx); };
+    whenVisible(era, () => {
+      if (timer) return;
+      timer = setInterval(next, 2600);
+    }, () => { clearInterval(timer); timer = 0; }, 0.6);
   }
 
   /* ——— 3. Salles ——— */
@@ -561,7 +604,6 @@
   }
 
   /* ——— 4. Verdict ——— */
-  const DIGITS = '0123456789'.split('').map((d) => `<span>${d}</span>`).join('');
   const verdict = $('.verdict');
   if (verdict) {
     const rolls = $$('[data-roll]', verdict);

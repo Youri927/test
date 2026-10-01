@@ -53,8 +53,8 @@ L'analyse repose sur ce que les moteurs de recherche indexent du site (pages Acc
 **Concept : une pièce plongée dans le noir.** Le site raconte une partie d'escape game, de l'enfermement à la sortie.
 
 1. **Le noir.** La page s'ouvre dans l'obscurité. Une lampe torche suit la souris (ou erre seule sur mobile) et révèle le titre et des indices cachés sur le mur. L'interaction est immédiate et propre à ce métier.
-2. **Les mots s'allument** au fil du défilement : trois salles, trois époques.
-3. **Trois portes.** Chaque salle apparaît derrière une fente de lumière qui s'ouvre en grand au scroll, chacune avec son propre éclairage : le néon du Jeff's Diner, la lumière dorée qui filtre des stores à Chicago, le gyrophare et le radar de Kaliningrad. Les titres s'allument à la manière de leur univers : lettre à lettre comme un néon, balayage doré, flash d'alarme.
+2. **L'affiche** : trois lignes géantes (« Trois salles. Trois époques. Une heure pour sortir. ») qu'un trait de lumière balaie au scroll, et un compteur d'années qui voyage de 1958 à 1938, puis vers une date classée secrète.
+3. **Trois portes.** Chaque salle apparaît derrière une fente de lumière qui s'ouvre en grand au scroll, chacune avec son propre éclairage : le néon du Jeff's Diner, la lumière dorée qui filtre des stores à Chicago, le gyrophare et le radar de Kaliningrad. Les titres s'allument à la manière de leur univers : lettre à lettre comme un néon, balayage doré, lumière rouge du gyrophare.
 4. **Le verdict.** Les notes réelles et les mots des joueurs, mis en scène comme une preuve.
 5. **Le cadenas.** Les tarifs se lisent en tournant la molette d'un cadenas à code : nombre de joueurs, prix par joueur, total de l'équipe.
 6. **La sortie.** Une dernière porte s'ouvre sur un plein écran de lumière : « La porte est ouverte. » La page passe du noir à la lumière, comme une équipe qui s'échappe.
