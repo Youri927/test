@@ -28,7 +28,7 @@ L'analyse repose sur ce que les moteurs de recherche indexent du site (pages Acc
 ## 3. Éléments de confiance disponibles
 
 - Une **note moyenne de 4,6/5 sur 62 avis** (The Escapers), avec des notes par salle de 4,5 à 4,8.
-- Des avis qui reviennent sur les mêmes points : un **accueil très amical**, des **animateurs au top**, des joueurs qui ont **testé deux salles et adoré les deux**.
+- Des avis qui reviennent sur les mêmes points : un **accueil très amical**, des **animateurs au top**.
 - Des **tarifs transparents** et dégressifs, faciles à présenter de façon interactive.
 - Une **adresse physique** et un **téléphone** : du concret, local, rassurant.
 - Des **données de jeu précises** (niveau, durée, répartition des énigmes) qui aident à choisir sa salle. C'est rare sur un site d'escape game, et c'est donc différenciant.

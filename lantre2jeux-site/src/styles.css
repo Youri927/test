@@ -837,7 +837,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   letter-spacing: -.02em;
 }
 .verdict__lines li { text-wrap: balance; }
-.verdict__lines li:nth-child(3) { margin-top: .45em; max-width: 24em; font-size: .52em; line-height: 1.35; letter-spacing: -.01em; color: rgba(242, 234, 223, .82); }
 .verdict__source { font-size: 14px; color: var(--mist); }
 .scores { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-width: 640px; }
 .scores li {
