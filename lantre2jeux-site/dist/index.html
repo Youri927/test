@@ -436,25 +436,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   margin-left: -.07em;
   filter: drop-shadow(0 0 30px rgba(255, 198, 110, .18));
 }
-.era__redact {
-  position: absolute;
-  left: 50%;
-  right: -.03em;
-  top: .02em;
-  bottom: -.02em;
-  background: var(--chalk);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform .55s var(--ease-out);
-}
-.era.is-secret .era__redact { transform: scaleX(1); transition-delay: .35s; }
+.era__year .roll { transition: color .3s; }
+.era.is-secret .era__year .roll:nth-child(n + 3) { color: var(--alarm); }
 /* libellé hors du calcul de largeur : le bloc ne change pas de taille d'une époque à l'autre */
 .era__place { position: absolute; left: 0; bottom: 0; width: max-content; max-width: 18em; font-size: 15px; font-weight: 500; color: var(--neon); transition: opacity .25s; }
 .era__place.is-out { opacity: 0; }
 .era__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 16px; color: var(--mist); }
 .era__list b { display: inline-block; min-width: 2.4em; margin-right: 10px; font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1; color: var(--tungsten); font-variant-numeric: tabular-nums; }
 .js.motion .era__list { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.redact-inline { display: inline-block; width: 1em; height: .7em; background: var(--chalk); }
+.era__list .secret { color: var(--alarm); }
 
 /* ——— 3. Salles ——— */
 .room { position: relative; background: var(--ink); }
@@ -1339,7 +1329,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
         <ul class="era__list">
           <li><b>1958</b>Crystal Springs, Nevada</li>
           <li><b>1938</b>Chicago</li>
-          <li><b>19<span class="redact-inline" aria-hidden="true"></span></b>Kaliningrad<span class="visually-hidden">, date classée secrète</span></li>
+          <li><b>19<span class="secret" aria-hidden="true">??</span></b>Kaliningrad<span class="visually-hidden">, date classée secrète</span></li>
         </ul>
       </div>
     </div>
@@ -1913,7 +1903,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
       { y: '1938', place: 'Chicago', c: 'var(--gold)' },
       { y: '1938', place: 'Kaliningrad, date classée secrète', c: 'var(--alarm)', secret: true },
     ];
-    yearEl.innerHTML = '1958'.split('').map(() => `<span class="roll"><span class="roll__col">${DIGITS}</span></span>`).join('') + '<span class="era__redact"></span>';
+    yearEl.innerHTML = '1958'.split('').map(() => `<span class="roll"><span class="roll__col">${DIGITS}</span></span>`).join('') ;
     const cols = $$('.roll__col', yearEl);
     // position de départ (1958) sans animation
     cols.forEach((col, k) => { col.style.transition = 'none'; col.style.transform = `translateY(${-Number(ERAS[0].y[k])}em)`; });
@@ -1922,10 +1912,28 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
     let idx = 0;
     let timer = 0;
     let swap = 0;
+    // Date classée secrète : les deux derniers chiffres défilent au hasard, en rouge, sans jamais se fixer
+    let scramble = 0;
+    const stopScramble = () => {
+      clearInterval(scramble);
+      scramble = 0;
+      cols.slice(2).forEach((col) => { col.style.transition = ''; });
+    };
+    const startScramble = () => {
+      stopScramble();
+      scramble = setInterval(() => {
+        cols.slice(2).forEach((col) => {
+          col.style.transition = 'none';
+          col.style.transform = `translateY(${-Math.floor(Math.random() * 10)}em)`;
+        });
+      }, 70);
+    };
     const show = (i) => {
       const e = ERAS[i];
+      stopScramble();
       e.y.split('').forEach((d, k) => { cols[k].style.transform = `translateY(${-Number(d)}em)`; });
       era.classList.toggle('is-secret', Boolean(e.secret));
+      if (e.secret) setTimeout(startScramble, 350);
       placeEl.classList.add('is-out');
       clearTimeout(swap);
       swap = setTimeout(() => {
@@ -1938,7 +1946,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
     whenVisible(era, () => {
       if (timer) return;
       timer = setInterval(next, 2600);
-    }, () => { clearInterval(timer); timer = 0; }, 0.6);
+    }, () => { clearInterval(timer); timer = 0; stopScramble(); }, 0.6);
   }
 
   /* ——— 3. Salles ——— */

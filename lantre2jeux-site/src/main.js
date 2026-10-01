@@ -283,7 +283,7 @@
       { y: '1938', place: 'Chicago', c: 'var(--gold)' },
       { y: '1938', place: 'Kaliningrad, date classée secrète', c: 'var(--alarm)', secret: true },
     ];
-    yearEl.innerHTML = '1958'.split('').map(() => `<span class="roll"><span class="roll__col">${DIGITS}</span></span>`).join('') + '<span class="era__redact"></span>';
+    yearEl.innerHTML = '1958'.split('').map(() => `<span class="roll"><span class="roll__col">${DIGITS}</span></span>`).join('') ;
     const cols = $$('.roll__col', yearEl);
     // position de départ (1958) sans animation
     cols.forEach((col, k) => { col.style.transition = 'none'; col.style.transform = `translateY(${-Number(ERAS[0].y[k])}em)`; });
@@ -292,10 +292,28 @@
     let idx = 0;
     let timer = 0;
     let swap = 0;
+    // Date classée secrète : les deux derniers chiffres défilent au hasard, en rouge, sans jamais se fixer
+    let scramble = 0;
+    const stopScramble = () => {
+      clearInterval(scramble);
+      scramble = 0;
+      cols.slice(2).forEach((col) => { col.style.transition = ''; });
+    };
+    const startScramble = () => {
+      stopScramble();
+      scramble = setInterval(() => {
+        cols.slice(2).forEach((col) => {
+          col.style.transition = 'none';
+          col.style.transform = `translateY(${-Math.floor(Math.random() * 10)}em)`;
+        });
+      }, 70);
+    };
     const show = (i) => {
       const e = ERAS[i];
+      stopScramble();
       e.y.split('').forEach((d, k) => { cols[k].style.transform = `translateY(${-Number(d)}em)`; });
       era.classList.toggle('is-secret', Boolean(e.secret));
+      if (e.secret) setTimeout(startScramble, 350);
       placeEl.classList.add('is-out');
       clearTimeout(swap);
       swap = setTimeout(() => {
@@ -308,7 +326,7 @@
     whenVisible(era, () => {
       if (timer) return;
       timer = setInterval(next, 2600);
-    }, () => { clearInterval(timer); timer = 0; }, 0.6);
+    }, () => { clearInterval(timer); timer = 0; stopScramble(); }, 0.6);
   }
 
   /* ——— 3. Salles ——— */
