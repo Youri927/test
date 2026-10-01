@@ -1,0 +1,24 @@
+{
+  "name": "lantre2jeux-motion",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Motion design 9:16 (15 s) pour L'Antre 2 Jeux – Escape Game Soissons",
+  "scripts": {
+    "studio": "remotion studio",
+    "render": "remotion render Lantre2Jeux out/lantre2jeux-9x16.mp4",
+    "finalize": "mkdir -p renders && ffmpeg -v error -y -i out/lantre2jeux-9x16.mp4 -c:v copy -af 'aresample=44100,atrim=end=14.99,afade=t=out:st=14.85:d=0.14' -c:a aac -b:a 192k -movflags +faststart renders/lantre2jeux-9x16.mp4 && ffmpeg -v error -y -i renders/lantre2jeux-9x16.mp4 -an -c:v copy -movflags +faststart renders/lantre2jeux-9x16-muet.mp4",
+    "build": "npm run render && npm run finalize",
+    "still": "remotion still Lantre2Jeux out/still.png",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.532",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "4.0.532"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}
