@@ -41,7 +41,7 @@ export const sceneStart = (name: string) => {
 };
 
 /** Vidéo de présentation du nouveau site, 16:9, 60 images/s */
-export const Presentation: React.FC<{sound: boolean}> = ({sound}) => {
+export const Presentation: React.FC<{sound: boolean; music?: boolean}> = ({sound, music = true}) => {
   let from = 0;
   return (
     <AbsoluteFill style={{background: C.ink}}>
@@ -55,7 +55,7 @@ export const Presentation: React.FC<{sound: boolean}> = ({sound}) => {
         return s;
       })}
       <Finish />
-      {sound ? <PresSound /> : null}
+      {sound ? <PresSound music={music} /> : null}
     </AbsoluteFill>
   );
 };

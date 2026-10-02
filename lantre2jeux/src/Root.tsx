@@ -15,6 +15,8 @@ export const Root: React.FC = () => (
     <Composition id="Pub-Lantre2Jeux-Muet" component={Ad} durationInFrames={AD_FRAMES} fps={FPS} width={1080} height={1920} defaultProps={{sound: false}} />
     {/* présentation du nouveau site au client, 16:9, 60 i/s */}
     <Composition id="Presentation-Site" component={Presentation} durationInFrames={PRES_FRAMES} fps={60} width={1920} height={1080} defaultProps={{sound: true}} />
+    {/* bruitages seuls, sans la musique : pour poser une autre musique au montage */}
+    <Composition id="Presentation-Site-Bruitages" component={Presentation} durationInFrames={PRES_FRAMES} fps={60} width={1920} height={1080} defaultProps={{sound: true, music: false}} />
     <Composition id="Presentation-Site-Muet" component={Presentation} durationInFrames={PRES_FRAMES} fps={60} width={1920} height={1080} defaultProps={{sound: false}} />
   </>
 );

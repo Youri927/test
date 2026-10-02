@@ -75,10 +75,10 @@ const CUES: Cue[] = [
   [2844, 'shimmer', 0.5],
 ];
 
-/** Musique originale + effets synchronisés sur l'image */
-export const PresSound: React.FC = () => (
+/** Musique originale + effets synchronisés sur l'image (music={false} : effets seuls) */
+export const PresSound: React.FC<{music?: boolean}> = ({music = true}) => (
   <>
-    <Html5Audio src={staticFile('sfx/pres/music.wav')} volume={0.62} />
+    {music ? <Html5Audio src={staticFile('sfx/pres/music.wav')} volume={0.62} /> : null}
     {CUES.map(([at, name, vol], i) => (
       <Sequence key={i} from={at} name={`${name} ${at}`}>
         <Html5Audio src={staticFile(`sfx/${name}.wav`)} volume={vol} />
