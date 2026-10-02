@@ -11,30 +11,37 @@ Le site est en anglais, comme le cabinet (Beverly Hills). Tout le contenu vient 
 
 ## Le concept : « The face, layer by layer »
 
-1. **Le hero.** Un ovale de visage abstrait, annoté au violet du marqueur chirurgical : axe médian, tiers du visage, contour de la mâchoire.
+1. **Le hero.** Les cinq couches du visage forment le titre, empilées : Surface, Volume, Motion, Support, Structure. La graisse et la largeur de la typo suivent la profondeur : la peau est fine et large, l'os dense et serré. À l'ouverture, les cinq mots apparaissent identiques puis rejoignent chacun leur profondeur. Survoler un mot affiche sa couche sur l'ovale du visage, annoté au violet du marqueur chirurgical comme une planche d'anatomie.
 2. **L'éclatement.** Au scroll, l'ovale bascule en 3D et se sépare en cinq calques dessinés :
-   - Surface : la peau ;
-   - Volume : les compartiments de graisse ;
-   - Motion : les muscles, dont les masséters ;
-   - Support : le réseau de soutien et les vecteurs de lifting ;
-   - Structure : l'os et le cartilage.
-3. **Les soins.** Tous les soins du visage sont rangés dans ces cinq couches. À la lecture, la couche active se détache, les couches au-dessus s'envolent et la caméra la recentre.
+   - la peau ;
+   - les compartiments de graisse ;
+   - les muscles, dont les masséters ;
+   - le réseau de soutien et les vecteurs de lifting ;
+   - l'os et le cartilage.
+
+   Chaque étiquette est écrite dans sa profondeur.
+3. **Les soins.** Tous les soins du visage sont rangés dans ces cinq couches. À la lecture, la couche active se détache et la caméra la recentre.
 4. **Les spécialités.** Chapitre sombre « Signature » : mâchoire, paupières, nez et lifting endoscopique, avec des planches au trait qui se dessinent au scroll.
-5. **Le chirurgien.** Ses deux certifications et sa formation racontées comme un parcours, de Washington University jusqu'à l'enseignement.
+5. **Le chirurgien.** Son parcours, des études à l'enseignement, et ses certifications.
 6. **La suite de la page.**
    - Le corps.
    - Les galeries avant/après (liens vers les vraies galeries du cabinet).
    - La note de 4,4/5 et deux avis.
    - Le journal.
-7. **« Your consultation ».** Le bouton + de chaque soin l'ajoute à une sélection, signalée par une pastille flottante. Le formulaire final est prérempli et prépare un SMS au numéro du cabinet (310) 779-5488. Rien n'est stocké en ligne.
+7. **« Your consultation ».** Le bouton + de chaque soin l'ajoute à une sélection. Le formulaire final est prérempli et prépare un SMS au cabinet, (310) 779-5488. Rien n'est stocké en ligne.
 
-**Typographie.** Fraunces pour les titres, Geist pour le texte, Geist Mono pour les annotations (licences OFL dans `vendor/fonts`).
+**Typographie.**
+- **Anybody**, une grotesque variable (graisse 100 à 900, largeur 50 à 150 %), pour les titres et l'interface.
+- **Newsreader**, un romain de lecture, pour le texte courant et les légendes de planche en italique.
+- Licences OFL dans `vendor/fonts`.
 
-**Couleurs.** Porcelaine `#F3EFE9`, encre `#16141B`, violet marqueur `#5B41E0`, nuit `#0F0E13`.
+**Évité volontairement.** Petites capitales monospace au-dessus des titres, mot coloré en italique dans un titre, rangée de gros chiffres, curseur personnalisé.
 
-**Animations.** GSAP, ScrollTrigger et Lenis. La 3D est en CSS, sans WebGL : c'est léger et fluide.
+**Couleurs.** Gaze `#EDECE7`, encre `#1F1A24`, violet marqueur `#5B41E0`, nuit `#17121C`.
 
-**Accessibilité.** HTML sémantique et navigation au clavier. Le mode « réduire les animations » est respecté et la page reste lisible sans JavaScript.
+**Animations.** GSAP, ScrollTrigger et Lenis. La 3D est en CSS, sans WebGL. Le mouvement est réservé à trois choses : l'ouverture, la pile de calques et les planches qui se dessinent.
+
+**Accessibilité.** HTML sémantique et navigation au clavier : le focus sur un mot du hero montre aussi sa couche. Le mode « réduire les animations » est respecté et la page reste lisible sans JavaScript.
 
 ## Modifier
 
@@ -55,7 +62,7 @@ node build.mjs
 
 ## Avant une vraie mise en ligne
 
-- Ajouter le portrait du Dr Lee (la carte « CSL » de la section The surgeon peut l'accueillir) et, si le cabinet le souhaite, des photos du lieu.
+- Ajouter le portrait du Dr Lee (à côté de la liste des certifications) et, si le cabinet le souhaite, des photos du lieu.
 - Vérifier le texte exact des deux avis cités, repris des extraits indexés de la page Reviews.
 - Brancher le formulaire sur l'outil du cabinet (e-mail, CRM ou prise de rendez-vous), en plus de l'envoi par SMS.
 - Confirmer la liste des soins med spa encore pratiqués.

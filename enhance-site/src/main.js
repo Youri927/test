@@ -33,29 +33,25 @@
   });
   const tags = NAMES.map((name, i) => {
     const el = document.createElement('div');
-    el.className = 'tag';
+    el.className = `tag d${i}`;
     el.style.setProperty('--k', 4 - i);
-    el.innerHTML = `<i>0${i + 1}</i>${name}`;
+    el.textContent = name;
     stack.appendChild(el);
     return el;
   });
-  const FIGS = {jaw: 'Jaw contour', eye: 'Upper eyelid crease', nose: 'Nasal profile and airflow', lift: 'Endoscopic access points'};
+  const FIGS = {jaw: 'jaw contour', eye: 'upper eyelid crease', nose: 'nasal profile and airflow', lift: 'endoscopic access points'};
   $$('[data-glyph]').forEach((el) => {
     el.innerHTML = A.glyph(el.dataset.glyph);
   });
   $$('.sig__glyph').forEach((el, i) => {
-    el.dataset.fig = `Fig. 0${i + 1}  ${FIGS[el.dataset.glyph] || ''}`;
-  });
-
-  /* ═════════ Boutons : texte qui roule ═════════ */
-  $$('.btn__roll').forEach((el) => {
-    const t = el.dataset.text || el.textContent;
-    el.innerHTML = `<span>${t}</span><span aria-hidden="true">${t}</span>`;
+    el.dataset.fig = `Fig. ${i + 1}, ${FIGS[el.dataset.glyph] || ''}`;
   });
 
   /* ═════════ Scène : état de la pile ═════════ */
   const S = {explode: 0, active: -1, fty: 0};
   const focus = planes.map(() => ({dz: 0, o: 1}));
+  // en vue de face, une seule couche est visible : la peau, ou celle que l'on survole dans le hero
+  const peek = planes.map((_, i) => ({o: i === 0 ? 1 : 0}));
   const geo = {gap: 96, rx: 62, rz: -32, scale: 1};
 
   function fit() {
@@ -80,10 +76,11 @@
     stack.style.setProperty('--rz', (geo.rz * p).toFixed(2));
     stack.style.setProperty('--gap', (geo.gap * p).toFixed(2));
     stage.style.setProperty('--ty', (-6 + lift * 0.9 + S.fty * p).toFixed(1));
-    stage.style.setProperty('--no', clamp(1 - p * 3).toFixed(3));
+    stage.style.setProperty('--no', (clamp(1 - p * 3) * peek[0].o).toFixed(3));
     stage.style.setProperty('--do', clamp((p - 0.55) * 2.4).toFixed(3));
     planes.forEach((el, i) => {
-      const base = i === 0 ? 1 : clamp((p - 0.04) * 4);
+      const open = clamp((p - 0.04) * 4);
+      const base = peek[i].o + (1 - peek[i].o) * open;
       el.style.setProperty('--o', (base * focus[i].o).toFixed(3));
       el.style.setProperty('--dz', focus[i].dz.toFixed(1));
       tags[i].style.setProperty('--dz', focus[i].dz.toFixed(1));
@@ -110,7 +107,7 @@
     else S.fty = fty;
     if (!gsap || reduce) render();
     depthFill.parentElement.parentElement.style.setProperty('--df', a < 0 ? 0 : (a + 1) / 5);
-    depthNow.textContent = a < 0 ? 'All layers' : `0${a + 1} ${NAMES[a]}`;
+    depthNow.textContent = a < 0 ? 'All layers' : NAMES[a];
   }
 
   fit();
@@ -165,44 +162,10 @@
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
 
-  /* ═════════ Découpes de texte ═════════ */
-  const splitWords = (el, cls) => {
-    const walk = (node) => {
-      Array.from(node.childNodes).forEach((n) => {
-        if (n.nodeType === 3) {
-          const frag = document.createDocumentFragment();
-          n.textContent.split(/(\s+)/).forEach((part) => {
-            if (!part) return;
-            if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
-            else {
-              const w = document.createElement('span');
-              w.className = cls;
-              if (cls === 'w') w.innerHTML = `<span>${part}</span>`;
-              else w.textContent = part;
-              frag.appendChild(w);
-            }
-          });
-          n.replaceWith(frag);
-        } else if (n.nodeType === 1 && n.tagName !== 'BR') walk(n);
-      });
-    };
-    walk(el);
-  };
-  $$('[data-words]').forEach((el) => splitWords(el, 'word'));
-  $$('[data-split]').forEach((el) => splitWords(el, 'w'));
-
-  /* ═════════ Compteurs ═════════ */
-  const fmt = (v, el) => {
-    const d = Number(el.dataset.decimals || 0);
-    const n = d ? v.toFixed(d) : String(Math.round(v));
-    return el.dataset.format === 'comma' ? Number(n).toLocaleString('en-US') : n;
-  };
-
   /* ═════════ Sans GSAP ou mouvement réduit : état final, lisible ═════════ */
   if (!gsap || !ST || reduce) {
     root.classList.add('is-static');
-    $$('.hero__title .line > span, [data-hero-in], .nav, .stage__3d, .note').forEach((el) => { el.style.opacity = 1; el.style.transform = 'none'; });
-    $$('.word').forEach((w) => { w.style.opacity = 1; });
+    $$('[data-hero-in], .nav, .stage__3d, .note').forEach((el) => { el.style.opacity = 1; });
     stage.classList.add('is-drawn');
     S.explode = mobileQ.matches ? 1 : 0;
     render();
@@ -221,26 +184,37 @@
     return;
   }
 
-  /* ═════════ Entrée ═════════ */
-  const intro = gsap.timeline({delay: 0.15});
+  /* ═════════ Entrée : chaque mot de la pile rejoint sa profondeur ═════════ */
+  const DEPTH = [[100, 125], [300, 112], [500, 100], [700, 88], [900, 76]];
+  const words = $$('.stratum__word');
+  const intro = gsap.timeline({delay: 0.2});
+  intro.to('.nav', {opacity: 1, duration: 1, ease: 'power2.out'}, 0);
+  words.forEach((w, i) => {
+    const o = {wg: 420, ws: 100, a: 0};
+    const set = () => { w.style.fontWeight = o.wg.toFixed(0); w.style.fontStretch = `${o.ws.toFixed(1)}%`; w.style.opacity = o.a; };
+    set();
+    intro.to(o, {a: 1, duration: 0.5, ease: 'power1.out', onUpdate: set}, 0.1 + i * 0.09)
+      .to(o, {wg: DEPTH[i][0], ws: DEPTH[i][1], duration: 1.7, ease: 'expo.inOut', onUpdate: set,
+        onComplete: () => { w.style.fontWeight = ''; w.style.fontStretch = ''; w.style.opacity = ''; }}, 0.45 + i * 0.09);
+  });
   intro
-    .to('.nav', {opacity: 1, duration: 1, ease: 'power2.out'}, 0)
-    .to('.hero__title .line > span', {y: 0, yPercent: 0, duration: 1.5, stagger: 0.12, ease: 'expo.out'}, 0.1)
-    .to('.stage__3d', {opacity: 1, duration: 1.6, ease: 'power2.out'}, 0.2)
-    .add(() => stage.classList.add('is-drawn'), 0.55)
-    .to('[data-hero-in]', {opacity: 1, y: 0, duration: 1.2, stagger: 0.1, ease: 'expo.out'}, 0.55)
-    .to('.note', {opacity: 1, duration: 0.9, stagger: 0.12, ease: 'power2.out'}, 1.3);
-  gsap.set('.hero__title .line > span', {yPercent: 105, y: 0});
+    .to('.stage__3d', {opacity: 1, duration: 1.4, ease: 'power2.out'}, 0.3)
+    .add(() => stage.classList.add('is-drawn'), 0.9)
+    .to('[data-hero-in]', {opacity: 1, duration: 1, stagger: 0.12, ease: 'power2.out'}, 1.1)
+    .to('.note', {opacity: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out'}, 1.6);
 
-  // compteurs du hero, à l'entrée
-  $$('[data-count]').forEach((el) => {
-    const end = Number(el.dataset.count);
-    const o = {v: 0};
-    el.textContent = fmt(0, el);
-    ST.create({
-      trigger: el, start: 'top bottom', once: true,
-      onEnter: () => gsap.to(o, {v: end, duration: 2, delay: el.closest('.hero') ? 0.9 : 0, ease: 'power3.out', onUpdate: () => { el.textContent = fmt(o.v, el); }}),
-    });
+  // survoler un mot montre sa couche sur le visage (tant que la pile n'est pas éclatée)
+  const strata = $$('[data-peek]');
+  const showPeek = (n) => {
+    strata.forEach((el, i) => el.classList.toggle('is-peek', i === n && n > 0));
+    peek.forEach((pk, i) => gsap.to(pk, {o: i === n ? 1 : 0, duration: 0.55, ease: 'power2.out', overwrite: true, onUpdate: render}));
+  };
+  strata.forEach((el) => {
+    const n = Number(el.dataset.peek);
+    el.addEventListener('pointerenter', () => showPeek(n));
+    el.addEventListener('focus', () => showPeek(n));
+    el.addEventListener('pointerleave', () => showPeek(0));
+    el.addEventListener('blur', () => showPeek(0));
   });
 
   /* ═════════ La pile : vue de face → éclatée → couche par couche ═════════ */
@@ -263,45 +237,6 @@
       onLeave: () => { if (i === all.length - 1) setActive(-1); },
     });
   });
-
-  // manifeste et citations : les mots s'allument au fil du scroll
-  $$('[data-words]').forEach((el) => {
-    gsap.to($$('.word', el), {
-      opacity: 1, ease: 'none', stagger: 0.08,
-      scrollTrigger: {trigger: el, start: 'top 82%', end: 'bottom 52%', scrub: 0.6},
-    });
-  });
-
-  // titres : les mots montent depuis leur ligne
-  $$('[data-split]').forEach((el) => {
-    gsap.from($$('.w > span', el), {
-      yPercent: 108, rotate: 2.5, duration: 1.3, ease: 'expo.out', stagger: 0.045,
-      scrollTrigger: {trigger: el, start: 'top 86%', once: true},
-    });
-  });
-
-  // apparitions douces des blocs
-  const rise = (sel, opts = {}) => $$(sel).forEach((el) => {
-    gsap.from(el, {
-      opacity: 0, y: opts.y ?? 36, duration: 1.3, ease: 'expo.out',
-      scrollTrigger: {trigger: el, start: opts.start || 'top 88%', once: true},
-    });
-  });
-  rise('.layer__head');
-  rise('.tx-list > li', {y: 22, start: 'top 94%'});
-  rise('.layer__fact');
-  rise('.manifesto__note');
-  rise('.manifesto__index');
-  rise('.sig__text');
-  rise('.surgeon__lede');
-  rise('.plate');
-  rise('.body-sec__lede');
-  rise('.gal', {y: 50});
-  rise('.rating');
-  rise('.quote--small');
-  rise('.journal__list li', {y: 24});
-  rise('.brief', {y: 60});
-  rise('.info__block', {y: 24});
 
   /* ═════════ Chapitre sombre ═════════ */
   ST.create({
@@ -338,7 +273,6 @@
   });
   $$('.path__step').forEach((el) => {
     ST.create({trigger: el, start: 'top 66%', onEnter: () => el.classList.add('is-on'), onLeaveBack: () => el.classList.remove('is-on')});
-    gsap.from(el, {opacity: 0.25, x: 18, duration: 1.1, ease: 'expo.out', scrollTrigger: {trigger: el, start: 'top 80%', once: true}});
   });
 
   /* ═════════ Le contour du corps ═════════ */
@@ -354,44 +288,6 @@
 
   /* ═════════ Pied de page : le mot se dédouble en couches ═════════ */
   gsap.to('.foot', {'--spread': 1, ease: 'none', scrollTrigger: {trigger: '.foot', start: 'top 95%', end: 'bottom bottom', scrub: 0.8}});
-
-  /* ═════════ Boutons magnétiques et curseur ═════════ */
-  if (fine) {
-    $$('[data-magnetic]').forEach((el) => {
-      const qx = gsap.quickTo(el, 'x', {duration: 0.6, ease: 'power3.out'});
-      const qy = gsap.quickTo(el, 'y', {duration: 0.6, ease: 'power3.out'});
-      el.addEventListener('pointermove', (e) => {
-        const r = el.getBoundingClientRect();
-        qx((e.clientX - r.left - r.width / 2) * 0.18);
-        qy((e.clientY - r.top - r.height / 2) * 0.3);
-      });
-      el.addEventListener('pointerleave', () => { qx(0); qy(0); });
-    });
-
-    const cursor = $('.cursor');
-    const dot = $('.cursor__dot', cursor);
-    const ring = $('.cursor__ring', cursor);
-    const label = $('.cursor__label', cursor);
-    const dx = gsap.quickTo(dot, 'x', {duration: 0.12, ease: 'power3.out'});
-    const dy = gsap.quickTo(dot, 'y', {duration: 0.12, ease: 'power3.out'});
-    const rx = gsap.quickTo(ring, 'x', {duration: 0.55, ease: 'power3.out'});
-    const ry = gsap.quickTo(ring, 'y', {duration: 0.55, ease: 'power3.out'});
-    gsap.set([dot, ring], {xPercent: -50, yPercent: -50});
-    window.addEventListener('pointermove', (e) => { cursor.classList.remove('is-hidden'); dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY); }, {passive: true});
-    document.addEventListener('pointerleave', () => cursor.classList.add('is-hidden'));
-    document.addEventListener('pointerover', (e) => {
-      const t = e.target.closest('.tx, .tx-chip, .gal, a, button, input');
-      cursor.classList.remove('is-link', 'is-label');
-      if (!t || t.matches('input')) return;
-      if (t.matches('.tx, .tx-chip')) {
-        label.textContent = t.getAttribute('aria-pressed') === 'true' ? 'Remove' : 'Add';
-        cursor.classList.add('is-label');
-      } else if (t.matches('.gal')) {
-        label.textContent = 'View';
-        cursor.classList.add('is-label');
-      } else cursor.classList.add('is-link');
-    });
-  }
 
   // la pile s'incline très légèrement vers la souris
   if (fine) {
@@ -483,8 +379,6 @@
       else { picked.add(t); toast(`${t} added to your consultation`); }
       write();
       sync(true);
-      const lab = $('.cursor__label');
-      if (lab && $('.cursor').classList.contains('is-label')) lab.textContent = picked.has(t) ? 'Remove' : 'Add';
     });
     $$('[data-area]').forEach((c) => c.addEventListener('click', () => {
       const a = c.dataset.area;
@@ -500,14 +394,13 @@
     form.addEventListener('input', () => sync());
     form.addEventListener('submit', (e) => e.preventDefault());
     copy.addEventListener('click', async () => {
-      const roll = $('.btn__roll', copy);
       try {
         await navigator.clipboard.writeText(message());
-        roll.firstChild.textContent = 'Copied';
+        copy.textContent = 'Message copied';
       } catch (err) {
-        roll.firstChild.textContent = 'Select and copy';
+        copy.textContent = 'Copy unavailable, select the text';
       }
-      setTimeout(() => { roll.firstChild.textContent = 'Copy message'; }, 1800);
+      setTimeout(() => { copy.textContent = 'Copy message'; }, 2000);
     });
     basket.addEventListener('click', () => scrollToEl(document.getElementById('visit')));
     sync();

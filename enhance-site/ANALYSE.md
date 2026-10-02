@@ -105,7 +105,7 @@ Site analysé : https://www.enhanceplasticsurgery.com (Beverly Hills, Californie
 **Les choix forts.**
 
 - **Couleurs.** Porcelaine chaude et encre presque noire. Un seul accent : le violet du marqueur chirurgical, utilisé pour toutes les annotations.
-- **Typographie.** Fraunces en très grand corps (élégance, luxe), Geist pour le texte, Geist Mono pour les annotations, avec un registre de précision clinique.
+- **Typographie.** Anybody, une grotesque variable dont la graisse et la largeur suivent la profondeur (la peau est fine et large, l'os dense et serré), avec Newsreader pour le texte courant et les légendes de planche.
 - **Composer sa consultation.** Chaque soin s'ajoute d'un clic à « votre consultation ». Le formulaire final est prérempli et le message part par SMS au cabinet. Personne ne fait ça sur un site de chirurgien.
 - **Le visage d'abord.** Le visage passe devant (c'est l'expertise rare), le corps en second. Un chapitre sombre est consacré aux spécialités signatures : la mâchoire, les paupières, le nez, le lifting endoscopique.
 - **La confiance par les faits.** Pas de slogans creux : le parcours du chirurgien est raconté comme une descente en profondeur, du diplôme à l'enseignement.

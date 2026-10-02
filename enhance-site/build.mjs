@@ -3,14 +3,13 @@ import {readFileSync, writeFileSync, mkdirSync} from 'node:fs';
 
 const here = (p) => new URL(p, import.meta.url);
 const read = (p) => readFileSync(here(p), 'utf8');
-const face = (file, family, {weight = '100 900', style = 'normal'} = {}) =>
-  `@font-face{font-family:"${family}";src:url(data:font/woff2;base64,${readFileSync(here(file)).toString('base64')}) format("woff2");font-weight:${weight};font-style:${style};font-display:swap}`;
+const face = (file, family, {weight = '100 900', stretch = '100%', style = 'normal'} = {}) =>
+  `@font-face{font-family:"${family}";src:url(data:font/woff2;base64,${readFileSync(here(file)).toString('base64')}) format("woff2");font-weight:${weight};font-stretch:${stretch};font-style:${style};font-display:swap}`;
 
 const fonts = [
-  face('./vendor/fonts/Fraunces.woff2', 'Fraunces'),
-  face('./vendor/fonts/Fraunces-Italic.woff2', 'Fraunces', {style: 'italic'}),
-  face('./vendor/fonts/Geist.woff2', 'Geist'),
-  face('./vendor/fonts/GeistMono.woff2', 'Geist Mono'),
+  face('./vendor/fonts/Anybody.woff2', 'Anybody', {stretch: '50% 150%'}),
+  face('./vendor/fonts/Newsreader.woff2', 'Newsreader', {weight: '200 800'}),
+  face('./vendor/fonts/Newsreader-Italic.woff2', 'Newsreader', {weight: '200 800', style: 'italic'}),
 ].join('\n');
 
 const css = read('./src/styles.css').replace('/*FONTS*/', () => fonts);
