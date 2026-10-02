@@ -1,0 +1,26 @@
+{
+  "name": "idoine-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vidéo 16:9 de présentation du nouveau site d'Idoine Piscines",
+  "scripts": {
+    "studio": "remotion studio",
+    "capture:site": "node capture/shots.mjs",
+    "sound": "node sound/music.mjs && node sound/sfx.mjs",
+    "render": "remotion render Presentation-Idoine out/presentation-idoine.mp4 --crf=18",
+    "finalize": "node sound/finalize.mjs out/presentation-idoine.mp4 renders/presentation-idoine-16x9.mp4",
+    "build": "npm run render && npm run finalize",
+    "typecheck": "tsc --noEmit",
+    "stills": "node capture/stills.mjs out/stills"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.532",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "4.0.532"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}

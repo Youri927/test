@@ -13,7 +13,7 @@ const require = createRequire(import.meta.url);
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || '/opt/node-tools/node_modules/playwright');
 
 const here = dirname(fileURLToPath(import.meta.url));
-export const SITE = resolve(here, '../../lantre2jeux-site/dist/index.html');
+export const SITE = resolve(here, '../../idoine-piscines-site/dist/index.html');
 export const OUT = resolve(here, '../public/site');
 
 const T0 = Date.parse('2026-10-02T10:00:00+02:00');
@@ -63,35 +63,15 @@ export async function openSite({width, height, dsf = 2, mobile = false}) {
   return {browser, context, page, cdp, width, height, dsf};
 }
 
-/** Position de défilement (px document) de repères utiles */
-export const layout = (page) =>
-  page.evaluate(() => {
-    const top = (sel) => {
-      const el = document.querySelector(sel);
-      return el ? el.getBoundingClientRect().top + window.scrollY : null;
-    };
-    const st = (window.ScrollTrigger ? window.ScrollTrigger.getAll() : []).map((s) => ({
-      trigger: s.trigger && (s.trigger.id || s.trigger.className),
-      start: s.start,
-      end: s.end,
-      pin: Boolean(s.pin),
-    }));
-    return {
-      vh: window.innerHeight,
-      max: document.documentElement.scrollHeight - window.innerHeight,
-      teaser: top('.teaser'),
-      era: top('.era'),
-      rooms: top('#salles'),
-      r66: top('#route-66'),
-      corleone: top('#corleone'),
-      alerte: top('#alerte-rouge'),
-      verdict: top('.verdict'),
-      pricing: top('#tarifs'),
-      infos: top('#infos'),
-      exit: top('#reserver'),
-      st,
-    };
-  });
+/** Position (px document) du haut d'un élément */
+export const top = (page, sel) => page.evaluate((sel) => document.querySelector(sel).getBoundingClientRect().top + window.scrollY, sel);
+
+/** Centre (px viewport) d'un élément */
+export const center = (page, sel) =>
+  page.evaluate((sel) => {
+    const r = document.querySelector(sel).getBoundingClientRect();
+    return {x: r.left + r.width / 2, y: r.top + r.height / 2};
+  }, sel);
 
 export const scrollTo = (page, y) =>
   page.evaluate((y) => {
