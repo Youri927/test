@@ -141,7 +141,9 @@ export async function record(site, {name, fps = 30, seconds, step, quality = 92}
     if (info.click) meta.clicks.push(i);
     await tick(page, t - last);
     last = t;
-    const {data} = await site.cdp.send('Page.captureScreenshot', {format: 'jpeg', quality, optimizeForSpeed: true});
+    // clip.scale = densité de pixels : sans lui, la capture sort en 1×, quel que soit l'écran émulé
+    const clip = {x: 0, y: 0, width: site.width, height: site.height, scale: site.dsf};
+    const {data} = await site.cdp.send('Page.captureScreenshot', {format: 'jpeg', quality, optimizeForSpeed: true, clip});
     const buf = Buffer.from(data, 'base64');
     if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));
     if (i % 60 === 0) process.stdout.write(`  ${name} ${i}/${n} (${((Date.now() - t0) / 1000).toFixed(0)} s)\n`);

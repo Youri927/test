@@ -16,7 +16,7 @@ const inputProps = {sound: false};
 const composition = await selectComposition({serveUrl, id: 'Presentation-Site-Muet', inputProps, browserExecutable});
 for (const fr of frames) {
   const output = path.join(out, `p${String(fr).padStart(4, '0')}.jpg`);
-  await renderStill({composition, serveUrl, frame: Number(fr), output, imageFormat: 'jpeg', jpegQuality: 88, browserExecutable, inputProps});
+  await renderStill({composition, serveUrl, frame: Number(fr), output, imageFormat: 'jpeg', jpegQuality: 100, browserExecutable, inputProps});
   process.stdout.write(`${fr} `);
 }
 console.log('✓');
