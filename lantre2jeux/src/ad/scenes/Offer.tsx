@@ -5,9 +5,9 @@ import {LockDrum} from '../Bits';
 import {C, F, G} from '../theme';
 import {E, pop, range} from '../util';
 
-export const OFFER_LEN = 60;
+export const OFFER_LEN = 45;
 const DIG = Array.from({length: 10}, (_, i) => i);
-const STEPS = [10, 20, 30];
+const STEPS = [6, 13, 20];
 
 const Col: React.FC<{v: number}> = ({v}) => (
   <span style={{display: 'inline-flex', height: '1em', overflow: 'hidden'}}>
@@ -29,10 +29,10 @@ export const Offer: React.FC = () => {
   const ones = 9 - 4 * p[0] - 2 * p[1] - 2 * p[2];
   const team = 3 + Math.round(sel);
   const head = pop(f, 0, 200, 18);
-  const last = range(f, 36, 48, 0, 1, E.out);
+  const last = range(f, 26, 36, 0, 1, E.out);
   return (
     <AbsoluteFill style={{background: `radial-gradient(70% 40% at 60% 48%, #13202f 0%, ${C.ink} 72%)`}}>
-      <CameraRig keys={[{f: 0, x: 540, y: 960, s: 0.8, ry: 0}, {f: 12, s: 1.0, ease: E.out}, {f: OFFER_LEN, s: 1.04, ry: -4, ease: E.sine}]}>
+      <CameraRig keys={[{f: 0, x: 540, y: 960, s: 0.8, ry: -24, rz: 2}, {f: 12, s: 1.0, ry: -7, rz: 0, ease: E.out}, {f: OFFER_LEN, s: 1.06, ry: 7, ease: E.sine}]}>
         <Place x={540} y={960} w={1080} h={1920}>
           <div
             style={{

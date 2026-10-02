@@ -1,6 +1,6 @@
 # L'Antre 2 Jeux — motion design 9:16
 
-## Pub verticale v2 (charte du nouveau site) — `npm run build:pub`
+## Pub verticale v3 (charte du nouveau site) — `npm run build:pub`
 
 | Fichier | Usage |
 | --- | --- |
@@ -9,11 +9,14 @@
 
 | Temps | Séquence | Levier |
 | --- | --- | --- |
-| 0 – 1,8 s | Le noir, la torche révèle « Entrez. », « On ferme derrière vous. », la porte claque, la lumière meurt | accroche, curiosité, défi |
-| 1,8 – 8,4 s | Couloir de trois portes de lumière : Route 66 (néon), La Planque des Corleone (diamant 3D), Alerte Rouge (radar, compte à rebours, date pixelisée) ; le compteur remonte le temps de 2026 à 1958, 1938, puis « 19▒▒ » | variété du choix, désir |
-| 8,4 – 10,6 s | 4,6/5 sur 62 avis, « Accueil très amical », « Animateurs au top » | preuve sociale |
-| 10,6 – 12,6 s | « Combien êtes-vous ? » : le cadenas passe de 3 à 6 joueurs, le prix descend de 29 € à 21 € | ancrage prix, réassurance |
-| 12,6 – 15 s | La porte s'ouvre sur la lumière : « La porte est ouverte. », bouton « Réservez votre salle », URL, dès 21 € | appel à l'action, soulagement |
+| 0 – 2 s | « ESCAPE GAME » révélé à la torche, « SOISSONS » qui claque avec un repère de carte, chrono 60:00 qui défile, « Saurez-vous sortir à temps ? » | quoi et où dès la première seconde, défi |
+| 2 – 3,6 s | « Fouillez. » (un code caché sur le mur), « Réfléchissez. » (le mot SORTIE se déchiffre), « Manipulez. » (un cadenas s'ouvre sur 1958) | on se projette dans la partie |
+| 3,6 – 9,6 s | Trois portes de lumière : Route 66, La Planque des Corleone, Alerte Rouge, chacune avec sa mission en une phrase ; le compteur remonte le temps de 2026 à 1958, 1938, puis « 19▒▒ » | variété du choix, désir |
+| 9,6 – 11,3 s | 4,6/5 sur 62 avis, « Accueil très amical », « Animateurs au top » | preuve sociale |
+| 11,3 – 12,8 s | « Combien êtes-vous ? » : le cadenas passe de 3 à 6 joueurs, le prix descend de 29 € à 21 € | ancrage prix, réassurance |
+| 12,8 – 15 s | La caméra traverse la porte : « La porte est ouverte. », bouton « Réservez votre salle », URL, adresse, dès 21 € | appel à l'action, soulagement |
+
+Caméra : chaque plan a son mouvement (punch-in, whip panoramique d'une porte à l'autre avec flou de mouvement, zoom sur le décor de chaque salle, bascule 3D, orbite, travelling à travers la porte finale), avec un léger effet caméra à l'épaule dans les salles. Le bandeau « Escape game à Soissons » reste affiché de 2 s à 12,8 s.
 
 Bande-son : nappe grave et battements de cœur qui accélèrent jusqu'à l'ouverture de la dernière porte, puis accord majeur de délivrance. Tous les sons sont synthétisés (`public/sfx/ad/`), sans droits tiers. Code : `src/ad/`.
 

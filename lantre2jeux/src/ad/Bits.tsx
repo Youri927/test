@@ -211,3 +211,45 @@ export const Slit: React.FC<{color: string; glow: string; opacity: number; grow?
     />
   </>
 );
+
+/** Caméra « à l'épaule » : léger flottement continu, pour donner de la vie aux plans. */
+export const Handheld: React.FC<{children: React.ReactNode; amp?: number}> = ({children, amp = 1}) => {
+  const f = useCurrentFrame();
+  const x = (Math.sin(f / 11) * 4 + Math.sin(f / 5.3) * 1.5) * amp;
+  const y = (Math.cos(f / 13) * 4 + Math.sin(f / 6.1) * 1.5) * amp;
+  const r = (Math.sin(f / 17) * 0.35 + Math.sin(f / 7.7) * 0.1) * amp;
+  return <div style={{position: 'absolute', inset: 0, transform: `translate(${x}px, ${y}px) rotate(${r}deg) scale(${1 + 0.012 * amp})`}}>{children}</div>;
+};
+
+/** Pastille de géolocalisation. */
+export const PinIcon: React.FC<{size: number; color: string}> = ({size, color}) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={2.4}>
+    <path d="M12 22s7-6.4 7-12a7 7 0 10-14 0c0 5.6 7 12 7 12z" />
+    <circle cx="12" cy="10" r="2.6" />
+  </svg>
+);
+
+/** Bandeau persistant : catégorie + lieu, pour qu'on sache toujours ce qu'on regarde. */
+export const Bug: React.FC<{opacity: number}> = ({opacity}) => (
+  <div style={{position: 'absolute', left: 0, right: 0, top: 160, display: 'flex', justifyContent: 'center', opacity, pointerEvents: 'none'}}>
+    <div
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 12,
+        padding: '12px 24px 11px 18px',
+        borderRadius: 999,
+        background: 'rgba(7, 16, 26, 0.62)',
+        border: '1.5px solid rgba(242, 234, 223, 0.18)',
+        fontFamily: F.body,
+        fontWeight: 600,
+        fontSize: 30,
+        lineHeight: 1,
+        color: C.chalk,
+      }}
+    >
+      <PinIcon size={30} color={C.tungsten} />
+      Escape game à Soissons
+    </div>
+  </div>
+);

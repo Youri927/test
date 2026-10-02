@@ -1,134 +1,117 @@
 import React from 'react';
 import {AbsoluteFill, interpolate, random, useCurrentFrame} from 'remotion';
 import {CameraRig, Place} from '../../lib/camera';
-import {Slit} from '../Bits';
+import {PinIcon, Wordmark} from '../Bits';
 import {C, F, G} from '../theme';
-import {clamp, E, pop, range, steps} from '../util';
+import {clamp, E, pop, range} from '../util';
 
-export const HOOK_LEN = 54;
+export const HOOK_LEN = 60;
 
 const WALL =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1080' height='1920'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .02' numOctaves='5' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .6 0 0 0 0 .62 0 0 0 0 .68 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E\")";
 
-const MOTES = Array.from({length: 70}, (_, i) => ({
-  x: random(`mx${i}`) * 1080,
-  y: random(`my${i}`) * 1920,
-  v: 0.6 + random(`mv${i}`) * 1.6,
-  s: 1.5 + random(`ms${i}`) * 3,
-  a: 0.35 + random(`ma${i}`) * 0.55,
-  p: random(`mp${i}`) * 6.28,
-}));
+const fmt = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
 
-const TitleText: React.FC<{color: string; glow?: boolean}> = ({color, glow}) => (
+const Big: React.FC<{color: string; glow?: boolean; opacity?: number}> = ({color, glow, opacity = 1}) => (
   <div
     style={{
       position: 'absolute',
-      left: G - 8,
-      top: 682,
+      left: G - 10,
+      top: 520,
       fontFamily: F.display,
       fontWeight: 900,
-      fontSize: 306,
-      lineHeight: 0.8,
+      fontSize: 300,
+      lineHeight: 0.82,
       letterSpacing: '-0.01em',
       textTransform: 'uppercase',
       color,
-      textShadow: glow ? '0 0 60px rgba(255, 198, 110, 0.35)' : undefined,
+      opacity,
+      textShadow: glow ? '0 0 70px rgba(255, 198, 110, 0.4)' : undefined,
     }}
   >
-    Entrez.
+    Escape
+    <br />
+    game
   </div>
 );
 
-/** 0 – 1,8 s : le noir, la torche révèle « Entrez. », la porte claque, la lumière meurt. */
+/** 0 – 2 s : on sait tout de suite ce que c'est (escape game), où (Soissons), et le défi (le chrono). */
 export const Hook: React.FC = () => {
   const f = useCurrentFrame();
-  const flicker = steps(f, [[0, 0.9], [2, 0.12], [3, 0.85], [5, 0.35], [6, 1]]);
-  const dies = interpolate(f, [43, 45, 46, 48, 50], [1, 0.3, 0.7, 0.12, 0], clamp);
-  const R = 300 * flicker * dies;
-  const tx = range(f, 0, 40, 170, 960, E.inOut);
-  const ty = 822 + Math.sin(f / 8) * 24;
-  const mask = `radial-gradient(circle ${R.toFixed(1)}px at ${tx.toFixed(1)}px ${ty.toFixed(1)}px, #000 0%, rgba(0,0,0,.92) 34%, rgba(0,0,0,.45) 64%, transparent 100%)`;
-
-  const l2 = pop(f, 22, 280, 18);
-  const fadeOut = 1 - range(f, 45, 51);
-  const shake = f >= 44 ? range(f, 44, 54, 1, 0) : 0;
-  const sx = (random(`shx${f}`) - 0.5) * 34 * shake;
-  const sy = (random(`shy${f}`) - 0.5) * 34 * shake;
-  const slit = range(f, 47, 54, 0, 1, E.out);
-
+  const R = 340;
+  const tx = range(f, 0, 42, 140, 980, E.inOut);
+  const ty = 760 + Math.sin(f / 7) * 40;
+  const mask = `radial-gradient(circle ${R}px at ${tx.toFixed(1)}px ${ty.toFixed(1)}px, #000 0%, rgba(0,0,0,.9) 36%, rgba(0,0,0,.4) 66%, transparent 100%)`;
+  const city = pop(f, 7, 300, 16);
+  const ask = range(f, 20, 30, 0, 1, E.out);
+  const secs = 3600 - Math.floor(f / 2);
+  const impact = Math.max(range(f, 0, 7, 1, 0), f >= 7 ? range(f, 7, 13, 0.5, 0) : 0);
+  const sx = (random(`hx${f}`) - 0.5) * 30 * impact;
+  const sy = (random(`hy${f}`) - 0.5) * 30 * impact;
+  const flash = range(f, 54, 60);
   return (
     <AbsoluteFill style={{background: C.ink}}>
       <AbsoluteFill style={{transform: `translate(${sx}px, ${sy}px)`}}>
-        <CameraRig keys={[{f: 0, x: 540, y: 960, s: 1.0}, {f: 44, s: 1.075, ease: E.sine}, {f: HOOK_LEN, s: 1.1}]} blur={0.3}>
+        <CameraRig
+          keys={[
+            {f: 0, x: 440, y: 900, s: 1.22, rz: -2},
+            {f: 10, x: 540, y: 960, s: 1.0, rz: 0, ease: E.out},
+            {f: 46, x: 548, s: 1.07, rz: 0.8, ease: E.sine},
+            {f: HOOK_LEN, x: 470, y: 900, s: 2.6, rz: 4, ease: E.in},
+          ]}
+          blur={0.5}
+        >
           <Place x={540} y={960} w={1080} h={1920}>
-            {/* lueur chaude de la torche */}
-            <div style={{position: 'absolute', inset: 0, background: `radial-gradient(circle ${(R * 2.6).toFixed(0)}px at ${tx}px ${ty}px, rgba(255,198,110,.10), rgba(255,198,110,.03) 45%, transparent 70%)`}} />
-            <div
-              style={{position: 'absolute', left: G, top: 380, fontFamily: F.body, fontWeight: 500, fontSize: 36, color: C.mist, opacity: range(f, 8, 18) * fadeOut}}
-            >
-              Escape game à Soissons
+            <div style={{position: 'absolute', inset: 0, background: `radial-gradient(circle ${R * 2.4}px at ${tx}px ${ty}px, rgba(255,198,110,.12), rgba(255,198,110,.03) 45%, transparent 70%)`}} />
+            <div style={{position: 'absolute', left: G, top: 236}}>
+              <Wordmark size={60} color={C.chalk} two={C.tungsten} />
             </div>
-            {/* texte dans la pénombre */}
-            <TitleText color={C.shade} />
-            {/* ce que révèle la torche */}
-            <div style={{position: 'absolute', inset: 0, WebkitMaskImage: mask, maskImage: mask}}>
-              <div style={{position: 'absolute', inset: 0, backgroundColor: '#182230', backgroundImage: WALL, backgroundSize: 'cover'}} />
-              <TitleText color={C.chalk} glow />
-              <div style={{position: 'absolute', left: 110, top: 537, fontFamily: F.display, fontWeight: 800, fontSize: 70, color: 'rgba(255,198,110,.88)', transform: 'rotate(-5deg)'}}>
-                75:00
-                <svg viewBox="0 0 200 110" preserveAspectRatio="none" style={{position: 'absolute', left: -38, top: -22, width: 240, height: 120}}>
-                  <path d="M18 60C10 22 70 6 118 10s82 22 72 54-80 44-124 38S22 88 18 60z" fill="none" stroke="rgba(255,198,110,.65)" strokeWidth="3" strokeLinecap="round" />
-                </svg>
-              </div>
-              <div style={{position: 'absolute', right: 92, top: 552, textAlign: 'right', fontFamily: F.stencil, fontWeight: 700, fontSize: 46, lineHeight: 1, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(61,240,216,.8)', transform: 'rotate(4deg)'}}>
-                Jeff’s Diner
-                <br />
-                1958
-              </div>
-              <div style={{position: 'absolute', right: 30, top: 962, writingMode: 'vertical-rl', fontFamily: F.stencil, fontWeight: 700, fontSize: 34, letterSpacing: '0.4em', textTransform: 'uppercase', color: 'rgba(255,59,47,.8)'}}>
-                Kaliningrad
-              </div>
-              <div style={{position: 'absolute', left: 600, top: 1000, fontFamily: F.body, fontSize: 64, color: 'rgba(255,75,110,.75)', transform: 'rotate(8deg)'}}>✕</div>
-              {MOTES.map((m, i) => {
-                const y = (((m.y - f * m.v) % 1920) + 1920) % 1920;
-                const x = m.x + Math.sin(f / 20 + m.p) * 14;
-                const d = Math.hypot(x - tx, y - ty) / Math.max(R, 1);
-                if (d >= 1) return null;
-                return (
-                  <div
-                    key={i}
-                    style={{position: 'absolute', left: x, top: y, width: m.s, height: m.s, borderRadius: 9, background: '#ffe2b2', opacity: m.a * (1 - d) * (1 - d), boxShadow: `0 0 ${m.s * 3}px ${m.s}px rgba(255,226,178,.5)`}}
-                  />
-                );
-              })}
-            </div>
-            {/* la phrase qui claque */}
             <div
               style={{
                 position: 'absolute',
                 left: G,
-                top: 987,
+                top: 330,
                 fontFamily: F.display,
-                fontWeight: 300,
-                fontSize: 122,
-                lineHeight: 0.92,
-                textTransform: 'uppercase',
-                color: C.chalk,
-                transformOrigin: 'left center',
-                transform: `scale(${interpolate(l2, [0, 1], [1.35, 1])})`,
-                opacity: Math.min(1, l2 * 3) * fadeOut,
-                filter: `blur(${interpolate(l2, [0, 0.7], [10, 0], clamp).toFixed(1)}px)`,
+                fontWeight: 700,
+                fontSize: 156,
+                lineHeight: 1,
+                letterSpacing: '0.02em',
+                fontVariantNumeric: 'tabular-nums',
+                color: '#ff5a4e',
+                textShadow: '0 0 20px rgba(255,59,47,.85), 0 0 60px rgba(255,59,47,.4)',
               }}
             >
-              On ferme
-              <br />
-              derrière vous.
+              {fmt(secs)}
+            </div>
+            {/* texte lisible d'emblée, la torche le fait briller */}
+            <Big color={C.chalk} opacity={0.8} />
+            <div style={{position: 'absolute', inset: 0, WebkitMaskImage: mask, maskImage: mask}}>
+              <div style={{position: 'absolute', inset: 0, backgroundColor: '#1a2433', backgroundImage: WALL, backgroundSize: 'cover', opacity: 0.85}} />
+              <Big color="#fff8ec" glow />
+            </div>
+            <div
+              style={{
+                position: 'absolute',
+                left: G,
+                top: 1050,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 18,
+                transformOrigin: 'left center',
+                transform: `scale(${interpolate(city, [0, 1], [1.4, 1])})`,
+                opacity: Math.min(1, city * 3),
+              }}
+            >
+              <PinIcon size={104} color={C.tungsten} />
+              <span style={{fontFamily: F.display, fontWeight: 800, fontSize: 140, lineHeight: 1, textTransform: 'uppercase', color: C.tungsten, filter: 'drop-shadow(0 0 30px rgba(255,198,110,.35))'}}>Soissons</span>
+            </div>
+            <div style={{position: 'absolute', left: G, top: 1222, fontFamily: F.body, fontStyle: 'italic', fontSize: 56, color: C.chalk, opacity: ask, transform: `translateY(${(1 - ask) * 30}px)`}}>
+              Saurez-vous sortir à temps&#8239;?
             </div>
           </Place>
         </CameraRig>
       </AbsoluteFill>
-      {/* une fente de lumière apparaît : la porte de la première salle */}
-      <Slit color="#e8fffb" glow="rgba(61, 240, 216, 0.9)" opacity={slit > 0 ? 1 : 0} grow={slit} streak={range(f, 48, 54) * 0.9} />
+      <AbsoluteFill style={{background: '#fff3dc', opacity: flash * 0.85}} />
     </AbsoluteFill>
   );
 };

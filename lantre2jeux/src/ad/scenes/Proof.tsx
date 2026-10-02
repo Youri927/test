@@ -5,7 +5,7 @@ import {Stars} from '../Bits';
 import {C, F} from '../theme';
 import {E, range} from '../util';
 
-export const PROOF_LEN = 66;
+export const PROOF_LEN = 50;
 const DIG = Array.from({length: 10}, (_, i) => i);
 
 const Col: React.FC<{v: number}> = ({v}) => (
@@ -52,21 +52,21 @@ const Quote: React.FC<{children: React.ReactNode; at: number; top: number}> = ({
 /** 8,4 – 10,6 s : la preuve sociale. */
 export const Proof: React.FC = () => {
   const f = useCurrentFrame();
-  const roll = range(f, 4, 24, 0, 1, E.out);
-  const shown = range(f, 3, 11);
+  const roll = range(f, 2, 18, 0, 1, E.out);
+  const shown = range(f, 1, 8);
   return (
     <AbsoluteFill style={{background: `radial-gradient(70% 40% at 50% 44%, #13202f 0%, ${C.ink} 70%)`}}>
       <CameraRig
         keys={[
-          {f: 0, x: 540 - 1500, y: 960, s: 0.96},
-          {f: 12, x: 540, s: 1.0, ease: E.out},
-          {f: 56, s: 1.05, ease: E.sine},
-          {f: PROOF_LEN, s: 1.7, ease: E.in},
+          {f: 0, x: 540, y: 960, s: 0.82, ry: 26, rx: 10, rz: -3},
+          {f: 14, s: 1.0, ry: 0, rx: 0, rz: 0, ease: E.out},
+          {f: 42, s: 1.05, ry: -2, ease: E.sine},
+          {f: PROOF_LEN, s: 1.6, ry: -8, ease: E.in},
         ]}
       >
         <Place x={540} y={960} w={1080} h={1920}>
           <div style={{position: 'absolute', left: 0, right: 0, top: 470, display: 'flex', justifyContent: 'center'}}>
-            <Stars value={range(f, 8, 30, 0, 4.6, E.out)} size={96} gap={16} />
+            <Stars value={range(f, 4, 20, 0, 4.6, E.out)} size={96} gap={16} />
           </div>
           <div
             style={{
@@ -92,12 +92,12 @@ export const Proof: React.FC = () => {
             <Col v={1 + 5 * roll} />
             <span style={{fontWeight: 300, fontSize: '0.28em', color: C.mist, marginLeft: '0.2em'}}>/5</span>
           </div>
-          <div style={{position: 'absolute', left: 0, right: 0, top: 1066, textAlign: 'center', fontFamily: F.body, fontWeight: 500, fontSize: 40, color: C.mist, opacity: range(f, 14, 24)}}>
+          <div style={{position: 'absolute', left: 0, right: 0, top: 1066, textAlign: 'center', fontFamily: F.body, fontWeight: 500, fontSize: 40, color: C.mist, opacity: range(f, 10, 18)}}>
             Note moyenne sur 62 avis de joueurs
           </div>
-          <Quote at={22} top={1170}>Accueil très amical</Quote>
-          <Quote at={30} top={1262}>Animateurs au top</Quote>
-          <div style={{position: 'absolute', left: 0, right: 0, top: 1372, textAlign: 'center', fontFamily: F.body, fontSize: 30, color: C.mist, opacity: range(f, 36, 44)}}>
+          <Quote at={14} top={1170}>Accueil très amical</Quote>
+          <Quote at={20} top={1262}>Animateurs au top</Quote>
+          <div style={{position: 'absolute', left: 0, right: 0, top: 1372, textAlign: 'center', fontFamily: F.body, fontSize: 30, color: C.mist, opacity: range(f, 26, 34)}}>
             Extraits d’avis sur The Escapers
           </div>
         </Place>
