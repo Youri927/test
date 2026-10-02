@@ -1,4 +1,34 @@
-# L'Antre 2 Jeux — motion design 9:16
+# L’Antre 2 Jeux — vidéos (Remotion)
+
+## Présentation du nouveau site (16:9) — `npm run build:pres`
+
+Vidéo de 50 s (1920×1080, 60 i/s) pour présenter la refonte du site à L'Antre 2 Jeux. Elle montre le **vrai site** (`../lantre2jeux-site/dist/index.html`), filmé image par image sur ordinateur et sur mobile, puis mis en scène dans un navigateur et des téléphones, avec des mouvements de caméra.
+
+| Fichier | Usage |
+| --- | --- |
+| `renders/presentation-site-16x9.mp4` | présentation avec musique et bruitages (−14 LUFS) |
+| `renders/presentation-site-16x9-muet.mp4` | même vidéo sans son |
+
+| Temps | Séquence |
+| --- | --- |
+| 0 – 4,2 s | Ouverture : la torche du site révèle « Le nouveau site », escape game à Soissons, concept de refonte |
+| 4,2 – 7,2 s | Le concept : « Une pièce plongée dans le noir », le parcours en six étapes |
+| 7,2 – 14,4 s | 01 Le noir : la torche s'allume, balaie « Entrez. », puis suit la souris et révèle les indices du mur |
+| 14,4 – 19,2 s | 02 L'affiche : les lignes se balaient de lumière, la date passe en « classée secrète » |
+| 19,2 – 28,8 s | 03 Trois portes : Route 66 (néon), La Planque des Corleone (diamant 3D), Alerte Rouge (radar, compte à rebours) |
+| 28,8 – 31,8 s | 04 Le verdict : 4,6/5 sur 62 avis, les mots des joueurs |
+| 31,8 – 36 s | 05 Le cadenas : deux clics, le prix passe de 25 € à 21 € par joueur |
+| 36 – 40,8 s | Sur mobile : la torche, une porte et le cadenas, au doigt |
+| 40,8 – 44,4 s | L'identité : couleurs de lumière, Big Shoulders et Epilogue |
+| 44,4 – 50,4 s | 06 La sortie : la porte s'ouvre sur la lumière, on la traverse, carton final |
+
+Fabrication :
+
+1. `npm run capture:site` filme le site avec Playwright (`capture/shots.mjs`). L'horloge de la page est simulée et avancée d'exactement 1/60 s entre deux images, et les animations CSS sont recalées dessus : les animations sont fluides et exactes. Les plans sont écrits dans `public/site/` (MP4 + trajectoire de la souris, redessinée nette par-dessus).
+2. `npm run music:pres` synthétise la musique originale (`sound/music.mjs`, 100 BPM, aucun échantillon ni droit tiers). Les coupes du montage tombent sur les temps.
+3. `npm run build:pres` rend la vidéo, normalise le son et crée la version muette.
+
+Code : `src/pres/`. Après une modification du site, relancez `node build.mjs` dans `lantre2jeux-site`, puis `npm run capture:site`.
 
 ## Pub verticale v3 (charte du nouveau site) — `npm run build:pub`
 

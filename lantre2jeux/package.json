@@ -2,7 +2,7 @@
   "name": "lantre2jeux-motion",
   "version": "1.0.0",
   "private": true,
-  "description": "Motion design 9:16 (15 s) pour L'Antre 2 Jeux – Escape Game Soissons",
+  "description": "Vidéos L'Antre 2 Jeux – Escape Game Soissons : motion design 9:16, pub verticale et présentation 16:9 du nouveau site",
   "scripts": {
     "studio": "remotion studio",
     "render": "remotion render Lantre2Jeux out/lantre2jeux-9x16.mp4",
@@ -12,7 +12,12 @@
     "typecheck": "tsc --noEmit",
     "render:pub": "remotion render Pub-Lantre2Jeux out/pub-lantre2jeux.mp4",
     "finalize:pub": "mkdir -p renders && ffmpeg -v error -y -i out/pub-lantre2jeux.mp4 -c:v copy -af 'volume=-0.8dB,alimiter=limit=0.84:attack=5:release=60:level=disabled,aresample=44100,atrim=end=14.99,afade=t=out:st=14.8:d=0.19' -c:a aac -b:a 192k -movflags +faststart renders/pub-lantre2jeux-9x16.mp4 && ffmpeg -v error -y -i renders/pub-lantre2jeux-9x16.mp4 -an -c:v copy -movflags +faststart renders/pub-lantre2jeux-9x16-muet.mp4",
-    "build:pub": "npm run render:pub && npm run finalize:pub"
+    "build:pub": "npm run render:pub && npm run finalize:pub",
+    "capture:site": "node capture/shots.mjs",
+    "music:pres": "node sound/music.mjs",
+    "render:pres": "remotion render Presentation-Site out/presentation-site.mp4 --crf=18",
+    "finalize:pres": "node sound/finalize.mjs out/presentation-site.mp4 renders/presentation-site-16x9.mp4",
+    "build:pres": "npm run render:pres && npm run finalize:pres"
   },
   "dependencies": {
     "@remotion/cli": "4.0.532",
