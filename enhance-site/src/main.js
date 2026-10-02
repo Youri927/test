@@ -33,9 +33,9 @@
   });
   const tags = NAMES.map((name, i) => {
     const el = document.createElement('div');
-    el.className = `tag d${i}`;
+    el.className = 'tag';
     el.style.setProperty('--k', 4 - i);
-    el.textContent = name;
+    el.innerHTML = `<i>${i + 1}</i>${name}`;
     stack.appendChild(el);
     return el;
   });
@@ -44,16 +44,6 @@
     el.innerHTML = A.detail(el.dataset.detail, `fig${i}`);
     el.dataset.fig = `Fig. ${i + 1}, ${FIGS[el.dataset.detail]}`;
   });
-
-  /* ═════════ Couleur des tissus : le chapitre du visage prend la teinte de la couche lue ═════════ */
-  const TISSUE = ['#EED9CC', '#EFDDB4', '#E8C2BC', '#DDD8E0', '#ECE4D2'];
-  const faceEl = $('.face');
-  const tint = {c: TISSUE[0]};
-  const setTissue = (a) => {
-    const c = TISSUE[a < 0 ? 0 : a];
-    if (window.gsap && !reduce) window.gsap.to(tint, {c, duration: 1.2, ease: 'power2.inOut', overwrite: true, onUpdate: () => faceEl.style.setProperty('--tissue', tint.c)});
-    else faceEl.style.setProperty('--tissue', c);
-  };
 
   /* ═════════ Scène : état de la pile ═════════ */
   const S = {explode: 0, active: -1, fty: 0};
@@ -116,7 +106,6 @@
     if (!gsap || reduce) render();
     depthFill.parentElement.parentElement.style.setProperty('--df', a < 0 ? 0 : (a + 1) / 5);
     depthNow.textContent = a < 0 ? 'All layers' : NAMES[a];
-    setTissue(a);
   }
 
   fit();
@@ -174,7 +163,7 @@
   /* ═════════ Sans GSAP ou mouvement réduit : état final, lisible ═════════ */
   if (!gsap || !ST || reduce) {
     root.classList.add('is-static');
-    $$('[data-hero-in], .nav, .stage__3d, .note').forEach((el) => { el.style.opacity = 1; });
+    $$('[data-hero-in], .nav, .stage__3d, .note').forEach((el) => { el.style.opacity = 1; el.style.transform = 'none'; });
     stage.classList.add('is-drawn');
     S.explode = mobileQ.matches ? 1 : 0;
     render();
@@ -188,29 +177,19 @@
       });
     }, {rootMargin: '-45% 0px -45% 0px'});
     $$('.layer, [data-explode]').forEach((el) => io.observe(el));
-    $$('.path__step').forEach((el) => el.classList.add('is-on'));
+    $$('.cv li').forEach((el) => el.classList.add('is-on'));
     initBrief();
     return;
   }
 
-  /* ═════════ Entrée : chaque mot de la pile rejoint sa profondeur ═════════ */
-  const DEPTH = [[100, 125], [300, 112], [500, 100], [700, 88], [900, 76]];
-  const words = $$('.stratum__word');
-  const intro = gsap.timeline({delay: 0.2});
-  intro.to('.nav', {opacity: 1, duration: 1, ease: 'power2.out'}, 0);
-  words.forEach((w, i) => {
-    const o = {wg: 420, ws: 100, a: 0};
-    const set = () => { w.style.fontWeight = o.wg.toFixed(0); w.style.fontStretch = `${o.ws.toFixed(1)}%`; w.style.opacity = o.a; };
-    set();
-    intro.to(o, {a: 1, duration: 0.5, ease: 'power1.out', onUpdate: set}, 0.1 + i * 0.09)
-      .to(o, {wg: DEPTH[i][0], ws: DEPTH[i][1], duration: 1.7, ease: 'expo.inOut', onUpdate: set,
-        onComplete: () => { w.style.fontWeight = ''; w.style.fontStretch = ''; w.style.opacity = ''; }}, 0.45 + i * 0.09);
-  });
+  /* ═════════ Entrée ═════════ */
+  const intro = gsap.timeline({delay: 0.15});
   intro
-    .to('.stage__3d', {opacity: 1, duration: 1.4, ease: 'power2.out'}, 0.3)
-    .add(() => stage.classList.add('is-drawn'), 0.9)
-    .to('[data-hero-in]', {opacity: 1, duration: 1, stagger: 0.12, ease: 'power2.out'}, 1.1)
-    .to('.note', {opacity: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out'}, 1.6);
+    .to('.nav', {opacity: 1, duration: 0.9, ease: 'power2.out'}, 0)
+    .to('[data-hero-in]', {opacity: 1, y: 0, duration: 1.1, stagger: 0.09, ease: 'expo.out'}, 0.1)
+    .to('.stage__3d', {opacity: 1, duration: 1.4, ease: 'power2.out'}, 0.25)
+    .add(() => stage.classList.add('is-drawn'), 0.6)
+    .to('.note', {opacity: 1, duration: 0.8, stagger: 0.08, ease: 'power2.out'}, 1.3);
 
   // survoler un mot montre sa couche sur le visage (tant que la pile n'est pas éclatée)
   const strata = $$('[data-peek]');
@@ -248,7 +227,7 @@
   });
 
   /* ═════════ Sections sombres : la navigation passe en clair ═════════ */
-  const darkSecs = $$('.signature, .foot');
+  const darkSecs = $$('.signature');
   let navTick = 0;
   const navTheme = () => {
     navTick = 0;
@@ -258,21 +237,10 @@
   window.addEventListener('scroll', () => { if (!navTick) navTick = requestAnimationFrame(navTheme); }, {passive: true});
   navTheme();
 
-  /* ═════════ Le parcours du chirurgien ═════════ */
-  const path = $('[data-path]');
-  const fill = document.createElement('span');
-  fill.className = 'path__fill';
-  path.prepend(fill);
-  ST.create({
-    trigger: path, start: 'top 65%', end: 'bottom 65%', scrub: 0.6,
-    onUpdate: (self) => path.style.setProperty('--pf', self.progress.toFixed(3)),
+  /* ═════════ Le parcours du chirurgien : chaque étape s'allume à la lecture ═════════ */
+  $$('.cv li').forEach((el) => {
+    ST.create({trigger: el, start: 'top 70%', onEnter: () => el.classList.add('is-on'), onLeaveBack: () => el.classList.remove('is-on')});
   });
-  $$('.path__step').forEach((el) => {
-    ST.create({trigger: el, start: 'top 66%', onEnter: () => el.classList.add('is-on'), onLeaveBack: () => el.classList.remove('is-on')});
-  });
-
-  /* ═════════ Pied de page : le mot se dédouble en couches ═════════ */
-  gsap.to('.foot', {'--spread': 1, ease: 'none', scrollTrigger: {trigger: '.foot', start: 'top 95%', end: 'bottom bottom', scrub: 0.8}});
 
   // la pile s'incline très légèrement vers la souris
   if (fine) {

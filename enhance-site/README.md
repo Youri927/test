@@ -11,42 +11,33 @@ Le site est en anglais, comme le cabinet (Beverly Hills). Tout le contenu vient 
 
 ## Le concept : « The face, layer by layer »
 
-1. **Le hero.** Les cinq couches du visage forment le titre, empilées : Surface, Volume, Motion, Support, Structure. La graisse et la largeur de la typo suivent la profondeur : la peau est fine et large, l'os dense et serré. À l'ouverture, les cinq mots apparaissent identiques puis rejoignent chacun leur profondeur. Survoler un mot affiche sa couche sur l'ovale du visage, annoté comme une planche d'anatomie.
-2. **L'éclatement.** Au scroll, l'ovale bascule en 3D et se sépare en cinq calques dessinés :
-   - la peau ;
-   - les compartiments de graisse ;
-   - les muscles, dont les masséters ;
-   - le réseau de soutien et les vecteurs de lifting ;
-   - l'os et le cartilage.
+**Principe.** Une direction sobre et professionnelle : fond clair, encre presque noire, une seule couleur d'accent (un bleu d'encre) réservée aux tracés du chirurgien. La personnalité vient de la mise en page, pas des effets.
 
-   Chaque étiquette est écrite dans sa profondeur.
-3. **Les soins.** Tous les soins du visage sont rangés dans ces cinq couches. À la lecture, la couche active se détache, la caméra la recentre et le fond prend la couleur du tissu, comme dans un atlas d'anatomie : peau rosée, graisse jaune beurre, muscle rose, fascia nacré, os ivoire.
-4. **Les spécialités.** Chapitre sombre « Signature » : mâchoire, paupières, nez et lifting endoscopique. Chaque spécialité est illustrée par une planche de détail tirée des calques du visage, avec des légendes anatomiques.
-5. **Le chirurgien.** Son parcours, des études à l'enseignement, et ses certifications.
-6. **La suite de la page.**
-   - Le corps.
-   - Les galeries avant/après, en index typographique (liens vers les vraies galeries du cabinet).
-   - La note de 4,4/5 et deux avis.
-   - Le journal.
-7. **« Your consultation ».** La case à cocher de chaque soin l'ajoute à une sélection, comme sur un formulaire médical. Le formulaire final est prérempli et prépare un SMS au cabinet, (310) 779-5488. Rien n'est stocké en ligne.
+1. **Le hero.** Le nom du chirurgien, un titre clair (« Facial plastic surgery in Beverly Hills »), puis l'index des cinq couches du visage. À droite, un ovale de visage annoté comme une planche d'anatomie. Survoler une couche dans l'index l'affiche sur le visage.
+2. **Les cinq couches.** Au scroll, l'ovale bascule en 3D et se sépare en cinq calques dessinés : la peau, les volumes, les muscles, le soutien, l'os. Tous les soins du visage sont rangés dans ces couches, en tableaux. À la lecture, la couche active se détache.
+3. **Les sections suivantes.** Comme dans une monographie, chaque titre reste dans la marge pendant que le contenu défile à droite.
+   - **Signature procedures**, en section sombre : quatre spécialités, chacune avec une planche de détail légendée tirée des calques du visage.
+   - **Dr. Charles S. Lee** : parcours présenté comme un CV (étape à gauche, description à droite), puis certifications.
+   - **Body** : tableau des soins.
+   - **Before and after** : index des galeries réelles du cabinet, avis et note de 4,4/5.
+   - **Book a complimentary consultation** : formulaire et informations pratiques.
+4. **« Your consultation ».** La case à cocher de chaque soin l'ajoute à une sélection. Le formulaire final est prérempli et prépare un SMS au cabinet, (310) 779-5488. Rien n'est stocké en ligne.
 
 **Typographie.**
-- **Anybody**, une grotesque variable (graisse 100 à 900, largeur 50 à 150 %), pour les titres et l'interface.
-- **Newsreader**, un romain de lecture, pour le texte courant et les légendes de planche en italique.
+- **Fraunces** pour les titres, les noms de soins, les citations et les légendes en italique.
+- **Geist** pour le texte et l'interface.
 - Licences OFL dans `vendor/fonts`.
 
 **Évité volontairement.**
-- Violet indigo et fond gris neutre.
-- Petites capitales monospace au-dessus des titres, mot coloré en italique dans un titre.
-- Rangée de gros chiffres, icônes au trait, grilles de points.
-- Slogans « X, not Y ».
-- Curseur personnalisé.
+- Étiquettes en petites capitales au-dessus des titres, mot coloré dans un titre.
+- Rangées de gros chiffres, grilles de cartes, boutons en pilule, slogans.
+- Curseur personnalisé, apparitions en fondu sur chaque bloc.
 
-**Couleurs.** Tissus `#EED9CC` (peau), `#EFDDB4` (graisse), `#E8C2BC` (muscle), `#DDD8E0` (fascia), `#ECE4D2` (os). Encre `#2B1E1C`, violet de gentiane `#5E2A7E` (la couleur réelle du marqueur chirurgical), nuit `#24141C`.
+**Couleurs.** Fond `#F7F6F3`, encre `#17161A`, gris `#67646D`, filets `#E1DED8`, accent `#2F4A63`, section sombre `#16151A`.
 
-**Animations.** GSAP, ScrollTrigger et Lenis. La 3D est en CSS, sans WebGL. Le mouvement est réservé à l'ouverture, à la pile de calques et au changement de couleur des tissus.
+**Animations.** GSAP, ScrollTrigger et Lenis. La 3D est en CSS, sans WebGL. Le mouvement est limité à l'ouverture et à la pile de calques.
 
-**Accessibilité.** HTML sémantique et navigation au clavier : le focus sur un mot du hero montre aussi sa couche. Le mode « réduire les animations » est respecté et la page reste lisible sans JavaScript.
+**Accessibilité.** HTML sémantique et navigation au clavier. Le mode « réduire les animations » est respecté et la page reste lisible sans JavaScript.
 
 ## Modifier
 
