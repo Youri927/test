@@ -39,11 +39,9 @@
     stack.appendChild(el);
     return el;
   });
-  const FIGS = {jaw: 'the jaw, bone and masseter muscle', eye: 'the upper eyelid', nose: 'the nasal bones', lift: 'the support layer, lift vectors'};
-  $$('[data-detail]').forEach((el, i) => {
-    el.innerHTML = A.detail(el.dataset.detail, `fig${i}`);
-    el.dataset.fig = `Fig. ${i + 1}, ${FIGS[el.dataset.detail]}`;
-  });
+  const FIGS = {jaw: 'jaw contour', eye: 'upper eyelid crease', nose: 'nasal profile and airflow', lift: 'endoscopic access points'};
+  $$('[data-glyph]').forEach((el) => { el.innerHTML = A.glyph(el.dataset.glyph); });
+  $$('.sig__glyph').forEach((el, i) => { el.dataset.fig = `Fig. ${i + 1}, ${FIGS[el.dataset.glyph]}`; });
 
   /* ═════════ Scène : état de la pile ═════════ */
   const S = {explode: 0, active: -1, fty: 0};
@@ -177,7 +175,7 @@
       });
     }, {rootMargin: '-45% 0px -45% 0px'});
     $$('.layer, [data-explode]').forEach((el) => io.observe(el));
-    $$('.cv li').forEach((el) => el.classList.add('is-on'));
+    $$('.path__step').forEach((el) => el.classList.add('is-on'));
     initBrief();
     return;
   }
@@ -237,9 +235,33 @@
   window.addEventListener('scroll', () => { if (!navTick) navTick = requestAnimationFrame(navTheme); }, {passive: true});
   navTheme();
 
-  /* ═════════ Le parcours du chirurgien : chaque étape s'allume à la lecture ═════════ */
-  $$('.cv li').forEach((el) => {
-    ST.create({trigger: el, start: 'top 70%', onEnter: () => el.classList.add('is-on'), onLeaveBack: () => el.classList.remove('is-on')});
+  /* ═════════ Signature : les dessins se tracent avec le scroll ═════════ */
+  $$('[data-sig]').forEach((sig) => {
+    const svg = $('svg', sig);
+    const solid = $$('.g-line, .g-mark:not(.g-dash):not(.g-dot)', svg);
+    const dashed = $$('.g-dash, .g-dot', svg);
+    solid.forEach((p) => {
+      p.setAttribute('pathLength', '1');
+      p.style.strokeDasharray = '1';
+      p.style.strokeDashoffset = '1';
+    });
+    dashed.forEach((p) => { p.style.opacity = 0; });
+    gsap.timeline({scrollTrigger: {trigger: sig, start: 'top 78%', end: 'center 52%', scrub: 0.8}})
+      .to(solid, {strokeDashoffset: 0, duration: 1, stagger: 0.12, ease: 'none'}, 0)
+      .to(dashed, {opacity: 1, duration: 0.4, stagger: 0.1, ease: 'none'}, 0.55);
+  });
+
+  /* ═════════ Le parcours du chirurgien : la ligne se remplit, chaque étape s'allume ═════════ */
+  const path = $('[data-path]');
+  const fill = document.createElement('span');
+  fill.className = 'path__fill';
+  path.prepend(fill);
+  ST.create({
+    trigger: path, start: 'top 65%', end: 'bottom 65%', scrub: 0.6,
+    onUpdate: (self) => path.style.setProperty('--pf', self.progress.toFixed(3)),
+  });
+  $$('.path__step').forEach((el) => {
+    ST.create({trigger: el, start: 'top 66%', onEnter: () => el.classList.add('is-on'), onLeaveBack: () => el.classList.remove('is-on')});
   });
 
   // la pile s'incline très légèrement vers la souris

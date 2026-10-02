@@ -15,13 +15,12 @@ Le site est en anglais, comme le cabinet (Beverly Hills). Tout le contenu vient 
 
 1. **Le hero.** Le nom du chirurgien, un titre clair (« Facial plastic surgery in Beverly Hills »), puis l'index des cinq couches du visage. À droite, un ovale de visage annoté comme une planche d'anatomie. Survoler une couche dans l'index l'affiche sur le visage.
 2. **Les cinq couches.** Au scroll, l'ovale bascule en 3D et se sépare en cinq calques dessinés : la peau, les volumes, les muscles, le soutien, l'os. Tous les soins du visage sont rangés dans ces couches, en tableaux. À la lecture, la couche active se détache.
-3. **Les sections suivantes.** Comme dans une monographie, chaque titre reste dans la marge pendant que le contenu défile à droite.
-   - **Signature procedures**, en section sombre : quatre spécialités, chacune avec une planche de détail légendée tirée des calques du visage.
-   - **Dr. Charles S. Lee** : parcours présenté comme un CV (étape à gauche, description à droite), puis certifications.
-   - **Body** : tableau des soins.
-   - **Before and after** : index des galeries réelles du cabinet, avis et note de 4,4/5.
-   - **Book a complimentary consultation** : formulaire et informations pratiques.
-4. **« Your consultation ».** La case à cocher de chaque soin l'ajoute à une sélection. Le formulaire final est prérempli et prépare un SMS au cabinet, (310) 779-5488. Rien n'est stocké en ligne.
+3. **Signature procedures**, en section sombre : quatre spécialités (mâchoire, paupières, nez, lifting endoscopique), chacune avec un dessin au trait qui se trace au scroll.
+4. **Dr. Charles S. Lee** : son nom en grand, une carte avec ses certifications et, à côté, son parcours sur une ligne qui se remplit à la lecture.
+5. **Body** : tableau des soins, titre dans la marge.
+6. **Before & after** : cartes des galeries réelles du cabinet, note de 4,4/5, deux avis et quatre articles du journal.
+7. **Your consultation is complimentary** : formulaire en trois étapes et informations pratiques (adresse, téléphone, horaires, paiement).
+8. **« Your consultation ».** La case à cocher de chaque soin l'ajoute à une sélection. Le formulaire final est prérempli et prépare un SMS au cabinet, (310) 779-5488. Rien n'est stocké en ligne.
 
 **Typographie.**
 - **Fraunces** pour les titres, les noms de soins, les citations et les légendes en italique.
@@ -30,7 +29,7 @@ Le site est en anglais, comme le cabinet (Beverly Hills). Tout le contenu vient 
 
 **Évité volontairement.**
 - Étiquettes en petites capitales au-dessus des titres, mot coloré dans un titre.
-- Rangées de gros chiffres, grilles de cartes, boutons en pilule, slogans.
+- Rangée de gros chiffres dans le hero, boutons en pilule.
 - Curseur personnalisé, apparitions en fondu sur chaque bloc.
 
 **Couleurs.** Fond `#F7F6F3`, encre `#17161A`, gris `#67646D`, filets `#E1DED8`, accent `#2F4A63`, section sombre `#16151A`.
