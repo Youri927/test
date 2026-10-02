@@ -27,11 +27,12 @@ Rien n'est inventé dans la refonte.
 
 **Le pitch.** Les joueurs sont les candidats d'une émission de télévision dystopique, dans un labyrinthe qui abrite le Minotaure. Ils doivent voler son trésor sans se faire éliminer. Un présentateur et un public simulent un direct et rythment la partie.
 
-**Le concept, en cinq genres.**
+**Le concept, en six genres.** La page « Le concept » présente Escape TV comme un mélange d'escape game, de cinéma, de télévision, de jeu vidéo, de jeu d'action et de théâtre immersif, avec un bloc de texte par genre.
 
 | Genre | Ce que ça veut dire dans le jeu |
 | --- | --- |
 | Escape game | décor haut de gamme, monstre présent pendant toute l'heure, indices sonores diffusés par des enceintes, caméras cinéma à la place des caméras de surveillance |
+| Cinéma | décor digne des plus grands studios, costume du Minotaure fabriqué par la référence mondiale du domaine, vidéo, prise de son et musique de qualité cinéma |
 | Télévision | émission dystopique, simulation de direct avec présentateur et spectateurs |
 | Jeu vidéo | interactions avec le Minotaure selon des règles précises, objets et compétences à débloquer pour vaincre la créature |
 | Jeu d'action | on avance vite, avec des mécanismes satisfaisants, sous la menace constante du monstre |
@@ -69,7 +70,7 @@ Les avis saluent l'aspect « émission TV », original et bien réalisé, le dé
 
 - Le nom Escape TV et le titre « Le Labyrinthe du Minotaure ».
 - « Le seul escape game filmé de France » et « Vivez un film, repartez avec le vôtre ».
-- Les cinq genres du concept, les règles de la FAQ (adrénaline, pas horreur ; le Minotaure toute l'heure).
+- Les six genres du concept, les règles de la FAQ (adrénaline, pas horreur ; le Minotaure toute l'heure).
 - La vidéo souvenir et ses deux formats.
 - Les infos pratiques et les notes réelles.
 
@@ -78,7 +79,7 @@ Les avis saluent l'aspect « émission TV », original et bien réalisé, le dé
 Le site devient la retransmission de l'émission.
 
 1. **Le hero.** Une image de régie, avec le cadre d'une caméra, le voyant REC et un timecode qui décompte l'heure de jeu. À l'écran, le plan du labyrinthe vu d'en haut, généré et animé. L'équipe progresse dans les couloirs, une tache de chaleur rôde (le Minotaure), le trésor brille au centre. La régie passe d'une caméra à l'autre.
-2. **Le concept, en zapping.** Les cinq genres deviennent cinq chaînes. Le scroll zappe de l'une à l'autre avec un passage de neige, et l'écran change de mode à chaque chaîne : plan du jeu, cadre cinéma, applaudimètre, interface de jeu vidéo, lumières de scène.
+2. **Le concept, en grille des programmes.** Les six genres deviennent six chaînes, présentées comme une page de magazine télé sur papier clair : six colonnes diffusées en même temps pendant l'heure de jeu. Le programme « à l'antenne » s'inverse en noir avec son voyant rouge, au survol sur ordinateur et au défilement sur mobile.
 3. **Le Minotaure en caméra thermique.** Une section entière en vision thermique. La tache de chaleur se rapproche lentement de la souris ou du doigt : il vous cherche. On y lit les règles de la FAQ.
 4. **« Votre film ».** Les deux formats de la vidéo souvenir côte à côte, en vrais lecteurs : un cadre 16:9 de 2 minutes et un cadre 9:16 de 30 secondes.
 5. **La fiche de l'épisode,** l'audimat (les notes réelles), les infos pratiques et la réservation.

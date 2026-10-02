@@ -74,7 +74,7 @@
 <!-- ═════ LE JEU ═════ -->
 <section class="pitch" id="jeu" aria-labelledby="pitch-title">
   <h2 class="sr" id="pitch-title">Le Labyrinthe du Minotaure</h2>
-  <p class="pitch__text" data-words>Vous êtes les candidats d’une émission de télévision dystopique. Le plateau : un labyrinthe de plus de 150 m². Votre adversaire : le Minotaure. Votre mission : voler son trésor sans vous faire éliminer.</p>
+  <p class="pitch__text" data-words>Vous êtes les candidats d’une émission de télévision dystopique. Le plateau : un labyrinthe de plus de 150 m². Votre adversaire : le Minotaure. Votre mission : voler son trésor sans vous faire éliminer.</p>
 
   <div class="guide">
     <div class="guide__head">
@@ -92,59 +92,48 @@
   </div>
 </section>
 
-<!-- ═════ LE CONCEPT : cinq chaînes ═════ -->
+<!-- ═════ LE CONCEPT : la grille des programmes ═════ -->
 <section class="concept" id="concept" aria-labelledby="concept-title">
-  <header class="concept__head">
-    <h2 class="h2" id="concept-title">Cinq genres. Une seule heure.</h2>
-    <p class="concept__lede">Escape TV mélange escape game, cinéma, télévision, jeu vidéo et théâtre immersif. Zappez.</p>
-  </header>
-
-  <div class="zap" data-zap>
-    <div class="zap__sticky">
-      <ol class="zap__list" aria-label="Les cinq genres">
-        <li><button type="button" data-ch="0"><i>1</i>Escape game</button></li>
-        <li><button type="button" data-ch="1"><i>2</i>Cinéma</button></li>
-        <li><button type="button" data-ch="2"><i>3</i>Télévision</button></li>
-        <li><button type="button" data-ch="3"><i>4</i>Jeu vidéo</button></li>
-        <li><button type="button" data-ch="4"><i>5</i>Théâtre immersif</button></li>
+  <div class="concept__in">
+    <header class="concept__head">
+      <h2 class="h2" id="concept-title">Six genres.<br>Une seule heure.</h2>
+      <p class="concept__lede">Escape TV mélange escape game, cinéma, télévision, jeu vidéo, jeu d’action et théâtre immersif. Six programmes, diffusés en même temps pendant toute votre partie.</p>
+    </header>
+    <div class="epg" data-epg>
+      <p class="epg__band"><span>Le Labyrinthe du Minotaure</span><span>Six chaînes en simultané, pendant 60 minutes</span></p>
+      <ol class="epg__grid" aria-label="Les six genres d’Escape TV">
+        <li class="prog">
+          <p class="prog__ch"><b>1</b><span class="prog__live">En direct</span><span class="prog__len">60 min</span></p>
+          <h3 class="prog__title">Escape game</h3>
+          <p class="prog__text">Un décor haut de gamme, un monstre présent pendant toute l’heure, des indices sonores diffusés par des enceintes dans toutes les pièces, et des caméras cinéma à la place des caméras de surveillance.</p>
+        </li>
+        <li class="prog">
+          <p class="prog__ch"><b>2</b><span class="prog__live">En direct</span><span class="prog__len">60 min</span></p>
+          <h3 class="prog__title">Cinéma</h3>
+          <p class="prog__text">Un décor digne des plus grands studios et un costume de Minotaure fabriqué par la référence mondiale du domaine. Vidéo, prise de son, musique : tout est de qualité cinéma.</p>
+        </li>
+        <li class="prog">
+          <p class="prog__ch"><b>3</b><span class="prog__live">En direct</span><span class="prog__len">60 min</span></p>
+          <h3 class="prog__title">Télévision</h3>
+          <p class="prog__text">Une émission dystopique : des candidats face à un monstre, pour lui voler son trésor au péril de leur vie. Un présentateur et des spectateurs simulent le direct pendant toute la partie.</p>
+        </li>
+        <li class="prog">
+          <p class="prog__ch"><b>4</b><span class="prog__live">En direct</span><span class="prog__len">60 min</span></p>
+          <h3 class="prog__title">Jeu vidéo</h3>
+          <p class="prog__text">Le Minotaure obéit à des règles précises. Débloquez des objets et des compétences pour, peut-être, vaincre la créature.</p>
+        </li>
+        <li class="prog">
+          <p class="prog__ch"><b>5</b><span class="prog__live">En direct</span><span class="prog__len">60 min</span></p>
+          <h3 class="prog__title">Jeu d’action</h3>
+          <p class="prog__text">On avance vite, avec des mécanismes satisfaisants, sous la menace constante du monstre.</p>
+        </li>
+        <li class="prog">
+          <p class="prog__ch"><b>6</b><span class="prog__live">En direct</span><span class="prog__len">60 min</span></p>
+          <h3 class="prog__title">Théâtre immersif</h3>
+          <p class="prog__text">Vous êtes les acteurs. Selon votre comportement, les lumières s’allument ou changent de couleur, et le public et le présentateur réagissent.</p>
+        </li>
       </ol>
-
-      <div class="tv">
-        <div class="tv__screen" data-screen data-ch="0">
-          <canvas class="tv__canvas" data-tv-canvas aria-hidden="true"></canvas>
-          <canvas class="tv__noise" data-noise aria-hidden="true"></canvas>
-          <span class="tv__ch" data-ch-osd aria-hidden="true">CH 1</span>
-
-          <div class="ov ov--0" aria-hidden="true">
-            <div class="wave"><span>Indice sonore</span><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          </div>
-          <div class="ov ov--1" aria-hidden="true">
-            <span class="ov__tag"><i class="dot"></i>Caméra cinéma</span>
-          </div>
-          <div class="ov ov--2" aria-hidden="true">
-            <div class="third"><span class="third__live">En direct</span><span class="third__title">Le Labyrinthe du Minotaure</span></div>
-            <div class="meter"><span>Public</span><b><i data-applause></i></b></div>
-          </div>
-          <div class="ov ov--3" aria-hidden="true">
-            <div class="hud"><span>Objets</span><i class="on"></i><i class="on"></i><i></i><i></i></div>
-            <div class="hud hud--threat"><span>Menace</span><b><i data-threat></i></b></div>
-            <div class="toast-game" data-skill>Compétence débloquée</div>
-          </div>
-          <div class="ov ov--4" aria-hidden="true">
-            <span class="ov__tag">Les lumières réagissent à vos actions</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="zap__texts">
-        <div class="zap__text" data-text="0"><h3>Escape game</h3><p>Un décor haut de gamme, un monstre présent pendant toute l’heure, des indices sonores diffusés dans chaque pièce, et des caméras cinéma à la place des caméras de surveillance.</p></div>
-        <div class="zap__text" data-text="1"><h3>Cinéma</h3><p>Le parcours est équipé de caméras cinéma, de micros, d’enceintes et de projecteurs, placés pour saisir les meilleurs moments de votre partie.</p></div>
-        <div class="zap__text" data-text="2"><h3>Télévision</h3><p>Une émission dystopique : des candidats face à un monstre, pour lui voler son trésor. Un présentateur et un public simulent le direct et rythment votre partie.</p></div>
-        <div class="zap__text" data-text="3"><h3>Jeu vidéo</h3><p>Le Minotaure obéit à des règles précises. Débloquez des objets et des compétences pour, peut-être, vaincre la créature.</p></div>
-        <div class="zap__text" data-text="4"><h3>Théâtre immersif</h3><p>Vous êtes les acteurs principaux. Selon vos actions, les lumières s’allument ou changent de couleur, et le public et le présentateur réagissent.</p></div>
-      </div>
     </div>
-    <div class="zap__steps" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
   </div>
 </section>
 
@@ -155,8 +144,8 @@
   <div class="beast__osd" aria-hidden="true"><span>THERMIQUE</span><span data-temp>CAM 05</span></div>
   <div class="beast__text">
     <h2 class="h2" id="beast-title">Il est là.<br>Toute l’heure.</h2>
-    <p>Le Minotaure vous traque pendant toute la partie. Ce n’est pas une salle d’horreur, c’est une salle d’adrénaline : il peut faire peur, mais le but est de le déjouer.</p>
-    <p class="beast__hint"><span>Bougez la souris, ou votre doigt : il vous suit.</span><span>Il vous a trouvé. Bougez !</span></p>
+    <p>Le Minotaure vous traque pendant toute la partie. Ce n’est pas une salle d’horreur, c’est une salle d’adrénaline : il peut faire peur, mais le but est de le déjouer.</p>
+    <p class="beast__hint"><span>Bougez la souris, ou votre doigt : il vous suit.</span><span>Il vous a trouvé. Bougez !</span></p>
   </div>
   <div class="prox" aria-hidden="true"><span>Proximité</span><b><i data-prox></i></b></div>
 </section>
@@ -207,7 +196,7 @@
     <div class="audience__side">
       <div class="stat"><p class="stat__big">92 %</p><p>de satisfaction sur 72 avis, escapegame.fr</p></div>
       <div class="stat"><p class="stat__big">5/5</p><p>sur Tripadvisor, 6 avis</p></div>
-      <p class="audience__note">Ce qui revient le plus : l’aspect « émission TV », original et bien réalisé, le décor et l’atmosphère du labyrinthe.</p>
+      <p class="audience__note">Ce qui revient le plus : l’aspect « émission TV », original et bien réalisé, le décor et l’atmosphère du labyrinthe.</p>
     </div>
   </div>
 </section>
@@ -223,15 +212,15 @@
       <div><dt>Tarif</dt><dd>De 25&nbsp;€ à 49&nbsp;€ par joueur<br>Réservation en ligne obligatoire</dd></div>
     </dl>
     <div class="faq">
-      <details><summary>Est-ce une salle d’horreur ?</summary><p>Non, c’est une salle d’adrénaline. Le Minotaure peut faire peur, mais ce n’est pas l’objectif du jeu.</p></details>
-      <details><summary>Le Minotaure est-il là toute la partie ?</summary><p>Oui. La bête est présente pendant toute l’heure : à vous de trouver comment la vaincre.</p></details>
-      <details><summary>Combien de joueurs, et à partir de quel âge ?</summary><p>De 2 à 8 joueurs, à partir de 14 ans.</p></details>
-      <details><summary>Quand reçoit-on la vidéo ?</summary><p>Deux vidéos, une de 2 minutes et une de 30 secondes, envoyées par lien de téléchargement sous 7 jours maximum.</p></details>
-      <details><summary>Faut-il réserver ?</summary><p>Oui, les créneaux se réservent à l’avance sur le site.</p></details>
+      <details><summary>Est-ce une salle d’horreur ?</summary><p>Non, c’est une salle d’adrénaline. Le Minotaure peut faire peur, mais ce n’est pas l’objectif du jeu.</p></details>
+      <details><summary>Le Minotaure est-il là toute la partie ?</summary><p>Oui. La bête est présente pendant toute l’heure : à vous de trouver comment la vaincre.</p></details>
+      <details><summary>Combien de joueurs, et à partir de quel âge ?</summary><p>De 2 à 8 joueurs, à partir de 14 ans.</p></details>
+      <details><summary>Quand reçoit-on la vidéo ?</summary><p>Deux vidéos, une de 2 minutes et une de 30 secondes, envoyées par lien de téléchargement sous 7 jours maximum.</p></details>
+      <details><summary>Faut-il réserver ?</summary><p>Oui, les créneaux se réservent à l’avance sur le site.</p></details>
     </div>
   </div>
   <div class="final">
-    <p class="final__title">Prêts pour l’antenne ?</p>
+    <p class="final__title">Prêts pour l’antenne ?</p>
     <a class="btn btn--big" href="https://escapetv.fr/#/catalog/57cfe152-8311-40f2-97df-a37e0d88007a">Réserver un créneau</a>
   </div>
 </section>

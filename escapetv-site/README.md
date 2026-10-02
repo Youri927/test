@@ -12,7 +12,7 @@ Le site est la retransmission de l'émission.
 | --- | --- |
 | Hero, la régie | Le plan du labyrinthe, généré et animé : l'équipe avance, le Minotaure rôde (tache de chaleur), le trésor brille au centre. La régie change de caméra toutes les 4,6 s (vue d'ensemble, l'équipe, le Minotaure, la salle du trésor). Le timecode décompte l'heure de jeu. À l'ouverture, l'écran s'allume comme une télévision |
 | Le jeu | Le pitch, dont les mots s'allument au défilement, puis la fiche du programme présentée comme un générique de fin |
-| Le concept | Les cinq genres deviennent cinq chaînes. Le défilement (ou un clic) zappe de l'une à l'autre avec de la neige, et l'écran change de mode : plan du jeu, cadre cinéma, direct télé avec applaudimètre, interface de jeu vidéo, lumières de scène |
+| Le concept | Les six genres (escape game, cinéma, télévision, jeu vidéo, jeu d'action, théâtre immersif) mis en page comme une grille de magazine télé, sur papier clair : six chaînes en simultané pendant l'heure. Le programme « à l'antenne » passe en noir avec son voyant rouge : au survol (et en boucle) sur ordinateur, au centre de l'écran sur mobile |
 | Le Minotaure | Une caméra thermique plein écran. La chaleur du Minotaure se rapproche de la souris ou du doigt ; la jauge de proximité monte, l'image tremble quand il vous trouve |
 | Votre film | Les deux formats de la vidéo souvenir dans de vrais lecteurs (16:9 de 2 minutes, vertical de 30 secondes), avec montage, barre de lecture et pause au clic |
 | L'audience | Les notes réelles (The Escapers, escapegame.fr, Tripadvisor) en applaudimètres |
@@ -29,8 +29,8 @@ Tous les boutons « Réserver » mènent à la page de réservation actuelle (`h
 ## Responsive et accessibilité
 
 - Testé à 390, 768, 1024, 1280 × 720, 1440 et 1920 px de large, sans défilement horizontal.
-- Sur mobile, les chaînes passent en pastilles défilantes sous l'écran, et la caméra thermique suit le doigt.
-- Avec « réduire les animations », le défilement doux, les changements de caméra, la neige et les animations sont coupés ; les écrans restent fixes.
+- Sur mobile, la grille devient une liste et la caméra thermique suit le doigt.
+- Avec « réduire les animations », le défilement doux, les changements de caméra et les animations sont coupés ; les écrans restent fixes.
 - Les animations des écrans s'arrêtent quand ils sortent de l'écran.
 
 ## Fabrication
@@ -44,7 +44,7 @@ node build.mjs     # assemble src/ et vendor/ dans dist/index.html
 | `src/index.html` | structure et contenu |
 | `src/styles.css` | styles |
 | `src/maze.js` | labyrinthe généré, personnages, modes de la régie, caméra thermique |
-| `src/main.js` | caméras du hero, zapping, lecteurs, audimat, FAQ, navigation |
+| `src/main.js` | caméras du hero, grille des programmes, lecteurs, audimat, FAQ, navigation |
 | `vendor/` | GSAP + ScrollTrigger, Lenis, polices (licences SIL OFL jointes) |
 
 ## À vérifier avant une mise en ligne

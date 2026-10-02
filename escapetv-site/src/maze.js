@@ -106,7 +106,7 @@
 
   /**
    * Crée un écran de régie.
-   * opts : cols, rows, seed, mode ('plan' | 'cinema' | 'tv' | 'game' | 'stage'), interactive
+   * opts : cols, rows, seed, mode ('plan' | 'cinema' | 'tv'), reduce
    */
   function create(canvas, opts = {}) {
     const m = build(opts.cols || 25, opts.rows || 15, opts.seed || 7);
@@ -121,7 +121,6 @@
       mode: opts.mode || 'plan',
       cam: {x: 0.5, y: 0.5, z: 1},
       camTo: {x: 0.5, y: 0.5, z: 1},
-      hue: 0,
       grade: 0,
       reduce: !!opts.reduce,
     };
@@ -219,7 +218,7 @@
       }
       ctx.lineCap = 'square';
       ctx.lineWidth = Math.max(1, Math.min(cell * 0.07, 4.5));
-      ctx.strokeStyle = state.mode === 'stage' ? `hsla(${state.hue}, 70%, 70%, 0.75)` : 'rgba(237, 230, 218, 0.62)';
+      ctx.strokeStyle = 'rgba(237, 230, 218, 0.62)';
       ctx.stroke();
 
       // l'équipe : quatre points serrés qui avancent ensemble
@@ -244,17 +243,6 @@
           ctx.arc(cx, cy, cell * 0.24, 0, Math.PI * 2);
           ctx.stroke();
         }
-      }
-      if (state.mode === 'stage') {
-        // lumières de scène qui changent de couleur
-        state.hue = (state.hue + dt * 30) % 360;
-        const lg = ctx.createRadialGradient(px, py, 0, px, py, cell * 5);
-        lg.addColorStop(0, `hsla(${state.hue}, 90%, 60%, 0.35)`);
-        lg.addColorStop(1, `hsla(${state.hue}, 90%, 50%, 0)`);
-        ctx.globalCompositeOperation = 'lighter';
-        ctx.fillStyle = lg;
-        ctx.fillRect(px - cell * 5, py - cell * 5, cell * 10, cell * 10);
-        ctx.globalCompositeOperation = 'source-over';
       }
       if (state.mode === 'cinema') {
         // étalonnage chaud et bandes cinémascope

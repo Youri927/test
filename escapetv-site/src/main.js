@@ -1,4 +1,4 @@
-/* Escape TV : la régie. Caméras du hero, zapping des cinq genres, caméra thermique,
+/* Escape TV : la régie. Caméras du hero, grille des six genres, caméra thermique,
    lecteurs du film souvenir, audimat et FAQ. */
 (function () {
   'use strict';
@@ -89,7 +89,7 @@
     if (!target) return;
     e.preventDefault();
     if (!menu.hidden) setMenu(false);
-    scrollToY(id === '#top' ? 0 : pageY(target) - (id === '#concept' ? 0 : 10));
+    scrollToY(id === '#top' ? 0 : pageY(target) - 10);
     history.replaceState(null, '', id);
   }));
 
@@ -193,100 +193,41 @@
     G.from('.guide__head, .guide__grid > div', {y: 50, opacity: 0, duration: 1, stagger: 0.07, ease: 'power3.out', scrollTrigger: {trigger: '.guide', start: 'top 82%'}});
   }
 
-  /* ——— LE CONCEPT : cinq chaînes ——— */
-  const zap = $('[data-zap]');
-  const screen = $('[data-screen]');
-  const tvCanvas = $('[data-tv-canvas]');
-  const noise = $('[data-noise]');
-  const chOsd = $('[data-ch-osd]');
-  const chBtns = $$('[data-ch]', zap);
-  const chTexts = $$('[data-text]', zap);
-  const list = $('.zap__list');
-  const applause = $('[data-applause]');
-  const threat = $('[data-threat]');
-  const skill = $('[data-skill]');
-  const tv = Lab.create(tvCanvas, {cols: 21, rows: 13, seed: 11, mode: 'plan', reduce});
-  const CH = [
-    {mode: 'plan', at: [0.5, 0.5, 1]},
-    {mode: 'cinema', follow: 'team', z: 2.3},
-    {mode: 'tv', at: [0.5, 0.5, 1.15]},
-    {mode: 'game', follow: 'team', z: 1.8},
-    {mode: 'stage', follow: 'team', z: 1.5},
-  ];
-  fit(tvCanvas, tv);
-
-  // la neige entre deux chaînes
-  const nctx = noise.getContext('2d');
-  noise.width = 120; noise.height = 76;
-  const nimg = nctx.createImageData(120, 76);
-  let noiseUntil = 0;
-  const drawNoise = (now) => {
-    if (now > noiseUntil) { noise.style.opacity = 0; return; }
-    const d = nimg.data;
-    for (let i = 0; i < d.length; i += 4) { const v = (Math.random() * 255) | 0; d[i] = d[i + 1] = d[i + 2] = v; d[i + 3] = 255; }
-    nctx.putImageData(nimg, 0, 0);
-    noise.style.opacity = String(clamp((noiseUntil - now) / 320, 0, 0.9));
+  /* ——— LE CONCEPT : la grille des programmes ——— */
+  // Un programme à la fois passe à l'antenne : au survol sur ordinateur (et en boucle tant
+  // qu'on ne survole pas), au centre de l'écran sur mobile.
+  const epg = $('[data-epg]');
+  const progs = $$('.prog', epg);
+  let live = -1;
+  const setLive = (i) => {
+    if (i === live) return;
+    live = i;
+    progs.forEach((p, k) => p.classList.toggle('is-live', k === i));
   };
-
-  let ch = -1;
-  let zapOn = false;
-  const setChannel = (i, quiet) => {
-    if (i === ch) return;
-    ch = i;
-    chBtns.forEach((b, k) => { b.setAttribute('aria-pressed', String(k === i)); if (k !== i) b.style.setProperty('--p', 0); });
-    chTexts.forEach((t, k) => t.classList.toggle('is-on', k === i));
-    screen.dataset.ch = String(i);
-    chOsd.textContent = `CH ${i + 1}`;
-    tv.setMode(CH[i].mode);
-    aim(tv, CH[i], true);
-    if (!zapOn) tv.frame();
-    if (!quiet && !reduce) {
-      noiseUntil = performance.now() + 340;
-      screen.classList.remove('is-zap');
-      void screen.offsetWidth;
-      screen.classList.add('is-zap');
-    }
-    // la pastille active reste visible dans la rangée (mobile)
-    const b = chBtns[i];
-    if (list.scrollWidth > list.clientWidth + 4) list.scrollTo({left: b.parentElement.offsetLeft - 16, behavior: reduce ? 'auto' : 'smooth'});
+  const canHover = window.matchMedia('(hover: hover) and (min-width: 700px)').matches;
+  let autoTimer = 0, hovering = false, epgOn = false;
+  const autoplay = () => {
+    clearInterval(autoTimer);
+    if (reduce || !epgOn || hovering) return;
+    autoTimer = setInterval(() => setLive((live + 1) % progs.length), 2600);
   };
-  setChannel(0, true);
-
-  let zapST = null;
-  if (ST) {
-    zapST = ST.create({
-      trigger: zap,
-      start: 'top top',
-      end: 'bottom bottom',
-      onUpdate(s) {
-        const f = s.progress * CH.length;
-        const i = clamp(Math.floor(f), 0, CH.length - 1);
-        setChannel(i);
-        chBtns[i].style.setProperty('--p', clamp(f - i, 0, 1).toFixed(3));
-      },
-    });
+  if (canHover) {
+    progs.forEach((p, i) => p.addEventListener('pointerenter', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      hovering = true;
+      clearInterval(autoTimer);
+      setLive(i);
+    }));
+    epg.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') { hovering = false; autoplay(); } });
+    onView(epg, () => { epgOn = true; if (live < 0) setLive(0); autoplay(); }, () => { epgOn = false; clearInterval(autoTimer); });
+  } else {
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) setLive(progs.indexOf(e.target)); }), {rootMargin: '-48% 0px -48% 0px'});
+    progs.forEach((p) => io.observe(p));
   }
-  chBtns.forEach((b, i) => b.addEventListener('click', () => {
-    if (!zapST) return setChannel(i);
-    const y = zapST.start + (zapST.end - zapST.start) * ((i + 0.08) / CH.length);
-    scrollToY(y, {duration: 0.9 + Math.abs(i - ch) * 0.15});
-  }));
-
-  let skillAt = 0;
-  tick((now) => {
-    drawNoise(now);
-    if (!zapOn) return;
-    if (CH[ch].follow) aim(tv, CH[ch]);
-    const t = now / 1000;
-    if (ch === 2) applause.style.transform = `scaleX(${(0.62 + 0.22 * Math.sin(t * 2.3) + 0.12 * Math.sin(t * 7.1)).toFixed(3)})`;
-    if (ch === 3) {
-      const w = tv.where();
-      const d = Math.hypot((w.team[0] - w.beast[0]) * 21, (w.team[1] - w.beast[1]) * 13);
-      threat.style.transform = `scaleX(${clamp(1 - d / 14, 0.06, 1).toFixed(3)})`;
-      if (now > skillAt) { skill.classList.toggle('is-on'); skillAt = now + (skill.classList.contains('is-on') ? 1900 : 2600); }
-    }
-  });
-  onView(screen, () => { zapOn = true; if (reduce) tv.frame(); else tv.start(); }, () => { zapOn = false; tv.stop(); });
+  if (G && !reduce) {
+    G.fromTo('.epg__band', {clipPath: 'inset(0 100% 0 0)'}, {clipPath: 'inset(0 0% 0 0)', duration: 1.4, ease: 'expo.inOut', scrollTrigger: {trigger: epg, start: 'top 85%'}});
+    G.from(progs, {y: 40, opacity: 0, duration: 1, stagger: 0.07, ease: 'power3.out', scrollTrigger: {trigger: epg, start: 'top 82%'}});
+  }
 
   /* ——— LE MINOTAURE : caméra thermique ——— */
   const beastSec = $('[data-beast]');
