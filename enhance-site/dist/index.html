@@ -214,7 +214,8 @@ html:not(.js) .mk-reveal, .is-drawn .mk-reveal { stroke-dashoffset: 0; transitio
 .surgeon__lede { margin-top: 36px; max-width: 25em; font-family: var(--f-serif); font-weight: 300; font-size: clamp(1.35rem, 2.2vw, 2rem); line-height: 1.26; letter-spacing: -0.012em; }
 .surgeon__grid { display: grid; grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.22fr); gap: 7vw; margin-top: 14vh; align-items: start; }
 .plate { position: sticky; top: 110px; padding: 34px 34px 18px; border-radius: 12px; background: var(--panel); box-shadow: 0 0 0 1px var(--line), 0 30px 70px -50px rgba(23, 22, 26, 0.4); }
-.plate__mono { padding-bottom: 26px; font-family: var(--f-serif); font-style: italic; font-weight: 300; font-size: clamp(5rem, 9vw, 8.2rem); line-height: 0.8; letter-spacing: -0.06em; color: var(--accent); }
+.plate__title { margin-bottom: 14px; font-family: var(--f-serif); font-weight: 400; font-size: clamp(1.45rem, 1.9vw, 1.75rem); line-height: 1.15; letter-spacing: -0.015em; }
+.plate__list + .plate__title { margin-top: 30px; }
 .plate__list li { position: relative; padding: 15px 0 15px 30px; border-top: 1px solid var(--line); font-size: 15px; line-height: 1.35; }
 .plate__list li::before { content: ""; position: absolute; left: 2px; top: 19px; width: 10px; height: 5px; border-left: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); transform: rotate(-45deg); }
 .path { position: relative; padding-left: 46px; }
@@ -633,10 +634,13 @@ html.js .note { opacity: 0; }
 
   <div class="surgeon__grid">
     <aside class="plate" aria-label="Credentials">
-      <div class="plate__mono" aria-hidden="true">CSL</div>
+      <h3 class="plate__title">Board certifications</h3>
       <ul class="plate__list">
         <li>American Board of Plastic Surgery</li>
         <li>American Board of Otolaryngology – Head and Neck Surgery</li>
+      </ul>
+      <h3 class="plate__title">Professional memberships</h3>
+      <ul class="plate__list">
         <li>Fellow, American College of Surgeons</li>
         <li>American Society of Plastic Surgeons</li>
         <li>American Society for Aesthetic Plastic Surgery</li>
