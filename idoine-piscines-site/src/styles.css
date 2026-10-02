@@ -144,7 +144,7 @@ strong { font-weight: 600; }
 /* ——— Navigation ——— */
 .nav {
   position: fixed; inset: 0 0 auto 0; z-index: 50;
-  color: var(--ecume);
+  color: var(--encre);
   transition: color .4s, background-color .4s, box-shadow .4s;
 }
 .nav__bar {
@@ -168,10 +168,6 @@ strong { font-weight: 600; }
   transform: scaleX(0); transform-origin: right; transition: transform .4s var(--ease-out);
 }
 .nav__links a:hover::after { transform: scaleX(1); transform-origin: left; }
-.nav .btn--small { background: var(--ecume); color: var(--encre); }
-.nav .btn--small::before { background: var(--lagon); }
-.nav.is-solid .btn--small { background: var(--encre); color: var(--ecume); }
-.nav.is-solid .btn--small::before { background: var(--bassin); }
 .nav__burger { display: none; width: 44px; height: 44px; border: 0; background: none; cursor: pointer; padding: 0; }
 .nav__burger-lines, .nav__burger-lines::before, .nav__burger-lines::after {
   display: block; width: 22px; height: 1.6px; margin: 0 auto; background: currentColor; position: relative;
@@ -188,67 +184,89 @@ strong { font-weight: 600; }
 .menu__links a { font-size: 1.7rem; font-stretch: 120%; font-weight: 300; text-decoration: none; padding: 6px 0; }
 .menu-open .nav { color: var(--encre); background: var(--calcaire); }
 
-/* ——— 1. Hero : l'eau vivante ——— */
+/* ——— 1. Hero : la ligne d'eau ——— */
 .hero {
+  --wl: 64vh;      /* hauteur de la ligne d'eau depuis le haut du hero (calculée en JS) */
+  --wl-t: 80%;     /* la même, depuis le haut du titre */
   position: relative;
   height: 100vh;
   height: 100svh;
-  min-height: 620px;
+  min-height: 640px;
   overflow: hidden;
-  background: radial-gradient(120% 90% at 30% 20%, #3FC3C2 0%, #1D97A0 45%, #0B6B74 100%);
-  color: var(--ecume);
+  background: var(--calcaire);
 }
-.hero__water { position: absolute; inset: 0; width: 100%; height: 100%; }
-.hero__shade {
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    linear-gradient(to top, rgba(4, 34, 40, .62) 0%, rgba(4, 34, 40, .2) 42%, transparent 66%),
-    linear-gradient(to bottom, rgba(4, 34, 40, .34), transparent 22%);
+.hero__water {
+  position: absolute; left: 0; right: 0; top: var(--wl); bottom: 0;
+  background: linear-gradient(180deg, #0E7C86 0%, #0B6B74 22%, #08474F 68%, #063339 100%);
 }
-.no-webgl .hero__water { display: none; }
-.no-webgl .hero { background-blend-mode: normal; }
-.hero__caustic {
-  position: absolute; inset: -20%;
-  background-size: 360px 360px;
-  mix-blend-mode: screen;
-  opacity: .55;
-  animation: caustic-drift 26s linear infinite;
+/* la lumière qui traverse la surface */
+.hero__water::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 120px;
+  background: linear-gradient(rgba(233, 255, 252, .2), transparent);
 }
-.hero__caustic--b { background-size: 520px 520px; opacity: .35; animation-duration: 38s; animation-direction: reverse; }
-@keyframes caustic-drift { to { transform: translate3d(360px, 180px, 0); } }
+/* une nappe de lumière, à peine visible, qui dérive sous la surface */
+.hero__water::after {
+  content: ""; position: absolute; left: -20%; top: 0; width: 70%; height: 80%;
+  background: radial-gradient(50% 60% at 50% 0%, rgba(233, 255, 252, .1), transparent 70%);
+  animation: drift 24s ease-in-out infinite alternate;
+}
+@keyframes drift { to { transform: translateX(70%); } }
+.hero__surface {
+  position: absolute; left: 0; top: -8px; width: 200%; height: 16px; overflow: visible;
+  animation: surface 16s linear infinite;
+}
+.hero__surface-fill { fill: #0E7C86; }
+.hero__surface-line { fill: none; stroke: #E9FFFC; stroke-width: 1.6; vector-effect: non-scaling-stroke; opacity: .85; }
+@keyframes surface { to { transform: translateX(-50%); } }
+.hero__ripples { position: absolute; inset: 0; pointer-events: none; }
+.ripple {
+  position: absolute; width: 150px; height: 18px; margin: -9px 0 0 -75px;
+  border: 1.4px solid rgba(233, 255, 252, .85); border-radius: 50%;
+  animation: ripple 2.2s cubic-bezier(.2, .7, .3, 1) forwards;
+}
+.ripple--big { width: 320px; height: 34px; margin: -17px 0 0 -160px; }
+@keyframes ripple { from { transform: scale(.08); opacity: .95; } to { transform: scale(1); opacity: 0; } }
+.hero__level {
+  position: absolute; top: calc(var(--wl) - 30px);
+  right: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: var(--encre); font-size: .8rem; font-stretch: 75%; font-weight: 500;
+}
+.hero__level span { order: -1; }
 .hero__inner {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  max-width: var(--max); margin: 0 auto;
-  padding: 0 var(--gutter) clamp(36px, 7vh, 84px);
+  position: absolute; left: 0; right: 0; bottom: clamp(52px, 11vh, 140px);
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter);
   pointer-events: none;
 }
 .hero__inner a, .hero__inner button { pointer-events: auto; }
+.hero__titlebox { position: relative; }
 .hero__title {
-  font-size: clamp(3rem, 8.2vw, 9.4rem);
+  margin: 0;
+  font-size: clamp(3rem, 8.2vw, 7.9rem);
   font-stretch: 125%;
   font-weight: 300;
-  line-height: .94;
+  line-height: .96;
   letter-spacing: -.03em;
   max-width: 16.5ch;
   text-wrap: balance;
-  text-shadow: 0 2px 40px rgba(4, 34, 40, .25);
+  color: var(--encre);
+  clip-path: inset(0 0 calc(100% - var(--wl-t)) 0);
 }
+/* sous la surface, la même phrase, éclaircie et déviée par l'eau */
+.hero__title--under {
+  position: absolute; inset: 0;
+  color: rgba(233, 255, 252, .9);
+  clip-path: inset(var(--wl-t) 0 0 0);
+  transform-origin: 0 var(--wl-t);
+  animation: refract 6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes refract { from { transform: translateX(0) scaleY(1.04); } to { transform: translateX(.06em) scaleY(1.07); } }
 .hero__title .line { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
-.hero__title .line > span { display: inline-block; will-change: transform; }
-.hero__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-top: clamp(24px, 4vh, 44px); }
-.hero__lede { max-width: 44ch; margin: 0; font-size: clamp(1.02rem, 1.3vw, 1.18rem); line-height: 1.55; color: rgba(246, 248, 247, .9); }
+.hero__title .line > span { display: inline-block; }
+.hero__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-top: clamp(44px, 8vh, 96px); }
+.hero__lede { max-width: 44ch; margin: 0; font-size: clamp(1.02rem, 1.3vw, 1.18rem); line-height: 1.55; color: rgba(246, 248, 247, .88); }
 .hero__actions { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
-.hero__hint {
-  position: absolute; right: var(--gutter); top: calc(var(--nav-h) + 22px); margin: 0;
-  font-size: .82rem; font-stretch: 80%; font-weight: 500; letter-spacing: .01em;
-  color: rgba(246, 248, 247, .85);
-  display: flex; align-items: center; gap: 10px;
-  opacity: 0; transition: opacity 1.2s;
-}
-.hero__hint::before { content: ""; width: 26px; height: 1px; background: currentColor; }
-.hero__hint.is-visible { opacity: 1; }
-.hint--touch { display: none; }
-@media (hover: none) { .hint--fine { display: none; } .hint--touch { display: inline; } }
 
 /* ——— 2. Paris, en coupe ——— */
 .lieux { position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); background: var(--calcaire); }
@@ -466,7 +484,7 @@ strong { font-weight: 600; }
   .nav__links, .nav__cta { display: none; }
   .nav__burger { display: block; }
   .hero__foot { flex-direction: column; align-items: flex-start; gap: 24px; }
-  .hero__hint { top: auto; bottom: auto; top: calc(var(--nav-h) + 14px); }
+  .hero__level { right: var(--gutter); }
   .lieux { grid-template-columns: minmax(0, 1fr); }
   .lieux__visual {
     grid-column: 1; grid-row: 1;

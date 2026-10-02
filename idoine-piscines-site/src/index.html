@@ -40,12 +40,24 @@
 </header>
 
 <main>
-  <!-- 1. L'eau vivante -->
+  <!-- 1. La ligne d'eau : le titre est à moitié immergé -->
   <section class="hero" id="haut" data-hero aria-labelledby="hero-title">
-    <canvas class="hero__water" data-water aria-hidden="true"></canvas>
-    <div class="hero__shade" aria-hidden="true"></div>
+    <div class="hero__water" aria-hidden="true">
+      <svg class="hero__surface" viewBox="0 0 2400 16" preserveAspectRatio="none" focusable="false">
+        <path class="hero__surface-fill" d=""/>
+        <path class="hero__surface-line" d=""/>
+      </svg>
+    </div>
+    <div class="hero__ripples" data-ripples aria-hidden="true"></div>
+    <div class="hero__level" data-level aria-hidden="true">
+      <svg viewBox="0 0 16 12" width="16" height="12"><path d="M1 1h14L8 11z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      <span>Ligne d’eau</span>
+    </div>
     <div class="hero__inner">
-      <h1 class="hero__title" id="hero-title" data-split>L’eau, là où Paris ne l’attend pas.</h1>
+      <div class="hero__titlebox" data-titlebox>
+        <h1 class="hero__title" id="hero-title" data-split>L’eau, là où Paris ne l’attend pas.</h1>
+        <p class="hero__title hero__title--under" data-under aria-hidden="true">L’eau, là où Paris ne l’attend pas.</p>
+      </div>
       <div class="hero__foot">
         <p class="hero__lede">Idoine conçoit et construit des piscines et des spas sur mesure pour les particuliers, les hôtels et les palaces, à Paris et en Île-de-France, depuis 1966.</p>
         <div class="hero__actions">
@@ -54,7 +66,6 @@
         </div>
       </div>
     </div>
-    <p class="hero__hint" aria-hidden="true"><span class="hint--fine">Passez la main sur l’eau</span><span class="hint--touch">Touchez l’eau</span></p>
   </section>
 
   <!-- 2. Paris, en coupe -->

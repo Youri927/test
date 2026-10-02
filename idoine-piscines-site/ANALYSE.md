@@ -75,7 +75,7 @@ Les remarques sur le design actuel se limitent donc à ce qu'on peut observer de
 
 **Concept : « L'eau, là où Paris ne l'attend pas. »** Idoine ne vend pas une piscine de jardin. Elle glisse de l'eau dans des lieux qui n'étaient pas faits pour en recevoir. Le site raconte cela, littéralement.
 
-1. **L'eau vivante.** La page s'ouvre sur une surface d'eau réelle, calculée en direct (WebGL) : mosaïque au fond, reflets de lumière qui dansent, et des ondes qui naissent sous la souris ou sous le doigt. Aucune photo de banque d'images : la matière même du métier, en mouvement.
+1. **La ligne d'eau.** La page s'ouvre sur une ligne d'eau qui traverse le titre : au-dessus, la pierre claire ; en dessous, l'eau profonde, où la fin de la phrase se lit déviée par la réfraction. Au chargement, l'eau monte jusqu'à sa ligne ; la souris fait naître de petites ondes à la surface. Un repère de niveau d'eau, comme sur un plan d'architecte, annonce la coupe qui suit. Aucune photo de banque d'images, et rien de lourd à calculer.
 2. **Paris, en coupe.** Une coupe d'immeuble parisien, dessinée comme un plan d'architecte. Au scroll, la caméra descend du toit à la cave et s'arrête sur chaque bassin caché : piscine de toit, piscine sous verrière, piscine en sous-sol, spa d'hôtel. Chaque arrêt explique ce que ce lieu exige vraiment.
 3. **Le bord de l'eau.** Les trois façons de faire rencontrer l'eau et la margelle (débordement, goulotte, reprise classique) sont montrées en coupe animée. Le fond mobile se manipule : on fait monter le fond jusqu'à refermer le bassin.
 4. **Les références.** Les palaces et les hôtels s'affichent en grand, comme une liste de lieux d'exception : la preuve est donnée sans discours.
@@ -88,13 +88,13 @@ Les remarques sur le design actuel se limitent donc à ce qu'on peut observer de
 
 **Qualité :**
 - responsive du mobile au grand écran, défilement fluide ;
-- contenu entièrement lisible sans animation (préférence « mouvement réduit » respectée) et repli sans WebGL ;
+- contenu entièrement lisible sans animation (préférence « mouvement réduit » respectée) ;
 - navigation au clavier ;
 - un seul fichier, qui fonctionne hors ligne.
 
 ## 8. À fournir par Idoine pour la mise en ligne
 
-- **Photos des réalisations** : la maquette n'utilise aucune photo, ni de banque d'images ni d'autres piscinistes. Les surfaces d'eau et la coupe sont générées, et sont prévues pour accueillir de vraies photos de projets.
+- **Photos des réalisations** : la maquette n'utilise aucune photo, ni de banque d'images ni d'autres piscinistes. La ligne d'eau, la coupe et les schémas sont dessinés en code, et la page est prévue pour accueillir de vraies photos de projets.
 - **Logo officiel** : il remplacera le logotype typographique.
 - **Confirmation** de la date de création (1966 ou 1967), du nombre de réalisations, des horaires, de l'adresse parisienne et du niveau d'adhésion à la FPP.
 - **Accord** pour citer chaque établissement de la liste de références.

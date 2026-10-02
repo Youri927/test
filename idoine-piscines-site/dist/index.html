@@ -155,7 +155,7 @@ strong { font-weight: 600; }
 /* ——— Navigation ——— */
 .nav {
   position: fixed; inset: 0 0 auto 0; z-index: 50;
-  color: var(--ecume);
+  color: var(--encre);
   transition: color .4s, background-color .4s, box-shadow .4s;
 }
 .nav__bar {
@@ -179,10 +179,6 @@ strong { font-weight: 600; }
   transform: scaleX(0); transform-origin: right; transition: transform .4s var(--ease-out);
 }
 .nav__links a:hover::after { transform: scaleX(1); transform-origin: left; }
-.nav .btn--small { background: var(--ecume); color: var(--encre); }
-.nav .btn--small::before { background: var(--lagon); }
-.nav.is-solid .btn--small { background: var(--encre); color: var(--ecume); }
-.nav.is-solid .btn--small::before { background: var(--bassin); }
 .nav__burger { display: none; width: 44px; height: 44px; border: 0; background: none; cursor: pointer; padding: 0; }
 .nav__burger-lines, .nav__burger-lines::before, .nav__burger-lines::after {
   display: block; width: 22px; height: 1.6px; margin: 0 auto; background: currentColor; position: relative;
@@ -199,67 +195,89 @@ strong { font-weight: 600; }
 .menu__links a { font-size: 1.7rem; font-stretch: 120%; font-weight: 300; text-decoration: none; padding: 6px 0; }
 .menu-open .nav { color: var(--encre); background: var(--calcaire); }
 
-/* ——— 1. Hero : l'eau vivante ——— */
+/* ——— 1. Hero : la ligne d'eau ——— */
 .hero {
+  --wl: 64vh;      /* hauteur de la ligne d'eau depuis le haut du hero (calculée en JS) */
+  --wl-t: 80%;     /* la même, depuis le haut du titre */
   position: relative;
   height: 100vh;
   height: 100svh;
-  min-height: 620px;
+  min-height: 640px;
   overflow: hidden;
-  background: radial-gradient(120% 90% at 30% 20%, #3FC3C2 0%, #1D97A0 45%, #0B6B74 100%);
-  color: var(--ecume);
+  background: var(--calcaire);
 }
-.hero__water { position: absolute; inset: 0; width: 100%; height: 100%; }
-.hero__shade {
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    linear-gradient(to top, rgba(4, 34, 40, .62) 0%, rgba(4, 34, 40, .2) 42%, transparent 66%),
-    linear-gradient(to bottom, rgba(4, 34, 40, .34), transparent 22%);
+.hero__water {
+  position: absolute; left: 0; right: 0; top: var(--wl); bottom: 0;
+  background: linear-gradient(180deg, #0E7C86 0%, #0B6B74 22%, #08474F 68%, #063339 100%);
 }
-.no-webgl .hero__water { display: none; }
-.no-webgl .hero { background-blend-mode: normal; }
-.hero__caustic {
-  position: absolute; inset: -20%;
-  background-size: 360px 360px;
-  mix-blend-mode: screen;
-  opacity: .55;
-  animation: caustic-drift 26s linear infinite;
+/* la lumière qui traverse la surface */
+.hero__water::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 120px;
+  background: linear-gradient(rgba(233, 255, 252, .2), transparent);
 }
-.hero__caustic--b { background-size: 520px 520px; opacity: .35; animation-duration: 38s; animation-direction: reverse; }
-@keyframes caustic-drift { to { transform: translate3d(360px, 180px, 0); } }
+/* une nappe de lumière, à peine visible, qui dérive sous la surface */
+.hero__water::after {
+  content: ""; position: absolute; left: -20%; top: 0; width: 70%; height: 80%;
+  background: radial-gradient(50% 60% at 50% 0%, rgba(233, 255, 252, .1), transparent 70%);
+  animation: drift 24s ease-in-out infinite alternate;
+}
+@keyframes drift { to { transform: translateX(70%); } }
+.hero__surface {
+  position: absolute; left: 0; top: -8px; width: 200%; height: 16px; overflow: visible;
+  animation: surface 16s linear infinite;
+}
+.hero__surface-fill { fill: #0E7C86; }
+.hero__surface-line { fill: none; stroke: #E9FFFC; stroke-width: 1.6; vector-effect: non-scaling-stroke; opacity: .85; }
+@keyframes surface { to { transform: translateX(-50%); } }
+.hero__ripples { position: absolute; inset: 0; pointer-events: none; }
+.ripple {
+  position: absolute; width: 150px; height: 18px; margin: -9px 0 0 -75px;
+  border: 1.4px solid rgba(233, 255, 252, .85); border-radius: 50%;
+  animation: ripple 2.2s cubic-bezier(.2, .7, .3, 1) forwards;
+}
+.ripple--big { width: 320px; height: 34px; margin: -17px 0 0 -160px; }
+@keyframes ripple { from { transform: scale(.08); opacity: .95; } to { transform: scale(1); opacity: 0; } }
+.hero__level {
+  position: absolute; top: calc(var(--wl) - 30px);
+  right: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: var(--encre); font-size: .8rem; font-stretch: 75%; font-weight: 500;
+}
+.hero__level span { order: -1; }
 .hero__inner {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  max-width: var(--max); margin: 0 auto;
-  padding: 0 var(--gutter) clamp(36px, 7vh, 84px);
+  position: absolute; left: 0; right: 0; bottom: clamp(52px, 11vh, 140px);
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter);
   pointer-events: none;
 }
 .hero__inner a, .hero__inner button { pointer-events: auto; }
+.hero__titlebox { position: relative; }
 .hero__title {
-  font-size: clamp(3rem, 8.2vw, 9.4rem);
+  margin: 0;
+  font-size: clamp(3rem, 8.2vw, 7.9rem);
   font-stretch: 125%;
   font-weight: 300;
-  line-height: .94;
+  line-height: .96;
   letter-spacing: -.03em;
   max-width: 16.5ch;
   text-wrap: balance;
-  text-shadow: 0 2px 40px rgba(4, 34, 40, .25);
+  color: var(--encre);
+  clip-path: inset(0 0 calc(100% - var(--wl-t)) 0);
 }
+/* sous la surface, la même phrase, éclaircie et déviée par l'eau */
+.hero__title--under {
+  position: absolute; inset: 0;
+  color: rgba(233, 255, 252, .9);
+  clip-path: inset(var(--wl-t) 0 0 0);
+  transform-origin: 0 var(--wl-t);
+  animation: refract 6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes refract { from { transform: translateX(0) scaleY(1.04); } to { transform: translateX(.06em) scaleY(1.07); } }
 .hero__title .line { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
-.hero__title .line > span { display: inline-block; will-change: transform; }
-.hero__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-top: clamp(24px, 4vh, 44px); }
-.hero__lede { max-width: 44ch; margin: 0; font-size: clamp(1.02rem, 1.3vw, 1.18rem); line-height: 1.55; color: rgba(246, 248, 247, .9); }
+.hero__title .line > span { display: inline-block; }
+.hero__foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-top: clamp(44px, 8vh, 96px); }
+.hero__lede { max-width: 44ch; margin: 0; font-size: clamp(1.02rem, 1.3vw, 1.18rem); line-height: 1.55; color: rgba(246, 248, 247, .88); }
 .hero__actions { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
-.hero__hint {
-  position: absolute; right: var(--gutter); top: calc(var(--nav-h) + 22px); margin: 0;
-  font-size: .82rem; font-stretch: 80%; font-weight: 500; letter-spacing: .01em;
-  color: rgba(246, 248, 247, .85);
-  display: flex; align-items: center; gap: 10px;
-  opacity: 0; transition: opacity 1.2s;
-}
-.hero__hint::before { content: ""; width: 26px; height: 1px; background: currentColor; }
-.hero__hint.is-visible { opacity: 1; }
-.hint--touch { display: none; }
-@media (hover: none) { .hint--fine { display: none; } .hint--touch { display: inline; } }
 
 /* ——— 2. Paris, en coupe ——— */
 .lieux { position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); background: var(--calcaire); }
@@ -477,7 +495,7 @@ strong { font-weight: 600; }
   .nav__links, .nav__cta { display: none; }
   .nav__burger { display: block; }
   .hero__foot { flex-direction: column; align-items: flex-start; gap: 24px; }
-  .hero__hint { top: auto; bottom: auto; top: calc(var(--nav-h) + 14px); }
+  .hero__level { right: var(--gutter); }
   .lieux { grid-template-columns: minmax(0, 1fr); }
   .lieux__visual {
     grid-column: 1; grid-row: 1;
@@ -544,12 +562,24 @@ strong { font-weight: 600; }
 </header>
 
 <main>
-  <!-- 1. L'eau vivante -->
+  <!-- 1. La ligne d'eau : le titre est à moitié immergé -->
   <section class="hero" id="haut" data-hero aria-labelledby="hero-title">
-    <canvas class="hero__water" data-water aria-hidden="true"></canvas>
-    <div class="hero__shade" aria-hidden="true"></div>
+    <div class="hero__water" aria-hidden="true">
+      <svg class="hero__surface" viewBox="0 0 2400 16" preserveAspectRatio="none" focusable="false">
+        <path class="hero__surface-fill" d=""/>
+        <path class="hero__surface-line" d=""/>
+      </svg>
+    </div>
+    <div class="hero__ripples" data-ripples aria-hidden="true"></div>
+    <div class="hero__level" data-level aria-hidden="true">
+      <svg viewBox="0 0 16 12" width="16" height="12"><path d="M1 1h14L8 11z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      <span>Ligne d’eau</span>
+    </div>
     <div class="hero__inner">
-      <h1 class="hero__title" id="hero-title" data-split>L’eau, là où Paris ne l’attend pas.</h1>
+      <div class="hero__titlebox" data-titlebox>
+        <h1 class="hero__title" id="hero-title" data-split>L’eau, là où Paris ne l’attend pas.</h1>
+        <p class="hero__title hero__title--under" data-under aria-hidden="true">L’eau, là où Paris ne l’attend pas.</p>
+      </div>
       <div class="hero__foot">
         <p class="hero__lede">Idoine conçoit et construit des piscines et des spas sur mesure pour les particuliers, les hôtels et les palaces, à Paris et en Île-de-France, depuis 1966.</p>
         <div class="hero__actions">
@@ -558,7 +588,6 @@ strong { font-weight: 600; }
         </div>
       </div>
     </div>
-    <p class="hero__hint" aria-hidden="true"><span class="hint--fine">Passez la main sur l’eau</span><span class="hint--touch">Touchez l’eau</span></p>
   </section>
 
   <!-- 2. Paris, en coupe -->
@@ -841,7 +870,7 @@ strong { font-weight: 600; }
 (function(){var e=`1.3.26`;function t(e,t,n){return Math.max(e,Math.min(t,n))}function n(e,t,n){return(1-n)*e+n*t}function r(e,t,r,i){return n(e,t,1-Math.exp(-r*i))}function i(e,t){return(e%t+t)%t}var a=class{isRunning=!1;value=0;from=0;to=0;currentTime=0;lerp;duration;easing;onUpdate;advance(e){if(!this.isRunning)return;let n=!1;if(this.duration&&this.easing){this.currentTime+=e;let r=t(0,this.currentTime/this.duration,1);n=r>=1;let i=n?1:this.easing(r);this.value=this.from+(this.to-this.from)*i}else this.lerp?(this.value=r(this.value,this.to,this.lerp*60,e),Math.round(this.value)===Math.round(this.to)&&(this.value=this.to,n=!0)):(this.value=this.to,n=!0);n&&this.stop(),this.onUpdate?.(this.value,n)}stop(){this.isRunning=!1}fromTo(e,t,{lerp:n,duration:r,easing:i,onStart:a,onUpdate:o}){this.from=this.value=e,this.to=t,this.lerp=n,this.duration=r,this.easing=i,this.currentTime=0,this.isRunning=!0,a?.(),this.onUpdate=o}};function o(e,t){let n;return function(...r){clearTimeout(n),n=setTimeout(()=>{n=void 0,e.apply(this,r)},t)}}var s=class{width=0;height=0;scrollHeight=0;scrollWidth=0;debouncedResize;wrapperResizeObserver;contentResizeObserver;constructor(e,t,{autoResize:n=!0,debounce:r=250}={}){this.wrapper=e,this.content=t,n&&(this.debouncedResize=o(this.resize,r),this.wrapper instanceof Window?window.addEventListener(`resize`,this.debouncedResize):(this.wrapperResizeObserver=new ResizeObserver(this.debouncedResize),this.wrapperResizeObserver.observe(this.wrapper)),this.contentResizeObserver=new ResizeObserver(this.debouncedResize),this.contentResizeObserver.observe(this.content)),this.resize()}destroy(){this.wrapperResizeObserver?.disconnect(),this.contentResizeObserver?.disconnect(),this.wrapper===window&&this.debouncedResize&&window.removeEventListener(`resize`,this.debouncedResize)}resize=()=>{this.onWrapperResize(),this.onContentResize()};onWrapperResize=()=>{this.wrapper instanceof Window?(this.width=window.innerWidth,this.height=window.innerHeight):(this.width=this.wrapper.clientWidth,this.height=this.wrapper.clientHeight)};onContentResize=()=>{this.wrapper instanceof Window?(this.scrollHeight=this.content.scrollHeight,this.scrollWidth=this.content.scrollWidth):(this.scrollHeight=this.wrapper.scrollHeight,this.scrollWidth=this.wrapper.scrollWidth)};get limit(){return{x:this.scrollWidth-this.width,y:this.scrollHeight-this.height}}},c=class{events={};emit(e,...t){let n=this.events[e]||[];for(let e=0,r=n.length;e<r;e++)n[e]?.(...t)}on(e,t){return this.events[e]?this.events[e].push(t):this.events[e]=[t],()=>{this.events[e]=this.events[e]?.filter(e=>t!==e)}}off(e,t){this.events[e]=this.events[e]?.filter(e=>t!==e)}destroy(){this.events={}}};let l={passive:!1};function u(e,t){return e===1?16.666666666666668:e===2?t:1}var d=class{touchStart={x:0,y:0};lastDelta={x:0,y:0};window={width:0,height:0};emitter=new c;constructor(e,t={wheelMultiplier:1,touchMultiplier:1}){this.element=e,this.options=t,window.addEventListener(`resize`,this.onWindowResize),this.onWindowResize(),this.element.addEventListener(`wheel`,this.onWheel,l),this.element.addEventListener(`touchstart`,this.onTouchStart,l),this.element.addEventListener(`touchmove`,this.onTouchMove,l),this.element.addEventListener(`touchend`,this.onTouchEnd,l)}on(e,t){return this.emitter.on(e,t)}destroy(){this.emitter.destroy(),window.removeEventListener(`resize`,this.onWindowResize),this.element.removeEventListener(`wheel`,this.onWheel,l),this.element.removeEventListener(`touchstart`,this.onTouchStart,l),this.element.removeEventListener(`touchmove`,this.onTouchMove,l),this.element.removeEventListener(`touchend`,this.onTouchEnd,l)}onTouchStart=e=>{let{clientX:t,clientY:n}=e.targetTouches?e.targetTouches[0]:e;this.touchStart.x=t,this.touchStart.y=n,this.lastDelta={x:0,y:0},this.emitter.emit(`scroll`,{deltaX:0,deltaY:0,event:e})};onTouchMove=e=>{let{clientX:t,clientY:n}=e.targetTouches?e.targetTouches[0]:e,r=-(t-this.touchStart.x)*this.options.touchMultiplier,i=-(n-this.touchStart.y)*this.options.touchMultiplier;this.touchStart.x=t,this.touchStart.y=n,this.lastDelta={x:r,y:i},this.emitter.emit(`scroll`,{deltaX:r,deltaY:i,event:e})};onTouchEnd=e=>{this.emitter.emit(`scroll`,{deltaX:this.lastDelta.x,deltaY:this.lastDelta.y,event:e})};onWheel=e=>{let{deltaX:t,deltaY:n,deltaMode:r}=e,i=u(r,this.window.width),a=u(r,this.window.height);t*=i,n*=a,t*=this.options.wheelMultiplier,n*=this.options.wheelMultiplier,this.emitter.emit(`scroll`,{deltaX:t,deltaY:n,event:e})};onWindowResize=()=>{this.window={width:window.innerWidth,height:window.innerHeight}}};let f=e=>Math.min(1,1.001-2**(-10*e));var p=class{_isScrolling=!1;_isStopped=!1;_isLocked=!1;_preventNextNativeScrollEvent=!1;_resetVelocityTimeout=null;_rafId=null;_isDraggingSelection=!1;reducedMotionMediaQuery=window.matchMedia(`(prefers-reduced-motion: reduce)`);isTouching;isIos;time=0;userData={};lastVelocity=0;velocity=0;direction=0;options;targetScroll;animatedScroll;animate=new a;emitter=new c;dimensions;virtualScroll;constructor({wrapper:t=window,content:n=document.documentElement,eventsTarget:r=t,smoothWheel:i=!0,syncTouch:a=!1,syncTouchLerp:o=.075,touchInertiaExponent:c=1.7,duration:l,easing:u,lerp:p=.1,infinite:m=!1,orientation:h=`vertical`,gestureOrientation:g=h===`horizontal`?`both`:`vertical`,touchMultiplier:_=1,wheelMultiplier:v=1,autoResize:y=!0,prevent:b,virtualScroll:x,overscroll:S=!0,autoRaf:C=!1,anchors:w=!1,autoToggle:T=!1,allowNestedScroll:E=!1,__experimental__naiveDimensions:D=!1,naiveDimensions:O=D,stopInertiaOnNavigate:k=!1,respectReducedMotion:A=!0}={}){window.lenisVersion=e,window.lenis||(window.lenis={}),window.lenis.version=e,h===`horizontal`&&(window.lenis.horizontal=!0),a===!0&&(window.lenis.touch=!0),this.isIos=/(iPad|iPhone|iPod)/g.test(navigator.userAgent),(!t||t===document.documentElement)&&(t=window),typeof l==`number`&&typeof u!=`function`?u=f:typeof u==`function`&&typeof l!=`number`&&(l=1),this.options={wrapper:t,content:n,eventsTarget:r,smoothWheel:i,syncTouch:a,syncTouchLerp:o,touchInertiaExponent:c,duration:l,easing:u,lerp:p,infinite:m,gestureOrientation:g,orientation:h,touchMultiplier:_,wheelMultiplier:v,autoResize:y,prevent:b,virtualScroll:x,overscroll:S,autoRaf:C,anchors:w,autoToggle:T,allowNestedScroll:E,naiveDimensions:O,stopInertiaOnNavigate:k,respectReducedMotion:A},this.dimensions=new s(t,n,{autoResize:y}),this.updateClassName(),this.targetScroll=this.animatedScroll=this.actualScroll,this.options.wrapper.addEventListener(`scroll`,this.onNativeScroll),this.options.wrapper.addEventListener(`scrollend`,this.onScrollEnd,{capture:!0}),(this.options.anchors||this.options.stopInertiaOnNavigate)&&this.options.wrapper.addEventListener(`click`,this.onClick),this.options.wrapper.addEventListener(`pointerdown`,this.onPointerDown),this.virtualScroll=new d(r,{touchMultiplier:_,wheelMultiplier:v}),this.virtualScroll.on(`scroll`,this.onVirtualScroll),this.options.autoToggle&&(this.checkOverflow(),this.rootElement.addEventListener(`transitionend`,this.onTransitionEnd)),this.options.autoRaf&&(this._rafId=requestAnimationFrame(this.raf))}destroy(){this.emitter.destroy(),this.options.wrapper.removeEventListener(`scroll`,this.onNativeScroll),this.options.wrapper.removeEventListener(`scrollend`,this.onScrollEnd,{capture:!0}),this.options.wrapper.removeEventListener(`pointerdown`,this.onPointerDown),(this.options.anchors||this.options.stopInertiaOnNavigate)&&this.options.wrapper.removeEventListener(`click`,this.onClick),this.virtualScroll.destroy(),this.dimensions.destroy(),this.cleanUpClassName(),this._rafId&&cancelAnimationFrame(this._rafId)}on(e,t){return this.emitter.on(e,t)}off(e,t){return this.emitter.off(e,t)}onScrollEnd=e=>{e instanceof CustomEvent||(this.isScrolling===`smooth`||this.isScrolling===!1)&&e.stopPropagation()};dispatchScrollendEvent=()=>{this.options.wrapper.dispatchEvent(new CustomEvent(`scrollend`,{bubbles:this.options.wrapper===window,detail:{lenisScrollEnd:!0}}))};get overflow(){let e=this.isHorizontal?`overflow-x`:`overflow-y`;return getComputedStyle(this.rootElement)[e]}checkOverflow(){[`hidden`,`clip`].includes(this.overflow)?this.internalStop():this.internalStart()}onTransitionEnd=e=>{e.propertyName?.includes(`overflow`)&&e.target===this.rootElement&&this.checkOverflow()};setScroll(e){this.isHorizontal?this.options.wrapper.scrollTo({left:e,behavior:`instant`}):this.options.wrapper.scrollTo({top:e,behavior:`instant`})}onClick=e=>{let t=e.composedPath().filter(e=>e instanceof HTMLAnchorElement&&e.href).map(e=>new URL(e.href)),n=new URL(window.location.href);if(this.options.anchors){let e=t.find(e=>n.host===e.host&&n.pathname===e.pathname&&e.hash);if(e){let t=typeof this.options.anchors==`object`&&this.options.anchors?this.options.anchors:void 0,n=decodeURIComponent(e.hash);this.scrollTo(n,t);return}}if(this.options.stopInertiaOnNavigate&&t.some(e=>n.host===e.host&&n.pathname!==e.pathname)){this.reset();return}};onPointerDown=e=>{e.button===1&&this.reset()};isTouchOnSelectionHandle(e){let t=window.getSelection();if(!t||t.isCollapsed||t.rangeCount===0)return!1;let n=e.targetTouches[0]??e.changedTouches[0];if(!n)return!1;let r=t.getRangeAt(0).getClientRects();if(r.length===0)return!1;let i=r[0],a=r[r.length-1],o=Math.hypot(n.clientX-i.left,n.clientY-i.top)<=40,s=Math.hypot(n.clientX-a.right,n.clientY-a.bottom)<=40;return o||s}onVirtualScroll=e=>{if(typeof this.options.virtualScroll==`function`&&this.options.virtualScroll(e)===!1)return;let{deltaX:t,deltaY:n,event:r}=e;if(this.emitter.emit(`virtual-scroll`,{deltaX:t,deltaY:n,event:r}),r.ctrlKey||r.lenisStopPropagation)return;let i=r.type.includes(`touch`),a=r.type.includes(`wheel`);if(i&&this.isIos&&(r.type===`touchstart`&&(this._isDraggingSelection=this.isTouchOnSelectionHandle(r)),this._isDraggingSelection)){r.type===`touchend`&&(this._isDraggingSelection=!1);return}this.isTouching=r.type===`touchstart`||r.type===`touchmove`;let o=t===0&&n===0;if(this.options.syncTouch&&i&&r.type===`touchstart`&&o&&!this.isStopped&&!this.isLocked){this.reset();return}let s=this.options.gestureOrientation===`vertical`&&n===0||this.options.gestureOrientation===`horizontal`&&t===0;if(o||s)return;let c=r.composedPath();c=c.slice(0,c.indexOf(this.rootElement));let l=this.options.prevent,u=Math.abs(t)>=Math.abs(n)?`horizontal`:`vertical`;if(c.find(e=>e instanceof HTMLElement&&(typeof l==`function`&&l?.(e)||e.hasAttribute?.(`data-lenis-prevent`)||u===`vertical`&&e.hasAttribute?.(`data-lenis-prevent-vertical`)||u===`horizontal`&&e.hasAttribute?.(`data-lenis-prevent-horizontal`)||i&&e.hasAttribute?.(`data-lenis-prevent-touch`)||a&&e.hasAttribute?.(`data-lenis-prevent-wheel`)||this.options.allowNestedScroll&&this.hasNestedScroll(e,{deltaX:t,deltaY:n}))))return;if(this.isStopped||this.isLocked){r.cancelable&&r.preventDefault();return}if(!(this.options.syncTouch&&i||this.options.smoothWheel&&a)){this.isScrolling=`native`,this.animate.stop(),r.lenisStopPropagation=!0;return}let d=n;this.options.gestureOrientation===`both`?d=Math.abs(n)>Math.abs(t)?n:t:this.options.gestureOrientation===`horizontal`&&(d=t),(!this.options.overscroll||this.options.infinite||this.options.wrapper!==window&&this.limit>0&&(this.animatedScroll>0&&this.animatedScroll<this.limit||this.animatedScroll===0&&n>0||this.animatedScroll===this.limit&&n<0))&&(r.lenisStopPropagation=!0),r.cancelable&&r.preventDefault();let f=i&&this.options.syncTouch,p=i&&r.type===`touchend`;p&&(d=Math.sign(d)*Math.abs(this.velocity)**this.options.touchInertiaExponent),this.scrollTo(this.targetScroll+d,{programmatic:!1,...f?{lerp:p?this.options.syncTouchLerp:1}:{lerp:this.options.lerp,duration:this.options.duration,easing:this.options.easing}})};resize(){this.dimensions.resize(),this.animatedScroll=this.targetScroll=this.actualScroll,this.emit()}emit(){this.emitter.emit(`scroll`,this)}onNativeScroll=()=>{if(this._resetVelocityTimeout!==null&&(clearTimeout(this._resetVelocityTimeout),this._resetVelocityTimeout=null),this._preventNextNativeScrollEvent){this._preventNextNativeScrollEvent=!1;return}if(this.isScrolling===!1||this.isScrolling===`native`){let e=this.animatedScroll;this.animatedScroll=this.targetScroll=this.actualScroll,this.lastVelocity=this.velocity,this.velocity=this.animatedScroll-e,this.direction=Math.sign(this.animatedScroll-e),this.isStopped||(this.isScrolling=`native`),this.emit(),this.velocity!==0&&(this._resetVelocityTimeout=setTimeout(()=>{this.lastVelocity=this.velocity,this.velocity=0,this.isScrolling=!1,this.emit()},400))}};reset(){this.isLocked=!1,this.isScrolling=!1,this.animatedScroll=this.targetScroll=this.actualScroll,this.lastVelocity=this.velocity=0,this.animate.stop()}start(){if(this.isStopped){if(this.options.autoToggle){this.rootElement.style.removeProperty(`overflow`);return}this.internalStart()}}internalStart(){this.isStopped&&(this.reset(),this.isStopped=!1,this.emit())}stop(){if(!this.isStopped){if(this.options.autoToggle){this.rootElement.style.setProperty(`overflow`,`clip`);return}this.internalStop()}}internalStop(){this.isStopped||(this.reset(),this.isStopped=!0,this.emit())}raf=e=>{let t=e-(this.time||e);this.time=e,this.animate.advance(t*.001),this.options.autoRaf&&(this._rafId=requestAnimationFrame(this.raf))};scrollTo(e,{offset:n=0,immediate:r=!1,lock:i=!1,programmatic:a=!0,lerp:o=a?this.options.lerp:void 0,duration:s=a?this.options.duration:void 0,easing:c=a?this.options.easing:void 0,onStart:l,onComplete:u,force:d=!1,userData:p}={}){if(this.prefersReducedMotion&&(a?r=!0:(o=1,s=void 0,c=void 0)),(this.isStopped||this.isLocked)&&!d)return;let m=e,h=n;if(typeof m==`string`&&[`top`,`left`,`start`,`#`].includes(m))m=0;else if(typeof m==`string`&&[`bottom`,`right`,`end`].includes(m))m=this.limit;else{let e=null;if(typeof m==`string`?(e=m.startsWith(`#`)?document.getElementById(m.slice(1)):document.querySelector(m),e||(m===`#top`?m=0:console.warn(`Lenis: Target not found`,m))):m instanceof HTMLElement&&m?.nodeType&&(e=m),e){if(this.options.wrapper!==window){let e=this.rootElement.getBoundingClientRect();h-=this.isHorizontal?e.left:e.top}let t=e.getBoundingClientRect(),n=getComputedStyle(e),r=this.isHorizontal?Number.parseFloat(n.scrollMarginLeft):Number.parseFloat(n.scrollMarginTop),i=getComputedStyle(this.rootElement),a=this.isHorizontal?Number.parseFloat(i.scrollPaddingLeft):Number.parseFloat(i.scrollPaddingTop);m=(this.isHorizontal?t.left:t.top)+this.animatedScroll-(Number.isNaN(r)?0:r)-(Number.isNaN(a)?0:a)}}if(typeof m==`number`){if(m+=h,this.options.infinite){if(a){this.targetScroll=this.animatedScroll=this.scroll;let e=m-this.animatedScroll;e>this.limit/2?m-=this.limit:e<-this.limit/2&&(m+=this.limit)}}else m=t(0,m,this.limit);if(m===this.targetScroll){l?.(this),u?.(this);return}if(this.userData=p??{},r){this.animatedScroll=this.targetScroll=m,this.setScroll(this.scroll),this.reset(),this.preventNextNativeScrollEvent(),this.emit(),u?.(this),this.userData={},requestAnimationFrame(()=>{this.dispatchScrollendEvent()});return}a||(this.targetScroll=m),typeof s==`number`&&typeof c!=`function`?c=f:typeof c==`function`&&typeof s!=`number`&&(s=1),this.animate.fromTo(this.animatedScroll,m,{duration:s,easing:c,lerp:o,onStart:()=>{i&&(this.isLocked=!0),this.isScrolling=`smooth`,l?.(this)},onUpdate:(e,t)=>{this.isScrolling=`smooth`,this.lastVelocity=this.velocity,this.velocity=e-this.animatedScroll,this.direction=Math.sign(this.velocity),this.animatedScroll=e,this.setScroll(this.scroll),a&&(this.targetScroll=e),t||this.emit(),t&&(this.reset(),this.emit(),u?.(this),this.userData={},requestAnimationFrame(()=>{this.dispatchScrollendEvent()}),this.preventNextNativeScrollEvent())}})}}preventNextNativeScrollEvent(){this._preventNextNativeScrollEvent=!0,requestAnimationFrame(()=>{this._preventNextNativeScrollEvent=!1})}hasNestedScroll(e,{deltaX:t,deltaY:n}){let r=Date.now();e._lenis||={};let i=e._lenis,a,o,s,c,l,u,d,f,p,m;if(r-(i.time??0)>2e3){i.time=Date.now();let t=window.getComputedStyle(e);if(i.computedStyle=t,a=[`auto`,`overlay`,`scroll`].includes(t.overflowX),o=[`auto`,`overlay`,`scroll`].includes(t.overflowY),l=[`auto`].includes(t.overscrollBehaviorX),u=[`auto`].includes(t.overscrollBehaviorY),i.hasOverflowX=a,i.hasOverflowY=o,!(a||o))return!1;d=e.scrollWidth,f=e.scrollHeight,p=e.clientWidth,m=e.clientHeight,s=d>p,c=f>m,i.isScrollableX=s,i.isScrollableY=c,i.scrollWidth=d,i.scrollHeight=f,i.clientWidth=p,i.clientHeight=m,i.hasOverscrollBehaviorX=l,i.hasOverscrollBehaviorY=u}else s=i.isScrollableX,c=i.isScrollableY,a=i.hasOverflowX,o=i.hasOverflowY,d=i.scrollWidth,f=i.scrollHeight,p=i.clientWidth,m=i.clientHeight,l=i.hasOverscrollBehaviorX,u=i.hasOverscrollBehaviorY;if(!(a&&s||o&&c))return!1;let h=Math.abs(t)>=Math.abs(n)?`horizontal`:`vertical`,g,_,v,y,b,x;if(h===`horizontal`)g=Math.round(e.scrollLeft),_=d-p,v=t,y=a,b=s,x=l;else if(h===`vertical`)g=Math.round(e.scrollTop),_=f-m,v=n,y=o,b=c,x=u;else return!1;return!x&&(g>=_||g<=0)?!0:(v>0?g<_:g>0)&&y&&b}get rootElement(){return this.options.wrapper===window?document.documentElement:this.options.wrapper}get limit(){return this.options.naiveDimensions?this.isHorizontal?this.rootElement.scrollWidth-this.rootElement.clientWidth:this.rootElement.scrollHeight-this.rootElement.clientHeight:this.dimensions.limit[this.isHorizontal?`x`:`y`]}get isHorizontal(){return this.options.orientation===`horizontal`}get actualScroll(){let e=this.options.wrapper;return this.isHorizontal?e.scrollX??e.scrollLeft:e.scrollY??e.scrollTop}get scroll(){return this.options.infinite?i(this.animatedScroll,this.limit):this.animatedScroll}get progress(){return this.limit===0?1:this.scroll/this.limit}get isScrolling(){return this._isScrolling}set isScrolling(e){this._isScrolling!==e&&(this._isScrolling=e,this.updateClassName())}get isStopped(){return this._isStopped}set isStopped(e){this._isStopped!==e&&(this._isStopped=e,this.updateClassName())}get isLocked(){return this._isLocked}set isLocked(e){this._isLocked!==e&&(this._isLocked=e,this.updateClassName())}get isSmooth(){return this.isScrolling===`smooth`}get prefersReducedMotion(){return this.options.respectReducedMotion&&this.reducedMotionMediaQuery.matches}get className(){let e=`lenis`;return this.options.autoToggle&&(e+=` lenis-autoToggle`),this.isStopped&&(e+=` lenis-stopped`),this.isLocked&&(e+=` lenis-locked`),this.isScrolling&&(e+=` lenis-scrolling`),this.isScrolling===`smooth`&&(e+=` lenis-smooth`),e}updateClassName(){this.cleanUpClassName(),this.className.split(` `).forEach(e=>{this.rootElement.classList.add(e)})}cleanUpClassName(){for(let e of Array.from(this.rootElement.classList))(e===`lenis`||e.startsWith(`lenis-`))&&this.rootElement.classList.remove(e)}};globalThis.Lenis=p,globalThis.Lenis.prototype=p.prototype})();
 //# sourceMappingURL=lenis.min.js.map
 ;
-/* Idoine — l'eau vivante (WebGL) et la texture de reflets (caustiques) */
+/* Idoine — texture de reflets (caustiques) pour l'eau des dessins */
 (() => {
   'use strict';
 
@@ -909,203 +938,7 @@ strong { font-weight: 600; }
     return c.toDataURL('image/png');
   }
 
-  /* ——— L'eau vivante : surface calculée en direct ——— */
-  const VERT = `
-attribute vec2 aPos;
-void main(){ gl_Position = vec4(aPos, 0.0, 1.0); }`;
-
-  const FRAG = `
-precision highp float;
-uniform vec2 uRes;
-uniform float uTime;
-uniform float uScale;
-uniform int uCount;
-uniform vec4 uDrops[24];
-
-float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
-vec2 hash2(vec2 p){ return fract(sin(vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)))) * 43758.5453); }
-
-// hauteur de la surface : houle légère + ondes nées des gouttes
-float height(vec2 p){
-  vec2 q = p / uScale;
-  float t = uTime;
-  float h = 0.0;
-  h += sin(dot(q, vec2(0.86, 0.50)) * 1.6 + t * 0.85) * 0.11;
-  h += sin(dot(q, vec2(-0.42, 0.91)) * 2.2 + t * 1.10) * 0.08;
-  h += sin(dot(q, vec2(0.97, -0.24)) * 3.3 + t * 1.55) * 0.045;
-  h += sin(dot(q, vec2(0.18, 0.98)) * 5.1 - t * 2.05) * 0.025;
-  for (int i = 0; i < 24; i++) {
-    if (i >= uCount) break;
-    vec4 d = uDrops[i];
-    float age = t - d.z;
-    if (age > 0.0 && age < 5.0) {
-      float r = length(p - d.xy) / uScale;
-      float x = r - age * 1.45;
-      float env = exp(-x * x * 2.6) * exp(-age * 0.95);
-      h += d.w * 1.7 * sin(x * 8.5) * env / (1.0 + r * 1.2);
-    }
-  }
-  return h;
-}
-
-// frontières de cellules de Voronoï animées : les filaments de lumière
-float vedge(vec2 x, float t){
-  vec2 n = floor(x);
-  vec2 f = fract(x);
-  float d1 = 8.0;
-  float d2 = 8.0;
-  for (int j = -1; j <= 1; j++) {
-    for (int i = -1; i <= 1; i++) {
-      vec2 g = vec2(float(i), float(j));
-      vec2 o = hash2(n + g);
-      o = 0.5 + 0.42 * sin(t + 6.2831 * o);
-      vec2 r = g + o - f;
-      float d = dot(r, r);
-      if (d < d1) { d2 = d1; d1 = d; } else if (d < d2) { d2 = d; }
-    }
-  }
-  return sqrt(d2) - sqrt(d1);
-}
-
-float caustic(vec2 p, float t){
-  float a = vedge(p, t * 0.55);
-  float b = vedge(p * 1.9 + 4.7, -t * 0.42);
-  return pow(1.0 - smoothstep(0.0, 0.2, a), 3.0) + 0.5 * pow(1.0 - smoothstep(0.0, 0.15, b), 3.0);
-}
-
-// fond du bassin : mosaïque de pâte de verre, joints clairs
-vec3 mosaic(vec2 fp){
-  vec2 tc = fp / (uScale * 0.2);
-  vec2 id = floor(tc);
-  vec2 f = fract(tc);
-  float j = 0.05;
-  float g = smoothstep(0.0, j, f.x) * smoothstep(0.0, j, f.y) * smoothstep(1.0, 1.0 - j, f.x) * smoothstep(1.0, 1.0 - j, f.y);
-  float v = hash(id);
-  vec3 deep = vec3(0.02, 0.31, 0.35);
-  vec3 light = vec3(0.10, 0.56, 0.59);
-  vec3 tile = mix(deep, light, 0.35 + 0.45 * v);
-  tile *= 0.94 + 0.12 * hash(id + 3.7);
-  vec3 joint = vec3(0.40, 0.66, 0.66);
-  return mix(joint, tile, g);
-}
-
-void main(){
-  vec2 p = gl_FragCoord.xy;
-  float e = max(1.0, uScale * 0.012);
-  float hc = height(p);
-  float hx = height(p + vec2(e, 0.0)) - hc;
-  float hy = height(p + vec2(0.0, e)) - hc;
-  vec3 n = normalize(vec3(-hx * uScale * 0.7 / e, -hy * uScale * 0.7 / e, 1.0));
-
-  // réfraction : le fond est vu à travers la surface
-  vec2 fp = p + n.xy * uScale * 0.42;
-  vec3 col = mosaic(fp);
-
-  // les reflets de lumière dansent au fond, déviés par les vagues
-  float c = caustic(fp / (uScale * 0.62) + n.xy * 1.6, uTime);
-  // la lumière n'est pas uniforme : de grandes nappes plus claires passent lentement
-  float m = 0.5 + 0.5 * sin(fp.x / (uScale * 2.6) + uTime * 0.21) * sin(fp.y / (uScale * 2.1) - uTime * 0.17);
-  c *= 0.45 + 0.75 * m;
-  col = col * (0.8 + 0.2 * c) + vec3(0.80, 1.0, 0.96) * c * 0.36;
-
-  // profondeur : plus sombre vers le bas de l'écran
-  vec2 uv = gl_FragCoord.xy / uRes;
-  col = mix(col, vec3(0.02, 0.23, 0.27), 0.42 * pow(1.0 - uv.y, 1.4));
-
-  // éclats du soleil sur la surface
-  vec3 L = normalize(vec3(-0.32, 0.52, 0.79));
-  vec3 R = reflect(-L, n);
-  float spec = pow(max(R.z, 0.0), 140.0);
-  col += vec3(1.0, 0.99, 0.95) * spec * 0.7;
-  col += vec3(0.86, 0.98, 1.0) * pow(1.0 - n.z, 1.5) * 0.7;
-
-  gl_FragColor = vec4(col, 1.0);
-}`;
-
-  function createWater(canvas) {
-    const gl = canvas.getContext('webgl', {antialias: false, alpha: false, premultipliedAlpha: false, powerPreference: 'high-performance'})
-      || canvas.getContext('experimental-webgl');
-    if (!gl) return null;
-    const compile = (type, src) => {
-      const sh = gl.createShader(type);
-      gl.shaderSource(sh, src);
-      gl.compileShader(sh);
-      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh));
-      return sh;
-    };
-    let prog;
-    try {
-      prog = gl.createProgram();
-      gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
-      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
-      gl.linkProgram(prog);
-      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
-    } catch (err) {
-      console.warn('Eau : WebGL indisponible', err);
-      return null;
-    }
-    gl.useProgram(prog);
-    const buf = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const aPos = gl.getAttribLocation(prog, 'aPos');
-    gl.enableVertexAttribArray(aPos);
-    gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-    const U = (name) => gl.getUniformLocation(prog, name);
-    const uRes = U('uRes');
-    const uTime = U('uTime');
-    const uScale = U('uScale');
-    const uCount = U('uCount');
-    const uDrops = U('uDrops[0]');
-
-    const MAX = 24;
-    const drops = new Float32Array(MAX * 4);
-    let head = 0;
-    let count = 0;
-    let res = 1;
-    let cssW = 1;
-    let cssH = 1;
-    let time = 0;
-
-    const resize = () => {
-      const r = canvas.getBoundingClientRect();
-      cssW = Math.max(1, r.width);
-      cssH = Math.max(1, r.height);
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      // budget de pixels : l'eau est douce, inutile de la calculer en pleine définition
-      res = Math.min(dpr, Math.sqrt(1.5e6 / (cssW * cssH)));
-      canvas.width = Math.round(cssW * res);
-      canvas.height = Math.round(cssH * res);
-      gl.viewport(0, 0, canvas.width, canvas.height);
-    };
-
-    // une goutte en (x, y) px CSS, depuis le coin haut gauche du canvas
-    const drop = (x, y, strength) => {
-      const i = head * 4;
-      drops[i] = x * res;
-      drops[i + 1] = (cssH - y) * res;
-      drops[i + 2] = time;
-      drops[i + 3] = strength;
-      head = (head + 1) % MAX;
-      count = Math.min(MAX, count + 1);
-    };
-
-    const render = (t) => {
-      time = t;
-      const scale = Math.max(90, Math.min(cssW, 1500) * 0.085) * res;
-      gl.uniform2f(uRes, canvas.width, canvas.height);
-      gl.uniform1f(uTime, t);
-      gl.uniform1f(uScale, scale);
-      gl.uniform1i(uCount, count);
-      gl.uniform4fv(uDrops, drops);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-    };
-
-    resize();
-    return {resize, drop, render, get time() { return time; }};
-  }
-
-  window.IdoineWater = {createWater, causticTile};
+  window.IdoineWater = {causticTile};
 })();
 
 ;
@@ -1171,7 +1004,7 @@ void main(){
   }));
 
   /* ——— Texture de reflets, partagée par tous les dessins ——— */
-  const causticURL = W ? W.causticTile(256, 5, 11) : '';
+  const causticURL = W ? W.causticTile(192, 4, 11) : '';
   const defs = document.createElementNS(SVGNS, 'svg');
   defs.setAttribute('width', '0');
   defs.setAttribute('height', '0');
@@ -1188,9 +1021,11 @@ void main(){
   document.body.prepend(defs);
   const cau = [$('#cau1', defs), $('#cau2', defs)];
   let causticOn = 0;
+  let causticLast = 0;
   const causticLoop = (t) => {
     requestAnimationFrame(causticLoop);
-    if (!causticOn || reduce) return;
+    if (!causticOn || reduce || t - causticLast < 80) return;
+    causticLast = t;
     const s = t / 1000;
     cau[0].setAttribute('patternTransform', `translate(${(s * 9) % 200} ${(s * 5) % 200})`);
     cau[1].setAttribute('patternTransform', `translate(${310 - ((s * 6) % 310)} ${(s * 8) % 310})`);
@@ -1205,116 +1040,119 @@ void main(){
     }).observe(el);
   };
 
-  /* ——— 1. Hero : l'eau vivante ——— */
-  const canvas = $('[data-water]');
-  const hint = $('.hero__hint');
-  let water = null;
-  if (W && canvas) {
-    try { water = W.createWater(canvas); } catch (err) { water = null; }
-  }
-  if (!water) {
-    // repli : dégradé et reflets en CSS
-    root.classList.add('no-webgl');
-    ['a', 'b'].forEach((k) => {
-      const d = document.createElement('div');
-      d.className = `hero__caustic hero__caustic--${k}`;
-      d.style.backgroundImage = `url(${causticURL})`;
-      hero.insertBefore(d, $('.hero__shade', hero));
-    });
-  } else {
-    let running = true;
-    let visible = true;
-    const t0 = performance.now();
-    let nextAuto = 1.2;
-    const loop = (now) => {
-      if (running) requestAnimationFrame(loop);
-      const t = (now - t0) / 1000;
-      if (!reduce && t > nextAuto) {
-        // de temps en temps, une goutte tombe d'elle-même
-        const r = canvas.getBoundingClientRect();
-        water.drop(r.width * (0.15 + Math.random() * 0.7), r.height * (0.12 + Math.random() * 0.55), 0.28 + Math.random() * 0.2);
-        nextAuto = t + 2.2 + Math.random() * 2.4;
-      }
-      water.render(reduce ? 1.4 : t);
-    };
-    const start = () => { if (!running && visible) { running = true; requestAnimationFrame(loop); } };
-    if (reduce) {
-      running = false;
-      water.render(1.4);
-    } else {
-      requestAnimationFrame(loop);
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver(([en]) => {
-          visible = en.isIntersecting;
-          if (visible) start(); else running = false;
-        }).observe(hero);
-      }
-      document.addEventListener('visibilitychange', () => { if (document.hidden) running = false; else start(); });
-    }
-    window.addEventListener('resize', () => { water.resize(); if (reduce) water.render(1.4); });
-
-    // la souris ou le doigt laisse un sillage
-    let last = null;
-    let lastDrop = 0;
-    const local = (e) => {
-      const r = canvas.getBoundingClientRect();
-      return {x: e.clientX - r.left, y: e.clientY - r.top, t: performance.now()};
-    };
-    hero.addEventListener('pointermove', (e) => {
-      if (reduce) return;
-      const p = local(e);
-      if (last && p.t - lastDrop > 50) {
-        const v = Math.hypot(p.x - last.x, p.y - last.y) / Math.max(16, p.t - last.t);
-        if (v > 0.05) {
-          water.drop(p.x, p.y, Math.min(0.55, 0.12 + v * 0.35));
-          lastDrop = p.t;
-          hint.classList.remove('is-visible');
-        }
-      }
-      last = p;
-    });
-    hero.addEventListener('pointerdown', (e) => {
-      if (reduce || e.target.closest('a, button')) return;
-      const p = local(e);
-      water.drop(p.x, p.y, 1.1);
-      hint.classList.remove('is-visible');
-    });
-    hero.addEventListener('pointerleave', () => { last = null; });
-    // l'ouverture : une première onde quand le titre se pose
-    if (!reduce) {
-      setTimeout(() => {
-        const r = canvas.getBoundingClientRect();
-        water.drop(r.width * 0.68, r.height * 0.38, 1.25);
-      }, 700);
-    }
-  }
-
-  // Titre : révélé ligne par ligne
+  /* ——— 1. Hero : la ligne d'eau ——— */
+  const titleBox = $('[data-titlebox]');
   const title = $('[data-split]');
+  const under = $('[data-under]');
+  const ripples = $('[data-ripples]');
+  const levelMark = $('[data-level]');
+  const TITLE = title.textContent.trim();
+  title.setAttribute('aria-label', TITLE);
+
+  // la surface : une houle très douce, deux périodes de large pour boucler sans raccord
+  (() => {
+    const svg = $('.hero__surface', hero);
+    let d = '';
+    for (let x = 0; x <= 2400; x += 20) {
+      const y = 8 + Math.sin((x / 300) * Math.PI * 2) * 2.6 + Math.sin((x / 150) * Math.PI * 2 + 1.3) * 0.9;
+      d += `${x ? 'L' : 'M'}${x} ${y.toFixed(2)}`;
+    }
+    $('.hero__surface-line', svg).setAttribute('d', d);
+    $('.hero__surface-fill', svg).setAttribute('d', `${d}L2400 16L0 16Z`);
+  })();
+
+  // le titre en lignes (pour la révélation), recopié à l'identique sous la surface
   const splitLines = () => {
-    const text = title.textContent.trim();
-    title.setAttribute('aria-label', text);
-    title.innerHTML = text.split(/\s+/).map((w) => `<span class="w" aria-hidden="true">${w}</span>`).join(' ');
-    const words = $$('.w', title);
+    title.innerHTML = TITLE.split(/\s+/).map((w) => `<span class="w" aria-hidden="true">${w}</span>`).join(' ');
     const lines = [];
     let top = null;
-    words.forEach((w) => {
+    $$('.w', title).forEach((w) => {
       if (w.offsetTop !== top) { lines.push([]); top = w.offsetTop; }
       lines[lines.length - 1].push(w.textContent);
     });
     title.innerHTML = lines.map((l) => `<span class="line" aria-hidden="true"><span>${l.join(' ')}</span></span>`).join('');
+    under.innerHTML = title.innerHTML;
   };
-  const intro = () => {
-    if (!hasGsap || reduce) { hint.classList.add('is-visible'); return; }
+
+  // la ligne d'eau traverse la dernière ligne du titre, un peu sous sa moitié
+  let wlFinal = 0;
+  let wlNow = null;
+  const setWL = (y) => {
+    wlNow = y;
+    const top = titleBox.getBoundingClientRect().top - hero.getBoundingClientRect().top;
+    hero.style.setProperty('--wl', `${y.toFixed(1)}px`);
+    hero.style.setProperty('--wl-t', `${(y - top).toFixed(1)}px`);
+  };
+  const measureWL = () => {
+    const lines = $$('.line', title);
+    const last = lines[lines.length - 1] || title;
+    const lr = last.getBoundingClientRect();
+    wlFinal = lr.top - hero.getBoundingClientRect().top + lr.height * 0.58;
+  };
+
+  // une onde à la surface, à l'abscisse donnée
+  let lastRipple = 0;
+  const ripple = (x, big = false) => {
+    if (reduce || wlNow === null) return;
+    const r = document.createElement('span');
+    r.className = big ? 'ripple ripple--big' : 'ripple';
+    r.style.left = `${x}px`;
+    r.style.top = `${wlNow}px`;
+    r.addEventListener('animationend', () => r.remove());
+    ripples.appendChild(r);
+    while (ripples.children.length > 10) ripples.firstChild.remove();
+  };
+  hero.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'touch') return;
+    const r = hero.getBoundingClientRect();
+    const y = e.clientY - r.top;
+    const now = performance.now();
+    // la souris effleure l'eau quand elle passe près de la surface
+    if (Math.abs(y - wlNow) < 110 && now - lastRipple > 160) {
+      lastRipple = now;
+      ripple(e.clientX - r.left);
+    }
+  });
+  hero.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('a, button')) return;
+    ripple(e.clientX - hero.getBoundingClientRect().left, true);
+  });
+  // et de temps en temps, une onde naît d'elle-même
+  if (!reduce) {
+    const ambient = () => {
+      if (!document.hidden && hero.getBoundingClientRect().bottom > 0) ripple(hero.offsetWidth * (0.2 + Math.random() * 0.6));
+      setTimeout(ambient, 3800 + Math.random() * 3000);
+    };
+    setTimeout(ambient, 3200);
+  }
+
+  const layoutHero = (animate) => {
     splitLines();
+    measureWL();
+    if (!animate) { setWL(wlFinal); return; }
+    // l'ouverture : le titre se pose, puis l'eau monte jusqu'à sa ligne
+    setWL(hero.offsetHeight + 20);
+    const wl = {y: hero.offsetHeight + 20};
     const tl = gsap.timeline({defaults: {ease: 'expo.out'}});
-    tl.from(canvas, {opacity: 0, duration: 1.6, ease: 'power2.out'}, 0)
-      .from($$('.line > span', title), {yPercent: 108, duration: 1.3, stagger: 0.11}, 0.25)
-      .from($$('.hero__lede, .hero__actions', hero), {opacity: 0, y: 18, duration: 1, stagger: 0.12}, 0.85)
-      .from('.nav__bar', {opacity: 0, y: -12, duration: 0.9}, 0.6)
-      .add(() => hint.classList.add('is-visible'), 2.2);
+    tl.from($$('.line > span', titleBox), {yPercent: 108, duration: 1.25, stagger: 0.1}, 0.15)
+      .to(wl, {y: wlFinal, duration: 1.9, ease: 'power3.out', onUpdate: () => setWL(wl.y)}, 0.7)
+      .from(levelMark, {opacity: 0, duration: 0.8}, 1.9)
+      .from($$('.hero__lede, .hero__actions', hero), {opacity: 0, y: 16, duration: 1, stagger: 0.12}, 1.5)
+      .from('.nav__bar', {opacity: 0, y: -10, duration: 0.9}, 0.4)
+      .add(() => ripple(hero.offsetWidth * 0.62, true), 2.1);
   };
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(intro); else intro();
+  const startHero = () => layoutHero(hasGsap && !reduce);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(startHero); else startHero();
+  let heroTimer = 0;
+  let lastW = window.innerWidth;
+  window.addEventListener('resize', () => {
+    clearTimeout(heroTimer);
+    heroTimer = setTimeout(() => {
+      if (window.innerWidth !== lastW) { lastW = window.innerWidth; splitLines(); }
+      measureWL();
+      setWL(wlFinal);
+    }, 120);
+  });
 
   /* ——— 2. Paris, en coupe : le dessin ——— */
   const R = (x, y, w, h, cls = 'poche', extra = '') => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" ${extra}/>`;

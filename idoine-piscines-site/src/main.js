@@ -60,7 +60,7 @@
   }));
 
   /* ——— Texture de reflets, partagée par tous les dessins ——— */
-  const causticURL = W ? W.causticTile(256, 5, 11) : '';
+  const causticURL = W ? W.causticTile(192, 4, 11) : '';
   const defs = document.createElementNS(SVGNS, 'svg');
   defs.setAttribute('width', '0');
   defs.setAttribute('height', '0');
@@ -77,9 +77,11 @@
   document.body.prepend(defs);
   const cau = [$('#cau1', defs), $('#cau2', defs)];
   let causticOn = 0;
+  let causticLast = 0;
   const causticLoop = (t) => {
     requestAnimationFrame(causticLoop);
-    if (!causticOn || reduce) return;
+    if (!causticOn || reduce || t - causticLast < 80) return;
+    causticLast = t;
     const s = t / 1000;
     cau[0].setAttribute('patternTransform', `translate(${(s * 9) % 200} ${(s * 5) % 200})`);
     cau[1].setAttribute('patternTransform', `translate(${310 - ((s * 6) % 310)} ${(s * 8) % 310})`);
@@ -94,116 +96,119 @@
     }).observe(el);
   };
 
-  /* ——— 1. Hero : l'eau vivante ——— */
-  const canvas = $('[data-water]');
-  const hint = $('.hero__hint');
-  let water = null;
-  if (W && canvas) {
-    try { water = W.createWater(canvas); } catch (err) { water = null; }
-  }
-  if (!water) {
-    // repli : dégradé et reflets en CSS
-    root.classList.add('no-webgl');
-    ['a', 'b'].forEach((k) => {
-      const d = document.createElement('div');
-      d.className = `hero__caustic hero__caustic--${k}`;
-      d.style.backgroundImage = `url(${causticURL})`;
-      hero.insertBefore(d, $('.hero__shade', hero));
-    });
-  } else {
-    let running = true;
-    let visible = true;
-    const t0 = performance.now();
-    let nextAuto = 1.2;
-    const loop = (now) => {
-      if (running) requestAnimationFrame(loop);
-      const t = (now - t0) / 1000;
-      if (!reduce && t > nextAuto) {
-        // de temps en temps, une goutte tombe d'elle-même
-        const r = canvas.getBoundingClientRect();
-        water.drop(r.width * (0.15 + Math.random() * 0.7), r.height * (0.12 + Math.random() * 0.55), 0.28 + Math.random() * 0.2);
-        nextAuto = t + 2.2 + Math.random() * 2.4;
-      }
-      water.render(reduce ? 1.4 : t);
-    };
-    const start = () => { if (!running && visible) { running = true; requestAnimationFrame(loop); } };
-    if (reduce) {
-      running = false;
-      water.render(1.4);
-    } else {
-      requestAnimationFrame(loop);
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver(([en]) => {
-          visible = en.isIntersecting;
-          if (visible) start(); else running = false;
-        }).observe(hero);
-      }
-      document.addEventListener('visibilitychange', () => { if (document.hidden) running = false; else start(); });
-    }
-    window.addEventListener('resize', () => { water.resize(); if (reduce) water.render(1.4); });
-
-    // la souris ou le doigt laisse un sillage
-    let last = null;
-    let lastDrop = 0;
-    const local = (e) => {
-      const r = canvas.getBoundingClientRect();
-      return {x: e.clientX - r.left, y: e.clientY - r.top, t: performance.now()};
-    };
-    hero.addEventListener('pointermove', (e) => {
-      if (reduce) return;
-      const p = local(e);
-      if (last && p.t - lastDrop > 50) {
-        const v = Math.hypot(p.x - last.x, p.y - last.y) / Math.max(16, p.t - last.t);
-        if (v > 0.05) {
-          water.drop(p.x, p.y, Math.min(0.55, 0.12 + v * 0.35));
-          lastDrop = p.t;
-          hint.classList.remove('is-visible');
-        }
-      }
-      last = p;
-    });
-    hero.addEventListener('pointerdown', (e) => {
-      if (reduce || e.target.closest('a, button')) return;
-      const p = local(e);
-      water.drop(p.x, p.y, 1.1);
-      hint.classList.remove('is-visible');
-    });
-    hero.addEventListener('pointerleave', () => { last = null; });
-    // l'ouverture : une première onde quand le titre se pose
-    if (!reduce) {
-      setTimeout(() => {
-        const r = canvas.getBoundingClientRect();
-        water.drop(r.width * 0.68, r.height * 0.38, 1.25);
-      }, 700);
-    }
-  }
-
-  // Titre : révélé ligne par ligne
+  /* ——— 1. Hero : la ligne d'eau ——— */
+  const titleBox = $('[data-titlebox]');
   const title = $('[data-split]');
+  const under = $('[data-under]');
+  const ripples = $('[data-ripples]');
+  const levelMark = $('[data-level]');
+  const TITLE = title.textContent.trim();
+  title.setAttribute('aria-label', TITLE);
+
+  // la surface : une houle très douce, deux périodes de large pour boucler sans raccord
+  (() => {
+    const svg = $('.hero__surface', hero);
+    let d = '';
+    for (let x = 0; x <= 2400; x += 20) {
+      const y = 8 + Math.sin((x / 300) * Math.PI * 2) * 2.6 + Math.sin((x / 150) * Math.PI * 2 + 1.3) * 0.9;
+      d += `${x ? 'L' : 'M'}${x} ${y.toFixed(2)}`;
+    }
+    $('.hero__surface-line', svg).setAttribute('d', d);
+    $('.hero__surface-fill', svg).setAttribute('d', `${d}L2400 16L0 16Z`);
+  })();
+
+  // le titre en lignes (pour la révélation), recopié à l'identique sous la surface
   const splitLines = () => {
-    const text = title.textContent.trim();
-    title.setAttribute('aria-label', text);
-    title.innerHTML = text.split(/\s+/).map((w) => `<span class="w" aria-hidden="true">${w}</span>`).join(' ');
-    const words = $$('.w', title);
+    title.innerHTML = TITLE.split(/\s+/).map((w) => `<span class="w" aria-hidden="true">${w}</span>`).join(' ');
     const lines = [];
     let top = null;
-    words.forEach((w) => {
+    $$('.w', title).forEach((w) => {
       if (w.offsetTop !== top) { lines.push([]); top = w.offsetTop; }
       lines[lines.length - 1].push(w.textContent);
     });
     title.innerHTML = lines.map((l) => `<span class="line" aria-hidden="true"><span>${l.join(' ')}</span></span>`).join('');
+    under.innerHTML = title.innerHTML;
   };
-  const intro = () => {
-    if (!hasGsap || reduce) { hint.classList.add('is-visible'); return; }
+
+  // la ligne d'eau traverse la dernière ligne du titre, un peu sous sa moitié
+  let wlFinal = 0;
+  let wlNow = null;
+  const setWL = (y) => {
+    wlNow = y;
+    const top = titleBox.getBoundingClientRect().top - hero.getBoundingClientRect().top;
+    hero.style.setProperty('--wl', `${y.toFixed(1)}px`);
+    hero.style.setProperty('--wl-t', `${(y - top).toFixed(1)}px`);
+  };
+  const measureWL = () => {
+    const lines = $$('.line', title);
+    const last = lines[lines.length - 1] || title;
+    const lr = last.getBoundingClientRect();
+    wlFinal = lr.top - hero.getBoundingClientRect().top + lr.height * 0.58;
+  };
+
+  // une onde à la surface, à l'abscisse donnée
+  let lastRipple = 0;
+  const ripple = (x, big = false) => {
+    if (reduce || wlNow === null) return;
+    const r = document.createElement('span');
+    r.className = big ? 'ripple ripple--big' : 'ripple';
+    r.style.left = `${x}px`;
+    r.style.top = `${wlNow}px`;
+    r.addEventListener('animationend', () => r.remove());
+    ripples.appendChild(r);
+    while (ripples.children.length > 10) ripples.firstChild.remove();
+  };
+  hero.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'touch') return;
+    const r = hero.getBoundingClientRect();
+    const y = e.clientY - r.top;
+    const now = performance.now();
+    // la souris effleure l'eau quand elle passe près de la surface
+    if (Math.abs(y - wlNow) < 110 && now - lastRipple > 160) {
+      lastRipple = now;
+      ripple(e.clientX - r.left);
+    }
+  });
+  hero.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('a, button')) return;
+    ripple(e.clientX - hero.getBoundingClientRect().left, true);
+  });
+  // et de temps en temps, une onde naît d'elle-même
+  if (!reduce) {
+    const ambient = () => {
+      if (!document.hidden && hero.getBoundingClientRect().bottom > 0) ripple(hero.offsetWidth * (0.2 + Math.random() * 0.6));
+      setTimeout(ambient, 3800 + Math.random() * 3000);
+    };
+    setTimeout(ambient, 3200);
+  }
+
+  const layoutHero = (animate) => {
     splitLines();
+    measureWL();
+    if (!animate) { setWL(wlFinal); return; }
+    // l'ouverture : le titre se pose, puis l'eau monte jusqu'à sa ligne
+    setWL(hero.offsetHeight + 20);
+    const wl = {y: hero.offsetHeight + 20};
     const tl = gsap.timeline({defaults: {ease: 'expo.out'}});
-    tl.from(canvas, {opacity: 0, duration: 1.6, ease: 'power2.out'}, 0)
-      .from($$('.line > span', title), {yPercent: 108, duration: 1.3, stagger: 0.11}, 0.25)
-      .from($$('.hero__lede, .hero__actions', hero), {opacity: 0, y: 18, duration: 1, stagger: 0.12}, 0.85)
-      .from('.nav__bar', {opacity: 0, y: -12, duration: 0.9}, 0.6)
-      .add(() => hint.classList.add('is-visible'), 2.2);
+    tl.from($$('.line > span', titleBox), {yPercent: 108, duration: 1.25, stagger: 0.1}, 0.15)
+      .to(wl, {y: wlFinal, duration: 1.9, ease: 'power3.out', onUpdate: () => setWL(wl.y)}, 0.7)
+      .from(levelMark, {opacity: 0, duration: 0.8}, 1.9)
+      .from($$('.hero__lede, .hero__actions', hero), {opacity: 0, y: 16, duration: 1, stagger: 0.12}, 1.5)
+      .from('.nav__bar', {opacity: 0, y: -10, duration: 0.9}, 0.4)
+      .add(() => ripple(hero.offsetWidth * 0.62, true), 2.1);
   };
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(intro); else intro();
+  const startHero = () => layoutHero(hasGsap && !reduce);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(startHero); else startHero();
+  let heroTimer = 0;
+  let lastW = window.innerWidth;
+  window.addEventListener('resize', () => {
+    clearTimeout(heroTimer);
+    heroTimer = setTimeout(() => {
+      if (window.innerWidth !== lastW) { lastW = window.innerWidth; splitLines(); }
+      measureWL();
+      setWL(wlFinal);
+    }, 120);
+  });
 
   /* ——— 2. Paris, en coupe : le dessin ——— */
   const R = (x, y, w, h, cls = 'poche', extra = '') => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${h}" ${extra}/>`;

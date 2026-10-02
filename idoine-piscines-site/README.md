@@ -8,7 +8,7 @@ Proposition de refonte du site d’Idoine Piscines, constructeur de piscines et 
 
 « L’eau, là où Paris ne l’attend pas. » Plus des trois quarts des bassins d’Idoine sont à l’intérieur : caves, immeubles anciens, lofts, verrières, toits.
 
-- **L’eau vivante** : la page s’ouvre sur une surface d’eau calculée en direct (WebGL), avec mosaïque, reflets de lumière et ondes sous la souris ou le doigt.
+- **La ligne d’eau** : la page s’ouvre sur une ligne d’eau qui traverse le titre, à moitié immergé et dévié par la réfraction. L’eau monte au chargement, la souris fait naître de petites ondes.
 - **Paris, en coupe** : une coupe d’immeuble parisien dessinée comme un plan d’architecte. Au scroll, la caméra s’arrête sur la piscine de toit, la piscine sous verrière, le spa d’hôtel et la piscine en cave voûtée.
 - **La ligne d’eau** : débordement, goulotte et reprise classique, en coupes animées. Le fond mobile se manipule avec un curseur.
 - **Les références** : les palaces et les hôtels du portfolio, en grand.
@@ -19,7 +19,7 @@ Proposition de refonte du site d’Idoine Piscines, constructeur de piscines et 
 ```
 src/index.html    contenu de la page
 src/styles.css    styles (couleurs et typographie en tête de fichier)
-src/water.js      l’eau en WebGL et la texture des reflets
+src/water.js      la texture des reflets dans l’eau des dessins
 src/main.js       coupe d’immeuble, bords de bassin, fond mobile, formulaire
 vendor/           GSAP + ScrollTrigger, Lenis, police Archivo
 build.mjs         assemble dist/index.html
@@ -43,8 +43,8 @@ Après une modification dans `src/`, lancez `node build.mjs` (Node 18 ou plus r�
 
 ## Accessibilité et repli
 
-- La préférence « mouvement réduit » est respectée : l’eau est figée et le contenu reste entièrement lisible.
-- Sans WebGL, l’eau est remplacée par un dégradé et des reflets en CSS.
+- La préférence « mouvement réduit » est respectée : rien ne bouge seul et le contenu reste entièrement lisible.
+- Aucun calcul lourd : animations en CSS et SVG, sans WebGL.
 - Navigation au clavier, focus visible.
 - Mise en page vérifiée de 390 px à 1 920 px de large.
 
