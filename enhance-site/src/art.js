@@ -203,7 +203,40 @@
       <path class="g-mark" d="M212 186h22M226 180l8 6-8 6"/>
     </svg>`;
 
+  /* ——— Planches de détail : un calque du visage, recadré, avec ses légendes d'atlas ——— */
+  // labels : [point visé x, y, texte x, y, texte, ancrage]
+  const DETAILS = {
+    // la mâchoire : l'os (remodelage) et le masséter (BOTOX®) superposés
+    jaw: {crop: [-30, 230, 460, 272], layers: [4, 2], extra: '', labels: [
+      [92, 406, -22, 486, 'mandibular angle', 'start'], [322, 362, 422, 486, 'masseter', 'end'], [340, 322, 422, 262, 'reduction line', 'end']]},
+    // la paupière : l'orbiculaire et le pli dessiné au marqueur
+    eye: {crop: [150, 136, 240, 136], layers: [2], extra: '<path class="mk mk--dash" d="M218 196C236 174 286 172 304 192"/><path class="mk" d="M221 196C240 214 282 214 301 194"/>', labels: [
+      [296, 186, 384, 156, 'upper eyelid crease', 'end'], [304, 228, 384, 262, 'orbicularis oculi', 'end']]},
+    // le nez : les os propres et l'orifice piriforme
+    nose: {crop: [118, 186, 164, 168], layers: [4], extra: '', labels: [
+      [208, 236, 278, 206, 'nasal bones', 'end'], [221, 314, 278, 346, 'piriform aperture', 'end']]},
+    // le lifting endoscopique : accès à la lisière, vecteurs et ligaments
+    lift: {crop: [-50, 4, 500, 480], layers: [3], extra: '<circle class="mk" cx="148" cy="44" r="6"/><circle class="mk" cx="200" cy="34" r="6"/><circle class="mk" cx="252" cy="44" r="6"/>', labels: [
+      [200, 34, 200, 20, 'endoscope access points', 'middle'], [101, 306, -40, 306, 'lift vectors', 'start'], [276, 432, 444, 474, 'retaining ligaments', 'end']]},
+  };
+  const detail = (name, id) => {
+    const d = DETAILS[name];
+    const [x, y, w, h] = d.crop;
+    const fs = w / 30;
+    const r = (n) => n.toFixed(1);
+    const inner = d.layers.map((i, k) => PLANES[i](`${id}-${k}`).replace('<svg viewBox="0 0 400 500" aria-hidden="true">', `<svg x="0" y="0" width="400" height="500" viewBox="0 0 400 500" class="dl dl--${k}">`)).join('');
+    const labels = d.labels.map(([px, py, tx, ty, t, anchor]) => {
+      const ex = anchor === 'start' ? tx - fs * 0.3 : anchor === 'end' ? tx + fs * 0.3 : tx;
+      const ey = anchor === 'middle' ? ty + fs * 0.3 : ty - fs * 0.32;
+      const lx = anchor === 'middle' ? px : anchor === 'start' ? Math.max(px - w, tx + t.length * fs * 0.44) : Math.min(px + w, tx - t.length * fs * 0.44);
+      const line = anchor === 'middle' ? '' : `<path class="atlas__lead" d="M${r(px)} ${r(py)}L${r(lx)} ${r(ey)}"/>`;
+      return `${line}<circle class="atlas__dot" cx="${r(px)}" cy="${r(py)}" r="${r(fs * 0.13)}"/><text class="atlas" x="${r(tx)}" y="${r(ty)}" text-anchor="${anchor}" font-size="${r(fs)}">${t}</text>`;
+    }).join('');
+    return `<svg viewBox="${x} ${y} ${w} ${h}" aria-hidden="true" class="detail">${inner}<g class="detail__extra">${d.extra}</g>${labels}</svg>`;
+  };
+
   window.EnhanceArt = {
+    detail,
     FACE,
     plane: (i, id) => PLANES[i](id),
     glyph: (name) => GLYPHS[name],

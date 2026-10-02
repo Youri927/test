@@ -39,13 +39,21 @@
     stack.appendChild(el);
     return el;
   });
-  const FIGS = {jaw: 'jaw contour', eye: 'upper eyelid crease', nose: 'nasal profile and airflow', lift: 'endoscopic access points'};
-  $$('[data-glyph]').forEach((el) => {
-    el.innerHTML = A.glyph(el.dataset.glyph);
+  const FIGS = {jaw: 'the jaw, bone and masseter muscle', eye: 'the upper eyelid', nose: 'the nasal bones', lift: 'the support layer, lift vectors'};
+  $$('[data-detail]').forEach((el, i) => {
+    el.innerHTML = A.detail(el.dataset.detail, `fig${i}`);
+    el.dataset.fig = `Fig. ${i + 1}, ${FIGS[el.dataset.detail]}`;
   });
-  $$('.sig__glyph').forEach((el, i) => {
-    el.dataset.fig = `Fig. ${i + 1}, ${FIGS[el.dataset.glyph] || ''}`;
-  });
+
+  /* ═════════ Couleur des tissus : le chapitre du visage prend la teinte de la couche lue ═════════ */
+  const TISSUE = ['#EED9CC', '#EFDDB4', '#E8C2BC', '#DDD8E0', '#ECE4D2'];
+  const faceEl = $('.face');
+  const tint = {c: TISSUE[0]};
+  const setTissue = (a) => {
+    const c = TISSUE[a < 0 ? 0 : a];
+    if (window.gsap && !reduce) window.gsap.to(tint, {c, duration: 1.2, ease: 'power2.inOut', overwrite: true, onUpdate: () => faceEl.style.setProperty('--tissue', tint.c)});
+    else faceEl.style.setProperty('--tissue', c);
+  };
 
   /* ═════════ Scène : état de la pile ═════════ */
   const S = {explode: 0, active: -1, fty: 0};
@@ -108,6 +116,7 @@
     if (!gsap || reduce) render();
     depthFill.parentElement.parentElement.style.setProperty('--df', a < 0 ? 0 : (a + 1) / 5);
     depthNow.textContent = a < 0 ? 'All layers' : NAMES[a];
+    setTissue(a);
   }
 
   fit();
@@ -238,29 +247,16 @@
     });
   });
 
-  /* ═════════ Chapitre sombre ═════════ */
-  ST.create({
-    trigger: '#signature',
-    start: 'top 55%',
-    end: 'bottom 45%',
-    toggleClass: {targets: root, className: 'is-dark'},
-  });
-
-  // glyphes : les traits se dessinent avec le scroll
-  $$('[data-sig]').forEach((sig) => {
-    const svg = $('svg', sig);
-    const solid = $$('.g-line, .g-mark:not(.g-dash):not(.g-dot)', svg);
-    const dashed = $$('.g-dash, .g-dot', svg);
-    solid.forEach((p) => {
-      p.setAttribute('pathLength', '1');
-      p.style.strokeDasharray = '1';
-      p.style.strokeDashoffset = '1';
-    });
-    dashed.forEach((p) => { p.style.opacity = 0; });
-    const tl = gsap.timeline({scrollTrigger: {trigger: sig, start: 'top 78%', end: 'center 52%', scrub: 0.8}});
-    tl.to(solid, {strokeDashoffset: 0, duration: 1, stagger: 0.12, ease: 'none'}, 0)
-      .to(dashed, {opacity: 1, duration: 0.4, stagger: 0.1, ease: 'none'}, 0.55);
-  });
+  /* ═════════ Sections sombres : la navigation passe en clair ═════════ */
+  const darkSecs = $$('.signature, .foot');
+  let navTick = 0;
+  const navTheme = () => {
+    navTick = 0;
+    const y = nav.offsetHeight / 2;
+    nav.classList.toggle('on-dark', darkSecs.some((el) => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom >= y; }));
+  };
+  window.addEventListener('scroll', () => { if (!navTick) navTick = requestAnimationFrame(navTheme); }, {passive: true});
+  navTheme();
 
   /* ═════════ Le parcours du chirurgien ═════════ */
   const path = $('[data-path]');
@@ -274,17 +270,6 @@
   $$('.path__step').forEach((el) => {
     ST.create({trigger: el, start: 'top 66%', onEnter: () => el.classList.add('is-on'), onLeaveBack: () => el.classList.remove('is-on')});
   });
-
-  /* ═════════ Le contour du corps ═════════ */
-  const contour = $('[data-contour] .contour__line');
-  if (contour) {
-    contour.setAttribute('pathLength', '1');
-    gsap.fromTo(contour, {strokeDasharray: 1, strokeDashoffset: 1}, {
-      strokeDashoffset: 0, ease: 'none',
-      scrollTrigger: {trigger: '.body-sec__wrap', start: 'top 75%', end: 'bottom 70%', scrub: 0.8},
-    });
-    gsap.from('[data-contour] .contour__mark', {opacity: 0, scrollTrigger: {trigger: '.body-sec__wrap', start: 'center 70%', end: 'bottom 70%', scrub: true}});
-  }
 
   /* ═════════ Pied de page : le mot se dédouble en couches ═════════ */
   gsap.to('.foot', {'--spread': 1, ease: 'none', scrollTrigger: {trigger: '.foot', start: 'top 95%', end: 'bottom bottom', scrub: 0.8}});
