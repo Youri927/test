@@ -287,9 +287,12 @@ img, canvas, svg { display: block; }
 /* le oui, sur l'île */
 .isle { max-width: none; padding-left: 0; padding-right: 0; }
 .isle .moment__head { padding: 0 var(--gut); max-width: 1000px; margin-left: max(0px, calc((100% - 1500px) / 2)); }
-.isle__scene { position: relative; height: clamp(380px, 62vh, 640px); margin-top: clamp(48px, 6vw, 90px); }
+.isle__scene { position: relative; height: min(62vh, 640px, 78vw); margin-top: clamp(48px, 6vw, 90px); }
 .isle__land { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; }
-.isle__bank, .isle__island { fill: var(--land); }
+.isle__bank, .isle__island .solid { fill: var(--land); }
+.isle__island .lawn { fill: var(--sky-bot); fill-opacity: .3; }
+.isle__island .arch { fill: none; stroke: var(--land); stroke-width: 4; stroke-linecap: round; }
+.isle__island .chairs { fill: none; stroke: var(--land); stroke-width: 2.4; stroke-linecap: round; }
 .river--isle { top: 46%; height: 54%; z-index: 1; }
 .pins { position: absolute; inset: 0; z-index: 3; margin: 0; padding: 0; list-style: none; pointer-events: none; }
 .pins li {
@@ -638,7 +641,16 @@ img, canvas, svg { display: block; }
   <div class="isle__scene" data-isle>
     <svg class="isle__land" viewBox="0 0 1600 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
       <path class="isle__bank" data-bank d=""/>
-      <path class="isle__island" data-island d=""/>
+      <g class="isle__island" data-island>
+        <path class="solid" d="M548 260 C 590 238, 690 230, 800 230 C 910 230, 1010 238, 1052 260 C 980 272, 620 272, 548 260 Z"/>
+        <path class="lawn" d="M596 247 C 680 236, 760 233, 800 233 C 860 233, 940 236, 1006 247 C 920 243, 690 243, 596 247 Z"/>
+        <path class="solid" d="M650 178 m-38 0 a38 60 0 1 0 76 0 a38 60 0 1 0 -76 0 Z M647 232 h6 v14 h-6 Z"/>
+        <path class="solid" d="M574 212 a26 26 0 1 0 52 0 a26 26 0 1 0 -52 0 Z M597 234 h5 v12 h-5 Z"/>
+        <path class="solid" d="M932 198 a36 36 0 1 0 72 0 a36 36 0 1 0 -72 0 Z M965 230 h6 v14 h-6 Z"/>
+        <path class="solid" d="M992 214 a24 24 0 1 0 48 0 a24 24 0 1 0 -48 0 Z M1013 236 h5 v10 h-5 Z"/>
+        <path class="arch" d="M785 234 V202 A15 15 0 0 1 815 202 V234"/>
+        <path class="chairs" data-chairs d=""/>
+      </g>
     </svg>
     <canvas class="river river--isle" data-river="isle" aria-hidden="true"></canvas>
     <ul class="pins">
@@ -1109,28 +1121,24 @@ img, canvas, svg { display: block; }
     }
     return d + ' L1600 200 Z';
   };
-  const islandPath = () => {
-    const r = rng(17);
-    let d = 'M610 262';
-    let x = 610;
-    while (x < 990) {
-      const cw = 26 + r() * 40;
-      d += ` Q${x + cw / 2} ${170 - r() * 60} ${x + cw} ${200 - r() * 30}`;
-      x += cw * 0.8;
-    }
-    return d + ' L1010 262 C 900 276, 720 276, 610 262 Z';
-  };
   $('[data-bank]').setAttribute('d', 'M0 420 L0 398 C 400 380, 1200 382, 1600 398 L1600 420 Z');
-  $('[data-island]').setAttribute('d', islandPath());
+  // la cérémonie sur l'îlot : trois rangées de chaises de part et d'autre de l'allée, face à l'arche
+  let chairs = '';
+  [[226, 6], [229.5, 7], [233, 8]].forEach(([base, h], row) => {
+    for (const [x0, x1] of [[706 - row * 4, 772], [828, 894 + row * 4]]) {
+      for (let x = x0; x <= x1; x += 9) chairs += `M${x} ${base} v${-h} `;
+    }
+  });
+  $('[data-chairs]').setAttribute('d', chairs);
   // le bois du parc, sur l'autre rive
   const isleSvg = $('.isle__land');
   const far = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   far.setAttribute('d', bankPath());
   far.setAttribute('class', 'isle__bank');
-  far.style.opacity = '.78';
+  far.style.opacity = '.45';
   isleSvg.insertBefore(far, isleSvg.firstChild);
   const farShape = new Path2D(far.getAttribute('d'));
-  const islandShape = new Path2D($('[data-island]').getAttribute('d'));
+  const islandShape = new Path2D($$('[data-island] .solid').map((p) => p.getAttribute('d')).join(' '));
 
   /* ——— L'Aisne : l'eau reflète le ciel, le soleil, et le nom du domaine ——— */
   const rivers = $$('[data-river]').map((cv) => ({cv, ctx: cv.getContext('2d'), kind: cv.dataset.river, on: false, w: 0, h: 0}));
@@ -1259,8 +1267,8 @@ img, canvas, svg { display: block; }
       ctx.restore();
       ctx.save();
       ctx.fillStyle = css(state.land, 0.38);
-      ctx.setTransform(dpr * k, 0, 0, -dpr * k * 0.75, dpr * ox, dpr * (268 * k - top));
-      ctx.translate(0, -268);
+      ctx.setTransform(dpr * k, 0, 0, -dpr * k * 0.75, dpr * ox, dpr * (264 * k - top));
+      ctx.translate(0, -264);
       ctx.fill(islandShape);
       ctx.restore();
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

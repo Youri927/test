@@ -209,28 +209,24 @@
     }
     return d + ' L1600 200 Z';
   };
-  const islandPath = () => {
-    const r = rng(17);
-    let d = 'M610 262';
-    let x = 610;
-    while (x < 990) {
-      const cw = 26 + r() * 40;
-      d += ` Q${x + cw / 2} ${170 - r() * 60} ${x + cw} ${200 - r() * 30}`;
-      x += cw * 0.8;
-    }
-    return d + ' L1010 262 C 900 276, 720 276, 610 262 Z';
-  };
   $('[data-bank]').setAttribute('d', 'M0 420 L0 398 C 400 380, 1200 382, 1600 398 L1600 420 Z');
-  $('[data-island]').setAttribute('d', islandPath());
+  // la cérémonie sur l'îlot : trois rangées de chaises de part et d'autre de l'allée, face à l'arche
+  let chairs = '';
+  [[226, 6], [229.5, 7], [233, 8]].forEach(([base, h], row) => {
+    for (const [x0, x1] of [[706 - row * 4, 772], [828, 894 + row * 4]]) {
+      for (let x = x0; x <= x1; x += 9) chairs += `M${x} ${base} v${-h} `;
+    }
+  });
+  $('[data-chairs]').setAttribute('d', chairs);
   // le bois du parc, sur l'autre rive
   const isleSvg = $('.isle__land');
   const far = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   far.setAttribute('d', bankPath());
   far.setAttribute('class', 'isle__bank');
-  far.style.opacity = '.78';
+  far.style.opacity = '.45';
   isleSvg.insertBefore(far, isleSvg.firstChild);
   const farShape = new Path2D(far.getAttribute('d'));
-  const islandShape = new Path2D($('[data-island]').getAttribute('d'));
+  const islandShape = new Path2D($$('[data-island] .solid').map((p) => p.getAttribute('d')).join(' '));
 
   /* ——— L'Aisne : l'eau reflète le ciel, le soleil, et le nom du domaine ——— */
   const rivers = $$('[data-river]').map((cv) => ({cv, ctx: cv.getContext('2d'), kind: cv.dataset.river, on: false, w: 0, h: 0}));
@@ -359,8 +355,8 @@
       ctx.restore();
       ctx.save();
       ctx.fillStyle = css(state.land, 0.38);
-      ctx.setTransform(dpr * k, 0, 0, -dpr * k * 0.75, dpr * ox, dpr * (268 * k - top));
-      ctx.translate(0, -268);
+      ctx.setTransform(dpr * k, 0, 0, -dpr * k * 0.75, dpr * ox, dpr * (264 * k - top));
+      ctx.translate(0, -264);
       ctx.fill(islandShape);
       ctx.restore();
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
