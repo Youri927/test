@@ -57,7 +57,7 @@
     return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
   };
   const DARK = [22, 32, 28], LIGHT = [244, 238, 227];
-  const state = {t: 15, top: K[0][1], bot: K[0][2], land: K[0][3], night: 0, sun: {x: 0, y: 0, a: 1}, moon: {x: 0, y: 0, a: 0}};
+  const state = {t: 15, top: K[0][1], bot: K[0][2], land: K[0][3], night: 0, warm: 0, sun: {x: 0, y: 0, a: 1}, moon: {x: 0, y: 0, a: 0}};
 
   function skyAt(t) {
     let i = 0;
@@ -99,6 +99,7 @@
     if (metaTheme) metaTheme.content = css(s.top);
     inkCss = css(ink);
     if (heroRiver && Math.abs(t - preppedAt) > 0.2) prepTitle(heroRiver);
+    tintWoods();
 
     // le soleil : levé vers 6 h, couché vers 21 h 50
     const h = ((t % 24) + 24) % 24;
@@ -109,6 +110,7 @@
     sunEl.style.transform = `translate(${state.sun.x}px, ${state.sun.y}px)`;
     sunEl.style.opacity = state.sun.a.toFixed(3);
     const warm = 1 - smooth(0.15, 0.6, sa);
+    state.warm = warm;
     st.setProperty('--sun-core', css(mix([255, 247, 227], [255, 196, 120], warm)));
     st.setProperty('--sun-halo', css(mix([255, 236, 196], [255, 150, 90], warm), 0.55));
     // la lune : de 21 h 30 à 6 h
@@ -181,64 +183,93 @@
     }
   }
 
-  /* ——— Une ligne d'arbres, pour l'horizon du domaine ——— */
-  const treePath = (seed, w, h, base) => {
-    const r = rng(seed);
-    let x = 0;
-    let d = `M0 ${h} L0 ${base}`;
-    while (x < w) {
-      const cw = 30 + r() * 70;
-      const ch = base - (14 + r() * (h * 0.7));
-      d += ` Q${(x + cw * 0.5).toFixed(1)} ${(ch - 10 * r()).toFixed(1)} ${(x + cw).toFixed(1)} ${(base - r() * 10).toFixed(1)}`;
-      x += cw * (0.7 + r() * 0.2);
+  /* ——— Les bois : la ligne d'arbres de l'horizon, le parc et l'îlot (dessinés par woods.js) ——— */
+  const W = window.BizaWoods;
+  const treesCv = $('.trees');
+  const tctx = treesCv.getContext('2d');
+  let heroWoods = null, isleWoods = null, woodsTime = 0;
+  // les couleurs du paysage à l'heure dite : la terre, le ciel de l'horizon, la lumière du soleil
+  function woodsPalette() {
+    const sunC = mix([255, 247, 227], [255, 190, 120], state.warm);
+    const light = mix(state.land.map((v) => Math.min(255, v * 2.3)), sunC, 0.45);
+    return {
+      land: css(state.land),
+      sky: css(mix(state.bot, state.top, 0.12)),
+      light: css(light),
+      lightA: 0.55 * state.sun.a + 0.1 * state.moon.a,
+      glow: css(mix(mix(state.bot, [255, 255, 255], 0.6), state.land, state.night * 0.75)),
+      glowA: 0.95,
+    };
+  }
+  // recoloré au plus toutes les 140 ms, et seulement ce qui est à l'écran
+  let heroAt = -99, isleAt = -99, woodsLater = 0;
+  function tintWoods(force) {
+    const now = performance.now();
+    clearTimeout(woodsLater);
+    if (!force && now - woodsTime < 140) { woodsLater = setTimeout(tintWoods, 150); return; }
+    woodsTime = now;
+    const pal = woodsPalette();
+    if (heroWoods && (force || (heroRiver ? heroRiver.on : true)) && (force || Math.abs(state.t - heroAt) > 0.02)) {
+      heroAt = state.t;
+      W.tint(heroWoods, pal);
+      tctx.clearRect(0, 0, treesCv.width, treesCv.height);
+      tctx.drawImage(heroWoods.out, 0, 0);
     }
-    return d + ` L${w} ${h} Z`;
-  };
-  $('[data-trees]').setAttribute('d', treePath(4, 1600, 120, 118));
+    if (isleWoods && (force || isleRiver.on) && (force || Math.abs(state.t - isleAt) > 0.1)) {
+      isleAt = state.t;
+      W.tint(isleWoods.bank, pal);
+      W.tint(isleWoods.island, pal);
+      prepMirror();
+    }
+  }
+  // le reflet de la rive et de l'îlot, renversé une fois pour toutes (à chaque changement de couleurs)
+  const mirror = document.createElement('canvas');
+  const mctx = mirror.getContext('2d');
+  function prepMirror() {
+    // (à la résolution de l'écran standard : dans l'eau, le reflet est de toute façon un peu flou)
+    const S = isleWoods, r = isleRiver, dpr = r.dpr, k = 1 / dpr;
+    const depth = r.h - S.water;
+    mirror.width = Math.round(r.w); mirror.height = Math.max(1, Math.round(depth));
+    // la rive se renverse autour de sa ligne d'eau, l'îlot autour de la sienne, un peu plus bas
+    mctx.globalAlpha = 0.5;
+    mctx.setTransform(k, 0, 0, -k, 0, S.water);
+    mctx.drawImage(S.bank.out, Math.round(S.bank.left * dpr), Math.round(S.bank.top * dpr));
+    mctx.globalAlpha = 0.72;
+    mctx.setTransform(k, 0, 0, -k, 0, 2 * S.isleWater - S.water);
+    mctx.drawImage(S.island.out, Math.round(S.island.left * dpr), Math.round(S.island.top * dpr));
+    // il s'efface avec la profondeur
+    mctx.setTransform(1, 0, 0, 1, 0, 0);
+    mctx.globalAlpha = 1;
+    const g = mctx.createLinearGradient(0, 0, 0, mirror.height);
+    g.addColorStop(0, 'rgba(0,0,0,1)');
+    g.addColorStop(0.5, 'rgba(0,0,0,.42)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    mctx.globalCompositeOperation = 'destination-in';
+    mctx.fillStyle = g;
+    mctx.fillRect(0, 0, mirror.width, mirror.height);
+    mctx.globalCompositeOperation = 'source-over';
+  }
+  function sizeTrees() {
+    const rect = treesCv.getBoundingClientRect();
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const key = `${Math.round(rect.width)}x${Math.round(rect.height)}@${dpr}`;
+    if (treesCv.dataset.key === key) return;
+    treesCv.dataset.key = key;
+    treesCv.width = Math.round(rect.width * dpr); treesCv.height = Math.round(rect.height * dpr);
+    heroWoods = W.treeline({w: rect.width, h: rect.height, dpr});
+    tintWoods(true);
+  }
 
-  // la rive et l'îlot
-  const bankPath = () => {
-    const r = rng(9);
-    let d = 'M0 200 L0 120';
-    let x = 0;
-    while (x < 1600) {
-      const cw = 40 + r() * 80;
-      const top = x < 560 ? 40 : x > 1120 ? 70 : 120;
-      d += ` Q${(x + cw / 2).toFixed(1)} ${(top - r() * 30).toFixed(1)} ${(x + cw).toFixed(1)} ${(top + 30 + r() * 30).toFixed(1)}`;
-      x += cw * 0.75;
-    }
-    return d + ' L1600 200 Z';
-  };
-  $('[data-bank]').setAttribute('d', 'M0 420 L0 398 C 400 380, 1200 382, 1600 398 L1600 420 Z');
-  // la cérémonie sur l'îlot : trois rangées de chaises de part et d'autre de l'allée, face à l'arche
-  let chairs = '';
-  [[226, 6], [229.5, 7], [233, 8]].forEach(([base, h], row) => {
-    for (const [x0, x1] of [[706 - row * 4, 772], [828, 894 + row * 4]]) {
-      for (let x = x0; x <= x1; x += 9) chairs += `M${x} ${base} v${-h} `;
-    }
-  });
-  $('[data-chairs]').setAttribute('d', chairs);
-  // le bois du parc, sur l'autre rive
-  const isleSvg = $('.isle__land');
-  const far = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  far.setAttribute('d', bankPath());
-  far.setAttribute('class', 'isle__bank');
-  far.style.opacity = '.45';
-  isleSvg.insertBefore(far, isleSvg.firstChild);
-  const farShape = new Path2D(far.getAttribute('d'));
-  const islandShape = new Path2D($$('[data-island] .solid').map((p) => p.getAttribute('d')).join(' '));
-
-  /* ——— L'Aisne : l'eau reflète le ciel, le soleil, et le nom du domaine ——— */
+  /* ——— L'Aisne : l'eau reflète le ciel, le soleil, les arbres et le nom du domaine ——— */
   const rivers = $$('[data-river]').map((cv) => ({cv, ctx: cv.getContext('2d'), kind: cv.dataset.river, on: false, w: 0, h: 0}));
+  const isleRiver = rivers.find((r) => r.kind === 'isle');
+  const pins = $$('.pins li[data-at]');
   const title = $('[data-title]');
   const titleText = title.querySelector('[aria-hidden]');
   let rise = reduce ? 1 : 0;
   root.style.setProperty('--rise', rise);
   const buf = document.createElement('canvas');
   const bctx = buf.getContext('2d');
-  const tbuf = document.createElement('canvas');
-  const tctx = tbuf.getContext('2d');
-  const treeShape = new Path2D($('[data-trees]').getAttribute('d'));
   let bufReady = false;
   let heroRiver = null;
   let inkCss = '#16201C';
@@ -251,8 +282,36 @@
     r.cv.width = Math.round(r.w * dpr); r.cv.height = Math.round(r.h * dpr);
     r.top = rect.top + scrollY;
     if (r.kind === 'hero') prepTitle(r);
+    if (r.kind === 'isle') {
+      const key = `${Math.round(r.w)}x${Math.round(r.h)}@${dpr}`;
+      if (r.key !== key) { r.key = key; isleWoods = null; growIsle(r); }
+      placePins(r);
+    }
   }
-  // le nom et les arbres, dessinés une fois dans un tampon, pour leur reflet
+  // le parc et l'îlot sont dessinés quand la page est au repos, ou dès qu'on s'en approche
+  let isleQueued = 0;
+  function growIsle(r, now) {
+    clearTimeout(isleQueued);
+    const go = () => { isleWoods = W.isle({w: r.w, h: r.h, dpr: r.dpr}); placePins(r); tintWoods(true); if (r.on) drawIsle(r, performance.now()); };
+    if (now || r.on) go();
+    else isleQueued = setTimeout(() => (window.requestIdleCallback ? requestIdleCallback(go, {timeout: 1500}) : go()), 400);
+  }
+  // chaque repère est posé sur le dessin (data-at, en unités du dessin) ; un fil descend vers le lieu (data-to)
+  function placePins(r) {
+    const s = Math.max(r.w / 1600, r.h / 420), ox = (r.w - 1600 * s) / 2, oy = r.h - 420 * s;
+    for (const li of pins) {
+      const [x, y] = li.dataset.at.split(',').map(Number);
+      const left = Math.max(30, Math.min(ox + x * s, r.w - li.offsetWidth + 14 - 16));
+      const top = oy + y * s;
+      li.style.setProperty('--x', `${left.toFixed(0)}px`);
+      li.style.setProperty('--y', `${top.toFixed(0)}px`);
+      if (li.dataset.to) {
+        const ty = oy + Number(li.dataset.to) * s;
+        li.style.setProperty('--lead', `${Math.max(0, ty - (top - li.offsetHeight / 2 + 21)).toFixed(0)}px`);
+      }
+    }
+  }
+  // le nom, dessiné une fois dans un tampon, pour son reflet
   function prepTitle(r) {
     heroRiver = r;
     const cs = getComputedStyle(title);
@@ -260,7 +319,7 @@
     const fs = parseFloat(cs.fontSize);
     const dpr = r.dpr;
     const w = r.w, hgt = Math.round(fs * 0.9);
-    // le nom : sa ligne de base est posée sur l'horizon
+    // sa ligne de base est posée sur l'horizon
     buf.width = Math.round(w * dpr); buf.height = Math.round(hgt * dpr);
     bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     bctx.clearRect(0, 0, w, hgt);
@@ -270,41 +329,68 @@
     bctx.textBaseline = 'alphabetic';
     bctx.fillStyle = inkCss;
     bctx.fillText('La Biza', tr.left + tr.width / 2 - r.cv.getBoundingClientRect().left, hgt - fs * 0.035);
-    // la ligne d'arbres
-    const th = $('.trees').getBoundingClientRect().height;
-    tbuf.width = Math.round(w * dpr); tbuf.height = Math.round(th * dpr);
-    tctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    tctx.clearRect(0, 0, w, th);
-    tctx.scale(w / 1600, th / 120);
-    tctx.fillStyle = css(state.land);
-    tctx.fill(treeShape);
     bufReady = true;
     preppedAt = state.t;
   }
 
+  // l'eau : le ciel renversé, un peu plus sombre
+  function water(ctx, y0, w, h) {
+    const g = ctx.createLinearGradient(0, y0, 0, y0 + h);
+    g.addColorStop(0, css(mix(state.bot, state.top, 0.35).map((v) => v * 0.86)));
+    g.addColorStop(1, css(state.top.map((v) => v * 0.6)));
+    ctx.fillStyle = g;
+    ctx.fillRect(0, y0, w, h);
+  }
+  // un paysage renversé sous sa ligne d'eau (src : dans la scène du paysage ; dst : dans ce canvas),
+  // qui ondule et s'efface avec la profondeur
+  function reflect(ctx, L, src, dst, time, alpha, depth) {
+    const dpr = L.dpr;
+    const rows = Math.min(src - L.top, depth);
+    for (let y = 0; y < rows; y += 2) {
+      const sy = (src - L.top - y - 2) * dpr;
+      if (sy < 0) break;
+      const k = y / rows;
+      const dx = reduce ? 0 : Math.sin(y * 0.13 + time * 1.6) * (0.5 + k * 2.6) + Math.sin(y * 0.045 - time * 0.7) * k * 2.4;
+      ctx.globalAlpha = alpha * (1 - k) * (1 - k * 0.3);
+      ctx.drawImage(L.out, 0, sy, L.out.width, 2 * dpr, L.left + dx, dst + y, L.width, 2);
+    }
+    ctx.globalAlpha = 1;
+  }
+  // le soleil (ou la lune) en une colonne de petits éclats, et de petites rides qui passent
+  function sparkle(ctx, y0, w, h, time) {
+    const light = state.sun.a > 0.05 ? state.sun : state.moon.a > 0.05 ? state.moon : null;
+    if (light) {
+      const warm = light === state.sun ? [255, 230, 180] : [240, 236, 222];
+      for (let i = 0; i < 70; i++) {
+        const k = i / 70;
+        const y = y0 + Math.pow(k, 1.6) * h;
+        const spread = 10 + k * 70;
+        const x = light.x + Math.sin(i * 12.9898 + time * (1.2 + (i % 5) * 0.2)) * spread;
+        const len = 8 + (1 - k) * 34 * (0.5 + 0.5 * Math.sin(i * 3.1 + time * 2));
+        ctx.fillStyle = css(warm, 0.5 * light.a * (1 - k * 0.6));
+        ctx.fillRect(x - len / 2, y, len, 1.4);
+      }
+    }
+    ctx.fillStyle = css(mix(state.bot, [255, 255, 255], 0.5), 0.22 + 0.1 * (1 - state.night));
+    const rr = rng(5);
+    for (let i = 0; i < 46; i++) {
+      const y = y0 + Math.pow(rr(), 1.4) * h;
+      const len = 20 + rr() * 90 * (0.4 + (y - y0) / h);
+      const x = ((rr() * (w + 200) + time * (8 + rr() * 14)) % (w + 200)) - 100;
+      ctx.fillRect(x, y, len, 1);
+    }
+  }
+
+  // l'Aisne du haut de page : les arbres et le nom s'y reflètent
   function drawRiver(r, now) {
     const {ctx, w, h, dpr} = r;
     const time = reduce ? 0 : now / 1000;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    // l'eau : le ciel renversé, un peu plus sombre
-    const g = ctx.createLinearGradient(0, 0, 0, h);
-    g.addColorStop(0, css(mix(state.bot, state.top, 0.35).map((v) => v * 0.86)));
-    g.addColorStop(1, css(state.top.map((v) => v * 0.6)));
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-
-    // reflet du nom (et de la ligne d'arbres) dans l'eau, qui ondule
-    if (r.kind === 'hero' && bufReady) {
+    water(ctx, 0, w, h);
+    if (heroWoods) reflect(ctx, heroWoods, heroWoods.height, 0, time, 0.5, heroWoods.height);
+    if (bufReady) {
       const wave = (y, k) => (reduce ? 0 : Math.sin(y * 0.11 + time * 1.7) * (1.5 + k * 9) + Math.sin(y * 0.031 - time * 0.8) * k * 6);
-      ctx.save();
-      // les arbres
-      const th = tbuf.height / dpr;
-      for (let y = 0; y < th; y += 2) {
-        const k = y / th;
-        ctx.globalAlpha = 0.5 * (1 - k);
-        ctx.drawImage(tbuf, 0, (th - 2 - y) * dpr, tbuf.width, 2 * dpr, wave(y, k) * 0.6, y, w, 2);
-      }
-      // le nom, qui ondule (et ne se reflète qu'une fois sorti de l'horizon)
+      // le nom ne se reflète qu'une fois sorti de l'horizon
       const bh = buf.height / dpr;
       const lift = (1 - rise) * bh;
       const rows = Math.min(h, bh * 0.95);
@@ -315,60 +401,48 @@
         ctx.globalAlpha = 0.42 * (1 - k) * (1 - k * 0.4);
         ctx.drawImage(buf, 0, src * dpr, buf.width, 2 * dpr, wave(y, k), y, w, 2);
       }
-      ctx.restore();
+      ctx.globalAlpha = 1;
     }
+    sparkle(ctx, 0, w, h, time);
+  }
 
-    // reflet du soleil (ou de la lune) : une colonne de petits éclats
-    const light = state.sun.a > 0.05 ? state.sun : state.moon.a > 0.05 ? state.moon : null;
-    if (light) {
-      const warm = light === state.sun ? [255, 230, 180] : [240, 236, 222];
-      for (let i = 0; i < 70; i++) {
-        const k = i / 70;
-        const y = Math.pow(k, 1.6) * h;
-        const spread = 10 + k * 70;
-        const x = light.x + Math.sin(i * 12.9898 + time * (1.2 + (i % 5) * 0.2)) * spread;
-        const len = 8 + (1 - k) * 34 * (0.5 + 0.5 * Math.sin(i * 3.1 + time * 2));
-        ctx.fillStyle = css(warm, 0.5 * light.a * (1 - k * 0.6));
-        ctx.fillRect(x - len / 2, y, len, 1.4);
-      }
+  // le parc et l'îlot, vus depuis l'eau : les reflets, puis la rive et l'île par-dessus
+  function drawIsle(r, now) {
+    const {ctx, w, h, dpr} = r;
+    const S = isleWoods;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, r.cv.width, r.cv.height);
+    if (!S) return;
+    const time = reduce ? 0 : now / 1000;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    water(ctx, S.water, w, h - S.water);
+    // le reflet ondule, par bandes de 3 px
+    const depth = h - S.water;
+    for (let y = 0; y < depth; y += 3) {
+      const k = y / depth;
+      const dx = reduce ? 0 : Math.sin(y * 0.13 + time * 1.6) * (0.5 + k * 2.6) + Math.sin(y * 0.045 - time * 0.7) * k * 2.4;
+      ctx.drawImage(mirror, 0, y, mirror.width, 3, dx, S.water + y, w, 3);
     }
-    // petites rides qui passent
-    ctx.fillStyle = css(mix(state.bot, [255, 255, 255], 0.5), 0.22 + 0.1 * (1 - state.night));
-    const rr = rng(5);
-    for (let i = 0; i < 46; i++) {
-      const y = Math.pow(rr(), 1.4) * h;
-      const len = 20 + rr() * 90 * (0.4 + y / h);
-      const x = ((rr() * (w + 200) + time * (8 + rr() * 14)) % (w + 200)) - 100;
-      ctx.fillRect(x, y, len, 1);
-    }
-    // l'îlot et le bois de l'autre rive se reflètent dans l'eau
-    if (r.kind === 'isle') {
-      const sh = r.h / 0.54; // hauteur de la scène (l'eau en occupe 54 %)
-      const k = sh / 420; // le dessin est mis à l'échelle sur la hauteur (preserveAspectRatio slice)
-      const ox = (w - 1600 * k) / 2;
-      const top = sh * 0.46;
-      ctx.save();
-      ctx.fillStyle = css(state.land, 0.3);
-      ctx.setTransform(dpr * k, 0, 0, -dpr * k * 0.7, dpr * ox, dpr * (200 * k - top));
-      ctx.translate(0, -200);
-      ctx.fill(farShape);
-      ctx.restore();
-      ctx.save();
-      ctx.fillStyle = css(state.land, 0.38);
-      ctx.setTransform(dpr * k, 0, 0, -dpr * k * 0.75, dpr * ox, dpr * (264 * k - top));
-      ctx.translate(0, -264);
-      ctx.fill(islandShape);
-      ctx.restore();
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    // la nuit : les lumières de la fête se reflètent sous l'îlot
-    if (r.kind === 'isle' && state.night > 0.05) {
+    sparkle(ctx, S.water, w, h - S.water, time);
+    // la nuit, les lumières de la fête se reflètent sous l'îlot
+    if (state.night > 0.05) {
       for (let i = 0; i < 12; i++) {
-        const x = w * (0.4 + i * 0.018);
+        const x = S.ox + (712 + i * 16) * S.s;
         ctx.fillStyle = `rgba(255, 213, 154, ${0.25 * state.night})`;
-        ctx.fillRect(x + Math.sin(time * 2 + i) * 3, h * 0.1 + i % 3 * 6, 10, 1.5);
+        ctx.fillRect(x + Math.sin(time * 2 + i) * 3, S.isleWater + 4 + (i % 3) * 6, 10, 1.5);
       }
     }
+    // le bas de l'eau se fond dans la page
+    const fade = ctx.createLinearGradient(0, h * 0.78, 0, h);
+    fade.addColorStop(0, 'rgba(0,0,0,0)');
+    fade.addColorStop(1, 'rgba(0,0,0,1)');
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = fade;
+    ctx.fillRect(0, h * 0.78, w, h * 0.22 + 1);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.drawImage(S.bank.out, Math.round(S.bank.left * dpr), Math.round(S.bank.top * dpr));
+    ctx.drawImage(S.island.out, Math.round(S.island.left * dpr), Math.round(S.island.top * dpr));
   }
 
   /* ——— Une seule boucle : les rivières visibles, les étoiles, la guirlande ——— */
@@ -376,14 +450,20 @@
   const tick = (fn) => loops.add(fn);
   let lastStar = 0;
   const frame = (now) => {
-    for (const r of rivers) if (r.on) drawRiver(r, now);
+    for (const r of rivers) if (r.on) (r.kind === 'isle' ? drawIsle : drawRiver)(r, now);
     if (!reduce && state.night > 0.02 && now - lastStar > 60) { drawStars(); lastStar = now; }
     loops.forEach((fn) => fn(now));
   };
   if (G) G.ticker.add(() => frame(performance.now()));
   else (function raf(n) { frame(n); requestAnimationFrame(raf); })(performance.now());
   rivers.forEach((r) => {
-    new IntersectionObserver(([e]) => { r.on = e.isIntersecting; if (r.on) drawRiver(r, performance.now()); }, {rootMargin: '80px'}).observe(r.cv);
+    new IntersectionObserver(([e]) => {
+      r.on = e.isIntersecting;
+      if (!r.on) return;
+      if (r.kind === 'isle' && !isleWoods) growIsle(r, true);
+      tintWoods();
+      (r.kind === 'isle' ? drawIsle : drawRiver)(r, performance.now());
+    }, {rootMargin: '120px'}).observe(r.cv);
   });
 
   /* ——— L'arche de pierre : elle s'ouvre sur le ciel ——— */
@@ -622,6 +702,7 @@
   const layout = () => {
     measure();
     sizeStars();
+    sizeTrees();
     rivers.forEach(sizeRiver);
     lastT = -1;
     onScroll();
