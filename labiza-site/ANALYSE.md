@@ -28,7 +28,7 @@ Rien n'est inventé dans la refonte.
 | Espace | Ce qu'en disent les fiches |
 | --- | --- |
 | La grande salle | 200 m², pierres et poutres apparentes, 150 personnes assises avec piste de danse, grande cheminée, cuisine professionnelle, vestiaire, décoration « rustique, bohème et chic » |
-| Le préau | 150 m², l'ancien bâtiment de ferme ouvert sur le parc : cocktails, vins d'honneur, garden-parties, repas en plein air |
+| Le préau | 150 m², l'ancien bâtiment de ferme ouvert sur le parc, protégé par de grandes baies vitrées d'un côté et une toiture refaite en 2018 : cocktails, vins d'honneur, garden-parties, repas en plein air |
 | Le gîte de la Biza | gîte 4 étoiles à quelques pas de la salle, maison de caractère en pierre de 180 m², 5 chambres doubles (10 personnes), jardin de 2 000 m² avec salon de détente et transats, accès au parc. Draps, linge, ménage, énergie et wifi inclus |
 
 **Les réceptions.**

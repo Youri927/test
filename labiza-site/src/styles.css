@@ -379,12 +379,56 @@ img, canvas, svg { display: block; }
 }
 .door:hover, .door:focus-visible, .door:focus-within { flex-grow: 1.5; background: rgba(255, 255, 255, .5); }
 .door:focus-visible { box-shadow: inset 0 0 0 2px var(--ink); }
-.door__tag { position: absolute; top: clamp(28px, 3vw, 48px); left: clamp(28px, 3vw, 48px); margin: 0; font-size: 15px; font-weight: 500; color: var(--ink-2); }
-.door__title { margin: 0; font: 500 clamp(30px, 3vw, 50px)/1.02 var(--f-display); letter-spacing: -.02em; max-width: 14em; }
+.door__tag { margin: 0 0 32px; font-size: 15px; font-weight: 500; color: var(--ink-2); }
+.door__title { margin: auto 0 0; font: 500 clamp(28px, 2.6vw, 46px)/1.04 var(--f-display); letter-spacing: -.02em; max-width: 14em; }
 .door__body { max-width: 34em; margin-top: 20px; color: var(--ink-2); }
 .door__body p { margin: 0 0 14px; }
 .door__price { color: var(--ink); }
 .door__price b { font: 500 26px var(--f-display); }
+
+/* ——— La visite virtuelle ——— */
+.visite { padding: clamp(110px, 13vw, 200px) var(--gut) clamp(60px, 7vw, 110px); max-width: 1500px; margin: 0 auto; }
+.visite__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(40px, 6vw, 110px); align-items: center; }
+.visite__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: 34px; }
+.visite__cta .btn { border: 0; cursor: pointer; }
+.tour {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 640 / 470;
+  border-radius: 8px;
+  background: var(--glass);
+  box-shadow: inset 0 0 0 1px var(--line);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+.tour svg { position: absolute; inset: 6% 5% 12%; width: 90%; height: 82%; overflow: visible; transition: transform .8s var(--ease); }
+.tour:hover svg { transform: scale(1.03) translateY(-6px); }
+.tour .iso { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-linejoin: round; stroke-linecap: round; }
+.tour .iso--soft { stroke: var(--ink-3); stroke-width: 1; }
+.tour .iso--beam { stroke-width: 1.6; }
+.tour .iso--glass { stroke: var(--ink-3); stroke-width: .8; }
+.tour .iso--floor { fill: var(--ink); fill-opacity: .05; stroke: none; }
+.tour .iso--table { fill: var(--paper); fill-opacity: .7; stroke: var(--ink); stroke-width: 1; }
+.tour .iso__label { font: 500 13px var(--f-text); fill: var(--ink-2); }
+.tour__play {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 84px; height: 84px;
+  margin: -42px 0 0 -42px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 0 0 rgba(31, 61, 51, .35);
+  animation: tourPulse 2.6s ease-out infinite;
+  transition: transform .4s var(--ease);
+}
+.tour__play:hover { transform: scale(1.08); }
+.tour__play span { position: absolute; left: 34px; top: 28px; width: 0; height: 0; border-left: 22px solid var(--on-accent); border-top: 14px solid transparent; border-bottom: 14px solid transparent; }
+@keyframes tourPulse { 0% { box-shadow: 0 0 0 0 var(--line); } 70%, 100% { box-shadow: 0 0 0 26px rgba(0, 0, 0, 0); } }
+.tour__cap { position: absolute; left: 22px; bottom: 18px; font-size: 14px; color: var(--ink-2); }
+.tour iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 /* ——— Avis ——— */
 .avis { padding: clamp(90px, 10vw, 150px) var(--gut); max-width: 1500px; margin: 0 auto; }
@@ -452,13 +496,13 @@ img, canvas, svg { display: block; }
   .hero { --horizon: 70%; }
   .hero__score { top: auto; bottom: calc(100% - var(--horizon) + clamp(130px, 30vw, 220px)); right: auto; left: var(--gut); }
   .hero__score b { font-size: 44px; }
-  .story__grid, .preau__grid, .salle__grid, .gite__grid, .contact__grid { grid-template-columns: 1fr; }
+  .story__grid, .preau__grid, .salle__grid, .gite__grid, .contact__grid, .visite__grid { grid-template-columns: 1fr; }
   .arch { max-width: 420px; }
   .pins li:not(:first-child) { display: none; }
   .pins li { max-width: 200px; }
   .doors { flex-direction: column; min-height: 0; }
-  .door { flex: none; min-height: 0; justify-content: flex-start; }
-  .door__tag { position: static; margin-bottom: 40px; }
+  .door { flex: none; min-height: 0; }
+  .door__title { margin-top: 0; }
   .door:hover, .door:focus-visible, .door:focus-within { flex-grow: 1; }
   .avis__grid { grid-template-columns: 1fr; }
   .scores li { grid-template-columns: 1fr 34px; grid-template-rows: auto auto; gap: 8px 14px; }

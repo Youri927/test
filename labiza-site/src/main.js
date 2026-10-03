@@ -436,6 +436,59 @@
     G.from('.drawing__dim text', {opacity: 0, duration: 0.8, delay: 1.4, scrollTrigger: {trigger: draw, start: 'top 75%'}});
   }
 
+  /* ——— La visite virtuelle : la salle et le préau en vue éclatée, puis la vraie visite 3D ——— */
+  const iso = $('[data-iso]');
+  if (iso) {
+    const S = 19, OX = 172, OY = 118, C = 0.866;
+    const P = (x, y, z) => [OX + (x - y) * C * S, OY + (x + y) * 0.5 * S - z * S];
+    const line = (pts, cls = 'iso') => `<path class="${cls}" d="M${pts.map((p) => P(...p).map((v) => v.toFixed(1)).join(' ')).join(' L')}"/>`;
+    const poly = (pts, cls) => `<path class="${cls}" d="M${pts.map((p) => P(...p).map((v) => v.toFixed(1)).join(' ')).join(' L')} Z"/>`;
+    let g = '';
+    // la grande salle : sol, murs du fond, murs de face coupés bas (vue de maison de poupée)
+    g += poly([[0, 0, 0], [16, 0, 0], [16, 8, 0], [0, 8, 0]], 'iso iso--floor');
+    g += line([[0, 8, 0], [0, 0, 0], [16, 0, 0]]);
+    g += line([[0, 8, 3], [0, 0, 3], [16, 0, 3]]);
+    g += line([[0, 0, 0], [0, 0, 3]]) + line([[0, 8, 0], [0, 8, 3]]) + line([[16, 0, 0], [16, 0, 3]]);
+    g += line([[0, 8, 0], [16, 8, 0], [16, 0, 0]]);
+    g += line([[0, 8, 0.7], [16, 8, 0.7], [16, 0, 0.7]], 'iso iso--soft');
+    // la charpente : fermes en A et faîtage, les poutres apparentes
+    for (let x = 0; x <= 16; x += 2) g += line([[x, 0, 3], [x, 4, 5], [x, 8, 3]], 'iso iso--beam');
+    g += line([[0, 4, 5], [16, 4, 5]], 'iso iso--beam');
+    // la cheminée, sur le pignon
+    g += line([[0, 3, 0], [0, 3, 1.4], [0, 5, 1.4], [0, 5, 0]]) + line([[0, 3.3, 1.4], [0, 3.7, 3], [0, 4.3, 3], [0, 4.7, 1.4]]);
+    // les tables rondes
+    const k = S * Math.SQRT2;
+    for (let x = 3; x <= 14; x += 2.6) for (let y = 1.8; y <= 6.4; y += 2.3) {
+      const [cx, cy] = P(x, y, 0.75);
+      g += `<ellipse class="iso iso--table" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${(0.62 * k * C).toFixed(1)}" ry="${(0.62 * k * 0.5).toFixed(1)}"/>`;
+    }
+    // le préau : poteaux, toiture, baies vitrées d'un côté
+    g += poly([[16.8, 0, 0], [24, 0, 0], [24, 8, 0], [16.8, 8, 0]], 'iso iso--floor');
+    for (const [x, y] of [[16.8, 0], [24, 0], [24, 8], [16.8, 8], [20.4, 0], [20.4, 8], [24, 4]]) g += line([[x, y, 0], [x, y, 3]]);
+    g += line([[16.8, 0, 3], [24, 0, 3], [24, 8, 3], [16.8, 8, 3]]);
+    for (let x = 16.8; x <= 24.01; x += 1.8) g += line([[x, 0, 3], [x, 4, 4.6], [x, 8, 3]], 'iso iso--soft');
+    g += line([[16.8, 4, 4.6], [24, 4, 4.6]]);
+    for (let x = 17.4; x < 24; x += 0.6) g += line([[x, 0, 0.1], [x, 0, 2.9]], 'iso iso--glass');
+    // les noms
+    const [lx, ly] = P(8, 0, 5.6), [px, py] = P(20.4, 0, 5.2);
+    g += `<text class="iso__label" x="${lx.toFixed(0)}" y="${ly.toFixed(0)}" text-anchor="middle">La grande salle</text><text class="iso__label" x="${px.toFixed(0)}" y="${py.toFixed(0)}" text-anchor="middle">Le préau</text>`;
+    iso.innerHTML = g;
+    if (G && ST && !reduce) {
+      const paths = $$('path.iso:not(.iso--floor)', iso);
+      paths.forEach((p) => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; });
+      G.to(paths, {strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut', stagger: 0.012, scrollTrigger: {trigger: iso, start: 'top 80%'}});
+      G.from($$('ellipse, text', iso), {opacity: 0, duration: 0.8, stagger: 0.02, delay: 0.8, scrollTrigger: {trigger: iso, start: 'top 80%'}});
+    }
+  }
+  // la vraie visite (Matterport) : intégrée si l'identifiant est connu, sinon la page de visite du site actuel
+  const tour = $('[data-tour]');
+  $$('[data-tour-open]').forEach((b) => b.addEventListener('click', () => {
+    const id = tour.dataset.matterport;
+    if (!id) { window.open('https://www.labiza.fr/visite-virtuelle', '_blank', 'noopener'); return; }
+    tour.innerHTML = `<iframe src="https://my.matterport.com/show/?m=${encodeURIComponent(id)}&play=1" allow="fullscreen; xr-spatial-tracking" allowfullscreen title="Visite virtuelle de la Ferme de la Biza"></iframe>`;
+    tour.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'});
+  }));
+
   /* ——— La carte des menus penche sous la souris ——— */
   const carte = $('.carte');
   if (carte && !reduce && matchMedia('(hover: hover)').matches) {
@@ -549,7 +602,7 @@
     $$('main .h2').forEach((h) => {
       G.fromTo(h, {clipPath: 'inset(-20% 0 120% 0)', y: 40}, {clipPath: 'inset(-20% 0 -20% 0)', y: 0, duration: 1.3, ease: 'expo.out', clearProps: 'clipPath', scrollTrigger: {trigger: h, start: 'top 86%'}});
     });
-    [['.moment__lede'], ['.registry li', 0.1], ['.pins li', 0.12], ['.isle__more'], ['.specs > div', 0.08], ['.carte'], ['.gite__list li', 0.06], ['.door', 0.12], ['.note, .scores, .awards', 0.1], ['.facts > div', 0.06], ['.map']].forEach(([sel, stagger]) => {
+    [['.moment__lede'], ['.registry li', 0.1], ['.pins li', 0.12], ['.isle__more'], ['.specs > div', 0.08], ['.carte'], ['.gite__list li', 0.06], ['.door', 0.12], ['.note, .scores, .awards', 0.1], ['.facts > div', 0.06], ['.map'], ['.visite__cta'], ['.tour']].forEach(([sel, stagger]) => {
       const els = $$(sel);
       els.forEach((el, i) => G.from(el, {y: 36, opacity: 0, duration: 1.1, ease: 'power3.out', delay: stagger ? (i % 4) * stagger : 0, scrollTrigger: {trigger: el, start: 'top 90%'}}));
     });

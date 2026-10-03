@@ -18,6 +18,7 @@ Le site se lit comme le déroulé d'une journée de mariage au domaine. **La lum
 | 23 h | La fête | Une guirlande de guinguette dont les ampoules s'allument une à une ; celles proches de la souris brillent plus fort |
 | 2 h | La nuit | Le gîte 4 étoiles : ses cinq chambres s'allument une par une |
 | Le lendemain | Familles et entreprises | Deux portes, qui s'ouvrent au survol, avec les formules réelles |
+| — | Visite 3D | La grande salle et le préau en vue éclatée, dessinés trait par trait ; le bouton lance la visite virtuelle (Matterport) |
 | — | Avis | 4,9/5 sur 126 avis Mariages.net, les quatre notes détaillées, les cinq Wedding Awards |
 | — | Venir | Les accès (Soissons, Reims, Paris, Charles-de-Gaulle) sur un schéma, l'adresse, les horaires et la demande de visite |
 
@@ -49,9 +50,12 @@ node build.mjs     # assemble src/ et vendor/ dans dist/index.html
 
 Tous les boutons « Demander une visite » ouvrent un e-mail à info@labiza.fr ; les numéros sont cliquables.
 
+**La visite virtuelle.** Le bouton « Lancer la visite 3D » ouvre pour l'instant la page de visite du site actuel (`labiza.fr/visite-virtuelle`). Dès que l'identifiant Matterport est connu, il suffit de le mettre dans `data-matterport` (section `#visite` de `src/index.html`) : la visite s'affiche alors directement dans la page.
+
 ## À vérifier avant une mise en ligne
 
 - Les tarifs et ce qu'ils comprennent (relevés sur les fiches publiques du domaine).
 - La capacité exacte selon l'événement (de 30 à 250 personnes selon les fiches).
 - Le devenir des pages « Salle de mariage à… » du site actuel.
 - Les photos du domaine, à fournir.
+- L'identifiant de la visite Matterport (adresse en `my.matterport.com/show/?m=…`).

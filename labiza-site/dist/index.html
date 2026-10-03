@@ -391,12 +391,56 @@ img, canvas, svg { display: block; }
 }
 .door:hover, .door:focus-visible, .door:focus-within { flex-grow: 1.5; background: rgba(255, 255, 255, .5); }
 .door:focus-visible { box-shadow: inset 0 0 0 2px var(--ink); }
-.door__tag { position: absolute; top: clamp(28px, 3vw, 48px); left: clamp(28px, 3vw, 48px); margin: 0; font-size: 15px; font-weight: 500; color: var(--ink-2); }
-.door__title { margin: 0; font: 500 clamp(30px, 3vw, 50px)/1.02 var(--f-display); letter-spacing: -.02em; max-width: 14em; }
+.door__tag { margin: 0 0 32px; font-size: 15px; font-weight: 500; color: var(--ink-2); }
+.door__title { margin: auto 0 0; font: 500 clamp(28px, 2.6vw, 46px)/1.04 var(--f-display); letter-spacing: -.02em; max-width: 14em; }
 .door__body { max-width: 34em; margin-top: 20px; color: var(--ink-2); }
 .door__body p { margin: 0 0 14px; }
 .door__price { color: var(--ink); }
 .door__price b { font: 500 26px var(--f-display); }
+
+/* ——— La visite virtuelle ——— */
+.visite { padding: clamp(110px, 13vw, 200px) var(--gut) clamp(60px, 7vw, 110px); max-width: 1500px; margin: 0 auto; }
+.visite__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(40px, 6vw, 110px); align-items: center; }
+.visite__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: 34px; }
+.visite__cta .btn { border: 0; cursor: pointer; }
+.tour {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 640 / 470;
+  border-radius: 8px;
+  background: var(--glass);
+  box-shadow: inset 0 0 0 1px var(--line);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+.tour svg { position: absolute; inset: 6% 5% 12%; width: 90%; height: 82%; overflow: visible; transition: transform .8s var(--ease); }
+.tour:hover svg { transform: scale(1.03) translateY(-6px); }
+.tour .iso { fill: none; stroke: var(--ink); stroke-width: 1.2; stroke-linejoin: round; stroke-linecap: round; }
+.tour .iso--soft { stroke: var(--ink-3); stroke-width: 1; }
+.tour .iso--beam { stroke-width: 1.6; }
+.tour .iso--glass { stroke: var(--ink-3); stroke-width: .8; }
+.tour .iso--floor { fill: var(--ink); fill-opacity: .05; stroke: none; }
+.tour .iso--table { fill: var(--paper); fill-opacity: .7; stroke: var(--ink); stroke-width: 1; }
+.tour .iso__label { font: 500 13px var(--f-text); fill: var(--ink-2); }
+.tour__play {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 84px; height: 84px;
+  margin: -42px 0 0 -42px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 0 0 rgba(31, 61, 51, .35);
+  animation: tourPulse 2.6s ease-out infinite;
+  transition: transform .4s var(--ease);
+}
+.tour__play:hover { transform: scale(1.08); }
+.tour__play span { position: absolute; left: 34px; top: 28px; width: 0; height: 0; border-left: 22px solid var(--on-accent); border-top: 14px solid transparent; border-bottom: 14px solid transparent; }
+@keyframes tourPulse { 0% { box-shadow: 0 0 0 0 var(--line); } 70%, 100% { box-shadow: 0 0 0 26px rgba(0, 0, 0, 0); } }
+.tour__cap { position: absolute; left: 22px; bottom: 18px; font-size: 14px; color: var(--ink-2); }
+.tour iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 /* ——— Avis ——— */
 .avis { padding: clamp(90px, 10vw, 150px) var(--gut); max-width: 1500px; margin: 0 auto; }
@@ -464,13 +508,13 @@ img, canvas, svg { display: block; }
   .hero { --horizon: 70%; }
   .hero__score { top: auto; bottom: calc(100% - var(--horizon) + clamp(130px, 30vw, 220px)); right: auto; left: var(--gut); }
   .hero__score b { font-size: 44px; }
-  .story__grid, .preau__grid, .salle__grid, .gite__grid, .contact__grid { grid-template-columns: 1fr; }
+  .story__grid, .preau__grid, .salle__grid, .gite__grid, .contact__grid, .visite__grid { grid-template-columns: 1fr; }
   .arch { max-width: 420px; }
   .pins li:not(:first-child) { display: none; }
   .pins li { max-width: 200px; }
   .doors { flex-direction: column; min-height: 0; }
-  .door { flex: none; min-height: 0; justify-content: flex-start; }
-  .door__tag { position: static; margin-bottom: 40px; }
+  .door { flex: none; min-height: 0; }
+  .door__title { margin-top: 0; }
   .door:hover, .door:focus-visible, .door:focus-within { flex-grow: 1; }
   .avis__grid { grid-template-columns: 1fr; }
   .scores li { grid-template-columns: 1fr 34px; grid-template-rows: auto auto; gap: 8px 14px; }
@@ -516,6 +560,7 @@ img, canvas, svg { display: block; }
     <a href="#salle">La salle</a>
     <a href="#gite">Le gîte</a>
     <a href="#semaine">Familles et entreprises</a>
+    <a href="#visite">Visite 3D</a>
     <a href="#avis">Avis</a>
   </nav>
   <div class="nav__end">
@@ -531,6 +576,7 @@ img, canvas, svg { display: block; }
     <a href="#salle">La salle</a>
     <a href="#gite">Le gîte</a>
     <a href="#semaine">Familles et entreprises</a>
+    <a href="#visite">Visite 3D</a>
     <a href="#avis">Avis</a>
     <a href="#contact">Contact</a>
   </nav>
@@ -611,7 +657,7 @@ img, canvas, svg { display: block; }
     <div class="moment__head">
       <p class="moment__time">18 h, le vin d’honneur</p>
       <h2 class="h2" id="preau-title">Sous le préau, ouvert sur le parc.</h2>
-      <p class="moment__lede">L’ancien bâtiment de ferme est devenu un préau de 150 m², ouvert sur le parc paysagé. On y sert les cocktails, les vins d’honneur, les garden-parties et les repas en plein air.</p>
+      <p class="moment__lede">L’ancien bâtiment de ferme est devenu un préau de 150 m², ouvert sur le parc paysagé. De grandes baies vitrées d’un côté et une toiture refaite en 2018 le protègent des intempéries. On y sert les cocktails, les vins d’honneur, les garden-parties et les repas en plein air.</p>
     </div>
     <figure class="drawing" aria-hidden="true">
       <svg viewBox="0 0 640 420" data-draw>
@@ -724,6 +770,26 @@ img, canvas, svg { display: block; }
         <p class="door__price">Restauration à partir de <b>46&nbsp;€&nbsp;HT</b> par personne</p>
       </div>
     </article>
+  </div>
+</section>
+
+<!-- ═════ La visite virtuelle ═════ -->
+<section class="visite" id="visite" data-time="32.4" aria-labelledby="visite-title">
+  <div class="visite__grid">
+    <div class="visite__head">
+      <p class="moment__time">Avant de venir</p>
+      <h2 class="h2" id="visite-title">Visitez la salle et le préau en 3D.</h2>
+      <p class="moment__lede">La visite virtuelle vous promène dans la grande salle et sous le préau, comme si vous y étiez. Et Naïma et Vianney vous font visiter le domaine quand vous le souhaitez, sur rendez-vous.</p>
+      <div class="visite__cta">
+        <button class="btn" type="button" data-tour-open>Lancer la visite 3D</button>
+        <a class="link" href="#contact">Prendre rendez-vous</a>
+      </div>
+    </div>
+    <figure class="tour" data-tour data-matterport="" aria-label="Aperçu de la visite virtuelle : la grande salle et le préau en vue éclatée">
+      <svg viewBox="0 0 640 470" data-iso aria-hidden="true"></svg>
+      <button class="tour__play" type="button" data-tour-open aria-label="Lancer la visite virtuelle en 3D"><span></span></button>
+      <figcaption class="tour__cap">Visite virtuelle en 3D du domaine</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -1270,6 +1336,59 @@ img, canvas, svg { display: block; }
     G.from('.drawing__dim text', {opacity: 0, duration: 0.8, delay: 1.4, scrollTrigger: {trigger: draw, start: 'top 75%'}});
   }
 
+  /* ——— La visite virtuelle : la salle et le préau en vue éclatée, puis la vraie visite 3D ——— */
+  const iso = $('[data-iso]');
+  if (iso) {
+    const S = 19, OX = 172, OY = 118, C = 0.866;
+    const P = (x, y, z) => [OX + (x - y) * C * S, OY + (x + y) * 0.5 * S - z * S];
+    const line = (pts, cls = 'iso') => `<path class="${cls}" d="M${pts.map((p) => P(...p).map((v) => v.toFixed(1)).join(' ')).join(' L')}"/>`;
+    const poly = (pts, cls) => `<path class="${cls}" d="M${pts.map((p) => P(...p).map((v) => v.toFixed(1)).join(' ')).join(' L')} Z"/>`;
+    let g = '';
+    // la grande salle : sol, murs du fond, murs de face coupés bas (vue de maison de poupée)
+    g += poly([[0, 0, 0], [16, 0, 0], [16, 8, 0], [0, 8, 0]], 'iso iso--floor');
+    g += line([[0, 8, 0], [0, 0, 0], [16, 0, 0]]);
+    g += line([[0, 8, 3], [0, 0, 3], [16, 0, 3]]);
+    g += line([[0, 0, 0], [0, 0, 3]]) + line([[0, 8, 0], [0, 8, 3]]) + line([[16, 0, 0], [16, 0, 3]]);
+    g += line([[0, 8, 0], [16, 8, 0], [16, 0, 0]]);
+    g += line([[0, 8, 0.7], [16, 8, 0.7], [16, 0, 0.7]], 'iso iso--soft');
+    // la charpente : fermes en A et faîtage, les poutres apparentes
+    for (let x = 0; x <= 16; x += 2) g += line([[x, 0, 3], [x, 4, 5], [x, 8, 3]], 'iso iso--beam');
+    g += line([[0, 4, 5], [16, 4, 5]], 'iso iso--beam');
+    // la cheminée, sur le pignon
+    g += line([[0, 3, 0], [0, 3, 1.4], [0, 5, 1.4], [0, 5, 0]]) + line([[0, 3.3, 1.4], [0, 3.7, 3], [0, 4.3, 3], [0, 4.7, 1.4]]);
+    // les tables rondes
+    const k = S * Math.SQRT2;
+    for (let x = 3; x <= 14; x += 2.6) for (let y = 1.8; y <= 6.4; y += 2.3) {
+      const [cx, cy] = P(x, y, 0.75);
+      g += `<ellipse class="iso iso--table" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${(0.62 * k * C).toFixed(1)}" ry="${(0.62 * k * 0.5).toFixed(1)}"/>`;
+    }
+    // le préau : poteaux, toiture, baies vitrées d'un côté
+    g += poly([[16.8, 0, 0], [24, 0, 0], [24, 8, 0], [16.8, 8, 0]], 'iso iso--floor');
+    for (const [x, y] of [[16.8, 0], [24, 0], [24, 8], [16.8, 8], [20.4, 0], [20.4, 8], [24, 4]]) g += line([[x, y, 0], [x, y, 3]]);
+    g += line([[16.8, 0, 3], [24, 0, 3], [24, 8, 3], [16.8, 8, 3]]);
+    for (let x = 16.8; x <= 24.01; x += 1.8) g += line([[x, 0, 3], [x, 4, 4.6], [x, 8, 3]], 'iso iso--soft');
+    g += line([[16.8, 4, 4.6], [24, 4, 4.6]]);
+    for (let x = 17.4; x < 24; x += 0.6) g += line([[x, 0, 0.1], [x, 0, 2.9]], 'iso iso--glass');
+    // les noms
+    const [lx, ly] = P(8, 0, 5.6), [px, py] = P(20.4, 0, 5.2);
+    g += `<text class="iso__label" x="${lx.toFixed(0)}" y="${ly.toFixed(0)}" text-anchor="middle">La grande salle</text><text class="iso__label" x="${px.toFixed(0)}" y="${py.toFixed(0)}" text-anchor="middle">Le préau</text>`;
+    iso.innerHTML = g;
+    if (G && ST && !reduce) {
+      const paths = $$('path.iso:not(.iso--floor)', iso);
+      paths.forEach((p) => { const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; });
+      G.to(paths, {strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut', stagger: 0.012, scrollTrigger: {trigger: iso, start: 'top 80%'}});
+      G.from($$('ellipse, text', iso), {opacity: 0, duration: 0.8, stagger: 0.02, delay: 0.8, scrollTrigger: {trigger: iso, start: 'top 80%'}});
+    }
+  }
+  // la vraie visite (Matterport) : intégrée si l'identifiant est connu, sinon la page de visite du site actuel
+  const tour = $('[data-tour]');
+  $$('[data-tour-open]').forEach((b) => b.addEventListener('click', () => {
+    const id = tour.dataset.matterport;
+    if (!id) { window.open('https://www.labiza.fr/visite-virtuelle', '_blank', 'noopener'); return; }
+    tour.innerHTML = `<iframe src="https://my.matterport.com/show/?m=${encodeURIComponent(id)}&play=1" allow="fullscreen; xr-spatial-tracking" allowfullscreen title="Visite virtuelle de la Ferme de la Biza"></iframe>`;
+    tour.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'});
+  }));
+
   /* ——— La carte des menus penche sous la souris ——— */
   const carte = $('.carte');
   if (carte && !reduce && matchMedia('(hover: hover)').matches) {
@@ -1383,7 +1502,7 @@ img, canvas, svg { display: block; }
     $$('main .h2').forEach((h) => {
       G.fromTo(h, {clipPath: 'inset(-20% 0 120% 0)', y: 40}, {clipPath: 'inset(-20% 0 -20% 0)', y: 0, duration: 1.3, ease: 'expo.out', clearProps: 'clipPath', scrollTrigger: {trigger: h, start: 'top 86%'}});
     });
-    [['.moment__lede'], ['.registry li', 0.1], ['.pins li', 0.12], ['.isle__more'], ['.specs > div', 0.08], ['.carte'], ['.gite__list li', 0.06], ['.door', 0.12], ['.note, .scores, .awards', 0.1], ['.facts > div', 0.06], ['.map']].forEach(([sel, stagger]) => {
+    [['.moment__lede'], ['.registry li', 0.1], ['.pins li', 0.12], ['.isle__more'], ['.specs > div', 0.08], ['.carte'], ['.gite__list li', 0.06], ['.door', 0.12], ['.note, .scores, .awards', 0.1], ['.facts > div', 0.06], ['.map'], ['.visite__cta'], ['.tour']].forEach(([sel, stagger]) => {
       const els = $$(sel);
       els.forEach((el, i) => G.from(el, {y: 36, opacity: 0, duration: 1.1, ease: 'power3.out', delay: stagger ? (i % 4) * stagger : 0, scrollTrigger: {trigger: el, start: 'top 90%'}}));
     });
