@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="fr" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Ferme de la Biza | Domaine de réception à Missy-sur-Aisne, à une heure de Paris</title>
+<meta name="description" content="Une ferme fortifiée médiévale, un parc de deux hectares au bord de l’Aisne et un îlot pour la cérémonie. Mariages, fêtes de famille et événements d’entreprise, gîte 4 étoiles. 4,9/5 sur 126 avis Mariages.net.">
+<meta name="theme-color" content="#93BCC4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2316201C'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' font-weight='700' text-anchor='middle' fill='%23F4EEE3'%3EB%3C/text%3E%3C/svg%3E">
+<!--STYLES-->
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+
+<!-- Le ciel au-dessus de l'Aisne : il change avec l'heure de la journée -->
+<div class="sky" aria-hidden="true">
+  <canvas class="sky__stars" data-stars></canvas>
+  <div class="sky__sun" data-sun></div>
+  <div class="sky__moon" data-moon></div>
+</div>
+
+<header class="nav" data-nav>
+  <a class="logo" href="#top" aria-label="La Ferme de la Biza, accueil"><span class="logo__small">La Ferme de la</span> Biza</a>
+  <nav class="nav__links" aria-label="Navigation principale">
+    <a href="#domaine">Le domaine</a>
+    <a href="#parc">Le parc</a>
+    <a href="#salle">La salle</a>
+    <a href="#gite">Le gîte</a>
+    <a href="#semaine">Familles et entreprises</a>
+    <a href="#avis">Avis</a>
+  </nav>
+  <div class="nav__end">
+    <a class="btn btn--sm" href="#contact">Demander une visite</a>
+    <button class="nav__burger" type="button" aria-expanded="false" aria-controls="menu" data-burger><span></span><span></span><span class="sr">Menu</span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu" data-menu hidden>
+  <nav class="menu__links" aria-label="Navigation mobile">
+    <a href="#domaine">Le domaine</a>
+    <a href="#parc">Le parc</a>
+    <a href="#salle">La salle</a>
+    <a href="#gite">Le gîte</a>
+    <a href="#semaine">Familles et entreprises</a>
+    <a href="#avis">Avis</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <p class="menu__foot"><a href="tel:+33323723332">03 23 72 33 32</a><br><a href="mailto:info@labiza.fr">info@labiza.fr</a></p>
+</div>
+
+<aside class="clock" aria-hidden="true">
+  <span class="clock__dial"><i data-clock-hand></i></span>
+  <span class="clock__txt"><b data-clock-time>15 h 00</b><span data-clock-label>Une journée à la Biza</span></span>
+</aside>
+
+<main id="main">
+
+<!-- ═════ 15 h : le domaine, au bord de l'Aisne ═════ -->
+<section class="hero" id="top" data-time="15" aria-labelledby="hero-title">
+  <div class="hero__top">
+    <p class="hero__where" data-in>Domaine de réception à Missy-sur-Aisne, à une heure de Paris</p>
+    <p class="hero__lede" data-in>Une ferme fortifiée du Moyen Âge, deux hectares de parc au bord de l’Aisne, et un îlot pour se dire oui.</p>
+    <div class="hero__cta" data-in>
+      <a class="btn" href="#contact">Demander une visite</a>
+      <a class="link" href="#domaine">Découvrir le domaine</a>
+    </div>
+  </div>
+  <a class="hero__score" href="#avis" data-in><b>4,9</b><span>sur 5<br>126 avis Mariages.net</span></a>
+  <div class="hero__land">
+    <svg class="trees" viewBox="0 0 1600 120" preserveAspectRatio="none" aria-hidden="true"><path data-trees d=""/></svg>
+    <h1 class="hero__title" id="hero-title" data-title><span class="sr">La Ferme de la Biza</span><span aria-hidden="true">La Biza</span></h1>
+    <canvas class="river" data-river="hero" aria-hidden="true"></canvas>
+  </div>
+</section>
+
+<!-- ═════ 15 h 30 : l'arrivée, l'histoire de la ferme ═════ -->
+<section class="moment story" id="domaine" data-time="15.6" aria-labelledby="story-title">
+  <div class="moment__head">
+    <p class="moment__time">15 h 30, l’arrivée</p>
+    <h2 class="h2" id="story-title">Une ferme fortifiée, sauvée de l’abandon.</h2>
+  </div>
+  <div class="story__grid">
+    <figure class="arch" data-arch aria-hidden="true">
+      <div class="arch__wall"></div>
+      <div class="arch__open"><span></span></div>
+    </figure>
+    <ol class="registry">
+      <li><b>Moyen Âge</b><p>Une ferme fortifiée s’élève au bord de l’Aisne, à Missy.</p></li>
+      <li><b>2002</b><p>Maryse et Hattab, restaurateurs à Soissons, rachètent la ferme, abandonnée depuis des années.</p></li>
+      <li><b>2006</b><p>La rénovation commence. La ferme devient un lieu de réception.</p></li>
+      <li><b>Aujourd’hui</b><p>Naïma et Vianney, leur fille et leur gendre, ont repris la maison. Les avis des couples saluent leur accueil.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═════ 16 h 30 : le oui, sur l'île ═════ -->
+<section class="moment isle" id="parc" data-time="16.6" aria-labelledby="isle-title">
+  <div class="moment__head">
+    <p class="moment__time">16 h 30, la cérémonie</p>
+    <h2 class="h2" id="isle-title">Le oui, sur l’île.</h2>
+    <p class="moment__lede">Le parc boisé de deux hectares descend jusqu’à l’Aisne. Entre les étangs et les petits cours d’eau, un îlot accueille les cérémonies et les photos.</p>
+  </div>
+  <div class="isle__scene" data-isle>
+    <svg class="isle__land" viewBox="0 0 1600 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <path class="isle__bank" data-bank d=""/>
+      <path class="isle__island" data-island d=""/>
+    </svg>
+    <canvas class="river river--isle" data-river="isle" aria-hidden="true"></canvas>
+    <ul class="pins">
+      <li style="--x:50%;--y:34%"><b>L’îlot</b>pour la cérémonie et les photos</li>
+      <li style="--x:16%;--y:12%"><b>Le parc boisé</b>2 hectares</li>
+      <li style="--x:83%;--y:22%"><b>L’Aisne</b>en accès direct</li>
+      <li style="--x:76%;--y:64%"><b>Étangs</b>et petits cours d’eau</li>
+    </ul>
+  </div>
+  <p class="isle__more">Dans le parc, des salons sous pergola et un terrain de pétanque attendent les invités.</p>
+</section>
+
+<!-- ═════ 18 h : le vin d'honneur, sous le préau ═════ -->
+<section class="moment preau" id="preau" data-time="18.3" aria-labelledby="preau-title">
+  <div class="preau__grid">
+    <div class="moment__head">
+      <p class="moment__time">18 h, le vin d’honneur</p>
+      <h2 class="h2" id="preau-title">Sous le préau, ouvert sur le parc.</h2>
+      <p class="moment__lede">L’ancien bâtiment de ferme est devenu un préau de 150 m², ouvert sur le parc paysagé. On y sert les cocktails, les vins d’honneur, les garden-parties et les repas en plein air.</p>
+    </div>
+    <figure class="drawing" aria-hidden="true">
+      <svg viewBox="0 0 640 420" data-draw>
+        <g class="drawing__line">
+          <path d="M40 360 H600"/>
+          <path d="M80 360 V170 M200 360 V170 M320 360 V170 M440 360 V170 M560 360 V170"/>
+          <path d="M50 178 L320 70 L590 178"/>
+          <path d="M70 170 H570"/>
+          <path d="M80 170 L200 130 M200 170 L320 110 M320 170 L440 130 M440 170 L560 160"/>
+          <path d="M320 70 V110"/>
+          <path d="M126 360 V300 H158 V360 M270 360 c0 -26 50 -26 50 0 M370 360 c0 -26 50 -26 50 0 M500 360 V310 a14 14 0 0 1 28 0 V360"/>
+        </g>
+        <g class="drawing__dim">
+          <path d="M80 392 H560"/><path d="M80 384 V400 M560 384 V400"/>
+          <text x="320" y="414" text-anchor="middle">150 m², ouvert sur le parc</text>
+        </g>
+      </svg>
+    </figure>
+  </div>
+</section>
+
+<!-- ═════ 20 h : le dîner, dans la grande salle ═════ -->
+<section class="moment salle" id="salle" data-time="20.2" aria-labelledby="salle-title">
+  <div class="moment__head moment__head--wide">
+    <p class="moment__time">20 h, le dîner</p>
+    <h2 class="h2" id="salle-title">Pierres, poutres, et une grande cheminée.</h2>
+  </div>
+  <div class="salle__grid">
+    <dl class="specs">
+      <div><dt>La grande salle</dt><dd>200 m², pierres et poutres apparentes</dd></div>
+      <div><dt>À table</dt><dd>150 personnes assises, avec la piste de danse</dd></div>
+      <div><dt>En coulisse</dt><dd>une cuisine professionnelle, un vestiaire</dd></div>
+      <div><dt>L’esprit</dt><dd>rustique, bohème et chic</dd></div>
+    </dl>
+    <article class="carte" aria-labelledby="carte-title">
+      <p class="carte__kicker">La maison cuisine pour vous</p>
+      <h3 class="carte__title" id="carte-title">Trois menus de mariage</h3>
+      <ul class="carte__prices">
+        <li><b>79&nbsp;€</b></li>
+        <li><b>89&nbsp;€</b></li>
+        <li><b>99&nbsp;€</b></li>
+      </ul>
+      <p class="carte__per">par personne, au choix</p>
+      <p class="carte__incl">Compris&nbsp;: le nappage, le service, la vaisselle, la location et l’exclusivité du domaine.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ═════ 23 h : la fête ═════ -->
+<section class="moment fete" id="fete" data-time="23" aria-labelledby="fete-title">
+  <svg class="garland" viewBox="0 0 1600 260" preserveAspectRatio="none" aria-hidden="true" data-garland></svg>
+  <div class="fete__in">
+    <p class="moment__time">23 h, la fête</p>
+    <h2 class="h2 h2--xl" id="fete-title">Et la piste s’allume.</h2>
+    <p class="moment__lede">La piste de danse est dans la grande salle, près de la cheminée. Sur l’ensemble du domaine, la Biza reçoit jusqu’à 250 invités.</p>
+  </div>
+</section>
+
+<!-- ═════ 2 h : la nuit, au gîte ═════ -->
+<section class="moment gite" id="gite" data-time="25.6" aria-labelledby="gite-title">
+  <div class="gite__grid">
+    <figure class="house" aria-hidden="true" data-house>
+      <svg viewBox="0 0 560 360">
+        <path class="house__body" d="M40 330 V170 L170 80 L300 170 V120 L420 60 L540 140 V330 Z"/>
+        <g class="house__win">
+          <rect x="80" y="210" width="44" height="62" rx="3"/>
+          <rect x="196" y="210" width="44" height="62" rx="3"/>
+          <rect x="336" y="160" width="44" height="58" rx="3"/>
+          <rect x="460" y="160" width="44" height="58" rx="3"/>
+          <rect x="398" y="246" width="44" height="58" rx="3"/>
+        </g>
+        <path class="house__ground" d="M0 330 H560"/>
+      </svg>
+      <figcaption class="house__count"><b data-rooms>0</b>/5 chambres allumées</figcaption>
+    </figure>
+    <div class="moment__head">
+      <p class="moment__time">2 h, la nuit</p>
+      <h2 class="h2" id="gite-title">Dormir à quelques pas.</h2>
+      <p class="moment__lede">Le gîte de la Biza, classé 4 étoiles, est une maison de caractère en pierre de 180 m², à quelques pas de la salle.</p>
+      <ul class="gite__list">
+        <li>5 chambres doubles, jusqu’à 10 personnes</li>
+        <li>Un jardin de 2 000 m², son salon de détente et ses transats</li>
+        <li>L’accès au parc de deux hectares</li>
+        <li>Draps, linge, ménage, énergie et wifi compris</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ Le lendemain matin : familles et entreprises ═════ -->
+<section class="semaine" id="semaine" data-time="31.5" aria-labelledby="semaine-title">
+  <div class="semaine__head">
+    <p class="moment__time">Et en semaine</p>
+    <h2 class="h2" id="semaine-title">La Biza reçoit aussi les familles et les entreprises.</h2>
+  </div>
+  <div class="doors" data-doors>
+    <article class="door" tabindex="0">
+      <p class="door__tag">Fêtes de famille</p>
+      <h3 class="door__title">Baptêmes, communions, anniversaires</h3>
+      <div class="door__body">
+        <p>Et les repas de groupe, à partir de 50 personnes. Le parc, le préau et la grande salle se prêtent à toutes les tailles de tablée.</p>
+        <p class="door__price">Formules à partir de <b>41&nbsp;€</b> par personne</p>
+      </div>
+    </article>
+    <article class="door" tabindex="0">
+      <p class="door__tag">Entreprises</p>
+      <h3 class="door__title">Séminaires, réunions, dîners de fin d’année</h3>
+      <div class="door__body">
+        <p>Lancements de produit, déjeuners d’affaires, réunions d’équipe. À partir de 40 personnes, la grande salle (200 m²), le préau (150 m²) et le parc sont privatisés, avec les salons sous pergola et la pétanque.</p>
+        <p class="door__price">Restauration à partir de <b>46&nbsp;€&nbsp;HT</b> par personne</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ═════ Avis ═════ -->
+<section class="avis" id="avis" data-time="33" aria-labelledby="avis-title">
+  <h2 class="sr" id="avis-title">Avis et distinctions</h2>
+  <div class="avis__grid">
+    <div class="note">
+      <p class="note__big"><b data-count="4.9">4,9</b><span>/5</span></p>
+      <p class="note__src">126 avis sur Mariages.net<br>Recommandé par 98&nbsp;% des couples</p>
+    </div>
+    <ul class="scores" data-scores>
+      <li><span>Qualité du service</span><b style="--v:1"><i></i></b><em>5,0</em></li>
+      <li><span>Réactivité</span><b style="--v:.98"><i></i></b><em>4,9</em></li>
+      <li><span>Professionnalisme</span><b style="--v:1"><i></i></b><em>5,0</em></li>
+      <li><span>Rapport qualité-prix</span><b style="--v:.98"><i></i></b><em>4,9</em></li>
+    </ul>
+    <div class="awards">
+      <p class="awards__title">Wedding Awards</p>
+      <ol class="awards__years">
+        <li>2019</li><li>2020</li><li>2021</li><li>2025</li><li>2026</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ═════ Venir, nous écrire ═════ -->
+<section class="contact" id="contact" data-time="34" aria-labelledby="contact-title">
+  <div class="contact__grid">
+    <div class="contact__main">
+      <h2 class="h2 h2--xl" id="contact-title">Venez voir le domaine.</h2>
+      <p class="moment__lede">Naïma et Vianney vous font visiter la ferme, le parc et le gîte. Dites-nous votre date et le nombre d’invités.</p>
+      <div class="contact__cta">
+        <a class="btn btn--big" href="mailto:info@labiza.fr?subject=Demande%20de%20visite%20%C3%A0%20la%20Ferme%20de%20la%20Biza">Demander une visite</a>
+        <a class="link" href="tel:+33323723332">03 23 72 33 32</a>
+      </div>
+      <dl class="facts">
+        <div><dt>Adresse</dt><dd>5 chemin de la Biza<br>02880 Missy-sur-Aisne</dd></div>
+        <div><dt>Horaires</dt><dd>De 9 h à 19 h</dd></div>
+        <div><dt>Téléphone</dt><dd><a href="tel:+33323723332">03 23 72 33 32</a><br><a href="tel:+33683561210">06 83 56 12 10</a></dd></div>
+        <div><dt>E-mail</dt><dd><a href="mailto:info@labiza.fr">info@labiza.fr</a></dd></div>
+      </dl>
+    </div>
+    <figure class="map" aria-labelledby="map-cap">
+      <svg viewBox="0 0 520 440" data-map>
+        <g class="map__routes">
+          <path d="M120 360 C 190 300, 250 230, 330 170"/>
+          <path d="M176 300 C 220 260, 280 210, 330 170"/>
+          <path d="M330 170 C 350 150, 372 138, 392 132"/>
+          <path d="M330 170 C 380 190, 420 220, 452 246"/>
+        </g>
+        <g class="map__river"><path d="M20 120 C 120 150, 200 140, 280 168 S 420 190, 500 150"/></g>
+        <g class="map__pts">
+          <circle cx="120" cy="360" r="5"/><text x="104" y="388">Paris</text>
+          <circle cx="176" cy="300" r="4"/><text x="64" y="296">Charles-de-Gaulle</text>
+          <circle cx="392" cy="132" r="4"/><text x="404" y="120">Soissons</text>
+          <circle cx="452" cy="246" r="4"/><text x="430" y="276">Reims</text>
+          <circle class="map__home" cx="330" cy="170" r="8"/><text class="map__homelabel" x="300" y="214">La Biza</text>
+        </g>
+        <g class="map__times">
+          <text x="214" y="262">1 h</text>
+          <text x="352" y="104">10 min</text>
+          <text x="410" y="200">40 min</text>
+        </g>
+      </svg>
+      <figcaption id="map-cap">À 10 minutes de Soissons, 40 minutes de Reims, une heure de Paris et de l’aéroport Charles-de-Gaulle. Schéma, pas à l’échelle.</figcaption>
+    </figure>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <a class="logo" href="#top" aria-label="La Ferme de la Biza, haut de page"><span class="logo__small">La Ferme de la</span> Biza</a>
+  <p>5 chemin de la Biza, 02880 Missy-sur-Aisne<br><a href="tel:+33323723332">03 23 72 33 32</a>, <a href="mailto:info@labiza.fr">info@labiza.fr</a></p>
+  <p class="foot__legal">Concept de refonte, octobre 2026.</p>
+</footer>
+
+<!--SCRIPTS-->
+</body>
+</html>
