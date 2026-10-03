@@ -188,6 +188,7 @@
   const treesCv = $('.trees');
   const tctx = treesCv.getContext('2d');
   let heroWoods = null, isleWoods = null, woodsTime = 0;
+  let porch = null; // le porche de l'arrivée (plus bas)
   // les couleurs du paysage à l'heure dite : la terre, le ciel de l'horizon, la lumière du soleil
   function woodsPalette() {
     const sunC = mix([255, 247, 227], [255, 190, 120], state.warm);
@@ -221,6 +222,7 @@
       W.tint(isleWoods.island, pal);
       prepMirror();
     }
+    tintPorch();
   }
   // le reflet de la rive et de l'îlot, renversé une fois pour toutes (à chaque changement de couleurs)
   const mirror = document.createElement('canvas');
@@ -466,41 +468,52 @@
     }, {rootMargin: '120px'}).observe(r.cv);
   });
 
-  /* ——— L'arche de pierre : elle s'ouvre sur le ciel ——— */
+  /* ——— Le porche : en descendant, on s'en approche, puis on entre dans le passage ——— */
   const arch = $('[data-arch]');
-  let archHole = null;
-  if (arch) {
-    const NS = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 400 500');
-    svg.innerHTML = '<defs><mask id="archmask"><rect width="400" height="500" fill="#fff"/><path id="archhole" fill="#000"/></mask></defs><g mask="url(#archmask)" id="archstones"></g>';
-    arch.appendChild(svg);
-    const g = svg.querySelector('#archstones');
-    const r = rng(23);
-    let out = '';
-    for (let y = 0, row = 0; y < 500; row++) {
-      const hgt = 26 + r() * 22;
-      let x = row % 2 ? -30 * r() : -60 * r();
-      while (x < 400) {
-        const wdt = 42 + r() * 70;
-        const tone = 0.78 + r() * 0.18;
-        out += `<rect x="${(x + 2).toFixed(1)}" y="${(y + 2).toFixed(1)}" width="${(wdt - 4).toFixed(1)}" height="${(hgt - 4).toFixed(1)}" rx="${(3 + r() * 6).toFixed(1)}" fill="rgb(${Math.round(214 * tone)},${Math.round(203 * tone)},${Math.round(184 * tone)})"/>`;
-        x += wdt;
-      }
-      y += hgt;
-    }
-    g.innerHTML = `<rect width="400" height="500" fill="#9C9078"/>${out}`;
-    archHole = svg.querySelector('#archhole');
-    const setHole = (o) => {
-      const w = lerp(40, 250, o), h = lerp(70, 380, o);
-      const x0 = 200 - w / 2, x1 = 200 + w / 2, yb = 500, yt = 500 - h;
-      archHole.setAttribute('d', `M${x0} ${yb} V${yt + w / 2} A${w / 2} ${w / 2} 0 0 1 ${x1} ${yt + w / 2} V${yb} Z`);
+  const PORCHE = window.BizaPorche;
+  const ZOOM = reduce ? 1 : 1.9;
+  if (arch && PORCHE) {
+    const gateCv = $('.arch__gate', arch), viewCv = $('.arch__view', arch);
+    porch = {gateCv, viewCv, on: false, key: '', trees: null, at: -99, w: 0, h: 0, dpr: 1};
+    // le porche avance plus vite que le parc, au loin
+    const setZoom = (v) => {
+      gateCv.style.transform = `scale(${(1 + (ZOOM - 1) * v).toFixed(4)})`;
+      viewCv.style.transform = `scale(${(1 + (ZOOM - 1) * v * 0.22).toFixed(4)})`;
     };
-    setHole(reduce ? 1 : 0.25);
+    setZoom(0);
     if (G && ST && !reduce) {
-      const o = {v: 0.25};
-      G.to(o, {v: 1, ease: 'none', onUpdate: () => setHole(o.v), scrollTrigger: {trigger: arch, start: 'top 85%', end: 'center 40%', scrub: true}});
+      const o = {v: 0};
+      G.to(o, {v: 1, ease: 'none', onUpdate: () => setZoom(o.v), scrollTrigger: {trigger: arch, start: 'top 35%', end: 'center 18%', scrub: 0.6}});
     }
+    // dessiné un écran avant d'arriver, ou quand la page est au repos
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) drawPorch(); }, {rootMargin: '100% 0px'}).observe(arch);
+    new IntersectionObserver(([e]) => { porch.on = e.isIntersecting; if (porch.on) tintPorch(true); }).observe(arch);
+    window.addEventListener('load', () => setTimeout(() => (window.requestIdleCallback ? requestIdleCallback(drawPorch, {timeout: 2000}) : drawPorch()), 600));
+  }
+  function drawPorch() {
+    if (!porch) return;
+    const rect = arch.getBoundingClientRect();
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const key = `${Math.round(rect.width)}x${Math.round(rect.height)}@${dpr}`;
+    if (!rect.width || porch.key === key) return;
+    Object.assign(porch, {key, w: rect.width, h: rect.height, dpr});
+    PORCHE.gate(porch.gateCv, {w: rect.width, h: rect.height, dpr, zoom: ZOOM});
+    porch.trees = W.treeline({w: rect.width, h: rect.width * 0.3, dpr});
+    tintPorch(true);
+  }
+  // le parc, au bout du passage, prend les couleurs de l'heure
+  function tintPorch(force) {
+    if (!porch || !porch.trees) return;
+    if (!force && (!porch.on || Math.abs(state.t - porch.at) < 0.08)) return;
+    porch.at = state.t;
+    const pal = woodsPalette();
+    W.tint(porch.trees, pal);
+    const lawn = mix(state.land, [132, 162, 104], 0.5);
+    PORCHE.view(porch.viewCv, {w: porch.w, h: porch.h, dpr: porch.dpr, trees: porch.trees, pal: {
+      far: css(mix(lawn, state.bot, 0.42)),
+      near: css(mix(state.land, [124, 154, 98], 0.5)),
+      haze: css(state.bot, 0.45),
+    }});
   }
 
   /* ——— Le préau se dessine ——— */
@@ -704,6 +717,7 @@
     sizeStars();
     sizeTrees();
     rivers.forEach(sizeRiver);
+    if (porch && porch.key) drawPorch();
     lastT = -1;
     onScroll();
   };

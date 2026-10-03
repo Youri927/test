@@ -11,7 +11,7 @@ Le site se lit comme le déroulé d'une journée de mariage au domaine. **La lum
 | Heure | Partie | Ce qu'on y voit |
 | --- | --- | --- |
 | 15 h | Le domaine | Le nom « La Biza » se lève sur l'horizon, devant la ligne d'arbres de l'autre rive, et se reflète avec elle dans l'Aisne, où il ondule |
-| 15 h 30 | L'arrivée | Un mur de pierre dont l'arche s'ouvre sur le ciel au défilement ; l'histoire réelle de la ferme, du Moyen Âge à Naïma et Vianney |
+| 15 h 30 | L'arrivée | Le porche de la ferme, un portail charretier en pierre dessiné pierre à pierre : en descendant, on s'en approche et on entre dans le passage, au bout duquel on aperçoit le parc ; à côté, l'histoire réelle de la ferme, du Moyen Âge à Naïma et Vianney |
 | 16 h 30 | Le oui, sur l'île | Le parc boisé, l'alignement de peupliers, les saules de la berge et l'îlot (son saule, l'arche fleurie, les chaises), reflétés dans l'eau, avec des repères |
 | 18 h | Le vin d'honneur | Le préau de 150 m², dessiné trait par trait comme un plan d'architecte |
 | 20 h | Le dîner | La grande salle (200 m², 150 assis, cheminée) et la carte des trois menus, qui s'incline sous la souris |
@@ -28,13 +28,14 @@ Le site se lit comme le déroulé d'une journée de mariage au domaine. **La lum
 - **Typographie.** Bodoni Moda, un didone à fort contraste, en très grand ; Schibsted Grotesk pour le texte.
 - **Images.** Les photos du domaine sont inaccessibles depuis mon environnement de travail. La rivière, le ciel, les reflets, le mur de pierre, la guirlande et le gîte sont générés en direct (canvas et SVG). Les vraies photos du domaine (l'îlot, la salle, le préau, le gîte) pourront compléter chaque moment.
 - **Le paysage.** Les arbres sont dessinés touche par touche, comme une gravure : des chênes, des peupliers d'Italie, des saules pleureurs, des buissons et des roseaux, éclairés du côté du soleil, sur trois plans de plus en plus pâles avec la distance et la brume. Le paysage est dessiné une seule fois à la taille de l'écran, puis seulement recoloré quand l'heure change (`src/woods.js`).
+- **Le porche.** C'est une évocation des portails charretiers des fermes fortifiées du Soissonnais (mur de moellons, arc en claveaux autour d'une clé, piédroits harpés, chasse-roues, lierre), pas un relevé de l'entrée réelle de la Biza (`src/porche.js`).
 
 ## Responsive et accessibilité
 
 - Testé à 390, 768, 1024, 1280 × 720, 1440 et 1920 px de large, sans défilement horizontal.
 - Sur mobile, l'horloge se range dans la barre du haut, l'îlot garde un seul repère et les portes s'empilent.
 - Avec « réduire les animations », le défilement doux et les animations sont coupés : le ciel suit toujours l'heure, l'eau ne bouge plus, et toutes les lumières sont allumées.
-- L'eau et les étoiles ne sont dessinées que lorsqu'elles sont à l'écran ; le parc est dessiné quand la page est au repos, ou dès qu'on s'en approche.
+- L'eau et les étoiles ne sont dessinées que lorsqu'elles sont à l'écran ; le porche et le parc sont dessinés quand la page est au repos, ou dès qu'on s'en approche.
 
 ## Fabrication
 
@@ -47,6 +48,7 @@ node build.mjs     # assemble src/ et vendor/ dans dist/index.html
 | `src/index.html` | structure et contenu |
 | `src/styles.css` | styles (les couleurs sont des variables mises à jour par le script) |
 | `src/woods.js` | les bois : arbres, plans, lumière ; la ligne d'arbres du haut de page, le parc et l'îlot |
+| `src/porche.js` | le porche de l'arrivée et le parc qu'on aperçoit au bout du passage |
 | `src/main.js` | ciel et heure, Aisne et reflets, arche, guirlande, gîte, navigation, apparitions |
 | `vendor/` | GSAP + ScrollTrigger, Lenis, polices (licences SIL OFL jointes) |
 
@@ -59,5 +61,5 @@ Tous les boutons « Demander une visite » ouvrent un e-mail à info@labiza.fr ;
 - Les tarifs et ce qu'ils comprennent (relevés sur les fiches publiques du domaine).
 - La capacité exacte selon l'événement (de 30 à 250 personnes selon les fiches).
 - Le devenir des pages « Salle de mariage à… » du site actuel.
-- Les photos du domaine, à fournir.
+- Les photos du domaine, à fournir. Une photo de l'entrée réelle pourra remplacer l'évocation du porche.
 - L'identifiant de la visite Matterport (adresse en `my.matterport.com/show/?m=…`).
