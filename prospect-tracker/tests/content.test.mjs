@@ -84,11 +84,24 @@ const PAGE = `<!doctype html><html><head><meta charset="utf-8"><title>Boîte de 
   const EMAILS = [
     {id: 'E1', recipient: 'prospect@acme.fr', subject: 'Votre site', sent_at: iso(3600e3), created_at: iso(3600e3), open_count: 2, click_count: 1, first_open_at: iso(3000e3), last_open_at: iso(300e3), last_click_at: iso(200e3)},
     {id: 'E0', recipient: 'autre@b.fr', subject: 'Votre site', sent_at: iso(7200e3), created_at: iso(7200e3), open_count: 0, click_count: 0},
+    {id: 'E9', recipient: 'relance@d.fr', subject: 'Proposition', sent_at: iso(4 * 86400e3), created_at: iso(4 * 86400e3), open_count: 0, click_count: 0},
+    {id: 'E10', recipient: 'fan@e.fr', subject: 'Maquette', sent_at: iso(86400e3), created_at: iso(86400e3), open_count: 4, click_count: 0, first_open_at: iso(80000e3), last_open_at: iso(3600e3)},
   ];
+  // la mémoire locale de l'extension : liens notés à l'envoi de E1
+  const LOCAL = {'meta:E1': {links: [
+    {url: 'https://monsite.fr/offre', text: 'notre offre', tracked: true},
+    {url: 'https://monsite.fr/tarifs', text: 'nos tarifs', tracked: true},
+    {url: 'https://agenda.fr/rdv', text: 'prendre rendez-vous', tracked: false},
+  ]}};
   window.chrome = {
-    storage: {onChanged: {addListener() {}}},
+    storage: {onChanged: {addListener() {}}, local: {
+      async get(k) { return typeof k === 'string' ? {[k]: LOCAL[k]} : {}; },
+      async set(o) { Object.assign(LOCAL, o); },
+      async remove(k) { delete LOCAL[k]; },
+    }},
     runtime: {
       lastError: null,
+      onMessage: {addListener(fn) { window.ptListener = fn; }},
       sendMessage(msg, cb) {
         window.messages.push(msg);
         const reply = (data, delay = 5) => setTimeout(() => cb({ok: true, ...data}), delay);
@@ -96,6 +109,7 @@ const PAGE = `<!doctype html><html><head><meta charset="utf-8"><title>Boîte de 
         if (msg.type === 'register') return reply({id: 'NEW' + (++n)}, window.registerDelay);
         if (msg.type === 'refresh') return reply({emails: EMAILS});
         if (msg.type === 'stats') return reply({emails: EMAILS.filter((e) => msg.ids.includes(e.id))});
+        if (msg.type === 'clicks') return reply({rows: [{id: 'E1', recipient: 'prospect@acme.fr', subject: 'Votre site', url: 'https://monsite.fr/offre', count: 1, last: iso(200e3)}]});
         if (msg.type === 'details' && msg.id !== 'E1') return reply({email: EMAILS.find((e) => e.id === msg.id), events: []});
         if (msg.type === 'details') return reply({email: EMAILS[0], events: [
           {type: 'open', counted: true, reason: 'gmail', created_at: iso(3000e3)},
@@ -293,16 +307,85 @@ await check('volet, onglet Activité : chiffres et fil des derniers gestes', asy
 await check('volet, onglet Mails suivis : filtres et recherche', async () => {
   await page.click('.pt-tab[data-tab="mails"]');
   await page.waitForTimeout(50);
-  assert.equal(await page.locator('.pt-mail').count(), 2);
+  assert.equal(await page.locator('.pt-mail').count(), 4);
   await page.click('[data-filter="unopened"]');
-  assert.equal(await page.locator('.pt-mail').count(), 1);
-  assert.match(await page.locator('.pt-mail').innerText(), /autre@b\.fr/);
+  assert.equal(await page.locator('.pt-mail').count(), 2);
+  assert.match(await page.locator('.pt-mails').innerText(), /autre@b\.fr/);
   await page.click('[data-filter="all"]');
   await page.fill('.pt-search input', 'dupont');
   assert.equal(await page.locator('.pt-mail').count(), 1);
   assert.match(await page.locator('.pt-mail').innerText(), /Ouvert 2 fois/);
   await page.fill('.pt-search input', 'zzz');
   assert.match(await page.locator('.pt-mails').innerText(), /Aucun résultat/);
+  await page.click('.pt-close');
+});
+
+await check('pistes : « lus plusieurs fois » et « à relancer » mènent aux mails concernés', async () => {
+  await page.click('.pt-launcher');
+  await page.click('.pt-tab[data-tab="activity"]');
+  await page.waitForTimeout(100);
+  assert.match(await page.locator('.pt-lead-hot').innerText(), /1 mail lu plusieurs fois/);
+  assert.match(await page.locator('.pt-lead-follow').innerText(), /1 mail à relancer\s*Pas ouvert depuis 3 jours/);
+  await page.click('.pt-lead-follow');
+  await page.waitForTimeout(50);
+  assert.equal(await page.locator('.pt-panel').getAttribute('data-view'), 'mails');
+  assert.equal(await page.locator('.pt-mail').count(), 1);
+  assert.match(await page.locator('.pt-mail').innerText(), /relance@d\.fr/);
+  await page.click('[data-filter="hot"]');
+  assert.match(await page.locator('.pt-mail').innerText(), /fan@e\.fr/);
+  await page.click('[data-filter="all"]');
+});
+
+await check('onglet Clics : chaque lien cliqué, par qui, combien de fois', async () => {
+  await page.click('.pt-tab[data-tab="clicks"]');
+  await page.waitForTimeout(100);
+  const text = await page.locator('.pt-panel-body').innerText();
+  for (const s of ['monsite.fr/offre', 'Jean Dupont', 'Cliqué 1 fois', '1 lien cliqué']) assert.ok(text.includes(s), `manque « ${s} »\n${text}`);
+  await page.click('.pt-click');
+  await page.waitForTimeout(150);
+  assert.equal(await page.locator('.pt-panel').getAttribute('data-view'), 'detail');
+});
+
+await check('détail : les liens du mail (cliqué, pas cliqué, non suivi) et « Ouvrir dans Gmail »', async () => {
+  const links = page.locator('.pt-links .pt-link');
+  assert.equal(await links.count(), 3);
+  const text = await page.locator('.pt-links').innerText();
+  for (const s of ['notre offre', '1 clic', 'nos tarifs', 'Pas encore cliqué', 'prendre rendez-vous', 'Non suivi']) assert.ok(text.includes(s), `manque « ${s} »\n${text}`);
+  assert.equal(await links.first().getAttribute('href'), 'https://monsite.fr/offre');
+  assert.match(await page.locator('.pt-panel-body').innerText(), /Liens\s*1 sur 3 cliqué/);
+  await page.click('[data-gmail]');
+  const hash = await page.evaluate(() => decodeURIComponent(location.hash));
+  assert.equal(hash, '#search/in:sent subject:"Votre site" to:prospect@acme.fr');
+  assert.doesNotMatch(await page.locator('.pt-panel').getAttribute('class'), /pt-open/);
+});
+
+await check('votre mail envoyé : pastille de clics à côté du lien cliqué', async () => {
+  await page.waitForTimeout(300);
+  const pill = page.locator('#tracked + .pt-link-pill');
+  assert.equal(await pill.count(), 1);
+  assert.equal((await pill.innerText()).trim(), '1');
+  assert.match(await pill.getAttribute('title'), /Cliqué 1 fois · dernier clic il y a/);
+});
+
+await check('mail reçu avec un pixel de suivi : puce « Suivi », jamais sur vos propres mails', async () => {
+  await page.evaluate(() => document.querySelector('[role="main"]').insertAdjacentHTML('beforeend', `
+    <div class="adn" data-message-id="m2"><table><tr><td><span class="gD" email="news@boutique.fr">Boutique</span></td><td class="gH"><span class="g3">09:00</span></td></tr></table>
+      <div class="a3s">Promo <img src="https://ci3.googleusercontent.com/meips/x=s0#https://boutique.us1.list-manage.com/track/open.php?u=1" width="1" height="1"></div></div>
+    <div class="adn" data-message-id="m3"><table><tr><td><span class="gD" email="ami@x.fr">Ami</span></td><td class="gH"><span class="g3">09:30</span></td></tr></table>
+      <div class="a3s">Salut <img src="https://ci3.googleusercontent.com/meips/y=s0#https://x.fr/photo.jpg" width="400" height="300"></div></div>`));
+  await page.waitForTimeout(150);
+  assert.equal(await page.locator('[data-message-id="m2"] .pt-spy').count(), 1);
+  assert.match(await page.locator('[data-message-id="m2"] .pt-spy').innerText(), /Suivi · Mailchimp/);
+  assert.equal(await page.locator('[data-message-id="m3"] .pt-spy').count(), 0);
+  assert.equal(await page.locator('[data-message-id="m1"] .pt-spy').count(), 0);
+});
+
+await check('notification cliquée : le détail du mail s’ouvre dans Gmail', async () => {
+  const r = await page.evaluate(() => new Promise((ok) => window.ptListener({type: 'open-panel', id: 'E10'}, {}, ok)));
+  assert.equal(r.ok, true);
+  await page.waitForTimeout(150);
+  assert.equal(await page.locator('.pt-panel').getAttribute('data-view'), 'detail');
+  assert.match(await page.locator('.pt-panel-body').innerText(), /Ouvert 4 fois/);
   await page.click('.pt-close');
 });
 
@@ -324,6 +407,81 @@ await check('interrupteur : un clic coupe le suivi du mail, avec un message', as
   assert.equal(await t.getAttribute('data-state'), 'off');
   assert.equal(await t.getAttribute('aria-pressed'), 'false');
   assert.match(await page.locator('.pt-toast').innerText(), /Suivi désactivé/);
+});
+
+const newCompose = (body) => page.evaluate((html) => document.body.insertAdjacentHTML('beforeend', `<div role="dialog" id="compose"><input name="subjectbox" value="Liens"><span email="jean@acme.fr">Jean</span>
+  <div contenteditable="true" role="textbox">${html}</div><div><div role="button" id="send1" data-tooltip="Envoyer">Envoyer</div></div></div>`), body);
+const lastSent = async () => page.evaluate(() => {
+  const d = document.createElement('div');
+  d.innerHTML = window.sent.at(-1).html;
+  return [...d.querySelectorAll('a')].map((a) => a.getAttribute('href'));
+});
+
+await check('menu ✓✓ de la rédaction : liens un par un, alertes du mail ; un lien exclu part sans suivi', async () => {
+  await newCompose('Voir <a href="https://monsite.fr/offre">offre</a>, <a href="https://agenda.fr/rdv">rdv</a> et https://monsite.fr/tarifs');
+  await page.waitForTimeout(300);
+  await page.click('#compose .pt-compose-menu');
+  const menu = page.locator('.pt-cmenu');
+  assert.match(await menu.getAttribute('class'), /pt-cmenu-show/);
+  assert.equal(await menu.locator('.pt-cm-link').count(), 3);
+  assert.match(await menu.innerText(), /3 suivis sur 3/);
+  await menu.locator('[data-act="link"][data-url="https://agenda.fr/rdv"]').click();
+  assert.equal(await menu.locator('[data-act="link"][data-url="https://agenda.fr/rdv"]').getAttribute('aria-checked'), 'false');
+  assert.match(await menu.innerText(), /2 suivis sur 3/);
+  await menu.locator('[data-act="click"]').click();
+  await menu.locator('select').selectOption('24');
+  await page.click('#send1');
+  await page.waitForTimeout(900);
+  const hrefs = await lastSent();
+  assert.ok(hrefs[0].includes('action=click') && hrefs[0].includes(encodeURIComponent('https://monsite.fr/offre')));
+  assert.equal(hrefs[1], 'https://agenda.fr/rdv', 'le lien exclu garde son adresse d’origine');
+  assert.ok(hrefs[2].includes('action=click') && hrefs[2].includes(encodeURIComponent('https://monsite.fr/tarifs')));
+  const m = await page.evaluate(() => window.messages.filter((x) => x.type === 'mark-sent').at(-1));
+  assert.deepEqual(m.links.map((l) => `${l.url} ${l.tracked}`), ['https://monsite.fr/offre true', 'https://agenda.fr/rdv false', 'https://monsite.fr/tarifs true']);
+  assert.deepEqual(m.prefs, {open: true, click: false, remind: 24});
+  assert.doesNotMatch(await menu.getAttribute('class'), /pt-cmenu-show/);
+});
+
+await check('bulle « Accéder au lien » de Gmail : interrupteur du lien', async () => {
+  await newCompose('Le <a href="https://monsite.fr/a">lien A</a>');
+  await page.waitForTimeout(300);
+  await page.focus('#compose [contenteditable]');
+  await page.evaluate(() => document.body.insertAdjacentHTML('beforeend', '<div id="bubble"><span>Accéder au lien : </span><a href="https://monsite.fr/a">https://monsite.fr/a</a> | <span role="link">Modifier</span> | <span role="link">Supprimer</span></div>'));
+  await page.waitForTimeout(150);
+  const sw = page.locator('#bubble .pt-lb-row .pt-sw');
+  assert.equal(await sw.getAttribute('aria-checked'), 'true');
+  await page.click('#bubble .pt-lb-row');
+  assert.equal(await sw.getAttribute('aria-checked'), 'false');
+  await page.evaluate(() => document.getElementById('bubble').remove());
+  await page.click('#send1');
+  await page.waitForTimeout(900);
+  assert.deepEqual(await lastSent(), ['https://monsite.fr/a']);
+});
+
+await check('fenêtre « Modifier le lien » de Gmail : interrupteur, appliqué à l’adresse saisie', async () => {
+  await newCompose('Bonjour');
+  await page.waitForTimeout(300);
+  await page.focus('#compose [contenteditable]');
+  await page.evaluate(() => document.body.insertAdjacentHTML('beforeend', `<div role="dialog" id="editlink"><div>Modifier le lien</div>
+    <label>Texte à afficher <input type="text" value="nouveau"></label><label>Vers quelle URL ce lien doit-il renvoyer ? <input type="text" id="urlin"></label>
+    <div role="button">OK</div><div role="button">Annuler</div></div>`));
+  await page.waitForTimeout(150);
+  const sw = page.locator('#editlink .pt-ld-row .pt-sw');
+  assert.equal(await sw.getAttribute('aria-checked'), 'true');
+  assert.equal(await page.evaluate(() => document.getElementById('urlin').nextElementSibling?.className), 'pt-ld-row pt-ui');
+  await page.fill('#urlin', 'monsite.fr/nouveau');
+  await page.click('#editlink .pt-ld-row');
+  assert.equal(await sw.getAttribute('aria-checked'), 'false');
+  await page.click('#editlink [role="button"]:text("OK")');
+  await page.evaluate(() => {
+    document.getElementById('editlink').remove();
+    document.querySelector('#compose [contenteditable]').insertAdjacentHTML('beforeend', ' <a href="http://monsite.fr/nouveau">nouveau</a> <a href="https://monsite.fr/autre">autre</a>');
+  });
+  await page.click('#send1');
+  await page.waitForTimeout(900);
+  const hrefs = await lastSent();
+  assert.equal(hrefs[0], 'http://monsite.fr/nouveau');
+  assert.ok(hrefs[1].includes('action=click'), 'les autres liens restent suivis');
 });
 
 console.log(results.join('\n'));

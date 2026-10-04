@@ -89,16 +89,20 @@
 .pt-msg-badge.pt-s-opened:hover, .pt-msg-badge.pt-s-clicked:hover,
 .pt-thread-status.pt-s-opened:hover, .pt-thread-status.pt-s-clicked:hover { background: #ceead6; }
 
-/* ——— Interrupteur à côté du bouton Envoyer ——— */
-.pt-compose-toggle {
-  display: inline-flex; align-items: center; gap: 7px;
-  height: 36px; margin: 0 2px 0 8px; padding: 0 9px 0 8px; border-radius: 18px;
-  color: var(--pt-grey); vertical-align: middle; position: relative;
-  transition: background-color .12s, color .15s;
+/* ——— À côté du bouton Envoyer : [✓✓ ▾] options du mail · [interrupteur] suivi ——— */
+.pt-compose {
+  display: inline-flex; align-items: center; height: 36px; margin: 0 2px 0 8px;
+  border-radius: 18px; color: var(--pt-grey); vertical-align: middle; position: relative;
+  transition: color .15s;
 }
-.pt-compose-toggle:hover { background: var(--pt-hover); }
-.pt-compose-toggle:active { background: var(--pt-press); }
-.pt-compose-toggle[data-busy="true"] { pointer-events: none; }
+.pt-compose-menu, .pt-compose-toggle { display: inline-flex; align-items: center; height: 36px; transition: background-color .12s; }
+.pt-compose-menu { gap: 1px; padding: 0 2px 0 9px; border-radius: 18px 0 0 18px; }
+.pt-compose-toggle { padding: 0 10px 0 5px; border-radius: 0 18px 18px 0; }
+.pt-compose-menu:hover, .pt-compose-toggle:hover, .pt-compose.pt-menu-open .pt-compose-menu { background: var(--pt-hover); }
+.pt-compose-menu:active, .pt-compose-toggle:active { background: var(--pt-press); }
+.pt-compose-menu .pt-i-caret { width: 15px; height: 15px; stroke-width: 2.2; color: var(--pt-ink-3); transition: transform .18s var(--pt-ease); }
+.pt-compose.pt-menu-open .pt-i-caret { transform: rotate(180deg); }
+.pt-compose[data-busy="true"] { pointer-events: none; }
 .pt-ct-ico { display: grid; place-items: center; width: 20px; height: 20px; }
 .pt-ct-ico > * { grid-area: 1 / 1; }
 .pt-ct-ico .pt-i { width: 20px; height: 20px; stroke-width: 2.3; }
@@ -106,20 +110,88 @@
 .pt-ct-ico .pt-spinner { width: 15px; height: 15px; }
 .pt-switch { position: relative; flex: none; width: 28px; height: 16px; border-radius: 8px; background: var(--pt-line-2); transition: background-color .18s var(--pt-ease); }
 .pt-switch i { position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, .3); transition: transform .2s var(--pt-ease); }
-.pt-compose-toggle[data-state="on"] { color: var(--pt-green); }
+.pt-compose[data-state="on"], .pt-compose[data-state="pending"] { color: var(--pt-green); }
 .pt-compose-toggle[data-state="on"] .pt-switch { background: var(--pt-green-2); }
 .pt-compose-toggle[data-state="on"] .pt-switch i,
 .pt-compose-toggle[data-state="pending"] .pt-switch i { transform: translateX(12px); }
-.pt-compose-toggle[data-state="pending"] { color: var(--pt-green); }
 .pt-compose-toggle[data-state="pending"] .pt-switch { background: #81c995; }
-.pt-compose-toggle[data-state="pending"] .pt-i-ticks,
-.pt-compose-toggle[data-busy="true"] .pt-i-ticks { display: none; }
-.pt-compose-toggle[data-state="pending"] .pt-spinner,
-.pt-compose-toggle[data-busy="true"] .pt-spinner { display: block; }
-.pt-compose-toggle[data-state="error"] { color: var(--pt-red); }
-.pt-compose-toggle[data-state="error"] .pt-i-ticks { display: none; }
-.pt-compose-toggle[data-state="error"] .pt-i-warn { display: block; }
+.pt-compose[data-state="pending"] .pt-i-ticks, .pt-compose[data-busy="true"] .pt-i-ticks { display: none; }
+.pt-compose[data-state="pending"] .pt-spinner, .pt-compose[data-busy="true"] .pt-spinner { display: block; }
+.pt-compose[data-state="error"] { color: var(--pt-red); }
+.pt-compose[data-state="error"] .pt-i-ticks { display: none; }
+.pt-compose[data-state="error"] .pt-i-warn { display: block; }
 .pt-compose-toggle[data-state="error"] .pt-switch { background: #f2b8b5; }
+
+/* Interrupteur générique (menus, bulle de lien) */
+.pt-sw { position: relative; flex: none; width: 36px; height: 20px; border-radius: 10px; background: var(--pt-line-2) !important; transition: background-color .18s var(--pt-ease); }
+.pt-sw i { position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, .3); transition: transform .2s var(--pt-ease); }
+.pt-sw[aria-checked="true"] { background: var(--pt-green-2) !important; }
+.pt-sw[aria-checked="true"] i { transform: translateX(16px); }
+.pt-sw:disabled { opacity: .45; cursor: default; }
+
+/* Le menu de la rédaction */
+.pt-cmenu {
+  position: fixed; top: 0; left: 0; z-index: 2147483600;
+  width: 340px; max-height: min(560px, calc(100vh - 16px)); overflow: auto; padding: 6px;
+  border-radius: 16px; background: var(--pt-surface); color: var(--pt-ink);
+  font: 400 14px/20px var(--pt-font); box-shadow: var(--pt-elev-3);
+  opacity: 0; visibility: hidden; transform: translateY(6px);
+  transition: opacity .14s var(--pt-ease), transform .18s var(--pt-ease), visibility 0s linear .18s;
+  scrollbar-width: thin;
+}
+.pt-cmenu.pt-cmenu-show { opacity: 1; visibility: visible; transform: none; transition: opacity .14s var(--pt-ease), transform .18s var(--pt-ease); }
+.pt-cm-head { display: flex; align-items: center; gap: 12px; padding: 10px 10px 12px; }
+.pt-cm-head > div { flex: 1; min-width: 0; }
+.pt-cm-head b { display: block; font: 500 15px/20px var(--pt-font-display); }
+.pt-cm-head small { display: block; font-size: 12px; line-height: 16px; color: var(--pt-ink-3); }
+.pt-cm-sec { margin: 0 4px; padding: 8px 6px 6px; border-top: 1px solid var(--pt-line); }
+.pt-cm-sec.pt-off { opacity: .55; }
+.pt-cm-title { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; font: 500 12px/16px var(--pt-font); color: var(--pt-ink-2); text-transform: none; }
+.pt-cm-title small { font-weight: 400; color: var(--pt-ink-3); }
+.pt-cm-links { max-height: 200px; overflow: auto; margin: 0 -6px; padding: 0 6px; scrollbar-width: thin; }
+.pt-cm-link { display: flex; align-items: center; gap: 10px; padding: 7px 0; }
+.pt-cm-link + .pt-cm-link { border-top: 1px solid #f1f3f4; }
+.pt-cm-link-ico { display: grid; place-items: center; flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--pt-blue-bg); color: var(--pt-blue); }
+.pt-cm-link-ico .pt-i { width: 15px; height: 15px; stroke-width: 2.3; }
+.pt-cm-link > div { flex: 1; min-width: 0; }
+.pt-cm-link b, .pt-cm-link small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pt-cm-link b { font-weight: 500; font-size: 13px; line-height: 18px; }
+.pt-cm-link small { font-size: 12px; line-height: 16px; color: var(--pt-ink-3); }
+.pt-cm-empty { margin: 2px 0 6px; font-size: 12.5px; line-height: 18px; color: var(--pt-ink-3); }
+.pt-cm-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 36px; font-size: 13px; color: var(--pt-ink); }
+.pt-cm-row select {
+  height: 30px; padding: 0 26px 0 10px; border: 1px solid var(--pt-line-2); border-radius: 8px; background: #fff;
+  color: var(--pt-ink); font: 500 12.5px/1 var(--pt-font); cursor: pointer; -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23444746' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 10l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 6px center; background-size: 16px;
+}
+.pt-cm-row select:focus { outline: 2px solid var(--pt-blue); outline-offset: 1px; }
+.pt-cm-foot { display: flex; align-items: center; gap: 10px; width: 100%; margin-top: 4px; padding: 10px 12px; border-radius: 10px; color: var(--pt-ink-2); font-size: 13px; }
+.pt-cm-foot span { flex: 1; }
+.pt-cm-foot .pt-i { width: 17px; height: 17px; color: var(--pt-ink-3); }
+.pt-cm-foot:hover { background: var(--pt-hover); }
+
+/* Dans la bulle « Accéder au lien » et la fenêtre « Modifier le lien » de Gmail */
+.pt-lb-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding: 6px 2px 0; border-top: 1px solid #e8eaed; font: 500 12.5px/18px var(--pt-font); color: var(--pt-ink-2); cursor: pointer; white-space: nowrap; }
+.pt-lb-txt { flex: 1; }
+.pt-lb-row .pt-logo { width: 18px; height: 18px; border-radius: 5px; box-shadow: none; }
+.pt-ld-row { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin: 8px 0 2px; font: 500 13px/18px var(--pt-font); color: var(--pt-ink-2); cursor: pointer; }
+.pt-ld-row[hidden] { display: none; }
+
+/* Dans votre mail envoyé : pastille de clics à côté d'un lien */
+.pt-link-pill {
+  display: inline-flex; align-items: center; gap: 2px; height: 18px; margin: 0 2px 0 5px; padding: 0 6px 0 4px;
+  border-radius: 9px; background: var(--pt-blue-bg); color: var(--pt-blue);
+  font: 500 11px/1 var(--pt-font); vertical-align: 1px; white-space: nowrap; cursor: default; text-decoration: none;
+}
+.pt-link-pill .pt-i { width: 12px; height: 12px; stroke-width: 2.4; }
+
+/* Mail reçu qui contient un pixel de suivi */
+.pt-spy {
+  display: inline-flex; align-items: center; gap: 5px; height: 22px; margin: 0 10px 0 0; padding: 0 9px 0 6px;
+  border-radius: 11px; background: #fef7e0; color: #8a5300; font: 500 11.5px/1 var(--pt-font); vertical-align: middle; white-space: nowrap; cursor: help;
+}
+.pt-spy .pt-i { width: 14px; height: 14px; stroke-width: 2.2; }
 
 /* ——— Message en bas à gauche, comme ceux de Gmail ——— */
 .pt-toast {
@@ -393,6 +465,54 @@
 .pt-loading .pt-spinner { color: var(--pt-green); }
 .pt-error { display: flex; align-items: flex-start; gap: 10px; margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: var(--pt-red-bg); color: var(--pt-red); font-size: 13px; line-height: 18px; }
 .pt-error .pt-i { width: 18px; height: 18px; }
+
+/* Pistes à suivre (onglet Activité) */
+.pt-leads { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.pt-lead { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 10px 10px 12px; border-radius: 14px; transition: background-color .12s; }
+.pt-lead-ico { display: grid; place-items: center; flex: none; width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, .75); }
+.pt-lead-ico .pt-i { width: 18px; height: 18px; }
+.pt-lead-txt { flex: 1; min-width: 0; }
+.pt-lead-txt b { display: block; font: 500 14px/20px var(--pt-font-display); }
+.pt-lead-txt small { display: block; font-size: 12px; line-height: 16px; opacity: .8; }
+.pt-lead > .pt-i-next { width: 16px; height: 16px; opacity: .55; }
+.pt-lead-hot { background: #fce8e6; color: #a50e0e; }
+.pt-lead-hot:hover { background: #fad2cf; }
+.pt-lead-follow { background: #fef7e0; color: #7a4a00; }
+.pt-lead-follow:hover { background: #feefc3; }
+
+.pt-chips { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); padding-right: 24px; }
+.pt-section-title small { margin-left: 6px; font: 400 12px/16px var(--pt-font); color: var(--pt-ink-3); }
+
+/* Onglet Clics */
+.pt-clicks-sum { margin: 4px 0 8px; font-size: 13px; color: var(--pt-ink-3); }
+.pt-clicks-sum b { font-weight: 500; color: var(--pt-ink); }
+.pt-click { display: flex; align-items: flex-start; gap: 12px; width: calc(100% + 20px); margin: 0 -10px; padding: 10px; border-radius: 12px; transition: background-color .12s; }
+.pt-click:hover { background: var(--pt-surface-3); }
+.pt-click-ico { display: grid; place-items: center; flex: none; width: 32px; height: 32px; margin-top: 2px; border-radius: 50%; background: var(--pt-blue-bg); color: var(--pt-blue); }
+.pt-click-ico .pt-i { width: 17px; height: 17px; stroke-width: 2.3; }
+.pt-meta-click .pt-i-click { width: 13px; height: 13px; }
+
+/* Détail : bouton et liens du mail */
+.pt-btn {
+  display: inline-flex; align-items: center; gap: 8px; height: 36px; margin-top: 12px; padding: 0 16px 0 12px;
+  border-radius: 18px; border: 1px solid var(--pt-line-2) !important; color: var(--pt-blue); font: 500 13px/1 var(--pt-font);
+  transition: background-color .12s, border-color .12s;
+}
+.pt-btn:hover { background: var(--pt-blue-bg); border-color: transparent !important; }
+.pt-btn .pt-i { width: 17px; height: 17px; }
+.pt-links { display: flex; flex-direction: column; gap: 6px; }
+.pt-link { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--pt-line); color: inherit !important; text-decoration: none !important; transition: background-color .12s, border-color .12s; }
+.pt-link:hover { background: var(--pt-surface-2); border-color: #d3d6da; }
+.pt-link-ico { display: grid; place-items: center; flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--pt-grey-bg); color: var(--pt-ink-3); }
+.pt-link-hit .pt-link-ico { background: var(--pt-blue-bg); color: var(--pt-blue); }
+.pt-link-ico .pt-i { width: 16px; height: 16px; stroke-width: 2.3; }
+.pt-link-main { flex: 1; min-width: 0; }
+.pt-link-main b, .pt-link-main small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pt-link-main b { font-weight: 500; font-size: 13.5px; line-height: 18px; color: var(--pt-ink); }
+.pt-link-main small { font-size: 12px; line-height: 16px; color: var(--pt-ink-3); }
+.pt-link-stat { flex: none; text-align: right; }
+.pt-link-stat b { display: block; font-weight: 500; font-size: 13px; line-height: 18px; color: var(--pt-blue); }
+.pt-link-stat small { display: block; font-size: 12px; line-height: 16px; color: var(--pt-ink-3); }
 
 @media (prefers-reduced-motion: reduce) {
   .pt-ui, .pt-ui *, .pt-pop, .pt-panel { transition: none !important; animation-duration: .01ms !important; }

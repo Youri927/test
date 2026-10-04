@@ -1,4 +1,4 @@
-import {DEFAULTS} from './config.js';
+import {DEFAULTS, PREFS} from './config.js';
 
 const $ = (id) => document.getElementById(id);
 const fmtDay = new Intl.DateTimeFormat('fr-FR', {day: 'numeric', month: 'short'});
@@ -39,25 +39,34 @@ function setConn(kind, text) {
   $('conn').querySelector('span').textContent = text;
 }
 
+const prefInputs = () => [...document.querySelectorAll('[data-pref]')];
+
 async function loadConfig() {
-  const cfg = await chrome.storage.sync.get(['apiBase', 'apiToken', 'notificationsEnabled', 'trackingDefault']);
+  const cfg = await chrome.storage.sync.get(['apiBase', 'apiToken', 'notificationsEnabled', ...Object.keys(PREFS)]);
   $('apiBase').value = cfg.apiBase || DEFAULTS.apiBase;
   $('apiToken').value = cfg.apiToken || DEFAULTS.apiToken;
-  $('notificationsEnabled').checked = cfg.notificationsEnabled !== false;
-  $('trackingDefault').checked = cfg.trackingDefault !== false;
+  const mute = cfg.notificationsEnabled === false; // ancien interrupteur unique (v3.0)
+  for (const el of prefInputs()) {
+    const k = el.dataset.pref;
+    let v = cfg[k] === undefined ? PREFS[k] : cfg[k];
+    if (mute && /^notify|^dailyReport$/.test(k)) v = false;
+    if (el.type === 'checkbox') el.checked = v !== false;
+    else el.value = String(v);
+  }
   if (!$('apiToken').value) $('settings').querySelector('.advanced').open = true;
   return cfg;
 }
 
 async function saveConfig() {
+  const prefs = Object.fromEntries(prefInputs().map((el) => [el.dataset.pref, el.type === 'checkbox' ? el.checked : Number(el.value) || 0]));
   await chrome.storage.sync.set({
     apiBase: $('apiBase').value.trim().replace(/\/$/, ''),
     apiToken: $('apiToken').value.trim(),
-    notificationsEnabled: $('notificationsEnabled').checked,
-    trackingDefault: $('trackingDefault').checked,
+    notificationsEnabled: true,
+    ...prefs,
   });
   $('saved').hidden = false;
-  setTimeout(() => { $('saved').hidden = true; show('dashboard'); refresh(); }, 900);
+  setTimeout(() => { $('saved').hidden = true; if (!asPage) show('dashboard'); refresh(); }, 1200);
 }
 
 function show(view) {
@@ -130,7 +139,10 @@ $('emails').addEventListener('click', (e) => {
   if (b) chrome.tabs.create({url: `https://mail.google.com/mail/#search/${encodeURIComponent(b.dataset.q)}`});
 });
 
-show('dashboard');
+// ouvert comme page de réglages (lien « Réglages par défaut » de Gmail) plutôt que comme menu de l'extension
+const asPage = new URLSearchParams(location.search).has('page') || Boolean(chrome.extension?.getViews && !chrome.extension.getViews({type: 'popup'}).includes(window));
+if (asPage) document.body.classList.add('page');
+show(asPage ? 'settings' : 'dashboard');
 Promise.all([loadConfig(), chrome.storage.local.get('ptNames').catch(() => ({}))]).then(([, local]) => {
   names = local?.ptNames || {};
   refresh();

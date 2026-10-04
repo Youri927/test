@@ -1,4 +1,4 @@
-# Prospect Tracker pour Gmail : v3
+# Prospect Tracker pour Gmail : v3.2
 
 Suivi des mails envoyés depuis Gmail, façon Mailsuite. Chaque mail suivi indique **s'il a été ouvert, combien de fois, quand, et quels liens ont été cliqués**. Vos propres lectures, les doublons et les robots sont écartés.
 
@@ -27,20 +27,47 @@ Suivi des mails envoyés depuis Gmail, façon Mailsuite. Chaque mail suivi indiq
 | --- | --- |
 | **Listes** (Envoyés, boîte de réception…) | Devant l'objet : ✓ gris = envoyé et suivi, pas encore ouvert. ✓✓ vert = ouvert. Petit lien bleu = au moins un lien cliqué |
 | **Survol d'une coche** | Une carte : « Ouvert 3 fois », dernière ouverture, destinataire, les 4 derniers gestes (ouvert, ré-ouvert, lien cliqué) et « Voir toute l'activité » |
-| **Message ouvert** | À côté de la date, une puce « Ouvert 2 fois · 1 clic », lue dans le pixel de CE message. Si le message est replié, la puce passe à côté de l'objet du fil |
-| **Rédaction** | À droite du bouton Envoyer : ✓✓ et un interrupteur. Vert = suivi, gris = sans suivi, rouge = serveur injoignable (cliquer pour réessayer) |
+| **Message ouvert** | À côté de la date, une puce « Ouvert 2 fois · 1 clic », lue dans le pixel de CE message. Si le message est replié, la puce passe à côté de l'objet du fil. Dans votre mail, chaque lien cliqué porte une pastille avec son nombre de clics |
+| **Rédaction** | À droite du bouton Envoyer : **✓✓ ▾** ouvre les options du mail, l'**interrupteur** coupe ou remet le suivi (vert = suivi, gris = sans suivi, rouge = serveur injoignable) |
+| **Mail reçu** | Une puce « Suivi · HubSpot » (Mailtrack, Mailchimp…) quand l'expéditeur y a mis un pixel de suivi |
 | **Onglet ✓✓ sur le bord droit** | Le volet de suivi. Un compteur rouge signale les nouvelles activités depuis votre dernière visite |
 
-Le volet a deux onglets :
-- **Activité** : vos chiffres (suivis, ouverts, cliqués, taux d'ouverture), puis le fil des derniers gestes, jour par jour : « Claire Martin a ouvert », « a ré-ouvert (3e fois) », « a cliqué un lien ». Les noms sont ceux que Gmail affiche.
-- **Mails suivis** : la recherche (nom, adresse, objet) et les filtres Tous, Ouverts, Pas ouverts, Cliqués.
+### Les liens, comme dans Mailtrack
 
-Un clic sur un mail ou sur une coche ouvre son détail :
-- le statut, l'envoi, la première et la dernière ouverture, le dernier clic ;
-- la chronologie : « Ouvert », « Ré-ouvert (2e fois) », « Lien cliqué » avec l'adresse du lien, « déduit du clic » quand les images étaient bloquées, puis « Envoyé » ;
-- les signaux ignorés, repliés à part : vous-même, doublons, robots.
+Par défaut, tous les liens d'un mail suivi sont suivis (réglage « Suivre les clics sur les liens »). Pour en exclure un, ou en ajouter un si le réglage est coupé :
+- **menu ✓✓ ▾ de la rédaction** : la liste des liens du mail, chacun avec son interrupteur ;
+- **bulle « Accéder au lien » de Gmail** (quand le curseur est sur un lien) : une ligne « Suivi des clics » ;
+- **fenêtre « Modifier le lien »** : « Suivre les clics sur ce lien », appliqué à l'adresse saisie quand vous cliquez OK.
 
-L'icône de l'extension dans la barre de Chrome donne vos chiffres, les derniers mails (un clic les retrouve dans Gmail) et les réglages.
+Un lien non suivi part avec son adresse d'origine. La bulle et la fenêtre dépendent de la présentation de Gmail : si Gmail la change, le menu ✓✓ ▾ reste le moyen sûr.
+
+Pour lire les clics :
+- **détail d'un mail** : chaque lien du mail, avec son nombre de clics et le dernier, « Pas encore cliqué » ou « Non suivi ». La liste des liens est notée sur cet ordinateur au moment de l'envoi ;
+- **onglet Clics du volet** : chaque lien cliqué, par qui, combien de fois, quand ;
+- **votre mail affiché dans Gmail** : une pastille à côté de chaque lien cliqué.
+
+### Le volet
+
+- **Activité** : vos chiffres (suivis, ouverts, cliqués, taux d'ouverture), les **pistes** (mails lus plusieurs fois, mails à relancer), puis le fil des derniers gestes, jour par jour : « Claire Martin a ouvert », « a ré-ouvert (3e fois) », « a cliqué un lien ». Les noms sont ceux que Gmail affiche.
+- **Mails suivis** : la recherche (nom, adresse, objet) et les filtres Tous, Ouverts, Pas ouverts, Cliqués, Lus plusieurs fois, À relancer.
+- **Clics** : le rapport des liens cliqués.
+
+Un clic sur un mail, une coche ou une notification ouvre son détail : le statut, l'envoi, la première et la dernière ouverture, le dernier clic, les liens, la chronologie, les signaux ignorés (vous-même, doublons, robots) et le bouton **Ouvrir dans Gmail**.
+
+### Les alertes (notifications de Chrome)
+
+| Alerte | Quand |
+| --- | --- |
+| E-mail ouvert, ré-ouvert (Ne fois) | À chaque ouverture comptée |
+| Lien cliqué | Avec le lien cliqué |
+| Lu plusieurs fois | 3 ouvertures en 24 h : bon moment pour relancer |
+| Ré-ouvert après N jours | Un mail ré-ouvert après une semaine sans ouverture |
+| Pas encore ouvert | Au bout du délai choisi (3 jours par défaut), une seule fois. Plusieurs mails d'un coup sont regroupés |
+| Votre récap du jour | Chaque matin à partir de 9 h : ouverts et cliqués depuis la veille, mails à relancer |
+
+Toutes se règlent dans l'icône de l'extension → réglages. L'ouverture, le clic et le délai de relance se règlent aussi mail par mail, dans le menu ✓✓ ▾ de la rédaction.
+
+L'icône de l'extension, dans la barre de Chrome, donne vos chiffres, les derniers mails (un clic les retrouve dans Gmail) et les réglages.
 
 ## Installation
 

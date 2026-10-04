@@ -33,15 +33,49 @@
 
   <section id="settings" hidden>
     <button id="backBtn" class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg>Retour</button>
-    <h2>Réglages</h2>
+    <h2>Suivi</h2>
     <label class="switch-row">
-      <span><b>Suivre les nouveaux mails</b><small>Activé par défaut à chaque nouveau mail. Vous pouvez toujours le couper mail par mail, à côté du bouton Envoyer.</small></span>
-      <input id="trackingDefault" type="checkbox" class="switch" checked />
+      <span><b>Suivre les nouveaux mails</b><small>Vous pouvez toujours le couper mail par mail, à côté du bouton Envoyer.</small></span>
+      <input data-pref="trackingDefault" type="checkbox" class="switch" />
     </label>
     <label class="switch-row">
-      <span><b>Notifications</b><small>Ouverture, ré-ouverture et clic sur un lien.</small></span>
-      <input id="notificationsEnabled" type="checkbox" class="switch" checked />
+      <span><b>Suivre les clics sur les liens</b><small>Lien par lien, le menu ✓✓ de la rédaction permet d’en exclure ou d’en ajouter.</small></span>
+      <input data-pref="trackLinks" type="checkbox" class="switch" />
     </label>
+    <label class="switch-row">
+      <span><b>Signaler les mails reçus qui sont suivis</b><small>Une puce « Suivi » s’affiche sur les mails qui contiennent un pixel de suivi.</small></span>
+      <input data-pref="flagIncoming" type="checkbox" class="switch" />
+    </label>
+
+    <h2>Me prévenir</h2>
+    <label class="switch-row">
+      <span><b>Quand un mail est ouvert</b><small>Puis à chaque ré-ouverture.</small></span>
+      <input data-pref="notifyOpen" type="checkbox" class="switch" />
+    </label>
+    <label class="switch-row">
+      <span><b>Quand un lien est cliqué</b><small>Avec le lien en question.</small></span>
+      <input data-pref="notifyClick" type="checkbox" class="switch" />
+    </label>
+    <label class="switch-row">
+      <span><b>Quand un mail est lu plusieurs fois</b><small>3 ouvertures en 24 h : bon moment pour relancer.</small></span>
+      <input data-pref="notifyHot" type="checkbox" class="switch" />
+    </label>
+    <label class="switch-row">
+      <span><b>Quand un vieux mail est ré-ouvert</b><small>Après une semaine sans ouverture.</small></span>
+      <input data-pref="notifyRevival" type="checkbox" class="switch" />
+    </label>
+    <label class="switch-row">
+      <span><b>S’il n’est pas ouvert sous</b><small>Un rappel pour relancer. Réglable aussi mail par mail.</small></span>
+      <select data-pref="remindHours" class="select">
+        <option value="0">Jamais</option><option value="24">24 h</option><option value="48">2 jours</option>
+        <option value="72">3 jours</option><option value="120">5 jours</option><option value="168">7 jours</option>
+      </select>
+    </label>
+    <label class="switch-row">
+      <span><b>Récap chaque matin</b><small>Ouvertures, clics et mails à relancer, à partir de 9 h.</small></span>
+      <input data-pref="dailyReport" type="checkbox" class="switch" />
+    </label>
+
     <details class="advanced">
       <summary>Connexion au serveur</summary>
       <label class="field"><span>Adresse du serveur de suivi</span>

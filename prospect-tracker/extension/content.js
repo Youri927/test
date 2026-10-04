@@ -65,6 +65,12 @@
     search: '<circle cx="11" cy="11" r="6.25"/><path d="M15.6 15.6l4.4 4.4"/>',
     shield: '<path d="M12 3.5l7 2.6v5.5c0 4.3-3 7.7-7 8.9-4-1.2-7-4.6-7-8.9V6.1z"/><path d="M9 12l2.2 2.2L15.2 10"/>',
     warn: '<path d="M12 4.5l8.5 15h-17z"/><path d="M12 10.5v4M12 17.2v.3"/>',
+    caret: '<path d="M8 10l4 4 4-4"/>',
+    flame: '<path d="M12 21c-3.6 0-6.5-2.6-6.5-6.2 0-2.6 1.6-4.5 3-6 .3 1.7 1.2 2.9 2.4 3.4C10.6 8.6 12 5.6 15 3.5c-.4 2.8.8 4.6 2 6.3 1 1.4 1.5 2.8 1.5 4.6 0 3.9-2.9 6.6-6.5 6.6z"/>',
+    bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+    external: '<path d="M14 4.5h5.5V10"/><path d="M19.5 4.5L11 13"/><path d="M18 14v4.5A1.5 1.5 0 0 1 16.5 20h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/>',
+    gear: '<circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4.9a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.5a7 7 0 0 0-2 1.2l-2.4-.9-2 3.4 2 1.6a7 7 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-.9a7 7 0 0 0 2 1.2L10 21h4l.5-2.5a7 7 0 0 0 2-1.2l2.4.9 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/>',
+    spy: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.75"/><path d="M4 20L20 4"/>',
     inbox: '<path d="M3.5 13.5l2.6-7.2A2 2 0 0 1 8 5h8a2 2 0 0 1 1.9 1.3l2.6 7.2V18a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 18z"/><path d="M3.5 13.5h4.5l1.5 2.5h5l1.5-2.5h4.5"/>',
   };
   const icon = (name) => `<svg class="pt-i pt-i-${name}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${PATHS[name]}</svg>`;
@@ -118,13 +124,13 @@
     }, kind === 'warn' ? 9000 : 4000);
   }
 
-  let config = {apiBase: '', trackingDefault: true, hasToken: false};
+  let config = {apiBase: '', hasToken: false, trackingDefault: true, trackLinks: true, flagIncoming: true, notifyOpen: true, notifyClick: true, remindHours: 72};
   let marker = ''; // hôte + chemin du serveur de suivi : reconnaît ses adresses où qu'elles soient
 
   async function loadConfig() {
     const r = await ask({type: 'config'});
     if (!r.ok) return;
-    config = r;
+    config = {...config, ...r};
     try {
       const u = new URL(r.apiBase);
       marker = u.host + u.pathname;
@@ -387,12 +393,17 @@
     if (!st.enabled || !st.id || !st.body.isConnected) return false;
     const body = st.body;
     linkify(body);
-    // tous les liens, y compris ceux d'anciens mails cités ou recopiés, sont suivis pour CE mail
+    // chaque lien, y compris ceux d'anciens mails cités ou recopiés, est suivi pour CE mail…
+    // sauf ceux que vous avez choisi de ne pas suivre (ramenés alors à leur adresse d'origine)
+    const links = [];
     body.querySelectorAll('a[href]').forEach((a) => {
       const target = originalUrl(a.getAttribute('href') || '');
       if (!/^https?:\/\//i.test(target) || isOurs(target)) return;
-      a.setAttribute('href', clickUrl(st.id, target));
+      const tracked = linkTracked(st, target);
+      a.setAttribute('href', tracked ? clickUrl(st.id, target) : target);
+      if (!a.closest('.gmail_quote, blockquote')) links.push({url: target, text: (a.textContent || '').trim().slice(0, 140), tracked});
     });
+    st.lastLinks = links.filter((l, i) => links.findIndex((m) => m.url === l.url && m.text === l.text) === i).slice(0, 50);
     // les pixels d'anciens mails ouvriraient… les anciens mails : on les retire
     body.querySelectorAll('img').forEach((img) => {
       if (img.dataset.ptPixel || isOurs(img.getAttribute('src') || '')) img.remove();
@@ -445,9 +456,11 @@
     const b = st.toggle;
     if (!b) return;
     const state = !st.enabled ? 'off' : st.error ? 'error' : st.id ? 'on' : 'pending';
+    if (cmenuFor === st) renderCMenu();
     if (b.dataset.state === state && b.__ptErr === st.error) return;
     b.__ptErr = st.error;
     b.dataset.state = state;
+    if (st.wrap) st.wrap.dataset.state = state;
     b.title = {
       off: config.hasToken ? 'Suivi désactivé pour ce mail. Cliquer pour l’activer.' : 'Ajoutez votre jeton dans les réglages de Prospect Tracker',
       error: `Suivi indisponible : ${st.error}. Cliquer pour réessayer.`,
@@ -461,14 +474,22 @@
   function addToggle(st) {
     const send = findSend(st.root);
     if (!send || st.root.querySelector('.pt-compose-toggle')) return;
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'pt-compose-toggle pt-ui';
-    b.innerHTML = `<span class="pt-ct-ico">${icon('ticks')}${icon('warn')}<i class="pt-spinner"></i></span><span class="pt-switch" aria-hidden="true"><i></i></span>`;
+    // [✓✓ ▾] ouvre les options du mail (liens, alertes) · [interrupteur] coupe ou remet le suivi
+    const wrap = document.createElement('span');
+    wrap.className = 'pt-compose pt-ui';
+    wrap.innerHTML = `<button type="button" class="pt-compose-menu" aria-haspopup="dialog" aria-label="Options de suivi de ce mail" title="Options de suivi : liens, alertes"><span class="pt-ct-ico">${icon('ticks')}${icon('warn')}<i class="pt-spinner"></i></span>${icon('caret')}</button><button type="button" class="pt-compose-toggle"><span class="pt-switch" aria-hidden="true"><i></i></span></button>`;
+    const b = wrap.querySelector('.pt-compose-toggle');
     const anchor = send.parentElement || send;
-    anchor.parentElement?.insertBefore(b, anchor.nextSibling);
+    anchor.parentElement?.insertBefore(wrap, anchor.nextSibling);
     st.toggle = b;
+    st.wrap = wrap;
     paintToggle(st);
+    wrap.querySelector('.pt-compose-menu').addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (cmenuFor === st) closeCMenu();
+      else openCMenu(st);
+    }, true);
     b.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -488,7 +509,11 @@
       if (composes.has(body)) return;
       const root = rootOf(body);
       if (!root) return;
-      const st = {body, root, enabled: Boolean(config.trackingDefault && config.hasToken), id: null, pending: null, error: '', toggle: null};
+      const st = {
+        body, root, enabled: Boolean(config.trackingDefault && config.hasToken), id: null, pending: null, error: '', toggle: null,
+        linksDefault: config.trackLinks !== false, linkPrefs: new Map(), // suivi lien par lien : adresse → oui / non
+        prefs: {open: config.notifyOpen !== false, click: config.notifyClick !== false, remind: Number(config.remindHours) || 0},
+      };
       const existing = undoneId(body);
       if (existing) { st.id = existing; st.enabled = true; }
       composes.set(body, st);
@@ -505,6 +530,226 @@
     return best;
   }
 
+  /* ——— Suivi lien par lien, comme Mailtrack ———
+     Chaque adresse a son choix (suivie ou non), qui vaut pour la rédaction en cours. On le règle dans le menu
+     ✓✓ ▾ de la rédaction, dans la bulle « Accéder au lien » de Gmail ou dans sa fenêtre « Modifier le lien ».
+     Le choix est appliqué à l'envoi. */
+  /** clé d'un lien, insensible aux détails d'écriture (http ou https, www, barre finale) */
+  function linkKey(url) {
+    let u = String(url || '').trim();
+    if (u && !/^[a-z][a-z0-9+.-]*:/i.test(u)) u = `http://${u}`;
+    try {
+      const p = new URL(u);
+      return `${p.hostname.replace(/^www\./, '').toLowerCase()}${p.pathname.replace(/\/+$/, '')}${p.search}`;
+    } catch {
+      return u.toLowerCase();
+    }
+  }
+  function linkTracked(st, url) {
+    const k = linkKey(url);
+    return st.linkPrefs.has(k) ? st.linkPrefs.get(k) : st.linksDefault;
+  }
+  function setLinkTracked(st, url, on) {
+    st.linkPrefs.set(linkKey(url), on);
+    paintLinkUis();
+    if (cmenuFor === st) renderCMenu();
+  }
+  /** les liens du message en cours, hors citation : liens posés et adresses tapées en texte */
+  function linksOf(body) {
+    const out = [];
+    const add = (raw, text) => {
+      const url = originalUrl(raw);
+      if (!/^https?:\/\//i.test(url) || isOurs(url)) return;
+      const key = linkKey(url);
+      if (!out.some((l) => l.key === key)) out.push({url, key, text: String(text || '').trim()});
+    };
+    body.querySelectorAll('a[href]').forEach((a) => { if (!a.closest('.gmail_quote, blockquote')) add(a.getAttribute('href') || '', a.textContent); });
+    const walker = document.createTreeWalker(body, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const n = walker.currentNode;
+      if (n.parentElement?.closest('a, .gmail_quote, blockquote')) continue;
+      for (const m of (n.nodeValue || '').matchAll(/https?:\/\/[^\s<>"']+/gi)) add(m[0].replace(/[),.;:!?»]+$/, ''), '');
+    }
+    return out;
+  }
+
+  /* Le menu ✓✓ ▾ de la rédaction : suivi du mail, ses liens un par un, les alertes de ce mail */
+  let cmenu = null;
+  let cmenuFor = null;
+  const sw = (on, attrs = '', disabled = false) => `<button type="button" class="pt-sw" role="switch" aria-checked="${Boolean(on)}"${disabled ? ' disabled' : ''} ${attrs}><i></i></button>`;
+  const REMIND = [[0, 'Jamais'], [24, '24 h'], [48, '2 jours'], [72, '3 jours'], [120, '5 jours'], [168, '7 jours']];
+
+  function openCMenu(st) {
+    if (!cmenu) {
+      cmenu = document.createElement('div');
+      cmenu.className = 'pt-cmenu pt-ui';
+      cmenu.setAttribute('role', 'dialog');
+      cmenu.setAttribute('aria-label', 'Options de suivi de ce mail');
+      cmenu.addEventListener('mousedown', (e) => { if (e.target.tagName !== 'SELECT') e.preventDefault(); });
+      cmenu.addEventListener('click', onCMenuClick);
+      cmenu.addEventListener('change', (e) => {
+        if (e.target.dataset.act === 'remind' && cmenuFor) cmenuFor.prefs.remind = Number(e.target.value) || 0;
+      });
+      for (const t of ['keydown', 'keypress', 'keyup']) cmenu.addEventListener(t, (e) => { if (e.key !== 'Escape') e.stopPropagation(); });
+      document.body.appendChild(cmenu);
+    }
+    cmenuFor = st;
+    renderCMenu();
+    cmenu.classList.add('pt-cmenu-show');
+    st.wrap?.classList.add('pt-menu-open');
+  }
+  function closeCMenu() {
+    cmenuFor?.wrap?.classList.remove('pt-menu-open');
+    cmenuFor = null;
+    cmenu?.classList.remove('pt-cmenu-show');
+  }
+  function placeCMenu() {
+    const anchor = cmenuFor?.wrap;
+    if (!cmenu || !anchor?.isConnected) { closeCMenu(); return; }
+    const r = anchor.getBoundingClientRect();
+    const w = cmenu.offsetWidth;
+    const h = cmenu.offsetHeight;
+    const left = Math.min(Math.max(8, r.left), window.innerWidth - w - 8);
+    let top = r.top - h - 8;
+    if (top < 8) top = Math.min(r.bottom + 8, window.innerHeight - h - 8);
+    cmenu.style.left = `${Math.round(left)}px`;
+    cmenu.style.top = `${Math.round(Math.max(8, top))}px`;
+  }
+  function renderCMenu() {
+    const st = cmenuFor;
+    if (!cmenu || !st) return;
+    const on = st.enabled && !st.error && config.hasToken;
+    const links = linksOf(st.body);
+    const nOn = links.filter((l) => linkTracked(st, l.url)).length;
+    const state = !config.hasToken ? 'Jeton manquant : voir les réglages' : st.error ? 'Serveur de suivi injoignable' : st.enabled ? 'Vous saurez quand il est ouvert' : 'Ce mail partira sans suivi';
+    put(cmenu, {html: `
+      <div class="pt-cm-head">${logo()}<div><b>Suivi de ce mail</b><small>${state}</small></div>${sw(st.enabled, 'data-act="track" aria-label="Suivi de ce mail"', !config.hasToken)}</div>
+      <div class="pt-cm-sec${on ? '' : ' pt-off'}">
+        <div class="pt-cm-title"><span>Liens</span>${links.length ? `<small>${nOn} suivi${nOn > 1 ? 's' : ''} sur ${links.length}</small>` : ''}</div>
+        ${links.length ? `<div class="pt-cm-links">${links.map((l) => `
+          <div class="pt-cm-link">
+            <span class="pt-cm-link-ico">${icon('link')}</span>
+            <div><b>${esc(l.text && l.text !== l.url ? l.text : linkLabel(l.url))}</b><small>${esc(linkLabel(l.url))}</small></div>
+            ${sw(on && linkTracked(st, l.url), `data-act="link" data-url="${esc(l.url)}" aria-label="Suivre les clics sur ${esc(linkLabel(l.url))}"`, !on)}
+          </div>`).join('')}</div>` : `<p class="pt-cm-empty">Aucun lien pour l’instant. Ceux que vous ajouterez ${st.linksDefault ? 'seront suivis' : 'ne seront pas suivis'}.</p>`}
+      </div>
+      <div class="pt-cm-sec${on ? '' : ' pt-off'}">
+        <div class="pt-cm-title"><span>Me prévenir</span></div>
+        <div class="pt-cm-row"><span>À l’ouverture</span>${sw(on && st.prefs.open, 'data-act="open" aria-label="Me prévenir à l’ouverture"', !on)}</div>
+        <div class="pt-cm-row"><span>Au clic sur un lien</span>${sw(on && st.prefs.click, 'data-act="click" aria-label="Me prévenir au clic"', !on)}</div>
+        <div class="pt-cm-row"><span>S’il n’est pas ouvert sous</span><select data-act="remind" aria-label="Relance si pas ouvert"${on ? '' : ' disabled'}>${REMIND.map(([hh, l]) => `<option value="${hh}"${hh === st.prefs.remind ? ' selected' : ''}>${l}</option>`).join('')}</select></div>
+      </div>
+      <button type="button" class="pt-cm-foot" data-act="settings">${icon('gear')}<span>Réglages par défaut</span>${icon('next')}</button>`});
+    placeCMenu();
+  }
+  function onCMenuClick(e) {
+    const st = cmenuFor;
+    const b = e.target.closest('button[data-act]');
+    if (!st || !b || b.disabled) return;
+    e.preventDefault();
+    const act = b.dataset.act;
+    if (act === 'track') st.toggle.click();
+    else if (act === 'link') setLinkTracked(st, b.dataset.url, b.getAttribute('aria-checked') !== 'true');
+    else if (act === 'open' || act === 'click') { st.prefs[act] = !st.prefs[act]; renderCMenu(); }
+    else if (act === 'settings') { closeCMenu(); ask({type: 'open-settings'}); }
+  }
+  document.addEventListener('mousedown', (e) => {
+    if (cmenuFor && !cmenu.contains(e.target) && !cmenuFor.wrap?.contains(e.target)) closeCMenu();
+  }, true);
+  document.addEventListener('input', (e) => { if (cmenuFor?.body.contains(e.target)) renderCMenu(); }, true);
+
+  /* La bulle « Accéder au lien » et la fenêtre « Modifier le lien » de Gmail reçoivent l'interrupteur du lien */
+  const BUBBLE_TXT = /(accéder au lien|go to link)/i;
+  const DIALOG_TXT = /(modifier le lien|edit link|insérer un lien|ajouter un lien|add link)/i;
+  const linkUis = new Map(); // élément de Gmail → 'bubble' | 'dialog'
+  let lastCompose = null;
+  document.addEventListener('focusin', (e) => { const st = stateFor(e.target); if (st) lastCompose = st; }, true);
+  const shown = (el) => el.isConnected && el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden';
+  const activeCompose = () => (lastCompose?.body.isConnected ? lastCompose : [...composes.values()].find((s) => s.body.isConnected) || null);
+
+  function spotLinkUi(node) {
+    const el = node.nodeType === 3 ? node.parentElement : node.nodeType === 1 ? node : null;
+    if (!el || el.closest('[contenteditable="true"], .pt-ui, .a3s')) return;
+    const text = el.textContent || '';
+    if (text.length > 2000) return;
+    if (BUBBLE_TXT.test(text)) {
+      let box = el;
+      for (let i = 0; box && i < 5 && !box.querySelector('a[href]'); i++) box = box.parentElement;
+      // une vraie bulle est courte et ne contient ni message ni zone de rédaction
+      if (box && box !== document.body && box.querySelector('a[href]') && (box.textContent || '').length < 600 && !box.querySelector('.a3s, [contenteditable="true"]')) linkUis.set(box, 'bubble');
+    } else if (DIALOG_TXT.test(text)) {
+      const dlg = el.closest('[role="dialog"], [role="alertdialog"]');
+      if (dlg && dlg.querySelector('input') && !dlg.querySelector('[contenteditable="true"]')) linkUis.set(dlg, 'dialog');
+    }
+  }
+  function paintLinkUis() {
+    for (const [el, kind] of linkUis) {
+      if (!el.isConnected) linkUis.delete(el);
+      else if (kind === 'bubble') paintBubble(el);
+      else paintDialog(el);
+    }
+  }
+  function paintBubble(el) {
+    const st = activeCompose();
+    const a = [...el.querySelectorAll('a[href]')].find((x) => !x.closest('.pt-ui'));
+    const url = a ? originalUrl(a.getAttribute('href') || '') : '';
+    let row = el.querySelector(':scope > .pt-lb-row');
+    if (!st || !/^https?:\/\//i.test(url) || isOurs(url)) { row?.remove(); return; }
+    if (!row) {
+      row = document.createElement('div');
+      row.className = 'pt-lb-row pt-ui';
+      row.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation(); }, true);
+      row.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const s = activeCompose();
+        if (s?.enabled && row.dataset.url) setLinkTracked(s, row.dataset.url, !linkTracked(s, row.dataset.url));
+      }, true);
+      el.appendChild(row);
+    }
+    if (row.dataset.url !== url) row.dataset.url = url;
+    put(row, {html: `${logo()}<span class="pt-lb-txt">${st.enabled ? 'Suivi des clics' : 'Suivi du mail désactivé'}</span>${sw(st.enabled && linkTracked(st, url), 'aria-label="Suivre les clics sur ce lien"', !st.enabled)}`});
+  }
+  function paintDialog(el) {
+    if (!shown(el)) { el.__ptOpen = false; return; }
+    const st = activeCompose();
+    const inputs = [...el.querySelectorAll('input')].filter((i) => !i.closest('.pt-ui') && /^(text|url)$/i.test(i.type || 'text') && shown(i));
+    const input = inputs.at(-1); // l'adresse du lien vient après le texte à afficher
+    let row = el.querySelector('.pt-ld-row');
+    if (!st || !input || inputs.length > 3) { row?.remove(); return; }
+    if (!row) {
+      row = document.createElement('div');
+      row.className = 'pt-ld-row pt-ui';
+      row.addEventListener('mousedown', (e) => { e.preventDefault(); e.stopPropagation(); }, true);
+      row.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!activeCompose()?.enabled) return;
+        el.__ptOn = !el.__ptOn;
+        paintDialog(el);
+      }, true);
+      input.insertAdjacentElement('afterend', row);
+      // OK (ou Entrée) : le choix s'applique à l'adresse saisie
+      el.addEventListener('click', (e) => {
+        const b = e.target.closest('button, [role="button"]');
+        const label = (b?.textContent || b?.getAttribute('aria-label') || '').trim();
+        if (b && !b.closest('.pt-ui') && /^(ok|accepter|accept|appliquer|apply|enregistrer|save|insérer|insert)$/i.test(label)) commitDialog(el);
+      }, true);
+      input.addEventListener('keydown', (e) => { if (e.key === 'Enter') commitDialog(el); }, true);
+      input.addEventListener('input', () => paintDialog(el));
+    }
+    el.__ptInput = input;
+    if (!el.__ptOpen) { el.__ptOpen = true; el.__ptOn = linkTracked(st, input.value || ''); }
+    const v = input.value.trim();
+    row.hidden = Boolean(v) && (/^mailto:/i.test(v) || /^[^\s/]+@[^\s/]+$/.test(v));
+    put(row, {html: `${sw(st.enabled && el.__ptOn, 'aria-label="Suivre les clics sur ce lien"', !st.enabled)}<span>${st.enabled ? 'Suivre les clics sur ce lien' : 'Suivi du mail désactivé'}</span>`});
+  }
+  function commitDialog(el) {
+    const st = activeCompose();
+    const v = el.__ptInput?.value?.trim();
+    if (st?.enabled && v) setLinkTracked(st, /^[a-z][a-z0-9+.-]*:/i.test(v) ? v : `http://${v}`, Boolean(el.__ptOn));
+  }
+
   /** le mail est parti quand sa fenêtre de rédaction disparaît (pas d'erreur, pas de destinataire manquant) */
   function watchSent(st, maxMs) {
     if (st.watching) return;
@@ -514,7 +759,7 @@
       if (!st.body.isConnected) {
         st.watching = false;
         justSent.set(st.id, Date.now());
-        ask({type: 'mark-sent', id: st.id, sender: account(), recipient: st.lastRecipients || '', subject: st.lastSubject || ''});
+        ask({type: 'mark-sent', id: st.id, sender: account(), recipient: st.lastRecipients || '', subject: st.lastSubject || '', links: st.lastLinks || [], prefs: st.prefs});
         setTimeout(() => refreshData(true), 2500);
         return;
       }
@@ -541,6 +786,7 @@
     if (st.holding) return;
     st.holding = true;
     st.toggle?.setAttribute('data-busy', 'true');
+    st.wrap?.setAttribute('data-busy', 'true');
     try {
       await Promise.race([ensureId(st), new Promise((_, ko) => setTimeout(() => ko(new Error('le serveur ne répond pas')), 5000))]);
       prepare(st);
@@ -556,6 +802,7 @@
     } finally {
       st.holding = false;
       st.toggle?.removeAttribute('data-busy');
+    st.wrap?.removeAttribute('data-busy');
     }
   }
 
@@ -660,7 +907,7 @@
         [...own, ...quoted].forEach((id) => selfPing(id, 'view'));
       }
       const id = own[0];
-      if (!id) continue;
+      if (!id) { paintSpy(body); continue; }
       const box = body.closest('.adn, [data-message-id]') || body.parentElement;
       let badge = box.querySelector(':scope .pt-msg-badge');
       if (!badge) {
@@ -671,8 +918,110 @@
       }
       if (badge.dataset.ptId !== id) badge.dataset.ptId = id;
       paintBadge(badge, statsById.get(id));
+      paintLinkPills(body, id);
     }
     paintThreadStatus();
+  }
+
+  /* Dans votre mail envoyé, une pastille à côté de chaque lien cliqué : combien de fois, et quand */
+  const pills = new WeakMap(); // lien → pastille
+  const loadingDetails = new Set();
+  const failedDetails = new Map();
+  /** le détail d'un mail s'il est assez frais ; sinon il est demandé, puis la page est repeinte */
+  function freshDetails(id, maxAge) {
+    const c = detailsCache.get(id);
+    if (c && Date.now() - c.at < maxAge) return c.data;
+    if (!loadingDetails.has(id) && Date.now() - (failedDetails.get(id) || 0) > 60000) {
+      loadingDetails.add(id);
+      getDetails(id, maxAge).then((r) => { if (!r.ok) failedDetails.set(id, Date.now()); }).finally(() => { loadingDetails.delete(id); queueScan(); });
+    }
+    return c?.data || null;
+  }
+  /** les clics comptés, regroupés par lien */
+  function clickStats(events) {
+    const per = new Map();
+    for (const ev of events || []) {
+      if (ev.type !== 'click' || !ev.counted || !ev.url) continue;
+      const k = linkKey(ev.url);
+      const p = per.get(k) || {url: ev.url, count: 0, last: ''};
+      p.count++;
+      if (ev.created_at > p.last) p.last = ev.created_at;
+      per.set(k, p);
+    }
+    return per;
+  }
+  function paintLinkPills(body, id) {
+    const anchors = [...body.querySelectorAll('a[href]')].filter((a) => !a.closest('.gmail_quote, blockquote') && clickId(a.href) === id);
+    const d = clicked(statsById.get(id)) && anchors.length ? freshDetails(id, 60000) : null;
+    const stats = d?.ok ? clickStats(d.events) : new Map();
+    for (const a of anchors) {
+      const s = stats.get(linkKey(originalUrl(a.href)));
+      let pill = pills.get(a);
+      if (!s) { pill?.remove(); continue; }
+      if (!pill?.isConnected) {
+        pill = document.createElement('span');
+        pill.className = 'pt-link-pill pt-ui';
+        a.after(pill);
+        pills.set(a, pill);
+      }
+      const label = `Cliqué ${times(s.count)} · dernier clic ${ago(s.last)}`;
+      put(pill, {html: `${icon('click')}<span>${s.count}</span>`, label});
+      if (pill.title !== label) pill.title = label;
+    }
+  }
+
+  /* Les mails reçus qui contiennent un pixel de suivi (Mailtrack, HubSpot, Mailchimp…) sont signalés */
+  const TRACKERS = [
+    [/mailtrack\.io|mltrk\.io|mailsuite\.com/i, 'Mailtrack'],
+    [/hubspot(?:email|links)?\.(?:com|net)|sidekickopen|hs-analytics/i, 'HubSpot'],
+    [/mixmax\.com/i, 'Mixmax'],
+    [/yesware\.com/i, 'Yesware'],
+    [/mailfoogae\.appspot\.com|streak\.com/i, 'Streak'],
+    [/superhuman\.com/i, 'Superhuman'],
+    [/list-manage\.com\/track/i, 'Mailchimp'],
+    [/sendgrid\.net\/wf\/open/i, 'SendGrid'],
+    [/saleshandy\.com/i, 'SalesHandy'],
+    [/lemlist\.(?:com|io)/i, 'lemlist'],
+    [/gmass\.co/i, 'GMass'],
+    [/getnotify\.com/i, 'GetNotify'],
+    [/bananatag\.com/i, 'Bananatag'],
+    [/mailtag\.io/i, 'MailTag'],
+    [/klaviyo\.com|klclick/i, 'Klaviyo'],
+    [/sendibt\d*\.com|sendibm\d*\.com|brevo\.com/i, 'Brevo'],
+    [/mjt\.lu|mailjet\.com/i, 'Mailjet'],
+  ];
+  /** nom de l'outil de suivi trouvé ('' si c'est un pixel anonyme), ou null */
+  function trackerIn(body) {
+    for (const img of body.querySelectorAll('img')) {
+      const raw = img.getAttribute('src') || '';
+      const hash = raw.indexOf('#');
+      const src = hash >= 0 && /googleusercontent\.com/i.test(raw.slice(0, hash)) ? decode(raw.slice(hash + 1)) : raw;
+      if (!/^https?:/i.test(src) || isOurs(src)) continue;
+      const hit = TRACKERS.find(([re]) => re.test(src));
+      if (hit) return hit[1];
+      const w = parseInt(img.getAttribute('width') || img.style.width, 10);
+      const h = parseInt(img.getAttribute('height') || img.style.height, 10);
+      // pixel anonyme : minuscule ET adresse qui ressemble à un suivi (pas une simple image d'espacement)
+      if (w <= 2 && h <= 2 && /[?&=]|open|track|pixel|beacon|trk/i.test(src.replace(/^https?:\/\/[^/]+/, ''))) return '';
+    }
+    return null;
+  }
+  function paintSpy(body) {
+    const box = body.closest('.adn, [data-message-id]') || body.parentElement;
+    let chip = box.querySelector(':scope .pt-spy');
+    const from = (box.querySelector('.gD[email]')?.getAttribute('email') || '').toLowerCase();
+    const tool = config.flagIncoming !== false && from !== account() ? trackerIn(body) : null;
+    if (tool === null) { chip?.remove(); return; }
+    if (!chip) {
+      const date = box.querySelector('.gH .g3') || box.querySelector('.g3');
+      if (!date?.parentElement) return;
+      chip = document.createElement('span');
+      chip.className = 'pt-spy pt-ui';
+      date.parentElement.insertBefore(chip, date);
+    }
+    const label = `Ce mail contient un pixel de suivi${tool ? ` (${tool})` : ''} : l’expéditeur peut savoir quand vous l’ouvrez.`;
+    put(chip, {html: `${icon('spy')}<span>Suivi${tool ? ` · ${esc(tool)}` : ''}</span>`, label});
+    if (chip.title !== label) chip.title = label;
   }
 
   function paintBadge(badge, e) {
@@ -931,7 +1280,8 @@
   window.addEventListener('resize', () => { if (popVisible()) placePop(); });
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
-    if (popVisible()) hidePop();
+    if (cmenuFor) closeCMenu();
+    else if (popVisible()) hidePop();
     else if (panelOpen && panel.contains(e.target)) closePanel();
   });
 
@@ -944,12 +1294,34 @@
   let filter = 'all';
   let lastSeen = Date.now(); // dernière visite de l'onglet Activité : ce qui est plus récent est « nouveau »
   let seenBefore = lastSeen;
+  /** lu au moins 3 fois, dernière ouverture il y a moins de 2 semaines : la personne s'y intéresse */
+  const isHot = (e) => (e.open_count || 0) >= 3 && Date.now() - tsOf(e.last_open_at) < 14 * 86400000;
+  /** pas ouvert au bout du délai de relance (envoyé il y a moins d'un mois) */
+  function toFollowUp(e) {
+    const age = Date.now() - tsOf(sentAt(e));
+    return !opened(e) && age >= (Number(config.remindHours) || 72) * 3600000 && age < 30 * 86400000;
+  }
+  const remindLabel = () => {
+    const h = Number(config.remindHours) || 72;
+    return h < 48 ? `${h} h` : `${Math.round(h / 24)} jours`;
+  };
   const FILTERS = [
     ['all', 'Tous', () => true],
     ['opened', 'Ouverts', opened],
     ['unopened', 'Pas ouverts', (e) => !opened(e)],
     ['clicked', 'Cliqués', clicked],
+    ['hot', 'Lus plusieurs fois', isHot],
+    ['followup', 'À relancer', toFollowUp],
   ];
+  let clickRows = null;
+  let clicksAt = 0;
+  /** ouvre la recherche du mail dans Gmail, à la place de la vue actuelle */
+  function openInGmail(e) {
+    const to = who(e.recipient).email;
+    const q = `in:sent subject:"${String(e.subject || '').replace(/"/g, ' ').trim()}"${to ? ` to:${to}` : ''}`;
+    closePanel();
+    location.hash = `#search/${encodeURIComponent(q)}`;
+  }
   const feedItems = () => emails.map((e) => ({e, sig: lastSignal(e)})).filter((x) => x.sig).sort((a, b) => tsOf(b.sig.at) - tsOf(a.sig.at));
   const bodyEl = () => panel.querySelector('.pt-panel-body');
   const emptyState = (ico, title, text) => `<div class="pt-empty"><span class="pt-empty-ico">${icon(ico)}</span><b>${title}</b><span>${text}</span></div>`;
@@ -995,6 +1367,7 @@
       <nav class="pt-tabs" role="tablist">
         <button type="button" class="pt-tab" role="tab" data-tab="activity">Activité</button>
         <button type="button" class="pt-tab" role="tab" data-tab="mails">Mails suivis</button>
+        <button type="button" class="pt-tab" role="tab" data-tab="clicks">Clics</button>
       </nav>
       <div class="pt-panel-body"></div>`;
     panel.querySelector('.pt-close').addEventListener('click', closePanel);
@@ -1002,6 +1375,7 @@
       const r = e.currentTarget;
       r.classList.add('pt-spin');
       if (selectedId) detailsCache.delete(selectedId);
+      clicksAt = 0;
       await refreshData(true);
       if (selectedId) await renderDetail(selectedId);
       r.classList.remove('pt-spin');
@@ -1012,7 +1386,16 @@
       if (item) { renderDetail(item.dataset.open); return; }
       if (e.target.closest('.pt-back')) { selectedId = null; renderTab(); paintLauncher(); return; }
       const f = e.target.closest('[data-filter]');
-      if (f) { filter = f.dataset.filter; renderMails(); }
+      if (f) { filter = f.dataset.filter; renderMails(); return; }
+      const go = e.target.closest('[data-go]');
+      if (go) {
+        filter = go.dataset.go;
+        query = ''; // la recherche repart de zéro
+        showTab('mails');
+        return;
+      }
+      const gm = e.target.closest('[data-gmail]');
+      if (gm) { const m = statsById.get(gm.dataset.gmail); if (m) openInGmail(m); }
     });
     const scroller = panel.querySelector('.pt-panel-body');
     scroller.addEventListener('scroll', () => panel.classList.toggle('pt-scrolled', scroller.scrollTop > 4), {passive: true});
@@ -1041,7 +1424,8 @@
     put(panel.querySelector('.pt-account'), {html: esc(account())});
     if (selectedId) return;
     if (tab === 'activity') renderActivity();
-    else renderMails();
+    else if (tab === 'mails') renderMails();
+    else renderClicks();
   }
   async function openPanel(id = null) {
     ensurePanel();
@@ -1067,6 +1451,8 @@
     const nOpen = emails.filter(opened).length;
     const nClick = emails.filter(clicked).length;
     const rate = total ? Math.round((nOpen / total) * 100) : 0;
+    const nHot = emails.filter(isHot).length;
+    const nFollow = emails.filter(toFollowUp).length;
     const feed = feedItems().slice(0, 60);
     const item = ({e, sig}) => {
       const w = who(e.recipient);
@@ -1086,6 +1472,10 @@
         </div>
         <div class="pt-rate"><div class="pt-rate-top"><span>Taux d’ouverture</span><b>${rate} %</b></div><div class="pt-rate-bar"><i></i></div></div>
       </section>
+      ${nHot || nFollow ? `<div class="pt-leads">
+        ${nHot ? `<button type="button" class="pt-lead pt-lead-hot" data-go="hot"><span class="pt-lead-ico">${icon('flame')}</span><span class="pt-lead-txt"><b>${nHot} mail${nHot > 1 ? 's' : ''} lu${nHot > 1 ? 's' : ''} plusieurs fois</b><small>Intérêt marqué : bon moment pour relancer</small></span>${icon('next')}</button>` : ''}
+        ${nFollow ? `<button type="button" class="pt-lead pt-lead-follow" data-go="followup"><span class="pt-lead-ico">${icon('bell')}</span><span class="pt-lead-txt"><b>${nFollow} mail${nFollow > 1 ? 's' : ''} à relancer</b><small>Pas ouvert${nFollow > 1 ? 's' : ''} depuis ${remindLabel()}</small></span>${icon('next')}</button>` : ''}
+      </div>` : ''}
       <div class="pt-section-title">Dernière activité</div>
       ${feed.length ? `<div class="pt-feed">${byDay(feed, (x) => x.sig.at, item)}</div>` : emptyState('inbox', 'Pas encore d’activité', 'Dès qu’un destinataire ouvre un mail suivi ou clique un lien, ça s’affiche ici.')}`});
     const bar = body.querySelector('.pt-rate-bar i');
@@ -1132,6 +1522,53 @@
         : emptyState('inbox', 'Rien ici pour l’instant', 'Les mails suivis apparaissent ici dès leur envoi.')});
   }
 
+  /** l'onglet Clics : chaque lien cliqué, par qui, combien de fois, quand */
+  async function renderClicks() {
+    const body = bodyEl();
+    if (!config.hasToken) { put(body, {html: noToken()}); return; }
+    if (!clickRows || Date.now() - clicksAt > 30000) {
+      if (!clickRows) put(body, {html: '<div class="pt-loading"><i class="pt-spinner"></i><span>Chargement des clics…</span></div>'});
+      const r = await ask({type: 'clicks'});
+      if (r.ok) { clickRows = r.rows || []; clicksAt = Date.now(); }
+      if (!panelOpen || selectedId || tab !== 'clicks') return;
+      if (!clickRows) { put(body, {html: `<div class="pt-error">${icon('warn')}<span>Clics indisponibles${r.error ? ` (${esc(r.error)})` : ''}.</span></div>`}); return; }
+    }
+    const total = clickRows.reduce((n, x) => n + x.count, 0);
+    const row = (x) => {
+      const w = who(x.recipient);
+      return `
+      <button type="button" class="pt-click" data-open="${esc(x.id)}" title="${esc(x.url)}">
+        <span class="pt-click-ico">${icon('link')}</span>
+        <span class="pt-mail-main">
+          <span class="pt-mail-top"><b>${esc(linkLabel(x.url))}</b><time>${esc(shortWhen(x.last))}</time></span>
+          <span class="pt-mail-subj">${whoName(w)} · ${esc(x.subject || '(sans objet)')}</span>
+          <span class="pt-mail-meta"><span class="pt-meta-click">${icon('click')}Cliqué ${times(x.count)}</span><span class="pt-meta-sent">dernier clic ${esc(ago(x.last))}</span></span>
+        </span>
+      </button>`;
+    };
+    put(body, {html: clickRows.length ? `
+      <div class="pt-clicks-sum"><b>${clickRows.length}</b> lien${clickRows.length > 1 ? 's' : ''} cliqué${clickRows.length > 1 ? 's' : ''} · <b>${total}</b> clic${total > 1 ? 's' : ''} au total</div>
+      ${clickRows.map(row).join('')}` : emptyState('click', 'Aucun lien cliqué pour l’instant', 'Chaque clic sur un lien suivi s’affiche ici : le lien, la personne, combien de fois et quand.')});
+  }
+
+  /** les liens du mail : ceux notés à l'envoi (sur cet ordinateur), complétés par ceux qui ont été cliqués */
+  function linkRows(meta, stats) {
+    const rows = [];
+    for (const l of meta?.links || []) {
+      const k = linkKey(l.url);
+      if (rows.some((r) => r.key === k)) continue;
+      rows.push({key: k, url: l.url, text: l.text, tracked: l.tracked !== false, ...(stats.get(k) || {count: 0, last: ''})});
+    }
+    for (const [k, s] of stats) if (!rows.some((r) => r.key === k)) rows.push({key: k, url: s.url, text: '', tracked: true, ...s});
+    return rows;
+  }
+  const linkItem = (l) => `
+      <a class="pt-link${l.count ? ' pt-link-hit' : ''}" href="${esc(l.url)}" target="_blank" rel="noopener noreferrer" title="${esc(l.url)}">
+        <span class="pt-link-ico">${icon('link')}</span>
+        <span class="pt-link-main"><b>${esc(l.text && l.text !== l.url ? l.text : linkLabel(l.url))}</b><small>${esc(linkLabel(l.url))}</small></span>
+        <span class="pt-link-stat">${!l.tracked ? '<small>Non suivi</small>' : l.count ? `<b>${clicksTxt(l.count)}</b><small>${esc(ago(l.last))}</small>` : '<small>Pas encore cliqué</small>'}</span>
+      </a>`;
+
   function tlItem(x, full = false) {
     const ico = x.kind === 'click' ? 'click' : x.kind === 'sent' ? 'send' : 'eye';
     const t = x.ev.created_at;
@@ -1158,6 +1595,11 @@
       return;
     }
     const e = r.email;
+    statsById.set(e.id, e);
+    const meta = await store.get(`meta:${id}`);
+    if (selectedId !== id) return;
+    const links = linkRows(meta, clickStats(r.events));
+    const nHit = links.filter((l) => l.count).length;
     const rows = describe(r.events);
     const counted = rows.filter((x) => !x.ignored);
     const ignored = rows.filter((x) => x.ignored);
@@ -1180,6 +1622,8 @@
         <div><div class="pt-hero-title">${esc(h.title)}${clicked(e) ? `<span class="pt-hero-clicks">${icon('link')}${clicksTxt(e.click_count)}</span>` : ''}</div><div class="pt-hero-sub">${esc(h.sub)}</div></div>
       </div>
       <div class="pt-facts">${facts.map(([k, v]) => `<div><span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>
+      <button type="button" class="pt-btn" data-gmail="${esc(e.id)}">${icon('external')}<span>Ouvrir dans Gmail</span></button>
+      ${links.length ? `<div class="pt-section-title">Liens <small>${nHit ? `${nHit} sur ${links.length} cliqué${nHit > 1 ? 's' : ''}` : 'aucun cliqué'}</small></div><div class="pt-links">${links.map(linkItem).join('')}</div>` : ''}
       <div class="pt-section-title">Activité</div>
       <div class="pt-tl">${byDay(timeline, (x) => x.ev.created_at, (x) => tlItem(x))}</div>
       ${ignored.length ? `<details class="pt-ignored"><summary>${icon('shield')}<span>${ignored.length > 1 ? `${ignored.length} signaux ignorés` : '1 signal ignoré'}</span><small>vous-même, doublons, robots</small>${icon('next')}</summary><div class="pt-tl pt-tl-flat">${ignored.map((x) => tlItem(x, true)).join('')}</div></details>` : ''}
@@ -1196,6 +1640,8 @@
     scanRows();
     learnNames();
     ensureLauncher();
+    if (linkUis.size) paintLinkUis();
+    if (cmenuFor) { if (cmenuFor.body.isConnected) placeCMenu(); else closeCMenu(); }
   }
   const queueScan = () => {
     if (queued) return;
@@ -1208,8 +1654,23 @@
     else store.set({ptLastSeen: lastSeen});
     seenBefore = lastSeen;
     for (const [email, name] of Object.entries(saved || {})) if (!names.has(email)) names.set(email, name);
-    new MutationObserver(queueScan).observe(document.documentElement, {childList: true, subtree: true});
+    new MutationObserver((records) => {
+      if (composes.size) for (const r of records) for (const n of r.addedNodes) spotLinkUi(n);
+      queueScan();
+    }).observe(document.documentElement, {childList: true, subtree: true});
     scanAll();
+    // un clic sur une notification de l'extension ouvre le détail du mail ici
+    chrome.runtime?.onMessage?.addListener((msg, _sender, reply) => {
+      if (msg?.type !== 'open-panel') return false;
+      openPanel(msg.id || null);
+      reply({ok: true});
+      return false;
+    });
+    store.get('pendingOpen').then((p) => {
+      if (!p || Date.now() - p.at > 120000) return;
+      try { chrome.storage.local.remove('pendingOpen'); } catch { /* rien à nettoyer */ }
+      openPanel(p.id || null);
+    });
     refreshData(true);
     window.addEventListener('focus', () => refreshData(true));
     document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshData(true); });
