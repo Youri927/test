@@ -30,7 +30,7 @@ Fabrication :
 
 1. **Captures.** `npm run capture:site` filme le site avec Playwright (`capture/shots.mjs`). L'horloge de la page est simulée et avancée d'exactement 1/60 s entre deux images ; les animations CSS sont recalées dessus. Les plans sont écrits en 2880 × 1800 (ordinateur) et 780 × 1688 (mobile) dans `public/site/`, avec la trajectoire de la souris, redessinée nette par-dessus. Les plans peuvent être filmés en parallèle : `node capture/shots.mjs d-hero d-disc`, etc.
 2. **Son.** `npm run sound` synthétise la musique originale (`sound/music.mjs`, 80 BPM, La majeur) et les bruitages (`sound/sfx.mjs` : souffle, clic, filé) : aucun échantillon, aucun droit tiers. Les clics des plans filmés sont replacés automatiquement sur la ligne de temps (`src/PresSound.tsx`).
-3. **Rendu.** `npm run build` rend la vidéo, normalise le son et crée la version muette.
+3. **Rendu.** `npm run build` rend la vidéo, normalise le son et crée la version muette. Pour retoucher une seule scène sans tout refaire : `npx remotion render Presentation-Scottsdale out/seg.mp4 --frames=début-fin --muted`, raccord dans la vidéo avec ffmpeg, puis `npm run mix` pour la bande-son (même placement des bruitages que `src/PresSound.tsx`) et `node sound/finalize.mjs`.
 
 Dans Remotion Studio (`npm run studio`) : `Presentation-Scottsdale` (complète), `Presentation-Scottsdale-Bruitages` (sans musique) et `Presentation-Scottsdale-Muet`.
 

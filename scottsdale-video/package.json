@@ -7,6 +7,7 @@
     "studio": "remotion studio",
     "capture:site": "node capture/shots.mjs",
     "sound": "node sound/music.mjs && node sound/sfx.mjs",
+    "mix": "node sound/mix.mjs out/audio.wav",
     "render": "remotion render Presentation-Scottsdale out/presentation-scottsdale.mp4 --crf=18",
     "finalize": "node sound/finalize.mjs out/presentation-scottsdale.mp4 renders/presentation-scottsdale-16x9.mp4",
     "build": "npm run render && npm run finalize",
