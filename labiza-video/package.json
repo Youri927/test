@@ -1,0 +1,25 @@
+{
+  "name": "labiza-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "La Biza : vidéo de présentation du nouveau site, en un plan-séquence (Remotion)",
+  "scripts": {
+    "studio": "remotion studio",
+    "capture:site": "node capture/shots.mjs",
+    "sound": "node sound/day.mjs",
+    "render": "remotion render Journee out/journee-a-la-biza.mp4 --crf=17",
+    "finalize": "node sound/finalize.mjs out/journee-a-la-biza.mp4 renders/journee-a-la-biza-16x9.mp4",
+    "build": "npm run render && npm run finalize",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.532",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "4.0.532"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}
