@@ -1,0 +1,80 @@
+import React from 'react';
+import {AbsoluteFill, Img, staticFile, useCurrentFrame} from 'remotion';
+import {Sheet, Wall} from '../Bits';
+import {CameraRig} from '../lib/camera';
+import {BrowserAt, Box} from '../Stage';
+import {BEAT, C, E, F, range} from '../util';
+import {AVANT_BG} from './Opening';
+
+export const AVANT_LEN = 12 * BEAT;
+
+// la vraie page d'accueil actuelle, capturée en entier (1440 × 6526 px)
+const PAGE_W = 1440;
+const B: Box = {x: 1260, y: 540, w: 1060};
+
+const FINDINGS: [string, string, number][] = [
+  ['The real projects come late.', 'Four small photos, halfway down the page.', 150],
+  ['The proof sits near the footer.', 'Six 5-star Google reviews, at the very bottom.', 285],
+  ['The essentials are buried.', 'Licence, 20+ years, one point of contact: all in long paragraphs.', 405],
+];
+
+/** Avant : la page d'accueil actuelle défile dans un navigateur ; trois constats tirés de l'analyse */
+export const Avant: React.FC = () => {
+  const f = useCurrentFrame();
+  const k = B.w / PAGE_W;
+  // défilement de la page actuelle (px de la capture) : accroche, réalisations, puis les avis tout en bas
+  const y = (() => {
+    const keys: [number, number][] = [[0, 0], [70, 0], [190, 1840], [270, 1840], [380, 4080], [470, 4080], [540, 4180]];
+    for (let i = 1; i < keys.length; i++) {
+      const [fa, ya] = keys[i - 1];
+      const [fb, yb] = keys[i];
+      if (f <= fb) return ya + (yb - ya) * E.inOut(Math.max(0, (f - fa) / (fb - fa)));
+    }
+    return keys[keys.length - 1][1];
+  })();
+  const up = (at: number) => ({opacity: range(f, at, at + 30, 0, 1), transform: `translateY(${range(f, at, at + 40, 22, 0, E.out)}px)`});
+  return (
+    <AbsoluteFill>
+      <Wall tint={AVANT_BG} />
+      <CameraRig
+        blur={0.4}
+        keys={[
+          {f: 0, x: 960, y: 540, s: 1.0, ry: 0},
+          {f: AVANT_LEN, x: 1000, y: 540, s: 1.05, ry: -3, ease: E.sine},
+        ]}
+      >
+        <BrowserAt b={B} transform="rotateY(-6deg)">
+          <Img src={staticFile('before/desktop.jpg')} style={{position: 'absolute', left: 0, top: -y * k, width: B.w}} />
+        </BrowserAt>
+      </CameraRig>
+
+      <div style={{position: 'absolute', left: 110, top: 150, width: 600}}>
+        <div style={{display: 'flex', alignItems: 'center', gap: 12, fontFamily: F.body, fontWeight: 600, fontSize: 19, letterSpacing: '0.16em', textTransform: 'uppercase', fontVariationSettings: '"wdth" 118', color: C.accent, ...up(20)}}>
+          <span style={{width: 30, height: 1.5, background: 'currentColor'}} />Before
+        </div>
+        <div style={{marginTop: 26, fontFamily: F.display, fontSize: 74, lineHeight: 1, letterSpacing: '-0.012em', color: C.ink, ...up(30)}}>
+          Today, the site looks like many others.
+        </div>
+        <div style={{marginTop: 26, fontFamily: F.body, fontSize: 26, lineHeight: 1.5, color: C.grey, ...up(80)}}>
+          The content is right. The presentation hides it.
+        </div>
+        <div style={{marginTop: 40, borderTop: `1px solid ${C.lineStrong}`}}>
+          {FINDINGS.map(([h, p, at], i) => (
+            <div key={h} style={{display: 'flex', gap: 20, padding: '20px 0', borderBottom: `1px solid ${C.lineStrong}`, ...up(at)}}>
+              <span style={{fontFamily: F.body, fontWeight: 600, fontSize: 16, letterSpacing: '0.14em', color: C.accent, paddingTop: 9}}>0{i + 1}</span>
+              <div>
+                <div style={{fontFamily: F.display, fontSize: 36, lineHeight: 1.05, color: C.ink}}>{h}</div>
+                <div style={{marginTop: 6, fontFamily: F.body, fontSize: 21, lineHeight: 1.45, color: C.grey}}>{p}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{position: 'absolute', left: 110, bottom: 46, fontFamily: F.body, fontSize: 18, color: C.mist, ...up(60)}}>
+        The current home page, scottsdalepoolpatiolandscape.com, October 2026.
+      </div>
+      <Sheet level={range(f, 0, 48, 1, 0, E.inOut)} tint={AVANT_BG} />
+      <Sheet level={range(f, AVANT_LEN - 52, AVANT_LEN, 0, 1, E.inOut)} />
+    </AbsoluteFill>
+  );
+};
