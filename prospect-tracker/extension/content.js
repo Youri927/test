@@ -195,13 +195,25 @@
     for (let i = 0; el && i < 30; i++, el = el.parentElement) if (findSend(el)) return el;
     return null;
   }
+  /** la zone qui porte l'objet et les destinataires : la fenêtre entière, plus large que le bloc du bouton Envoyer */
+  function metaRoot(root) {
+    const dialog = root.closest('[role="dialog"]');
+    if (dialog) return dialog;
+    let el = root;
+    for (let i = 0; el && i < 8; i++, el = el.parentElement) {
+      if (el.querySelector('input[name="subjectbox"], [email], input[name="to"]')) return el;
+    }
+    return root;
+  }
   function subjectOf(root) {
+    root = metaRoot(root);
     const s = root.querySelector('input[name="subjectbox"]')?.value?.trim();
     if (s) return s;
     const thread = document.querySelector('h2.hP')?.textContent?.trim();
     return thread ? (/^re\s*:/i.test(thread) ? thread : `Re: ${thread}`) : '';
   }
   function recipientsOf(root) {
+    root = metaRoot(root);
     const set = new Set();
     root.querySelectorAll('[email]').forEach((el) => {
       const v = el.getAttribute('email');

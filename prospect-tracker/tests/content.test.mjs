@@ -43,6 +43,7 @@ const PAGE = `<!doctype html><html><head><meta charset="utf-8"><title>Boîte de 
 <div role="dialog" id="compose">
   <input name="subjectbox" value="Votre site">
   <div class="to"><span email="prospect@acme.fr">Jean</span></div>
+  <div class="editor-and-toolbar">
   <div contenteditable="true" role="textbox" id="body1"><div dir="ltr">Bonjour Jean,<br>Notre offre : https://monsite.fr/offre.<br>
     Portfolio : <a href="${oldLink}">ici</a>, contact : <a href="${googleWrapped}">là</a>, <a href="mailto:a@b.fr">mail</a>
     <img src="${oldPixel}" width="1" height="1"></div>
@@ -50,6 +51,7 @@ const PAGE = `<!doctype html><html><head><meta charset="utf-8"><title>Boîte de 
   </div>
   <table><tr><td><div class="dC"><div role="button" id="send1" data-tooltip="Envoyer ‪(Ctrl+Entrée)‬" aria-label="Envoyer ‪(Ctrl+Entrée)‬">Envoyer</div></div></td>
   <td><div role="button" aria-label="Plus d'options d'envoi">▾</div></td></tr></table>
+  </div>
 </div>
 
 <!-- une réponse tapée dans le fil -->
