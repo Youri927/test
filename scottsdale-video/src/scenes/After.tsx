@@ -104,9 +104,9 @@ export const AfterElements: React.FC = () => {
 /* ——— 03 : les formes de bassin ——— */
 export const POOLS_LEN = 14 * BEAT;
 export const AfterPools: React.FC = () => {
-  const plan = (f: number, s = 1.5): CamKey => onSite(B, 445, 390, {f, s, ease: E.soft});
-  const list = (f: number): CamKey => onSite(B, 760, 430, {f, s: 1.12, ease: E.soft});
-  const last = onSite(B, 445, 390, {f: 0, s: 1.42});
+  // cadrage moyen (le plan et la liste), un seul gros plan sur la forme libre quand l'eau se remplit
+  const mid = (f: number, s = 1.14, x = 730): CamKey => onSite(B, x, 430, {f, s, ease: E.soft});
+  const last = onSite(B, 700, 430, {f: 0, s: 1.16});
   return (
     <AbsoluteFill>
       <Wall />
@@ -114,20 +114,18 @@ export const AfterPools: React.FC = () => {
         blur={0.6}
         keys={[
           ...whipIn(),
-          plan(140),
-          plan(205, 1.54),
-          list(250),
-          plan(320),
-          list(405),
-          plan(470, 1.56),
-          list(565),
-          {...last, f: POOLS_LEN - WHIP_LEN, ease: E.soft},
+          mid(130),
+          mid(330, 1.17, 700),
+          onSite(B, 445, 390, {f: 420, s: 1.56, ease: E.soft}),
+          onSite(B, 450, 400, {f: 480, s: 1.58, ease: E.sine}),
+          mid(545, 1.16, 700),
+          {...last, f: POOLS_LEN - WHIP_LEN, ease: E.sine},
           ...whipOut(POOLS_LEN, last).slice(1),
         ]}
       >
-        <BrowserAt b={B} clip={{meta: M.dPools, from: 60}} />
+        <BrowserAt b={B} clip={{meta: M.dPools, from: 60, rate: 1.15}} />
       </CameraRig>
-      <LowerThird tag="03" title="Seven pool designs, drawn in plan" text="Like an architect’s sheet: coping, steps and labels draw themselves, and light moves on the water." at={24} out={205} right />
+      <LowerThird tag="03" title="Seven pool designs, drawn in plan" text="Like an architect’s sheet: coping, steps and labels draw themselves, and light moves on the water." at={24} out={200} right />
     </AbsoluteFill>
   );
 };
@@ -221,10 +219,10 @@ export const AfterQuote: React.FC = () => {
           onSite(B, 1000, 400, {f: QUOTE_LEN, s: 1.3, ease: E.soft}),
         ]}
       >
-        <BrowserAt b={B} clip={{meta: M.dQuote, from: 100, rate: 1.1}} />
+        <BrowserAt b={B} clip={{meta: M.dQuote, from: 100, rate: 1.18}} />
       </CameraRig>
       <LowerThird tag="07" title="A free quote, in three steps" text="The project, a budget range, then contact details." at={24} out={170} dark />
-      <Sheet level={range(f, QUOTE_LEN - 50, QUOTE_LEN, 0, 1, E.inOut)} />
+      <Sheet level={range(f, QUOTE_LEN - 38, QUOTE_LEN, 0, 1, E.inOut)} />
     </AbsoluteFill>
   );
 };

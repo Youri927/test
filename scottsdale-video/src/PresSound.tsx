@@ -7,10 +7,10 @@ type Cue = [number, string, number];
 
 // Les clics filmés dans chaque plan, replacés sur la ligne de temps du montage (début de scène, image de départ, vitesse)
 const CLICK_CLIPS: [string, string, number, number, number][] = [
-  ['03 Pool designs', 'dPools', 60, 1, 0.34],
+  ['03 Pool designs', 'dPools', 60, 1.15, 0.34],
   ['04 Work', 'dWork', 50, 1.12, 0.3],
   ['06 Reviews', 'dProof', 60, 1, 0.3],
-  ['07 Free quote', 'dQuote', 100, 1.1, 0.34],
+  ['07 Free quote', 'dQuote', 100, 1.18, 0.34],
 ];
 const clickCues = (): Cue[] =>
   CLICK_CLIPS.flatMap(([scene, clip, from, rate, vol]) => {

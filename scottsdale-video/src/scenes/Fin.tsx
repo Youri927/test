@@ -31,7 +31,7 @@ export const Fin: React.FC = () => {
               {f: CUT, x: 960, y: 540, s: 0.98, ease: E.soft},
             ]}
           >
-            <BrowserAt b={B} clip={{meta: M.dFooter, from: 0, rate: 1.6}} />
+            <BrowserAt b={B} clip={{meta: M.dFooter, from: 150}} />
           </CameraRig>
           <Sheet level={range(f, 0, 50, 1, 0, E.inOut)} />
         </AbsoluteFill>
