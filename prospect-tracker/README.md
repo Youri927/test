@@ -21,19 +21,26 @@ Suivi des mails envoyés depuis Gmail, façon Mailsuite. Chaque mail suivi indiq
 | Ouvertures en double | Gmail recharge parfois l'image | Deux chargements à moins d'une minute d'écart comptent pour une seule ouverture. Au-delà, c'est une ré-ouverture |
 | Envoi perdu si le réseau hésite | L'envoi se signalait en un seul essai | L'identifiant est demandé dès l'ouverture de la rédaction. L'envoi est mis en file d'attente et réessayé |
 
-## Ce que veut dire chaque statut
+## Dans Gmail
 
-| Affichage | Signification |
+| Où | Ce qui s'affiche |
 | --- | --- |
-| ✓ gris | Envoyé et suivi, pas encore d'ouverture détectée |
-| ✓✓ vert | Ouvert : le pixel s'est chargé, ou un lien a été cliqué |
-| ↗ | Au moins un lien cliqué |
-| « Ouvert 3 fois » | Trois ouvertures distinctes : la première, puis deux ré-ouvertures |
+| **Listes** (Envoyés, boîte de réception…) | Devant l'objet : ✓ gris = envoyé et suivi, pas encore ouvert. ✓✓ vert = ouvert. Petit lien bleu = au moins un lien cliqué |
+| **Survol d'une coche** | Une carte : « Ouvert 3 fois », dernière ouverture, destinataire, les 4 derniers gestes (ouvert, ré-ouvert, lien cliqué) et « Voir toute l'activité » |
+| **Message ouvert** | À côté de la date, une puce « Ouvert 2 fois · 1 clic », lue dans le pixel de CE message. Si le message est replié, la puce passe à côté de l'objet du fil |
+| **Rédaction** | À droite du bouton Envoyer : ✓✓ et un interrupteur. Vert = suivi, gris = sans suivi, rouge = serveur injoignable (cliquer pour réessayer) |
+| **Onglet ✓✓ sur le bord droit** | Le volet de suivi. Un compteur rouge signale les nouvelles activités depuis votre dernière visite |
 
-Le volet de suivi (onglet « Suivi » à droite, ou clic sur une coche) donne le détail de chaque mail :
-- la première et la dernière ouverture, le dernier clic ;
-- la chronologie : « Ouvert », « Ré-ouvert (2e fois) », « Lien cliqué · site.fr/page », « déduit du clic » quand les images étaient bloquées ;
-- les signaux ignorés, à part : vous-même, doublons, robots.
+Le volet a deux onglets :
+- **Activité** : vos chiffres (suivis, ouverts, cliqués, taux d'ouverture), puis le fil des derniers gestes, jour par jour : « Claire Martin a ouvert », « a ré-ouvert (3e fois) », « a cliqué un lien ». Les noms sont ceux que Gmail affiche.
+- **Mails suivis** : la recherche (nom, adresse, objet) et les filtres Tous, Ouverts, Pas ouverts, Cliqués.
+
+Un clic sur un mail ou sur une coche ouvre son détail :
+- le statut, l'envoi, la première et la dernière ouverture, le dernier clic ;
+- la chronologie : « Ouvert », « Ré-ouvert (2e fois) », « Lien cliqué » avec l'adresse du lien, « déduit du clic » quand les images étaient bloquées, puis « Envoyé » ;
+- les signaux ignorés, repliés à part : vous-même, doublons, robots.
+
+L'icône de l'extension dans la barre de Chrome donne vos chiffres, les derniers mails (un clic les retrouve dans Gmail) et les réglages.
 
 ## Installation
 

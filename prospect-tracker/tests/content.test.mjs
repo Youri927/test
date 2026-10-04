@@ -21,9 +21,9 @@ const oldPixel = `https://ci3.googleusercontent.com/meips/ADKq_abc=s0-d-e1-ft#${
 const PAGE = `<!doctype html><html><head><meta charset="utf-8"><title>Boîte de réception - moi@gmail.com - Gmail</title><style>${CSS}</style></head><body>
 <!-- une liste -->
 <table><tbody>
-  <tr class="zA" id="row1"><td><span email="prospect@acme.fr">Jean</span></td><td><span class="bog">Votre site</span></td><td class="xW"><span>10:12</span></td></tr>
+  <tr class="zA" id="row1"><td><span email="prospect@acme.fr" name="Jean Dupont">Jean</span></td><td><span class="bog">Votre site</span></td><td class="xW"><span>10:12</span></td></tr>
   <tr class="zA" id="row2"><td><span email="autre@b.fr">Paul</span></td><td><span class="bog">Votre site</span></td><td class="xW"><span>09:40</span></td></tr>
-  <tr class="zA" id="row3"><td><span email="moi@gmail.com">moi</span>, <span email="prospect@acme.fr">Jean</span></td><td><span class="bog">RE : Votre site</span></td><td class="xW"><span>hier</span></td></tr>
+  <tr class="zA" id="row3"><td><span email="moi@gmail.com" name="moi">moi</span>, <span email="prospect@acme.fr" name="Jean Dupont">Jean</span></td><td><span class="bog">RE : Votre site</span></td><td class="xW"><span>hier</span></td></tr>
   <tr class="zA" id="row4"><td><span email="inconnu@c.fr">X</span></td><td><span class="bog">Votre site</span></td><td class="xW"><span>lun.</span></td></tr>
 </tbody></table>
 
@@ -31,7 +31,7 @@ const PAGE = `<!doctype html><html><head><meta charset="utf-8"><title>Boîte de 
 <div role="main">
   <h2 class="hP">Votre site</h2>
   <div class="adn" data-message-id="m1">
-    <table><tr><td class="gH"><span class="g3">10:12</span></td></tr></table>
+    <table><tr><td><span class="gD" email="moi@gmail.com" name="Moi">Moi</span> à <span class="g2" email="prospect@acme.fr" name="Jean Dupont">Jean</span></td><td class="gH"><span class="g3">10:12</span></td></tr></table>
     <div class="a3s"><img src="https://ci3.googleusercontent.com/meips/xyz=s0-d-e1-ft#${BASE}?action=open&amp;id=E1" width="1" height="1">
       Bonjour, voici <a id="tracked" href="https://www.google.com/url?q=${enc(`${BASE}?action=click&id=E1&u=${enc('https://monsite.fr/offre')}`)}">notre offre</a>.
       <div class="gmail_quote"><img src="https://ci3.googleusercontent.com/meips/q=s0#${BASE}?action=open&amp;id=E0"></div>
@@ -96,6 +96,7 @@ const PAGE = `<!doctype html><html><head><meta charset="utf-8"><title>Boîte de 
         if (msg.type === 'register') return reply({id: 'NEW' + (++n)}, window.registerDelay);
         if (msg.type === 'refresh') return reply({emails: EMAILS});
         if (msg.type === 'stats') return reply({emails: EMAILS.filter((e) => msg.ids.includes(e.id))});
+        if (msg.type === 'details' && msg.id !== 'E1') return reply({email: EMAILS.find((e) => e.id === msg.id), events: []});
         if (msg.type === 'details') return reply({email: EMAILS[0], events: [
           {type: 'open', counted: true, reason: 'gmail', created_at: iso(3000e3)},
           {type: 'open', counted: false, reason: 'dup', created_at: iso(2990e3)},
@@ -200,11 +201,11 @@ await check('si le serveur est lent, l’envoi attend l’identifiant puis part,
   assert.match(last.html, /id=NEW3/);
 });
 
-await check('fil affiché : statut du message lu dans son propre pixel', async () => {
+await check('fil affiché : statut du message lu dans son propre pixel, sans doublon sur l’objet', async () => {
   const txt = await page.locator('.adn .pt-msg-badge').textContent();
   assert.match(txt, /Ouvert 2 fois · 1 clic/);
-  const status = await page.locator('.pt-thread-status').textContent();
-  assert.match(status, /Ouvert 2 fois/);
+  assert.match(await page.locator('.adn .pt-msg-badge').getAttribute('class'), /pt-s-clicked/);
+  assert.equal(await page.locator('.pt-thread-status').count(), 0);
 });
 
 await check('vos propres lectures sont signalées (message affiché et citation)', async () => {
@@ -253,8 +254,76 @@ await check('pas de boucle : la page ne bouge plus quand rien ne change', async 
 await check('volet : ouvertures numérotées, clic, ouverture déduite, signaux ignorés à part', async () => {
   await page.click('.adn .pt-msg-badge');
   await page.waitForTimeout(150);
-  const text = await page.locator('.pt-drawer-body').innerText();
-  for (const s of ['Ouvert 2 fois', 'Ré-ouvert (2e fois), déduit du clic', 'Lien cliqué', 'monsite.fr/offre', 'Ouvert\n', '3 signaux ignorés', 'Première ouverture']) assert.ok(text.includes(s), `manque « ${s.trim()} »\n${text}`);
+  assert.equal(await page.locator('.pt-panel').getAttribute('data-view'), 'detail');
+  const text = await page.locator('.pt-panel-body').innerText();
+  for (const s of ['Ouvert 2 fois', 'Ré-ouvert (2e fois), déduit du clic', 'Lien cliqué', 'monsite.fr/offre', 'Ouvert\n', '3 signaux ignorés', 'Première ouverture', 'Jean Dupont', 'Envoyé']) assert.ok(text.includes(s), `manque « ${s.trim()} »\n${text}`);
+  await page.click('.pt-close');
+  await page.waitForTimeout(50);
+  assert.doesNotMatch(await page.locator('.pt-panel').getAttribute('class'), /pt-open/);
+});
+
+await check('carte au survol d’une coche : statut, contact, dernières actions, lien vers le détail', async () => {
+  await page.hover('#row3 .pt-row-checks');
+  await page.waitForTimeout(500);
+  const pop = page.locator('.pt-pop');
+  assert.match(await pop.getAttribute('class'), /pt-pop-show/);
+  const text = await pop.innerText();
+  for (const s of ['Ouvert 2 fois', 'Dernière ouverture', 'Jean Dupont', 'Votre site', 'Lien cliqué', 'Ré-ouvert (2e fois), déduit du clic', 'Voir toute l’activité']) assert.ok(text.includes(s), `manque « ${s} »\n${text}`);
+  assert.ok(!text.includes('Robot'), 'les signaux ignorés ne sont pas dans la carte');
+  const box = await pop.boundingBox();
+  const vp = page.viewportSize();
+  assert.ok(box.x >= 0 && box.y >= 0 && box.x + box.width <= vp.width && box.y + box.height <= vp.height, 'la carte reste dans la fenêtre');
+  await page.click('.pt-pop-more');
+  await page.waitForTimeout(150);
+  assert.equal(await page.locator('.pt-panel').getAttribute('data-view'), 'detail');
+  assert.doesNotMatch(await pop.getAttribute('class'), /pt-pop-show/);
+  await page.click('.pt-close');
+  await page.mouse.move(5, 5);
+});
+
+await check('volet, onglet Activité : chiffres et fil des derniers gestes', async () => {
+  await page.click('.pt-launcher');
+  await page.waitForTimeout(150);
+  assert.equal(await page.locator('.pt-panel').getAttribute('data-view'), 'activity');
+  const text = await page.locator('.pt-panel-body').innerText();
+  for (const s of ['Suivis', 'Ouverts', 'Cliqués', '50 %', 'Jean Dupont a cliqué un lien', 'Aujourd’hui']) assert.ok(text.includes(s), `manque « ${s} »\n${text}`);
+  assert.ok(!text.includes('autre@b.fr'), 'un mail jamais ouvert n’est pas une activité');
+});
+
+await check('volet, onglet Mails suivis : filtres et recherche', async () => {
+  await page.click('.pt-tab[data-tab="mails"]');
+  await page.waitForTimeout(50);
+  assert.equal(await page.locator('.pt-mail').count(), 2);
+  await page.click('[data-filter="unopened"]');
+  assert.equal(await page.locator('.pt-mail').count(), 1);
+  assert.match(await page.locator('.pt-mail').innerText(), /autre@b\.fr/);
+  await page.click('[data-filter="all"]');
+  await page.fill('.pt-search input', 'dupont');
+  assert.equal(await page.locator('.pt-mail').count(), 1);
+  assert.match(await page.locator('.pt-mail').innerText(), /Ouvert 2 fois/);
+  await page.fill('.pt-search input', 'zzz');
+  assert.match(await page.locator('.pt-mails').innerText(), /Aucun résultat/);
+  await page.click('.pt-close');
+});
+
+await check('message replié : le statut passe à côté de l’objet du fil (objet ET destinataire)', async () => {
+  await page.evaluate(() => { document.querySelector('.adn .a3s').remove(); document.querySelector('.adn .pt-msg-badge').remove(); });
+  await page.waitForTimeout(150);
+  assert.match(await page.locator('.pt-thread-status').textContent(), /Ouvert 2 fois/);
+  assert.equal(await page.locator('.pt-thread-status').getAttribute('data-pt-id'), 'E1');
+});
+
+await check('interrupteur : un clic coupe le suivi du mail, avec un message', async () => {
+  await page.evaluate(() => { window.registerDelay = 50; });
+  await page.evaluate(() => document.body.insertAdjacentHTML('beforeend', `<div role="dialog" id="compose3"><input name="subjectbox" value="Test"><span email="z@z.fr">Z</span>
+    <div contenteditable="true" role="textbox">Bonjour</div><div><div role="button" data-tooltip="Envoyer">Envoyer</div></div></div>`));
+  await page.waitForTimeout(400);
+  const t = page.locator('#compose3 .pt-compose-toggle');
+  assert.equal(await t.getAttribute('data-state'), 'on');
+  await t.click();
+  assert.equal(await t.getAttribute('data-state'), 'off');
+  assert.equal(await t.getAttribute('aria-pressed'), 'false');
+  assert.match(await page.locator('.pt-toast').innerText(), /Suivi désactivé/);
 });
 
 console.log(results.join('\n'));

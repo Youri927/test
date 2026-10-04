@@ -28,15 +28,65 @@
     if (d.toDateString() === y.toDateString()) return `hier à ${fmtTime.format(d)}`;
     return `le ${when(iso)}`;
   }
+  const fmtLong = new Intl.DateTimeFormat('fr-FR', {weekday: 'long', day: 'numeric', month: 'long'});
+  const sameDay = (a, b) => a.toDateString() === b.toDateString();
+  const clock = (iso) => (iso ? fmtTime.format(new Date(iso)) : '');
+  const shortWhen = (iso) => (!iso ? '' : sameDay(new Date(iso), new Date()) ? clock(iso) : fmtDay.format(new Date(iso)));
+  function dayLabel(iso) {
+    const d = new Date(iso);
+    if (sameDay(d, new Date())) return 'Aujourd’hui';
+    if (sameDay(d, new Date(Date.now() - 86400000))) return 'Hier';
+    const s = fmtLong.format(d);
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
   /** n'écrit dans la page que si quelque chose change (sinon l'observateur de Gmail tournerait en boucle) */
-  function put(el, {html, cls, title}) {
+  function put(el, {html, cls, label}) {
+    if (!el) return;
     if (html !== undefined && el.__ptHtml !== html) { el.innerHTML = html; el.__ptHtml = html; }
     if (cls !== undefined && el.className !== cls) el.className = cls;
-    if (title !== undefined && el.title !== title) { el.title = title; el.setAttribute('aria-label', title); }
+    if (label !== undefined && el.getAttribute('aria-label') !== label) el.setAttribute('aria-label', label);
   }
   const times = (n) => (n === 1 ? '1 fois' : `${n} fois`);
   const clicksTxt = (n) => (n === 1 ? '1 clic' : `${n} clics`);
   const ordinal = (n) => (n === 1 ? '1re' : `${n}e`);
+
+  /* ——— Icônes (trait, 24 × 24) ——— */
+  const PATHS = {
+    tick: '<path d="M4.5 12.5l4.5 4.5L19.5 6.5"/>',
+    ticks: '<path d="M1.5 12.5L6 17 16.5 6.5"/><path d="M10 15.5l1.5 1.5L22 6.5"/>',
+    eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.75"/>',
+    click: '<path d="M9.5 9.5l10 4-4.2 1.5-1.6 4.4z"/><path d="M5.5 5.5l1.7 1.7M10 3.5v2.3M3.5 10h2.3"/>',
+    link: '<path d="M10 13.5a3.75 3.75 0 0 0 5.3.2l2.9-2.9a3.75 3.75 0 0 0-5.3-5.3l-1.2 1.2"/><path d="M14 10.5a3.75 3.75 0 0 0-5.3-.2l-2.9 2.9a3.75 3.75 0 0 0 5.3 5.3l1.2-1.2"/>',
+    send: '<path d="M4 11.8L20.5 4l-7.8 16.5-2.1-6.6z"/><path d="M10.6 13.9L20.5 4"/>',
+    refresh: '<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4.2h-4.2"/>',
+    close: '<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
+    back: '<path d="M14.5 5.5L8 12l6.5 6.5"/>',
+    next: '<path d="M9.5 5.5L16 12l-6.5 6.5"/>',
+    search: '<circle cx="11" cy="11" r="6.25"/><path d="M15.6 15.6l4.4 4.4"/>',
+    shield: '<path d="M12 3.5l7 2.6v5.5c0 4.3-3 7.7-7 8.9-4-1.2-7-4.6-7-8.9V6.1z"/><path d="M9 12l2.2 2.2L15.2 10"/>',
+    warn: '<path d="M12 4.5l8.5 15h-17z"/><path d="M12 10.5v4M12 17.2v.3"/>',
+    inbox: '<path d="M3.5 13.5l2.6-7.2A2 2 0 0 1 8 5h8a2 2 0 0 1 1.9 1.3l2.6 7.2V18a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 18z"/><path d="M3.5 13.5h4.5l1.5 2.5h5l1.5-2.5h4.5"/>',
+  };
+  const icon = (name) => `<svg class="pt-i pt-i-${name}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${PATHS[name]}</svg>`;
+  const logo = (cls = '') => `<span class="pt-logo ${cls}">${icon('ticks')}</span>`;
+
+  /* ——— Petite mémoire locale : noms des contacts, dernière visite du volet ——— */
+  const store = {
+    async get(key) {
+      try {
+        return (await chrome.storage.local.get(key))[key];
+      } catch {
+        return undefined;
+      }
+    },
+    set(obj) {
+      try {
+        chrome.storage.local.set(obj).catch?.(() => {});
+      } catch {
+        // stockage indisponible : la mémoire de la page suffit
+      }
+    },
+  };
 
   function ask(message) {
     return new Promise((resolve) => {
@@ -52,13 +102,20 @@
     });
   }
 
-  function toast(message) {
+  /** message façon Gmail, en bas à gauche */
+  function toast(message, kind = 'info') {
     document.querySelector('.pt-toast')?.remove();
     const el = document.createElement('div');
-    el.className = 'pt-toast';
-    el.textContent = message;
+    el.className = `pt-toast pt-ui pt-toast-${kind}`;
+    el.setAttribute('role', 'status');
+    el.innerHTML = `${kind === 'warn' ? `<span class="pt-toast-ico">${icon('warn')}</span>` : logo()}<span class="pt-toast-txt"></span>`;
+    el.querySelector('.pt-toast-txt').textContent = message;
     document.body.appendChild(el);
-    setTimeout(() => el.remove(), 6000);
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('pt-toast-in')));
+    setTimeout(() => {
+      el.classList.remove('pt-toast-in');
+      setTimeout(() => el.remove(), 300);
+    }, kind === 'warn' ? 9000 : 4000);
   }
 
   let config = {apiBase: '', trackingDefault: true, hasToken: false};
@@ -169,19 +226,70 @@
       if (s.ok) for (const e of s.emails || []) statsById.set(e.id, e);
     }
     paintAll();
-    if (drawerOpen && !selectedId) renderList();
+    if (panelOpen && !selectedId) renderTab();
   }
 
+  /* ——— Statuts ——— */
   const opened = (e) => (e?.open_count || 0) > 0 || (e?.click_count || 0) > 0;
-  function summary(e) {
+  const clicked = (e) => (e?.click_count || 0) > 0;
+  const stateOf = (e) => (clicked(e) ? 'clicked' : opened(e) ? 'opened' : 'sent');
+  const ticksOf = (e) => icon(opened(e) ? 'ticks' : 'tick');
+  const tsOf = (iso) => (iso ? Date.parse(iso) || 0 : 0);
+  const sentAt = (e) => e.sent_at || e.created_at;
+  /** court : « Ouvert 2 fois · 1 clic » */
+  function statusText(e) {
     if (!e) return 'Suivi';
-    const parts = [];
-    if ((e.open_count || 0) > 0) parts.push(`Ouvert ${times(e.open_count)} · dernière ouverture ${ago(e.last_open_at)}`);
-    else parts.push('Pas encore d’ouverture détectée');
-    if ((e.click_count || 0) > 0) parts.push(`${clicksTxt(e.click_count)} · dernier ${ago(e.last_click_at)}`);
-    return parts.join(' · ');
+    const o = (e.open_count || 0) > 0 ? `Ouvert ${times(e.open_count)}` : clicked(e) ? 'Ouvert' : 'Pas encore ouvert';
+    return clicked(e) ? `${o} · ${clicksTxt(e.click_count)}` : o;
   }
-  const checks = (e) => (opened(e) ? '<span>✓</span><span>✓</span>' : '<span>✓</span>');
+  /** titre et sous-titre des cartes */
+  function headline(e) {
+    if ((e.open_count || 0) > 0) return {title: `Ouvert ${times(e.open_count)}`, sub: `Dernière ouverture ${ago(e.last_open_at)}`};
+    if (clicked(e)) return {title: 'Lien cliqué', sub: `Dernier clic ${ago(e.last_click_at)}`};
+    return {title: 'Pas encore ouvert', sub: `Envoyé ${ago(sentAt(e))}`};
+  }
+  /** le dernier geste du destinataire, pour le fil d'activité */
+  function lastSignal(e) {
+    const o = (e.open_count || 0) > 0 ? e.last_open_at : null;
+    const c = clicked(e) ? e.last_click_at : null;
+    if (c && (!o || tsOf(c) >= tsOf(o))) return {kind: 'click', at: c, verb: 'a cliqué un lien'};
+    if (o) return {kind: 'open', at: o, verb: e.open_count > 1 ? `a ré-ouvert (${ordinal(e.open_count)} fois)` : 'a ouvert'};
+    return null;
+  }
+
+  /* ——— Contacts : le nom affiché par Gmail, sinon l'adresse ——— */
+  const names = new Map();
+  let lastLearn = 0;
+  let saveNamesTimer = 0;
+  function learnNames() {
+    if (Date.now() - lastLearn < 2000) return;
+    lastLearn = Date.now();
+    const me = account();
+    let changed = false;
+    for (const el of document.querySelectorAll('[email][name]')) {
+      const email = (el.getAttribute('email') || '').trim().toLowerCase();
+      const name = (el.getAttribute('name') || '').trim();
+      if (!email || !name || email === me || name.includes('@') || names.get(email) === name) continue;
+      names.set(email, name);
+      changed = true;
+    }
+    if (!changed) return;
+    clearTimeout(saveNamesTimer);
+    saveNamesTimer = setTimeout(() => store.set({ptNames: Object.fromEntries([...names].slice(-400))}), 3000);
+  }
+  function who(recipient) {
+    const list = String(recipient || '').split(/[,;]/).map((s) => s.trim().toLowerCase()).filter(Boolean);
+    const email = list[0] || '';
+    return {email, name: names.get(email) || email || 'Destinataire inconnu', more: Math.max(0, list.length - 1)};
+  }
+  const whoName = (w) => `${esc(w.name)}${w.more ? ` <span class="pt-more">+${w.more}</span>` : ''}`;
+  function hue(s) {
+    let h = 0;
+    for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+    return h % 8;
+  }
+  const initial = (w) => esc((w.name.match(/[\p{L}\p{N}]/u) || ['?'])[0].toUpperCase());
+  const avatar = (w, extra = '') => `<span class="pt-av pt-av-${hue(w.email || w.name)}">${initial(w)}${extra}</span>`;
 
   /* ——— Rédaction : détection, interrupteur, préparation à l'envoi ——— */
   const composes = new Map(); // corps du message → état
@@ -341,12 +449,13 @@
     b.__ptErr = st.error;
     b.dataset.state = state;
     b.title = {
-      off: config.hasToken ? 'Suivi désactivé pour ce mail (cliquer pour l’activer)' : 'Ajoutez votre jeton dans les réglages de Prospect Tracker',
+      off: config.hasToken ? 'Suivi désactivé pour ce mail. Cliquer pour l’activer.' : 'Ajoutez votre jeton dans les réglages de Prospect Tracker',
       error: `Suivi indisponible : ${st.error}. Cliquer pour réessayer.`,
-      on: 'Suivi activé : ouvertures et clics de ce mail (cliquer pour désactiver)',
+      on: 'Suivi activé : vous saurez quand ce mail est ouvert et ses liens cliqués. Cliquer pour désactiver.',
       pending: 'Préparation du suivi…',
     }[state];
-    b.innerHTML = `<span class="pt-check-icon"><i>✓</i><i>✓</i></span><span class="pt-compose-label">${{off: 'Sans suivi', error: 'Suivi ⚠', on: 'Suivi', pending: 'Suivi…'}[state]}</span>`;
+    b.setAttribute('aria-label', b.title);
+    b.setAttribute('aria-pressed', String(state !== 'off'));
   }
 
   function addToggle(st) {
@@ -354,8 +463,8 @@
     if (!send || st.root.querySelector('.pt-compose-toggle')) return;
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'pt-compose-toggle';
-    b.setAttribute('aria-label', 'Suivi Prospect Tracker');
+    b.className = 'pt-compose-toggle pt-ui';
+    b.innerHTML = `<span class="pt-ct-ico">${icon('ticks')}${icon('warn')}<i class="pt-spinner"></i></span><span class="pt-switch" aria-hidden="true"><i></i></span>`;
     const anchor = send.parentElement || send;
     anchor.parentElement?.insertBefore(b, anchor.nextSibling);
     st.toggle = b;
@@ -363,13 +472,13 @@
     b.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      if (!config.hasToken) { toast('Ajoutez votre jeton dans les réglages de Prospect Tracker (icône de l’extension).'); return; }
+      if (!config.hasToken) { toast('Ajoutez votre jeton dans les réglages de Prospect Tracker (icône de l’extension).', 'warn'); return; }
       if (st.error) { st.enabled = true; ensureId(st); return; }
       st.enabled = !st.enabled;
       if (st.enabled) ensureId(st);
       else removeTracking(st);
       paintToggle(st);
-      toast(st.enabled ? 'Suivi activé pour ce mail' : 'Suivi désactivé pour ce mail');
+      toast(st.enabled ? 'Suivi activé : vous saurez quand ce mail est ouvert' : 'Suivi désactivé pour ce mail');
     }, true);
   }
 
@@ -443,7 +552,7 @@
       st.error = '';
       removeTracking(st);
       paintToggle(st);
-      toast(`Suivi indisponible (${err.message}). Le mail n’est PAS parti : cliquez à nouveau sur Envoyer pour l’envoyer sans suivi.`);
+      toast(`Suivi indisponible (${err.message}). Le mail n’est PAS parti : cliquez à nouveau sur Envoyer pour l’envoyer sans suivi.`, 'warn');
     } finally {
       st.holding = false;
       st.toggle?.removeAttribute('data-busy');
@@ -527,8 +636,22 @@
   }
 
   const seenBodies = new WeakSet();
+  /** une puce de statut : survol = carte de suivi, clic = détail dans le volet (sans ouvrir ni replier le message) */
+  function badgeButton(cls) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = cls;
+    b.addEventListener('mousedown', (e) => e.stopPropagation(), true);
+    b.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      hidePop();
+      openPanel(b.dataset.ptId);
+    }, true);
+    return b;
+  }
+
   function scanMessages() {
-    let latest = null;
     for (const body of messageBodies()) {
       const {own, quoted} = idsIn(body);
       // le message vient de s'afficher : si c'est vous l'expéditeur, cette ouverture est la vôtre
@@ -538,29 +661,25 @@
       }
       const id = own[0];
       if (!id) continue;
-      latest = id;
       const box = body.closest('.adn, [data-message-id]') || body.parentElement;
       let badge = box.querySelector(':scope .pt-msg-badge');
       if (!badge) {
-        badge = document.createElement('button');
-        badge.type = 'button';
-        badge.className = 'pt-msg-badge';
-        badge.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openDrawer(badge.dataset.ptId); }, true);
+        badge = badgeButton('pt-msg-badge pt-ui');
         const date = box.querySelector('.gH .g3') || box.querySelector('.g3');
         if (date?.parentElement) date.parentElement.insertBefore(badge, date);
         else body.parentElement.insertBefore(badge, body);
       }
-      badge.dataset.ptId = id;
+      if (badge.dataset.ptId !== id) badge.dataset.ptId = id;
       paintBadge(badge, statsById.get(id));
     }
-    paintThreadStatus(latest);
+    paintThreadStatus();
   }
 
   function paintBadge(badge, e) {
     put(badge, {
-      cls: `pt-msg-badge ${opened(e) ? 'pt-opened' : ''}`,
-      title: e ? summary(e) : 'Message suivi',
-      html: `<span class="pt-ticks">${checks(e)}</span>${e ? `<span>${(e.open_count || 0) > 0 ? `Ouvert ${times(e.open_count)}` : 'Pas encore ouvert'}${(e.click_count || 0) > 0 ? ` · ${clicksTxt(e.click_count)}` : ''}</span>` : '<span>Suivi</span>'}`,
+      cls: `pt-msg-badge pt-ui pt-s-${stateOf(e)}`,
+      label: e ? `${statusText(e)}. Survoler pour le détail.` : 'Message suivi',
+      html: `${ticksOf(e)}<span class="pt-chip-txt">${esc(statusText(e))}</span>`,
     });
   }
 
@@ -576,8 +695,10 @@
     if (others.length) {
       best = pool.filter((e) => others.some((p) => (e.recipient || '').toLowerCase().includes(p)));
       if (!best.length) return null; // même objet mais pas le même destinataire : surtout ne rien afficher de faux
+    } else if (new Set(pool.map((e) => (e.recipient || '').toLowerCase())).size > 1) {
+      return null; // personne à comparer et plusieurs destinataires possibles : on ne devine pas
     }
-    return best.sort((a, b) => Date.parse(b.sent_at || b.created_at) - Date.parse(a.sent_at || a.created_at))[0];
+    return best.sort((a, b) => tsOf(sentAt(b)) - tsOf(sentAt(a)))[0];
   }
 
   function scanRows() {
@@ -596,137 +717,55 @@
       const email = matchRow(subject, people);
       if (!email) { badge?.remove(); return; }
       if (!badge) {
-        const cell = row.querySelector('.xW') || row.querySelector('td:last-child');
+        // devant l'objet, comme Mailsuite : la colonne de la date est remplacée par les actions au survol
+        const subj = row.querySelector('.bog');
+        const cell = subj?.parentElement || row.querySelector('.xW') || row.querySelector('td:last-child');
         if (!cell) return;
-        badge = document.createElement('button');
-        badge.type = 'button';
-        badge.className = 'pt-row-checks';
-        badge.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openDrawer(badge.dataset.ptId); }, true);
-        cell.prepend(badge);
+        badge = badgeButton('pt-row-checks pt-ui');
+        if (subj && subj.parentElement === cell) cell.insertBefore(badge, subj);
+        else cell.prepend(badge);
       }
       if (badge.dataset.ptId !== email.id) badge.dataset.ptId = email.id;
       put(badge, {
-        cls: `pt-row-checks ${opened(email) ? 'pt-row-opened' : 'pt-row-unopened'}${(email.click_count || 0) > 0 ? ' pt-row-clicked' : ''}`,
-        title: summary(email),
-        html: checks(email),
+        cls: `pt-row-checks pt-ui ${opened(email) ? 'pt-row-opened' : 'pt-row-unopened'}${clicked(email) ? ' pt-row-clicked' : ''}`,
+        label: statusText(email),
+        html: `${ticksOf(email)}${clicked(email) ? icon('link') : ''}`,
       });
     });
   }
 
-  function paintThreadStatus(latestId) {
-    const h2 = document.querySelector('h2.hP');
-    const old = document.querySelector('.pt-thread-status');
-    let email = latestId ? statsById.get(latestId) : null;
-    if (!email && h2) email = emails.filter((e) => norm(e.subject) === norm(h2.textContent)).sort((a, b) => Date.parse(b.sent_at || b.created_at) - Date.parse(a.sent_at || a.created_at))[0] || null;
-    if (!email || !h2) { old?.remove(); return; }
-    const el = old || document.createElement('button');
-    if (!old) {
-      el.type = 'button';
-      el.addEventListener('click', () => openDrawer(el.dataset.ptId));
-      h2.insertAdjacentElement('afterend', el);
+  /** à côté de l'objet du fil, seulement si aucun message suivi n'est affiché (messages repliés, images coupées) */
+  function paintThreadStatus() {
+    const h2 = $$('h2.hP').find((h) => h.offsetParent !== null) || null;
+    let old = document.querySelector('.pt-thread-status');
+    if (old && old.previousElementSibling !== h2) { old.remove(); old = null; }
+    const hasChip = $$('.pt-msg-badge').some((b) => b.offsetParent !== null);
+    let email = null;
+    if (h2 && !hasChip) {
+      const scope = h2.closest('[role="main"]') || document;
+      const people = $$('[email]', scope).map((el) => (el.getAttribute('email') || '').toLowerCase()).filter(Boolean);
+      email = matchRow(h2.textContent, people);
     }
+    if (!email) { old?.remove(); return; }
+    const el = old || badgeButton('pt-thread-status pt-ui');
+    if (!old) h2.insertAdjacentElement('afterend', el);
     if (el.dataset.ptId !== email.id) el.dataset.ptId = email.id;
     put(el, {
-      cls: `pt-thread-status ${opened(email) ? 'pt-opened' : ''}`,
-      title: summary(email),
-      html: `${opened(email) ? '✓✓' : '✓'} <span>${(email.open_count || 0) > 0 ? `Ouvert ${times(email.open_count)}` : 'Pas encore ouvert'}${(email.click_count || 0) > 0 ? ` · ${clicksTxt(email.click_count)}` : ''}</span>`,
+      cls: `pt-thread-status pt-ui pt-s-${stateOf(email)}`,
+      label: statusText(email),
+      html: `${ticksOf(email)}<span class="pt-chip-txt">${esc(statusText(email))}</span>`,
     });
   }
 
   function paintAll() {
     scanRows();
     for (const badge of $$('.pt-msg-badge')) paintBadge(badge, statsById.get(badge.dataset.ptId));
-    const latest = displayedIds().at(-1) || null;
-    paintThreadStatus(latest);
+    paintThreadStatus();
+    paintLauncher();
+    if (popVisible()) refreshPop();
   }
 
-  /* ——— Le volet de suivi ——— */
-  let drawer = null;
-  let drawerOpen = false;
-  let selectedId = null;
-
-  function ensureLauncher() {
-    if (document.querySelector('.pt-gmail-launcher')) return;
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'pt-gmail-launcher';
-    b.title = 'Ouvrir Prospect Tracker';
-    b.innerHTML = '<span class="pt-launcher-icon">✓✓</span><span class="pt-launcher-text">Suivi</span>';
-    b.addEventListener('click', () => (drawerOpen ? closeDrawer() : openDrawer()));
-    document.body.appendChild(b);
-  }
-
-  function ensureDrawer() {
-    if (drawer) return drawer;
-    drawer = document.createElement('aside');
-    drawer.className = 'pt-drawer';
-    drawer.innerHTML = `
-      <div class="pt-drawer-head">
-        <div class="pt-brand"><span class="pt-brand-icon">✓✓</span><span>Prospect Tracker</span></div>
-        <div class="pt-head-actions">
-          <button class="pt-icon-btn pt-refresh" title="Actualiser">↻</button>
-          <button class="pt-icon-btn pt-close" title="Fermer">×</button>
-        </div>
-      </div>
-      <div class="pt-drawer-body"></div>`;
-    drawer.querySelector('.pt-close').addEventListener('click', closeDrawer);
-    drawer.querySelector('.pt-refresh').addEventListener('click', async () => {
-      const r = drawer.querySelector('.pt-refresh');
-      r.classList.add('pt-spin');
-      await refreshData(true);
-      if (selectedId) await renderDetail(selectedId);
-      else renderList();
-      r.classList.remove('pt-spin');
-    });
-    document.body.appendChild(drawer);
-    return drawer;
-  }
-
-  async function openDrawer(id = null) {
-    ensureDrawer();
-    drawerOpen = true;
-    selectedId = id;
-    drawer.classList.add('pt-drawer-open');
-    if (id) await renderDetail(id);
-    else { renderList(); refreshData(true); }
-  }
-
-  function closeDrawer() {
-    if (!drawer) return;
-    drawerOpen = false;
-    selectedId = null;
-    drawer.classList.remove('pt-drawer-open');
-  }
-
-  function renderList() {
-    if (!drawer) return;
-    const body = drawer.querySelector('.pt-drawer-body');
-    if (!config.hasToken) {
-      body.innerHTML = '<div class="pt-error">Ajoutez votre jeton dans les réglages de Prospect Tracker (icône de l’extension, puis « Réglages »).</div>';
-      return;
-    }
-    const list = emails.slice(0, 80);
-    body.innerHTML = `
-      <div class="pt-summary">
-        <div><strong>${list.length}</strong><span>Suivis</span></div>
-        <div><strong>${list.filter(opened).length}</strong><span>Ouverts</span></div>
-        <div><strong>${list.filter((e) => (e.click_count || 0) > 0).length}</strong><span>Cliqués</span></div>
-      </div>
-      <div class="pt-section-title">Derniers mails suivis</div>
-      <div class="pt-mail-list">${list.length ? list.map((e) => `
-        <button class="pt-mail-card" data-id="${esc(e.id)}">
-          <div class="pt-mail-status ${opened(e) ? 'opened' : ''}">${opened(e) ? '✓✓' : '✓'}</div>
-          <div class="pt-mail-main">
-            <div class="pt-mail-to">${esc(e.recipient || 'Destinataire inconnu')}</div>
-            <div class="pt-mail-subject">${esc(e.subject || '(sans objet)')}</div>
-            <div class="pt-mail-meta">${(e.open_count || 0) > 0 ? `Ouvert ${times(e.open_count)} · ${ago(e.last_open_at)}` : `Pas encore ouvert · envoyé ${ago(e.sent_at || e.created_at)}`}${(e.click_count || 0) > 0 ? ` · ${clicksTxt(e.click_count)}` : ''}</div>
-          </div>
-          <div class="pt-mail-arrow">›</div>
-        </button>`).join('') : '<div class="pt-empty">Aucun mail suivi pour l’instant.</div>'}
-      </div>`;
-    body.querySelectorAll('.pt-mail-card').forEach((card) => card.addEventListener('click', () => renderDetail(card.dataset.id)));
-  }
-
+  /* ——— Les événements d'un mail, dans l'ordre : 1re ouverture, ré-ouvertures, clics ——— */
   const VIA = {gmail: 'Gmail', apple: 'Apple Mail · peut être automatique', outlook: 'Outlook', yahoo: 'Yahoo Mail', other: ''};
   const IGNORED = {self: 'Vous-même : non compté', dup: 'Même ouverture : non comptée', bot: 'Robot ou antivirus : non compté'};
   function linkLabel(url) {
@@ -737,54 +776,415 @@
       return url || '';
     }
   }
+  function describe(events) {
+    const asc = [...(events || [])].sort((a, b) => a.created_at.localeCompare(b.created_at));
+    let n = 0;
+    return asc.map((ev) => {
+      if (!ev.counted) return {ev, kind: ev.type === 'click' ? 'click' : 'open', ignored: true, title: ev.type === 'click' ? 'Clic' : 'Ouverture', sub: IGNORED[ev.reason] || 'Non compté'};
+      if (ev.type === 'click') return {ev, kind: 'click', title: 'Lien cliqué', sub: linkLabel(ev.url)};
+      n++;
+      const base = n === 1 ? 'Ouvert' : `Ré-ouvert (${ordinal(n)} fois)`;
+      return {ev, kind: 'open', title: ev.reason === 'implied' ? `${base}, déduit du clic` : base, sub: ev.reason === 'implied' ? 'Images bloquées : le clic prouve l’ouverture' : VIA[ev.reason] || ''};
+    }).reverse();
+  }
+  function byDay(items, at, render) {
+    let day = '';
+    return items.map((it) => {
+      const iso = at(it);
+      const label = iso ? dayLabel(iso) : '';
+      const head = label && label !== day ? `<div class="pt-day">${label}</div>` : '';
+      day = label || day;
+      return head + render(it);
+    }).join('');
+  }
+
+  /* ——— La carte de suivi, au survol d'une coche ——— */
+  const BADGES = '.pt-row-checks, .pt-msg-badge, .pt-thread-status';
+  const detailsCache = new Map();
+  let pop = null;
+  let popAnchor = null;
+  let popTimer = 0;
+  let hideTimer = 0;
+
+  async function getDetails(id, maxAge = 20000) {
+    const c = detailsCache.get(id);
+    if (c && Date.now() - c.at < maxAge) return c.data;
+    const r = await ask({type: 'details', id});
+    if (r.ok && r.email) {
+      detailsCache.set(id, {at: Date.now(), data: r});
+      statsById.set(r.email.id, r.email);
+    }
+    return r;
+  }
+
+  const popVisible = () => Boolean(pop?.classList.contains('pt-pop-show'));
+  function ensurePop() {
+    if (pop) return pop;
+    pop = document.createElement('div');
+    pop.className = 'pt-pop pt-ui';
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', 'Suivi du mail');
+    pop.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+    pop.addEventListener('mouseleave', () => hideSoon());
+    pop.addEventListener('click', (e) => {
+      const more = e.target.closest('[data-pt-open]');
+      if (!more) return;
+      e.preventDefault();
+      const id = more.dataset.ptOpen;
+      hidePop();
+      openPanel(id);
+    });
+    document.body.appendChild(pop);
+    return pop;
+  }
+  function hidePop() {
+    clearTimeout(popTimer);
+    clearTimeout(hideTimer);
+    popAnchor = null;
+    pop?.classList.remove('pt-pop-show');
+  }
+  function hideSoon() {
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hidePop, 220);
+  }
+  function placePop() {
+    if (!pop || !popAnchor?.isConnected) { hidePop(); return; }
+    const r = popAnchor.getBoundingClientRect();
+    const w = pop.offsetWidth;
+    const h = pop.offsetHeight;
+    const left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), window.innerWidth - w - 8);
+    let top = r.bottom + 8;
+    let side = 'below';
+    if (top + h > window.innerHeight - 8 && r.top - h - 8 >= 8) { top = r.top - h - 8; side = 'above'; }
+    pop.style.left = `${Math.round(left)}px`;
+    pop.style.top = `${Math.round(top)}px`;
+    pop.dataset.side = side;
+  }
+
+  const popAct = (x) => `<div class="pt-pop-act pt-k-${x.kind}">${icon(x.kind === 'click' ? 'click' : 'eye')}<span>${esc(x.title)}${x.kind === 'click' && x.sub ? ` <em>${esc(x.sub)}</em>` : ''}</span><time>${esc(ago(x.ev.created_at))}</time></div>`;
+  function popHtml(e, d) {
+    const h = headline(e);
+    const w = who(e.recipient);
+    let acts = '<div class="pt-pop-skel"><i></i><i></i></div>';
+    if (d?.ok) {
+      const list = describe(d.events).filter((x) => !x.ignored).slice(0, 4);
+      acts = list.length ? list.map(popAct).join('') : '<div class="pt-pop-empty">Aucune ouverture ni aucun clic pour l’instant.</div>';
+    } else if (d) {
+      acts = '';
+    }
+    return `
+      <div class="pt-pop-head pt-s-${stateOf(e)}">
+        <span class="pt-pop-ico">${ticksOf(e)}</span>
+        <div class="pt-pop-head-txt"><div class="pt-pop-title">${esc(h.title)}</div><div class="pt-pop-sub">${esc(h.sub)}</div></div>
+      </div>
+      <div class="pt-pop-to">${avatar(w)}<div><b>${whoName(w)}</b><span>${esc(e.subject || '(sans objet)')}</span></div><time>${esc(shortWhen(sentAt(e)))}</time></div>
+      ${acts ? `<div class="pt-pop-acts">${acts}</div>` : ''}
+      <button type="button" class="pt-pop-more" data-pt-open="${esc(e.id)}"><span>Voir toute l’activité</span>${icon('next')}</button>`;
+  }
+
+  async function showPop(anchor) {
+    const id = anchor.dataset.ptId;
+    const e = statsById.get(id);
+    if (!e || !anchor.isConnected) return;
+    ensurePop();
+    popAnchor = anchor;
+    const c = detailsCache.get(id);
+    put(pop, {html: popHtml(e, c?.data)});
+    pop.classList.add('pt-pop-show');
+    placePop();
+    if (c && Date.now() - c.at < 20000) return;
+    const d = await getDetails(id);
+    if (popAnchor !== anchor) return;
+    put(pop, {html: popHtml(statsById.get(id) || e, d)});
+    placePop();
+  }
+  function refreshPop() {
+    const id = popAnchor?.dataset.ptId;
+    const e = id && statsById.get(id);
+    if (!e) return;
+    put(pop, {html: popHtml(e, detailsCache.get(id)?.data)});
+    placePop();
+  }
+
+  document.addEventListener('mouseover', (e) => {
+    const a = e.target.closest?.(BADGES);
+    if (!a?.dataset.ptId) return;
+    clearTimeout(hideTimer);
+    if (a === popAnchor && popVisible()) return;
+    clearTimeout(popTimer);
+    popTimer = setTimeout(() => showPop(a), popVisible() ? 80 : 300);
+  });
+  document.addEventListener('mouseout', (e) => {
+    const a = e.target.closest?.(BADGES);
+    if (!a || a.contains(e.relatedTarget)) return;
+    clearTimeout(popTimer);
+    if (popVisible()) hideSoon();
+  });
+  document.addEventListener('focusin', (e) => {
+    const a = e.target.closest?.(BADGES);
+    if (a?.dataset.ptId && !e.target.matches(':hover')) showPop(a);
+  });
+  document.addEventListener('focusout', (e) => {
+    if (e.target.closest?.(BADGES) && !pop?.contains(e.relatedTarget)) hideSoon();
+  });
+  window.addEventListener('scroll', (e) => { if (popVisible() && !pop.contains(e.target)) hidePop(); }, true);
+  window.addEventListener('resize', () => { if (popVisible()) placePop(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (popVisible()) hidePop();
+    else if (panelOpen && panel.contains(e.target)) closePanel();
+  });
+
+  /* ——— Le volet de suivi ——— */
+  let panel = null;
+  let panelOpen = false;
+  let selectedId = null;
+  let tab = 'activity';
+  let query = '';
+  let filter = 'all';
+  let lastSeen = Date.now(); // dernière visite de l'onglet Activité : ce qui est plus récent est « nouveau »
+  let seenBefore = lastSeen;
+  const FILTERS = [
+    ['all', 'Tous', () => true],
+    ['opened', 'Ouverts', opened],
+    ['unopened', 'Pas ouverts', (e) => !opened(e)],
+    ['clicked', 'Cliqués', clicked],
+  ];
+  const feedItems = () => emails.map((e) => ({e, sig: lastSignal(e)})).filter((x) => x.sig).sort((a, b) => tsOf(b.sig.at) - tsOf(a.sig.at));
+  const bodyEl = () => panel.querySelector('.pt-panel-body');
+  const emptyState = (ico, title, text) => `<div class="pt-empty"><span class="pt-empty-ico">${icon(ico)}</span><b>${title}</b><span>${text}</span></div>`;
+  const noToken = () => emptyState('warn', 'Jeton manquant', 'Cliquez sur l’icône de Prospect Tracker dans la barre de Chrome, puis sur les réglages, et collez votre jeton.');
+  const backBtn = () => `<button type="button" class="pt-back">${icon('back')}<span>Retour</span></button>`;
+
+  function ensureLauncher() {
+    if (document.querySelector('.pt-launcher')) return;
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pt-launcher pt-ui';
+    b.title = 'Suivi des mails';
+    b.innerHTML = `${logo()}<span class="pt-launcher-count"></span>`;
+    b.addEventListener('click', () => (panelOpen ? closePanel() : openPanel()));
+    document.body.appendChild(b);
+    paintLauncher();
+  }
+  function paintLauncher() {
+    const b = document.querySelector('.pt-launcher');
+    if (!b) return;
+    const n = panelOpen && !selectedId && tab === 'activity' ? 0 : feedItems().filter((x) => tsOf(x.sig.at) > lastSeen).length;
+    const s = n > 1 ? 's' : '';
+    put(b, {cls: `pt-launcher pt-ui${panelOpen ? ' pt-active' : ''}`, label: n ? `Suivi des mails : ${n} nouvelle${s} activité${s}` : 'Suivi des mails'});
+    put(b.querySelector('.pt-launcher-count'), {html: n ? (n > 9 ? '9+' : String(n)) : '', cls: `pt-launcher-count${n ? ' pt-on' : ''}`});
+  }
+  function seeActivity() {
+    lastSeen = Date.now();
+    store.set({ptLastSeen: lastSeen});
+    paintLauncher();
+  }
+
+  function ensurePanel() {
+    if (panel) return panel;
+    panel = document.createElement('aside');
+    panel.className = 'pt-panel pt-ui';
+    panel.setAttribute('aria-label', 'Suivi des mails');
+    panel.innerHTML = `
+      <header class="pt-panel-head">
+        <div class="pt-brand">${logo()}<div class="pt-brand-txt"><b>Suivi des mails</b><small class="pt-account"></small></div></div>
+        <button type="button" class="pt-icon-btn pt-refresh" title="Actualiser" aria-label="Actualiser">${icon('refresh')}</button>
+        <button type="button" class="pt-icon-btn pt-close" title="Fermer" aria-label="Fermer">${icon('close')}</button>
+      </header>
+      <nav class="pt-tabs" role="tablist">
+        <button type="button" class="pt-tab" role="tab" data-tab="activity">Activité</button>
+        <button type="button" class="pt-tab" role="tab" data-tab="mails">Mails suivis</button>
+      </nav>
+      <div class="pt-panel-body"></div>`;
+    panel.querySelector('.pt-close').addEventListener('click', closePanel);
+    panel.querySelector('.pt-refresh').addEventListener('click', async (e) => {
+      const r = e.currentTarget;
+      r.classList.add('pt-spin');
+      if (selectedId) detailsCache.delete(selectedId);
+      await refreshData(true);
+      if (selectedId) await renderDetail(selectedId);
+      r.classList.remove('pt-spin');
+    });
+    panel.querySelectorAll('.pt-tab').forEach((t) => t.addEventListener('click', () => showTab(t.dataset.tab)));
+    panel.addEventListener('click', (e) => {
+      const item = e.target.closest('[data-open]');
+      if (item) { renderDetail(item.dataset.open); return; }
+      if (e.target.closest('.pt-back')) { selectedId = null; renderTab(); paintLauncher(); return; }
+      const f = e.target.closest('[data-filter]');
+      if (f) { filter = f.dataset.filter; renderMails(); }
+    });
+    const scroller = panel.querySelector('.pt-panel-body');
+    scroller.addEventListener('scroll', () => panel.classList.toggle('pt-scrolled', scroller.scrollTop > 4), {passive: true});
+    panel.addEventListener('input', (e) => {
+      if (!e.target.matches('.pt-search input')) return;
+      query = e.target.value;
+      paintMails();
+    });
+    // les raccourcis clavier de Gmail ne doivent pas réagir à ce qu'on tape dans le volet
+    for (const t of ['keydown', 'keypress', 'keyup']) panel.addEventListener(t, (e) => { if (e.key !== 'Escape') e.stopPropagation(); });
+    document.body.appendChild(panel);
+    return panel;
+  }
+
+  function showTab(name) {
+    tab = name;
+    selectedId = null;
+    if (name === 'activity') seenBefore = lastSeen;
+    renderTab();
+    paintLauncher();
+  }
+  function renderTab() {
+    if (!panel) return;
+    panel.dataset.view = selectedId ? 'detail' : tab;
+    panel.querySelectorAll('.pt-tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === tab)));
+    put(panel.querySelector('.pt-account'), {html: esc(account())});
+    if (selectedId) return;
+    if (tab === 'activity') renderActivity();
+    else renderMails();
+  }
+  async function openPanel(id = null) {
+    ensurePanel();
+    hidePop();
+    panelOpen = true;
+    panel.classList.add('pt-open');
+    if (id) await renderDetail(id);
+    else { showTab(tab); refreshData(true); }
+    paintLauncher();
+  }
+  function closePanel() {
+    if (!panel) return;
+    panelOpen = false;
+    selectedId = null;
+    panel.classList.remove('pt-open');
+    paintLauncher();
+  }
+
+  function renderActivity() {
+    const body = bodyEl();
+    if (!config.hasToken) { put(body, {html: noToken()}); return; }
+    const total = emails.length;
+    const nOpen = emails.filter(opened).length;
+    const nClick = emails.filter(clicked).length;
+    const rate = total ? Math.round((nOpen / total) * 100) : 0;
+    const feed = feedItems().slice(0, 60);
+    const item = ({e, sig}) => {
+      const w = who(e.recipient);
+      return `
+      <button type="button" class="pt-feed-item${tsOf(sig.at) > seenBefore ? ' pt-new' : ''}" data-open="${esc(e.id)}">
+        ${avatar(w, `<i class="pt-av-badge pt-k-${sig.kind}">${icon(sig.kind === 'click' ? 'click' : 'eye')}</i>`)}
+        <span class="pt-feed-main"><span class="pt-feed-line"><b>${whoName(w)}</b> ${esc(sig.verb)}</span><span class="pt-feed-subj">${esc(e.subject || '(sans objet)')}</span></span>
+        <time>${esc(clock(sig.at))}</time>
+      </button>`;
+    };
+    put(body, {html: `
+      <section class="pt-overview">
+        <div class="pt-stats">
+          <div class="pt-stat pt-k-sent">${icon('send')}<b>${total}</b><span>Suivis</span></div>
+          <div class="pt-stat pt-k-open">${icon('eye')}<b>${nOpen}</b><span>Ouverts</span></div>
+          <div class="pt-stat pt-k-click">${icon('click')}<b>${nClick}</b><span>Cliqués</span></div>
+        </div>
+        <div class="pt-rate"><div class="pt-rate-top"><span>Taux d’ouverture</span><b>${rate} %</b></div><div class="pt-rate-bar"><i></i></div></div>
+      </section>
+      <div class="pt-section-title">Dernière activité</div>
+      ${feed.length ? `<div class="pt-feed">${byDay(feed, (x) => x.sig.at, item)}</div>` : emptyState('inbox', 'Pas encore d’activité', 'Dès qu’un destinataire ouvre un mail suivi ou clique un lien, ça s’affiche ici.')}`});
+    const bar = body.querySelector('.pt-rate-bar i');
+    if (bar && bar.style.width !== `${rate}%`) bar.style.width = `${rate}%`;
+    seeActivity();
+  }
+
+  function renderMails() {
+    const body = bodyEl();
+    if (!config.hasToken) { put(body, {html: noToken()}); return; }
+    if (!body.querySelector('.pt-tools')) {
+      put(body, {html: `
+        <div class="pt-tools">
+          <label class="pt-search">${icon('search')}<input type="search" placeholder="Rechercher un contact ou un objet" aria-label="Rechercher" autocomplete="off" spellcheck="false"></label>
+          <div class="pt-chips" role="group" aria-label="Filtrer"></div>
+        </div>
+        <div class="pt-mails"></div>`});
+      body.querySelector('.pt-search input').value = query;
+    }
+    put(body.querySelector('.pt-chips'), {html: FILTERS.map(([k, label, fn]) => `<button type="button" class="pt-chip${filter === k ? ' pt-chip-on' : ''}" data-filter="${k}" aria-pressed="${filter === k}">${label}<span>${emails.filter(fn).length}</span></button>`).join('')});
+    paintMails();
+  }
+  function mailRow(e) {
+    const w = who(e.recipient);
+    const meta = (e.open_count || 0) > 0 ? `Ouvert ${times(e.open_count)} · ${ago(e.last_open_at)}` : clicked(e) ? 'Ouvert' : 'Pas encore ouvert';
+    return `
+      <button type="button" class="pt-mail" data-open="${esc(e.id)}">
+        <span class="pt-status pt-s-${stateOf(e)}">${ticksOf(e)}</span>
+        <span class="pt-mail-main">
+          <span class="pt-mail-top"><b>${whoName(w)}</b><time>${esc(shortWhen(sentAt(e)))}</time></span>
+          <span class="pt-mail-subj">${esc(e.subject || '(sans objet)')}</span>
+          <span class="pt-mail-meta"><span class="pt-meta-${opened(e) ? 'open' : 'sent'}">${esc(meta)}</span>${clicked(e) ? `<span class="pt-meta-click">${icon('link')}${clicksTxt(e.click_count)}</span>` : ''}</span>
+        </span>
+      </button>`;
+  }
+  function paintMails() {
+    const box = panel?.querySelector('.pt-mails');
+    if (!box) return;
+    const fn = (FILTERS.find(([k]) => k === filter) || FILTERS[0])[2];
+    const q = query.trim().toLowerCase();
+    const list = emails.filter(fn).filter((e) => !q || `${e.recipient || ''} ${who(e.recipient).name} ${e.subject || ''}`.toLowerCase().includes(q));
+    put(box, {html: list.length ? list.slice(0, 150).map(mailRow).join('')
+      : q ? emptyState('search', 'Aucun résultat', 'Essayez un autre nom, une autre adresse ou un autre objet.')
+        : emptyState('inbox', 'Rien ici pour l’instant', 'Les mails suivis apparaissent ici dès leur envoi.')});
+  }
+
+  function tlItem(x, full = false) {
+    const ico = x.kind === 'click' ? 'click' : x.kind === 'sent' ? 'send' : 'eye';
+    const t = x.ev.created_at;
+    return `
+      <div class="pt-tl-item pt-k-${x.kind}${x.ignored ? ' pt-tl-off' : ''}">
+        <span class="pt-tl-dot">${icon(ico)}</span>
+        <div class="pt-tl-copy"><div class="pt-tl-title">${esc(x.title)}</div>${x.sub ? `<div class="pt-tl-sub"${x.ev.url ? ` title="${esc(x.ev.url)}"` : ''}>${esc(x.sub)}</div>` : ''}</div>
+        <time>${esc(full && t ? `${fmtDay.format(new Date(t))} ${clock(t)}` : clock(t))}</time>
+      </div>`;
+  }
 
   async function renderDetail(id) {
-    if (!drawer) return;
+    if (!panel) return;
     selectedId = id;
-    const body = drawer.querySelector('.pt-drawer-body');
-    body.innerHTML = '<div class="pt-loading">Chargement de l’activité…</div>';
-    const r = await ask({type: 'details', id});
+    panel.dataset.view = 'detail';
+    paintLauncher();
+    const body = bodyEl();
+    put(body, {html: `${backBtn()}<div class="pt-loading"><i class="pt-spinner"></i><span>Chargement de l’activité…</span></div>`});
+    body.scrollTop = 0;
+    const r = await getDetails(id, 0);
     if (selectedId !== id) return;
     if (!r.ok || !r.email) {
-      body.innerHTML = `<button class="pt-back">‹ Tous les mails suivis</button><div class="pt-error">Activité introuvable${r.error ? ` (${esc(r.error)})` : ''}.</div>`;
-      body.querySelector('.pt-back').addEventListener('click', () => { selectedId = null; renderList(); });
+      put(body, {html: `${backBtn()}<div class="pt-error">${icon('warn')}<span>Activité introuvable${r.error ? ` (${esc(r.error)})` : ''}.</span></div>`});
       return;
     }
     const e = r.email;
-    statsById.set(e.id, e);
-    // les signaux comptés, numérotés dans l'ordre : 1re ouverture, puis ré-ouvertures
-    const asc = [...(r.events || [])].sort((a, b) => a.created_at.localeCompare(b.created_at));
-    let n = 0;
-    const rows = asc.map((ev) => {
-      if (!ev.counted) return {ev, ignored: true, title: ev.type === 'click' ? 'Clic' : 'Ouverture', sub: IGNORED[ev.reason] || 'Non compté'};
-      if (ev.type === 'click') return {ev, title: 'Lien cliqué', sub: linkLabel(ev.url)};
-      n++;
-      const base = n === 1 ? 'Ouvert' : `Ré-ouvert (${ordinal(n)} fois)`;
-      return {ev, title: ev.reason === 'implied' ? `${base}, déduit du clic` : base, sub: ev.reason === 'implied' ? 'Le clic prouve l’ouverture (images bloquées)' : VIA[ev.reason] || ''};
-    }).reverse();
+    const rows = describe(r.events);
     const counted = rows.filter((x) => !x.ignored);
     const ignored = rows.filter((x) => x.ignored);
-    const item = (x) => `
-      <div class="pt-event ${x.ignored ? 'pt-event-ignored' : ''}">
-        <div class="pt-event-icon ${x.ev.type === 'click' ? 'click' : 'open'}">${x.ev.type === 'click' ? '↗' : '◉'}</div>
-        <div class="pt-event-copy"><strong>${esc(x.title)}</strong><span>${esc(when(x.ev.created_at))}${x.sub ? ` · ${esc(x.sub)}` : ''}</span></div>
-      </div>`;
-    const isOpen = opened(e);
-    body.innerHTML = `
-      <button class="pt-back">‹ Tous les mails suivis</button>
-      <div class="pt-detail-title">${esc(e.subject || '(sans objet)')}</div>
-      <div class="pt-detail-meta">Envoyé ${esc(when(e.sent_at || e.created_at))}<br>À ${esc(e.recipient || 'destinataire inconnu')}</div>
-      <div class="pt-detail-status ${isOpen ? 'opened' : ''}">
-        <span class="pt-detail-checks">${isOpen ? '✓✓' : '✓'}</span>
-        <span>${(e.open_count || 0) > 0 ? `Ouvert ${times(e.open_count)}` : 'Pas encore d’ouverture détectée'}</span>
-        ${(e.click_count || 0) > 0 ? `<span class="pt-click-count">${clicksTxt(e.click_count)}</span>` : ''}
+    const w = who(e.recipient);
+    const h = headline(e);
+    const facts = [
+      ['Envoyé', when(sentAt(e))],
+      (e.open_count || 0) > 0 && ['Première ouverture', when(e.first_open_at)],
+      (e.open_count || 0) > 0 && ['Dernière ouverture', ago(e.last_open_at)],
+      clicked(e) && ['Dernier clic', ago(e.last_click_at)],
+    ].filter(Boolean);
+    const timeline = [...counted, {kind: 'sent', ev: {created_at: sentAt(e)}, title: 'Envoyé', sub: w.more ? `À ${w.more + 1} destinataires` : ''}];
+    const extra = w.name !== w.email || w.more ? e.recipient : '';
+    put(body, {html: `
+      ${backBtn()}
+      <h2 class="pt-detail-subject">${esc(e.subject || '(sans objet)')}</h2>
+      <div class="pt-detail-to">${avatar(w)}<div><b>${whoName(w)}</b>${extra ? `<span>${esc(extra)}</span>` : ''}</div></div>
+      <div class="pt-hero pt-s-${stateOf(e)}">
+        <span class="pt-hero-ico">${ticksOf(e)}</span>
+        <div><div class="pt-hero-title">${esc(h.title)}${clicked(e) ? `<span class="pt-hero-clicks">${icon('link')}${clicksTxt(e.click_count)}</span>` : ''}</div><div class="pt-hero-sub">${esc(h.sub)}</div></div>
       </div>
-      ${(e.open_count || 0) > 0 ? `<div class="pt-facts"><div><span>Première ouverture</span><b>${esc(when(e.first_open_at))}</b></div><div><span>Dernière ouverture</span><b>${esc(ago(e.last_open_at))}</b></div>${(e.click_count || 0) > 0 ? `<div><span>Dernier clic</span><b>${esc(ago(e.last_click_at))}</b></div>` : ''}</div>` : ''}
+      <div class="pt-facts">${facts.map(([k, v]) => `<div><span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>
       <div class="pt-section-title">Activité</div>
-      <div class="pt-timeline">${counted.length ? counted.map(item).join('') : '<div class="pt-empty pt-empty-activity">Aucune ouverture ni aucun clic pour l’instant.</div>'}</div>
-      ${ignored.length ? `<details class="pt-ignored"><summary>${ignored.length > 1 ? `${ignored.length} signaux ignorés` : '1 signal ignoré'} (vous-même, doublons, robots)</summary>${ignored.map(item).join('')}</details>` : ''}
-      <p class="pt-note">Une ouverture n’est détectée que si les images s’affichent chez le destinataire ; un clic compte aussi comme ouverture. Vos propres lectures, les doublons et les antivirus ne sont pas comptés.</p>`;
-    body.querySelector('.pt-back').addEventListener('click', () => { selectedId = null; renderList(); });
+      <div class="pt-tl">${byDay(timeline, (x) => x.ev.created_at, (x) => tlItem(x))}</div>
+      ${ignored.length ? `<details class="pt-ignored"><summary>${icon('shield')}<span>${ignored.length > 1 ? `${ignored.length} signaux ignorés` : '1 signal ignoré'}</span><small>vous-même, doublons, robots</small>${icon('next')}</summary><div class="pt-tl pt-tl-flat">${ignored.map((x) => tlItem(x, true)).join('')}</div></details>` : ''}
+      <p class="pt-note">Une ouverture n’est visible que si le destinataire affiche les images. Un clic compte aussi comme ouverture. Vos propres lectures, les doublons et les antivirus ne sont pas comptés.</p>`});
+    paintAll();
   }
 
   /* ——— Boucle ——— */
@@ -794,6 +1194,7 @@
     scanComposes();
     scanMessages();
     scanRows();
+    learnNames();
     ensureLauncher();
   }
   const queueScan = () => {
@@ -802,7 +1203,11 @@
     requestAnimationFrame(() => { queued = false; scanAll(); });
   };
 
-  loadConfig().then(() => {
+  Promise.all([loadConfig(), store.get('ptLastSeen'), store.get('ptNames')]).then(([, seen, saved]) => {
+    if (seen) lastSeen = seen;
+    else store.set({ptLastSeen: lastSeen});
+    seenBefore = lastSeen;
+    for (const [email, name] of Object.entries(saved || {})) if (!names.has(email)) names.set(email, name);
     new MutationObserver(queueScan).observe(document.documentElement, {childList: true, subtree: true});
     scanAll();
     refreshData(true);

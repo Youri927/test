@@ -7,50 +7,60 @@
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <main>
-    <header>
-      <div>
-        <h1>Prospect Tracker</h1>
-        <p>Ouvertures et clics de vos mails</p>
-      </div>
-      <button id="settingsBtn" class="ghost">Réglages</button>
-    </header>
+  <header class="head">
+    <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 12.5L6 17 16.5 6.5"/><path d="M10 15.5l1.5 1.5L22 6.5"/></svg></span>
+    <div class="brand">
+      <h1>Suivi des mails</h1>
+      <p id="conn" class="conn"><i></i><span>Connexion…</span></p>
+    </div>
+    <button id="refreshBtn" class="icon-btn" title="Actualiser" aria-label="Actualiser"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4.5v4.2h-4.2"/></svg></button>
+    <button id="settingsBtn" class="icon-btn" title="Réglages" aria-label="Réglages"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button>
+  </header>
 
-    <section id="dashboard">
-      <div class="summary">
-        <div><strong id="sentCount">0</strong><span>Suivis</span></div>
-        <div><strong id="openCount">0</strong><span>Ouverts</span></div>
-        <div><strong id="clickCount">0</strong><span>Cliqués</span></div>
-      </div>
-      <div class="toolbar">
-        <span id="status">Chargement…</span>
-        <button id="refreshBtn">Actualiser</button>
-      </div>
-      <div id="emails" class="emails"></div>
-    </section>
+  <section id="dashboard">
+    <div class="stats">
+      <div class="stat k-sent"><b id="sentCount">0</b><span>Suivis</span></div>
+      <div class="stat k-open"><b id="openCount">0</b><span>Ouverts</span></div>
+      <div class="stat k-click"><b id="clickCount">0</b><span>Cliqués</span></div>
+    </div>
+    <div class="rate">
+      <div class="rate-top"><span>Taux d’ouverture</span><b id="rate">0 %</b></div>
+      <div class="rate-bar"><i id="rateBar"></i></div>
+    </div>
+    <h2>Derniers mails</h2>
+    <div id="emails" class="emails"></div>
+  </section>
 
-    <section id="settings" hidden>
-      <label>Adresse du serveur de suivi
-        <input id="apiBase" type="url" placeholder="https://….supabase.co/functions/v1/mail-tracker" />
+  <section id="settings" hidden>
+    <button id="backBtn" class="back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5"/></svg>Retour</button>
+    <h2>Réglages</h2>
+    <label class="switch-row">
+      <span><b>Suivre les nouveaux mails</b><small>Activé par défaut à chaque nouveau mail. Vous pouvez toujours le couper mail par mail, à côté du bouton Envoyer.</small></span>
+      <input id="trackingDefault" type="checkbox" class="switch" checked />
+    </label>
+    <label class="switch-row">
+      <span><b>Notifications</b><small>Ouverture, ré-ouverture et clic sur un lien.</small></span>
+      <input id="notificationsEnabled" type="checkbox" class="switch" checked />
+    </label>
+    <details class="advanced">
+      <summary>Connexion au serveur</summary>
+      <label class="field"><span>Adresse du serveur de suivi</span>
+        <input id="apiBase" type="url" placeholder="https://….supabase.co/functions/v1/mail-tracker" spellcheck="false" />
       </label>
-      <label>Jeton
-        <input id="apiToken" type="password" placeholder="Le TRACKER_TOKEN de la fonction Supabase" />
+      <label class="field"><span>Jeton</span>
+        <input id="apiToken" type="password" placeholder="Le TRACKER_TOKEN de la fonction Supabase" spellcheck="false" />
       </label>
-      <label class="check">
-        <input id="trackingDefault" type="checkbox" checked />
-        Suivre les nouveaux mails par défaut
-      </label>
-      <label class="check">
-        <input id="notificationsEnabled" type="checkbox" checked />
-        Notifications Chrome (ouverture, ré-ouverture, clic)
-      </label>
-      <div class="settings-actions">
-        <button id="backBtn" class="ghost">Retour</button>
-        <button id="saveBtn">Enregistrer</button>
-      </div>
-      <p class="hint">Après un changement, rechargez Gmail.</p>
-    </section>
-  </main>
+    </details>
+    <div class="actions">
+      <span id="saved" class="saved" hidden>Enregistré. Rechargez Gmail.</span>
+      <button id="saveBtn" class="primary">Enregistrer</button>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <button id="gmailBtn" class="text-btn">Ouvrir Gmail</button>
+    <span>Le détail de chaque mail : onglet <b>✓✓</b> sur le bord droit de Gmail.</span>
+  </footer>
   <script type="module" src="popup.js"></script>
 </body>
 </html>

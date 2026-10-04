@@ -1,10 +1,43 @@
 import {DEFAULTS} from './config.js';
 
 const $ = (id) => document.getElementById(id);
-const fmt = new Intl.DateTimeFormat('fr-FR', {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'});
-const when = (v) => (v ? fmt.format(new Date(v)) : '—');
+const fmtDay = new Intl.DateTimeFormat('fr-FR', {day: 'numeric', month: 'short'});
+const fmtTime = new Intl.DateTimeFormat('fr-FR', {hour: '2-digit', minute: '2-digit'});
 const esc = (s) => String(s ?? '').replace(/[&<>'"]/g, (c) => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[c]));
 const opened = (e) => (e.open_count || 0) > 0 || (e.click_count || 0) > 0;
+const clicked = (e) => (e.click_count || 0) > 0;
+const ts = (iso) => (iso ? Date.parse(iso) || 0 : 0);
+const times = (n) => (n === 1 ? '1 fois' : `${n} fois`);
+const ICON = {
+  tick: '<path d="M4.5 12.5l4.5 4.5L19.5 6.5"/>',
+  ticks: '<path d="M1.5 12.5L6 17 16.5 6.5"/><path d="M10 15.5l1.5 1.5L22 6.5"/>',
+  link: '<path d="M10 13.5a3.75 3.75 0 0 0 5.3.2l2.9-2.9a3.75 3.75 0 0 0-5.3-5.3l-1.2 1.2"/><path d="M14 10.5a3.75 3.75 0 0 0-5.3-.2l-2.9 2.9a3.75 3.75 0 0 0 5.3 5.3l1.2-1.2"/>',
+  inbox: '<path d="M3.5 13.5l2.6-7.2A2 2 0 0 1 8 5h8a2 2 0 0 1 1.9 1.3l2.6 7.2V18a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 18z"/><path d="M3.5 13.5h4.5l1.5 2.5h5l1.5-2.5h4.5"/>',
+};
+const icon = (n) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
+
+function ago(iso) {
+  if (!iso) return '';
+  const min = Math.max(0, Math.round((Date.now() - ts(iso)) / 60000));
+  if (min < 1) return 'à l’instant';
+  if (min < 60) return `il y a ${min} min`;
+  const h = Math.round(min / 60);
+  if (h < 24) return `il y a ${h} h`;
+  return `le ${fmtDay.format(new Date(iso))}`;
+}
+const shortWhen = (iso) => {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toDateString() === new Date().toDateString() ? fmtTime.format(d) : fmtDay.format(d);
+};
+const lastActivity = (e) => Math.max(ts(e.last_click_at), ts(e.last_open_at), ts(e.sent_at || e.created_at));
+
+let names = {};
+
+function setConn(kind, text) {
+  $('conn').className = `conn ${kind}`;
+  $('conn').querySelector('span').textContent = text;
+}
 
 async function loadConfig() {
   const cfg = await chrome.storage.sync.get(['apiBase', 'apiToken', 'notificationsEnabled', 'trackingDefault']);
@@ -12,6 +45,7 @@ async function loadConfig() {
   $('apiToken').value = cfg.apiToken || DEFAULTS.apiToken;
   $('notificationsEnabled').checked = cfg.notificationsEnabled !== false;
   $('trackingDefault').checked = cfg.trackingDefault !== false;
+  if (!$('apiToken').value) $('settings').querySelector('.advanced').open = true;
   return cfg;
 }
 
@@ -22,55 +56,82 @@ async function saveConfig() {
     notificationsEnabled: $('notificationsEnabled').checked,
     trackingDefault: $('trackingDefault').checked,
   });
-  $('settings').hidden = true;
-  $('dashboard').hidden = false;
-  refresh();
+  $('saved').hidden = false;
+  setTimeout(() => { $('saved').hidden = true; show('dashboard'); refresh(); }, 900);
+}
+
+function show(view) {
+  $('settings').hidden = view !== 'settings';
+  $('dashboard').hidden = view !== 'dashboard';
+  document.body.dataset.view = view;
+}
+
+function row(e) {
+  const email = String(e.recipient || '').split(',')[0].trim().toLowerCase();
+  const more = String(e.recipient || '').split(',').filter((s) => s.trim()).length - 1;
+  const name = names[email] || email || 'Destinataire inconnu';
+  const state = clicked(e) ? 'clicked' : opened(e) ? 'opened' : 'sent';
+  const meta = (e.open_count || 0) > 0 ? `Ouvert ${times(e.open_count)} · ${ago(e.last_open_at)}` : clicked(e) ? 'Ouvert' : 'Pas encore ouvert';
+  const q = `in:sent subject:"${String(e.subject || '').replace(/"/g, '')}"${email ? ` to:${email}` : ''}`;
+  return `
+    <button class="email" data-q="${esc(q)}" title="Retrouver ce mail dans Gmail">
+      <span class="status s-${state}">${icon(opened(e) ? 'ticks' : 'tick')}</span>
+      <span class="main">
+        <span class="top"><b>${esc(name)}${more > 0 ? ` <em>+${more}</em>` : ''}</b><time>${esc(shortWhen(e.sent_at || e.created_at))}</time></span>
+        <span class="subject">${esc(e.subject || '(sans objet)')}</span>
+        <span class="meta"><span class="${opened(e) ? 'm-open' : 'm-sent'}">${esc(meta)}</span>${clicked(e) ? `<span class="m-click">${icon('link')}${e.click_count === 1 ? '1 clic' : `${e.click_count} clics`}</span>` : ''}</span>
+      </span>
+    </button>`;
 }
 
 function render(emails) {
-  $('sentCount').textContent = emails.length;
-  $('openCount').textContent = emails.filter(opened).length;
-  $('clickCount').textContent = emails.filter((e) => e.click_count > 0).length;
-  $('status').textContent = `${emails.length} mail${emails.length > 1 ? 's' : ''} suivi${emails.length > 1 ? 's' : ''}`;
-  if (!emails.length) {
-    $('emails').innerHTML = '<div class="empty">Aucun mail suivi pour l’instant.<br>Le suivi s’active à côté du bouton Envoyer de Gmail.</div>';
+  const total = emails.length;
+  const nOpen = emails.filter(opened).length;
+  const rate = total ? Math.round((nOpen / total) * 100) : 0;
+  $('sentCount').textContent = total;
+  $('openCount').textContent = nOpen;
+  $('clickCount').textContent = emails.filter(clicked).length;
+  $('rate').textContent = `${rate} %`;
+  $('rateBar').style.width = `${rate}%`;
+  if (!total) {
+    $('emails').innerHTML = `<div class="empty"><span>${icon('inbox')}</span><b>Aucun mail suivi pour l’instant</b>Le suivi s’active à côté du bouton Envoyer de Gmail.</div>`;
     return;
   }
-  $('emails').innerHTML = emails.slice(0, 40).map((e) => `
-    <article class="email">
-      <div class="email-top">
-        <div class="recipient">${esc(e.recipient || 'Destinataire inconnu')}</div>
-        <div class="time">${when(e.sent_at || e.created_at)}</div>
-      </div>
-      <div class="subject">${esc(e.subject || '(sans objet)')}</div>
-      <div class="metrics">
-        <span class="badge ${e.open_count ? 'on' : ''}">Ouvert ${e.open_count || 0}×</span>
-        <span class="badge ${e.click_count ? 'click' : ''}">${e.click_count || 0} clic${e.click_count > 1 ? 's' : ''}</span>
-        <span class="badge">Dernier signal : ${when([e.last_click_at, e.last_open_at].filter(Boolean).sort().at(-1))}</span>
-      </div>
-    </article>`).join('');
+  // les mails qui viennent de bouger d'abord
+  $('emails').innerHTML = [...emails].sort((a, b) => lastActivity(b) - lastActivity(a)).slice(0, 30).map(row).join('');
 }
 
 let busy = false;
 async function refresh() {
   if (busy) return;
   busy = true;
-  $('refreshBtn').disabled = true;
-  $('status').textContent = 'Chargement…';
+  $('refreshBtn').classList.add('spin');
   chrome.runtime.sendMessage({type: 'refresh', force: true}, (r) => {
     busy = false;
-    $('refreshBtn').disabled = false;
+    $('refreshBtn').classList.remove('spin');
     if (chrome.runtime.lastError || !r?.ok) {
-      $('status').textContent = r?.error || 'Service de l’extension injoignable';
+      const err = r?.error || 'Service de l’extension injoignable';
+      setConn('ko', /jeton/i.test(err) ? 'Jeton manquant (réglages)' : err);
       render([]);
       return;
     }
+    setConn('ok', 'Connecté · suivi actif');
     render(r.emails || []);
   });
 }
 
-$('settingsBtn').addEventListener('click', async () => { await loadConfig(); $('dashboard').hidden = true; $('settings').hidden = false; });
-$('backBtn').addEventListener('click', () => { $('settings').hidden = true; $('dashboard').hidden = false; });
+$('settingsBtn').addEventListener('click', async () => { await loadConfig(); show(document.body.dataset.view === 'settings' ? 'dashboard' : 'settings'); });
+$('backBtn').addEventListener('click', () => show('dashboard'));
 $('saveBtn').addEventListener('click', saveConfig);
 $('refreshBtn').addEventListener('click', refresh);
-loadConfig().then(refresh);
+$('gmailBtn').addEventListener('click', () => chrome.tabs.create({url: 'https://mail.google.com/mail/'}));
+$('emails').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-q]');
+  if (b) chrome.tabs.create({url: `https://mail.google.com/mail/#search/${encodeURIComponent(b.dataset.q)}`});
+});
+
+show('dashboard');
+Promise.all([loadConfig(), chrome.storage.local.get('ptNames').catch(() => ({}))]).then(([, local]) => {
+  names = local?.ptNames || {};
+  refresh();
+});
