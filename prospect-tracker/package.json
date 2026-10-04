@@ -1,0 +1,10 @@
+{
+  "name": "prospect-tracker",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Suivi des ouvertures et clics de mails Gmail : extension Chrome + fonction Supabase",
+  "scripts": {
+    "test": "node --experimental-strip-types --no-warnings --test tests/server.test.ts && node --test tests/background.test.mjs && node tests/content.test.mjs",
+    "bundle": "node tools/bundle.mjs"
+  }
+}

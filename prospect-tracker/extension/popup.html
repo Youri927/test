@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prospect Tracker</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Prospect Tracker</h1>
+        <p>Ouvertures et clics de vos mails</p>
+      </div>
+      <button id="settingsBtn" class="ghost">Réglages</button>
+    </header>
+
+    <section id="dashboard">
+      <div class="summary">
+        <div><strong id="sentCount">0</strong><span>Suivis</span></div>
+        <div><strong id="openCount">0</strong><span>Ouverts</span></div>
+        <div><strong id="clickCount">0</strong><span>Cliqués</span></div>
+      </div>
+      <div class="toolbar">
+        <span id="status">Chargement…</span>
+        <button id="refreshBtn">Actualiser</button>
+      </div>
+      <div id="emails" class="emails"></div>
+    </section>
+
+    <section id="settings" hidden>
+      <label>Adresse du serveur de suivi
+        <input id="apiBase" type="url" placeholder="https://….supabase.co/functions/v1/mail-tracker" />
+      </label>
+      <label>Jeton
+        <input id="apiToken" type="password" placeholder="Le TRACKER_TOKEN de la fonction Supabase" />
+      </label>
+      <label class="check">
+        <input id="trackingDefault" type="checkbox" checked />
+        Suivre les nouveaux mails par défaut
+      </label>
+      <label class="check">
+        <input id="notificationsEnabled" type="checkbox" checked />
+        Notifications Chrome (ouverture, ré-ouverture, clic)
+      </label>
+      <div class="settings-actions">
+        <button id="backBtn" class="ghost">Retour</button>
+        <button id="saveBtn">Enregistrer</button>
+      </div>
+      <p class="hint">Après un changement, rechargez Gmail.</p>
+    </section>
+  </main>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
