@@ -6,7 +6,7 @@ de 25 mm pour le carrelage de verre. Ce sont des rendus de matière (relief, omb
 pas des photos : ils servent à comparer les finitions, sous l'eau, dans le configurateur du site.
 L'éclairage est volontairement doux : l'eau et les caustiques sont ajoutées par le shader du site.
 
-    python3 tools/finishes.py                  → src/img/fin-*.webp (1024 px)
+    python3 tools/finishes.py                  → src/img/fin-*.webp (calculées en 1024 px, enregistrées en 768)
     python3 tools/finishes.py quartz beadcrete → seulement celles-ci
 """
 import sys
@@ -171,10 +171,16 @@ def shade(albedo, h, strength, spec=0.1, shine=40, ao=None, amb=0.62, diff=0.42)
     return out + hs[..., None] * s
 
 
-def save(img, name, q=90):
-    a = np.clip(img, 0, 1)
-    Image.fromarray((a * 255 + 0.5).astype(np.uint8)).save(OUT / f'{name}.webp', 'WEBP', quality=q, method=6)
-    print('✓', name, img.shape[0])
+def save(img, name, q=80, size=None):
+    """Enregistre en WebP ; size : réduction en gardant le raccord (l'image est rééchantillonnée sur 3 × 3 tuiles)."""
+    a = (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
+    im = Image.fromarray(a)
+    if size and size != a.shape[0]:
+        n = a.shape[0]
+        big = Image.fromarray(np.tile(a, (3, 3, 1))).resize((size * 3, size * 3), Image.LANCZOS)
+        im = big.crop((size, size, size * 2, size * 2))
+    im.save(OUT / f'{name}.webp', 'WEBP', quality=q, method=6)
+    print('✓', name, im.size[0])
 
 
 def palette(cols, m, rng, weights=None, spread=(0.9, 1.08)):
@@ -397,22 +403,22 @@ def worn(n, seed=5):
 
 def stripped(n, seed=7):
     """Coque mise à nu au sablage : béton projeté gris, granulats, quelques îlots d'ancien enduit."""
-    base = sand(n, '#A3A199', seed, mott=0.035, grain=0.12)
+    base = sand(n, '#A6A49C', seed, mott=0.02, grain=0.14)
     h = 0.35 * noise(n, 1, 4, seed + 1) + 0.25 * noise(n, 5, 30, seed + 2)
     rng = np.random.default_rng(seed + 3)
     pts = poisson(n, 9, seed + 3)
     m = len(pts)
     a = rng.uniform(0.25, 0.45, m) * 9
     gi, rho, _ = grains(n, pts, a, a * rng.uniform(0.6, 0.95, m), rng.uniform(0, np.pi, m), seed + 4, k=6, wobble=0.12, angular=True)
-    keep = (rng.random(m) < 0.45)[gi] & (rho < 1)
+    keep = (rng.random(m) < 0.3)[gi] & (rho < 1)
     stones = palette(['#8C8A84', '#B9B5AA', '#6F6E6A', '#C9C4B8'], m, rng)[gi]
     alb = np.where(keep[..., None], stones, base)
     h = np.where(keep, h + 0.5 * np.clip(1 - rho, 0, 1) ** 0.4, h)
-    old = (noise(n, 60, 400, seed + 5) + 0.25 * noise(n, 4, 24, seed + 6)) > 1.5
+    old = (noise(n, 60, 400, seed + 5) + 0.3 * noise(n, 4, 24, seed + 6)) > 2.1
     alb = np.where(old[..., None], sand(n, '#DCDAD1', seed + 7, grain=0.05), alb)
     h = np.where(old, h + 0.3, h)
-    damp = smooth(0.6, 1.6, noise(n, 60, 400, seed + 8))
-    alb = alb * (1 - 0.18 * damp)[..., None]
+    damp = noise(n, 150, 900, seed + 8)
+    alb = alb * (1 - 0.05 * damp)[..., None]
     ao = cavity(h, 2.5, 1.0, 0.6)
     return shade(alb, h, 3.0, 0.02, 20, ao, amb=0.64, diff=0.4)
 
@@ -451,7 +457,7 @@ if __name__ == '__main__':
     args = sys.argv[1:]
     for name, fn in FINISHES.items():
         if not args or name in args:
-            save(fn(1024), f'fin-{name}')
+            save(fn(1024), f'fin-{name}', size=768)
     for name, fn in EXTRA.items():
         if not args or name in args:
-            save(fn(), name, q=86)
+            save(fn(), name, q=78, size=1536 if name == 'worn' else None)
