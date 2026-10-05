@@ -10,7 +10,7 @@ L'analyse du site actuel et les choix de direction sont dans `ANALYSE.md`. Les p
 | --- | --- |
 | Accueil | Sur fond blanc d'enduit : « Love your pool again. », appel, devis. À côté, le même bassin avant et après rénovation, vu de dessus sous l'eau. Au chargement, un trait passe comme une lisseuse et efface l'ancien fond jusqu'au milieu ; on compare ensuite en faisant glisser (souris, doigt ou clavier). « Now booking November, December, January ». |
 | Confiance | 12+ ans, licensed / bonded / insured, satisfaction garantie, Google « Excellent » (27 avis), devis gratuit. |
-| 01 Signes | Les 6 signes d'usure de la FAQ du site, à cocher. Chacun est repéré sur une illustration d'un vieux bassin à moitié vidé. |
+| 01 Signes | Les 6 signes d'usure de la FAQ du site, à cocher. À côté, une coupe technique au trait du bord du bassin (plage, margelle, frise, enduit, coque, eau), à la manière d'un détail d'architecte : chaque défaut y est dessiné à sa place (enduit qui s'écaille, surface rugueuse, taches, dépôt calcaire, niveau d'eau en baisse, faïençage avec un détail en plan). Le repère correspondant s'allume au survol ou quand on coche. Le dessin se trace à l'arrivée dans l'écran. |
 | 02 Finitions | Les 9 finitions du site, rendues sous l'eau. Chaque pastille montre la matière sèche ; la finition choisie s'ouvre en cercle depuis le centre de l'aperçu. Fiche : texte du site, toucher, durée, lavage acide. « Ask about this finish » préremplit le formulaire. |
 | 03 Services | Les 5 services en cartes qui s'empilent au défilement, avec les photos de chantier. |
 | 04 Déroulé | Les 7 étapes du site. L'aperçu raconte le chantier au défilement : la ligne d'eau recule (vidange), le sablage, la pose de la finition, la ligne d'eau avance (remplissage), l'eau trouble puis claire. Une jauge suit le niveau d'eau. |
@@ -35,6 +35,7 @@ La page n'a rien à calculer : toutes les vues d'eau sont des images rendues à 
   - Les 6 états du chantier.
   - Les pastilles sèches du sélecteur.
   - Commande : `node tools/stills.mjs`.
+- **`tools/section.py`** : génère la coupe technique (`src/section.svg`, insérée dans la page à la construction).
 - **`tools/finishes.py`** : génère les matières, rangées dans `textures/` : les 9 finitions, le vieil enduit abîmé et la coque sablée.
   - Chaque matière est modélisée à l'échelle réelle (1 px ≈ 0,24 mm) : galets, éclats de quartz, billes de verre, mosaïque.
   - Rendu avec relief, occlusion et brillance ; textures raccordables sans couture.

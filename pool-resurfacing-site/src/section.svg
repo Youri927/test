@@ -1,0 +1,111 @@
+<svg class="section" viewBox="0 26 720 534" role="img" aria-labelledby="sec-t sec-d">
+<title id="sec-t">Section through an aged plaster pool</title>
+<desc id="sec-d">Technical drawing of a pool edge in section: deck, coping, waterline tile, plaster finish over a gunite shell. Marked: 1 peeling plaster, 2 rough texture, 3 stains, 4 chalky residue, 5 water level below normal, 6 spider-web cracks, with a plan detail.</desc>
+<defs>
+  <pattern id="p-shell" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" class="hatch"/></pattern>
+  <pattern id="p-soil" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="3" cy="4" r=".8" class="soil"/><circle cx="11" cy="9" r=".6" class="soil"/><circle cx="6" cy="13" r=".7" class="soil"/><circle cx="14" cy="2" r=".5" class="soil"/></pattern>
+  <pattern id="p-water" width="22" height="9" patternUnits="userSpaceOnUse"><line x1="2" y1="4.5" x2="12" y2="4.5" class="wline"/></pattern>
+  <clipPath id="c-plan"><circle cx="300" cy="288" r="56"/></clipPath>
+</defs>
+
+<!-- terre, coque, enduit -->
+<path class="soil-fill" d="M0,130 H100 V420 A130,130 0 0 0 230,550 H720 V560 H0 Z"/>
+<path class="shell" d="M100,130 H170 V420 A60,60 0 0 0 230,480 H720 V550 H230 A130,130 0 0 1 100,420 Z"/>
+<path class="water" d="M181,205 H720 V470 H230 A50,50 0 0 1 180,420 V205 Z"/>
+<path class="water-hatch" d="M181,205 H720 V470 H230 A50,50 0 0 1 180,420 V205 Z"/>
+<path class="plaster" d="M170,178 H180 V420 A50,50 0 0 0 230,470 H720 V480 H230 A60,60 0 0 1 170,420 Z"/>
+
+<!-- plage, margelle, frise de carrelage -->
+<rect class="deck" x="0" y="112" width="72" height="18"/>
+<path class="coping" d="M72,108 H185 A11,11 0 0 1 185,130 H72 Z"/>
+<rect class="tile" x="170" y="132" width="11.5" height="46"/>
+<path class="joint" d="M170,147.3 H181.5 M170,162.6 H181.5"/>
+
+<!-- contours au trait -->
+<path class="ln o" pathLength="1" d="M0,112 H72 M72,130 H0"/>
+<path class="ln o" pathLength="1" d="M72,108 H185 A11,11 0 0 1 185,130 H72 Z"/>
+<path class="ln o" pathLength="1" d="M100,130 V420 A130,130 0 0 0 230,550 H720"/>
+<path class="ln o" pathLength="1" d="M181.5,132 V178 H180 V420 A50,50 0 0 0 230,470 H720"/>
+<path class="ln s" pathLength="1" d="M170,132 V420 A60,60 0 0 0 230,480 H720"/>
+<path class="ln s" pathLength="1" d="M170,132 H181.5"/>
+
+<!-- niveaux d'eau -->
+<path class="ln level-n" pathLength="1" d="M196,160 H720"/>
+<path class="ln level" pathLength="1" d="M181.5,205 H720"/>
+<path class="sym" d="M591,151 H605 L598,159 Z"/>
+<path class="sym sym--on" d="M591,196 H605 L598,204 Z"/>
+<path class="ln s" pathLength="1" d="M592,209 H604 M594.5,212.5 H601.5"/>
+
+<!-- 1 · enduit qui s'écaille -->
+<g class="def" data-def="1">
+  <path class="water" d="M269,468.5 H333.5 V481 H269 Z"/><path class="water-hatch" d="M269,468.5 H333.5 V481 H269 Z"/>
+  <polyline class="ln s acc" pathLength="1" points="270,480 274.5,479.5 279.4,479.8 283.3,478.8 286.6,479.2 289.6,478.9 294.2,479.1 298.9,479.5 303.3,479 307.5,479.3 312.1,478.5 316.1,478.9 319.2,478.9 323.5,478.4 328.2,479.5 331.9,478.9 332,479.3"/>
+  <path class="plaster acc-fill" d="M270,470 C292,466 312,458 335,449 L337,456.5 C315,465 294,473 270.5,480 Z"/>
+  <path class="ln o acc" pathLength="1" d="M270,470 C292,466 312,458 335,449 L337,456.5 C315,465 294,473 270.5,480"/>
+  <path class="ln o" pathLength="1" d="M230,470 H270 M333,470 H372"/>
+</g>
+
+<!-- 2 · surface rugueuse -->
+<g class="def" data-def="2">
+  <path class="water" d="M371,462 H453 V471 H371 Z"/><path class="water-hatch" d="M371,462 H453 V471 H371 Z"/>
+  <polygon class="plaster" points="372,470 375.2,468.9 379,469.2 382.5,468.1 385.2,467.6 387.9,467.9 390.6,469.2 394,466.4 396.8,468.7 400.5,466 404.2,468 408.5,469.3 412.7,468.4 415.5,469.1 418.7,466.5 421.6,467.3 425.4,468.1 429,469.3 431.7,468.7 435.5,467.9 438.6,467.3 442.1,468.4 446.1,466.9 449.1,467.4 452,466.3 452,470 452,480 372,480"/>
+  <polyline class="ln o acc" pathLength="1" points="372,470 375.2,468.9 379,469.2 382.5,468.1 385.2,467.6 387.9,467.9 390.6,469.2 394,466.4 396.8,468.7 400.5,466 404.2,468 408.5,469.3 412.7,468.4 415.5,469.1 418.7,466.5 421.6,467.3 425.4,468.1 429,469.3 431.7,468.7 435.5,467.9 438.6,467.3 442.1,468.4 446.1,466.9 449.1,467.4 452,466.3 452,470"/>
+</g>
+
+<!-- 3 · taches -->
+<g class="def" data-def="3">
+  <path class="stain acc-fill" d="M484,470.2 C500,469.6 538,469.8 556,470.2 L556,476 C540,478.5 502,478.8 484,475.5 Z"/>
+  <circle class="speck" cx="535.9" cy="476.7" r="0.6"/><circle class="speck" cx="521.6" cy="474.5" r="1.1"/><circle class="speck" cx="540.7" cy="476.8" r="0.9"/><circle class="speck" cx="546.7" cy="475.8" r="1"/><circle class="speck" cx="501.6" cy="471.2" r="0.6"/><circle class="speck" cx="510.5" cy="471.7" r="1.1"/><circle class="speck" cx="524" cy="475.4" r="0.9"/><circle class="speck" cx="532.3" cy="474.4" r="0.5"/><circle class="speck" cx="540.2" cy="476.2" r="0.9"/><circle class="speck" cx="522.4" cy="475.6" r="0.5"/><circle class="speck" cx="536.1" cy="472.8" r="0.6"/><circle class="speck" cx="504.1" cy="476.1" r="0.6"/><circle class="speck" cx="536.3" cy="477.8" r="0.8"/><circle class="speck" cx="512" cy="474.4" r="1"/><circle class="speck" cx="538.2" cy="475.3" r="0.9"/><circle class="speck" cx="491.3" cy="472" r="0.7"/><circle class="speck" cx="536.5" cy="473.1" r="0.9"/><circle class="speck" cx="486.8" cy="471.4" r="0.7"/><circle class="speck" cx="531.7" cy="475.8" r="1"/><circle class="speck" cx="505.8" cy="474.6" r="0.8"/><circle class="speck" cx="517.7" cy="471.8" r="1.1"/><circle class="speck" cx="499.5" cy="477.8" r="1.2"/><circle class="speck" cx="487.2" cy="474.2" r="1.1"/><circle class="speck" cx="551.8" cy="474.1" r="0.7"/><circle class="speck" cx="500.3" cy="477.6" r="0.6"/><circle class="speck" cx="525.5" cy="472" r="0.9"/><circle class="speck" cx="550.8" cy="471.9" r="1.1"/><circle class="speck" cx="520.6" cy="477.2" r="1"/><circle class="speck" cx="501.7" cy="477.3" r="0.8"/><circle class="speck" cx="487.7" cy="471" r="0.8"/><circle class="speck" cx="516.7" cy="473.1" r="0.6"/><circle class="speck" cx="509.4" cy="473.2" r="1.1"/><circle class="speck" cx="486.1" cy="476.3" r="1.1"/><circle class="speck" cx="494.2" cy="477.5" r="1"/><circle class="speck" cx="547.3" cy="473" r="0.8"/><circle class="speck" cx="512.7" cy="478" r="0.9"/><circle class="speck" cx="510.5" cy="474" r="0.7"/><circle class="speck" cx="489.3" cy="471.7" r="1.1"/><circle class="speck" cx="505.4" cy="477.5" r="0.7"/><circle class="speck" cx="504.1" cy="474.6" r="0.6"/>
+</g>
+
+<!-- 4 · dépôt calcaire -->
+<g class="def" data-def="4">
+  <circle class="chalk acc-dot" cx="604.5" cy="469" r="1.2"/><circle class="chalk acc-dot" cx="601.1" cy="469" r="0.8"/><circle class="chalk acc-dot" cx="623.6" cy="468.9" r="1"/><circle class="chalk acc-dot" cx="637.3" cy="468.9" r="1.2"/><circle class="chalk acc-dot" cx="660.5" cy="468.5" r="0.9"/><circle class="chalk acc-dot" cx="620.9" cy="468.4" r="1.2"/><circle class="chalk acc-dot" cx="672.4" cy="468.8" r="0.8"/><circle class="chalk acc-dot" cx="610.1" cy="468.5" r="1"/><circle class="chalk acc-dot" cx="640.7" cy="469.4" r="1"/><circle class="chalk acc-dot" cx="621.8" cy="469.2" r="1"/><circle class="chalk acc-dot" cx="672" cy="468.7" r="1.1"/><circle class="chalk acc-dot" cx="648.2" cy="467.5" r="0.7"/><circle class="chalk acc-dot" cx="667.4" cy="468.8" r="1.2"/><circle class="chalk acc-dot" cx="623.7" cy="466" r="0.9"/><circle class="chalk acc-dot" cx="598.9" cy="469" r="0.7"/><circle class="chalk acc-dot" cx="608" cy="468.9" r="0.8"/><circle class="chalk acc-dot" cx="619.2" cy="469.4" r="0.8"/><circle class="chalk acc-dot" cx="598.7" cy="469.4" r="0.9"/><circle class="chalk acc-dot" cx="592.2" cy="467.7" r="0.8"/><circle class="chalk acc-dot" cx="611.7" cy="467.7" r="0.9"/><circle class="chalk acc-dot" cx="621.3" cy="467" r="1.3"/><circle class="chalk acc-dot" cx="630.1" cy="467.1" r="1"/><circle class="chalk acc-dot" cx="597.4" cy="468.2" r="0.9"/><circle class="chalk acc-dot" cx="661.3" cy="468.5" r="0.8"/><circle class="chalk acc-dot" cx="592" cy="467.4" r="0.8"/><circle class="chalk acc-dot" cx="636.7" cy="468.8" r="0.7"/><circle class="chalk acc-dot" cx="635.4" cy="466" r="1.1"/><circle class="chalk acc-dot" cx="612.5" cy="468.9" r="0.9"/><circle class="chalk acc-dot" cx="604.4" cy="469.1" r="1.2"/><circle class="chalk acc-dot" cx="618.4" cy="467.3" r="0.8"/><circle class="chalk acc-dot" cx="659.8" cy="466.1" r="1.2"/><circle class="chalk acc-dot" cx="660.4" cy="469.1" r="1.1"/><circle class="chalk acc-dot" cx="609.5" cy="467.8" r="0.7"/><circle class="chalk acc-dot" cx="592.4" cy="469.2" r="0.9"/><circle class="chalk acc-dot" cx="612.3" cy="467.9" r="1"/><circle class="chalk acc-dot" cx="670.6" cy="465.4" r="1.3"/><circle class="chalk acc-dot" cx="672.1" cy="468.6" r="0.8"/><circle class="chalk acc-dot" cx="606.9" cy="468.5" r="0.8"/><circle class="chalk acc-dot" cx="643.7" cy="466.8" r="1"/><circle class="chalk acc-dot" cx="646.2" cy="467.5" r="1.2"/><circle class="chalk acc-dot" cx="597.3" cy="467.4" r="1.2"/><circle class="chalk acc-dot" cx="654.5" cy="466.2" r="1"/><circle class="chalk acc-dot" cx="605.4" cy="469" r="1.2"/><circle class="chalk acc-dot" cx="673.6" cy="467.9" r="0.9"/><circle class="chalk acc-dot" cx="624.5" cy="466.8" r="0.8"/><circle class="chalk acc-dot" cx="600.9" cy="468.5" r="0.8"/><circle class="chalk acc-dot" cx="667.8" cy="469.1" r="1.2"/><circle class="chalk acc-dot" cx="674.3" cy="468.5" r="1.1"/><circle class="chalk acc-dot" cx="620.1" cy="468.5" r="0.7"/><circle class="chalk acc-dot" cx="673.5" cy="469.1" r="1.1"/><circle class="chalk acc-dot" cx="635.3" cy="467.7" r="1.2"/><circle class="chalk acc-dot" cx="661" cy="468.7" r="0.8"/><circle class="chalk acc-dot" cx="611.7" cy="469.1" r="1.1"/><circle class="chalk acc-dot" cx="612.3" cy="468.2" r="1"/><circle class="chalk acc-dot" cx="601.3" cy="468.1" r="1"/><circle class="chalk acc-dot" cx="640.2" cy="468.5" r="1.2"/><circle class="chalk acc-dot" cx="626.2" cy="467.7" r="1"/><circle class="chalk acc-dot" cx="635" cy="468.4" r="0.7"/><circle class="chalk acc-dot" cx="627.9" cy="469.3" r="1.2"/><circle class="chalk acc-dot" cx="604.8" cy="469.3" r="1"/><circle class="chalk acc-dot" cx="652.4" cy="468" r="1"/><circle class="chalk acc-dot" cx="637.8" cy="468.9" r="1.2"/><circle class="chalk acc-dot" cx="599.1" cy="468.2" r="0.9"/><circle class="chalk acc-dot" cx="656.4" cy="468.9" r="1"/><circle class="chalk acc-dot" cx="638.3" cy="469.2" r="1"/><circle class="chalk acc-dot" cx="642.7" cy="465.7" r="1"/><circle class="chalk acc-dot" cx="634" cy="468.7" r="1"/><circle class="chalk acc-dot" cx="631.1" cy="467.7" r="1.3"/><circle class="chalk acc-dot" cx="650.1" cy="466.5" r="0.9"/><circle class="chalk acc-dot" cx="638.1" cy="466.6" r="1.3"/><circle class="chalk acc-dot" cx="662.2" cy="468.8" r="1"/><circle class="chalk acc-dot" cx="596.2" cy="468.7" r="0.8"/><circle class="chalk acc-dot" cx="596.3" cy="468" r="1.2"/><circle class="chalk acc-dot" cx="603.3" cy="466.8" r="1.1"/><circle class="chalk acc-dot" cx="646.8" cy="467.2" r="1.3"/><circle class="chalk acc-dot" cx="608.9" cy="466.6" r="1.3"/><circle class="chalk acc-dot" cx="624.3" cy="464.3" r="1.2"/><circle class="chalk acc-dot" cx="603.9" cy="469" r="1"/><circle class="chalk acc-dot" cx="634.3" cy="468.8" r="0.9"/><circle class="chalk acc-dot" cx="652.1" cy="468.4" r="0.7"/><circle class="chalk acc-dot" cx="637.6" cy="469.1" r="0.9"/><circle class="chalk acc-dot" cx="643.7" cy="469.3" r="1"/><circle class="chalk acc-dot" cx="595.5" cy="466.4" r="1.3"/><circle class="chalk acc-dot" cx="599" cy="469.1" r="0.9"/><circle class="chalk acc-dot" cx="593.4" cy="469.2" r="0.8"/><circle class="chalk acc-dot" cx="626.3" cy="468.1" r="1.2"/><circle class="chalk acc-dot" cx="660.4" cy="469.3" r="1.3"/><circle class="chalk acc-dot" cx="639.1" cy="468.4" r="1.1"/><circle class="chalk acc-dot" cx="597.7" cy="467" r="1"/><circle class="chalk acc-dot" cx="596.2" cy="468.5" r="1.3"/><circle class="chalk acc-dot" cx="644.6" cy="469.2" r="1.2"/><circle class="chalk acc-dot" cx="595.7" cy="468.7" r="1.2"/><circle class="chalk acc-dot" cx="629" cy="468.3" r="1.3"/><circle class="chalk acc-dot" cx="613" cy="467.6" r="0.8"/><circle class="chalk acc-dot" cx="635.3" cy="469.3" r="0.8"/><circle class="chalk acc-dot" cx="594.3" cy="468.6" r="0.8"/><circle class="chalk acc-dot" cx="616.8" cy="468.4" r="0.9"/><circle class="chalk acc-dot" cx="633" cy="466.7" r="0.8"/><circle class="chalk acc-dot" cx="619.8" cy="468.1" r="0.7"/><circle class="chalk acc-dot" cx="653" cy="469.3" r="1"/><circle class="chalk acc-dot" cx="606.3" cy="465.5" r="0.8"/><circle class="chalk acc-dot" cx="660.4" cy="468.8" r="1"/><circle class="chalk acc-dot" cx="632.6" cy="468.5" r="1"/><circle class="chalk acc-dot" cx="649.1" cy="467.9" r="1.3"/><circle class="chalk acc-dot" cx="619.5" cy="468.1" r="1.1"/><circle class="chalk acc-dot" cx="624.8" cy="467.1" r="0.9"/><circle class="chalk acc-dot" cx="594.7" cy="469" r="1.1"/><circle class="chalk acc-dot" cx="612" cy="468.9" r="0.8"/><circle class="chalk acc-dot" cx="597.3" cy="467.5" r="1.1"/><circle class="chalk acc-dot" cx="614.2" cy="466.5" r="0.8"/>
+  <circle class="float acc-dot" cx="618.3" cy="441.5" r="1"/><circle class="float acc-dot" cx="629.9" cy="434" r="1.5"/><circle class="float acc-dot" cx="669.9" cy="444.8" r="1"/><circle class="float acc-dot" cx="669.4" cy="435.8" r="1.1"/><circle class="float acc-dot" cx="596.1" cy="438.5" r="1.2"/><circle class="float acc-dot" cx="634.2" cy="431.6" r="1.2"/><circle class="float acc-dot" cx="596.4" cy="434" r="1"/><circle class="float acc-dot" cx="626.4" cy="425.6" r="0.9"/><circle class="float acc-dot" cx="619.1" cy="432.8" r="1.3"/><circle class="float acc-dot" cx="636.2" cy="452.5" r="1.3"/><circle class="float acc-dot" cx="650.4" cy="457.4" r="1.1"/><circle class="float acc-dot" cx="620.8" cy="461.4" r="1"/><circle class="float acc-dot" cx="651" cy="448.4" r="0.9"/><circle class="float acc-dot" cx="659.5" cy="457.9" r="1.3"/>
+</g>
+
+<!-- 5 · niveau en baisse : cote -->
+<g class="def" data-def="5">
+  <path class="ln dim acc" pathLength="1" d="M560,160 V205 M555,165 L565,155 M555,210 L565,200"/>
+</g>
+
+<!-- 6 · faïençage : fissures en coupe et détail en plan -->
+<g class="def" data-def="6">
+  <polyline class="ln crack acc" pathLength="1" points="181,292 176.4,293.2 172.1,292.4 168.5,291.8 163.9,290 160.5,291.1 157,289.2"/><polyline class="ln crack acc" pathLength="1" points="181,309 177.9,309.2 174.3,311.3 169.5,313.5 166,311.7 162.8,311.7 158.4,311.4 154.9,311.1"/>
+  <path class="ln lead" pathLength="1" d="M184,300 L243,294"/>
+  <circle class="plan-bg" cx="300" cy="288" r="56"/>
+  <g clip-path="url(#c-plan)">
+    <polyline class="ln crack-p acc" pathLength="1" points="300.7,286.6 310.6,287.1 321.4,287.4 329.3,282.3 339.3,274.7 347.2,269.1 356.8,270.7 366.1,261.4"/><polyline class="ln crack-p acc" pathLength="1" points="300.5,287.4 305.5,296.1 311.6,301.3 313.9,309.6 321.9,315.5 322.1,329.1 332.6,333.4 344.5,333.9 357.6,332.1"/><polyline class="ln crack-p acc" pathLength="1" points="299.2,287.3 296.8,297.3 293.9,307.7 291,316.3 290.4,325.3 292.2,333.2 297.9,345.7 294.5,355"/><polyline class="ln crack-p acc" pathLength="1" points="301.1,287.1 293.7,293.5 287.2,299.7 276.2,304.8 271.4,316.6 263.9,319.1 255.6,327 257.1,342.1"/><polyline class="ln crack-p acc" pathLength="1" points="299.7,289.3 289.1,285.9 277.1,285.6 269.5,288.7 259.9,286.2 248.5,281.6 239.4,274.5 230.6,271.2"/><polyline class="ln crack-p acc" pathLength="1" points="298.6,288.8 296.6,280.6 291.2,271.8 285.6,266.3 282.1,256.5 272.8,253.7 268.1,245.2 258,242 242.6,244"/><polyline class="ln crack-p acc" pathLength="1" points="299.4,287.9 303.2,276.6 306,265.6 305.4,257.1 310.5,246.1 303.8,236.4 308.3,227.4 303.5,217.8"/><polyline class="ln crack-p acc" pathLength="1" points="300.5,289.3 304.9,281.5 309.7,274.2 313.2,264.2 321.3,256.3 322.3,245.8 324.1,233.5 322.3,220.9"/>
+    <polyline class="ln crack-p acc" pathLength="1" points="315.7,287 313.4,295.8 310.4,304.7"/><polyline class="ln crack-p acc" pathLength="1" points="308.7,302 304.4,306.1 296.6,305.7"/><polyline class="ln crack-p acc" pathLength="1" points="284,299.7 288.3,292.1 285.2,287"/><polyline class="ln crack-p acc" pathLength="1" points="289.4,271.8 298.1,269.1 304,270"/><polyline class="ln crack-p acc" pathLength="1" points="303.3,273.3 308,272.7 314.2,274.5"/><polyline class="ln crack-p acc" pathLength="1" points="330.2,286.1 324.5,299.8 315.9,313.5"/><polyline class="ln crack-p acc" pathLength="1" points="293.6,321.1 283.2,316.1 276.8,304.9"/><polyline class="ln crack-p acc" pathLength="1" points="273.4,307.4 272.4,296.9 267.1,285.8"/><polyline class="ln crack-p acc" pathLength="1" points="281.7,259.9 294.2,260 306.4,259.5"/><polyline class="ln crack-p acc" pathLength="1" points="306.7,258.3 312.8,259.4 323.8,265.3"/><polyline class="ln crack-p acc" pathLength="1" points="290.9,334.6 278.5,325.7 260.9,316.5"/><polyline class="ln crack-p acc" pathLength="1" points="262.2,315.5 254.8,296.7 255.5,285.1"/><polyline class="ln crack-p acc" pathLength="1" points="257.1,285.2 258,265.9 274,248.2"/><polyline class="ln crack-p acc" pathLength="1" points="276.4,251.9 296,243.9 309.7,244.7"/><polyline class="ln crack-p acc" pathLength="1" points="309.9,243.8 325.1,251.8 332.2,257.3"/><polyline class="ln crack-p acc" pathLength="1" points="331.9,257.6 343.7,273.2 347.7,285"/>
+  </g>
+  <circle class="ln plan-ring" pathLength="1" cx="300" cy="288" r="56"/>
+  <text class="lab" x="300" y="361" text-anchor="middle">PLAN DETAIL</text>
+</g>
+
+<!-- légendes de structure -->
+<g class="labels">
+  <text class="lab" x="14" y="102">DECK</text>
+  <path class="ln lead-s" pathLength="1" d="M206,96 L190,111"/><text class="lab" x="210" y="99">COPING</text>
+  <path class="ln lead-s" pathLength="1" d="M206,143 L184,150"/><text class="lab" x="210" y="146">WATERLINE TILE</text>
+  <text class="lab" x="712" y="154" text-anchor="end">NORMAL LEVEL</text>
+  <text class="lab" x="712" y="199" text-anchor="end">CURRENT LEVEL</text>
+  <path class="ln lead-s" pathLength="1" d="M664,504 L664,476"/><rect class="tag-bg" x="606" y="506" width="116" height="18" rx="2"/><text class="lab" x="664" y="519" text-anchor="middle">PLASTER FINISH</text>
+  <rect class="tag-bg" x="398" y="506" width="104" height="18" rx="2"/><text class="lab" x="450" y="519" text-anchor="middle">GUNITE SHELL</text>
+  <text class="lab lab--soft" x="22" y="300">SOIL</text>
+</g>
+
+<!-- cartouche -->
+<g class="cartouche">
+  <path class="ln s" pathLength="1" d="M472,58 H712"/>
+  <text class="lab lab--title" x="472" y="48">SECTION A · AGED PLASTER POOL</text>
+  <text class="lab lab--soft" x="472" y="74">NOT TO SCALE</text>
+</g>
+
+<!-- repères -->
+<g class="pin" data-pin="1"><path class="lead ln" pathLength="1" d="M304.2,416.3 L318,457"/><circle class="dot" cx="300" cy="404" r="13"/><text class="num" x="300" y="408.4">1</text></g>
+<g class="pin" data-pin="2"><path class="lead ln" pathLength="1" d="M412,417 L412,466"/><circle class="dot" cx="412" cy="404" r="13"/><text class="num" x="412" y="408.4">2</text></g>
+<g class="pin" data-pin="3"><path class="lead ln" pathLength="1" d="M520,417 L520,472"/><circle class="dot" cx="520" cy="404" r="13"/><text class="num" x="520" y="408.4">3</text></g>
+<g class="pin" data-pin="4"><path class="lead ln" pathLength="1" d="M633,417 L633,464"/><circle class="dot" cx="633" cy="404" r="13"/><text class="num" x="633" y="408.4">4</text></g>
+<g class="pin" data-pin="5"><path class="lead ln" pathLength="1" d="M535,182 L556,182"/><circle class="dot" cx="522" cy="182" r="13"/><text class="num" x="522" y="186.4">5</text></g>
+<g class="pin" data-pin="6"><path class="lead ln" pathLength="1" d="M338.8,249.2 L338,250"/><circle class="dot" cx="348" cy="240" r="13"/><text class="num" x="348" y="244.4">6</text></g>
+</svg>

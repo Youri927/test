@@ -189,17 +189,64 @@ section { position: relative; }
 .signs__count { font-size: 15.5px; color: var(--ink-2); max-width: 30ch; }
 .signs__count > span:first-child { font-weight: 700; color: var(--ink); font-size: 18px; }
 .signs__figure { grid-column: 7 / -1; position: sticky; top: calc(var(--nav) + 28px); }
-.signs__img { position: relative; border-radius: 22px; overflow: hidden; aspect-ratio: 5 / 4; background: #9fb8b1; }
-.signs__img img { width: 100%; height: 100%; object-fit: cover; }
+.signs__drawing { position: relative; border-radius: 22px; background: var(--card); box-shadow: 0 0 0 1px var(--line); padding: clamp(10px, 1.6vw, 22px); }
 .signs__figure figcaption { margin-top: 14px; color: var(--ink-3); font-size: 11px; }
-.pin {
-  position: absolute; left: var(--x); top: var(--y); width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%;
-  background: var(--paper); color: var(--ink); font-family: var(--mono); font-size: 13px; display: grid; place-items: center;
-  box-shadow: 0 0 0 6px rgba(242, 243, 239, .28), 0 8px 20px -8px rgba(8, 30, 40, .55);
-  transition: transform .4s var(--ease), background-color .3s, color .3s, box-shadow .4s var(--ease);
-}
-.pin:hover, .pin.is-hot { transform: scale(1.14); background: var(--ink); color: var(--paper); box-shadow: 0 0 0 10px rgba(242, 243, 239, .34), 0 8px 20px -8px rgba(8, 30, 40, .55); }
-.pin.is-on { background: var(--signal); color: #fff; }
+
+/* ——— Coupe technique ——— */
+.section { width: 100%; height: auto; overflow: visible; }
+.section .soil-fill { fill: url(#p-soil); }
+.section .soil { fill: #8A8577; }
+.section .shell { fill: url(#p-shell); }
+.section .hatch { stroke: rgba(12, 37, 48, .32); stroke-width: .7; }
+.section .water { fill: #D3ECEA; }
+.section .water-hatch { fill: url(#p-water); }
+.section .wline { stroke: rgba(30, 120, 135, .28); stroke-width: .8; stroke-linecap: round; }
+.section .plaster { fill: #FDFDFB; }
+.section .deck { fill: #E4E1D8; }
+.section .coping { fill: #ECE9E1; }
+.section .tile { fill: #9DCDD6; }
+.section .joint { stroke: rgba(12, 37, 48, .55); stroke-width: .7; fill: none; }
+.section .ln { fill: none; stroke: var(--ink); stroke-linecap: round; stroke-linejoin: round; }
+.section .o { stroke-width: 1.5; }
+.section .s { stroke-width: .9; }
+.section .level { stroke: #2A8C9A; stroke-width: 1.4; }
+.section .level-n { stroke: var(--ink-2); stroke-width: 1; stroke-dasharray: 6 5; }
+.section .sym { fill: none; stroke: var(--ink-2); stroke-width: 1; }
+.section .sym--on { fill: #2A8C9A; stroke: #2A8C9A; }
+.section .stain { fill: #B48A5C; opacity: .72; }
+.section .speck { fill: #7A5A3A; opacity: .6; }
+.section .chalk { fill: #FFFFFF; stroke: rgba(12, 37, 48, .6); stroke-width: .5; }
+.section .float { fill: #FFFFFF; stroke: rgba(12, 37, 48, .5); stroke-width: .5; }
+.section .crack { stroke-width: .9; }
+.section .crack-p { stroke-width: 1; }
+.section .plan-bg { fill: #FDFDFB; }
+.section .plan-ring { stroke-width: 1.2; }
+.section .dim { stroke-width: 1; }
+.section .lead { stroke: var(--ink); stroke-width: .9; }
+.section .lead-s { stroke: var(--ink-3); stroke-width: .8; }
+.section .lab { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; fill: var(--ink-2); }
+.section .lab--soft { fill: var(--ink-3); }
+.section .lab--title { fill: var(--ink); font-size: 11px; }
+.section .tag-bg { fill: var(--card); }
+.section .dot { fill: var(--card); stroke: var(--ink); stroke-width: 1.2; transition: fill .3s, stroke .3s; }
+.section .num { font-family: var(--mono); font-size: 12.5px; text-anchor: middle; fill: var(--ink); transition: fill .3s; }
+.section .pin { cursor: pointer; }
+.section .pin.is-hot .dot { fill: var(--ink); }
+.section .pin.is-hot .num { fill: var(--card); }
+.section .pin.is-on .dot { fill: var(--signal); stroke: var(--signal); }
+.section .pin.is-on .num { fill: #fff; }
+.section .pin.is-on .lead, .section .pin.is-hot .lead { stroke-width: 1.4; }
+.section .def .acc { transition: stroke .3s, stroke-width .3s; }
+.section .def.is-hot .acc, .section .def.is-on .acc { stroke: var(--signal); }
+.section .def.is-on .acc.crack, .section .def.is-on .acc.crack-p { stroke-width: 1.4; }
+.section .def.is-hot .acc-fill, .section .def.is-on .acc-fill { stroke: var(--signal); stroke-width: 1; }
+.section .def.is-hot .acc-dot, .section .def.is-on .acc-dot { stroke: var(--signal); stroke-width: .6; }
+/* tracé à l'apparition */
+.js .section .ln { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.js .section.is-drawn .ln { stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s var(--ease); }
+.js .section.is-drawn .level-n { stroke-dasharray: 6 5; stroke-dashoffset: 0; transition: none; }
+.js .section .pin .dot, .js .section .pin .num { opacity: 0; transition: opacity .5s var(--ease), fill .3s, stroke .3s; }
+.js .section.is-drawn .pin .dot, .js .section.is-drawn .pin .num { opacity: 1; transition-delay: calc(.9s + var(--d, 0s)), 0s, 0s; }
 
 /* ——— 02 Finitions ——— */
 .finishes { background: var(--deep); color: var(--paper); padding: clamp(96px, 11vw, 170px) 0; }
@@ -443,7 +490,11 @@ section { position: relative; }
   .signs__text, .signs__figure, .finishes__head > *, .finishes__view, .finishes__side, .services__head > *, .rating, .pull, .wall, .faq__head, .faq__list, .contact__text, .form { grid-column: 1 / -1 !important; }
   .signs__figure { position: relative; top: 0; order: -1; margin-bottom: 36px; }
   .signs__text .h2 { max-width: none; }
-  .pin { width: 28px; height: 28px; margin: -14px 0 0 -14px; font-size: 11.5px; }
+  .section .lab, .section .cartouche, .section .labels { display: none; }
+  .section .dot { r: 21px; stroke-width: 2px; }
+  .section .num { font-size: 20px; transform: translateY(2.6px); }
+  .section .pin.is-on .lead, .section .pin.is-hot .lead { stroke-width: 2.2; }
+  .section .lead { stroke-width: 1.6; }
   .finishes__head .lead { margin-top: 18px; }
   .finishes__view { aspect-ratio: 1 / 1; border-radius: 20px; }
   .finishes__side { display: flex; gap: 22px; min-width: 0; }

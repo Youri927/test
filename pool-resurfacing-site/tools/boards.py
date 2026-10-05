@@ -66,7 +66,7 @@ board('avant-apres-mobile.jpg', [
 
 # parcours de la nouvelle page : 6 vues
 views = [
-    ('shots/z-01-signs-40.png', '01 SIGNS', 'Tick what you see in your pool'),
+    ('shots/z-01-signs-40.png', '01 SIGNS', 'Tick what you see; find it in the section drawing'),
     ('shots/x-fin-1.png', '02 FINISHES', 'Nine finishes, rendered under water'),
     ('shots/z-02-services-1300.png', '03 SERVICES', 'Five trades, stacked cards'),
     ('shots/zs-01-stepnthchild6--250.png', '04 PROCESS', 'Drain, strip, finish, refill'),

@@ -341,34 +341,42 @@
     }));
   }
 
-  /* ——— 01 Signes ——— */
+  /* ——— 01 Signes : la liste et la coupe se répondent ——— */
   function startSigns() {
     const items = $$('[data-sign]');
     const pins = $$('[data-pin]');
     const count = $('[data-sign-count]');
     const msg = $('[data-sign-msg]');
+    const drawing = $('.section');
     const MSG = ['Resurfaces usually last 10 to 20+ years.', 'Worth a free look.', 'Worth a free look.', 'Time to talk about resurfacing.'];
+    const parts = (id) => [$(`[data-sign="${id}"]`), $(`[data-pin="${id}"]`), $(`[data-def="${id}"]`)].filter(Boolean);
     const update = () => {
       const n = items.filter((b) => b.getAttribute('aria-pressed') === 'true').length;
       count.textContent = n;
       msg.textContent = MSG[Math.min(3, n)];
-      pins.forEach((p) => p.classList.toggle('is-on', $(`[data-sign="${p.dataset.pin}"]`).getAttribute('aria-pressed') === 'true'));
+      items.forEach((b) => {
+        const on = b.getAttribute('aria-pressed') === 'true';
+        parts(b.dataset.sign).slice(1).forEach((el) => el.classList.toggle('is-on', on));
+      });
     };
     const toggle = (id) => { const b = $(`[data-sign="${id}"]`); b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); update(); };
-    const hot = (id, on) => { $(`[data-pin="${id}"]`).classList.toggle('is-hot', on); $(`[data-sign="${id}"]`).classList.toggle('is-hot', on); };
+    const hot = (id, on) => parts(id).forEach((el) => el.classList.toggle('is-hot', on));
     items.forEach((b) => {
       b.addEventListener('click', () => toggle(b.dataset.sign));
       b.addEventListener('pointerenter', () => hot(b.dataset.sign, true));
       b.addEventListener('pointerleave', () => hot(b.dataset.sign, false));
+      b.addEventListener('focus', () => hot(b.dataset.sign, true));
+      b.addEventListener('blur', () => hot(b.dataset.sign, false));
     });
-    pins.forEach((p) => {
+    pins.forEach((p, k) => {
+      p.style.setProperty('--d', (k * 0.08).toFixed(2) + 's');
       p.addEventListener('click', () => toggle(p.dataset.pin));
       p.addEventListener('pointerenter', () => hot(p.dataset.pin, true));
       p.addEventListener('pointerleave', () => hot(p.dataset.pin, false));
     });
-    if (!reduce) {
-      ST.create({trigger: '.signs__img', start: 'top 75%', once: true, onEnter: () => G.fromTo(pins, {scale: 0, opacity: 0}, {scale: 1, opacity: 1, duration: 0.7, ease: 'back.out(2)', stagger: 0.08, delay: 0.3, clearProps: 'transform'})});
-    }
+    // le dessin se trace une fois, à l'arrivée dans l'écran
+    if (reduce) drawing.classList.add('is-drawn');
+    else ST.create({trigger: drawing, start: 'top 80%', once: true, onEnter: () => drawing.classList.add('is-drawn')});
   }
 
   /* ——— 03 Services : les cartes s'empilent ——— */

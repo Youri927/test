@@ -32,6 +32,7 @@ const html = read('./src/index.html')
     if (n > 1) return `src="${PIXEL}" data-dup="${name}"`;
     return `${attr}="data:image/webp;base64,${b64(`./src/img/${name}.webp`)}"${attr === 'src' ? ` data-img="${name}"` : ''}`;
   })
+  .replace('<!--SECTION-->', () => read('./src/section.svg'))
   .replace('<!--STYLES-->', () => `<style>\n${css}\n</style>`)
   .replace('<!--SCRIPTS-->', () => `<script>${copy}</script>\n<script>\n${js}\n</script>`);
 
