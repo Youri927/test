@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8">
+<style>html,body{margin:0;height:100%;background:#000}canvas{display:block;width:100vw;height:100vh}</style>
+<canvas id="c"></canvas>
+<script src="../src/water.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const img = new Image();
+img.src = '../src/img/fin-' + (q.get('f') || 'quartz') + '.webp';
+img.onload = () => {
+  const num = (k) => q.has(k) ? +q.get(k) : undefined;
+  const opt = {keep: true, dpr: 1};
+  for (const k of ['focus', 'amb', 'sun', 'tile', 'depth', 'blur', 'seed']) if (q.has(k)) opt[k] = num(k);
+  if (q.has('lam')) opt.lam = q.get('lam').split(',').map(Number);
+  const w = new Water(document.getElementById('c'), opt);
+  w.floor(0, img, w.mood(q.get('deep') || '#062a36', (q.get('tr') || '0.55,0.86,0.92').split(',').map(Number)));
+  const t = +(q.get('t') || 3);
+  if (q.get('drops')) { w.drop(innerWidth * 0.62, innerHeight * 0.45, 1, t - 1.6); w.drop(innerWidth * 0.3, innerHeight * 0.7, 0.6, t - 0.8); }
+  w.render(t);
+  document.title = 'ready';
+};
+</script>
