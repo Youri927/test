@@ -487,7 +487,7 @@ await check('fenêtre « Modifier le lien » de Gmail : interrupteur, appliqué 
 // un en-tête proche de celui de Gmail : la grille des applications est enveloppée dans un petit bloc
 // (avec son menu caché), Gemini et « Mettre à niveau » sont dans la même rangée d'icônes
 const HEADER = `<header id="gb" role="banner" style="display:flex;align-items:center;height:64px;padding:8px 8px 8px 16px;box-sizing:border-box;font:14px Arial;background:#f6f8fc">
-  <style>#gb .mk{width:40px;height:40px;margin:4px;padding:0;border:0;border-radius:50%;background:none;display:grid;place-items:center;font-size:20px;color:#444;box-sizing:border-box;text-decoration:none}</style>
+  <style>#gb svg, #gb svg path{fill:#444746;color:#444746}#gb .mk{width:40px;height:40px;margin:4px;padding:0;border:0;border-radius:50%;background:none;display:grid;place-items:center;font-size:20px;color:#444;box-sizing:border-box;text-decoration:none}</style>
   <div style="display:flex;align-items:center;width:230px"><b>Gmail</b></div>
   <form role="search" style="flex:1;max-width:620px;height:48px;margin:0;border-radius:24px;background:#e9eef6;display:flex;justify-content:flex-end"><button type="button" aria-label="Rechercher avec Gemini" class="mk">✧</button></form>
   <div class="gb-right" style="display:flex;align-items:center;margin-left:auto;height:48px;overflow:hidden">
@@ -533,6 +533,8 @@ await check('bouton dans la barre du haut de Gmail, juste après Gemini, à la m
   assert.ok(g.b.left >= g.gemItem.right - 1, 'à droite de Gemini, pas au-dessus');
   assert.ok(g.b.top >= g.header.top && g.b.bottom <= g.header.bottom, 'pas coupé par la barre');
   assert.ok(Math.abs(g.apps.mid - g.gem.mid) < 2, 'la grille des applications n’a pas bougé');
+  const ink = await page.evaluate(() => { const p = getComputedStyle(document.querySelector('.pt-launcher .pt-logo path')); return `${p.fill} ${p.stroke}`; });
+  assert.equal(ink, 'none rgb(255, 255, 255)', 'les coches restent blanches malgré les couleurs de la barre');
   await page.click('.pt-launcher');
   await page.waitForTimeout(150);
   assert.match(await page.locator('.pt-panel').getAttribute('class'), /pt-open/);

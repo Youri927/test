@@ -240,6 +240,9 @@
 .pt-launcher.pt-in-bar:hover { width: 40px; box-shadow: none; background: rgba(60, 64, 67, .08); }
 .pt-launcher.pt-in-bar.pt-active { opacity: 1; pointer-events: auto; transform: none; background: rgba(60, 64, 67, .12); }
 .pt-launcher.pt-in-bar .pt-logo { width: 28px; height: 28px; border-radius: 8px; }
+/* la barre de Gmail colore ses icônes (remplissage gris) : le logo garde ses coches blanches, comme dans le volet */
+.pt-launcher .pt-logo { color: #fff !important; opacity: 1 !important; filter: none !important; }
+.pt-launcher .pt-logo .pt-i, .pt-launcher .pt-logo .pt-i path { fill: none !important; stroke: #fff !important; }
 .pt-launcher.pt-in-bar .pt-launcher-count { top: -1px; left: auto; right: -4px; }
 .pt-launcher.pt-in-bar:focus-visible { outline: 2px solid #1a73e8; outline-offset: 1px; }
 
