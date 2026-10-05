@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 const require = createRequire(import.meta.url);
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || '/opt/node-tools/node_modules/playwright');
 const here = dirname(fileURLToPath(import.meta.url));
-const CONTENT = readFileSync(resolve(here, '../extension/content.js'), 'utf8');
+const CONTENT = readFileSync(process.env.PT_CONTENT || resolve(here, '../extension/content.js'), 'utf8');
 const CSS = readFileSync(resolve(here, '../extension/content.css'), 'utf8');
 const BASE = 'https://demo.supabase.co/functions/v1/mail-tracker';
 const enc = encodeURIComponent;
@@ -484,17 +484,55 @@ await check('fenêtre « Modifier le lien » de Gmail : interrupteur, appliqué 
   assert.ok(hrefs[1].includes('action=click'), 'les autres liens restent suivis');
 });
 
-await check('bouton dans la barre du haut de Gmail, juste avant la grille des applications', async () => {
-  await page.evaluate(() => document.body.insertAdjacentHTML('afterbegin', `<header id="gb"><div class="right" style="display:flex;align-items:center">
-    <div id="gemini"><a href="#">Gemini</a></div>
-    <div id="apps"><div><a href="https://www.google.fr/intl/fr/about/products?tab=mh" aria-label="Applications Google">apps</a></div></div>
-    <div id="avatar"><a href="#">moi</a></div></div></header>`));
-  await page.waitForTimeout(200);
-  const where = await page.evaluate(() => {
-    const b = document.querySelector('.pt-launcher');
-    return {count: document.querySelectorAll('.pt-launcher').length, next: b.nextElementSibling?.id, inBar: b.classList.contains('pt-in-bar'), parent: b.parentElement.className};
-  });
-  assert.deepEqual(where, {count: 1, next: 'apps', inBar: true, parent: 'right'});
+// un en-tête proche de celui de Gmail : la grille des applications est enveloppée dans un petit bloc
+// (avec son menu caché), Gemini et « Mettre à niveau » sont dans la même rangée d'icônes
+const HEADER = `<header id="gb" role="banner" style="display:flex;align-items:center;height:64px;padding:8px 8px 8px 16px;box-sizing:border-box;font:14px Arial;background:#f6f8fc">
+  <style>#gb .mk{width:40px;height:40px;margin:4px;padding:0;border:0;border-radius:50%;background:none;display:grid;place-items:center;font-size:20px;color:#444;box-sizing:border-box;text-decoration:none}</style>
+  <div style="display:flex;align-items:center;width:230px"><b>Gmail</b></div>
+  <form role="search" style="flex:1;max-width:620px;height:48px;margin:0;border-radius:24px;background:#e9eef6;display:flex;justify-content:flex-end"><button type="button" aria-label="Rechercher avec Gemini" class="mk">✧</button></form>
+  <div class="gb-right" style="display:flex;align-items:center;margin-left:auto;height:48px;overflow:hidden">
+    <div class="gm-actions" style="display:flex;align-items:center">
+      <div role="button" aria-label="Assistance" class="mk">?</div><div role="button" aria-label="Paramètres" class="mk">⚙</div>
+    </div>
+    <div class="ogb" style="display:flex;align-items:center;padding:0 4px">
+      <div class="gem"><div><button type="button" aria-label="Demander à Gemini" class="mk">✦</button></div></div>
+      <div class="up"><a style="display:inline-block;margin:0 8px;padding:0 22px;height:40px;line-height:40px;border-radius:20px;background:#c2e7ff">Mettre à niveau</a></div>
+      <div id="gbwa"><div class="wf" style="position:relative">
+        <a href="https://www.google.fr/intl/fr/about/products?tab=mh" aria-label="Applications Google" role="button" class="mk">⋮</a>
+        <div class="wf-pop" style="display:none"></div>
+      </div></div>
+      <div class="av" style="width:48px;height:48px;display:grid;place-items:center"><span style="width:32px;height:32px;border-radius:50%;background:#345;display:block"></span></div>
+    </div>
+  </div>
+</header>`;
+const geo = () => page.evaluate(() => {
+  const r = (el) => { const q = el.getBoundingClientRect(); return {top: q.top, bottom: q.bottom, left: q.left, right: q.right, mid: q.top + q.height / 2}; };
+  const b = document.querySelector('.pt-launcher');
+  const gem = document.querySelector('#gb .gem button');
+  return {
+    count: document.querySelectorAll('.pt-launcher').length,
+    inBar: b.classList.contains('pt-in-bar'),
+    prev: b.previousElementSibling?.className || null,
+    next: b.nextElementSibling?.id || b.nextElementSibling?.className || null,
+    parent: b.parentElement.className || b.parentElement.tagName,
+    b: r(b), header: r(document.getElementById('gb')), apps: r(document.querySelector('#gbwa a')),
+    gem: gem ? r(gem) : null, gemItem: gem ? r(document.querySelector('.gem')) : null,
+  };
+});
+
+await check('bouton dans la barre du haut de Gmail, juste après Gemini, à la même hauteur que les icônes', async () => {
+  await page.evaluate((h) => document.body.insertAdjacentHTML('afterbegin', h), HEADER);
+  await page.waitForTimeout(900);
+  const g = await geo();
+  if (process.env.PT_SHOTS) await page.locator('#gb').screenshot({path: `${process.env.PT_SHOTS}/barre-gemini.png`});
+  assert.equal(g.count, 1);
+  assert.equal(g.inBar, true, 'le bouton est dans la barre');
+  assert.equal(g.parent, 'ogb', 'dans la rangée d’icônes');
+  assert.equal(g.prev, 'gem', 'juste après Gemini');
+  assert.ok(Math.abs(g.b.mid - g.gem.mid) < 2, `même hauteur que Gemini (${g.b.mid} / ${g.gem.mid})`);
+  assert.ok(g.b.left >= g.gemItem.right - 1, 'à droite de Gemini, pas au-dessus');
+  assert.ok(g.b.top >= g.header.top && g.b.bottom <= g.header.bottom, 'pas coupé par la barre');
+  assert.ok(Math.abs(g.apps.mid - g.gem.mid) < 2, 'la grille des applications n’a pas bougé');
   await page.click('.pt-launcher');
   await page.waitForTimeout(150);
   assert.match(await page.locator('.pt-panel').getAttribute('class'), /pt-open/);
@@ -502,9 +540,19 @@ await check('bouton dans la barre du haut de Gmail, juste avant la grille des ap
   await page.click('.pt-launcher');
   await page.waitForTimeout(100);
   assert.doesNotMatch(await page.locator('.pt-panel').getAttribute('class'), /pt-open/);
-  // Gmail retire la barre : le bouton revient sur le bord droit
+});
+
+await check('sans Gemini : juste avant la grille des applications ; sans barre : onglet sur le bord droit', async () => {
+  await page.evaluate(() => document.querySelector('#gb .gem').remove());
+  await page.waitForTimeout(900);
+  let g = await geo();
+  if (process.env.PT_SHOTS) await page.locator('#gb').screenshot({path: `${process.env.PT_SHOTS}/barre-sans-gemini.png`});
+  assert.equal(g.count, 1);
+  assert.equal(g.next, 'gbwa', 'juste avant la grille');
+  assert.ok(Math.abs(g.b.mid - g.apps.mid) < 2, `même hauteur que la grille (${g.b.mid} / ${g.apps.mid})`);
+  assert.ok(g.b.right <= g.apps.left + 1, 'à gauche de la grille, pas au-dessus');
   await page.evaluate(() => document.getElementById('gb').remove());
-  await page.waitForTimeout(200);
+  await page.waitForTimeout(900);
   assert.equal(await page.evaluate(() => {
     const b = document.querySelector('.pt-launcher');
     return `${document.querySelectorAll('.pt-launcher').length} ${b.parentElement === document.body} ${b.classList.contains('pt-in-bar')}`;

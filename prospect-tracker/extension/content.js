@@ -1328,14 +1328,59 @@
   const noToken = () => emptyState('warn', 'Jeton manquant', 'Cliquez sur l’icône de Prospect Tracker dans la barre de Chrome, puis sur les réglages, et collez votre jeton.');
   const backBtn = () => `<button type="button" class="pt-back">${icon('back')}<span>Retour</span></button>`;
 
-  /** la place du bouton dans la barre du haut de Gmail : juste avant la grille des applications Google (comme Mailsuite) */
-  function topBarSlot() {
-    const apps = document.querySelector('header a[href*="/about/products"], header a[aria-label^="Google apps"], header a[aria-label^="Applications Google"]');
-    if (!apps) return null;
-    let wrap = apps;
-    while (wrap.parentElement && wrap.parentElement.children.length < 2 && wrap.parentElement.tagName !== 'HEADER') wrap = wrap.parentElement;
-    return wrap.parentElement ? wrap : null;
+  /* ——— Le bouton du volet : dans la rangée d'icônes de la barre du haut, juste après Gemini (comme Mailsuite) ——— */
+  const GEMINI_SEL = 'header [aria-label*="Gemini"], header [data-tooltip*="Gemini"]';
+  const APPS_SEL = 'header a[href*="/about/products"], header [aria-label^="Google apps"], header [aria-label^="Applications Google"]';
+  const barRect = (el) => el.getBoundingClientRect();
+  const hasBox = (r) => r.width > 0 && r.height > 0;
+  const barMid = (r) => r.top + r.height / 2;
+  /** les commandes visibles du sélecteur, posées dans la barre du haut (hors champ de recherche) */
+  function barControls(sel) {
+    const out = [];
+    for (const el of document.querySelectorAll(sel)) {
+      if (el.closest('.pt-ui, [role="search"], form')) continue;
+      const ctl = el.closest('a, button, [role="button"]') || el;
+      const r = barRect(ctl);
+      const h = barRect(ctl.closest('header'));
+      if (hasBox(r) && r.width < 300 && barMid(r) > h.top && barMid(r) < h.bottom && !out.includes(ctl)) out.push(ctl);
+    }
+    return out;
   }
+  /**
+   * Remonte d'une icône jusqu'à l'élément posé dans la rangée d'icônes : le premier ancêtre qui a un frère
+   * visible juste à côté, à la même hauteur. (Le bloc qui enveloppe une icône avec son menu caché ne compte pas.)
+   */
+  function rowItem(el) {
+    const header = el.closest('header');
+    for (let item = el; item && item !== header; item = item.parentElement) {
+      const row = item.parentElement;
+      if (!row) break;
+      const r = barRect(item);
+      if (!hasBox(r)) continue;
+      const beside = [...row.children].some((c) => {
+        if (c === item || c.classList.contains('pt-launcher')) return false;
+        const q = barRect(c);
+        return hasBox(q) && Math.abs(barMid(q) - barMid(r)) < 8 && (q.left >= r.right - 2 || q.right <= r.left + 2);
+      });
+      if (beside) return item;
+    }
+    return null;
+  }
+  /** pose le bouton juste après (ou avant) l'icône de référence, puis vérifie qu'il est dans la rangée, à la même hauteur */
+  function placeInBar(b, ref, after) {
+    const item = rowItem(ref);
+    if (!item) return false;
+    const row = item.parentElement;
+    if (b.parentElement !== row || (after ? b.previousSibling !== item : b.nextSibling !== item)) row.insertBefore(b, after ? item.nextSibling : item);
+    b.classList.add('pt-in-bar');
+    const r = barRect(b);
+    const it = barRect(item);
+    const h = barRect(ref.closest('header'));
+    return hasBox(r) && Math.abs(barMid(r) - barMid(barRect(ref))) < 6 && r.top >= h.top - 1 && r.bottom <= h.bottom + 1
+      && (r.left >= it.right - 2 || r.right <= it.left + 2);
+  }
+  let placedAt = 0;
+  let placeTimer = 0;
   function ensureLauncher() {
     let b = document.querySelector('.pt-launcher');
     if (!b) {
@@ -1346,15 +1391,27 @@
       b.innerHTML = `${logo()}<span class="pt-launcher-count"></span>`;
       b.addEventListener('click', () => (panelOpen ? closePanel() : openPanel()));
     }
-    // dans la barre du haut si Gmail l'affiche ; sinon, onglet sur le bord droit
-    const slot = topBarSlot();
-    if (slot) {
-      if (b.nextElementSibling !== slot || b.parentElement !== slot.parentElement) slot.parentElement.insertBefore(b, slot);
-    } else if (!b.isConnected || b.dataset.place === 'bar') {
-      document.body.appendChild(b);
+    // Gmail redessine souvent sa barre : on revérifie la place au plus toutes les 0,7 s (tout de suite si le bouton a disparu)
+    const now = Date.now();
+    if (b.isConnected && now - placedAt < 700) {
+      // une dernière vérification à la fin de l'attente, même si la page ne bouge plus d'ici là
+      if (!placeTimer) placeTimer = setTimeout(() => { placeTimer = 0; ensureLauncher(); }, 720 - (now - placedAt));
+      return;
     }
-    const place = slot ? 'bar' : 'edge';
-    if (b.dataset.place !== place) { b.dataset.place = place; paintLauncher(); }
+    placedAt = now;
+    // juste après Gemini ; sinon juste avant la grille des applications ; sinon, onglet sur le bord droit
+    const apps = barControls(APPS_SEL)[0] || null;
+    const appsLeft = apps ? barRect(apps).left : Infinity;
+    // le Gemini des icônes de droite : après le champ de recherche, le plus à droite avant la grille des applications
+    const search = document.querySelector('header form, header [role="search"]');
+    const searchRight = search ? barRect(search).right : -Infinity;
+    const gemini = barControls(GEMINI_SEL)
+      .filter((g) => { const r = barRect(g); return r.left >= searchRight - 2 && r.right <= appsLeft + 2; })
+      .sort((x, y) => barRect(y).left - barRect(x).left)[0] || null;
+    const inBar = (gemini && placeInBar(b, gemini, true)) || (apps && placeInBar(b, apps, false));
+    if (!inBar && (!b.isConnected || b.parentElement !== document.body)) document.body.appendChild(b);
+    b.dataset.place = inBar ? 'bar' : 'edge';
+    paintLauncher();
   }
   function paintLauncher() {
     const b = document.querySelector('.pt-launcher');

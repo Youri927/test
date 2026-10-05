@@ -30,7 +30,7 @@ Suivi des mails envoyés depuis Gmail, façon Mailsuite. Chaque mail suivi indiq
 | **Message ouvert** | À côté de la date, une puce « Ouvert 2 fois · 1 clic », lue dans le pixel de CE message. Si le message est replié, la puce passe à côté de l'objet du fil. Dans votre mail, chaque lien cliqué porte une pastille avec son nombre de clics |
 | **Rédaction** | À droite du bouton Envoyer : **✓✓ ▾** ouvre les options du mail, l'**interrupteur** coupe ou remet le suivi (vert = suivi, gris = sans suivi, rouge = serveur injoignable) |
 | **Mail reçu** | Une puce « Suivi · HubSpot » (Mailtrack, Mailchimp…) quand l'expéditeur y a mis un pixel de suivi |
-| **Bouton ✓✓ dans la barre du haut de Gmail** (à gauche de la grille des applications, comme Mailsuite) | Le volet de suivi. Un compteur rouge signale les nouvelles activités depuis votre dernière visite. Si Gmail n’affiche pas sa barre, le bouton revient en onglet sur le bord droit |
+| **Bouton ✓✓ dans la barre du haut de Gmail** (dans la rangée d’icônes, juste après Gemini, comme Mailsuite ; sans Gemini, juste avant la grille des applications) | Le volet de suivi. Un compteur rouge signale les nouvelles activités depuis votre dernière visite. Si Gmail n’affiche pas sa barre, le bouton revient en onglet sur le bord droit |
 
 ### Les liens, comme dans Mailtrack
 
