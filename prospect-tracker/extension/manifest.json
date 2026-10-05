@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Prospect Tracker for Gmail",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Suivi des ouvertures, ré-ouvertures et clics de vos e-mails, directement dans Gmail.",
   "permissions": ["storage", "notifications", "alarms", "declarativeNetRequest"],
   "host_permissions": [

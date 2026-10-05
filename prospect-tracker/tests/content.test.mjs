@@ -484,6 +484,33 @@ await check('fenêtre « Modifier le lien » de Gmail : interrupteur, appliqué 
   assert.ok(hrefs[1].includes('action=click'), 'les autres liens restent suivis');
 });
 
+await check('bouton dans la barre du haut de Gmail, juste avant la grille des applications', async () => {
+  await page.evaluate(() => document.body.insertAdjacentHTML('afterbegin', `<header id="gb"><div class="right" style="display:flex;align-items:center">
+    <div id="gemini"><a href="#">Gemini</a></div>
+    <div id="apps"><div><a href="https://www.google.fr/intl/fr/about/products?tab=mh" aria-label="Applications Google">apps</a></div></div>
+    <div id="avatar"><a href="#">moi</a></div></div></header>`));
+  await page.waitForTimeout(200);
+  const where = await page.evaluate(() => {
+    const b = document.querySelector('.pt-launcher');
+    return {count: document.querySelectorAll('.pt-launcher').length, next: b.nextElementSibling?.id, inBar: b.classList.contains('pt-in-bar'), parent: b.parentElement.className};
+  });
+  assert.deepEqual(where, {count: 1, next: 'apps', inBar: true, parent: 'right'});
+  await page.click('.pt-launcher');
+  await page.waitForTimeout(150);
+  assert.match(await page.locator('.pt-panel').getAttribute('class'), /pt-open/);
+  assert.ok(await page.locator('.pt-launcher').isVisible(), 'le bouton reste visible, volet ouvert');
+  await page.click('.pt-launcher');
+  await page.waitForTimeout(100);
+  assert.doesNotMatch(await page.locator('.pt-panel').getAttribute('class'), /pt-open/);
+  // Gmail retire la barre : le bouton revient sur le bord droit
+  await page.evaluate(() => document.getElementById('gb').remove());
+  await page.waitForTimeout(200);
+  assert.equal(await page.evaluate(() => {
+    const b = document.querySelector('.pt-launcher');
+    return `${document.querySelectorAll('.pt-launcher').length} ${b.parentElement === document.body} ${b.classList.contains('pt-in-bar')}`;
+  }), '1 true false');
+});
+
 console.log(results.join('\n'));
 if (errors.length) console.log('Erreurs JS :', errors);
 await b.close();

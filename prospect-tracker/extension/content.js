@@ -1328,23 +1328,40 @@
   const noToken = () => emptyState('warn', 'Jeton manquant', 'Cliquez sur l’icône de Prospect Tracker dans la barre de Chrome, puis sur les réglages, et collez votre jeton.');
   const backBtn = () => `<button type="button" class="pt-back">${icon('back')}<span>Retour</span></button>`;
 
+  /** la place du bouton dans la barre du haut de Gmail : juste avant la grille des applications Google (comme Mailsuite) */
+  function topBarSlot() {
+    const apps = document.querySelector('header a[href*="/about/products"], header a[aria-label^="Google apps"], header a[aria-label^="Applications Google"]');
+    if (!apps) return null;
+    let wrap = apps;
+    while (wrap.parentElement && wrap.parentElement.children.length < 2 && wrap.parentElement.tagName !== 'HEADER') wrap = wrap.parentElement;
+    return wrap.parentElement ? wrap : null;
+  }
   function ensureLauncher() {
-    if (document.querySelector('.pt-launcher')) return;
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'pt-launcher pt-ui';
-    b.title = 'Suivi des mails';
-    b.innerHTML = `${logo()}<span class="pt-launcher-count"></span>`;
-    b.addEventListener('click', () => (panelOpen ? closePanel() : openPanel()));
-    document.body.appendChild(b);
-    paintLauncher();
+    let b = document.querySelector('.pt-launcher');
+    if (!b) {
+      b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pt-launcher pt-ui';
+      b.title = 'Suivi des mails';
+      b.innerHTML = `${logo()}<span class="pt-launcher-count"></span>`;
+      b.addEventListener('click', () => (panelOpen ? closePanel() : openPanel()));
+    }
+    // dans la barre du haut si Gmail l'affiche ; sinon, onglet sur le bord droit
+    const slot = topBarSlot();
+    if (slot) {
+      if (b.nextElementSibling !== slot || b.parentElement !== slot.parentElement) slot.parentElement.insertBefore(b, slot);
+    } else if (!b.isConnected || b.dataset.place === 'bar') {
+      document.body.appendChild(b);
+    }
+    const place = slot ? 'bar' : 'edge';
+    if (b.dataset.place !== place) { b.dataset.place = place; paintLauncher(); }
   }
   function paintLauncher() {
     const b = document.querySelector('.pt-launcher');
     if (!b) return;
     const n = panelOpen && !selectedId && tab === 'activity' ? 0 : feedItems().filter((x) => tsOf(x.sig.at) > lastSeen).length;
     const s = n > 1 ? 's' : '';
-    put(b, {cls: `pt-launcher pt-ui${panelOpen ? ' pt-active' : ''}`, label: n ? `Suivi des mails : ${n} nouvelle${s} activité${s}` : 'Suivi des mails'});
+    put(b, {cls: `pt-launcher pt-ui${b.dataset.place === 'bar' ? ' pt-in-bar' : ''}${panelOpen ? ' pt-active' : ''}`, label: n ? `Suivi des mails : ${n} nouvelle${s} activité${s}` : 'Suivi des mails'});
     put(b.querySelector('.pt-launcher-count'), {html: n ? (n > 9 ? '9+' : String(n)) : '', cls: `pt-launcher-count${n ? ' pt-on' : ''}`});
   }
   function seeActivity() {
