@@ -57,11 +57,11 @@ def board(name, pairs, w, title):
 S = lambda n: Image.open(SRC / n)
 board('avant-apres-ordinateur.jpg', [
     (S('pr/now/desktop-top.png'), 'BEFORE', 'Current homepage', (160, 170, 175)),
-    (S('shots/di-4.5.png'), 'AFTER', 'New homepage: the pool fills, then reacts to the cursor', SIGNAL),
+    (S('shots/h3-3.2.png'), 'AFTER', 'New homepage: the same pool before and after, drag to compare', SIGNAL),
 ], 1100, 'Scottsdale Pool Resurfacing: before / after')
 board('avant-apres-mobile.jpg', [
     (S('pr/now/mobile-top.png'), 'BEFORE', 'Current site, phone', (160, 170, 175)),
-    (S('shots/mi-4.5.png'), 'AFTER', 'New site, phone', SIGNAL),
+    (S('shots/mi2-3.2.png'), 'AFTER', 'New site, phone', SIGNAL),
 ], 560, 'Before / after on a phone')
 
 # parcours de la nouvelle page : 6 vues
@@ -69,7 +69,7 @@ views = [
     ('shots/z-01-signs-40.png', '01 SIGNS', 'Tick what you see in your pool'),
     ('shots/x-fin-1.png', '02 FINISHES', 'Nine finishes, rendered under water'),
     ('shots/z-02-services-1300.png', '03 SERVICES', 'Five trades, stacked cards'),
-    ('shots/zr-01-stepnthchild6--230.png', '04 PROCESS', 'Drain, strip, finish, refill'),
+    ('shots/zs-01-stepnthchild6--250.png', '04 PROCESS', 'Drain, strip, finish, refill'),
     ('shots/z-03-reviews.png', '05 REVIEWS', 'Ten Google reviews, word for word'),
     ('shots/z-04-contact.png', '06 CONTACT', 'Call back from the owner'),
 ]

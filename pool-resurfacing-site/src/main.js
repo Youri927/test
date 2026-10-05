@@ -11,7 +11,6 @@
   const G = window.gsap;
   const ST = window.ScrollTrigger;
   G.registerPlugin(ST);
-  const now = () => performance.now() / 1000;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
 
@@ -141,155 +140,125 @@
 
   /* ——— Données des finitions (textes du site actuel) ——— */
   const FIN = {
-    'plaster': {name: 'Conventional plaster', look: {deep: '#0b5566', trans: [0.27, 0.79, 0.89]},
+    'plaster': {name: 'Conventional plaster',
       desc: 'Still the most commonly requested resurfacing material, and found in many older pools. Cost-effective and extremely durable.',
       rows: [['Feel', 'Smooth'], ['Lasts', 'Up to 10 years when skillfully applied'], ['Good to know', 'Sensitive to stains and discoloring']]},
-    'quartz': {name: 'Quartz & plaster', look: {deep: '#0a4f60', trans: [0.26, 0.77, 0.88]},
+    'quartz': {name: 'Quartz & plaster',
       desc: 'A plaster-based quartz finish: an improvement on traditional plaster, with calcium carbonate added for a glimmering finish.',
       rows: [['Feel', 'Smooth'], ['After install', 'Acid wash by specialized crew']]},
-    'diamond-brite': {name: 'Diamond Brite', look: {deep: '#0a4a62', trans: [0.24, 0.71, 0.87]},
+    'diamond-brite': {name: 'Diamond Brite',
       desc: 'A blend of aggregate and natural quartz in polymer-modified cement. Affordable, sturdy and looks great, in 17 colors. It can be drained without the worries of a plaster pool.',
       rows: [['Feel', 'Smooth, lightly textured'], ['Lasts', 'A little over a decade, with a single acid wash'], ['Good to know', 'Lighter shades make the water look aqua-blue']]},
-    'pebble-fina': {name: 'Pebble Fina', look: {deep: '#0b4652', trans: [0.3, 0.72, 0.8]},
+    'pebble-fina': {name: 'Pebble Fina',
       desc: 'A blend of cement and silica stone: the midpoint between conventional plaster and branded pebble finishes. Durable and resilient, with a shimmering color.',
       rows: [['Feel', 'Fine texture'], ['After install', 'Acid wash by specialized crew']]},
-    'pebble-tec': {name: 'Pebble Tec', look: {deep: '#073a4c', trans: [0.22, 0.62, 0.78]},
+    'pebble-tec': {name: 'Pebble Tec',
       desc: 'Small river pebbles mixed with Portland cement and dye, in colors from white to dark blue and even black. Natural and non-slip, because it is made of stones. No two pools look alike.',
       rows: [['Feel', 'Textured, non-slip'], ['Lasts', 'Up to 20 years if maintained properly'], ['After install', 'Acid wash by specialized crew']]},
-    'pebble-sheen': {name: 'Pebble Sheen', look: {deep: '#083e50', trans: [0.24, 0.66, 0.8]},
+    'pebble-sheen': {name: 'Pebble Sheen',
       desc: 'Smaller pebbles, about 1 to 2 mm across, fused in a highly polished, dense sheen.',
       rows: [['Feel', 'Polished'], ['Lasts', 'Up to 20 years if maintained properly'], ['After install', 'Acid wash by specialized crew']]},
-    'hydrazzo': {name: 'Hydrazzo', look: {deep: '#0a4a64', trans: [0.24, 0.72, 0.9]},
+    'hydrazzo': {name: 'Hydrazzo',
       desc: 'The pick for those who prefer a shiny, smooth surface: an exquisite, durable finish in several shades.',
       rows: [['Feel', 'Shiny and smooth'], ['After install', 'Acid wash by specialized crew']]},
-    'beadcrete': {name: 'Bead Crete', look: {deep: '#08465e', trans: [0.24, 0.72, 0.9]},
+    'beadcrete': {name: 'Bead Crete',
       desc: 'A pebble-aggregate finish made with glass beads instead of stone. Like quartz and pebble finishes, it gets an acid wash after it goes on.',
       rows: [['Feel', 'Lightly textured'], ['After install', 'Acid wash by specialized crew']]},
-    'glass-tile': {name: 'Glass tile', look: {deep: '#0a4a60', trans: [0.22, 0.7, 0.86], size: 1.5},
+    'glass-tile': {name: 'Glass tile',
       desc: 'The most popular option for many homeowners, for its durability and exceptional beauty. Glass goes anywhere: edges, steps, the waterline, water walls, sun shelves.',
       rows: [['Feel', 'Glossy'], ['Lasts', 'The most durable of all finishes'], ['Good to know', 'The most expensive option']]},
   };
   const KEYS = Object.keys(FIN);
-  const EXTRA = {worn: {deep: '#2c5047', trans: [0.46, 0.66, 0.55], size: 3.4}, stripped: {size: 1.4}};
 
-  /* ——— Les scènes d'eau ——— */
-  const scenes = [];
-  let webgl = !!window.WebGL2RenderingContext && !!window.Water;
-  const texImg = (name) => $(`img[data-tex="${name}"]`);
   const decode = (img) => (img.complete && img.naturalWidth ? Promise.resolve() : (img.decode ? img.decode() : new Promise((ok) => { img.onload = ok; }))).catch(() => {});
-  function makeScene(canvas, opts, names) {
-    if (!webgl) return null;
-    let w;
-    try { w = new Water(canvas, opts); } catch (e) { webgl = false; root.classList.add('no-webgl'); return null; }
-    names.forEach((n) => w.texture(n, texImg(n), FIN[n] ? FIN[n].look : EXTRA[n]));
-    const sc = {w, canvas, visible: false, dirty: true, tick: null};
-    new IntersectionObserver(([e]) => { sc.visible = e.isIntersecting; sc.dirty = true; }, {rootMargin: '80px'}).observe(canvas);
-    new ResizeObserver(() => { w.resize(); sc.dirty = true; }).observe(canvas);
-    scenes.push(sc);
-    return sc;
-  }
-  function loop() {
-    const t = now();
-    for (const sc of scenes) {
-      if (!sc.visible) continue;
-      if (sc.tick) sc.tick(t);
-      // mouvement réduit : une image fixe, redessinée seulement quand l'état change
-      if (reduce && !sc.dirty) continue;
-      sc.w.render(reduce ? 2.4 : t);
-      sc.dirty = false;
-    }
-  }
 
-  /** Ronds dans l'eau sous le doigt ou la souris */
-  function ripples(sc, el = sc.canvas) {
-    let last = null;
-    const pos = (e) => { const r = sc.canvas.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-    el.addEventListener('pointermove', (e) => {
-      if (e.pointerType !== 'mouse') return;
-      const [x, y] = pos(e);
-      const t = now();
-      if (!last) { last = {x, y, t}; return; }
-      const d = Math.hypot(x - last.x, y - last.y);
-      if (d > 26) {
-        const v = d / Math.max(0.016, t - last.t);
-        sc.w.drop(x, y, clamp(0.16 + v * 0.00022, 0.16, 0.5));
-        last = {x, y, t};
-      }
-    });
-    el.addEventListener('pointerleave', () => { last = null; });
-    el.addEventListener('pointerdown', (e) => { const [x, y] = pos(e); sc.w.drop(x, y, e.pointerType === 'mouse' ? 0.9 : 0.75); });
-  }
-
-  /* ——— Accueil : le bassin se remplit ——— */
-  let heroSc = null;
+  /* ——— Accueil : le même bassin, avant et après ——— */
   function startHero() {
-    heroSc = makeScene($('[data-water="hero"]'), {tile: 330, depth: 1500, focus: 4}, ['quartz']);
     const title = $('.hero__title');
     const ins = $$('[data-hero-in]');
+    const fig = $('[data-compare]');
+    const range = $('.compare__range', fig);
+    const pos = {v: 50};
+    const set = (v) => {
+      pos.v = clamp(v, 0, 100);
+      fig.style.setProperty('--pos', pos.v.toFixed(2) + '%');
+      fig.style.setProperty('--pos-n', pos.v.toFixed(1));
+      range.value = Math.round(pos.v);
+    };
+    // glisser à la souris ou au doigt ; au doigt, un geste vertical reste un défilement (touch-action: pan-y)
+    let drag = false;
+    const at = (e) => { const r = fig.getBoundingClientRect(); return ((e.clientX - r.left) / r.width) * 100; };
+    fig.addEventListener('pointerdown', (e) => {
+      if (e.button > 0) return;
+      drag = true;
+      G.killTweensOf(pos);
+      fig.classList.add('is-drag');
+      try { fig.setPointerCapture(e.pointerId); } catch (_) {}
+      if (e.pointerType === 'mouse') set(at(e));
+    });
+    fig.addEventListener('pointermove', (e) => { if (drag) set(at(e)); });
+    const end = () => { drag = false; fig.classList.remove('is-drag'); };
+    fig.addEventListener('pointerup', end);
+    fig.addEventListener('pointercancel', end);
+    range.addEventListener('input', () => { G.killTweensOf(pos); set(+range.value); });
+    if (reduce) { set(50); G.set(ins, {opacity: 1, y: 0}); showLines(title); return; }
+    set(100);
     const tl = G.timeline({delay: 0.1});
-    if (heroSc) {
-      const w = heroSc.w;
-      w.set({a: 'quartz', level: reduce ? 1 : 0, fillDir: [-0.74, 0.67]});
-      ripples(heroSc, hero);
-      if (!reduce) {
-        const st = {level: 0};
-        tl.to(st, {level: 1, duration: 2.4, ease: 'power1.inOut', onUpdate: () => w.set({level: st.level})}, 0.05);
-        tl.call(() => { const r = title.getBoundingClientRect(); w.drop(r.left + r.width * 0.62, r.top + r.height * 0.3, 1.1); }, null, 2.1);
-        // de temps en temps, une goutte : la surface reste vivante quand personne n'y touche
-        let seed = 11, next = 6;
-        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-        heroSc.tick = (t) => {
-          if (t > next) { w.drop(w.w * (0.15 + rnd() * 0.7), w.h * (0.2 + rnd() * 0.6), 0.45 + rnd() * 0.3); next = t + 4 + rnd() * 3; }
-        };
-      }
-    }
-    if (reduce) {
-      G.set(ins, {opacity: 1, y: 0});
-      showLines(title);
-    } else {
-      tl.call(() => showLines(title), null, 0.75);
-      tl.to(ins, {opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: 0.07}, 1.25);
-    }
-    // légère sortie au défilement
-    if (!reduce) {
-      G.to('.hero__inner', {yPercent: -10, opacity: 0.2, ease: 'none', scrollTrigger: {trigger: hero, start: 'top top', end: 'bottom top', scrub: true}});
-    }
+    tl.fromTo(fig, {clipPath: 'inset(6% 6% 6% 6% round 28px)', opacity: 0}, {clipPath: 'inset(0% 0% 0% 0% round 28px)', opacity: 1, duration: 1.3, ease: 'expo.out', clearProps: 'clipPath'}, 0);
+    tl.fromTo($$('img', fig), {scale: 1.1}, {scale: 1, duration: 2.2, ease: 'expo.out', clearProps: 'transform'}, 0);
+    tl.call(() => showLines(title), null, 0.2);
+    tl.to(ins, {opacity: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: 0.07}, 0.6);
+    // une passe de lisseuse : l'ancien fond s'efface jusqu'au milieu
+    tl.to(pos, {v: 50, duration: 1.7, ease: 'power3.inOut', onUpdate: () => set(pos.v)}, 0.95);
   }
 
   /* ——— 02 Finitions ——— */
   let current = 'diamond-brite';
   function startFinishes() {
-    const view = $('.finishes__view');
-    const sc = makeScene($('[data-water="finish"]'), {tile: 520, depth: 1100, focus: 3, seed: 3, wind: 0.9, spread: 4.2, blur: 0.5, tint: 0.62, view: 0.25}, KEYS);
+    const view = $('[data-fin-view]');
+    const ring = $('.fv-ring', view);
     const btns = $$('[data-fin]');
-    const still = $('.finishes__still');
     const project = $('[data-project]');
-    if (sc) { sc.w.set({a: current}); ripples(sc, view); }
-    const show = (key, from) => {
+    let base = $('.fv', view);
+    let anim = null;
+    const srcOf = (key) => $(`img[data-fin-src="${key}"]`).src;
+    // la nouvelle finition s'ouvre en cercle depuis le centre, bordée d'un reflet
+    const reveal = (key) => {
+      if (anim) anim.progress(1);
+      const img = new Image();
+      img.className = 'fv';
+      img.alt = `${FIN[key].name} finish under water (illustration)`;
+      img.src = srcOf(key);
+      view.insertBefore(img, ring);
+      const far = Math.hypot(view.clientWidth, view.clientHeight) / 2 + 30;
+      const p = {r: 0};
+      const draw = () => {
+        img.style.clipPath = `circle(${p.r.toFixed(1)}px at 50% 50%)`;
+        ring.style.width = ring.style.height = (p.r * 2).toFixed(1) + 'px';
+        ring.style.opacity = p.r > 4 ? Math.min(1, (far - p.r) / 80) : 0;
+      };
+      draw();
+      anim = G.to(p, {
+        r: far, duration: reduce ? 0 : 1.1, ease: 'power2.inOut', onUpdate: draw,
+        onComplete: () => { base.remove(); base = img; img.style.clipPath = ''; ring.style.opacity = 0; anim = null; },
+      });
+    };
+    const show = (key, animate) => {
       const f = FIN[key];
-      const i = KEYS.indexOf(key);
       btns.forEach((b) => b.setAttribute('aria-selected', b.dataset.fin === key));
-      $('[data-fin-index]').textContent = String(i + 1).padStart(2, '0');
+      $('[data-fin-index]').textContent = String(KEYS.indexOf(key) + 1).padStart(2, '0');
       $('[data-fin-label]').textContent = f.name;
       $('[data-spec-name]').textContent = f.name;
       $('[data-spec-desc]').textContent = f.desc;
       $('[data-spec-rows]').innerHTML = f.rows.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
-      still.src = texImg(key).src;
-      if (sc && from) {
-        const r = sc.canvas.getBoundingClientRect();
-        sc.w.swap(key, from[0] - r.left, from[1] - r.top, now());
-        sc.dirty = true;
+      if (animate) {
+        reveal(key);
+        if (!reduce) G.fromTo('[data-spec] > *', {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: 0.6, stagger: 0.04, ease: 'expo.out'});
       }
-      if (!reduce && from) G.fromTo('[data-spec] > *', {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: 0.6, stagger: 0.04, ease: 'expo.out'});
       current = key;
     };
-    btns.forEach((b) => b.addEventListener('click', () => {
-      if (b.dataset.fin === current) return;
-      // l'onde part du centre du bassin, ou de là où on a cliqué dans l'eau
-      const r = view.getBoundingClientRect();
-      show(b.dataset.fin, [r.left + r.width * 0.5, r.top + r.height * 0.5]);
-    }));
-    show(current);
+    btns.forEach((b) => b.addEventListener('click', () => { if (b.dataset.fin !== current) show(b.dataset.fin, true); }));
+    show(current, false);
     $('[data-spec-ask]').addEventListener('click', () => {
       const line = `I’m interested in a ${FIN[current].name} finish.`;
       if (!project.value.trim() || /^I’m interested in a .* finish\.$/.test(project.value.trim())) project.value = line;
@@ -298,33 +267,69 @@
 
   /* ——— 04 Déroulé : vidange, préparation, finition, remplissage ——— */
   const STATES = ['Drained', 'Stripped and sandblasted', 'Tile and masonry', 'Plumbing sealed', 'New finish', 'Filling', 'Balanced water'];
+  // demi-plan (1 - x) + y <= d dans le carré unité : l'eau arrive du coin haut droit (le grand bain)
+  function water(d) {
+    const sq = [[0, 0], [1, 0], [1, 1], [0, 1]];
+    const f = ([x, y]) => 1 - x + y - d;
+    const out = [];
+    sq.forEach((a, k) => {
+      const b = sq[(k + 1) % 4];
+      const fa = f(a), fb = f(b);
+      if (fa <= 0) out.push(a);
+      if ((fa <= 0) !== (fb <= 0)) { const t = fa / (fa - fb); out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]); }
+    });
+    if (out.length < 3) return 'polygon(0 0, 0 0, 0 0)';
+    return `polygon(${out.map(([x, y]) => `${(x * 100).toFixed(2)}% ${(y * 100).toFixed(2)}%`).join(', ')})`;
+  }
+  // passe de lisseuse : bord légèrement irrégulier, de gauche à droite
+  function wipe(c) {
+    const pts = [];
+    for (let k = 0; k <= 24; k++) {
+      const y = k / 24;
+      const x = c * 1.08 - 0.04 + 0.008 * Math.sin(y * 23 + 1.7) + 0.006 * Math.sin(y * 61) + 0.003 * Math.sin(y * 140 + 2);
+      pts.push(`${(x * 100).toFixed(2)}% ${(y * 100).toFixed(2)}%`);
+    }
+    return `polygon(0% 0%, ${pts.join(', ')}, 0% 100%)`;
+  }
   function startProcess() {
-    const sc = makeScene($('[data-water="process"]'), {tile: 300, depth: 1300, focus: 3.4, seed: 5, wind: 2.2}, ['worn', 'stripped', ...KEYS]);
+    const view = $('[data-proc]');
+    const layers = Object.fromEntries($$('[data-layer]', view).map((el) => [el.dataset.layer, el]));
+    const wet = $('.proc-wet', view);
+    const shore = $('.proc-shore', view);
     const steps = $$('[data-step]');
     const gauge = $('.gauge');
     const label = $('[data-state]');
     let active = -1;
     const apply = (i, seg) => {
-      const fin = current;
-      let st;
-      if (i === 0) st = {a: 'worn', b: null, wipe: -1, level: 1 - smooth(0.25, 0.85, seg), clear: 1};
-      else if (i === 1) st = {a: 'worn', b: 'stripped', wipe: smooth(0.15, 0.85, seg), level: 0, clear: 1};
-      else if (i < 4) st = {a: 'stripped', b: null, wipe: -1, level: 0, clear: 1};
-      else if (i === 4) st = {a: 'stripped', b: fin, wipe: smooth(0.15, 0.85, seg), level: 0, clear: 1};
-      else if (i === 5) st = {a: fin, b: null, wipe: -1, level: smooth(0.15, 0.85, seg), clear: 0.3};
-      else st = {a: fin, b: null, wipe: -1, level: 1, clear: 0.3 + 0.7 * smooth(0.1, 0.8, seg)};
-      if (sc) { sc.w.set(st); sc.dirty = true; }
-      gauge.style.setProperty('--level', st.level.toFixed(3));
+      let bottom, top = null, clip = null, op = 1, level = 0, lvl = null;
+      if (i === 0) { bottom = 'drained'; top = 'old'; level = lvl = 1 - smooth(0.25, 0.85, seg); }
+      else if (i === 1) { bottom = 'drained'; top = 'stripped'; clip = wipe(smooth(0.15, 0.85, seg)); }
+      else if (i < 4) { bottom = 'stripped'; }
+      else if (i === 4) { bottom = 'stripped'; top = 'finish'; clip = wipe(smooth(0.15, 0.85, seg)); }
+      else if (i === 5) { bottom = 'finish'; top = 'cloudy'; level = lvl = smooth(0.15, 0.85, seg); }
+      else { bottom = 'cloudy'; top = 'clear'; op = smooth(0.1, 0.8, seg); level = 1; }
+      if (lvl !== null) clip = water(lvl * 2.02);
+      for (const [name, el] of Object.entries(layers)) {
+        const on = name === bottom || name === top;
+        el.style.opacity = on ? (name === top ? op : 1) : 0;
+        el.style.zIndex = name === top ? 4 : 1;
+        el.style.clipPath = name === top && clip ? clip : '';
+      }
+      // la ligne d'eau : un reflet clair au bord, le fond encore mouillé juste au-delà
+      const edge = lvl !== null && lvl > 0.001 && lvl < 0.999;
+      wet.style.opacity = shore.style.opacity = edge ? 1 : 0;
+      if (edge) { wet.style.clipPath = water(lvl * 2.02 + 0.045); shore.style.clipPath = water(lvl * 2.02 + 0.007); }
+      wet.style.zIndex = 2;
+      shore.style.zIndex = 3;
+      gauge.style.setProperty('--level', level.toFixed(3));
       if (i !== active) {
         steps.forEach((s, j) => s.classList.toggle('is-on', j === i));
-        if (sc && i === 6 && active === 5) { sc.w.drop(sc.w.w * 0.4, sc.w.h * 0.45, 1); sc.w.drop(sc.w.w * 0.66, sc.w.h * 0.62, 0.7, now() + 0.4); }
         active = i;
       }
-      label.textContent = i === 0 ? (seg < 0.25 ? 'Old surface' : seg < 0.85 ? 'Draining' : 'Drained') : STATES[i];
+      label.textContent = i === 0 ? (seg < 0.25 ? 'Old surface' : seg < 0.85 ? 'Draining' : 'Drained') : i === 5 && seg > 0.85 ? 'Full, still cloudy' : STATES[i];
     };
-    if (sc) sc.w.set({fillDir: [-0.7, -0.71], wipeDir: [1, 0]});
     apply(0, 0);
-    // chaque étape pilote l'aperçu tant qu'elle passe au milieu de l'écran
+    // chaque étape pilote l'aperçu tant qu'elle passe sur la ligne de lecture
     // sur mobile l'aperçu occupe le haut de l'écran : la ligne de lecture est plus bas
     const line = () => (innerWidth <= 900 ? '80%' : '58%');
     steps.forEach((s, j) => ST.create({
@@ -334,7 +339,6 @@
       onLeave: () => j === steps.length - 1 && apply(j, 1),
       onLeaveBack: () => j === 0 && apply(0, 0),
     }));
-    // le panneau d'aperçu dit l'état seulement ; les étapes s'allument une à une
   }
 
   /* ——— 01 Signes ——— */
@@ -440,10 +444,9 @@
 
   /* ——— Démarrage ——— */
   async function start() {
-    if (!webgl) root.classList.add('no-webgl');
     await document.fonts.ready.catch(() => {});
     splits.forEach((el) => G.set(splitLines(el), {yPercent: 108}));
-    await Promise.all($$('img[data-tex]').map(decode));
+    await Promise.all($$('.compare img').map(decode));
     startHero();
     startSigns();
     startFinishes();
@@ -454,7 +457,6 @@
     startFaq();
     startForm();
     reveals();
-    G.ticker.add(loop);
     let w0 = innerWidth;
     let rt;
     addEventListener('resize', () => {

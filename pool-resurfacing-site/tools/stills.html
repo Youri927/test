@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8">
+<style>html,body{margin:0;height:100%;background:#000}canvas{display:block;width:100vw;height:100vh}</style>
+<canvas id="c"></canvas>
+<script src="water.js"></script>
+<script>
+// Rend une scène (décrite en JSON dans l'adresse, après #) avec le moteur d'eau, image fixe.
+const S = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+const load = (f) => new Promise((ok) => { const i = new Image(); i.onload = () => ok(i); i.src = '../textures/' + f + '.webp'; });
+Promise.all(S.tex.map((t) => load(t.file))).then((imgs) => {
+  const w = new Water(document.getElementById('c'), Object.assign({keep: true, dpr: 1}, S.opts));
+  S.tex.forEach((t, i) => w.texture(t.name, imgs[i], t.look));
+  w.set(S.state);
+  (S.drops || []).forEach(([x, y, a, dt]) => w.drop(x * innerWidth, y * innerHeight, a, S.t - dt));
+  w.render(S.t);
+  document.title = 'ready';
+});
+</script>

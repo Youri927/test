@@ -18,7 +18,6 @@ const js = [
   read('./vendor/gsap.min.js'),
   read('./vendor/ScrollTrigger.min.js'),
   read('./vendor/lenis.min.js'),
-  read('./src/water.js'),
   read('./src/main.js'),
 ].join('\n;\n').replace(/<\/script/gi, '<\\/script');
 

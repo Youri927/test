@@ -73,8 +73,8 @@ Les finitions à galets durent jusqu'à 20 ans si elles sont entretenues. Quartz
 ## Direction retenue pour la refonte
 
 - **Idée** : « Love your pool again », la phrase du site actuel. La page parle de la surface du bassin, sous l'eau.
-- **Accueil** : le fond du bassin, vu de dessus. Le bassin vide se remplit au chargement, puis l'eau réagit au curseur.
-- **Signature technique** : un vrai rendu d'eau en WebGL. Les caustiques sont calculées physiquement : réfraction des rayons du soleil, concentration de la lumière sur le fond.
+- **Accueil** : sur fond blanc, le même bassin avant et après rénovation, vu de dessus sous l'eau, à comparer en faisant glisser. C'est la promesse du métier, montrée plutôt que dite.
+- **Signature technique** : les vues d'eau sont rendues avec un vrai moteur d'eau. Les caustiques sont calculées physiquement : réfraction des rayons du soleil, concentration de la lumière sur le fond. Elles sont rendues à l'avance, en images : la page reste légère et fluide.
 - **Finitions** : 9 matières modélisées une par une, à l'échelle réelle (galets de 6 à 10 mm, billes de 2 à 3 mm, mosaïque de 25 mm), puis vues sous l'eau dans le configurateur.
 - **Ce qui est conservé** : tout le contenu réel (services, finitions, étapes, avis, coordonnées, secteurs, offres), réécrit plus court.
 - **Ce qui ne l'est pas** :

@@ -16,7 +16,7 @@ import numpy as np
 from PIL import Image
 from scipy.spatial import cKDTree
 
-OUT = Path(__file__).resolve().parent.parent / 'src' / 'img'
+OUT = Path(__file__).resolve().parent.parent / 'textures'
 OUT.mkdir(parents=True, exist_ok=True)
 LIGHT = np.array([-0.38, -0.5, 0.78])
 LIGHT /= np.linalg.norm(LIGHT)

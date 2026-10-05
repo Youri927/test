@@ -47,22 +47,26 @@
 
   <!-- ===== Accueil : le fond du bassin se remplit ===== -->
   <section class="hero" id="top" data-hero>
-    <div class="hero__water">
-      <canvas class="hero__canvas" data-water="hero" aria-hidden="true"></canvas>
-      <img class="hero__still" src="img/hero-still.webp" alt="" aria-hidden="true">
-    </div>
     <div class="hero__inner">
-      <p class="hero__eyebrow mono" data-hero-in><i class="e-long">Pool resurfacing contractor <span>·</span> </i>Scottsdale, Arizona <span>·</span> Since 2011</p>
-      <p class="hero__booking" data-hero-in><span class="dot" aria-hidden="true"></span>Now booking November, December, January</p>
-      <h1 class="hero__title" data-split-lines>Love your <br>pool again.</h1>
-      <div class="hero__foot">
+      <div class="hero__text">
+        <p class="hero__eyebrow mono" data-hero-in><i class="e-long">Pool resurfacing contractor <span>·</span> </i>Scottsdale, Arizona <span>·</span> Since 2011</p>
+        <h1 class="hero__title" data-split-lines>Love your <br>pool again.</h1>
         <p class="hero__lead" data-hero-in>Resurfacing, remodeling and plastering for pools, spas and decks. Free on-site estimates, and a guaranteed call back from the owner.</p>
         <div class="hero__ctas" data-hero-in>
           <a class="btn btn--ink" href="tel:+14805681704">Call or text <b>480-568-1704</b></a>
-          <a class="btn btn--glass" href="#contact">Get a free estimate</a>
+          <a class="btn btn--line-ink" href="#contact">Get a free estimate</a>
         </div>
       </div>
-      <p class="hero__hint mono" data-hero-in aria-hidden="true"><span class="hint-desk">Move across the water</span><span class="hint-touch">Touch the water</span></p>
+      <figure class="compare" data-compare style="--pos:50%">
+        <img class="compare__img" src="img/hero-after.webp" alt="Illustration: the same pool floor after resurfacing, a fresh quartz finish under clear water" width="1100" height="1375">
+        <div class="compare__before"><img src="img/hero-before.webp" alt="Illustration: an aged plaster pool floor under tired water, with peeling, stains and cracks" width="1100" height="1375"></div>
+        <p class="hero__booking" data-hero-in><span class="dot" aria-hidden="true"></span>Now booking November, December, January</p>
+        <span class="compare__tag compare__tag--b mono" aria-hidden="true">Before</span>
+        <span class="compare__tag compare__tag--a mono" aria-hidden="true">After</span>
+        <div class="compare__line" aria-hidden="true"><span class="compare__knob"><svg viewBox="0 0 24 24"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6"/></svg></span></div>
+        <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Compare the pool before and after resurfacing">
+        <figcaption class="compare__note mono">Illustration · same pool · drag to compare</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -120,23 +124,32 @@
         <p class="lead" data-reveal>The finish is what you see and feel every time you swim. Lighter shades make the water look aqua-blue; darker ones take it deeper. Pick one and watch it spread across the floor.</p>
       </div>
       <div class="finishes__stage">
-        <div class="finishes__view" data-reveal>
-          <canvas data-water="finish" aria-hidden="true"></canvas>
-          <img class="finishes__still" src="img/fin-diamond-brite.webp" alt="" aria-hidden="true">
+        <div class="finishes__view" data-reveal data-fin-view>
+          <img class="fv" src="img/fin-diamond-brite.webp" alt="Diamond Brite finish under water (illustration)">
+          <span class="fv-ring" aria-hidden="true"></span>
+          <img hidden data-fin-src="plaster" src="img/fin-plaster.webp" alt="">
+          <img hidden data-fin-src="quartz" src="img/fin-quartz.webp" alt="">
+          <img hidden data-fin-src="diamond-brite" src="img/fin-diamond-brite.webp" alt="">
+          <img hidden data-fin-src="pebble-fina" src="img/fin-pebble-fina.webp" alt="">
+          <img hidden data-fin-src="pebble-tec" src="img/fin-pebble-tec.webp" alt="">
+          <img hidden data-fin-src="pebble-sheen" src="img/fin-pebble-sheen.webp" alt="">
+          <img hidden data-fin-src="hydrazzo" src="img/fin-hydrazzo.webp" alt="">
+          <img hidden data-fin-src="beadcrete" src="img/fin-beadcrete.webp" alt="">
+          <img hidden data-fin-src="glass-tile" src="img/fin-glass-tile.webp" alt="">
           <p class="finishes__now mono" aria-live="polite"><span data-fin-index>03</span> / 09 <b data-fin-label>Diamond Brite</b></p>
           <p class="finishes__note mono">Renders for comparison, not exact product colors</p>
         </div>
         <div class="finishes__side">
           <ul class="finishes__rail" role="listbox" aria-label="Pool finishes" data-fin-rail>
-            <li><button type="button" role="option" data-fin="plaster"><img src="img/fin-plaster.webp" alt="" data-tex="plaster"><span><b>Conventional plaster</b><i>The classic white</i></span></button></li>
-            <li><button type="button" role="option" data-fin="quartz"><img src="img/fin-quartz.webp" alt="" data-tex="quartz"><span><b>Quartz &amp; plaster</b><i>Plaster with a glimmer</i></span></button></li>
-            <li><button type="button" role="option" data-fin="diamond-brite"><img src="img/fin-diamond-brite.webp" alt="" data-tex="diamond-brite"><span><b>Diamond Brite</b><i>Quartz in polymer cement</i></span></button></li>
-            <li><button type="button" role="option" data-fin="pebble-fina"><img src="img/fin-pebble-fina.webp" alt="" data-tex="pebble-fina"><span><b>Pebble Fina</b><i>Cement and silica stone</i></span></button></li>
-            <li><button type="button" role="option" data-fin="pebble-tec"><img src="img/fin-pebble-tec.webp" alt="" data-tex="pebble-tec"><span><b>Pebble Tec</b><i>River pebbles, non-slip</i></span></button></li>
-            <li><button type="button" role="option" data-fin="pebble-sheen"><img src="img/fin-pebble-sheen.webp" alt="" data-tex="pebble-sheen"><span><b>Pebble Sheen</b><i>1–2 mm pebbles, polished</i></span></button></li>
-            <li><button type="button" role="option" data-fin="hydrazzo"><img src="img/fin-hydrazzo.webp" alt="" data-tex="hydrazzo"><span><b>Hydrazzo</b><i>Shiny and smooth</i></span></button></li>
-            <li><button type="button" role="option" data-fin="beadcrete"><img src="img/fin-beadcrete.webp" alt="" data-tex="beadcrete"><span><b>Bead Crete</b><i>Glass-bead aggregate</i></span></button></li>
-            <li><button type="button" role="option" data-fin="glass-tile"><img src="img/fin-glass-tile.webp" alt="" data-tex="glass-tile"><span><b>Glass tile</b><i>The most durable finish</i></span></button></li>
+            <li><button type="button" role="option" data-fin="plaster"><img src="img/chip-plaster.webp" alt=""><span><b>Conventional plaster</b><i>The classic white</i></span></button></li>
+            <li><button type="button" role="option" data-fin="quartz"><img src="img/chip-quartz.webp" alt=""><span><b>Quartz &amp; plaster</b><i>Plaster with a glimmer</i></span></button></li>
+            <li><button type="button" role="option" data-fin="diamond-brite"><img src="img/chip-diamond-brite.webp" alt=""><span><b>Diamond Brite</b><i>Quartz in polymer cement</i></span></button></li>
+            <li><button type="button" role="option" data-fin="pebble-fina"><img src="img/chip-pebble-fina.webp" alt=""><span><b>Pebble Fina</b><i>Cement and silica stone</i></span></button></li>
+            <li><button type="button" role="option" data-fin="pebble-tec"><img src="img/chip-pebble-tec.webp" alt=""><span><b>Pebble Tec</b><i>River pebbles, non-slip</i></span></button></li>
+            <li><button type="button" role="option" data-fin="pebble-sheen"><img src="img/chip-pebble-sheen.webp" alt=""><span><b>Pebble Sheen</b><i>1–2 mm pebbles, polished</i></span></button></li>
+            <li><button type="button" role="option" data-fin="hydrazzo"><img src="img/chip-hydrazzo.webp" alt=""><span><b>Hydrazzo</b><i>Shiny and smooth</i></span></button></li>
+            <li><button type="button" role="option" data-fin="beadcrete"><img src="img/chip-beadcrete.webp" alt=""><span><b>Bead Crete</b><i>Glass-bead aggregate</i></span></button></li>
+            <li><button type="button" role="option" data-fin="glass-tile"><img src="img/chip-glass-tile.webp" alt=""><span><b>Glass tile</b><i>The most durable finish</i></span></button></li>
           </ul>
           <article class="spec" data-spec aria-live="polite">
             <h3 class="spec__name" data-spec-name>Diamond Brite</h3>
@@ -216,11 +229,15 @@
     </div>
     <div class="process__body">
       <div class="process__sticky">
-        <div class="process__view">
-          <canvas data-water="process" aria-hidden="true"></canvas>
-          <img class="process__still" src="img/hero-still.webp" alt="" aria-hidden="true">
-          <img src="img/worn.webp" alt="" data-tex="worn" hidden>
-          <img src="img/stripped.webp" alt="" data-tex="stripped" hidden>
+        <div class="process__view" data-proc>
+          <img data-layer="old" src="img/proc-old.webp" alt="" aria-hidden="true">
+          <img data-layer="drained" src="img/proc-drained.webp" alt="" aria-hidden="true">
+          <img data-layer="stripped" src="img/proc-stripped.webp" alt="" aria-hidden="true">
+          <img data-layer="finish" src="img/proc-finish.webp" alt="" aria-hidden="true">
+          <img data-layer="cloudy" src="img/proc-cloudy.webp" alt="" aria-hidden="true">
+          <img data-layer="clear" src="img/proc-clear.webp" alt="" aria-hidden="true">
+          <span class="proc-wet" aria-hidden="true"></span>
+          <span class="proc-shore" aria-hidden="true"></span>
           <div class="gauge" aria-hidden="true"><span class="gauge__fill" data-gauge></span><i>Full</i><i>Empty</i></div>
           <p class="process__state mono" aria-hidden="true"><span data-state>Old surface</span></p>
         </div>
