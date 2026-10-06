@@ -23,7 +23,6 @@ OUT.mkdir(parents=True, exist_ok=True)
 PHOTOS = [
     ('mirror', 'dr-cameron-with-patient.avif', 1500, 80),
     ('shade', 'three.avif', 1300, 78),
-    ('rootcanal', 'root-canal-naples_desktop.jpg', 1800, 78),
     ('xray', 'dr-al-xrays-2a.avif', 1400, 78),
     ('kid', 'IMG_3715-scaled-1-e1760392104527.avif', 1100, 78),
     ('building', 'cameron-dental-building-2.avif', 1500, 78),
@@ -31,7 +30,6 @@ PHOTOS = [
     ('waiting', 'IMG_3641-scaled.jpg', 1500, 76),
     ('desk', 'IMG_3567.jpg', 1400, 76),
     ('art', 'IMG_3645.jpg', 1200, 76),
-    ('hall', 'IMG_3646.jpg', 1100, 76),
     ('cbct', 'IMG_3611-scaled-e1752787983246.jpg', 1200, 76),
     ('dr-cameron', 'Dr.-Andrea-Cameron.jpg', 900, 80),
     ('dr-djindil', 'IMG_3561-scaled-e1708028912200.jpg', 900, 80),
