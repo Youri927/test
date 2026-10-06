@@ -97,8 +97,9 @@
   const onScroll = () => {
     const y = scrollY;
     hd.classList.toggle('is-solid', y > 40);
-    hd.classList.toggle('is-hidden', y > lastY + 2 && y > 240 && !drawer.hasAttribute('data-open'));
-    if (y < lastY - 2) hd.classList.remove('is-hidden');
+    // l'en-tête se range quand on descend, revient quand on remonte (rien ne change à l'arrêt)
+    if (y > lastY + 2 && y > 240 && !drawer.hasAttribute('data-open')) hd.classList.add('is-hidden');
+    else if (y < lastY - 2 || y <= 240) hd.classList.remove('is-hidden');
     mbar.classList.toggle('is-on', y > hero.offsetHeight * 0.7 && !contactSeen && !drawer.hasAttribute('data-open'));
     lastY = y;
     paintSky();
