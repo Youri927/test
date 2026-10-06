@@ -205,11 +205,19 @@
     const c = cols();
     visible().forEach((f, i) => f.style.setProperty('--fd', `${250 + ((i % c) + Math.floor(i / c)) * 90}ms`));
     if (reduce) { head.classList.add('is-in'); faces.forEach((f) => f.classList.add('is-in')); return; }
+    wall.classList.add('is-intro');
     requestAnimationFrame(() => {
       head.classList.add('is-in');
       faces.forEach((f) => f.classList.add('is-in'));
       G.fromTo(ins, {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: 0.9, stagger: 0.07, ease: 'power3.out', delay: 0.45});
     });
+    const list = visible();
+    setTimeout(() => {
+      list.forEach((f, i) => f.style.setProperty('--wd', `${((i % c) + Math.floor(i / c)) * 110}ms`));
+      wall.classList.add('is-flipping');
+      wall.classList.remove('is-intro');
+      setTimeout(() => { wall.classList.remove('is-flipping'); faces.forEach((f) => f.style.removeProperty('--wd')); }, 2600);
+    }, 1900);
   }
 
   /* ——— Apparitions ——— */
@@ -219,8 +227,8 @@
     const show = (el) => {
       const now = performance.now();
       if (now - batchT > 140) { batch = 0; batchT = now; }
-      if (el.matches('[data-reveal]') && !el.style.getPropertyValue('--d')) el.style.setProperty('--d', `${Math.min(batch++, 6) * 70}ms`);
-      el.classList.add('is-in');
+      if (el.matches('[data-reveal], .doc') && !el.style.getPropertyValue('--d')) el.style.setProperty('--d', `${Math.min(batch++, 6) * 70}ms`);
+      el.classList.add(el.matches('.proof li') ? 'is-drawn' : 'is-in');
       const img = el.matches('.pic') && $('img[data-drift]', el);
       if (img && !reduce) G.fromTo(img, {scale: 1.12}, {scale: 1, duration: 1.8, ease: 'expo.out'});
     };
@@ -229,7 +237,7 @@
       obs.unobserve(en.target);
       show(en.target);
     }), {rootMargin: '0px 0px -8% 0px'});
-    [...splits.filter((el) => el.id !== 'hero-t'), ...$$('[data-reveal], .pic[data-pic]')].forEach((el) => obs.observe(el));
+    [...splits.filter((el) => el.id !== 'hero-t'), ...$$('[data-reveal], .pic[data-pic], .doc, .proof li, [data-ft-big]')].forEach((el) => obs.observe(el));
   }
 
   /* ——— Photos qui glissent dans leur cadre au défilement ——— */
@@ -247,9 +255,137 @@
     const pic = $('[data-bleed]');
     const fig = pic.parentNode;
     const side = () => { const cs = getComputedStyle(fig.parentNode); return fig.parentNode.getBoundingClientRect().left + parseFloat(cs.paddingLeft); };
-    G.fromTo(pic, {clipPath: () => `inset(0px ${side()}px 0px ${side()}px round 6px)`}, {clipPath: 'inset(0px 0px 0px 0px round 0px)', ease: 'none',
-      scrollTrigger: {trigger: fig, start: 'top 88%', end: 'top 18%', scrub: 0.4, invalidateOnRefresh: true}});
+    G.fromTo(pic, {scale: () => 1 - (2 * side()) / innerWidth, borderRadius: 8}, {scale: 1, borderRadius: 0, ease: 'none',
+      scrollTrigger: {trigger: fig, start: 'top 90%', end: 'top 20%', scrub: 0.4, invalidateOnRefresh: true}});
   }
+
+  /* ——— Barre de progression de lecture ——— */
+  function progress() {
+    const bar = $('[data-progress]');
+    if (reduce) { bar.hidden = true; return; }
+    G.to(bar, {scaleX: 1, ease: 'none', scrollTrigger: {trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 0.3}});
+  }
+
+  /* ——— Au défilement, les colonnes du mur se décalent ——— */
+  function wallDepth() {
+    if (reduce) return;
+    const mm = G.matchMedia();
+    mm.add('(min-width: 901px)', () => {
+      const c = cols();
+      const shift = [0, -70, -25, -95];
+      visible().forEach((f, i) => G.to(f, {y: shift[i % c] || 0, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.5}}));
+      G.to('.hero__text', {y: 60, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 0.5}});
+    });
+  }
+
+  /* ——— Bandeau des soins : il défile, accélère et change de sens avec le défilement ——— */
+  function marquee() {
+    const track = $('[data-marquee-track]');
+    track.innerHTML += track.innerHTML;
+    if (reduce) return;
+    let x = 0;
+    let dir = -1;
+    let boost = 0;
+    let half = track.scrollWidth / 2;
+    addEventListener('resize', () => { half = track.scrollWidth / 2; });
+    if (lenis) lenis.on('scroll', ({velocity}) => { if (Math.abs(velocity) > 0.2) dir = velocity > 0 ? -1 : 1; boost = Math.min(Math.abs(velocity) * 1.6, 28); });
+    let inView = true;
+    new IntersectionObserver(([en]) => { inView = en.isIntersecting; }).observe(track.parentNode);
+    G.ticker.add((t, dt) => {
+      if (!inView) return;
+      boost *= 0.92;
+      x += dir * (0.9 + boost) * (dt / 16.7);
+      if (x <= -half) x += half;
+      if (x > 0) x -= half;
+      track.style.transform = `translate3d(${x.toFixed(2)}px,0,0)`;
+    });
+  }
+
+  /* ——— Le cas de Donald : la section se fige, un balayage révèle le nouveau sourire ——— */
+  function compare() {
+    const cmp = $('[data-cmp]');
+    const pct = $('[data-cmp-pct]');
+    const set = (p) => { cmp.style.setProperty('--p', p.toFixed(4)); pct.textContent = Math.round(p * 100); };
+    // on peut aussi faire glisser la ligne à la main
+    $$('.cmp__f', cmp).forEach((f) => {
+      const at = (e) => { const r = f.getBoundingClientRect(); set(Math.min(1, Math.max(0, (e.clientX - r.left) / r.width))); };
+      f.addEventListener('pointerdown', (e) => { f.setPointerCapture(e.pointerId); at(e); f.addEventListener('pointermove', at); });
+      f.addEventListener('pointerup', () => f.removeEventListener('pointermove', at));
+      f.addEventListener('pointercancel', () => f.removeEventListener('pointermove', at));
+      f.style.cursor = 'ew-resize';
+      f.style.touchAction = 'pan-y';
+    });
+    if (reduce) { set(0.5); return; }
+    set(0);
+    const state = {p: 0};
+    const mm = G.matchMedia();
+    mm.add('(min-width: 901px)', () => {
+      G.timeline({scrollTrigger: {trigger: '.story', start: 'top top', end: '+=110%', pin: true, scrub: 0.6, anticipatePin: 1}})
+        .to(state, {p: 1, ease: 'none', duration: 1, onUpdate: () => set(state.p)}, 0.08)
+        .to({}, {duration: 0.12});
+    });
+    mm.add('(max-width: 900px)', () => {
+      G.to(state, {p: 1, ease: 'none', onUpdate: () => set(state.p), scrollTrigger: {trigger: cmp, start: 'top 75%', end: 'bottom 45%', scrub: 0.5}});
+    });
+  }
+
+  /* ——— Témoignage de Dawn : les mots s'allument au fil de la lecture ——— */
+  function words() {
+    $$('[data-words]').forEach((el) => {
+      el.innerHTML = el.textContent.split(/\s+/).map((w) => `<span class="w">${w}</span>`).join(' ');
+      if (reduce) return;
+      G.to($$('.w', el), {opacity: 1, stagger: 0.1, ease: 'none', scrollTrigger: {trigger: el, start: 'top 82%', end: 'bottom 52%', scrub: 0.4}});
+    });
+  }
+
+  /* ——— Les pages bleues s'élargissent jusqu'aux bords ——— */
+  function panels() {
+    if (reduce) return;
+    const mm = G.matchMedia();
+    mm.add('(min-width: 701px)', () => {
+      const undo = [];
+      ['.reviews', '.visit'].forEach((sel) => {
+        const sec = $(sel);
+        const bg = document.createElement('div');
+        bg.className = 'panel-bg';
+        bg.setAttribute('aria-hidden', 'true');
+        sec.prepend(bg);
+        sec.classList.add('has-bg');
+        G.fromTo(bg, {scaleX: () => 1 - 96 / innerWidth, scaleY: 0.96, borderRadius: 28}, {scaleX: 1, scaleY: 1, borderRadius: 0, ease: 'none',
+          scrollTrigger: {trigger: sec, start: 'top 95%', end: 'top 25%', scrub: 0.4, invalidateOnRefresh: true}});
+        undo.push(() => { bg.remove(); sec.classList.remove('has-bg'); });
+      });
+      return () => undo.forEach((f) => f());
+    });
+    // les quatre avis de la liste glissent un peu plus vite que la citation principale
+    G.fromTo('.quotes figure:not(:first-child)', {y: 50}, {y: -30, ease: 'none', scrollTrigger: {trigger: '.quotes', start: 'top bottom', end: 'bottom top', scrub: 0.5}});
+    // photos du cabinet : profondeurs différentes
+    G.fromTo('.office__b, .office__c', {y: 60}, {y: -40, ease: 'none', scrollTrigger: {trigger: '.office__grid', start: 'top bottom', end: 'bottom top', scrub: 0.5}});
+  }
+
+  /* ——— Première visite : une ligne relie les étapes ——— */
+  function steps() {
+    const ol = $('.steps');
+    if (reduce) { ol.style.setProperty('--prog', 1); $$('li', ol).forEach((li) => li.classList.add('is-on')); return; }
+    G.to(ol, {'--prog': 1, ease: 'none', scrollTrigger: {trigger: ol, start: 'top 70%', end: 'bottom 60%', scrub: 0.4}});
+    $$('li', ol).forEach((li) => ST.create({trigger: li, start: 'top 68%', toggleClass: 'is-on'}));
+  }
+
+  /* ——— Pied de page : le nom du cabinet remplit la largeur, lettre par lettre ——— */
+  const ftBig = $('[data-ft-big]');
+  ftBig.innerHTML = [...ftBig.textContent].map((c, i) => (c === ' ' ? ' ' : `<span class="ch" style="--i:${i}">${c}</span>`)).join('');
+  const fitBig = () => {
+    const box = ftBig.parentNode;
+    const cs = getComputedStyle(box);
+    const avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    let size = 100;
+    for (let k = 0; k < 3; k++) {
+      ftBig.style.fontSize = `${size}px`;
+      size *= avail / ftBig.scrollWidth;
+    }
+    ftBig.style.fontSize = `${size}px`;
+  };
+  document.fonts.addEventListener('loadingdone', () => fitBig());
 
   /* ——— Visionneuse des 18 cas ——— */
   function startCase() {
@@ -423,6 +559,8 @@
   async function start() {
     await document.fonts.ready.catch(() => {});
     splits.forEach(splitLines);
+    fitBig();
+    words();
     intro();
     startWall();
     startCase();
@@ -432,6 +570,12 @@
     startForm();
     drifts();
     bleed();
+    progress();
+    wallDepth();
+    marquee();
+    compare();
+    panels();
+    steps();
     reveals();
     let w0 = innerWidth;
     let rt;
@@ -441,6 +585,7 @@
       clearTimeout(rt);
       rt = setTimeout(() => {
         splits.forEach((el) => { const was = el.classList.contains('is-in'); splitLines(el); if (was) el.classList.add('is-in'); });
+        fitBig();
         ST.refresh();
       }, 200);
     });

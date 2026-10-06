@@ -45,6 +45,7 @@
     </div>
     <button class="hd__menu" type="button" aria-expanded="false" aria-controls="menu" data-menu><span class="sr">Menu</span><i aria-hidden="true"></i></button>
   </div>
+  <i class="progress" aria-hidden="true" data-progress></i>
 </header>
 
 <div class="menu" id="menu" hidden data-drawer data-lenis-prevent>
@@ -96,6 +97,19 @@
     <li data-in><b>In pain?</b><span>Seen the same day, Mon–Fri</span></li>
   </ul>
 
+  <div class="marquee" aria-hidden="true" data-marquee>
+    <div class="marquee__track" data-marquee-track>
+      <span>Smile makeovers</span><svg class="marquee__t"><use href="#tooth"/></svg>
+      <span>Teeth whitening</span><svg class="marquee__t"><use href="#tooth"/></svg>
+      <span>Invisalign</span><svg class="marquee__t"><use href="#tooth"/></svg>
+      <span>Implants</span><svg class="marquee__t"><use href="#tooth"/></svg>
+      <span>Dentures</span><svg class="marquee__t"><use href="#tooth"/></svg>
+      <span>Family dentistry</span><svg class="marquee__t"><use href="#tooth"/></svg>
+      <span>Gentle sedation</span><svg class="marquee__t"><use href="#tooth"/></svg>
+      <span>Same-day emergencies</span><svg class="marquee__t"><use href="#tooth"/></svg>
+    </div>
+  </div>
+
   <!-- La Dr. Cameron -->
   <section class="doctor" id="doctor" aria-labelledby="doctor-t">
     <figure class="doctor__photo">
@@ -122,17 +136,22 @@
 
   <!-- Un cas en détail -->
   <section class="story" id="smiles" aria-labelledby="story-t">
-    <div class="ba" data-reveal>
-      <figure class="ba__col">
-        <figcaption class="tag">Before</figcaption>
-        <div class="ba__face"><img src="img/case13-fb.webp" alt="Donald before treatment" width="480" height="600" loading="lazy"></div>
-        <div class="ba__close"><img src="img/case13-cb.webp" alt="Donald’s teeth before treatment" width="720" height="460" loading="lazy"></div>
+    <div class="cmp" data-cmp>
+      <figure class="cmp__f cmp__f--face">
+        <img class="cmp__b" src="img/case13-fb.webp" alt="Donald before treatment" width="480" height="600" loading="lazy">
+        <span class="cmp__aw"><img class="cmp__a" src="img/case13-fa.webp" alt="Donald after treatment, smiling" width="480" height="600" loading="lazy"></span>
+        <i class="cmp__line" aria-hidden="true"></i>
+        <span class="tag tag--blue cmp__ta">After</span><span class="tag cmp__tb">Before</span>
       </figure>
-      <figure class="ba__col">
-        <figcaption class="tag tag--blue">After</figcaption>
-        <div class="ba__face"><img src="img/case13-fa.webp" alt="Donald after treatment, smiling" width="480" height="600" loading="lazy"></div>
-        <div class="ba__close"><img src="img/case13-ca.webp" alt="Donald’s teeth after treatment" width="720" height="460" loading="lazy"></div>
-      </figure>
+      <div class="cmp__side">
+        <p class="cmp__hint" aria-hidden="true"><span class="cmp__pct" data-cmp-pct>0</span> Scroll to reveal the new smile</p>
+        <figure class="cmp__f cmp__f--close">
+          <img class="cmp__b" src="img/case13-cb.webp" alt="Donald’s teeth before treatment" width="720" height="460" loading="lazy">
+          <span class="cmp__aw"><img class="cmp__a" src="img/case13-ca.webp" alt="Donald’s teeth after treatment" width="720" height="460" loading="lazy"></span>
+          <i class="cmp__line" aria-hidden="true"></i>
+          <span class="tag tag--blue cmp__ta">After</span><span class="tag cmp__tb">Before</span>
+        </figure>
+      </div>
     </div>
     <div class="story__text">
       <p class="eyebrow" data-reveal>Smile makeover, upper and lower teeth</p>
@@ -295,8 +314,8 @@
         <p>A pill before your visit. You stay conscious and relaxed while we monitor your vital signs, and you likely won’t remember the procedure. Someone drives you home.</p>
       </li>
     </ol>
-    <figure class="comfort__quote" data-reveal>
-      <blockquote><p>“As a person who had previously struggled with dental anxiety, the personal one-on-one attention, caring staff, and beautiful office vibe let me know that I am in good hands here and can relax! I no longer dread dental appointments.”</p></blockquote>
+    <figure class="comfort__quote">
+      <blockquote><p data-words>“As a person who had previously struggled with dental anxiety, the personal one-on-one attention, caring staff, and beautiful office vibe let me know that I am in good hands here and can relax! I no longer dread dental appointments.”</p></blockquote>
       <figcaption>Dawn Pike, patient</figcaption>
     </figure>
   </section>
@@ -468,6 +487,7 @@
 </main>
 
 <footer class="ft">
+  <p class="ft__big" aria-hidden="true" data-ft-big>Cameron Dental Studio</p>
   <div class="ft__top">
     <a class="brand brand--ft" href="#top" aria-label="Cameron Dental Studio, back to top">
       <svg class="brand__tooth" aria-hidden="true"><use href="#tooth"/></svg>

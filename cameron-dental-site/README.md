@@ -27,16 +27,32 @@ Une première version, « The Smile Issue », mise en page comme un magazine, a 
 | En-tête | Le logo (la dent de leur logo, redessinée), le menu, l'état « Open now / Closed » calculé à l'heure de Naples (lundi–vendredi, 7 h–17 h), le téléphone et le bouton de rendez-vous. |
 | Accueil | « Gentle, non-judgmental, beautiful dentistry » (leur accroche), deux boutons (rendez-vous, appel), la note Google, et le mur des sourires. Dessous, quatre raisons de choisir le cabinet : Top Dentist 2021, près de 5 étoiles, conventionné PPO, urgences le jour même. |
 | La Dr. Cameron | La photo du miroir, « Every smile is a work of art », son parcours, l'avis d'une patiente, ses distinctions. |
-| Un cas en détail | Donald Rebello : avant / après (visage et sourire), avec son avis signé. Le bouton « See all 18 smiles » ouvre la visionneuse. |
+| Un cas en détail | Donald Rebello : avant / après (visage et sourire) révélé par un balayage, avec son avis signé. Le bouton « See all 18 smiles » ouvre la visionneuse. |
 | Les soins | Huit soins en accordéon : esthétique, blanchiment, aligneurs, implants et prothèses, famille, holistique, ronflement, urgences. Chaque lien « Ask about… » présélectionne le sujet dans le formulaire. |
 | Le confort | « Nervous about the dentist? Tell us. » : trois niveaux d'aide (approche douce, protoxyde d'azote, sédation consciente), d'après leurs propres textes, et l'avis de Dawn Pike. |
-| Les dentistes | La photo d'équipe, qui s'élargit jusqu'aux bords de l'écran au défilement, puis les cinq dentistes, avec une courte biographie. |
+| Les dentistes | La photo d'équipe, puis les cinq dentistes, avec une courte biographie. |
 | Les avis | Page bleue : un avis en grand, cinq autres, les liens Google, Yelp et Facebook, et les couvertures de magazines. |
 | Le cabinet | Les photos du cabinet, l'équipement, le lien vers leur visite vidéo. |
 | Première visite et assurances | Les quatre étapes de la première visite. Un vérificateur d'assurance : on tape le nom de son assurance, la liste de leur page « finances » répond (25 PPO, 6 plans de réduction). Les moyens de paiement. |
 | Rendez-vous | Page bleu marine : le téléphone, l'adresse, les horaires, la photo du bâtiment et le formulaire. |
 
 Sur téléphone, une barre « Call / Book a visit » apparaît après l'accueil. Elle se retire sur la section rendez-vous.
+
+## Les animations
+
+- **Ouverture** : les douze visages arrivent en balayage, d'abord en « avant », puis basculent en vague sur leur « après ». Le titre monte ligne par ligne.
+- **Accueil, au défilement** : les colonnes du mur se décalent à des vitesses différentes, pour donner de la profondeur.
+- **Bandeau des soins** : il défile en continu, accélère quand on fait défiler la page et change de sens avec elle. Les séparateurs sont la dent de leur logo.
+- **Le cas de Donald** : la section se fige pendant qu'un balayage révèle le nouveau sourire, avec un compteur de 0 à 100 %. On peut aussi faire glisser la ligne à la main. Sur téléphone, le balayage suit le défilement, sans arrêt.
+- **Témoignage de Dawn** : les mots s'allument au fil de la lecture.
+- **Photo d'équipe** : elle s'agrandit jusqu'aux bords de l'écran.
+- **Pages bleues** (avis, rendez-vous) : elles s'élargissent jusqu'aux bords à leur arrivée.
+- **Première visite** : une ligne relie les quatre étapes au fil du défilement, et chaque pastille se remplit à son tour.
+- **Détails** :
+  - les filets des listes qui se tracent, les portraits découverts de bas en haut, les couvertures de magazines qui s'ouvrent en éventail ;
+  - les photos qui glissent dans leur cadre, les boutons qui se remplissent au survol, une barre de progression de lecture ;
+  - le nom du cabinet en grand, lettre par lettre, en pied de page.
+- **Fluidité** : uniquement des transformations et des opacités. Les balayages et les élargissements ne redessinent rien.
 
 ## Contenus
 

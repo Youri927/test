@@ -81,7 +81,7 @@ views = [
     ('top-before.png', 'The smile wall, switched to “before”', 'Hover one face, or flip all twelve in a wave'),
     ('case.png', 'Any smile, up close', 'Before / after, faces and close-ups; arrows or swipe for all 18'),
     ('doctor.png', 'Dr. Andrea Cameron', '“Every smile is a work of art”: her story, a patient’s words'),
-    ('story.png', 'One case in detail', 'Donald Rebello’s new smile, with his own review'),
+    ('story.png', 'One case in detail', 'The section holds still while a wipe reveals the new smile'),
     ('treat.png', 'What we do', 'Eight treatments, written from their own pages'),
     ('comfort.png', 'Nervous about the dentist?', 'Three levels of help, from their sedation pages'),
     ('team.png', 'Five doctors', 'The team photo widens to the edges as you scroll'),
