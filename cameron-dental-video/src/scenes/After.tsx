@@ -152,7 +152,7 @@ export const AfterCare: React.FC = () => {
 
 /* ——— L'équipe, puis les avis ——— */
 export const TEAM_LEN = 10 * BEAT;
-const TEAM_CUT = 250;
+const TEAM_CUT = 315;
 export const AfterTeam: React.FC = () => {
   const last = onSite(B, 720, 470, {f: 0, s: 1.04});
   return (
@@ -172,7 +172,7 @@ export const AfterTeam: React.FC = () => {
       </CameraRig>
       <LowerThird tag="The team" title="Five doctors, one studio." text="The team photo widens to the edges; every doctor has a face, a role and a short bio." at={30} out={TEAM_CUT - 6} right />
       <Sequence from={TEAM_CUT} layout="none">
-        <LowerThird tag="Reviews" title="Patients say it best." text="Real, signed reviews, and nearly five stars from 150+ Google reviews." at={20} out={TEAM_LEN - TEAM_CUT - 26} right dark />
+        <LowerThird tag="Reviews" title="Patients say it best." text="Real, signed reviews, and nearly five stars from 150+ Google reviews." at={8} out={TEAM_LEN - TEAM_CUT - 22} right dark />
       </Sequence>
     </AbsoluteFill>
   );
