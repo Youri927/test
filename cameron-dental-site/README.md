@@ -1,6 +1,6 @@
 # Cameron Dental Studio : refonte du site (maquette)
 
-`dist/index.html` est un fichier unique : polices, photos, logo, librairies et scripts sont intégrés. Il s'ouvre directement dans un navigateur, sans serveur.
+`dist/index.html` est un fichier unique (5,1 Mo) : polices, photos, logo, librairies et scripts sont intégrés. Il s'ouvre directement dans un navigateur, sans serveur.
 
 L'analyse du site actuel et les choix de direction sont dans `ANALYSE.md`. Les planches avant/après sont dans `boards/`.
 
@@ -51,6 +51,7 @@ Sur téléphone, une barre « Call / Book a visit » apparaît après la couvert
 - **Animations** : GSAP 3 + ScrollTrigger, défilement doux Lenis (`vendor/`).
   - Uniquement des transformations, des opacités et des découpes ; rien n'est calculé en continu.
   - Pas de curseur personnalisé, pas d'effet 3D.
+  - Mesuré : 60 images par seconde à l'arrêt sur toutes les sections, aucune tâche longue au défilement.
 - **Polices** : Noto Serif Display (variable en graisse et en largeur, condensée pour le grand titre) et Instrument Sans, licence OFL (`vendor/fonts/`).
 
 Pour reconstruire la page : `node build.mjs`.

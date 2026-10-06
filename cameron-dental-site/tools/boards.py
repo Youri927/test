@@ -93,16 +93,16 @@ board('avant-apres-mobile.jpg', [
 ], 520, 'Before / after on a phone', SUB, crop_h=1125)
 
 grid('nouvelle-page-sections.jpg', 'The new page, as a magazine issue', 'Real content from the studio: doctors, treatments, 18 real cases, reviews, insurance, contact', [
-    ('fin-01-contents.png', 'P. 02 · CONTENTS', 'A table of contents; each line reveals a photo on hover'),
+    ('fin-01-contents80.png', 'P. 02 · CONTENTS', 'A table of contents; each line reveals a photo on hover'),
     ('fin-02-artist100.png', 'P. 03 · THE ARTIST', 'Dr. Cameron’s profile, credentials, a patient’s words'),
     ('fin-03-smiles150.png', 'P. 04 · FEATURE', 'One case up close, with the patient’s own review'),
     ('fin-04-.sheethead60.png', 'P. 04 · EIGHTEEN SMILES', 'The whole gallery; Before / After flips every photo in a wave'),
     ('case.png', 'ONE SMILE, UP CLOSE', 'Faces before / after; press and hold the close-up to see it before'),
-    ('fin-05-treatments260.png', 'P. 05 · THE TREATMENTS', 'Eight tabs, written from their own treatment pages'),
-    ('fin-06-comfort120.png', 'P. 06 · COMFORT', 'How nervous are you? The matching comfort option, from their texts'),
-    ('fin-07-doctors380.png', 'P. 07 · THE DOCTORS', 'Five dentists; each card opens a short bio'),
+    ('fin-05-treatments150.png', 'P. 05 · THE TREATMENTS', 'Eight tabs, written from their own treatment pages'),
+    ('fin-06-comfort150.png', 'P. 06 · COMFORT', 'How nervous are you? The matching comfort option, from their texts'),
+    ('fin-07-doctors700.png', 'P. 07 · THE DOCTORS', 'Five dentists; each card opens a short bio'),
     ('fin-08-letters60.png', 'P. 08 · LETTERS', 'Real reviews, sorted by what patients mention most'),
-    ('fin-10-practical760.png', 'P. 10 · INSURANCE', 'Type your plan: their list of accepted PPO and discount plans'),
+    ('ins.png', 'P. 10 · INSURANCE', 'Type your plan: their list of accepted PPO and discount plans'),
 ], 900, 563, 2)
 
 phones = [('finm-00-top.png', 'COVER'), ('finm-03-.sheethead60.png', 'SMILES'), ('finm-04-treatments300.png', 'TREATMENTS'),
