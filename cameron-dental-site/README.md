@@ -1,38 +1,42 @@
 # Cameron Dental Studio : refonte du site (maquette)
 
-`dist/index.html` est un fichier unique (5,1 Mo) : polices, photos, logo, librairies et scripts sont intégrés. Il s'ouvre directement dans un navigateur, sans serveur.
+`dist/index.html` est un fichier unique (4,8 Mo) : polices, photos, logo, librairies et scripts sont intégrés. Il s'ouvre directement dans un navigateur, sans serveur.
 
 L'analyse du site actuel et les choix de direction sont dans `ANALYSE.md`. Les planches avant/après sont dans `boards/`.
 
-## L'idée : « The Smile Issue »
+## L'idée : de vrais sourires, en pleine lumière
 
-Leurs patientes font la couverture de magazines, et la Dr. Cameron se présente comme une artiste (« every smile is a work of art »). Le site devient donc **un numéro de magazine consacré au sourire** :
-- une couverture avec le nom du cabinet en grand titre ;
-- un sommaire ;
-- des rubriques numérotées, avec leur titre courant et leur numéro de page ;
-- des légendes, des citations, un « courrier des lecteurs » ;
-- une quatrième de couverture pour prendre rendez-vous.
+Le meilleur argument du cabinet, ce sont les sourires de ses patients. Le site les montre d'emblée : l'accueil est un mur de douze vrais patients après traitement.
+- **Au survol**, un visage montre son avant.
+- **L'interrupteur « Show before »** bascule tout le mur en vague.
+- **De temps en temps**, un visage montre seul son avant une seconde.
+- **Un clic** ouvre le cas complet.
 
-Le registre est celui des magazines de mode et d'art : un papier chaud, une encre presque noire et une seule couleur d'accent, le bleu cobalt (le bleu de leur logo, en plus franc). Deux pages changent de couleur pour rythmer la lecture : le courrier (cobalt) et la prise de rendez-vous (encre).
+Le reste est volontairement simple :
+- **Couleurs** : celles du cabinet, sur fond blanc (le bleu de leur logo et un bleu marine).
+- **Typographie** : une grotesque franche (Bricolage Grotesque) pour les titres, Hanken Grotesk pour le texte.
+- **Photos** : uniquement les vraies.
+- **Sobriété** : peu d'effets, aucun gimmick.
+
+Une première version, « The Smile Issue », mise en page comme un magazine, a été écartée. Elle reste dans l'historique git (commit `4fac857`).
 
 ## La page
 
-| Rubrique | Contenu |
+| Section | Contenu |
 | --- | --- |
-| Couverture | « CAMERON » en grand titre condensé, qui remplit la largeur de l'écran ; la photo de la Dr. Cameron qui tend le miroir à sa patiente passe devant le titre, comme sur une couverture. Quatre « titres de une » mènent aux rubriques. Accroche : « Every smile is a work of art. » |
-| En-tête | Le folio (« 04 · Before & after ») suit la rubrique en cours. L'état « Open now / Closed » est calculé à l'heure de Naples (lundi–vendredi, 7 h–17 h). |
-| 02 · Sommaire | Les rubriques ; au survol, chaque ligne découvre une photo. |
-| 03 · L'artiste | Le portrait de la Dr. Cameron, son parcours (textes de leur page), ses diplômes et prix, Top Dentist 2021, et l'avis d'une patiente. |
-| 04 · Avant / après | Un cas à la une (Donald Rebello, avec son avis signé), puis la planche des 18 sourires de leur galerie. L'interrupteur « Before / After » retourne toutes les photos en vague. Un clic ouvre le cas : les deux visages, et le gros plan du sourire ; on appuie dessus pour voir l'avant. Puis les couvertures de magazines, qui s'ouvrent en éventail au défilement. |
-| 05 · Les soins | Huit onglets : esthétique, blanchiment, aligneurs, implants et prothèses, famille, holistique, ronflement, urgences. Chaque lien « Ask about… » présélectionne le sujet dans le formulaire. |
-| 06 · Confort | « How do you feel about the dentist? » : un curseur à trois positions propose l'approche douce, le protoxyde d'azote ou la sédation consciente, d'après leurs propres textes. |
-| 07 · Les dentistes | La photo d'équipe et les cinq dentistes ; chaque carte s'ouvre sur une courte biographie. |
-| 08 · Le courrier | Des avis réels et signés, classés par thème : sans pression, douceur, honnêteté, service, premières visites. |
-| 09 · Le cabinet | Les photos du cabinet, les équipements, le lien vers leur visite vidéo. |
-| 10 · Pratique | La première visite en quatre étapes. Un vérificateur d'assurance : on tape le nom de son assurance, la liste de leur page « finances » répond (25 PPO, 6 plans de réduction). Les moyens de paiement. |
-| 11 · Rendez-vous | Le formulaire (sujet, nom, e-mail, téléphone), le téléphone, l'adresse, les horaires. Le nom du cabinet en grand ferme la page. |
+| En-tête | Le logo (la dent de leur logo, redessinée), le menu, l'état « Open now / Closed » calculé à l'heure de Naples (lundi–vendredi, 7 h–17 h), le téléphone et le bouton de rendez-vous. |
+| Accueil | « Gentle, non-judgmental, beautiful dentistry » (leur accroche), deux boutons (rendez-vous, appel), la note Google, et le mur des sourires. Dessous, quatre raisons de choisir le cabinet : Top Dentist 2021, près de 5 étoiles, conventionné PPO, urgences le jour même. |
+| La Dr. Cameron | La photo du miroir, « Every smile is a work of art », son parcours, l'avis d'une patiente, ses distinctions. |
+| Un cas en détail | Donald Rebello : avant / après (visage et sourire), avec son avis signé. Le bouton « See all 18 smiles » ouvre la visionneuse. |
+| Les soins | Huit soins en accordéon : esthétique, blanchiment, aligneurs, implants et prothèses, famille, holistique, ronflement, urgences. Chaque lien « Ask about… » présélectionne le sujet dans le formulaire. |
+| Le confort | « Nervous about the dentist? Tell us. » : trois niveaux d'aide (approche douce, protoxyde d'azote, sédation consciente), d'après leurs propres textes, et l'avis de Dawn Pike. |
+| Les dentistes | La photo d'équipe, qui s'élargit jusqu'aux bords de l'écran au défilement, puis les cinq dentistes, avec une courte biographie. |
+| Les avis | Page bleue : un avis en grand, cinq autres, les liens Google, Yelp et Facebook, et les couvertures de magazines. |
+| Le cabinet | Les photos du cabinet, l'équipement, le lien vers leur visite vidéo. |
+| Première visite et assurances | Les quatre étapes de la première visite. Un vérificateur d'assurance : on tape le nom de son assurance, la liste de leur page « finances » répond (25 PPO, 6 plans de réduction). Les moyens de paiement. |
+| Rendez-vous | Page bleu marine : le téléphone, l'adresse, les horaires, la photo du bâtiment et le formulaire. |
 
-Sur téléphone, une barre « Call / Book a visit » apparaît après la couverture. Elle se retire sur la page de rendez-vous.
+Sur téléphone, une barre « Call / Book a visit » apparaît après l'accueil. Elle se retire sur la section rendez-vous.
 
 ## Contenus
 
@@ -50,17 +54,17 @@ Sur téléphone, une barre « Call / Book a visit » apparaît après la couvert
 - **Planches** : `tools/boards.py`.
 - **Animations** : GSAP 3 + ScrollTrigger, défilement doux Lenis (`vendor/`).
   - Uniquement des transformations, des opacités et des découpes ; rien n'est calculé en continu.
-  - Pas de curseur personnalisé, pas d'effet 3D.
+  - Pas de curseur personnalisé, pas d'effet 3D, pas de dégradés ni de cartes « verre ».
   - Mesuré : 60 images par seconde à l'arrêt sur toutes les sections, aucune tâche longue au défilement.
-- **Polices** : Noto Serif Display (variable en graisse et en largeur, condensée pour le grand titre) et Instrument Sans, licence OFL (`vendor/fonts/`).
+- **Polices** : Bricolage Grotesque (Atelier Triay) et Hanken Grotesk, licence OFL (`vendor/fonts/`).
 
 Pour reconstruire la page : `node build.mjs`.
 
 ## Comportements prévus
 
 - **Mouvement réduit** (réglage système) : pas de défilement doux ni d'animation ; tout est affiché d'emblée.
-- **Clavier** : onglets et thèmes au clavier (flèches), visionneuse des cas (flèches, Échap, la touche Espace maintenue montre l'avant).
-- **Écrans testés** : 390 px (téléphone), 820 px (tablette), 1440 et 1920 px (ordinateur).
+- **Clavier** : tout se pilote au clavier ; dans la visionneuse, les flèches changent de cas et Échap la ferme. Sur téléphone, on balaie.
+- **Écrans testés** : 390 px (téléphone), 820 px (tablette), 1280, 1440 et 1920 px (ordinateur).
 
 ## À vérifier avec le client avant mise en ligne
 

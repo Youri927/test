@@ -72,43 +72,48 @@ Ce sont probablement des numéros de suivi d'appels. La maquette utilise celui d
 - **Quatre numéros de téléphone.**
 - Rien n'aide le patient anxieux à choisir, ni à savoir si son assurance est acceptée, alors que le contenu existe.
 
-## 6. Direction artistique : « The Smile Issue »
+## 6. Direction artistique : « de vrais sourires, en pleine lumière »
 
-**L'idée.** Leurs patientes font la couverture de magazines, et la Dr. Cameron est une artiste. Le site devient donc un numéro de magazine éditorial haut de gamme consacré au sourire :
-- une couverture avec le grand titre du cabinet ;
-- un sommaire ;
-- des rubriques numérotées ;
-- des légendes, des citations en exergue, du « courrier des lecteurs ».
+Une première version, « The Smile Issue » (un numéro de magazine : serif fin, mots en italique bleu, rubriques numérotées, papier crème), a été écartée : trop « concept », et ces codes sont devenus ceux des sites générés. Elle reste dans l'historique git.
 
-Le registre est celui des magazines de mode et d'art contemporain, pas d'une revue people : beaucoup de blanc, des colonnes, une seule couleur d'accent.
+**L'idée.** Montrer d'emblée ce que le cabinet fait de mieux : les sourires de ses vrais patients.
+- L'accueil est un mur de douze patients après traitement.
+- On survole un visage pour voir l'avant, ou on bascule tout le mur d'un coup.
+- Un clic ouvre le cas complet.
+- Le site ressemble à une marque, pas à un gabarit : peu d'effets, des photos réelles, une typographie franche.
 
 **Typographie.**
-- **Noto Serif Display** (variable en graisse et en largeur) : condensée et grasse pour le titre du cabinet, comme le titre d'un magazine ; fine et italique pour les titres.
-- **Instrument Sans** pour le texte, les légendes et les étiquettes.
+- **Bricolage Grotesque** pour les titres : une grotesque légèrement condensée, chaleureuse, en casse normale.
+- **Hanken Grotesk** pour le texte.
+- Pas de serif italique, pas de sur-titres en capitales espacées, pas de numérotation des rubriques.
 
-**Couleurs.**
-- Un blanc papier chaud (#F4F1EA), une encre presque noire.
-- Une couleur d'accent unique, le bleu cobalt, qui reprend le bleu de leur logo et des fauteuils du cabinet en plus franc.
+**Couleurs.** Celles du cabinet, pas une palette inventée :
+- fond blanc ;
+- bleu marine pour le texte ;
+- le bleu de leur logo (#458EB7), approfondi pour les boutons (#2A73A3) ;
+- un bleu ciel très pâle, comme les fauteuils de leur salle d'attente, pour la page « confort ».
 
 **Images.** Uniquement les vraies photos :
+- les 18 cas avant / après ;
 - la Dr. Cameron qui tend le miroir à une patiente ;
-- l'équipe, le cabinet et ses œuvres d'art ;
-- les 18 cas avant / après.
+- l'équipe et le cabinet.
 
 Les photos des cas, petites à l'origine, sont agrandies ×2 par super-résolution, sans retouche.
 
 **Interactions.**
-- Une planche-contact des 18 sourires. Un interrupteur « Before / After » retourne tous les portraits en vague ; un clic ouvre le cas complet.
-- Un curseur « How do you feel about the dentist? » qui propose l'option de confort adaptée, d'après leurs propres textes.
-- Un vérificateur d'assurance : on tape le nom de son assurance, on voit si le cabinet est conventionné.
-- Le « courrier des lecteurs » : les avis réels, classés par thème.
-- Un indicateur de page dans l'en-tête (« p. 03 · Before & After »), comme le folio d'un magazine.
+- Le mur des sourires :
+  - au survol, l'avant ;
+  - un interrupteur « Show before » qui bascule tous les visages en vague ;
+  - de temps en temps, un visage montre seul son avant une seconde.
+- La visionneuse des 18 cas : avant / après côte à côte, visages et gros plans, flèches du clavier et balayage.
+- Les soins en accordéon. Les liens « Ask about… » présélectionnent le sujet du formulaire.
+- Un vérificateur d'assurance : on tape le nom de son assurance, la liste du cabinet répond.
 - L'état « Open now / Closed », calculé à l'heure de Naples.
 
 **Ce qui est évité.**
 - Les photos de banque d'images, les affiches de films, les badges inventés, les compteurs.
-- Le curseur personnalisé, les effets 3D lourds.
-- Aucune retouche des photos des patients.
+- Le curseur personnalisé, les effets 3D.
+- Toute retouche des photos des patients.
 
 ## 7. À vérifier avec le client
 

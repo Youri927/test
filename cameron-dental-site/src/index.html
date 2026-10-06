@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cameron Dental Studio · Gentle, beautiful dentistry in Naples, Florida</title>
 <meta name="description" content="Cameron Dental Studio in Naples, Florida: gentle, non-judgmental, top-rated, beautiful dentistry. Cosmetic dentistry, whitening, Invisalign, implants, sedation and family care. (239) 422-7924.">
-<meta name="theme-color" content="#F4F1EA">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F4F1EA'/%3E%3Cpath d='M20 16c6-4 9 2 12 2s7-6 13-2c5 4 3 14 1 20-2 7-2 14-5 14-3 0-3-10-9-10s-6 10-9 10c-3 0-3-7-5-14-2-6-4-16 2-20Z' fill='none' stroke='%232B3BD6' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E2233'/%3E%3Cpath d='M20 16c6-4 9 2 12 2s7-6 13-2c5 4 3 14 1 20-2 7-2 14-5 14-3 0-3-10-9-10s-6 10-9 10c-3 0-3-7-5-14-2-6-4-16 2-20Z' fill='none' stroke='%2373B5DD' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -27,31 +27,36 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="hd" data-hd>
-  <a class="hd__brand" href="#cover" aria-label="Cameron Dental Studio, back to the cover">
-    <svg class="tooth" aria-hidden="true"><use href="#tooth"/></svg>
-    <span class="hd__name">Cameron Dental Studio</span>
-  </a>
-  <p class="hd__folio" aria-hidden="true" data-folio><b data-folio-n>01</b><span data-folio-t>Cover</span></p>
-  <div class="hd__end">
-    <p class="status" data-status><i aria-hidden="true"></i><span>Mon–Fri, 7 AM–5 PM</span></p>
-    <a class="hd__tel" href="tel:+12394227924">(239) 422-7924</a>
-    <a class="btn btn--ink btn--sm" href="#visit"><span>Book a visit</span></a>
+  <div class="hd__in">
+    <a class="brand" href="#top" aria-label="Cameron Dental Studio, home">
+      <svg class="brand__tooth" aria-hidden="true"><use href="#tooth"/></svg>
+      <span class="brand__name">Cameron<br>Dental Studio</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#smiles">Smiles</a>
+      <a href="#treatments">Treatments</a>
+      <a href="#comfort">Comfort</a>
+      <a href="#doctors">Doctors</a>
+      <a href="#insurance">Insurance</a>
+    </nav>
+    <div class="hd__end">
+      <a class="hd__tel" href="tel:+12394227924"><span class="status" data-status><i aria-hidden="true"></i><span>Mon–Fri, 7–5</span></span><b>(239) 422-7924</b></a>
+      <a class="btn btn--ink" href="#visit">Book a visit</a>
+    </div>
+    <button class="hd__menu" type="button" aria-expanded="false" aria-controls="menu" data-menu><span class="sr">Menu</span><i aria-hidden="true"></i></button>
   </div>
-  <button class="hd__menu" type="button" aria-expanded="false" aria-controls="menu" data-menu><span>Contents</span><i aria-hidden="true"></i></button>
 </header>
 
 <div class="menu" id="menu" hidden data-drawer data-lenis-prevent>
-  <p class="menu__t">In this issue</p>
   <nav aria-label="Menu">
-    <a href="#artist"><b>03</b>The artist</a>
-    <a href="#smiles"><b>04</b>Before &amp; after</a>
-    <a href="#treatments"><b>05</b>The treatments</a>
-    <a href="#comfort"><b>06</b>Comfort</a>
-    <a href="#doctors"><b>07</b>The doctors</a>
-    <a href="#letters"><b>08</b>Letters</a>
-    <a href="#studio"><b>09</b>Inside the studio</a>
-    <a href="#practical"><b>10</b>First visit &amp; insurance</a>
-    <a href="#visit"><b>11</b>Book a visit</a>
+    <a href="#smiles">Smiles</a>
+    <a href="#doctor">Dr. Cameron</a>
+    <a href="#treatments">Treatments</a>
+    <a href="#comfort">Comfort</a>
+    <a href="#doctors">Doctors</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#insurance">First visit &amp; insurance</a>
+    <a href="#visit">Book a visit</a>
   </nav>
   <div class="menu__foot">
     <a class="menu__tel" href="tel:+12394227924">(239) 422-7924</a>
@@ -61,584 +66,462 @@
 
 <main id="main">
 
-  <!-- ——— 01 · La couverture ——— -->
-  <section class="cover" id="cover" data-folio-of="01|Cover" aria-labelledby="cover-t">
-    <div class="cover__strip" data-in>
-      <span>The Smile Issue</span>
-      <span>Naples, Florida</span>
-      <span class="cover__strip-tag">Gentle · Non-judgmental · Top-rated · Beautiful</span>
+  <!-- Accueil : le texte, et le mur des sourires des patients -->
+  <section class="hero" id="top" aria-labelledby="hero-t">
+    <div class="hero__text">
+      <h1 class="hero__t" id="hero-t" data-lines>Gentle, non&#8209;judgmental, beautiful dentistry</h1>
+      <p class="hero__d" data-in>Dr. Andrea Cameron and her team in Naples, Florida. Cosmetic and family dentistry, implants, and real help for nervous patients.</p>
+      <div class="hero__ctas" data-in>
+        <a class="btn btn--blue btn--lg" href="#visit">Book a visit</a>
+        <a class="btn btn--line btn--lg" href="tel:+12394227924">Call (239) 422-7924</a>
+      </div>
+      <p class="hero__rating" data-in><span class="stars" aria-hidden="true">★★★★★</span> Nearly a perfect 5-star rating, from 150+ Google reviews</p>
     </div>
-    <h1 class="mast" id="cover-t" aria-label="Cameron Dental Studio">
-      <span class="mast__word" data-mast aria-hidden="true">Cameron</span>
-      <span class="mast__sub" data-in aria-hidden="true">Dental <br>Studio</span>
-    </h1>
-    <div class="cover__body">
-      <ul class="cover__lines" aria-label="In this issue">
-        <li data-in><a href="#smiles"><b>18 smiles</b><span>Before &amp; after, from our own patients</span><em>p. 04</em></a></li>
-        <li data-in><a href="#artist"><b>Top Dentist</b><span>Dr. Andrea Cameron, <i>Naples Illustrated</i>, 2021</span><em>p. 03</em></a></li>
-        <li data-in><a href="#comfort"><b>Nervous?</b><span>There’s a comfortable way through it</span><em>p. 06</em></a></li>
-        <li data-in><a href="#practical"><b>Insurance</b><span>In network with all major PPO plans</span><em>p. 10</em></a></li>
+
+    <div class="wall" data-wall>
+      <ul class="wall__grid" data-wall-grid>
+        <!--WALL-->
       </ul>
-      <figure class="cover__photo" data-cover-photo>
-        <div class="cover__frame" data-cover-frame>
-          <img src="img/mirror.webp" alt="Dr. Andrea Cameron holds up a hand mirror; her patient smiles at her new smile" width="1500" height="1343" data-cover-img>
-        </div>
-        <figcaption data-in><span>On the cover</span> Dr. Andrea Cameron, and the moment a patient sees her new smile.</figcaption>
-      </figure>
-      <div class="cover__lead">
-        <p class="cover__head" data-split>Every smile is a <em>work of art.</em></p>
-        <p class="cover__deck" data-in>Gentle, non-judgmental, top-rated, beautiful dentistry, by a dentist with an artist’s eye and the team around her.</p>
-        <div class="cover__ctas" data-in>
-          <a class="btn btn--cobalt" href="#visit"><span>Request an appointment</span><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
-          <a class="btn btn--line" href="#smiles"><span>See the smiles</span></a>
-        </div>
+      <div class="wall__bar" data-in>
+        <p class="wall__cap">Real patients of the studio, after treatment. <span class="wall__hint">Hover a smile to see it before.</span></p>
+        <button class="switch" type="button" role="switch" aria-checked="false" data-flip><span class="switch__t">Show before</span><i aria-hidden="true"></i></button>
       </div>
     </div>
   </section>
 
-  <!-- ——— 02 · Le sommaire ——— -->
-  <section class="contents" id="contents" data-folio-of="02|Contents" aria-labelledby="contents-t">
-    <div class="rh" data-rule><span>Cameron Dental Studio</span><span>The Smile Issue</span><b>02</b></div>
-    <h2 class="contents__t" id="contents-t" data-split>In this issue</h2>
-    <ol class="toc">
-      <li><a href="#artist" data-reveal><b>03</b><span class="toc__t">The artist</span><span class="toc__d">Dr. Andrea Cameron, on science, art and trust</span><span class="toc__img" aria-hidden="true"><img src="img/dr-cameron.webp" alt="" width="900" height="900" loading="lazy"></span></a></li>
-      <li><a href="#smiles" data-reveal><b>04</b><span class="toc__t">Before &amp; after</span><span class="toc__d">Eighteen smiles from the studio’s own gallery</span><span class="toc__img" aria-hidden="true"><img src="img/case01-fa.webp" alt="" width="480" height="600" loading="lazy"></span></a></li>
-      <li><a href="#treatments" data-reveal><b>05</b><span class="toc__t">The treatments</span><span class="toc__d">From a single bonded tooth to implants</span><span class="toc__img" aria-hidden="true"><img src="img/cos-a.webp" alt="" width="780" height="364" loading="lazy"></span></a></li>
-      <li><a href="#comfort" data-reveal><b>06</b><span class="toc__t">Comfort</span><span class="toc__d">How gentle care and sedation work</span><span class="toc__img" aria-hidden="true"><img src="img/waiting.webp" alt="" width="1500" height="1125" loading="lazy"></span></a></li>
-      <li><a href="#doctors" data-reveal><b>07</b><span class="toc__t">The doctors</span><span class="toc__d">Five dentists, one studio</span><span class="toc__img" aria-hidden="true"><img src="img/team.webp" alt="" width="1536" height="1152" loading="lazy"></span></a></li>
-      <li><a href="#letters" data-reveal><b>08</b><span class="toc__t">Letters</span><span class="toc__d">What patients write about us</span><span class="toc__img" aria-hidden="true"><img src="img/case13-fa.webp" alt="" width="480" height="600" loading="lazy"></span></a></li>
-      <li><a href="#studio" data-reveal><b>09</b><span class="toc__t">Inside the studio</span><span class="toc__d">Bright rooms, art on the walls, 3D imaging</span><span class="toc__img" aria-hidden="true"><img src="img/art.webp" alt="" width="1200" height="900" loading="lazy"></span></a></li>
-      <li><a href="#practical" data-reveal><b>10</b><span class="toc__t">First visit &amp; insurance</span><span class="toc__d">What to expect, and whether your plan is accepted</span><span class="toc__img" aria-hidden="true"><img src="img/desk.webp" alt="" width="1400" height="1050" loading="lazy"></span></a></li>
-    </ol>
-  </section>
+  <ul class="proof" aria-label="Why patients choose us">
+    <li data-in><b>Top Dentist</b><span><i>Naples Illustrated</i>, 2021</span></li>
+    <li data-in><b>Nearly 5 stars</b><span>150+ Google reviews</span></li>
+    <li data-in><b>In network</b><span>with all major PPO plans</span></li>
+    <li data-in><b>In pain?</b><span>Seen the same day, Mon–Fri</span></li>
+  </ul>
 
-  <!-- ——— 03 · L'artiste ——— -->
-  <section class="artist" id="artist" data-folio-of="03|The artist" aria-labelledby="artist-t">
-    <div class="rh" data-rule><span>Profile</span><span>The artist</span><b>03</b></div>
-    <div class="artist__grid">
-      <figure class="artist__portrait">
-        <div class="plate" data-plate><img src="img/dr-cameron.webp" alt="Portrait of Dr. Andrea Cameron" width="900" height="900" loading="lazy" data-drift></div>
-        <figcaption>Dr. Andrea Cameron, DDS. Founder of the studio.</figcaption>
-      </figure>
-      <div class="artist__text">
-        <p class="kicker" data-reveal>Profile · Dr. Andrea Cameron</p>
-        <h2 class="artist__quote" id="artist-t" data-split>“She considers every smile she designs or renews to be a <em>work of art.</em>”</h2>
-        <div class="artist__cols">
-          <p class="dropcap" data-reveal>Growing up near Toronto, Andrea Cameron found her calling at ten. By sixteen she was spending every summer in a dental office, learning all she could. She went on to graduate with honors from the University of Toronto’s Faculty of Dentistry, collecting awards along the way.</p>
-          <p data-reveal>Today she works where medical science meets art: restoring healthy function and aesthetics, and with them confidence. Smile makeovers are her favorite work. Outside the studio she makes art of other kinds: detailed ceramics, expansive wall murals, clothing design.</p>
-          <p data-reveal>Trust is the cornerstone of her practice. She explains, she offers options, and she leaves the decision to you, in a no-pressure environment.</p>
-          <blockquote class="artist__letter" data-reveal>
-            <p>“She partners with you as to work she recommends as opposed to dictating what you ‘must’ have done.”</p>
-            <cite>Maureen Schwartz, patient</cite>
-          </blockquote>
-        </div>
-      </div>
-      <aside class="creds" aria-label="Education and honors" data-reveal>
-        <p class="creds__t">Credentials</p>
-        <dl>
-          <div><dt>DDS</dt><dd>University of Toronto, Faculty of Dentistry, honors graduate</dd></div>
-          <div><dt>Hon. BSc</dt><dd>Physiology, University of Western Ontario</dd></div>
-          <div><dt>Certified</dt><dd>Invisalign · Botox</dd></div>
-          <div><dt>Honors</dt><dd>Prosthodontic Award (full-mouth reconstruction &amp; cosmetic dentistry) · Paul Takahashi Scholarship · Wroblewski Memorial Award</dd></div>
-          <div class="creds__star"><dt>2021</dt><dd>Top Dentist, <i>Naples Illustrated</i></dd></div>
-        </dl>
-      </aside>
-    </div>
-  </section>
-
-  <!-- ——— 04 · Avant / après ——— -->
-  <section class="smiles" id="smiles" data-folio-of="04|Before &amp; after" aria-labelledby="smiles-t">
-    <div class="rh" data-rule><span>Portfolio</span><span>Before &amp; after</span><b>04</b></div>
-
-    <article class="lead" aria-labelledby="lead-t">
-      <div class="lead__faces">
-        <figure class="lead__after"><div class="plate" data-plate><img src="img/case13-fa.webp" alt="Donald, after treatment, smiling" width="480" height="600" loading="lazy"></div><figcaption>After</figcaption></figure>
-        <figure class="lead__before"><div class="plate" data-plate><img src="img/case13-fb.webp" alt="Donald, before treatment" width="480" height="600" loading="lazy"></div><figcaption>Before</figcaption></figure>
-      </div>
-      <div class="lead__text">
-        <p class="kicker" data-reveal>Feature · Upper and lower smile</p>
-        <h2 class="lead__t" id="lead-t" data-split>“It’s absolutely <em>gorgeous.</em> I get many compliments!”</h2>
-        <p class="lead__body" data-reveal>Dr. Cameron and staff created a brand-new smile for me, both upper and lower teeth. Dr. Cameron is the consummate professional, and her staff is both pleasant and professional, as well.</p>
-        <p class="lead__by" data-reveal>Donald Rebello, patient</p>
-        <div class="lead__close" data-reveal>
-          <figure><img src="img/case13-cb.webp" alt="Donald’s teeth before" width="720" height="460" loading="lazy"><figcaption>Before</figcaption></figure>
-          <figure><img src="img/case13-ca.webp" alt="Donald’s teeth after" width="720" height="460" loading="lazy"><figcaption>After</figcaption></figure>
-        </div>
-      </div>
-    </article>
-
-    <div class="sheet-head">
-      <h3 class="sheet-head__t" id="smiles-t" data-split>Eighteen smiles.</h3>
-      <p class="sheet-head__d" data-reveal>Real patients of the studio, photographed before and after treatment. Flip the whole sheet, or open a smile to see it up close.</p>
-      <div class="flip is-after" role="group" aria-label="Show photos" data-reveal>
-        <button type="button" aria-pressed="false" data-flip="before">Before</button>
-        <button type="button" aria-pressed="true" data-flip="after">After</button>
-        <i aria-hidden="true"></i>
-      </div>
-    </div>
-    <ol class="sheet" data-sheet>
-      <!--CASES-->
-    </ol>
-    <p class="sheet-note" data-reveal>From the smile gallery of Cameron Dental Studio. Photos are shown as published, without retouching by us.</p>
-
-    <div class="covers">
-      <div class="covers__text">
-        <p class="kicker" data-reveal>Cover stars</p>
-        <h3 class="covers__t" data-split>Our patients’ smiles, on the covers of magazines.</h3>
-        <p class="covers__d" data-reveal><i>Gulfshore Life</i>, twice, and <i>Naples Illustrated</i>.</p>
-      </div>
-      <div class="covers__stack" data-covers>
-        <figure class="cv" style="--r:-7deg;--x:-6%"><img src="img/cover-ni.webp" alt="Naples Illustrated: Ingrid Aielli, 2016 Leading Lady" width="700" height="955" loading="lazy"></figure>
-        <figure class="cv" style="--r:2deg;--x:0%"><img src="img/cover-social.webp" alt="Gulfshore Life magazine cover, The Social Register issue" width="700" height="907" loading="lazy"></figure>
-        <figure class="cv" style="--r:8deg;--x:6%"><img src="img/cover-taste.webp" alt="Gulfshore Life magazine cover, All in Good Taste" width="700" height="956" loading="lazy"></figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- ——— 05 · Les soins ——— -->
-  <section class="treat" id="treatments" data-folio-of="05|The treatments" aria-labelledby="treat-t">
-    <div class="rh" data-rule><span>Guide</span><span>The treatments</span><b>05</b></div>
-    <header class="treat__head">
-      <h2 class="h2" id="treat-t" data-split>The treatments.</h2>
-      <p class="deck" data-reveal>From a single bonded tooth to a complete smile makeover, and everything a family needs in between.</p>
-    </header>
-    <div class="tabs" role="tablist" aria-label="Treatments" data-tabs data-reveal>
-      <button role="tab" id="t-cos" aria-controls="p-cos" aria-selected="true" type="button">Cosmetic</button>
-      <button role="tab" id="t-wh" aria-controls="p-wh" aria-selected="false" tabindex="-1" type="button">Whitening</button>
-      <button role="tab" id="t-al" aria-controls="p-al" aria-selected="false" tabindex="-1" type="button">Clear aligners</button>
-      <button role="tab" id="t-imp" aria-controls="p-imp" aria-selected="false" tabindex="-1" type="button">Implants &amp; dentures</button>
-      <button role="tab" id="t-fam" aria-controls="p-fam" aria-selected="false" tabindex="-1" type="button">Family</button>
-      <button role="tab" id="t-hol" aria-controls="p-hol" aria-selected="false" tabindex="-1" type="button">Holistic</button>
-      <button role="tab" id="t-sl" aria-controls="p-sl" aria-selected="false" tabindex="-1" type="button">Snoring</button>
-      <button role="tab" id="t-em" aria-controls="p-em" aria-selected="false" tabindex="-1" type="button">Emergencies</button>
-      <i class="tabs__bar" aria-hidden="true"></i>
-    </div>
-
-    <div class="panels" data-panels>
-      <div class="panel" role="tabpanel" id="p-cos" aria-labelledby="t-cos">
-        <div class="panel__text">
-          <h3>Even a small change can make a big difference.</h3>
-          <ul class="items">
-            <li><b>Smile makeovers</b><span>Crowns or veneers, designed around your preferences. You love it before it becomes permanent.</span></li>
-            <li><b>Dental bonding</b><span>Gaps, chips and discoloration, fixed in a single appointment with color-matched composite.</span></li>
-            <li><b>Zirconia crowns</b><span>BruxZir full-strength zirconia: metal-free, natural-looking, often called “ceramic steel”.</span></li>
-          </ul>
-          <a class="link" href="#visit" data-topic="Cosmetic">Ask about a smile makeover<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
-        </div>
-        <figure class="panel__fig diptych">
-          <div><img src="img/cos-b.webp" alt="Teeth with a gap and uneven edges, before" width="780" height="368" loading="lazy"><span>Before</span></div>
-          <div><img src="img/cos-a.webp" alt="The same smile, even and closed, after" width="780" height="364" loading="lazy"><span>After</span></div>
-          <figcaption>From the studio’s smile gallery.</figcaption>
-        </figure>
-      </div>
-
-      <div class="panel" role="tabpanel" id="p-wh" aria-labelledby="t-wh" hidden>
-        <div class="panel__text">
-          <h3>Shades brighter, in one appointment.</h3>
-          <ul class="items">
-            <li><b>Zoom, in the studio</b><span>A peroxide gel activated by the Zoom light, about 15 minutes at a time, two or three times. Relax or watch TV.</span></li>
-            <li><b>At home, on your schedule</b><span>A custom tray made from a digital scan of your smile, about 20 minutes a day for two weeks.</span></li>
-            <li><b>Good to know</b><span>Whitening doesn’t fade; teeth slowly pick up new stains, and a fresh treatment brings them back.</span></li>
-          </ul>
-          <a class="link" href="#visit" data-topic="Whitening">Book a whitening<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
-        </div>
-        <figure class="panel__fig"><div class="panel__photo"><img src="img/shade.webp" alt="Dr. Cameron shows teeth whitening shade options to her patient" width="1300" height="1164" loading="lazy"></div><figcaption>Dr. Cameron with a shade guide.</figcaption></figure>
-      </div>
-
-      <div class="panel" role="tabpanel" id="p-al" aria-labelledby="t-al" hidden>
-        <div class="panel__text">
-          <h3>A straighter smile, without braces.</h3>
-          <ul class="items">
-            <li><b>Invisalign or ClearCorrect</b><span>Two brands, similar results. Invisalign is the forerunner; ClearCorrect offers more plan flexibility.</span></li>
-            <li><b>How it works</b><span>A new aligner every two weeks, follow-ups about every four weeks. Remove them to eat and brush.</span></li>
-            <li><b>Retainers</b><span>We replace lost retainers, even if yours came from another provider.</span></li>
-          </ul>
-          <a class="link" href="#visit" data-topic="Clear aligners">Ask about aligners<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
-        </div>
-        <figure class="panel__fig panel__type"><p class="big">6–12<small>months</small></p><p class="panel__type-d">A typical treatment with clear aligners, often about half the time of traditional braces.</p></figure>
-      </div>
-
-      <div class="panel" role="tabpanel" id="p-imp" aria-labelledby="t-imp" hidden>
-        <div class="panel__text">
-          <h3>Teeth that feel like your own again.</h3>
-          <ul class="items">
-            <li><b>Single implants</b><span>A zirconia crown on an implant, planned with a 3D CBCT scan. Surgery takes place in our office.</span></li>
-            <li><b>Implant-supported dentures</b><span>Snap-on overdentures (from two implants), fixed “hybrid” dentures, or a full zirconia implant bridge.</span></li>
-            <li><b>Not enough bone?</b><span>The all-on-4 method, or bone grafting in our office.</span></li>
-            <li><b>Dentures in two visits</b><span>Impressions at the first appointment; try them on and wear them home at the second.</span></li>
-          </ul>
-          <a class="link" href="#visit" data-topic="Implants or dentures">Ask about implants<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
-        </div>
-        <figure class="panel__fig diptych">
-          <div><img src="img/imp-b.webp" alt="Worn and missing teeth, before" width="980" height="465" loading="lazy"><span>Before</span></div>
-          <div><img src="img/imp-a.webp" alt="A complete new smile, after" width="980" height="460" loading="lazy"><span>After</span></div>
-          <figcaption>From the studio’s smile gallery.</figcaption>
-        </figure>
-      </div>
-
-      <div class="panel" role="tabpanel" id="p-fam" aria-labelledby="t-fam" hidden>
-        <div class="panel__text">
-          <h3>The whole family, one studio.</h3>
-          <ul class="items">
-            <li><b>First visit at three</b><span>Bring your child along to your own exam: a positive first experience, and a new toothbrush.</span></li>
-            <li><b>Check-ups for kids</b><span>Cleanings, exams, fluoride (Naples city water is no longer fluoridated) and sealants. White fillings, never amalgam.</span></li>
-            <li><b>Special needs</b><span>We’re experienced with children on the autism spectrum.</span></li>
-          </ul>
-          <a class="link" href="#visit" data-topic="Family check-up">Book a family check-up<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
-        </div>
-        <figure class="panel__fig"><div class="panel__photo"><img src="img/kid.webp" alt="A young patient in the chair, smiling, picking a prize from the treasure box" width="1100" height="1100" loading="lazy"></div><figcaption>The treasure box, after the check-up.</figcaption></figure>
-      </div>
-
-      <div class="panel" role="tabpanel" id="p-hol" aria-labelledby="t-hol" hidden>
-        <div class="panel__text">
-          <h3>Holistic mindsets welcome.</h3>
-          <ul class="items">
-            <li><b>Mercury-free</b><span>Only tooth-colored composite fillings, never amalgam.</span></li>
-            <li><b>BPA-free on request</b><span>Ask, and we’ll use only BPA-free composites.</span></li>
-            <li><b>Metal-free crowns</b><span>Zirconia: strong, natural-looking and completely metal-free.</span></li>
-          </ul>
-          <a class="link" href="#visit" data-topic="Holistic dentistry">Ask us your questions<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
-        </div>
-        <figure class="panel__fig panel__type"><p class="big">100<small>%</small></p><p class="panel__type-d">Of our crowns and fillings are mercury-free and metal-free.</p></figure>
-      </div>
-
-      <div class="panel" role="tabpanel" id="p-sl" aria-labelledby="t-sl" hidden>
-        <div class="panel__text">
-          <h3>A quieter night, for everyone.</h3>
-          <ul class="items">
-            <li><b>Oral appliance therapy</b><span>For snoring and mild to moderate sleep apnea, a device that keeps the airway open by moving the lower jaw forward.</span></li>
-            <li><b>Silent Nite</b><span>Affordable, comfortable, flexible, with connectors in several sizes and an AM Aligner.</span></li>
-            <li><b>EMA by Myerson</b><span>36 connector straps for a fully adjustable fit.</span></li>
-          </ul>
-          <a class="link" href="#visit" data-topic="Snoring">Ask about snoring<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></a>
-        </div>
-        <figure class="panel__fig panel__type"><p class="big big--word">Silence<small>is golden</small></p><p class="panel__type-d">Most patients prefer a mandibular advancement device to a CPAP machine.</p></figure>
-      </div>
-
-      <div class="panel" role="tabpanel" id="p-em" aria-labelledby="t-em" hidden>
-        <div class="panel__text">
-          <h3>In pain? Come in today.</h3>
-          <ul class="items">
-            <li><b>Call during office hours</b><span>Monday to Friday, 7 AM to 5 PM, and we’ll have you come right in. A toothache is usually simple to relieve.</span></li>
-            <li><b>Injuries</b><span>A knocked-out tooth must be replanted urgently. If we’re closed, go to the hospital.</span></li>
-            <li><b>Cosmetic emergencies</b><span>A damaged front tooth matters too. We take care of it right away.</span></li>
-          </ul>
-          <a class="btn btn--cobalt" href="tel:+12394227924"><span>Call (239) 422-7924</span></a>
-        </div>
-        <figure class="panel__fig"><div class="panel__photo"><img src="img/xray.webp" alt="Dr. Al Djindil explains an x-ray on screen to a patient" width="1400" height="1050" loading="lazy"></div><figcaption>Dr. Al Djindil, finding the source of the pain.</figcaption></figure>
-      </div>
-    </div>
-  </section>
-
-  <!-- ——— 06 · Le confort ——— -->
-  <section class="comfort" id="comfort" data-folio-of="06|Comfort" aria-labelledby="comfort-t">
-    <div class="rh" data-rule><span>Advice</span><span>Comfort</span><b>06</b></div>
-    <div class="comfort__grid">
-      <div class="comfort__intro">
-        <h2 class="h2" id="comfort-t" data-split>Nervous? You’re in <em>good company.</em></h2>
-        <p class="deck" data-reveal>Dental anxiety affects all kinds of people, and it can even keep the numbing from working. We listen first. Then you choose how much help you’d like.</p>
-      </div>
-      <div class="dial" data-dial>
-        <label class="dial__q" for="dial-in">How do you feel about the dentist?</label>
-        <div class="dial__track">
-          <input id="dial-in" type="range" min="0" max="2" step="1" value="1" aria-describedby="dial-out" data-dial-in>
-          <div class="dial__marks" aria-hidden="true"><span>I’m fine</span><span>A little nervous</span><span>Really anxious</span></div>
-        </div>
-        <div class="dial__out" id="dial-out" aria-live="polite">
-          <article class="opt" data-opt="0" hidden>
-            <p class="opt__k">Our gentle approach</p>
-            <h3 class="opt__t">Gentle, unhurried care.</h3>
-            <dl class="opt__spec">
-              <div><dt>What we do</dt><dd>Listen, answer every question, and explain your options before anything happens.</dd></div>
-              <div><dt>In the room</dt><dd>A TV in every operatory: watch whatever helps you feel comfortable.</dd></div>
-              <div><dt>Patients say</dt><dd>“She is gentle and comforting when drilling.” — Laura Barsamian</dd></div>
-            </dl>
-          </article>
-          <article class="opt" data-opt="1">
-            <p class="opt__k">For mild anxiety</p>
-            <h3 class="opt__t">Nitrous oxide, “laughing gas”.</h3>
-            <dl class="opt__spec">
-              <div><dt>How it feels</dt><dd>A carefree feeling through a mask over your nose, while the anxiety fades.</dd></div>
-              <div><dt>Why it helps</dt><dd>Calm lets the numbing work as it should, for a pain-free treatment.</dd></div>
-              <div><dt>Afterwards</dt><dd>It wears off as soon as you stop breathing it in. You can drive yourself home.</dd></div>
-            </dl>
-          </article>
-          <article class="opt" data-opt="2" hidden>
-            <p class="opt__k">For stronger anxiety</p>
-            <h3 class="opt__t">Oral conscious sedation.</h3>
-            <dl class="opt__spec">
-              <div><dt>How it feels</dt><dd>A pill before your appointment. Completely relaxed, still conscious, with your natural reflexes.</dd></div>
-              <div><dt>Safety</dt><dd>We monitor your vital signs and oxygen levels throughout.</dd></div>
-              <div><dt>Afterwards</dt><dd>You likely won’t remember the procedure. Someone will need to drive you home.</dd></div>
-            </dl>
-          </article>
-        </div>
-      </div>
-      <blockquote class="comfort__letter" data-reveal>
-        <p>“As a person who had previously struggled with dental anxiety, the personal one-on-one attention, caring staff, and beautiful office vibe let me know that I am in good hands here and can relax! I no longer dread dental appointments.”</p>
-        <cite>Dawn Pike, patient</cite>
-      </blockquote>
-    </div>
-  </section>
-
-  <!-- ——— 07 · Les dentistes ——— -->
-  <section class="doctors" id="doctors" data-folio-of="07|The doctors" aria-labelledby="doctors-t">
-    <div class="rh" data-rule><span>Contributors</span><span>The doctors</span><b>07</b></div>
-    <header class="doctors__head">
-      <h2 class="h2" id="doctors-t" data-split>Five doctors, <em>one studio.</em></h2>
-      <p class="deck" data-reveal>Cosmetic artistry, gum surgery, periodontics, oral surgery and family dentistry, under one roof, with the convenience of in-house implant surgery.</p>
-    </header>
-    <figure class="doctors__team">
-      <div class="plate plate--wide" data-plate><img src="img/team.webp" alt="Dr. Cameron and Dr. Djindil with the studio team on the office stairs" width="1536" height="1152" loading="lazy" data-drift></div>
-      <figcaption>Dr. Cameron and Dr. Djindil with the studio team.</figcaption>
+  <!-- La Dr. Cameron -->
+  <section class="doctor" id="doctor" aria-labelledby="doctor-t">
+    <figure class="doctor__photo">
+      <div class="pic" data-pic><img src="img/mirror.webp" alt="Dr. Andrea Cameron holds up a hand mirror; her patient smiles at her new smile" width="1500" height="1343" loading="lazy" data-drift></div>
     </figure>
-    <ul class="docs">
-      <li class="doc" data-reveal>
-        <button class="doc__card" type="button" aria-expanded="false" aria-controls="bio-cameron" data-doc>
-          <span class="doc__img"><img src="img/dr-cameron.webp" alt="" width="900" height="900" loading="lazy"></span>
-          <span class="doc__name">Dr. Andrea Cameron</span>
-          <span class="doc__role">Founder · Cosmetic dentistry</span>
-          <span class="doc__more" aria-hidden="true">+</span>
-        </button>
-        <div class="doc__bio" id="bio-cameron" hidden>
-          <p>Honors graduate of the University of Toronto, with post-graduate training in cosmetic dentistry and certifications in Invisalign and Botox. Top Dentist, <i>Naples Illustrated</i>, 2021.</p>
+    <div class="doctor__text">
+      <p class="eyebrow" data-reveal>Dr. Andrea Cameron, DDS</p>
+      <h2 class="h2" id="doctor-t" data-lines>Every smile is a work of art</h2>
+      <div class="doctor__body">
+        <p data-reveal>Dr. Cameron found her calling at ten, spent her teenage summers in a dental office, and graduated with honors from the University of Toronto. Smile makeovers are her favorite work; outside the studio she makes ceramics, murals and clothing.</p>
+        <p data-reveal>She explains, offers options, and leaves the decision to you. No pressure, ever.</p>
+      </div>
+      <blockquote class="note" data-reveal>
+        <p>“She partners with you as to work she recommends as opposed to dictating what you ‘must’ have done.”</p>
+        <cite>Maureen Schwartz</cite>
+      </blockquote>
+      <dl class="facts" data-reveal>
+        <div><dt>Top Dentist</dt><dd><i>Naples Illustrated</i>, 2021</dd></div>
+        <div><dt>Certified</dt><dd>Invisalign and Botox</dd></div>
+        <div><dt>Honors</dt><dd>Prosthodontic Award for full-mouth reconstruction and cosmetic dentistry</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Un cas en détail -->
+  <section class="story" id="smiles" aria-labelledby="story-t">
+    <div class="ba" data-reveal>
+      <figure class="ba__col">
+        <figcaption class="tag">Before</figcaption>
+        <div class="ba__face"><img src="img/case13-fb.webp" alt="Donald before treatment" width="480" height="600" loading="lazy"></div>
+        <div class="ba__close"><img src="img/case13-cb.webp" alt="Donald’s teeth before treatment" width="720" height="460" loading="lazy"></div>
+      </figure>
+      <figure class="ba__col">
+        <figcaption class="tag tag--blue">After</figcaption>
+        <div class="ba__face"><img src="img/case13-fa.webp" alt="Donald after treatment, smiling" width="480" height="600" loading="lazy"></div>
+        <div class="ba__close"><img src="img/case13-ca.webp" alt="Donald’s teeth after treatment" width="720" height="460" loading="lazy"></div>
+      </figure>
+    </div>
+    <div class="story__text">
+      <p class="eyebrow" data-reveal>Smile makeover, upper and lower teeth</p>
+      <h2 class="h2 story__t" id="story-t" data-lines>“It’s absolutely gorgeous. I get many compliments!”</h2>
+      <p class="story__quote" data-reveal>“Dr. Cameron and staff created a brand-new smile for me, both upper and lower teeth. Dr. Cameron is the consummate professional, and her staff is both pleasant and professional, as well.”</p>
+      <p class="story__by" data-reveal>Donald Rebello, patient</p>
+      <div class="story__cta" data-reveal>
+        <button class="btn btn--ink" type="button" data-open-case="0">See all 18 smiles</button>
+        <p class="small">From the studio’s smile gallery, shown as published, without retouching.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Les soins -->
+  <section class="treat" id="treatments" aria-labelledby="treat-t">
+    <div class="treat__head">
+      <h2 class="h2" id="treat-t" data-lines>What we do</h2>
+      <p class="lede" data-reveal>From a single bonded tooth to a complete smile makeover, and everything a family needs in between.</p>
+    </div>
+    <ul class="acc" data-acc>
+      <li class="acc__item" data-reveal>
+        <h3><button class="acc__btn" type="button" aria-expanded="true" aria-controls="acc-cos" id="acc-cos-b"><span class="acc__name">Cosmetic dentistry</span><span class="acc__sum">Makeovers, bonding, zirconia crowns</span><i aria-hidden="true"></i></button></h3>
+        <div class="acc__panel" id="acc-cos" role="region" aria-labelledby="acc-cos-b">
+          <div class="acc__in">
+            <ul class="pts">
+              <li><b>Smile makeovers</b>Crowns or veneers, designed around your preferences. You love it before it becomes permanent.</li>
+              <li><b>Dental bonding</b>Gaps, chips and discoloration, fixed in a single appointment with color-matched composite.</li>
+              <li><b>Zirconia crowns</b>BruxZir full-strength zirconia: metal-free, natural-looking, often called “ceramic steel”.</li>
+            </ul>
+            <figure class="acc__fig pair">
+              <div><img src="img/cos-b.webp" alt="Teeth with a gap and uneven edges, before" width="780" height="368" loading="lazy"><span class="tag">Before</span></div>
+              <div><img src="img/cos-a.webp" alt="The same smile, even and closed, after" width="780" height="364" loading="lazy"><span class="tag tag--blue">After</span></div>
+            </figure>
+            <a class="link" href="#visit" data-topic="Cosmetic">Ask about a smile makeover</a>
+          </div>
         </div>
       </li>
-      <li class="doc" data-reveal>
-        <button class="doc__card" type="button" aria-expanded="false" aria-controls="bio-djindil" data-doc>
-          <span class="doc__img"><img src="img/dr-djindil.webp" alt="" width="900" height="1021" loading="lazy"></span>
-          <span class="doc__name">Dr. Al Djindil</span>
-          <span class="doc__role">Gum surgery · Root canal therapy</span>
-          <span class="doc__more" aria-hidden="true">+</span>
-        </button>
-        <div class="doc__bio" id="bio-djindil" hidden>
-          <p>Top of his class at Western Ontario. Awards from the American Academy of Periodontology and the American Academy of Endodontics. Mentors students, and consults for Florida Dental Board Preps.</p>
+      <li class="acc__item" data-reveal>
+        <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-wh" id="acc-wh-b"><span class="acc__name">Teeth whitening</span><span class="acc__sum">Zoom in one visit, or at home</span><i aria-hidden="true"></i></button></h3>
+        <div class="acc__panel" id="acc-wh" role="region" aria-labelledby="acc-wh-b" hidden>
+          <div class="acc__in">
+            <ul class="pts">
+              <li><b>Zoom, in the studio</b>A whitening gel activated by the Zoom light, about 15 minutes at a time, two or three times. Relax or watch TV.</li>
+              <li><b>At home</b>A custom tray made from a digital scan of your smile, about 20 minutes a day for two weeks.</li>
+              <li><b>Good to know</b>Whitening doesn’t fade; teeth slowly pick up new stains, and a fresh treatment brings them back.</li>
+            </ul>
+            <figure class="acc__fig"><img src="img/shade.webp" alt="Dr. Cameron shows teeth whitening shade options to her patient" width="1300" height="1164" loading="lazy"></figure>
+            <a class="link" href="#visit" data-topic="Whitening">Book a whitening</a>
+          </div>
         </div>
       </li>
-      <li class="doc" data-reveal>
-        <button class="doc__card" type="button" aria-expanded="false" aria-controls="bio-goncalves" data-doc>
-          <span class="doc__img"><img src="img/dr-goncalves.webp" alt="" width="600" height="600" loading="lazy"></span>
-          <span class="doc__name">Dr. Flavia Goncalves</span>
-          <span class="doc__role">Board-certified periodontist</span>
-          <span class="doc__more" aria-hidden="true">+</span>
-        </button>
-        <div class="doc__bio" id="bio-goncalves" hidden>
-          <p>Nearly two decades of experience. Gum disease surgery, dental implants and bone regeneration, with minimally invasive techniques. MS in Periodontics, Nova Southeastern University.</p>
+      <li class="acc__item" data-reveal>
+        <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-al" id="acc-al-b"><span class="acc__name">Clear aligners</span><span class="acc__sum">Invisalign or ClearCorrect, 6–12 months</span><i aria-hidden="true"></i></button></h3>
+        <div class="acc__panel" id="acc-al" role="region" aria-labelledby="acc-al-b" hidden>
+          <div class="acc__in">
+            <ul class="pts">
+              <li><b>Two brands, similar results</b>Invisalign is the forerunner; ClearCorrect offers more plan flexibility.</li>
+              <li><b>How it works</b>A new aligner every two weeks, a check-in about every four. Take them out to eat and brush.</li>
+              <li><b>Retainers</b>We replace lost retainers, even if yours came from another provider.</li>
+            </ul>
+            <a class="link" href="#visit" data-topic="Clear aligners">Ask about aligners</a>
+          </div>
         </div>
       </li>
-      <li class="doc" data-reveal>
-        <button class="doc__card" type="button" aria-expanded="false" aria-controls="bio-martinez" data-doc>
-          <span class="doc__img"><img src="img/dr-martinez.webp" alt="" width="550" height="550" loading="lazy"></span>
-          <span class="doc__name">Dr. Mathias Martinez</span>
-          <span class="doc__role">Oral surgery · Dental implants</span>
-          <span class="doc__more" aria-hidden="true">+</span>
-        </button>
-        <div class="doc__bio" id="bio-martinez" hidden>
-          <p>Over 20 years in surgical dentistry: complex implants, bone grafting, extractions, full-mouth rehabilitation. Residency at UNAM, training at the Eastman Institute. Fellow of the IAOMS.</p>
+      <li class="acc__item" data-reveal>
+        <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-imp" id="acc-imp-b"><span class="acc__name">Implants &amp; dentures</span><span class="acc__sum">Planned in 3D, placed in our office</span><i aria-hidden="true"></i></button></h3>
+        <div class="acc__panel" id="acc-imp" role="region" aria-labelledby="acc-imp-b" hidden>
+          <div class="acc__in">
+            <ul class="pts">
+              <li><b>Single implants</b>A zirconia crown on an implant, planned with a 3D CBCT scan. Surgery takes place in our office.</li>
+              <li><b>Implant-supported dentures</b>Snap-on overdentures from two implants, fixed “hybrid” dentures, or a full zirconia implant bridge.</li>
+              <li><b>Not enough bone?</b>The all-on-4 method, or bone grafting in our office.</li>
+              <li><b>Dentures in two visits</b>Impressions at the first appointment; try them on and wear them home at the second.</li>
+            </ul>
+            <figure class="acc__fig pair">
+              <div><img src="img/imp-b.webp" alt="Worn and missing teeth, before" width="980" height="465" loading="lazy"><span class="tag">Before</span></div>
+              <div><img src="img/imp-a.webp" alt="A complete new smile, after" width="980" height="460" loading="lazy"><span class="tag tag--blue">After</span></div>
+            </figure>
+            <a class="link" href="#visit" data-topic="Implants or dentures">Ask about implants</a>
+          </div>
         </div>
       </li>
-      <li class="doc" data-reveal>
-        <button class="doc__card" type="button" aria-expanded="false" aria-controls="bio-tardibuono" data-doc>
-          <span class="doc__img"><img src="img/dr-tardibuono.webp" alt="" width="600" height="600" loading="lazy"></span>
-          <span class="doc__name">Dr. Anthony Tardibuono</span>
-          <span class="doc__role">General &amp; restorative dentistry</span>
-          <span class="doc__more" aria-hidden="true">+</span>
-        </button>
-        <div class="doc__bio" id="bio-tardibuono" hidden>
-          <p>DDS and MS in Biomaterials, University at Buffalo; Advanced Education in General Dentistry in Southwest Florida. A particular interest in restorative and removable dentistry.</p>
+      <li class="acc__item" data-reveal>
+        <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-fam" id="acc-fam-b"><span class="acc__name">Family dentistry</span><span class="acc__sum">Check-ups for every age, from three</span><i aria-hidden="true"></i></button></h3>
+        <div class="acc__panel" id="acc-fam" role="region" aria-labelledby="acc-fam-b" hidden>
+          <div class="acc__in">
+            <ul class="pts">
+              <li><b>First visit at three</b>Bring your child along to your own exam: a positive first experience, and a new toothbrush.</li>
+              <li><b>Check-ups for kids</b>Cleanings, exams, fluoride (Naples city water is no longer fluoridated) and sealants. White fillings, never amalgam.</li>
+              <li><b>Special needs</b>We’re experienced with children on the autism spectrum.</li>
+            </ul>
+            <figure class="acc__fig"><img src="img/kid.webp" alt="A young patient in the chair, smiling, picking a prize from the treasure box" width="1100" height="1100" loading="lazy"></figure>
+            <a class="link" href="#visit" data-topic="Check-up &amp; cleaning">Book a family check-up</a>
+          </div>
+        </div>
+      </li>
+      <li class="acc__item" data-reveal>
+        <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-hol" id="acc-hol-b"><span class="acc__name">Holistic dentistry</span><span class="acc__sum">Mercury-free, metal-free, BPA-free on request</span><i aria-hidden="true"></i></button></h3>
+        <div class="acc__panel" id="acc-hol" role="region" aria-labelledby="acc-hol-b" hidden>
+          <div class="acc__in">
+            <ul class="pts">
+              <li><b>Mercury-free</b>Only tooth-colored composite fillings, never amalgam.</li>
+              <li><b>BPA-free on request</b>Ask, and we’ll use only BPA-free composites.</li>
+              <li><b>Metal-free crowns</b>Zirconia: strong, natural-looking and completely metal-free.</li>
+            </ul>
+            <a class="link" href="#visit">Ask us your questions</a>
+          </div>
+        </div>
+      </li>
+      <li class="acc__item" data-reveal>
+        <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-sl" id="acc-sl-b"><span class="acc__name">Snoring &amp; sleep apnea</span><span class="acc__sum">Oral appliances instead of a CPAP</span><i aria-hidden="true"></i></button></h3>
+        <div class="acc__panel" id="acc-sl" role="region" aria-labelledby="acc-sl-b" hidden>
+          <div class="acc__in">
+            <ul class="pts">
+              <li><b>Oral appliance therapy</b>For snoring and mild to moderate sleep apnea: a device that keeps the airway open by moving the lower jaw forward.</li>
+              <li><b>Silent Nite</b>Affordable, comfortable and flexible, with connectors in several sizes.</li>
+              <li><b>EMA by Myerson</b>36 connector straps for a fully adjustable fit.</li>
+            </ul>
+            <a class="link" href="#visit">Ask about snoring</a>
+          </div>
+        </div>
+      </li>
+      <li class="acc__item" data-reveal>
+        <h3><button class="acc__btn" type="button" aria-expanded="false" aria-controls="acc-em" id="acc-em-b"><span class="acc__name">Emergencies</span><span class="acc__sum">Call during office hours, come in today</span><i aria-hidden="true"></i></button></h3>
+        <div class="acc__panel" id="acc-em" role="region" aria-labelledby="acc-em-b" hidden>
+          <div class="acc__in">
+            <ul class="pts">
+              <li><b>Toothache</b>Call Monday to Friday, 7 AM to 5 PM, and we’ll have you come right in. It’s usually simple to relieve.</li>
+              <li><b>Injuries</b>A knocked-out tooth must be replanted urgently. If we’re closed, go to the hospital.</li>
+              <li><b>Cosmetic emergencies</b>A damaged front tooth matters too. We take care of it right away.</li>
+            </ul>
+            <figure class="acc__fig"><img src="img/xray.webp" alt="Dr. Al Djindil explains an x-ray on screen to a patient" width="1400" height="1050" loading="lazy"></figure>
+            <a class="btn btn--blue" href="tel:+12394227924">Call (239) 422-7924</a>
+          </div>
         </div>
       </li>
     </ul>
   </section>
 
-  <!-- ——— 08 · Le courrier ——— -->
-  <section class="letters" id="letters" data-folio-of="08|Letters" aria-labelledby="letters-t">
-    <div class="rh" data-rule><span>Correspondence</span><span>Letters</span><b>08</b></div>
-    <header class="letters__head">
-      <h2 class="h2" id="letters-t" data-split>Letters.</h2>
-      <p class="deck" data-reveal>Nearly a perfect five-star rating, with over 150 Google reviews. A few, sorted by what patients mention most.</p>
-    </header>
-    <div class="chips" role="tablist" aria-label="Review themes" data-themes data-reveal>
-      <button role="tab" aria-selected="true" type="button" data-theme="pressure">No pressure</button>
-      <button role="tab" aria-selected="false" tabindex="-1" type="button" data-theme="gentle">Gentleness</button>
-      <button role="tab" aria-selected="false" tabindex="-1" type="button" data-theme="honest">Honesty</button>
-      <button role="tab" aria-selected="false" tabindex="-1" type="button" data-theme="service">Service</button>
-      <button role="tab" aria-selected="false" tabindex="-1" type="button" data-theme="first">First visits</button>
+  <!-- Le confort -->
+  <section class="comfort" id="comfort" aria-labelledby="comfort-t">
+    <div class="comfort__head">
+      <h2 class="h2" id="comfort-t" data-lines>Nervous about the dentist? Tell us.</h2>
+      <p class="lede" data-reveal>Dental anxiety affects all kinds of people, and it can even keep the numbing from working. We listen first, then you choose how much help you’d like.</p>
     </div>
-    <div class="mail" data-mail aria-live="polite">
-      <div class="mail__set" data-set="pressure">
-        <blockquote><p>“They take the time to listen and propose treatment plans suitable to the client’s lifestyle and budget.”</p><cite>Jeannene Rutherford</cite></blockquote>
-        <blockquote><p>“I was looking for a second opinion, and to my amazement they let me know that I did not need the $1000 services another practice quoted me!”</p><cite>Sylvia Rodriguez</cite></blockquote>
-      </div>
-      <div class="mail__set" data-set="gentle" hidden>
-        <blockquote><p>“She’s incredibly gentle and really helped ease my fear of going to the dentist.”</p><cite>Eren Kaptana</cite></blockquote>
-        <blockquote><p>“It’s the only dental office I’ve been to that is pleasant and inviting; I enjoy going, which is not the norm.”</p><cite>Laura Barsamian</cite></blockquote>
-      </div>
-      <div class="mail__set" data-set="honest" hidden>
-        <blockquote><p>“Dr. Cameron took the time to offer multiple treatment options, ensuring I felt informed and comfortable with my care.”</p><cite>Andy Reites</cite></blockquote>
-        <blockquote><p>“They will NEVER suggest dental work when it is not truly needed, unlike many other practices.”</p><cite>Samantha Brown</cite></blockquote>
-      </div>
-      <div class="mail__set" data-set="service" hidden>
-        <blockquote><p>“Excellent dental care and very friendly, professional staff. I have been a patient of Dr. Cameron &amp; Dr. Al for close to 20 years!”</p><cite>Patty Haines</cite></blockquote>
-        <blockquote><p>“Hands-down the best place to go if you want perfection, efficiency, and fun as well. Definitely a 5-star operation.”</p><cite>Karen Ritz</cite></blockquote>
-      </div>
-      <div class="mail__set" data-set="first" hidden>
-        <blockquote><p>“I recently visited for the first time. I appreciated the transparency in payment and billing. They took the time to ask good questions.”</p><cite>Daniel Alexander</cite></blockquote>
-        <blockquote><p>“Today was my daughter’s first appointment. Dr. Cameron and her staff were so accommodating and made her feel so special!”</p><cite>Jessica Mann</cite></blockquote>
-      </div>
+    <ol class="levels">
+      <li class="level" data-reveal>
+        <p class="level__for">For everyone</p>
+        <h3>Gentle, unhurried care</h3>
+        <p>We answer every question and explain your options before anything happens. There’s a TV in every room.</p>
+      </li>
+      <li class="level" data-reveal>
+        <p class="level__for">A little nervous</p>
+        <h3>Nitrous oxide</h3>
+        <p>“Laughing gas” through a small mask: the anxiety fades and the numbing works as it should. It wears off right away, so you can drive home.</p>
+      </li>
+      <li class="level" data-reveal>
+        <p class="level__for">Really anxious</p>
+        <h3>Oral conscious sedation</h3>
+        <p>A pill before your visit. You stay conscious and relaxed while we monitor your vital signs, and you likely won’t remember the procedure. Someone drives you home.</p>
+      </li>
+    </ol>
+    <figure class="comfort__quote" data-reveal>
+      <blockquote><p>“As a person who had previously struggled with dental anxiety, the personal one-on-one attention, caring staff, and beautiful office vibe let me know that I am in good hands here and can relax! I no longer dread dental appointments.”</p></blockquote>
+      <figcaption>Dawn Pike, patient</figcaption>
+    </figure>
+  </section>
+
+  <!-- Les dentistes -->
+  <section class="team" id="doctors" aria-labelledby="team-t">
+    <div class="team__head">
+      <h2 class="h2" id="team-t" data-lines>Five doctors under one roof</h2>
+      <p class="lede" data-reveal>Cosmetic dentistry, gum surgery, periodontics, oral surgery and family care, with implant surgery done right here.</p>
     </div>
-    <p class="letters__more" data-reveal>Read them all on
+    <figure class="team__photo">
+      <div class="pic" data-bleed><img src="img/team.webp" alt="Dr. Cameron and Dr. Djindil with the studio team on the office stairs" width="1536" height="1152" loading="lazy" data-drift></div>
+    </figure>
+    <ul class="docs">
+      <li class="doc" data-reveal>
+        <div class="doc__img"><img src="img/dr-cameron.webp" alt="Dr. Andrea Cameron" width="900" height="900" loading="lazy"></div>
+        <h3>Dr. Andrea Cameron</h3>
+        <p class="doc__role">Founder, cosmetic dentistry</p>
+        <button class="doc__more" type="button" aria-expanded="false" aria-controls="bio-cameron" data-doc>About</button>
+        <p class="doc__bio" id="bio-cameron" hidden>Honors graduate of the University of Toronto, with post-graduate training in cosmetic dentistry and certifications in Invisalign and Botox.</p>
+      </li>
+      <li class="doc" data-reveal>
+        <div class="doc__img"><img src="img/dr-djindil.webp" alt="Dr. Al Djindil" width="900" height="1021" loading="lazy"></div>
+        <h3>Dr. Al Djindil</h3>
+        <p class="doc__role">Gum surgery, root canals</p>
+        <button class="doc__more" type="button" aria-expanded="false" aria-controls="bio-djindil" data-doc>About</button>
+        <p class="doc__bio" id="bio-djindil" hidden>Top of his class at Western Ontario, with awards from the American Academy of Periodontology and the American Academy of Endodontics. He also mentors future dentists.</p>
+      </li>
+      <li class="doc" data-reveal>
+        <div class="doc__img"><img src="img/dr-goncalves.webp" alt="Dr. Flavia Goncalves" width="600" height="600" loading="lazy"></div>
+        <h3>Dr. Flavia Goncalves</h3>
+        <p class="doc__role">Board-certified periodontist</p>
+        <button class="doc__more" type="button" aria-expanded="false" aria-controls="bio-goncalves" data-doc>About</button>
+        <p class="doc__bio" id="bio-goncalves" hidden>Nearly two decades of experience in gum disease surgery, dental implants and bone regeneration. MS in Periodontics, Nova Southeastern University.</p>
+      </li>
+      <li class="doc" data-reveal>
+        <div class="doc__img"><img src="img/dr-martinez.webp" alt="Dr. Mathias Martinez" width="550" height="550" loading="lazy"></div>
+        <h3>Dr. Mathias Martinez</h3>
+        <p class="doc__role">Oral surgery, implants</p>
+        <button class="doc__more" type="button" aria-expanded="false" aria-controls="bio-martinez" data-doc>About</button>
+        <p class="doc__bio" id="bio-martinez" hidden>Over 20 years in surgical dentistry: complex implants, bone grafting, extractions, full-mouth rehabilitation. Fellow of the IAOMS.</p>
+      </li>
+      <li class="doc" data-reveal>
+        <div class="doc__img"><img src="img/dr-tardibuono.webp" alt="Dr. Anthony Tardibuono" width="600" height="600" loading="lazy"></div>
+        <h3>Dr. Anthony Tardibuono</h3>
+        <p class="doc__role">General &amp; restorative</p>
+        <button class="doc__more" type="button" aria-expanded="false" aria-controls="bio-tardibuono" data-doc>About</button>
+        <p class="doc__bio" id="bio-tardibuono" hidden>DDS and MS in Biomaterials from the University at Buffalo, with a particular interest in restorative and removable dentistry.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Les avis -->
+  <section class="reviews" id="reviews" aria-labelledby="reviews-t">
+    <div class="reviews__head">
+      <h2 class="h2" id="reviews-t" data-lines>What patients say</h2>
+      <p class="reviews__score" data-reveal><span class="stars" aria-hidden="true">★★★★★</span> Nearly a perfect five-star rating, with over 150 Google reviews.</p>
+    </div>
+    <div class="quotes">
+      <figure data-reveal><blockquote><p>“I was looking for a second opinion, and to my amazement they let me know that I did not need the $1000 services another practice quoted me!”</p></blockquote><figcaption>Sylvia Rodriguez</figcaption></figure>
+      <figure data-reveal><blockquote><p>“She’s incredibly gentle and really helped ease my fear of going to the dentist.”</p></blockquote><figcaption>Eren Kaptana</figcaption></figure>
+      <figure data-reveal><blockquote><p>“They will NEVER suggest dental work when it is not truly needed, unlike many other practices.”</p></blockquote><figcaption>Samantha Brown</figcaption></figure>
+      <figure data-reveal><blockquote><p>“Excellent dental care and very friendly, professional staff. I have been a patient of Dr. Cameron &amp; Dr. Al for close to 20 years!”</p></blockquote><figcaption>Patty Haines</figcaption></figure>
+      <figure data-reveal><blockquote><p>“Today was my daughter’s first appointment. Dr. Cameron and her staff were so accommodating and made her feel so special!”</p></blockquote><figcaption>Jessica Mann</figcaption></figure>
+      <figure data-reveal><blockquote><p>“It’s the only dental office I’ve been to that is pleasant and inviting; I enjoy going, which is not the norm.”</p></blockquote><figcaption>Laura Barsamian</figcaption></figure>
+    </div>
+    <p class="reviews__more" data-reveal>Read them all on
       <a href="https://www.google.com/maps/place/Cameron+Dental+Studio/@26.1607371,-81.7931523,1020m/data=!3m1!1e3!4m8!3m7!1s0x88db19d0d87af7a7:0x3d68c95f94fcb9f0!8m2!3d26.1607323!4d-81.7905774!9m1!1b1!16s%2Fg%2F11gy8znsw7">Google</a>,
       <a href="https://www.yelp.com/biz/cameron-dental-studio-naples">Yelp</a> and
       <a href="https://www.facebook.com/cameron.dental.studio/reviews">Facebook</a>.</p>
-  </section>
-
-  <!-- ——— 09 · Le cabinet ——— -->
-  <section class="studio" id="studio" data-folio-of="09|Inside the studio" aria-labelledby="studio-t">
-    <div class="rh" data-rule><span>Visit</span><span>Inside the studio</span><b>09</b></div>
-    <header class="studio__head">
-      <h2 class="h2" id="studio-t" data-split>Inside <em>the studio.</em></h2>
-      <p class="deck" data-reveal>“It truly is a studio, and they take pride in their profession.” Bright rooms, art on the walls, a TV in every operatory, and the technology to plan precisely.</p>
-    </header>
-    <div class="spread">
-      <figure class="spread__a"><div class="plate" data-plate><img src="img/waiting.webp" alt="The reception room, with light blue chairs and art on the walls" width="1500" height="1125" loading="lazy" data-drift></div><figcaption>The reception room.</figcaption></figure>
-      <figure class="spread__b"><div class="plate" data-plate><img src="img/art.webp" alt="A colorful tree artwork by the staircase" width="1200" height="900" loading="lazy" data-drift></div><figcaption>Art on every wall.</figcaption></figure>
-      <figure class="spread__c"><div class="plate" data-plate><img src="img/cbct.webp" alt="A patient ready for a 3D cone beam scan" width="1200" height="776" loading="lazy" data-drift></div><figcaption>The 3D CBCT scanner, used to plan implants.</figcaption></figure>
-      <figure class="spread__d"><div class="plate" data-plate><img src="img/building.webp" alt="The white studio building on Goodlette-Frank Road North" width="1500" height="1125" loading="lazy" data-drift></div><figcaption>1008 Goodlette-Frank Road North.</figcaption></figure>
-      <div class="spread__tech" data-reveal>
-        <p class="kicker">In-office technology</p>
-        <ul>
-          <li>Digital x-rays</li><li>Digital impressions</li><li>3-D x-rays</li><li>CBCT scanner</li><li>Electrosurge unit</li><li>Zoom whitening system</li>
-        </ul>
-        <a class="link" href="https://player.vimeo.com/video/1112027729">Watch the office tour<svg aria-hidden="true" viewBox="0 0 20 20"><path d="M6 14 14 6M7 6h7v7"/></svg></a>
+    <div class="covers">
+      <p class="covers__t" data-reveal>Our patients’ smiles have made the covers of <i>Gulfshore Life</i>, twice, and <i>Naples Illustrated</i>.</p>
+      <div class="covers__row">
+        <figure class="cv" data-reveal><img src="img/cover-social.webp" alt="Gulfshore Life magazine cover, The Social Register issue" width="700" height="907" loading="lazy"></figure>
+        <figure class="cv" data-reveal><img src="img/cover-taste.webp" alt="Gulfshore Life magazine cover, All in Good Taste" width="515" height="703" loading="lazy"></figure>
+        <figure class="cv" data-reveal><img src="img/cover-ni.webp" alt="Naples Illustrated: Ingrid Aielli, 2016 Leading Lady" width="700" height="955" loading="lazy"></figure>
       </div>
     </div>
   </section>
 
-  <!-- ——— 10 · Pratique ——— -->
-  <section class="practical" id="practical" data-folio-of="10|First visit &amp; insurance" aria-labelledby="practical-t">
-    <div class="rh" data-rule><span>Service</span><span>The practical pages</span><b>10</b></div>
-    <div class="practical__grid">
-      <div class="first">
-        <h2 class="h2" id="practical-t" data-split>Your first visit.</h2>
-        <ol class="steps">
-          <li data-reveal><b>01</b><div><h3>Welcome</h3><p>Arrive about 15 minutes early to fill out the new patient form, or fill it out before you come.</p></div></li>
-          <li data-reveal><b>02</b><div><h3>Exam</h3><p>X-rays, then you meet your dentist for a complete exam of your teeth, gums and oral tissues. Any concerns come with every option explained.</p></div></li>
-          <li data-reveal><b>03</b><div><h3>Cleaning</h3><p>A good, thorough cleaning. The whole visit takes less than an hour.</p></div></li>
-          <li data-reveal><b>04</b><div><h3>Your plan</h3><p>If you need treatment, our coordinator walks you through the plan. We can often schedule it the same day.</p></div></li>
-        </ol>
-      </div>
-      <div class="ins" data-ins>
-        <h2 class="h3" data-split>Is my insurance accepted?</h2>
-        <p class="deck deck--sm" data-reveal>We’re in network with all major PPO plans and take care of the insurance filing for you.</p>
-        <div class="ins__box" data-reveal>
-          <label class="sr" for="ins-q">Type your insurance</label>
-          <div class="ins__field">
-            <svg aria-hidden="true" viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5"/><path d="m13.2 13.2 3.8 3.8"/></svg>
-            <input id="ins-q" type="search" placeholder="Type your insurance, e.g. Delta" autocomplete="off" data-ins-q>
-          </div>
-          <p class="ins__res" data-ins-res aria-live="polite">25 PPO plans and 6 discount plans accepted.</p>
-          <div class="ins__lists">
-            <div><p class="ins__h">PPO plans</p><ul data-ins-list="ppo"></ul></div>
-            <div><p class="ins__h">Discount plans</p><ul data-ins-list="discount"></ul></div>
-          </div>
-        </div>
-        <div class="pay" data-reveal>
-          <p class="ins__h">Payment</p>
-          <p>Due at the time of service. Visa, MasterCard, Discover and American Express. Financing with CareCredit and Cherry, including some zero-interest plans.</p>
-        </div>
+  <!-- Le cabinet -->
+  <section class="office" id="office" aria-labelledby="office-t">
+    <div class="office__head">
+      <h2 class="h2" id="office-t" data-lines>Inside the studio</h2>
+      <p class="lede" data-reveal>Bright rooms, art on every wall, a TV in every operatory, and the technology to plan precisely. “It truly is a studio.”</p>
+    </div>
+    <div class="office__grid">
+      <figure class="office__a"><div class="pic" data-pic><img src="img/waiting.webp" alt="The reception room, with light blue chairs and art on the walls" width="1500" height="1125" loading="lazy" data-drift></div><figcaption>The reception room</figcaption></figure>
+      <figure class="office__b"><div class="pic" data-pic><img src="img/art.webp" alt="A colorful tree artwork by the staircase" width="1200" height="900" loading="lazy" data-drift></div><figcaption>Art by the stairs</figcaption></figure>
+      <figure class="office__c"><div class="pic" data-pic><img src="img/cbct.webp" alt="A patient ready for a 3D cone beam scan" width="1200" height="776" loading="lazy" data-drift></div><figcaption>The 3D CBCT scanner, used to plan implants</figcaption></figure>
+      <div class="office__tech" data-reveal>
+        <h3>In the office</h3>
+        <ul><li>Digital x-rays</li><li>Digital impressions</li><li>3D x-rays and CBCT</li><li>Electrosurge unit</li><li>Zoom whitening</li></ul>
+        <a class="link" href="https://player.vimeo.com/video/1112027729">Watch the office tour</a>
       </div>
     </div>
   </section>
 
-  <!-- ——— 11 · Rendez-vous (quatrième de couverture) ——— -->
-  <section class="visit" id="visit" data-folio-of="11|Book a visit" aria-labelledby="visit-t">
-    <div class="rh rh--dark" data-rule><span>Back cover</span><span>Book a visit</span><b>11</b></div>
-    <div class="visit__grid">
-      <div class="visit__info">
-        <h2 class="visit__t" id="visit-t" data-split>Book a <em>visit.</em></h2>
-        <p class="visit__d" data-reveal>Send a request and we’ll contact you to schedule. Or call: we’re here Monday to Friday, 7 AM to 5 PM.</p>
-        <a class="visit__tel" href="tel:+12394227924" data-reveal>(239) 422-7924</a>
-        <p class="status status--big" data-status data-reveal><i aria-hidden="true"></i><span>Mon–Fri, 7 AM–5 PM</span></p>
-        <dl class="visit__dl" data-reveal>
-          <div><dt>Studio</dt><dd><a href="https://maps.app.goo.gl/mu57ppX1dx1kQzkCA">1008 Goodlette-Frank Road North<br>Suite 100, Naples, Florida 34102</a></dd></div>
-          <div><dt>Hours</dt><dd>Monday – Friday, 7 AM – 5 PM<br>Saturday &amp; Sunday, closed</dd></div>
-          <div><dt>In pain?</dt><dd>Call during office hours and we’ll see you today.</dd></div>
-        </dl>
-      </div>
-      <form class="form" data-form novalidate>
-        <fieldset class="form__chips" data-reveal>
-          <legend>What would you like to talk about? <small>(optional)</small></legend>
-          <label><input type="radio" name="topic" value="Check-up &amp; cleaning"><span>Check-up &amp; cleaning</span></label>
-          <label><input type="radio" name="topic" value="Cosmetic"><span>Cosmetic</span></label>
-          <label><input type="radio" name="topic" value="Whitening"><span>Whitening</span></label>
-          <label><input type="radio" name="topic" value="Clear aligners"><span>Clear aligners</span></label>
-          <label><input type="radio" name="topic" value="Implants or dentures"><span>Implants or dentures</span></label>
-          <label><input type="radio" name="topic" value="Emergency"><span>Emergency</span></label>
-        </fieldset>
-        <div class="form__grid">
-          <div class="field" data-reveal><label for="f-first">First name</label><input id="f-first" name="first" autocomplete="given-name" required><p class="field__err">Please enter your first name.</p></div>
-          <div class="field" data-reveal><label for="f-last">Last name</label><input id="f-last" name="last" autocomplete="family-name" required><p class="field__err">Please enter your last name.</p></div>
-          <div class="field" data-reveal><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required><p class="field__err">Please enter a valid email.</p></div>
-          <div class="field" data-reveal><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required><p class="field__err">Please enter a phone number.</p></div>
-        </div>
-        <div class="form__end" data-reveal>
-          <button class="btn btn--cobalt" type="submit"><span>Request an appointment</span><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></button>
-          <p class="form__note">We value your privacy: your details are only used to schedule your visit.</p>
-        </div>
-        <div class="form__done" data-done hidden role="status">
-          <p class="form__done-t">Thank you.</p>
-          <p>Your request is in. We’ll contact you to schedule your appointment.</p>
-        </div>
-      </form>
+  <!-- Première visite et assurances -->
+  <section class="practical" id="insurance" aria-labelledby="first-t">
+    <div class="first">
+      <h2 class="h2" id="first-t" data-lines>Your first visit</h2>
+      <p class="lede" data-reveal>Less than an hour, and often treatment the same day.</p>
+      <ol class="steps">
+        <li data-reveal><h3>Welcome</h3><p>Arrive about 15 minutes early for the new patient form, or <a href="https://camerondentalstudio.com/new-patient-form/">fill it out online</a>.</p></li>
+        <li data-reveal><h3>Exam</h3><p>X-rays, then a complete exam of your teeth, gums and oral tissues with your dentist. Every option explained.</p></li>
+        <li data-reveal><h3>Cleaning</h3><p>A good, thorough cleaning.</p></li>
+        <li data-reveal><h3>Your plan</h3><p>If you need treatment, our coordinator walks you through it. We can often schedule it the same day.</p></li>
+      </ol>
     </div>
-    <footer class="ft">
-      <p class="ft__mast" aria-hidden="true" data-ft-mast>Cameron</p>
-      <div class="ft__row">
-        <p>© <span data-year>2026</span> Cameron Dental Studio, Naples, Florida</p>
-        <nav aria-label="Social and reviews">
-          <a href="https://www.instagram.com/cameron_dental_studio/">Instagram</a>
-          <a href="https://www.facebook.com/cameron.dental.studio/">Facebook</a>
-          <a href="https://www.yelp.com/biz/cameron-dental-studio-naples">Yelp</a>
-        </nav>
-        <nav aria-label="Legal">
-          <a href="https://camerondentalstudio.com/privacy-policy/">Privacy policy</a>
-          <a href="https://camerondentalstudio.com/accessibility-statement/">Accessibility</a>
-          <a href="https://camerondentalstudio.com/new-patient-form/">New patient form</a>
-        </nav>
+    <div class="ins" data-ins>
+      <h2 class="h3" id="ins-t" data-reveal>Is my insurance accepted?</h2>
+      <p class="ins__d" data-reveal>We’re in network with all major PPO plans and take care of the insurance filing for you.</p>
+      <div class="ins__box" data-reveal>
+        <label class="sr" for="ins-q">Type the name of your insurance</label>
+        <div class="ins__field">
+          <svg aria-hidden="true" viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5"/><path d="m13.2 13.2 3.8 3.8"/></svg>
+          <input id="ins-q" type="search" placeholder="Type your insurance, e.g. Delta" autocomplete="off" data-ins-q>
+        </div>
+        <p class="ins__res" data-ins-res aria-live="polite">25 PPO plans and 6 discount plans accepted.</p>
+        <div class="ins__lists">
+          <div><p class="ins__h">PPO plans</p><ul data-ins-list="ppo"></ul></div>
+          <div><p class="ins__h">Discount plans</p><ul data-ins-list="discount"></ul></div>
+        </div>
       </div>
-    </footer>
+      <p class="ins__pay" data-reveal><b>Payment</b> is due at the time of service: Visa, MasterCard, Discover, American Express. Financing with CareCredit and Cherry, including some zero-interest plans.</p>
+    </div>
+  </section>
+
+  <!-- Rendez-vous -->
+  <section class="visit" id="visit" aria-labelledby="visit-t">
+    <div class="visit__info">
+      <h2 class="h2" id="visit-t" data-lines>Book a visit</h2>
+      <p class="visit__d" data-reveal>Send a request and we’ll call you to schedule. Or call us now.</p>
+      <a class="visit__tel" href="tel:+12394227924" data-reveal>(239) 422-7924</a>
+      <p class="status status--big" data-status data-reveal><i aria-hidden="true"></i><span>Mon–Fri, 7 AM–5 PM</span></p>
+      <dl class="visit__dl" data-reveal>
+        <div><dt>Address</dt><dd><a href="https://maps.app.goo.gl/mu57ppX1dx1kQzkCA">1008 Goodlette-Frank Road North, Suite 100<br>Naples, Florida 34102</a></dd></div>
+        <div><dt>Hours</dt><dd>Monday to Friday, 7 AM to 5 PM</dd></div>
+      </dl>
+      <figure class="visit__photo" data-reveal><img src="img/building.webp" alt="The white studio building on Goodlette-Frank Road North" width="1500" height="1125" loading="lazy"></figure>
+    </div>
+    <form class="form" data-form novalidate>
+      <fieldset class="form__chips" data-reveal>
+        <legend>What would you like to talk about?</legend>
+        <label><input type="radio" name="topic" value="Check-up &amp; cleaning"><span>Check-up &amp; cleaning</span></label>
+        <label><input type="radio" name="topic" value="Cosmetic"><span>Cosmetic</span></label>
+        <label><input type="radio" name="topic" value="Whitening"><span>Whitening</span></label>
+        <label><input type="radio" name="topic" value="Clear aligners"><span>Clear aligners</span></label>
+        <label><input type="radio" name="topic" value="Implants or dentures"><span>Implants or dentures</span></label>
+        <label><input type="radio" name="topic" value="Emergency"><span>Emergency</span></label>
+      </fieldset>
+      <div class="form__grid">
+        <div class="field" data-reveal><label for="f-first">First name</label><input id="f-first" name="first" autocomplete="given-name" required><p class="field__err">Please enter your first name.</p></div>
+        <div class="field" data-reveal><label for="f-last">Last name</label><input id="f-last" name="last" autocomplete="family-name" required><p class="field__err">Please enter your last name.</p></div>
+        <div class="field" data-reveal><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required><p class="field__err">Please enter a valid email.</p></div>
+        <div class="field" data-reveal><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required><p class="field__err">Please enter a phone number.</p></div>
+      </div>
+      <div class="form__end" data-reveal>
+        <button class="btn btn--blue btn--lg" type="submit">Request an appointment</button>
+        <p class="small">Your details are only used to schedule your visit.</p>
+      </div>
+      <div class="form__done" data-done hidden role="status">
+        <p class="form__done-t">Thank you</p>
+        <p>Your request is in. We’ll call you to schedule your appointment.</p>
+      </div>
+    </form>
   </section>
 </main>
 
+<footer class="ft">
+  <div class="ft__top">
+    <a class="brand brand--ft" href="#top" aria-label="Cameron Dental Studio, back to top">
+      <svg class="brand__tooth" aria-hidden="true"><use href="#tooth"/></svg>
+      <span class="brand__name">Cameron<br>Dental Studio</span>
+    </a>
+    <p class="ft__tag">Gentle, non-judgmental, top-rated, beautiful dentistry in Naples, Florida.</p>
+  </div>
+  <div class="ft__row">
+    <p>© <span data-year>2026</span> Cameron Dental Studio</p>
+    <nav aria-label="Social and reviews">
+      <a href="https://www.instagram.com/cameron_dental_studio/">Instagram</a>
+      <a href="https://www.facebook.com/cameron.dental.studio/">Facebook</a>
+      <a href="https://www.yelp.com/biz/cameron-dental-studio-naples">Yelp</a>
+    </nav>
+    <nav aria-label="Legal">
+      <a href="https://camerondentalstudio.com/privacy-policy/">Privacy policy</a>
+      <a href="https://camerondentalstudio.com/accessibility-statement/">Accessibility</a>
+    </nav>
+  </div>
+</footer>
+
 <div class="mbar" data-mbar>
-  <a class="mbar__call" href="tel:+12394227924"><svg aria-hidden="true" viewBox="0 0 20 20"><path d="M6.6 2.8 4.4 3.4c-.6.2-1 .8-.9 1.4.9 6 5.7 10.8 11.7 11.7.6.1 1.2-.3 1.4-.9l.6-2.2c.2-.6-.1-1.2-.7-1.5l-2.6-1.1c-.5-.2-1.1-.1-1.5.3l-.9 1c-1.7-.8-3-2.2-3.8-3.8l1-.9c.4-.4.5-1 .3-1.5L7.9 3.5c-.2-.6-.8-.9-1.3-.7Z"/></svg>Call</a>
-  <a class="btn btn--cobalt" href="#visit"><span>Book a visit</span></a>
+  <a class="mbar__call" href="tel:+12394227924">Call</a>
+  <a class="btn btn--blue" href="#visit">Book a visit</a>
+</div>
+
+<!-- les 18 cas de leur galerie, pour la visionneuse -->
+<div class="store" hidden data-cases>
+  <!--CASES-->
 </div>
 
 <div class="case" data-case hidden data-lenis-prevent role="dialog" aria-modal="true" aria-labelledby="case-t">
-  <div class="case__inner">
+  <div class="case__in">
     <header class="case__head">
-      <p class="case__n" id="case-t" data-case-n>No. 01</p>
-      <p class="case__of" data-case-of>of 18</p>
-      <button class="case__close" type="button" data-case-close aria-label="Close"><svg viewBox="0 0 20 20"><path d="M5 5l10 10M15 5 5 15"/></svg></button>
+      <p class="case__t" id="case-t"><span data-case-n>Smile 1</span> <span class="case__of" data-case-of>of 18</span></p>
+      <div class="case__nav">
+        <button type="button" data-case-prev aria-label="Previous smile"><svg viewBox="0 0 20 20"><path d="M16 10H5M9 5l-5 5 5 5"/></svg></button>
+        <button type="button" data-case-next aria-label="Next smile"><svg viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></button>
+        <button class="case__close" type="button" data-case-close aria-label="Close"><svg viewBox="0 0 20 20"><path d="M5 5l10 10M15 5 5 15"/></svg></button>
+      </div>
     </header>
-    <div class="case__faces">
-      <figure><img alt="" data-case-img="fb"><figcaption>Before</figcaption></figure>
-      <figure><img alt="" data-case-img="fa"><figcaption>After</figcaption></figure>
+    <div class="case__body">
+      <figure class="case__col">
+        <figcaption class="tag">Before</figcaption>
+        <img class="case__face" alt="" data-case-img="fb">
+        <img class="case__close-up" alt="" data-case-img="cb">
+      </figure>
+      <figure class="case__col">
+        <figcaption class="tag tag--blue">After</figcaption>
+        <img class="case__face" alt="" data-case-img="fa">
+        <img class="case__close-up" alt="" data-case-img="ca">
+      </figure>
     </div>
-    <div class="case__close-up">
-      <button class="hold" type="button" data-hold aria-label="Press and hold to see the smile before treatment">
-        <img alt="" data-case-img="ca">
-        <img class="hold__b" alt="" data-case-img="cb">
-        <span class="hold__tag" data-hold-tag>After</span>
-      </button>
-      <p class="case__hint"><span class="case__dot" aria-hidden="true"></span>Press and hold the smile to see it before.</p>
-    </div>
-    <div class="case__nav">
-      <button type="button" data-case-prev aria-label="Previous smile"><svg viewBox="0 0 20 20"><path d="M16 10H5M9 5l-5 5 5 5"/></svg></button>
-      <button type="button" data-case-next aria-label="Next smile"><svg viewBox="0 0 20 20"><path d="M4 10h11M11 5l5 5-5 5"/></svg></button>
-    </div>
+    <p class="case__note">From the studio’s smile gallery, shown as published. Use the arrow keys to browse.</p>
   </div>
 </div>
 

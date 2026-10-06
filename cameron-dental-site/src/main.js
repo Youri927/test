@@ -8,6 +8,7 @@
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hover = matchMedia('(hover: hover)').matches;
   const G = window.gsap;
   const ST = window.ScrollTrigger;
   G.registerPlugin(ST);
@@ -17,70 +18,56 @@
   /* ——— Défilement doux ——— */
   let lenis = null;
   if (!reduce && window.Lenis) {
-    lenis = new Lenis({duration: 1.15, smoothWheel: true});
+    lenis = new Lenis({duration: 1.1, smoothWheel: true});
     lenis.on('scroll', ST.update);
     G.ticker.add((t) => lenis.raf(t * 1000));
     G.ticker.lagSmoothing(0);
   }
+  const hdH = () => parseFloat(getComputedStyle(root).getPropertyValue('--hd')) || 72;
   const goTo = (el) => {
-    if (lenis) lenis.scrollTo(el, {offset: 0, duration: 1.6});
-    else window.scrollTo({top: el.getBoundingClientRect().top + scrollY, behavior: reduce ? 'auto' : 'smooth'});
+    const off = el.id === 'top' ? 0 : -hdH() + 1;
+    if (lenis) lenis.scrollTo(el.id === 'top' ? 0 : el, {offset: off, duration: 1.4});
+    else window.scrollTo({top: el.id === 'top' ? 0 : el.getBoundingClientRect().top + scrollY + off, behavior: reduce ? 'auto' : 'smooth'});
   };
   const lock = (on) => {
     root.classList.toggle('is-locked', on);
     if (lenis) on ? lenis.stop() : lenis.start();
   };
 
-  /* ——— En-tête : fond au défilement, masqué en descendant, folio de la rubrique en cours ——— */
+  /* ——— En-tête : ombre au défilement, masqué en descendant ——— */
   const hd = $('[data-hd]');
   const drawer = $('[data-drawer]');
   const menuBtn = $('[data-menu]');
   const mbar = $('[data-mbar]');
   let lastY = scrollY;
-  let coverSeen = true;
+  let heroSeen = true;
   let visitSeen = false;
   const onScroll = () => {
     const y = scrollY;
-    hd.classList.toggle('is-solid', y > 30 || !drawer.hidden);
-    if (y > lastY + 2 && y > 500 && drawer.hidden) hd.classList.add('is-hidden');
-    else if (y < lastY - 2 || y <= 500) hd.classList.remove('is-hidden');
+    hd.classList.toggle('is-solid', y > 10);
+    if (y > lastY + 2 && y > 600 && drawer.hidden) hd.classList.add('is-hidden');
+    else if (y < lastY - 2 || y <= 600) hd.classList.remove('is-hidden');
     lastY = y;
-    mbar.classList.toggle('is-on', !coverSeen && !visitSeen && drawer.hidden);
+    mbar.classList.toggle('is-on', !heroSeen && !visitSeen && drawer.hidden);
   };
   addEventListener('scroll', onScroll, {passive: true});
-  new IntersectionObserver(([en]) => { coverSeen = en.isIntersecting; onScroll(); }, {rootMargin: '0px 0px -55% 0px'}).observe($('#cover'));
+  new IntersectionObserver(([en]) => { heroSeen = en.isIntersecting; onScroll(); }, {rootMargin: '0px 0px -40% 0px'}).observe($('.hero__ctas'));
   new IntersectionObserver(([en]) => { visitSeen = en.isIntersecting; onScroll(); }, {rootMargin: '0px 0px -25% 0px'}).observe($('#visit'));
 
-  const folioN = $('[data-folio-n]');
-  const folioT = $('[data-folio-t]');
-  let folio = '01';
-  const setFolio = (n, t) => {
-    if (n === folio) return;
-    folio = n;
-    if (reduce) { folioN.textContent = n; folioT.textContent = t; return; }
-    G.timeline()
-      .to([folioN, folioT], {yPercent: -110, opacity: 0, duration: 0.25, ease: 'power2.in', stagger: 0.03})
-      .add(() => { folioN.textContent = n; folioT.textContent = t; })
-      .fromTo([folioN, folioT], {yPercent: 110, opacity: 0}, {yPercent: 0, opacity: 1, duration: 0.5, ease: 'expo.out', stagger: 0.04});
-  };
-  const folioIO = new IntersectionObserver((entries) => entries.forEach((en) => {
+  // la rubrique en cours est soulignée dans le menu
+  const navLinks = $$('.nav a');
+  const navIO = new IntersectionObserver((entries) => entries.forEach((en) => {
     if (!en.isIntersecting) return;
-    const [n, t] = en.target.dataset.folioOf.split('|');
-    setFolio(n, t);
-  }), {rootMargin: '-40% 0px -55% 0px'});
-  $$('[data-folio-of]').forEach((el) => folioIO.observe(el));
+    navLinks.forEach((a) => a.classList.toggle('is-here', a.getAttribute('href') === '#' + en.target.id));
+  }), {rootMargin: '-45% 0px -50% 0px'});
+  $$('main > section').forEach((s) => navIO.observe(s));
 
   /* ——— Menu (tablette et téléphone) ——— */
   const setDrawer = (open) => {
     menuBtn.setAttribute('aria-expanded', String(open));
-    if (open) {
-      drawer.hidden = false;
-      lock(true);
-      if (!reduce) G.fromTo($$('.menu__t, .menu nav a, .menu__foot', drawer), {opacity: 0, y: 24}, {opacity: 1, y: 0, duration: 0.8, stagger: 0.04, ease: 'expo.out'});
-    } else {
-      drawer.hidden = true;
-      lock(false);
-    }
+    drawer.hidden = !open;
+    lock(open);
+    if (open && !reduce) G.fromTo($$('.menu nav a, .menu__foot', drawer), {opacity: 0, y: 16}, {opacity: 1, y: 0, duration: 0.6, stagger: 0.035, ease: 'power3.out'});
     onScroll();
   };
   menuBtn.addEventListener('click', () => setDrawer(menuBtn.getAttribute('aria-expanded') !== 'true'));
@@ -110,14 +97,16 @@
     const weekday = day >= 1 && day <= 5;
     const open = weekday && min >= 420 && min < 1020;
     let text = 'Open now · until 5 PM';
+    let short = 'Open now';
     if (!open) {
+      short = 'Closed now';
       if (weekday && min < 420) text = 'Closed · opens at 7 AM';
       else if (day >= 1 && day <= 4) text = 'Closed · opens tomorrow, 7 AM';
       else text = 'Closed · opens Monday, 7 AM';
     }
     $$('[data-status]').forEach((el) => {
       el.classList.toggle('is-open', open);
-      el.querySelector('span').textContent = text;
+      el.querySelector('span').textContent = el.closest('.hd__tel') ? short : text;
       el.title = 'Monday to Friday, 7 AM to 5 PM (Naples time)';
     });
   };
@@ -125,7 +114,7 @@
   setInterval(paintStatus, 60000);
   $$('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
 
-  /* ——— Titres : découpe en lignes réelles (l'italique est conservé mot par mot) ——— */
+  /* ——— Titres : découpe en lignes réelles ——— */
   function splitLines(el) {
     if (!el.dataset.src) el.dataset.src = el.innerHTML;
     el.innerHTML = el.dataset.src;
@@ -139,7 +128,6 @@
             if (!part) return;
             if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
             const w = document.createElement(inner ? inner.tagName.toLowerCase() : 'span');
-            if (inner && inner.className) w.className = inner.className;
             w.textContent = part;
             frag.appendChild(w);
             words.push(w);
@@ -170,290 +158,201 @@
     });
     el.classList.add('is-split');
   }
-  const splits = $$('[data-split]');
+  const splits = $$('[data-lines]');
 
-  /* ——— Titre de couverture et pied de page : le mot « Cameron » remplit la largeur ——— */
-  const mastWord = $('[data-mast]');
-  const ftMast = $('[data-ft-mast]');
-  mastWord.innerHTML = [...mastWord.textContent].map((c) => `<span class="ch">${c}</span>`).join('');
-  const fit = (el, avail) => {
-    el.style.fontSize = '100px';
-    const w = el.scrollWidth;
-    if (w) el.style.fontSize = `${(100 * avail) / w}px`;
-  };
-  const fitMasts = () => {
-    const mast = mastWord.parentNode;
-    const cs = getComputedStyle(mast);
-    const sub = $('.mast__sub');
-    const avail = mast.clientWidth - (cs.flexDirection === 'column' ? 0 : sub.offsetWidth + parseFloat(cs.columnGap || 0));
-    fit(mastWord, Math.min(avail, innerHeight * 1.6));
-    mast.parentNode.style.setProperty('--mast-h', `${mastWord.offsetHeight}px`);
-    const ft = getComputedStyle(ftMast.parentNode);
-    fit(ftMast, ftMast.parentNode.clientWidth - parseFloat(ft.paddingLeft) - parseFloat(ft.paddingRight));
-  };
+  /* ——— Le mur des sourires : avant au survol, en vague avec l'interrupteur, et quelques « coups d'œil » ——— */
+  const wall = $('[data-wall]');
+  const faces = $$('.face', wall);
+  const flip = $('[data-flip]', wall);
+  const visible = () => faces.filter((f) => f.offsetParent !== null);
+  const cols = () => getComputedStyle($('[data-wall-grid]')).gridTemplateColumns.split(' ').length;
+  function startWall() {
+    let clearT;
+    flip.addEventListener('click', () => {
+      const before = flip.getAttribute('aria-checked') !== 'true';
+      const c = cols();
+      visible().forEach((f, i) => f.style.setProperty('--wd', reduce ? '0ms' : `${((i % c) + Math.floor(i / c)) * 70}ms`));
+      flip.setAttribute('aria-checked', String(before));
+      $('.switch__t', flip).textContent = before ? 'Show after' : 'Show before';
+      wall.classList.toggle('is-before', before);
+      clearTimeout(clearT);
+      clearT = setTimeout(() => faces.forEach((f) => f.style.removeProperty('--wd')), 1600);
+    });
+    if (reduce) return;
+    // de temps en temps, un sourire montre son « avant » une seconde
+    let inView = true;
+    let pointer = false;
+    let last = -1;
+    new IntersectionObserver(([en]) => { inView = en.isIntersecting; }).observe(wall);
+    wall.addEventListener('pointerenter', () => { pointer = true; });
+    wall.addEventListener('pointerleave', () => { pointer = false; });
+    setInterval(() => {
+      if (!inView || pointer || wall.classList.contains('is-before') || document.hidden) return;
+      const list = visible();
+      let i = Math.floor(Math.random() * list.length);
+      if (i === last) i = (i + 1) % list.length;
+      last = i;
+      const f = list[i];
+      f.classList.add('is-peek');
+      setTimeout(() => f.classList.remove('is-peek'), 1700);
+    }, 2600);
+  }
 
-  /* ——— Ouverture : couverture ——— */
-  const coverFrame = $('[data-cover-frame]');
-  const coverImg = $('[data-cover-img]');
+  /* ——— Ouverture ——— */
   function intro() {
-    const ins = $$('#cover [data-in]');
-    const head = $('#cover [data-split]');
-    if (reduce) {
+    const head = $('#hero-t');
+    const ins = $$('[data-in]');
+    const c = cols();
+    visible().forEach((f, i) => f.style.setProperty('--fd', `${250 + ((i % c) + Math.floor(i / c)) * 90}ms`));
+    if (reduce) { head.classList.add('is-in'); faces.forEach((f) => f.classList.add('is-in')); return; }
+    requestAnimationFrame(() => {
       head.classList.add('is-in');
-      return;
-    }
-    mastWord.style.clipPath = 'inset(-20% -5% -.04em -5%)';
-    G.timeline({defaults: {ease: 'expo.out'}})
-      .fromTo($$('.ch', mastWord), {yPercent: 108}, {yPercent: 0, duration: 1.5, stagger: 0.055, onComplete: () => { mastWord.style.clipPath = ''; }}, 0.1)
-      .fromTo(coverFrame, {clipPath: 'inset(100% 0% 0% 0%)'}, {clipPath: 'inset(0% 0% 0% 0%)', duration: 1.7, ease: 'expo.inOut'}, 0.25)
-      .fromTo(coverImg, {scale: 1.35}, {scale: 1.1, duration: 2.4}, 0.25)
-      .fromTo(ins, {opacity: 0, y: 18}, {opacity: 1, y: 0, duration: 1.1, stagger: 0.06}, 0.9)
-      .add(() => head.classList.add('is-in'), 1.05);
-    // en défilant, la photo glisse un peu moins vite que la page
-    G.to(coverImg, {yPercent: 3.5, ease: 'none', scrollTrigger: {trigger: '#cover', start: 'top top', end: 'bottom top', scrub: true}});
+      faces.forEach((f) => f.classList.add('is-in'));
+      G.fromTo(ins, {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: 0.9, stagger: 0.07, ease: 'power3.out', delay: 0.45});
+    });
   }
 
   /* ——— Apparitions ——— */
-  const drifts = $$('img[data-drift]');
   function reveals() {
     let batch = 0;
     let batchT = 0;
     const show = (el) => {
       const now = performance.now();
       if (now - batchT > 140) { batch = 0; batchT = now; }
-      if (el.matches('[data-reveal], .shot') && !el.style.getPropertyValue('--d')) el.style.setProperty('--d', `${Math.min(batch++, 7) * 75}ms`);
+      if (el.matches('[data-reveal]') && !el.style.getPropertyValue('--d')) el.style.setProperty('--d', `${Math.min(batch++, 6) * 70}ms`);
       el.classList.add('is-in');
-      const img = el.matches('.plate') && $('img[data-drift]', el);
-      if (img && !reduce) G.fromTo(img, {scale: 1.14}, {scale: 1, duration: 1.9, ease: 'expo.out'});
+      const img = el.matches('.pic') && $('img[data-drift]', el);
+      if (img && !reduce) G.fromTo(img, {scale: 1.12}, {scale: 1, duration: 1.8, ease: 'expo.out'});
     };
     const obs = new IntersectionObserver((entries) => entries.forEach((en) => {
       if (!en.isIntersecting) return;
       obs.unobserve(en.target);
       show(en.target);
-    }), {rootMargin: '0px 0px -10% 0px'});
-    [...splits.filter((el) => !el.closest('#cover')), ...$$('[data-reveal], .rh[data-rule], .plate[data-plate], .shot, [data-ft-mast]')].forEach((el) => obs.observe(el));
+    }), {rootMargin: '0px 0px -8% 0px'});
+    [...splits.filter((el) => el.id !== 'hero-t'), ...$$('[data-reveal], .pic[data-pic]')].forEach((el) => obs.observe(el));
   }
 
-  /* ——— Mouvements liés au défilement ——— */
-  function scrubs() {
+  /* ——— Photos qui glissent dans leur cadre au défilement ——— */
+  function drifts() {
     if (reduce) return;
-    // photos dans leur cadre
-    drifts.forEach((img) => {
-      img.style.transition = 'none';
-      G.set(img, {scale: 1.14});
-      G.fromTo(img, {yPercent: -4.5}, {yPercent: 4.5, ease: 'none', scrollTrigger: {trigger: img.parentNode, start: 'top bottom', end: 'bottom top', scrub: true}});
+    $$('img[data-drift]').forEach((img) => {
+      G.set(img, {scale: 1.12});
+      G.fromTo(img, {yPercent: -4}, {yPercent: 4, ease: 'none', scrollTrigger: {trigger: img.parentNode, start: 'top bottom', end: 'bottom top', scrub: true}});
     });
-    // la photo « avant » du cas vedette remonte un peu plus vite que l'« après »
-    G.fromTo('.lead__before', {y: 70}, {y: -50, ease: 'none', scrollTrigger: {trigger: '.lead__faces', start: 'top bottom', end: 'bottom top', scrub: true}});
-    // les couvertures de magazines s'ouvrent en éventail
-    G.fromTo('[data-covers]', {'--spread': 0, '--tilt': 0.15}, {'--spread': 1.1, '--tilt': 1, ease: 'none',
-      scrollTrigger: {trigger: '[data-covers]', start: 'top 95%', end: 'center 45%', scrub: 0.6}});
   }
 
-  /* ——— Planche des 18 sourires : avant / après en vague ——— */
-  function startSheet() {
-    const sheet = $('[data-sheet]');
-    const flip = $('.flip');
-    const btns = $$('[data-flip]', flip);
-    const shots = $$('.shot', sheet);
-    let clearT;
-    const set = (before) => {
-      if (sheet.classList.contains('is-before') === before) return;
-      const cols = getComputedStyle(sheet).gridTemplateColumns.split(' ').length;
-      shots.forEach((li, i) => {
-        const d = reduce ? 0 : ((i % cols) + Math.floor(i / cols)) * 55;
-        li.style.setProperty('--wd', `${d}ms`);
-        const label = $('[data-state]', li);
-        setTimeout(() => { label.textContent = before ? 'Before' : 'After'; }, d + 200);
-      });
-      sheet.classList.toggle('is-before', before);
-      flip.classList.toggle('is-after', !before);
-      btns.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.flip === 'before') === before)));
-      clearTimeout(clearT);
-      clearT = setTimeout(() => shots.forEach((li) => li.style.removeProperty('--wd')), 1800);
-    };
-    btns.forEach((b) => b.addEventListener('click', () => set(b.dataset.flip === 'before')));
-    return shots;
+  /* ——— La photo d'équipe s'élargit jusqu'aux bords de l'écran ——— */
+  function bleed() {
+    if (reduce) return;
+    const pic = $('[data-bleed]');
+    const fig = pic.parentNode;
+    const side = () => { const cs = getComputedStyle(fig.parentNode); return fig.parentNode.getBoundingClientRect().left + parseFloat(cs.paddingLeft); };
+    G.fromTo(pic, {clipPath: () => `inset(0px ${side()}px 0px ${side()}px round 6px)`}, {clipPath: 'inset(0px 0px 0px 0px round 0px)', ease: 'none',
+      scrollTrigger: {trigger: fig, start: 'top 88%', end: 'top 18%', scrub: 0.4, invalidateOnRefresh: true}});
   }
 
-  /* ——— Visionneuse d'un cas : visages, puis gros plan « appuyer pour voir avant » ——— */
-  function startCase(shots) {
+  /* ——— Visionneuse des 18 cas ——— */
+  function startCase() {
+    const store = $$('[data-case-i]');
     const dlg = $('[data-case]');
     const imgs = {};
     $$('[data-case-img]', dlg).forEach((img) => { imgs[img.dataset.caseImg] = img; });
-    const hold = $('[data-hold]', dlg);
-    const tag = $('[data-hold-tag]', dlg);
     let cur = 0;
     let opener = null;
     const fill = (i) => {
-      cur = (i + shots.length) % shots.length;
-      const li = shots[cur];
-      imgs.fa.src = $('.shot__a', li).src;
-      imgs.fb.src = $('.shot__b', li).src;
-      imgs.cb.src = $('img[data-cb]', li).src;
-      imgs.ca.src = $('img[data-ca]', li).src;
-      const n = String(cur + 1).padStart(2, '0');
-      imgs.fb.alt = `Smile no. ${n}, before treatment`;
-      imgs.fa.alt = `Smile no. ${n}, after treatment`;
-      imgs.ca.alt = `Smile no. ${n}, close-up after treatment`;
-      imgs.cb.alt = `Smile no. ${n}, close-up before treatment`;
-      $('[data-case-n]', dlg).textContent = `No. ${n}`;
-      $('[data-case-of]', dlg).textContent = `of ${shots.length}`;
+      cur = (i + store.length) % store.length;
+      const n = cur + 1;
+      ['fb', 'fa', 'cb', 'ca'].forEach((k) => { imgs[k].src = $(`img[data-k="${k}"]`, store[cur]).src; });
+      imgs.fb.alt = `Smile ${n}, before treatment`;
+      imgs.fa.alt = `Smile ${n}, after treatment`;
+      imgs.cb.alt = `Smile ${n}, teeth before treatment`;
+      imgs.ca.alt = `Smile ${n}, teeth after treatment`;
+      $('[data-case-n]', dlg).textContent = `Smile ${n}`;
+      $('[data-case-of]', dlg).textContent = `of ${store.length}`;
     };
-    const anim = (dir) => {
-      if (reduce) return;
-      G.fromTo($$('.case__faces figure, .case__close-up', dlg), {opacity: 0, x: 30 * dir}, {opacity: 1, x: 0, duration: 0.8, stagger: 0.05, ease: 'expo.out'});
-    };
+    const parts = () => $$('.case__col > img', dlg);
     const open = (i, from) => {
       opener = from;
       fill(i);
       dlg.hidden = false;
       lock(true);
       if (!reduce) {
-        G.fromTo(dlg, {opacity: 0}, {opacity: 1, duration: 0.4, ease: 'power2.out'});
-        G.fromTo($$('.case__head, .case__faces figure, .case__close-up, .case__nav', dlg), {opacity: 0, y: 30}, {opacity: 1, y: 0, duration: 1, stagger: 0.06, ease: 'expo.out', delay: 0.05});
+        G.fromTo(dlg, {opacity: 0}, {opacity: 1, duration: 0.35, ease: 'power2.out'});
+        G.fromTo(parts(), {opacity: 0, y: 24}, {opacity: 1, y: 0, duration: 0.8, stagger: 0.05, ease: 'power3.out', delay: 0.05});
       }
       $('[data-case-close]', dlg).focus();
     };
     const close = () => {
-      setDown(false);
       const done = () => { dlg.hidden = true; lock(false); if (opener) opener.focus({preventScroll: true}); };
       if (reduce) done();
-      else G.to(dlg, {opacity: 0, duration: 0.3, ease: 'power2.in', onComplete: done});
+      else G.to(dlg, {opacity: 0, duration: 0.25, ease: 'power2.in', onComplete: done});
     };
-    const step = (d) => { fill(cur + d); anim(d); };
-    shots.forEach((li, i) => $('.shot__btn', li).addEventListener('click', (e) => open(i, e.currentTarget)));
+    const step = (d) => {
+      fill(cur + d);
+      if (!reduce) G.fromTo(parts(), {opacity: 0, x: 20 * d}, {opacity: 1, x: 0, duration: 0.6, stagger: 0.04, ease: 'power3.out'});
+    };
+    $$('[data-open-case]').forEach((b) => b.addEventListener('click', (e) => open(+b.dataset.openCase, e.currentTarget)));
     $('[data-case-close]', dlg).addEventListener('click', close);
     $('[data-case-prev]', dlg).addEventListener('click', () => step(-1));
     $('[data-case-next]', dlg).addEventListener('click', () => step(1));
-
-    const setDown = (on) => {
-      hold.classList.toggle('is-down', on);
-      tag.textContent = on ? 'Before' : 'After';
-    };
-    hold.addEventListener('pointerdown', (e) => { e.preventDefault(); hold.setPointerCapture?.(e.pointerId); setDown(true); });
-    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach((t) => hold.addEventListener(t, () => setDown(false)));
-    hold.addEventListener('contextmenu', (e) => e.preventDefault());
-    hold.addEventListener('keydown', (e) => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); setDown(true); } });
-    hold.addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'Enter') setDown(false); });
-    hold.addEventListener('blur', () => setDown(false));
-
     dlg.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') { e.preventDefault(); close(); }
       else if (e.key === 'ArrowRight') step(1);
       else if (e.key === 'ArrowLeft') step(-1);
       else if (e.key === 'Tab') {
-        const f = $$('button', dlg).filter((b) => b.offsetParent !== null);
-        const first = f[0];
-        const last = f[f.length - 1];
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        const f = $$('button', dlg);
+        if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
       }
     });
-  }
-
-  /* ——— Onglets (soins) et thèmes (courrier) : tabindex mobile, flèches du clavier ——— */
-  function roving(list, items, onPick) {
-    items.forEach((b, i) => {
-      b.addEventListener('click', () => onPick(b, true));
-      b.addEventListener('keydown', (e) => {
-        const d = {ArrowRight: 1, ArrowLeft: -1, Home: -i, End: items.length - 1 - i}[e.key];
-        if (d === undefined) return;
-        e.preventDefault();
-        const n = items[(i + d + items.length) % items.length];
-        n.focus();
-        onPick(n, true);
-      });
+    // balayage sur téléphone
+    let x0 = null;
+    dlg.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, {passive: true});
+    dlg.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 60) step(dx < 0 ? 1 : -1);
+      x0 = null;
     });
   }
-  const enter = (el) => { el.classList.remove('is-enter'); void el.offsetWidth; el.classList.add('is-enter'); };
+
+  /* ——— Soins : accordéon ——— */
   let refreshT;
-  const refreshSoon = () => { clearTimeout(refreshT); refreshT = setTimeout(() => ST.refresh(), 120); };
-
-  function startTabs() {
-    const list = $('[data-tabs]');
-    const tabs = $$('[role="tab"]', list);
-    const bar = $('.tabs__bar', list);
-    const place = () => {
-      const t = tabs.find((b) => b.getAttribute('aria-selected') === 'true');
-      bar.style.setProperty('--x', `${t.offsetLeft}px`);
-      bar.style.setProperty('--w', `${t.offsetWidth}px`);
-    };
-    roving(list, tabs, (tab, user) => {
-      tabs.forEach((b) => {
-        const on = b === tab;
-        b.setAttribute('aria-selected', String(on));
-        b.tabIndex = on ? 0 : -1;
-        const p = document.getElementById(b.getAttribute('aria-controls'));
-        if (on && p.hidden) { p.hidden = false; if (user) enter(p); }
-        else if (!on) p.hidden = true;
-      });
-      place();
-      if (list.scrollWidth > list.clientWidth) list.scrollTo({left: tab.offsetLeft - 24, behavior: reduce ? 'auto' : 'smooth'});
-      refreshSoon();
-    });
-    place();
-    return place;
+  const refreshSoon = () => { clearTimeout(refreshT); refreshT = setTimeout(() => ST.refresh(), 150); };
+  function startAcc() {
+    $$('.acc__btn').forEach((btn) => btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      btn.setAttribute('aria-expanded', String(open));
+      if (open) {
+        panel.hidden = false;
+        if (!reduce) {
+          G.fromTo(panel, {height: 0}, {height: 'auto', duration: 0.7, ease: 'power3.inOut', clearProps: 'height', onComplete: refreshSoon});
+          G.fromTo(panel.firstElementChild.children, {opacity: 0, y: 14}, {opacity: 1, y: 0, duration: 0.7, stagger: 0.06, ease: 'power3.out', delay: 0.15});
+        } else refreshSoon();
+      } else if (reduce) {
+        panel.hidden = true;
+        refreshSoon();
+      } else {
+        G.to(panel, {height: 0, duration: 0.5, ease: 'power3.inOut', onComplete: () => { panel.hidden = true; G.set(panel, {clearProps: 'height'}); refreshSoon(); }});
+      }
+    }));
   }
 
-  function startLetters() {
-    const list = $('[data-themes]');
-    const chips = $$('[data-theme]', list);
-    const sets = $$('[data-set]');
-    roving(list, chips, (chip) => {
-      chips.forEach((c) => { c.setAttribute('aria-selected', String(c === chip)); c.tabIndex = c === chip ? 0 : -1; });
-      sets.forEach((s) => {
-        const on = s.dataset.set === chip.dataset.theme;
-        if (on && s.hidden) { s.hidden = false; enter(s); }
-        else if (!on) s.hidden = true;
-      });
-      refreshSoon();
-    });
-  }
-
-  /* ——— Curseur « How do you feel about the dentist? » ——— */
-  function startDial() {
-    const input = $('[data-dial-in]');
-    const opts = $$('[data-opt]');
-    const marks = $$('.dial__marks span');
-    const words = ['I’m fine', 'A little nervous', 'Really anxious'];
-    const set = (v, user) => {
-      input.style.setProperty('--fill', `${v * 50}%`);
-      input.setAttribute('aria-valuetext', words[v]);
-      marks.forEach((m, i) => m.classList.toggle('is-on', i === v));
-      opts.forEach((o) => {
-        const on = +o.dataset.opt === v;
-        if (on && o.hidden) { o.hidden = false; if (user) enter(o); }
-        else if (!on) o.hidden = true;
-      });
-    };
-    input.addEventListener('input', () => set(+input.value, true));
-    marks.forEach((m, i) => {
-      m.style.cursor = 'pointer';
-      m.addEventListener('click', () => { input.value = i; set(i, true); });
-    });
-    set(+input.value, false);
-  }
-
-  /* ——— Dentistes : biographie dépliable ——— */
+  /* ——— Dentistes : biographie ——— */
   function startDoctors() {
     $$('[data-doc]').forEach((btn) => btn.addEventListener('click', () => {
       const open = btn.getAttribute('aria-expanded') !== 'true';
       const bio = document.getElementById(btn.getAttribute('aria-controls'));
       btn.setAttribute('aria-expanded', String(open));
-      if (open) {
-        bio.hidden = false;
-        if (!reduce) G.fromTo(bio, {height: 0, opacity: 0}, {height: 'auto', opacity: 1, duration: 0.7, ease: 'expo.out', clearProps: 'height', onComplete: refreshSoon});
-      } else if (reduce) {
-        bio.hidden = true;
-      } else {
-        G.to(bio, {height: 0, opacity: 0, duration: 0.45, ease: 'power3.inOut', onComplete: () => { bio.hidden = true; G.set(bio, {clearProps: 'height,opacity'}); refreshSoon(); }});
-      }
+      btn.firstChild.textContent = open ? 'Close' : 'About';
+      bio.hidden = !open;
+      if (open && !reduce) G.fromTo(bio, {opacity: 0, y: -6}, {opacity: 1, y: 0, duration: 0.5, ease: 'power2.out'});
       refreshSoon();
     }));
   }
 
-  /* ——— Assurances : la liste du site, filtrée à la frappe ——— */
+  /* ——— Assurances : la liste de leur page « finances », filtrée à la frappe ——— */
   function startInsurance() {
     const PPO = ['Aetna', 'Altus Dental', 'Assurant', 'Ameritas', 'Allegiance', 'BlueDental Choice', 'BlueDental Choice Plus',
       'BlueOptions Health & Dental', 'Careington', 'Cigna', 'Connection Dental Network', 'Delta', 'Dental Network of America (DNOA)',
@@ -491,7 +390,7 @@
       items.forEach((m) => m.li.classList.toggle('is-match', hits.includes(m)));
       const ppo = hits.filter((m) => m.kind === 'ppo');
       const disc = hits.filter((m) => m.kind === 'discount');
-      if (!hits.length) res.innerHTML = `Not on our list yet. Call us at <a href="tel:+12394227924">${TEL}</a> and we’ll check for you.`;
+      if (!hits.length) res.innerHTML = `Not on our list. Call us at <a href="tel:+12394227924">${TEL}</a> and we’ll check for you.`;
       else if (ppo.length) res.innerHTML = `Yes, we’re in network with ${list(ppo)}${disc.length ? `, and accept ${list(disc)}` : ''}.`;
       else res.innerHTML = `We accept the discount plan ${list(disc)}.`;
     });
@@ -515,28 +414,24 @@
       done.hidden = false;
       done.setAttribute('tabindex', '-1');
       done.focus({preventScroll: true});
-      if (!reduce) G.fromTo(done, {clipPath: 'inset(100% 0% 0% 0%)'}, {clipPath: 'inset(0% 0% 0% 0%)', duration: 1, ease: 'expo.inOut'});
+      if (!reduce) G.fromTo(done.children, {opacity: 0, y: 16}, {opacity: 1, y: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out'});
     });
     $$('[required]', form).forEach((f) => f.addEventListener('input', () => { f.closest('.field').classList.remove('is-bad'); f.removeAttribute('aria-invalid'); }));
   }
 
   /* ——— Démarrage ——— */
-  const decode = (img) => (img.complete && img.naturalWidth ? Promise.resolve() : (img.decode ? img.decode() : new Promise((ok) => { img.onload = ok; }))).catch(() => {});
   async function start() {
     await document.fonts.ready.catch(() => {});
-    fitMasts();
     splits.forEach(splitLines);
-    await decode(coverImg);
     intro();
-    const shots = startSheet();
-    startCase(shots);
-    const placeBar = startTabs();
-    startLetters();
-    startDial();
+    startWall();
+    startCase();
+    startAcc();
     startDoctors();
     startInsurance();
     startForm();
-    scrubs();
+    drifts();
+    bleed();
     reveals();
     let w0 = innerWidth;
     let rt;
@@ -545,9 +440,7 @@
       w0 = innerWidth;
       clearTimeout(rt);
       rt = setTimeout(() => {
-        fitMasts();
         splits.forEach((el) => { const was = el.classList.contains('is-in'); splitLines(el); if (was) el.classList.add('is-in'); });
-        placeBar();
         ST.refresh();
       }, 200);
     });
