@@ -27,9 +27,10 @@ Ajouter un composant : `npx shadcn@latest add carousel`, ou le demander à Claud
 Catalogues branchés :
 - **shadcn/ui**, les composants de base ;
 - **Aceternity UI** (`@aceternity`, déclaré dans `components.json`), des composants animés : `npx shadcn@latest add @aceternity/nom-du-composant` ;
+- **Magic UI** (`@magicui`, déclaré dans `components.json`), des effets et composants animés : `npx shadcn@latest add @magicui/nom-du-composant` ;
 - **21st.dev**, par le serveur MCP 21st du dépôt (clé dans la variable d'environnement `API_KEY_21ST`).
 
-Les composants Aceternity utilisent souvent la bibliothèque `motion`, ou des effets de flou et de lueur : à choisir avec soin et à restyler, pour garder le rendu sur mesure et fluide.
+Les composants Aceternity et Magic UI utilisent souvent la bibliothèque `motion`, ou des effets de flou et de lueur : à choisir avec soin et à restyler, pour garder le rendu sur mesure et fluide.
 
 ## Règles pour garder un rendu sur mesure
 
