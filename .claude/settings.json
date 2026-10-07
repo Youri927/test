@@ -1,4 +1,12 @@
 {
+  "env": {
+    "PLAYWRIGHT_MCP_BROWSER": "chromium",
+    "PLAYWRIGHT_MCP_HEADLESS": "true",
+    "PLAYWRIGHT_MCP_EXECUTABLE_PATH": "/opt/pw-browsers/chromium"
+  },
+  "enabledPlugins": {
+    "playwright@claude-plugins-official": true
+  },
   "extraKnownMarketplaces": {
     "claude-plugins-official": {
       "source": {
@@ -6,13 +14,5 @@
         "repo": "anthropics/claude-plugins-official"
       }
     }
-  },
-  "enabledPlugins": {
-    "playwright@claude-plugins-official": true
-  },
-  "env": {
-    "PLAYWRIGHT_MCP_BROWSER": "chromium",
-    "PLAYWRIGHT_MCP_HEADLESS": "true",
-    "PLAYWRIGHT_MCP_EXECUTABLE_PATH": "/opt/pw-browsers/chromium"
   }
 }
