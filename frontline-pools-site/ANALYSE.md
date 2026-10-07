@@ -37,8 +37,8 @@ Site analysé : **frontlinepools.com**, le 7 octobre 2026. J'ai parcouru les 21 
 
 ## 4. Les photos
 
-- **Les vraies photos de chantier sont bonnes**, prises au téléphone mais nettes et lumineuses : une vingtaine de bassins terminés, trois paires avant / après (deux locaux techniques, une piscine vidée puis remise en eau), des détails (carrelage, étoile de mer au fond).
-- Quatre photos montrent visiblement le même jardin : bassin romain, deux bassins surélevés carrelés de verre bleu, margelles en travertin, perron en brique. Elles correspondent à l'avis de John (Davis Island) et au chantier Davis Islands, mais rien ne le confirme sur le site : la maquette ne les nomme pas.
+- **Les vraies photos de chantier sont bonnes**, prises au téléphone mais nettes et lumineuses : une quinzaine de bassins terminés, trois paires avant / après (deux locaux techniques, une piscine vidée puis remise en eau), des détails (carrelage, étoile de mer au fond).
+- Trois photos montrent visiblement le même jardin : bassin romain, deux bassins surélevés carrelés de verre bleu, margelles en travertin, perron en brique. Elles pourraient correspondre à l'avis de John (Davis Island) et au chantier Davis Islands, mais rien ne le confirme sur le site : la maquette ne les nomme pas.
 - **À écarter** :
   - les photos de catalogue des fournisseurs (mosaïques, nuanciers, travertins, pavés) ;
   - une photo de banque d'images (enfants avec pistolets à eau) et un fond d'eau flou ;

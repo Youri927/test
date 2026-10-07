@@ -19,7 +19,7 @@ import numpy as np
 import shapefile
 
 GEO = Path(sys.argv[1])
-OUT = Path(__file__).resolve().parent.parent / 'src' / 'map.svg'
+OUT = Path(__file__).resolve().parent.parent / 'src' / 'map.svg'  # + src/map-bg.svg (fond)
 
 LON0, LON1, LAT0, LAT1 = -82.80, -82.04, 27.70, 28.42
 LATC = (LAT0 + LAT1) / 2
@@ -145,17 +145,23 @@ BASE = (27.9850, -82.4640)  # dans le code postal 33603
 
 svg = []
 add = svg.append
+# Deux calques. Le fond (côtes, lacs, routes) est une image SVG autonome : le navigateur la dessine une seule fois.
+# Par-dessus, un SVG léger porte les textes (dans la police du site) et les secteurs, seuls à s'animer.
+bg = [f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" xmlns="http://www.w3.org/2000/svg">',
+      '<style>.s{fill:#1d305d}.l{fill:#eef2f7}.r{fill:none;stroke:#c1cad9;stroke-width:1.4;stroke-linejoin:round}'
+      '.c{stroke:#1d305d;stroke-width:1.5;fill:none}.b{fill:#fff;stroke:#b7c1d2}</style>',
+      f'<rect class="s" width="{W}" height="{H}"/>',
+      f'<path class="l" d="{path(land, .8, closed=True)}"/>',
+      f'<path class="s" d="{path(water, .7, closed=True)}"/>',
+      f'<path class="s" d="{path(lakes, .7, closed=True, minarea=14)}"/>']
+for key, rings in roads.items():
+    bg.append(f'<path class="r" d="{path(rings, .7)}"/>')
+
 add(f'<svg class="map" viewBox="0 0 {W} {H}" role="img" aria-labelledby="map-t map-d" xmlns="http://www.w3.org/2000/svg">')
 add('<title id="map-t">Where Frontline Pools works</title>')
 add('<desc id="map-d">Map of Tampa Bay with the neighborhoods Frontline Pools serves, from Hudson and Wesley Chapel in '
     'the north to Apollo Beach in the south and Plant City in the east. Coastline, lakes and highways from the US Census '
     'Bureau (TIGER/Line 2024).</desc>')
-add(f'<rect class="m-sea" width="{W}" height="{H}"/>')
-add(f'<path class="m-land" d="{path(land, .8, closed=True)}"/>')
-add(f'<path class="m-water" d="{path(water, .7, closed=True)}"/>')
-add(f'<path class="m-lake" d="{path(lakes, .7, closed=True, minarea=14)}"/>')
-for key, rings in roads.items():
-    add(f'<path class="m-road" data-route="{key}" d="{path(rings, .7)}"/>')
 
 # numéros d'autoroutes, posés sur un point du tracé
 SHIELDS = {'275': (28.150, -82.465), '75': (28.090, -82.335), '4': (28.015, -82.250)}
@@ -177,7 +183,7 @@ for name, (lat, lon), rot in [('Gulf of Mexico', (28.20, -82.789), -90), ('Old T
                               ('Tampa Bay', (27.752, -82.585), 0)]:
     x, y = proj(lon, lat)
     tr = f' transform="rotate({rot} {x:.1f} {y:.1f})"' if rot else ''
-    add(f'<text class="m-sea-label" x="{x:.1f}" y="{y:.1f}"{tr}>{name}</text>')
+    add(f'<text class="m-sea-label" x="{x:.1f}" y="{y:.1f}"{tr} aria-hidden="true">{name}</text>')
 
 bx, by = proj(BASE[1], BASE[0])
 add(f'<g class="m-base" transform="translate({bx:.1f} {by:.1f})"><circle class="m-base-ring" r="15"/><circle r="6.5"/>'
@@ -191,6 +197,7 @@ for key, label, (lat, lon), side in AREAS:
         f'<text x="{tx}" y="{ty}" text-anchor="{anchor}">{label}</text></g>')
 add('</g>')
 add('</svg>')
-
+bg.append('</svg>')
+(OUT.parent / 'map-bg.svg').write_text('\n'.join(bg))
 OUT.write_text('\n'.join(svg))
 print(OUT, f'{W}x{H}', f'{OUT.stat().st_size // 1024} KB')

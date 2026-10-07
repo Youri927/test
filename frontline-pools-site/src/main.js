@@ -157,9 +157,9 @@
     const avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
     const spans = $$('.ln > span', title);
     let w;
-    if (mobile()) w = Math.max(...spans.map(textWidth));
+    if (innerWidth <= 1080) w = Math.max(...spans.map(textWidth));
     else w = textWidth($('.hero__l1', title));
-    box.style.setProperty('--fit', `${Math.floor((100 * avail) / w * (mobile() ? 0.97 : 0.995))}px`);
+    box.style.setProperty('--fit', `${Math.floor((100 * avail) / w * (mobile() ? 0.97 : 0.985))}px`);
   }
   $$('.ln', title).forEach((l, i) => l.style.setProperty('--i', i));
 
@@ -456,8 +456,7 @@
       const box = $('.ba__box', ba);
       const tl = G.timeline({scrollTrigger: {trigger: box, start: () => (mobile() ? 'top 82%' : 'top 78%'), end: () => (mobile() ? 'center 38%' : 'top 22%'), scrub: 0.6, invalidateOnRefresh: true}});
       tl.fromTo($('.ba__after', ba), {yPercent: 100}, {yPercent: 0, ease: 'none'}, 0)
-        .fromTo($('.ba__after-in', ba), {yPercent: -100}, {yPercent: 0, ease: 'none'}, 0)
-        .fromTo($('.ba__img img', ba), {scale: 1.08}, {scale: 1, ease: 'none'}, 0);
+        .fromTo($('.ba__after-in', ba), {yPercent: -100}, {yPercent: 0, ease: 'none'}, 0);
     });
   }
 

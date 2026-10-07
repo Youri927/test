@@ -49,7 +49,7 @@ const PIXEL = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAI
 const copy = 'for(const i of document.querySelectorAll("img[data-dup]"))i.src=document.querySelector(`img[data-img="${i.dataset.dup}"]`).src;';
 const html = read('./src/index.html')
   .replace('<!--REVIEWS-->', () => reviews)
-  .replace('<!--MAP-->', () => read('./src/map.svg'))
+  .replace('<!--MAP-->', () => `<img class="map-bg" src="img/map-bg.webp" alt="" width="800" height="859" loading="lazy">\n${read('./src/map.svg')}`)
   .replace(/src="img\/([\w-]+)\.webp"/g, (m, name) => {
     const n = (seen.get(name) || 0) + 1;
     seen.set(name, n);
