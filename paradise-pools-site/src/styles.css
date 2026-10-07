@@ -310,13 +310,16 @@ html.lenis, html.lenis body { height: auto; }
 .counties button:hover::before, .counties button.is-hot::before { background: var(--sun); transform: scale(1.35); }
 .area__map { grid-column: 7 / 13; margin: 0; }
 .area__map figcaption { margin-top: 12px; font-size: 13px; color: var(--sub); }
+.map-wrap { position: relative; }
 .map { display: block; width: 100%; height: auto; background: #d8edf6; }
 .m-around { fill: #f4f7f9; stroke: #cfd9df; stroke-width: 1; }
-.m-county { fill: #c9dfeb; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; cursor: pointer; transition: fill .8s var(--ease) calc(var(--i) * .16s); }
-.area.is-in .m-county { fill: var(--ocean); }
-.area .m-county.is-hot { fill: var(--sun); transition-delay: 0s; transition-duration: .35s; }
-.m-label { font: 600 15px var(--text); fill: #fff; text-anchor: middle; dominant-baseline: middle; pointer-events: none; opacity: 0; transition: opacity .6s calc(var(--i) * .16s + .35s); }
-.area.is-in .m-label { opacity: 1; }
+.m-county { fill: #c9dfeb; stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; cursor: pointer; }
+/* un calque par comté : seule son opacité s'anime */
+.m-lit { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; will-change: opacity; transition: opacity .9s var(--ease) calc(var(--i) * .16s); }
+.area.is-in .m-lit { opacity: 1; }
+.m-lit path { fill: var(--ocean); stroke: #fff; stroke-width: 1.6; stroke-linejoin: round; }
+.m-lit.is-hot path { fill: var(--sun); }
+.m-lit text { font: 600 15px var(--text); fill: #fff; text-anchor: middle; dominant-baseline: middle; }
 .m-sea { font: 500 13px var(--text); letter-spacing: .14em; fill: #5d8ca5; text-anchor: middle; }
 .m-scale path { stroke: #4b6271; stroke-width: 1.2; fill: none; }
 .m-scale text { font: 500 12px var(--text); fill: #4b6271; text-anchor: middle; }
@@ -407,13 +410,18 @@ abbr { margin-left: 2px; color: var(--sun); text-decoration: none; }
 .no-motion .hero__wipe { display: none; }
 .no-motion .hero__pin { height: auto; min-height: 100svh; }
 .no-motion .hero__slot { flex: none; height: 62svh; }
+.no-motion .hero__eye { position: relative; inset: auto; height: 62svh; margin-top: 12px; opacity: 1; visibility: visible; }
 .no-motion .hero__note { position: relative; left: auto; bottom: auto; transform: none; width: auto; max-width: 620px; margin-top: 8px; padding: 24px 0 0; }
-.no-motion *, .no-motion *::before, .no-motion *::after { animation: none !important; transition-duration: .01s !important; transition-delay: 0s !important; }
+/* transition-duration seule s'appliquerait à toutes les propriétés (transition-property vaut all) : on coupe tout */
+.no-motion *, .no-motion *::before, .no-motion *::after { animation: none !important; transition: none !important; }
 
 /* ---------- tablette ---------- */
 @media (max-width: 1180px) {
   .hd__nav { display: none; }
   .hd__menu { display: block; }
+}
+@media (max-width: 1080px) and (orientation: portrait) {
+  .hero__br { display: block; height: 0; }
 }
 @media (max-width: 1080px) {
   .hero__side { position: static; width: auto; max-width: 560px; margin-top: 22px; }

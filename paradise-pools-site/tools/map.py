@@ -101,21 +101,18 @@ for sr in rd.iterShapeRecords():
 
 svg = []
 add = svg.append
+# Deux étages. Dessous, la carte complète (comtés voisins, comtés desservis en clair, mer, échelle), dessinée une fois.
+# Dessus, un petit SVG par comté desservi (aplat bleu et nom) : leur allumage n'anime que l'opacité de calques
+# séparés, sans redessiner la carte.
+add('<div class="map-wrap">')
 add(f'<svg class="map" viewBox="0 0 {W} {H}" role="img" aria-labelledby="map-t map-d" xmlns="http://www.w3.org/2000/svg">')
 add('<title id="map-t">The six counties Paradise Pools serves</title>')
 add('<desc id="map-d">Map of the Tampa Bay area with the six counties Paradise Pools of Tampa Bay serves: Hillsborough, '
     'Pinellas, Pasco, Hernando, Manatee and Polk. County lines and coastline from the US Census Bureau (2024).</desc>')
 add(f'<path class="m-around" d="{path(around, .9)}"/>')
-add('<g class="m-counties">')
-for i, (fp, key, name) in enumerate(SERVED):
-    add(f'<path class="m-county" data-county="{key}" style="--i:{i}" d="{path(served[fp], .8)}"/>')
-add('</g>')
-add('<g class="m-labels" aria-hidden="true">')
-for i, (fp, key, name) in enumerate(SERVED):
-    x, y = proj(*LABELS[key])
-    rot = f' transform="rotate(-78 {x:.1f} {y:.1f})"' if key == 'pinellas' else ''  # le long de la presqu'île
-    add(f'<text class="m-label" data-county="{key}" style="--i:{i}" x="{x:.1f}" y="{y:.1f}"{rot}>{name}</text>')
-add('</g>')
+paths = {fp: path(served[fp], .8) for fp, _, _ in SERVED}
+for fp, key, name in SERVED:
+    add(f'<path class="m-county" data-county="{key}" d="{paths[fp]}"/>')
 for name, (lon, lat), rot in [('Gulf of Mexico', (-82.93, 27.62), -90), ('Tampa Bay', (-82.60, 27.70), -48)]:
     x, y = proj(lon, lat)
     add(f'<text class="m-sea" x="{x:.1f}" y="{y:.1f}" transform="rotate({rot} {x:.1f} {y:.1f})" aria-hidden="true">{name}</text>')
@@ -123,6 +120,12 @@ sx, sy = W - 28 - 20 * MILE, H - 30
 add(f'<g class="m-scale" aria-hidden="true"><path d="M{sx:.1f} {sy}h{20 * MILE:.1f}M{sx:.1f} {sy - 4}v8M{sx + 20 * MILE:.1f} {sy - 4}v8"/>'
     f'<text x="{sx + 10 * MILE:.1f}" y="{sy - 10}">20 miles</text></g>')
 add('</svg>')
+for i, (fp, key, name) in enumerate(SERVED):
+    x, y = proj(*LABELS[key])
+    rot = f' transform="rotate(-78 {x:.1f} {y:.1f})"' if key == 'pinellas' else ''  # le long de la presqu'île
+    add(f'<svg class="m-lit" data-county="{key}" style="--i:{i}" viewBox="0 0 {W} {H}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">'
+        f'<path d="{paths[fp]}"/><text x="{x:.1f}" y="{y:.1f}"{rot}>{name}</text></svg>')
+add('</div>')
 
 OUT.write_text('\n'.join(svg) + '\n')
 print(OUT, f'{OUT.stat().st_size / 1024:.1f} Ko', f'{W}×{H}')

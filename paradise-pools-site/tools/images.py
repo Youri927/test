@@ -54,6 +54,13 @@ for ph in json.loads((ROOT / 'data' / 'photos.json').read_text())['photos']:
     im.save(path, 'AVIF', quality=q, speed=4)
     total += path.stat().st_size
     sizes[ph['name']] = im.size
+    # vignette pour la grille de la galerie et les petites vues : 560 px, décodée bien plus vite que l'original
+    th = im.copy()
+    th.thumbnail((560, 560), Image.LANCZOS)
+    tp = OUT / f"t-{ph['name']}.avif"
+    th.save(tp, 'AVIF', quality=50, speed=4)
+    total += tp.stat().st_size
+    sizes['t-' + ph['name']] = th.size
     print(f"{ph['name']:13} {ph['src']} {origin:3} {im.size[0]}×{im.size[1]} {path.stat().st_size // 1024} Ko")
 (OUT / 'sizes.json').write_text(json.dumps(sizes, separators=(',', ':')))
 print(f'total {total / 1024 / 1024:.2f} Mo')

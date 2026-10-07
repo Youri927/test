@@ -232,6 +232,7 @@
       hero.tags.forEach((t) => { t.style.opacity = tagA; });
       hero.plan.style.opacity = 1 - clamp((p - .03) / .1);
     }
+    if (!motion) return; // sans animation, la photo au bord de l'eau et le texte suivent simplement la vue de drone
     const ea = clamp((p - .44) / .2);
     hero.eye.style.opacity = ea;
     hero.eye.style.visibility = ea > 0 ? 'visible' : 'hidden';
@@ -337,7 +338,7 @@
         scrollTrigger: {trigger: pin, pin: true, start: 'top top', end: () => '+=' + dist(), scrub: true, invalidateOnRefresh: true, anticipatePin: 1,
           onUpdate: (s) => G.set('[data-work-bar]', {scaleX: s.progress})},
       });
-      $$('.job').forEach((job) => {
+      if (motion) $$('.job').forEach((job) => {
         const img = $('.job__main img', job);
         G.fromTo(img, {xPercent: -4}, {xPercent: 4, ease: 'none', scrollTrigger: {trigger: job, containerAnimation: tween, start: 'left right', end: 'right left', scrub: true}});
         G.fromTo($$('.job__text > *, .job__side button', job), {opacity: 0, x: 60}, {opacity: 1, x: 0, duration: 1, ease: 'expo.out', stagger: .06,
@@ -352,10 +353,18 @@
   const lbImg = $('[data-lb-img]');
   let lbList = [];
   let lbI = 0;
+  // la grille montre des vignettes ; la visionneuse prend la photo entière, déjà dans la page ou rangée à part (#full-src)
+  let fullMap = null;
+  const srcOf = (name) => {
+    const im = $(`img[data-img="${name}"]`);
+    if (im) return im.src;
+    fullMap = fullMap || JSON.parse($('#full-src').textContent);
+    return fullMap[name];
+  };
   const lbShow = (i, dir = 0) => {
     lbI = (i + lbList.length) % lbList.length;
     const src = lbList[lbI];
-    lbImg.src = src.src;
+    lbImg.src = srcOf(src.name);
     lbImg.alt = src.alt;
     $('[data-lb-cap]').textContent = src.alt;
     $('[data-lb-n]').textContent = `${lbI + 1} / ${lbList.length}`;
@@ -392,7 +401,7 @@
     b.addEventListener('click', () => {
       const names = b.dataset.jobOpen.split(' ');
       const start = +(b.dataset.start || 0);
-      lbOpen(names.map((n) => imgOf(n)).filter(Boolean).map((im) => ({src: im.src, alt: im.alt})), start);
+      lbOpen(names.filter((n) => imgOf(n)).map((n) => ({name: n, alt: imgOf(n).alt})), start);
     });
   });
 
@@ -437,7 +446,7 @@
     });
     items.forEach((it) => it.addEventListener('click', () => {
       const list = visible();
-      lbOpen(list.map((x) => ({src: $('img', x).src, alt: $('img', x).alt})), list.indexOf(it));
+      lbOpen(list.map((x) => ({name: x.dataset.name, alt: $('img', x).alt})), list.indexOf(it));
     }));
     let lastCols = cols();
     window.addEventListener('resize', () => { if (cols() !== lastCols) { lastCols = cols(); apply(false); } });
@@ -449,8 +458,9 @@
     const area = $('[data-area]');
     const btns = $$('[data-counties] button');
     const paths = $$('.m-county', area);
+    const lit = $$('.m-lit', area);
     const hot = (key) => {
-      paths.forEach((p) => p.classList.toggle('is-hot', p.dataset.county === key));
+      lit.forEach((l) => l.classList.toggle('is-hot', l.dataset.county === key));
       btns.forEach((b) => b.classList.toggle('is-hot', b.dataset.county === key));
     };
     btns.forEach((b) => {
@@ -561,6 +571,9 @@
     root.classList.add('is-ready');
     ST.refresh();
   };
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(start);
-  else window.addEventListener('load', start);
+  // les mesures (titre, lignes) attendent les vraies polices : fonts.ready peut se résoudre avant leur chargement
+  if (document.fonts && document.fonts.load) {
+    Promise.all([document.fonts.load('700 100px "Funnel Display"'), document.fonts.load('400 16px "Funnel Sans"')])
+      .catch(() => {}).then(() => document.fonts.ready).then(start);
+  } else window.addEventListener('load', start);
 })();

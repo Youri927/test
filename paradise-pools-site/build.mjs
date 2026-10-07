@@ -37,6 +37,11 @@ const img = (name, attrs = '') => {
   const [w, h] = sizes[name];
   return `<img src="img/${name}.avif" alt="${esc(byName[name].alt)}" width="${w}" height="${h}" loading="lazy"${attrs}>`;
 };
+// vignette (560 px) : la photo entière n'est décodée qu'à l'ouverture de la visionneuse
+const thumb = (name, attrs = '') => {
+  const [w, h] = sizes['t-' + name];
+  return `<img src="img/t-${name}.avif" alt="${esc(byName[name].alt)}" width="${w}" height="${h}" loading="lazy"${attrs}>`;
+};
 const work = WORK.map((j) => {
   const all = photos.filter((p) => p.job === j.job).map((p) => p.name);
   const list = [j.main, ...j.side, ...all.filter((n) => n !== j.main && !j.side.includes(n))];
@@ -49,7 +54,7 @@ const work = WORK.map((j) => {
           <ul>${j.facts.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>
           <button type="button" class="link job__open" data-job-open="${list.join(' ')}">See all ${list.length} photos</button>
         </div>
-        <div class="job__side">${j.side.map((n) => `<button type="button" data-job-open="${list.join(' ')}" data-start="${at(n)}" aria-label="Open photo: ${esc(byName[n].alt)}">${img(n, ' aria-hidden="true"')}</button>`).join('')}</div>
+        <div class="job__side">${j.side.map((n) => `<button type="button" data-job-open="${list.join(' ')}" data-start="${at(n)}" aria-label="Open photo: ${esc(byName[n].alt)}">${thumb(n, ' aria-hidden="true"')}</button>`).join('')}</div>
       </article>`;
 }).join('\n');
 
@@ -64,7 +69,7 @@ const ORDER = ['canal', 'b-2', 'a-1', 'modern', 'f-1', 'c-1', 'e-1', 'd-1', 'b-1
   'plan', 'eye', 'a-3', 'b-4', 'b-6', 'c-3', 'd-2', 'd-3', 'd-4', 'e-3', 'e-4', 'f-2', 'resurface', 'pads', 'deck-2',
   'lap', 'screen-1', 'screen-3', 'screen-4', 'screen-5', 'screen-6', 'brick', 'spa-step', 'spa-close', 'kidney-2'];
 if (ORDER.length !== 49 || new Set(ORDER).size !== 49 || ORDER.some((n) => !byName[n])) throw new Error('ordre de la galerie incomplet');
-const gallery = ORDER.map((n) => `    <button type="button" class="g" data-name="${n}" data-tags="${byName[n].tags.join(' ')}">${img(n)}</button>`).join('\n');
+const gallery = ORDER.map((n) => `    <button type="button" class="g" data-name="${n}" data-tags="${byName[n].tags.join(' ')}">${thumb(n)}</button>`).join('\n');
 
 // ---------- assemblage ----------
 const css = fonts + '\n' + read('./src/styles.css');
@@ -77,7 +82,7 @@ const seen = new Map();
 const PIXEL = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 const copy = 'for(const i of document.querySelectorAll("img[data-dup]"))i.src=document.querySelector(`img[data-img="${i.dataset.dup}"]`).src;';
 const MIME = {avif: 'image/avif', webp: 'image/webp'};
-const html = read('./src/index.html')
+let html = read('./src/index.html')
   .replace('<!--WORK-->', () => work)
   .replace('<!--CHIPS-->', () => chips)
   .replace('<!--GALLERY-->', () => gallery)
@@ -90,9 +95,12 @@ const html = read('./src/index.html')
     return `<img src="data:${MIME[ext]};base64,${b64(`./src/img/${name}.${ext}`)}" data-img="${name}"${rest}>`;
   })
   .replace('<!--STYLES-->', () => `<style>\n${css}\n</style>`)
-  .replace('<!--SCRIPTS-->', () => `<script>${copy}</script>\n<script>\n${js}\n</script>`);
+  .replace('<!--SCRIPTS-->', () => `<!--FULL-->\n<script>${copy}</script>\n<script>\n${js}\n</script>`);
 
+// les photos entières qui ne sont pas déjà dans la page, pour la visionneuse (du texte : rien n'est décodé avant usage)
+const full = Object.fromEntries(photos.filter((p) => !seen.has(p.name)).map((p) => [p.name, `data:image/avif;base64,${b64(`./src/img/${p.name}.avif`)}`]));
+html = html.replace('<!--FULL-->', () => `<script type="application/json" id="full-src">${JSON.stringify(full)}</script>`);
 if (/src="img\//.test(html)) throw new Error('image non intégrée : ' + html.match(/src="img\/[^"]+"/)[0]);
 mkdirSync(here('./dist/'), {recursive: true});
 writeFileSync(here('./dist/index.html'), html);
-console.log(`dist/index.html — ${(Buffer.byteLength(html) / 1024 / 1024).toFixed(2)} Mo, ${seen.size} images`);
+console.log(`dist/index.html — ${(Buffer.byteLength(html) / 1024 / 1024).toFixed(2)} Mo, ${seen.size} images dans la page, ${Object.keys(full).length} photos entières pour la visionneuse`);
