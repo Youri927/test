@@ -22,7 +22,14 @@ Base de départ pour les prochains sites : **React + Tailwind 4 + shadcn/ui + GS
 | `components.json` | configuration shadcn (style radix-nova, icônes Lucide, alias `@/`) |
 | `vite.config.ts` | Tailwind, alias `@/`, et `vite-plugin-singlefile` (tout est intégré dans le HTML) |
 
-Ajouter un composant : `npx shadcn@latest add carousel` (ou demander à Claude, qui utilise le skill et le serveur MCP shadcn du dépôt).
+Ajouter un composant : `npx shadcn@latest add carousel`, ou le demander à Claude, qui utilise le skill et le serveur MCP shadcn du dépôt.
+
+Catalogues branchés :
+- **shadcn/ui**, les composants de base ;
+- **Aceternity UI** (`@aceternity`, déclaré dans `components.json`), des composants animés : `npx shadcn@latest add @aceternity/nom-du-composant` ;
+- **21st.dev**, par le serveur MCP 21st du dépôt (clé dans la variable d'environnement `API_KEY_21ST`).
+
+Les composants Aceternity utilisent souvent la bibliothèque `motion`, ou des effets de flou et de lueur : à choisir avec soin et à restyler, pour garder le rendu sur mesure et fluide.
 
 ## Règles pour garder un rendu sur mesure
 
