@@ -1,0 +1,6 @@
+node_modules
+out/
+logs/
+logs-capture.txt
+.DS_Store
+logs-render.txt
