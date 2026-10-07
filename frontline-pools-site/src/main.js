@@ -381,8 +381,8 @@
     G.set(label, {opacity: 1});
     chaps.forEach((c, i) => ST.create({
       trigger: c,
-      start: () => (mobile() ? 'top 72%' : 'top 58%'),
-      end: () => (mobile() ? 'bottom 72%' : 'bottom 58%'),
+      start: () => (mobile() ? 'top 60%' : 'top 58%'),
+      end: () => (mobile() ? 'bottom 60%' : 'bottom 58%'),
       onToggle: (self) => { if (self.isActive) go(i); },
       onLeaveBack: () => { if (i === 0) go(-1); },
       invalidateOnRefresh: true,

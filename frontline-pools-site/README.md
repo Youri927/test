@@ -1,6 +1,6 @@
 # Frontline Pools : refonte du site (maquette)
 
-`dist/index.html` est un fichier unique (4,2 Mo) : police, photos, carte, avis, librairies et scripts y sont intégrés. Il s'ouvre directement dans un navigateur, sans serveur.
+`dist/index.html` est un fichier unique (4,6 Mo) : police, photos, carte, avis, librairies et scripts y sont intégrés. Il s'ouvre directement dans un navigateur, sans serveur.
 
 L'analyse du site actuel et les choix de direction sont dans `ANALYSE.md`. Les planches avant / après sont dans `boards/`.
 

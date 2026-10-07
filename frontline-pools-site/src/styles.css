@@ -573,7 +573,7 @@ html.js .hero__media.is-done figcaption { transform: none; transition: transform
   .chap, .chap:first-child { min-height: 52vh; min-height: 52svh; padding: 26px 0; justify-content: flex-start; }
   .chap:last-child { min-height: 64svh; }
   .chap p { font-size: 16.5px; }
-  .sheet { padding: 8px 10px 12px; }
+  .sheet { padding: 8px 10px 84px; }
   .sheet__in, .sheet:nth-child(even) .sheet__in { grid-template-columns: 1fr; grid-template-rows: minmax(0, 42%) 1fr; }
   .sheet:nth-child(even) .sheet__media { order: 0; }
   .sheet__body { padding: 20px 20px 18px; gap: 10px; justify-content: flex-start; }
