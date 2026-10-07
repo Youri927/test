@@ -28,15 +28,20 @@ export function Hero() {
   useLayoutEffect(() => {
     const el = ref.current
     if (!el || !motion()) return
+    // page pré-générée déjà affichée depuis un moment (réseau lent) : on ne rejoue pas l'entrée
+    const late = document.documentElement.hasAttribute('data-prerendered') && performance.now() > 700
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: 0.1 })
-      tl.from('[data-l1] .w > span', { yPercent: 112, duration: 1.4, stagger: 0.08 })
-        .from('[data-mask]', { yPercent: 100, duration: 1.7 }, 0.12)
-        .from('[data-mask-in]', { yPercent: -100, duration: 1.7 }, 0.12)
-        .from('[data-img]', { scale: 1.2, duration: 2.4, ease: 'power3.out' }, 0.12)
-        .from('[data-l2] .w > span', { yPercent: 112, duration: 1.4, stagger: 0.08 }, 0.62)
-        .from('[data-intro] > *', { y: 26, opacity: 0, duration: 1.1, stagger: 0.09 }, 0.55)
-        .from('[data-fact]', { y: 16, opacity: 0, duration: 0.9, stagger: 0.05 }, 1)
+      if (!late) {
+        gsap
+          .timeline({ defaults: { ease: 'expo.out' }, delay: 0.1 })
+          .from('[data-l1] .w > span', { yPercent: 112, duration: 1.4, stagger: 0.08 })
+          .from('[data-mask]', { yPercent: 100, duration: 1.7 }, 0.12)
+          .from('[data-mask-in]', { yPercent: -100, duration: 1.7 }, 0.12)
+          .from('[data-img]', { scale: 1.2, duration: 2.4, ease: 'power3.out' }, 0.12)
+          .from('[data-l2] .w > span', { yPercent: 112, duration: 1.4, stagger: 0.08 }, 0.62)
+          .from('[data-intro] > *', { y: 26, opacity: 0, duration: 1.1, stagger: 0.09 }, 0.55)
+          .from('[data-fact]', { y: 16, opacity: 0, duration: 0.9, stagger: 0.05 }, 1)
+      }
 
       // parallaxe : la photo descend moins vite que la page, la seconde ligne remonte plus vite
       const st = { trigger: '[data-photo]', start: 'top 70%', end: 'bottom top', scrub: true }
@@ -71,7 +76,7 @@ export function Hero() {
       <div data-photo className="relative mt-[clamp(20px,3.2vw,44px)]">
         <div data-mask className="relative h-[64svh] overflow-hidden md:h-[72vh] xl:h-[min(80vh,880px)]">
           <div data-mask-in className="absolute inset-0">
-            <div data-img-wrap className="absolute inset-x-0 -top-[8%] h-[116%]">
+            <div data-img-wrap className="absolute inset-x-0 -top-[8%] h-[116%] will-change-transform">
               <picture>
                 <source media="(max-width: 767px)" srcSet={small.src} width={small.width} height={small.height} />
                 <img
@@ -89,7 +94,7 @@ export function Hero() {
             <div className="absolute inset-0 bg-[#062c48]/12" aria-hidden />
           </div>
         </div>
-        <p data-l2 className="t-display split pointer-events-none absolute top-[clamp(10px,2.1vw,30px)] left-[var(--gutter)] text-white" aria-hidden>
+        <p data-l2 className="t-display split pointer-events-none absolute top-[clamp(10px,2.1vw,30px)] left-[var(--gutter)] text-white will-change-transform" aria-hidden>
           {words(hero.line2)}
         </p>
       </div>

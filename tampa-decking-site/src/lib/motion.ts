@@ -3,11 +3,11 @@
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 
 gsap.registerPlugin(ScrollTrigger)
 
-export const motion = () => document.documentElement.classList.contains('motion')
+export const motion = () => typeof document !== 'undefined' && document.documentElement.classList.contains('motion')
 
 let lenis: Lenis | null = null
 
@@ -56,16 +56,17 @@ export function watchReveals(root: ParentNode = document) {
   return () => io.disconnect()
 }
 
+// Côté serveur (page pré-générée), la réponse vaut false ; React la corrige juste après l'hydratation.
 export function useMediaQuery(query: string) {
-  const [match, setMatch] = useState(() => matchMedia(query).matches)
-  useEffect(() => {
-    const m = matchMedia(query)
-    const on = () => setMatch(m.matches)
-    m.addEventListener('change', on)
-    on()
-    return () => m.removeEventListener('change', on)
-  }, [query])
-  return match
+  return useSyncExternalStore(
+    (on) => {
+      const m = matchMedia(query)
+      m.addEventListener('change', on)
+      return () => m.removeEventListener('change', on)
+    },
+    () => matchMedia(query).matches,
+    () => false,
+  )
 }
 
 export { gsap, ScrollTrigger }

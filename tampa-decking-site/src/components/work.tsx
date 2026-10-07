@@ -69,7 +69,7 @@ export function Work() {
       <div data-cols className="wrap mt-[clamp(40px,6vw,96px)]">
         <div className="hidden grid-cols-3 items-start gap-[clamp(16px,2vw,32px)] lg:grid">
           {cols3.map((col, c) => (
-            <div key={c} data-col={c} className="grid gap-[clamp(16px,2vw,32px)]">
+            <div key={c} data-col={c} className="grid gap-[clamp(16px,2vw,32px)] will-change-transform">
               {col.map(({ s, i }) => (
                 <Tile key={i} shot={s} i={i} onOpen={setIndex} />
               ))}

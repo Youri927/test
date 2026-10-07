@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:web": "tsc -b && vite build --mode web && vite build --mode web --ssr src/entry-server.tsx --outDir dist-ssr && node tools/prerender.mjs"
   },
   "dependencies": {
     "@fontsource-variable/mona-sans": "^5.3.0",

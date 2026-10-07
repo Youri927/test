@@ -161,7 +161,10 @@ function LayersPinned() {
   // recadrage du dessin sur la couche active
   useEffect(() => {
     if (!box.current || !cam.current) return
-    gsap.to(cam.current, { ...frame(box.current, active), duration: 1.5, ease: 'expo.out', overwrite: true })
+    const el = cam.current
+    // pendant le mouvement, le dessin est déplacé comme une image (couche à part) ; à la fin, il est retracé net
+    el.style.willChange = 'transform'
+    gsap.to(el, { ...frame(box.current, active), duration: 1.5, ease: 'expo.out', overwrite: true, onComplete: () => { el.style.willChange = 'auto' } })
   }, [active])
 
   const jump = (id: LayerId) => {

@@ -17,7 +17,7 @@ export function About() {
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.rw',
-        { opacity: 0.16 },
+        { opacity: 0.38 },
         { opacity: 1, ease: 'none', stagger: 0.12, scrollTrigger: { trigger: el, start: 'top 82%', end: 'bottom 38%', scrub: true } },
       )
     }, el)

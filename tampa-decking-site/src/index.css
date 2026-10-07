@@ -264,10 +264,11 @@ html.lenis, html.lenis body { height: auto; }
 html:not(.motion) *, html:not(.motion) *::before, html:not(.motion) *::after { transition: none !important; animation: none !important; }
 
 /* ---------- Coupe du bord de bassin ---------- */
-.sd .sd-sun { opacity: 0; transition: opacity 0.7s ease; }
-.sd .sd-sun.is-on { opacity: 0.95; }
-.sd .sd-sun-soft.is-on { opacity: 0.42; }
-.sd .layer:hover .sd-sun:not(.is-on) { opacity: 0.35; }
+/* le calque du dessus a sa propre couche : changer de couche ne retrace pas le fond */
+.sd-top { will-change: transform; }
+.sd .sd-hl { opacity: 0; transition: opacity 0.7s ease; }
+.sd .sd-hl.is-on { opacity: 1; }
+.sd .sd-hit { cursor: pointer; }
 .sd .sd-label { transition: opacity 0.5s ease; }
 .sd.has-active .sd-label { opacity: 0.42; }
 .sd.has-active .sd-label.is-on { opacity: 1; }

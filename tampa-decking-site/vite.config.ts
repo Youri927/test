@@ -20,8 +20,18 @@ const inlineIcons = (): Plugin => ({
 
 // Le site est compilé en un seul fichier dist/index.html (scripts, styles, polices et images intégrés),
 // à ouvrir d'un double-clic sans serveur.
-export default defineConfig({
-  plugins: [inlineIcons(), react(), tailwindcss(), viteSingleFile()],
-  resolve: { alias: { '@': path.resolve(import.meta.dirname, './src') } },
-  build: { assetsInlineLimit: 100_000_000 },
-})
+// « vite build --mode web » produit au contraire une version de production classique dans dist-web/ :
+// photos, police et scripts en fichiers séparés, photos chargées au fur et à mesure.
+export default defineConfig(({ mode }) =>
+  mode === 'web'
+    ? {
+        plugins: [react(), tailwindcss()],
+        resolve: { alias: { '@': path.resolve(import.meta.dirname, './src') } },
+        build: { outDir: 'dist-web' },
+      }
+    : {
+        plugins: [inlineIcons(), react(), tailwindcss(), viteSingleFile()],
+        resolve: { alias: { '@': path.resolve(import.meta.dirname, './src') } },
+        build: { assetsInlineLimit: 100_000_000 },
+      },
+)
