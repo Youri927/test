@@ -13,6 +13,18 @@
       "headers": {
         "x-api-key": "${API_KEY_21ST}"
       }
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--headless",
+        "--isolated",
+        "--executablePath",
+        "/opt/pw-browsers/chromium",
+        "--chromeArg=--no-sandbox"
+      ]
     }
   }
 }
