@@ -1,8 +1,9 @@
-// Défilement fluide (Lenis) synchronisé avec GSAP ScrollTrigger.
-// Rien ne s'anime si le visiteur a demandé de réduire les animations.
+// Défilement fluide (Lenis) synchronisé avec GSAP ScrollTrigger, et petits outils d'animation.
+// Tout est coupé si le visiteur a demandé moins d'animations : la classe .motion n'est alors pas posée sur <html>.
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
+import { useEffect, useState } from 'react'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -19,14 +20,52 @@ export function startSmoothScroll() {
   return lenis
 }
 
-// à appeler à l'ouverture d'une fenêtre ou d'un menu, pour bloquer le défilement de la page derrière
 export const pauseScroll = (paused: boolean) => (paused ? lenis?.stop() : lenis?.start())
+
+export function scrollToY(y: number) {
+  if (lenis) lenis.scrollTo(y, { duration: 1.4 })
+  else window.scrollTo({ top: y, behavior: 'auto' })
+}
 
 export function scrollToId(id: string) {
   const el = document.getElementById(id)
   if (!el) return
-  if (lenis) lenis.scrollTo(el, { duration: 1.4, offset: -40 })
-  else el.scrollIntoView({ behavior: motion() ? 'smooth' : 'auto' })
+  // la hauteur de l'en-tête est déjà réservée par scroll-padding-top (index.css), que Lenis respecte
+  if (lenis) lenis.scrollTo(id === 'top' ? 0 : el, { duration: 1.4 })
+  else el.scrollIntoView({ behavior: 'auto' })
+}
+
+// Fait apparaître [data-up], .unveil et .reveal quand ils entrent à l'écran (classe is-in).
+export function watchReveals(root: ParentNode = document) {
+  const targets = root.querySelectorAll<HTMLElement>('[data-up], .unveil, .reveal')
+  if (!motion()) {
+    targets.forEach((t) => t.classList.add('is-in'))
+    return () => {}
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue
+        e.target.classList.add('is-in')
+        io.unobserve(e.target)
+      }
+    },
+    { rootMargin: '0px 0px -8% 0px' },
+  )
+  targets.forEach((t) => io.observe(t))
+  return () => io.disconnect()
+}
+
+export function useMediaQuery(query: string) {
+  const [match, setMatch] = useState(() => matchMedia(query).matches)
+  useEffect(() => {
+    const m = matchMedia(query)
+    const on = () => setMatch(m.matches)
+    m.addEventListener('change', on)
+    on()
+    return () => m.removeEventListener('change', on)
+  }, [query])
+  return match
 }
 
 export { gsap, ScrollTrigger }
