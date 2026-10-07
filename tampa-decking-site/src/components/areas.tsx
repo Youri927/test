@@ -38,7 +38,7 @@ export function Areas() {
   else if (nq.length >= 3) answer = <>Not on our list yet. Call us at <a href={PHONE_HREF} className="ul font-[600] text-white">{PHONE}</a> and we will tell you.</>
 
   return (
-    <section id="areas" className="on-dark bg-deep pb-[clamp(96px,12vw,192px)] text-white" aria-labelledby="areas-title">
+    <section id="areas" tabIndex={-1} className="on-dark bg-deep pb-[clamp(96px,12vw,192px)] text-white" aria-labelledby="areas-title">
       <div className="wrap grid gap-12 border-t border-white/15 pt-[clamp(72px,9vw,140px)] lg:grid-cols-[1fr_1.25fr] lg:gap-[clamp(48px,6vw,104px)]">
         <div>
           <Lines id="areas-title" className="t-h2 max-w-[12ch]">Hillsborough, Pasco and Pinellas</Lines>

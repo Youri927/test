@@ -3,9 +3,8 @@
 import { ArrowRight, Phone } from 'lucide-react'
 import { Fragment, useLayoutEffect, useRef } from 'react'
 
-import { go } from '@/components/header'
 import { hero, PHONE, PHONE_HREF } from '@/data/content'
-import { gsap, motion } from '@/lib/motion'
+import { go, gsap, motion } from '@/lib/motion'
 import { photo } from '@/lib/photos'
 
 const words = (s: string) =>
@@ -17,8 +16,6 @@ const words = (s: string) =>
       {i < a.length - 1 && ' '}
     </Fragment>
   ))
-
-const facts = ['Veteran owned', 'Christian owned', 'Family business', 'In Tampa for 30 years', 'Free, up-front estimates', 'We aim to reply within 24 hours']
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null)
@@ -52,7 +49,7 @@ export function Hero() {
   }, [])
 
   return (
-    <section id="top" ref={ref} className="relative pt-[var(--header)]" aria-labelledby="hero-title">
+    <section id="top" ref={ref} className="relative pt-[var(--header)]" tabIndex={-1} aria-labelledby="hero-title">
       <div className="wrap grid items-end gap-x-12 gap-y-6 pt-[clamp(24px,5.5vh,72px)] xl:grid-cols-[auto_minmax(300px,1fr)]">
         <h1 id="hero-title" className="t-display text-ink xl:whitespace-nowrap">
           <span data-l1 className="split block" aria-hidden>{words(hero.line1)}</span>
@@ -101,7 +98,7 @@ export function Hero() {
 
       <div className="wrap">
         <ul className="grid grid-cols-2 gap-x-6 gap-y-3 border-b border-line py-6 text-[15px] font-[560] md:flex md:flex-wrap md:justify-between md:gap-x-8">
-          {facts.map((f) => (
+          {hero.facts.map((f) => (
             <li key={f} data-fact className="flex items-center gap-2.5">
               <span className="size-2 shrink-0 rounded-full bg-sun ring-1 ring-ink/25" aria-hidden />
               {f}

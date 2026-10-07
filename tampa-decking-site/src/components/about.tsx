@@ -25,7 +25,7 @@ export function About() {
   }, [])
 
   return (
-    <section id="about" className="on-dark bg-deep text-white" aria-labelledby="about-title">
+    <section id="about" tabIndex={-1} className="on-dark bg-deep text-white" aria-labelledby="about-title">
       <div className="wrap pt-[clamp(96px,12vw,192px)] pb-[clamp(72px,9vw,144px)]">
         <h2 id="about-title" ref={title} className="t-h2 max-w-[17ch]" aria-label={about.title}>
           {about.title.split(' ').map((w, i) => (

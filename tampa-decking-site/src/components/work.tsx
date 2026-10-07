@@ -58,7 +58,7 @@ export function Work() {
   }, [])
 
   return (
-    <section id="work" ref={root} className="overflow-hidden pt-[clamp(96px,13vw,200px)] pb-[clamp(80px,10vw,160px)]" aria-labelledby="work-title">
+    <section id="work" tabIndex={-1} ref={root} className="overflow-hidden pt-[clamp(96px,13vw,200px)] pb-[clamp(80px,10vw,160px)]" aria-labelledby="work-title">
       <div className="wrap grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
         <Lines id="work-title" className="t-h2 max-w-[12ch] text-ink">Our work, up close</Lines>
         <p data-up className="t-lead max-w-[30rem] text-ink-soft">

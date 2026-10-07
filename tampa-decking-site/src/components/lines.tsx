@@ -27,7 +27,18 @@ export function Lines({ as: Tag = 'h2', children, className = '', delay = 0, id 
         }
         lines[lines.length - 1].push(s.textContent ?? '')
       }
-      el.innerHTML = lines.map((l, i) => `<span class="ln" aria-hidden="true" style="--i:${i}"><span>${l.join('').trim()}</span></span>`).join('')
+      el.replaceChildren(
+        ...lines.map((l, i) => {
+          const ln = document.createElement('span')
+          ln.className = 'ln'
+          ln.setAttribute('aria-hidden', 'true')
+          ln.style.setProperty('--i', String(i))
+          const inner = document.createElement('span')
+          inner.textContent = l.join('').trim()
+          ln.appendChild(inner)
+          return ln
+        }),
+      )
     }
     split()
     document.fonts?.ready.then(split)
@@ -42,7 +53,7 @@ export function Lines({ as: Tag = 'h2', children, className = '', delay = 0, id 
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) {
-          el.classList.add('is-in')
+          el.setAttribute('data-shown', '')
           io.disconnect()
         }
       },

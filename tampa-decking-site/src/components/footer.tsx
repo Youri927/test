@@ -2,8 +2,8 @@
 import { ArrowUp } from 'lucide-react'
 
 import logoNavy from '@/assets/brand/logo-navy.webp'
-import { go } from '@/components/header'
 import { EMAIL, PHONE, PHONE_HREF } from '@/data/content'
+import { go } from '@/lib/motion'
 
 const groups = [
   {

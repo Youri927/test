@@ -115,6 +115,7 @@
   a { color: inherit; text-decoration: none; }
   img { max-width: 100%; display: block; }
   :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  section[tabindex='-1']:focus { outline: none; }
   .on-dark :focus-visible { outline-color: var(--sun); }
 }
 
@@ -184,17 +185,17 @@ html.lenis, html.lenis body { height: auto; }
 .lines .ln { display: block; overflow: hidden; padding-bottom: 0.12em; margin-bottom: -0.12em; }
 .lines .ln > span { display: block; }
 .motion .lines .ln > span { transform: translateY(110%); transition: transform 1.15s var(--ease-out-expo) calc(var(--d, 0s) + var(--i, 0) * 0.08s); }
-.motion .lines.is-in .ln > span { transform: none; }
+.motion .lines[data-shown] .ln > span { transform: none; }
 
-/* blocs qui montent en fondu (attribut data-up, classe is-in posée par useReveal) */
+/* blocs qui montent en fondu : data-up, puis data-shown posé par watchReveals (un attribut, que React ne réécrit pas) */
 .motion [data-up] { opacity: 0; transform: translateY(28px); transition: opacity 0.9s ease, transform 1.1s var(--ease-out-expo); transition-delay: var(--d, 0s); }
-.motion [data-up].is-in { opacity: 1; transform: none; }
+.motion [data-up][data-shown] { opacity: 1; transform: none; }
 
 /* photos qui se dévoilent de bas en haut (masque + contre-mouvement) */
 .unveil { overflow: hidden; }
 .motion .unveil > .unveil-in { transform: translateY(101%); transition: transform 1.3s var(--ease-out-expo) var(--d, 0s); }
 .motion .unveil > .unveil-in > * { transform: translateY(-101%) scale(1.12); transition: transform 1.3s var(--ease-out-expo) var(--d, 0s); }
-.motion .unveil.is-in > .unveil-in, .motion .unveil.is-in > .unveil-in > * { transform: none; }
+.motion .unveil[data-shown] > .unveil-in, .motion .unveil[data-shown] > .unveil-in > * { transform: none; }
 
 @layer components {
 /* ---------- Boutons ---------- */

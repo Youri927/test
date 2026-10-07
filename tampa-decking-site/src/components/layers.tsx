@@ -111,18 +111,18 @@ function Panel({ active }: { active: LayerId }) {
   )
 }
 
-function Sheet({ children }: { children: ReactNode }) {
+function Plate({ children }: { children: ReactNode }) {
   // cadre de la planche, avec son cartouche
   return (
     <div className="relative overflow-hidden rounded-[4px] border border-line bg-[#fbfdfe]">
       {children}
-      <p className="pointer-events-none absolute top-2.5 right-3 text-[11.5px] font-[520] tracking-[0.01em] text-ink-soft/80">Typical pool edge, in section</p>
+      <p className="pointer-events-none absolute bottom-2.5 left-3 hidden text-[11.5px] md:block font-[520] tracking-[0.01em] text-ink-soft/80">Typical pool edge, in section</p>
     </div>
   )
 }
 
 function LayersPinned() {
-  const root = useRef<HTMLElement>(null)
+  const root = useRef<HTMLDivElement>(null)
   const stage = useRef<HTMLDivElement>(null)
   const box = useRef<HTMLDivElement>(null)
   const cam = useRef<HTMLDivElement>(null)
@@ -175,18 +175,17 @@ function LayersPinned() {
   }
 
   return (
-    <section id="layers" ref={root} aria-labelledby="layers-title">
-      <Intro />
+    <div ref={root}>
       <div ref={stage} className="h-screen">
         <div className="wrap grid h-full grid-cols-[1.32fr_1fr] items-center gap-[clamp(32px,4vw,72px)] pt-[calc(var(--header)*0.5)] pb-8">
           <div className="grid gap-5">
-            <Sheet>
+            <Plate>
               <div ref={box} className="relative aspect-[1200/590] overflow-hidden">
                 <div ref={cam} className="absolute inset-0 origin-top-left">
                   <SectionDrawing active={active} onSelect={jump} />
                 </div>
               </div>
-            </Sheet>
+            </Plate>
             <div className="flex items-center justify-between gap-4">
               <Tabs active={active} onPick={jump} />
               <Progress active={active} />
@@ -195,7 +194,7 @@ function LayersPinned() {
           <Panel active={active ?? 'deck'} />
         </div>
       </div>
-    </section>
+    </div>
   )
 }
 
@@ -212,22 +211,26 @@ function LayersStatic() {
   const [active, setActive] = useState<LayerId>('deck')
   const compact = useMediaQuery('(max-width: 767px)')
   return (
-    <section id="layers" aria-labelledby="layers-title">
-      <Intro />
-      <div className="wrap grid gap-8 md:gap-10 lg:grid-cols-[1.32fr_1fr] lg:items-start">
-        <div className="grid gap-4">
-          <Sheet>
-            <SectionDrawing active={active} onSelect={setActive} compact={compact} />
-          </Sheet>
-          <Tabs active={active} onPick={setActive} className="-mx-1 px-1" />
-        </div>
-        <Panel active={active} />
+    <div className="wrap grid gap-8 md:gap-10 lg:grid-cols-[1.32fr_1fr] lg:items-start">
+      <div className="grid gap-4">
+        <Plate>
+          <SectionDrawing active={active} onSelect={setActive} compact={compact} />
+        </Plate>
+        <Tabs active={active} onPick={setActive} className="-mx-1 px-1" />
       </div>
-    </section>
+      <Panel active={active} />
+    </div>
   )
 }
 
+// La section reste le même élément quand on passe d'une variante à l'autre (rotation d'une tablette,
+// fenêtre redimensionnée) : l'ancre, le menu et l'apparition de l'introduction continuent de fonctionner.
 export function Layers() {
   const desktop = useMediaQuery('(min-width: 1024px) and (min-height: 640px)')
-  return desktop && motion() ? <LayersPinned /> : <LayersStatic />
+  return (
+    <section id="layers" tabIndex={-1} aria-labelledby="layers-title">
+      <Intro />
+      {desktop && motion() ? <LayersPinned /> : <LayersStatic />}
+    </section>
+  )
 }

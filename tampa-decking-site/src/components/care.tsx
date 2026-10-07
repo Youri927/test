@@ -3,11 +3,9 @@
 import { useLayoutEffect, useRef } from 'react'
 
 import { Lines } from '@/components/lines'
-import { sealing } from '@/data/content'
+import { sealing, washing } from '@/data/content'
 import { gsap, motion, ScrollTrigger } from '@/lib/motion'
 import { photo } from '@/lib/photos'
-
-const washing = ['Roofs, with a soft wash', 'Pool decks and patios', 'Driveways and walkways', 'Oil, rust and graffiti stains']
 
 export function Care() {
   const list = useRef<HTMLOListElement>(null)
@@ -30,7 +28,7 @@ export function Care() {
   }, [])
 
   return (
-    <section id="care" className="bg-water-2 py-[clamp(88px,11vw,176px)]" aria-labelledby="care-title">
+    <section id="care" tabIndex={-1} className="bg-water-2 py-[clamp(88px,11vw,176px)]" aria-labelledby="care-title">
       <div className="wrap">
         <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-end lg:gap-16">
           <Lines id="care-title" className="t-h2 max-w-[12ch] text-ink">Keep it looking new</Lines>

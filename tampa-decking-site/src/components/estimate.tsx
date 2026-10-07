@@ -47,7 +47,7 @@ export function Estimate() {
   }
 
   return (
-    <section id="estimate" className="bg-sun text-ink" aria-labelledby="estimate-title">
+    <section id="estimate" tabIndex={-1} className="bg-sun text-ink" aria-labelledby="estimate-title">
       <div className="wrap grid gap-12 py-[clamp(88px,11vw,176px)] lg:grid-cols-[1fr_1.3fr] lg:gap-[clamp(48px,6vw,104px)]">
         <div className="flex flex-col">
           <Lines id="estimate-title" className="t-h2 max-w-[10ch]">Get a free estimate</Lines>

@@ -1,5 +1,6 @@
-// Tous les textes du site. Repris ou raccourcis depuis tampadeckingandpools.com (voir ANALYSE.md) :
-// rien n'est inventé, les chiffres et les noms viennent de leurs pages.
+// Contenus du site : coordonnées, services, photos, prix, villes, avis… Les phrases d'introduction de chaque
+// section sont écrites dans leur composant. Tout est repris ou raccourci depuis tampadeckingandpools.com
+// (voir ANALYSE.md) : rien n'est inventé, les chiffres et les noms viennent de leurs pages.
 import type { PhotoId } from '@/lib/photos'
 
 export const PHONE = '813-695-1458'
@@ -20,6 +21,7 @@ export const hero = {
   line2: 'to the deep end',
   intro: 'Pool resurfacing, tile, coping and new decks across Tampa Bay. Family and veteran owned, in Tampa for 30 years.',
   caption: 'Raised stone spa with two spillovers',
+  facts: ['Veteran owned', 'Christian owned', 'Family business', 'In Tampa for 30 years', 'Free, up-front estimates', 'We aim to reply within 24 hours'],
 }
 
 export type LayerId = 'deck' | 'coping' | 'tile' | 'finish'
@@ -126,6 +128,8 @@ export const sealing = [
   { name: 'Seal', text: 'Two coats, sprayed or rolled, in a natural matte or a glossy wet look.' },
   { name: 'Cure', text: 'Light foot traffic is fine after a day. Wait longer for furniture and cars.', time: '24 h' },
 ]
+
+export const washing = ['Roofs, with a soft wash', 'Pool decks and patios', 'Driveways and walkways', 'Oil, rust and graffiti stains']
 
 export const about = {
   title: 'Part of Tampa for 30 years, and here to stay',

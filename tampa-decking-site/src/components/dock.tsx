@@ -2,18 +2,22 @@
 import { Phone } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-import { go } from '@/components/header'
 import { PHONE_HREF } from '@/data/content'
+import { go } from '@/lib/motion'
 import { cn } from '@/lib/utils'
 
 export function Dock() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    const seen = { top: true, estimate: false, footer: false }
+    // zones où la barre serait en trop : l'ouverture, le formulaire, le pied de page
+    const visible = new Set(['top'])
     const io = new IntersectionObserver((entries) => {
-      for (const e of entries) seen[e.target.id === 'top' ? 'top' : e.target.id === 'estimate' ? 'estimate' : 'footer'] = e.isIntersecting
-      setShow(!seen.top && !seen.estimate && !seen.footer)
+      for (const e of entries) {
+        if (e.isIntersecting) visible.add(e.target.id)
+        else visible.delete(e.target.id)
+      }
+      setShow(visible.size === 0)
     })
     for (const id of ['top', 'estimate', 'site-footer']) {
       const el = document.getElementById(id)

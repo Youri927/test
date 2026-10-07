@@ -3,10 +3,9 @@
 import { ArrowRight } from 'lucide-react'
 import { useLayoutEffect, useRef } from 'react'
 
-import { go } from '@/components/header'
 import { Lines } from '@/components/lines'
 import { cost } from '@/data/content'
-import { gsap, motion, ScrollTrigger } from '@/lib/motion'
+import { go, gsap, motion, ScrollTrigger } from '@/lib/motion'
 
 const money = (n: number) => '$' + Math.round(n).toLocaleString('en-US')
 const pct = (n: number) => `${(n / cost.scaleMax) * 100}%`
@@ -49,7 +48,7 @@ export function Cost() {
   }, [])
 
   return (
-    <section id="cost" className="bg-water pb-[clamp(88px,11vw,176px)]" aria-labelledby="cost-title">
+    <section id="cost" tabIndex={-1} className="bg-water pb-[clamp(88px,11vw,176px)]" aria-labelledby="cost-title">
       <div className="wrap grid gap-12 border-t border-ink/15 pt-[clamp(72px,9vw,140px)] lg:grid-cols-[1fr_1.25fr] lg:gap-[clamp(48px,6vw,104px)]">
         <div>
           <Lines id="cost-title" className="t-h2 max-w-[14ch] text-ink">What resurfacing costs in Tampa</Lines>

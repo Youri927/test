@@ -15,7 +15,7 @@ export function Surfaces() {
   const s = surfaces[active]
 
   return (
-    <section id="surfaces" className="bg-water py-[clamp(88px,11vw,176px)]" aria-labelledby="surfaces-title">
+    <section id="surfaces" tabIndex={-1} className="bg-water py-[clamp(88px,11vw,176px)]" aria-labelledby="surfaces-title">
       <div className="wrap grid gap-10 lg:grid-cols-[minmax(300px,0.78fr)_2fr] lg:gap-[clamp(40px,4.5vw,80px)]">
         <div className="flex flex-col">
           <Lines id="surfaces-title" className="t-h2 text-ink">Pick your surface</Lines>

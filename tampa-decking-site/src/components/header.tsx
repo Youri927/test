@@ -6,13 +6,8 @@ import { useEffect, useState, type MouseEvent } from 'react'
 import logoNavy from '@/assets/brand/logo-navy.webp'
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { EMAIL, nav, PHONE, PHONE_HREF } from '@/data/content'
-import { pauseScroll, scrollToId } from '@/lib/motion'
+import { go, pauseScroll, scrollToId } from '@/lib/motion'
 import { cn } from '@/lib/utils'
-
-export function go(e: MouseEvent, id: string) {
-  e.preventDefault()
-  scrollToId(id)
-}
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
