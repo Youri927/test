@@ -2,7 +2,8 @@
 // Au milieu de la phrase, une pastille montre le sourire du Dr. Fakhoury. Au défilement, elle s'ouvre jusqu'à
 // remplir l'écran (son portrait entier), puis son nom apparaît sur le mur, à droite du visage.
 // La pastille de départ est un fond CSS (visible avant le JavaScript) ; dès qu'on défile, un calque prend le relais,
-// cadré exactement pareil, puis s'agrandit : seuls la position et l'échelle de la photo changent, et le masque.
+// cadré exactement pareil, puis s'agrandit. Tout se fait par transformations : le calque sert de fenêtre (déplacé,
+// étiré), la photo reçoit l'échelle inverse ; seuls les coins arrondis du début sont redessinés.
 import { ArrowDown, ArrowRight, Phone } from 'lucide-react'
 import { Fragment, useEffect, useRef, type CSSProperties } from 'react'
 
@@ -98,8 +99,9 @@ export function Hero() {
         cd.style.setProperty('--card-left', `${Math.round(left)}px`)
         cd.style.setProperty('--card-width', `${Math.round(Math.min(W - left - W * 0.04, 460))}px`)
       } else {
-        // téléphone : un cadre en haut, le visage centré, le nom en dessous
-        T = { x: 0, y: 0, w: W, h: Math.round(Math.min(W * 1.2, H - (W >= 768 ? 330 : 250))) }
+        // téléphone : un cadre en haut, le visage centré, le nom en dessous (le tout dans la hauteur visible)
+        const vh = Math.min(H, innerHeight)
+        T = { x: 0, y: 0, w: W, h: Math.round(Math.min(W * 1.2, vh - (W >= 768 ? 330 : 250))) }
         k1 = Math.max(T.w / P.width, T.h / P.height)
         ox = Math.min(0, Math.max(T.w - P.width * k1, T.w / 2 - FACE_CENTER * k1))
         oy = (T.h - P.height * k1) * FOCUS.y
@@ -112,16 +114,22 @@ export function Hero() {
 
     const render = () => {
       const e = ease(t)
+      // fenêtre D (à l'écran) : le calque, de la taille de l'ouverture, est réduit et déplacé jusqu'à elle ;
+      // la photo, à l'intérieur, reçoit l'échelle inverse. Que des transformations : pas de masque à repeindre.
       const D = { x: lerp(S.x, T.x, e), y: lerp(S.y, T.y, e), w: lerp(S.w, T.w, e), h: lerp(S.h, T.h, e) }
+      const sx = D.w / W
+      const sy = D.h / H
       const k = k0 * Math.pow(k1 / k0, e)
       const fx = lerp(F0.x, F1.x, e)
       const fy = lerp(F0.y, F1.y, e)
       const ox = D.x + D.w / 2 - k * fx
       const oy = D.y + D.h / 2 - k * fy
-      const r = (S.h / 2) * (1 - e)
+      ly.style.transform = `translate3d(${D.x.toFixed(2)}px, ${D.y.toFixed(2)}px, 0) scale(${sx.toFixed(5)}, ${sy.toFixed(5)})`
       // la photo est mise en page à demi-taille (voir .hero-img), d'où l'échelle doublée
-      im.style.transform = `translate3d(${ox.toFixed(2)}px, ${oy.toFixed(2)}px, 0) scale(${(k * 2).toFixed(5)})`
-      ly.style.clipPath = `inset(${D.y.toFixed(2)}px ${(W - D.x - D.w).toFixed(2)}px ${(H - D.y - D.h).toFixed(2)}px ${D.x.toFixed(2)}px round ${r.toFixed(2)}px)`
+      im.style.transform = `translate3d(${((ox - D.x) / sx).toFixed(2)}px, ${((oy - D.y) / sy).toFixed(2)}px, 0) scale(${((2 * k) / sx).toFixed(5)}, ${((2 * k) / sy).toFixed(5)})`
+      // les bords arrondis de la pastille s'effacent pendant le premier quart de l'ouverture (rayons dans le repère du calque)
+      const r = (S.h / 2) * (1 - Math.min(1, e / 0.22))
+      ly.style.borderRadius = r > 0.5 ? `${(r / sx).toFixed(1)}px / ${(r / sy).toFixed(1)}px` : '0'
       // relais : le calque n'apparaît qu'une fois le défilement commencé, la pastille se cache derrière lui
       const on = t > 0.0005
       if (on !== shown) {

@@ -11,6 +11,10 @@ import { photo } from '@/lib/photos'
 const work = photo('work')
 const { michigan: A, newYork: B, naples: C } = M.stops
 
+// le fond de carte (États, frontières) est une image : dessiné une fois, il n'est pas repeint quand le trajet avance
+const baseSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${M.w} ${M.h}"><path d="${M.newYork}" fill="rgba(255,255,255,0.07)"/><path d="${M.florida}" fill="rgba(255,255,255,0.07)"/><path d="${M.borders}" fill="none" stroke="rgba(255,255,255,0.17)" stroke-width="1.1"/><path d="${M.outline}" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.4"/></svg>`
+const baseSrc = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(baseSvg)}`
+
 // le trajet : une courbe du Michigan à New York, puis une longue courbe au-dessus de l'Atlantique jusqu'à Naples
 const route = `M${A[0]} ${A[1]} Q${(A[0] + B[0]) / 2} ${A[1] - 70} ${B[0]} ${B[1]} C${B[0] + 150} ${B[1] + 150} ${C[0] + 260} ${C[1] - 210} ${C[0]} ${C[1]}`
 
@@ -46,12 +50,9 @@ function RouteMap() {
 
   return (
     <div ref={ref} className="relative mx-auto w-full max-w-[600px]" style={{ aspectRatio: `${M.w} / ${M.h}` }} role="img" aria-label="Map: born and raised in Michigan, trained in New York City, now in Naples, Florida.">
+      <img src={baseSrc} alt="" aria-hidden width={M.w} height={M.h} className="absolute inset-0 size-full" />
       <svg viewBox={`0 0 ${M.w} ${M.h}`} className="absolute inset-0 size-full overflow-visible" aria-hidden>
-        <path d={M.newYork} fill="rgb(255 255 255 / 0.07)" />
-        <path d={M.florida} fill="rgb(255 255 255 / 0.07)" />
         <path className="map-mi" d={M.michigan} fill="var(--teal)" fillOpacity={0.85} />
-        <path d={M.borders} fill="none" stroke="rgb(255 255 255 / 0.16)" strokeWidth={1} vectorEffect="non-scaling-stroke" />
-        <path d={M.outline} fill="none" stroke="rgb(255 255 255 / 0.5)" strokeWidth={1.2} vectorEffect="non-scaling-stroke" />
         <path className="map-route" d={route} pathLength={1} fill="none" stroke="var(--teal)" strokeWidth={2.5} strokeLinecap="round" strokeDasharray="1" vectorEffect="non-scaling-stroke" />
         {[A, B, C].map((p, i) => (
           <g key={i}>

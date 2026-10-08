@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react'
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet'
 import { byId, PHONE, PHONE_HREF, type Treatment } from '@/data/content'
 import { pauseScroll, scrollToId } from '@/lib/motion'
-import { closeSheet, setReason, useSheet } from '@/lib/sheet'
+import { closeSheet, setReason, sheetOpener, useSheet } from '@/lib/sheet'
 
 function Body({ t }: { t: Treatment }) {
   return (
@@ -58,7 +58,19 @@ export function TreatmentSheet() {
 
   return (
     <Sheet open={s.open} onOpenChange={(o) => (o ? null : closeSheet())}>
-      <SheetContent side="right" showCloseButton={false} className="sheet-panel gap-0 border-0 bg-white p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-[620px]">
+      <SheetContent
+        side="right"
+        showCloseButton={false}
+        className="sheet-panel gap-0 border-0 bg-white p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-[620px]"
+        onCloseAutoFocus={(e) => {
+          // pas de bouton d'ouverture attaché au panneau (il s'ouvre depuis plusieurs sections) : on rend le focus à la main
+          const el = sheetOpener()
+          if (el?.isConnected) {
+            e.preventDefault()
+            el.focus({ preventScroll: true })
+          }
+        }}
+      >
         <div className="flex items-center justify-between gap-4 px-[clamp(20px,4vw,40px)] pt-5 pb-3">
           <SheetDescription className="text-[14.5px] font-[520] text-ink-soft">{list.length > 1 ? `${list.length} treatments` : 'Treatment'}</SheetDescription>
           <SheetClose className="grid size-11 place-items-center rounded-full shadow-[inset_0_0_0_1.5px_var(--line)] transition-shadow hover:shadow-[inset_0_0_0_1.5px_var(--ink)]" aria-label="Close">

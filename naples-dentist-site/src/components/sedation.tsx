@@ -10,6 +10,8 @@ import { motion, ScrollTrigger, scrollToY } from '@/lib/motion'
 import { openSheet } from '@/lib/sheet'
 import { cn } from '@/lib/utils'
 
+const ARROWS: Record<string, number> = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }
+
 const smooth = (a: number, b: number, x: number) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)))
   return t * t * (3 - 2 * t)
@@ -35,7 +37,7 @@ export function Sedation() {
         st.style.setProperty('--l2', smooth(0.27, 0.39, p).toFixed(3))
         st.style.setProperty('--l3', smooth(0.6, 0.72, p).toFixed(3))
         st.style.setProperty('--sp', p.toFixed(4))
-        const l = p < 0.33 ? 0 : p < 0.66 ? 1 : 2
+        const l = Math.min(2, Math.floor(p * 3))
         if (l !== current) {
           current = l
           setLevel(l)
@@ -86,14 +88,13 @@ export function Sedation() {
                   aria-checked={level === i}
                   onClick={() => choose(i)}
                   onKeyDown={(e) => {
-                    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                      e.preventDefault()
-                      choose(Math.min(2, i + 1))
-                    }
-                    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                      e.preventDefault()
-                      choose(Math.max(0, i - 1))
-                    }
+                    // flèches : niveau suivant ou précédent, et le focus le suit (groupe de boutons radio)
+                    const step = ARROWS[e.key]
+                    if (!step) return
+                    e.preventDefault()
+                    const next = Math.min(2, Math.max(0, i + step))
+                    choose(next)
+                    ;(e.currentTarget.parentElement?.children[next] as HTMLElement | undefined)?.focus({ preventScroll: true })
                   }}
                   tabIndex={level === i ? 0 : -1}
                   className={cn('sed-level', level === i && 'is-on')}

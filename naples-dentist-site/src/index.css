@@ -296,7 +296,7 @@ html:not(.motion) *, html:not(.motion) *::before, html:not(.motion) *::after { t
 
 /* le portrait qui s'ouvre : un calque masqué, la photo à sa taille d'origine, déplacée et réduite */
 .hero-layer { display: none; }
-.motion .hero-layer { display: block; position: absolute; inset: 0; z-index: 3; overflow: hidden; visibility: hidden; pointer-events: none; background: var(--wall); }
+.motion .hero-layer { display: block; position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 3; overflow: hidden; visibility: hidden; pointer-events: none; background: var(--wall); transform-origin: 0 0; will-change: transform; }
 /* mise en page à demi-taille (--hw × --hh) : l'échelle appliquée en JS est doublée ; la photo reste décodée en pleine définition */
 .motion .hero-img { position: absolute; left: 0; top: 0; width: var(--hw); height: var(--hh); max-width: none; transform-origin: 0 0; will-change: transform; -webkit-mask-image: linear-gradient(to right, #000 88%, transparent); mask-image: linear-gradient(to right, #000 88%, transparent); }
 
@@ -453,4 +453,10 @@ html:not(.motion) .hero-card { display: block; padding: 28px var(--gutter) 56px;
 @media (max-width: 767px) {
   html:not(.motion) .hero-layer { aspect-ratio: 4 / 4.6; }
   html:not(.motion) .hero-img { left: 50%; translate: -52% 0; -webkit-mask-image: none; mask-image: none; }
+}
+
+/* sections épinglées depuis le haut : une ancre y mène exactement au début de l'épinglage (leur haut réserve déjà la place de l'en-tête) */
+.motion #sedation { scroll-margin-top: calc(-1 * var(--header)); }
+@media (min-width: 1024px) and (min-height: 640px) {
+  .motion #crowns { scroll-margin-top: calc(-1 * var(--header)); }
 }

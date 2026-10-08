@@ -7,7 +7,7 @@ import { useEffect, useRef, type CSSProperties } from 'react'
 
 import { Lines } from '@/components/lines'
 import { e4dWay, usualWay } from '@/data/content'
-import { motion, ScrollTrigger } from '@/lib/motion'
+import { gsap, motion, ScrollTrigger } from '@/lib/motion'
 import { openSheet } from '@/lib/sheet'
 import { cn } from '@/lib/utils'
 
@@ -54,22 +54,28 @@ export function SameDay() {
       el.setAttribute('data-usual', '')
       return
     }
-    const wide = innerWidth >= 1024 && innerHeight >= 640
-    const st = ScrollTrigger.create({
-      trigger: wide ? sg : el,
-      start: wide ? 'top top' : 'center center',
-      end: () => `+=${Math.round(innerHeight * (wide ? 1.5 : 1.15))}`,
-      pin: true,
-      scrub: 0.6,
-      onUpdate: (self) => {
-        // une petite marge au début et à la fin : le schéma reste immobile le temps de le lire
-        const p = Math.min(1, Math.max(0, (self.progress - 0.06) / 0.86))
-        el.style.setProperty('--p', p.toFixed(4))
-        el.toggleAttribute('data-e4d', p >= E4D_DONE)
-        el.toggleAttribute('data-usual', p >= USUAL_DONE)
-      },
+    // grand écran : tout le cadre (titre et course) reste en place ; ailleurs, la course seule, au centre.
+    // matchMedia refait l'épinglage si l'écran change de format (tablette tournée).
+    const mm = gsap.matchMedia()
+    mm.add({ wide: '(min-width: 1024px) and (min-height: 640px)', narrow: '(max-width: 1023px), (max-height: 639px)' }, (ctx) => {
+      const wide = !!ctx.conditions?.wide
+      const st = ScrollTrigger.create({
+        trigger: wide ? sg : el,
+        start: wide ? 'top top' : 'center center',
+        end: () => `+=${Math.round(innerHeight * (wide ? 1.5 : 1.15))}`,
+        pin: true,
+        scrub: 0.6,
+        onUpdate: (self) => {
+          // une petite marge au début et à la fin : le schéma reste immobile le temps de le lire
+          const p = Math.min(1, Math.max(0, (self.progress - 0.06) / 0.86))
+          el.style.setProperty('--p', p.toFixed(4))
+          el.toggleAttribute('data-e4d', p >= E4D_DONE)
+          el.toggleAttribute('data-usual', p >= USUAL_DONE)
+        },
+      })
+      return () => st.kill()
     })
-    return () => st.kill()
+    return () => mm.revert()
   }, [])
 
   return (

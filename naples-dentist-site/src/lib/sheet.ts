@@ -4,10 +4,14 @@ import { useSyncExternalStore } from 'react'
 export type SheetState = { open: boolean; title: string; ids: string[]; from?: string }
 
 let state: SheetState = { open: false, title: '', ids: [] }
+// le bouton qui a ouvert la fiche : le focus y revient à la fermeture
+let opener: HTMLElement | null = null
+export const sheetOpener = () => opener
 const listeners = new Set<() => void>()
 const emit = () => listeners.forEach((l) => l())
 
 export function openSheet(ids: string[], title = '', from?: string) {
+  opener = document.activeElement instanceof HTMLElement ? document.activeElement : null
   state = { open: true, title, ids, from }
   emit()
 }

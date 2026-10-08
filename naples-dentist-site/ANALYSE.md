@@ -124,22 +124,22 @@ Site analysé : https://naplescomprehensivedentist.com, relevé le 8 octobre 202
 
 ## Direction proposée : « Everything in between »
 
-« Comprehensive » veut dire : tout. Dans ce cabinet, le même dentiste pose l'implant, endort les patients anxieux, conçoit et usine la couronne sur place, avec un prothésiste dans la pièce d'à côté. Le site part de là : des implants aux couronnes du jour même, et tout ce qu'il y a entre les deux. Le titre d'ouverture le dit en une phrase : « Implants, same-day crowns and everything in between ».
+« Comprehensive » veut dire : tout. Dans ce cabinet, le même dentiste pose l'implant, endort les patients anxieux, conçoit et usine la couronne sur place, avec un prothésiste au cabinet. Le site part de là : des implants aux couronnes du jour même, et tout ce qu'il y a entre les deux. Le titre d'ouverture le dit en une phrase : « Implants, same-day crowns and everything in between ».
 
 1. **L'ouverture** :
-   - Le titre, en très grand. Au milieu de la phrase, une pastille contient la photo du Dr. Fakhoury au travail.
-   - Au défilement, la pastille s'ouvre jusqu'à remplir l'écran : on entre dans le cabinet.
-   - Juste sous le titre : l'appel en un geste, et l'état du cabinet en direct, calculé à l'heure de Naples (« Open now, until 5 PM », ou la ligne d'urgence quand il est fermé).
-2. **Ce qui vous amène** : les soins classés par situation, avec les mots des patients.
-   - « A tooth is missing », « My dentures are loose », « A tooth is cracked », « I'm nervous »…
-   - Chaque ligne donne les soins qui répondent, et ouvre leur fiche complète, rédigée avec le texte de leurs pages.
+   - Le titre, en très grand. Au milieu de la phrase, une pastille montre le sourire du Dr. Fakhoury.
+   - Au défilement, la pastille s'ouvre jusqu'à remplir l'écran : son portrait entier, et son nom sur le mur. Les patients voient d'abord la personne qui les soigne.
+   - Juste sous le titre : l'appel en un geste, et l'état du cabinet en direct, calculé à l'heure de Naples (« Open now, until 5:00 PM today »), l'adresse et la ligne d'urgence.
+2. **Les implants** : le logo du cabinet sert de schéma. La racine apparaît, la vis entre filet par filet, puis la couronne se pose ; les trois parties d'un implant se nomment à côté.
 3. **La couronne en une séance**, sur fond turquoise :
    - Deux lignes de temps. La méthode habituelle : empreinte, couronne provisoire, second rendez-vous.
-   - La leur : scan, conception, usinage, pose. Au défilement, le temps se resserre jusqu'à tenir en une seule visite.
+   - La leur : scan, conception, usinage, pose. Au défilement, les deux font la course, et la leur finit dès la première visite.
    - Puis les quatre arguments E4D, et le bridge en une journée.
-4. **Les implants** : le logo du cabinet sert de schéma. La couronne, puis la vis, filet par filet, avec les trois parties et les trois cas (une dent, plusieurs, une arcade).
+4. **Et tout le reste** (« And everything in between ») : les autres soins, classés par situation, avec les mots des patients.
+   - « A tooth is missing », « My dentures are loose », « A tooth is cracked », « I'm nervous »…
+   - Chaque ligne donne les soins qui répondent, et ouvre leur fiche complète, rédigée avec le texte de leurs pages.
 5. **La sédation** : on choisit son niveau, et la lumière de la section baisse avec lui, du protoxyde d'azote à la sédation intraveineuse.
-6. **Dr. Fakhoury**, sur fond sombre : son portrait, et son parcours tracé sur une carte : le Michigan, New York, Naples.
+6. **Dr. Fakhoury**, sur fond sombre : son parcours tracé sur une carte (le Michigan, New York, Naples), sa photo au travail, ses formations.
 7. **Venir au cabinet** :
    - la photo de l'immeuble, l'adresse et l'itinéraire, les horaires (le jour en cours mis en avant), la ligne d'urgence ;
    - une demande de rendez-vous (ici une démonstration) ;
@@ -152,5 +152,5 @@ Site analysé : https://naplescomprehensivedentist.com, relevé le 8 octobre 202
 
 **Animations**
 - Présentes dès l'ouverture, toujours fluides : des transformations et des fondus, sauf le dessin des lignes.
-- Titres qui montent ligne par ligne, photos qui se dévoilent, pastille qui s'ouvre en plein écran, lignes de temps qui se resserrent, lumière qui baisse, tracé du parcours, filets de la vis.
+- Titres qui montent ligne par ligne, photos qui se dévoilent, pastille qui s'ouvre en plein écran, lignes de temps qui font la course, lumière qui baisse, tracé du parcours, filets de la vis.
 - Tout se coupe si le visiteur a demandé moins d'animations.
