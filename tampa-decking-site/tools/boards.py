@@ -73,7 +73,7 @@ A = lambda n: Image.open(AFTER / n)
 B = lambda n: Image.open(BEFORE / n)
 
 pair('avant-apres-ordinateur.jpg', [
-    (B('desktop-top.png'), 'Before', 'Current homepage: a stock photo of a pergola, no menu, a form that does not load', False),
+    (B('desktop-top.png'), 'Before', 'Current homepage: a darkened patio photo, no menu, a form that does not load', False),
     (A('d-top.png'), 'After', 'New homepage: their own stone spa, the headline across the waterline', True),
 ], 1100, 'Tampa Decking & Pools: before and after', SUB)
 

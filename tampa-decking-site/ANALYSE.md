@@ -104,7 +104,6 @@ Site analysé : https://tampadeckingandpools.com, relevé le 7 octobre 2026.
 - **Filigranes d'autres entreprises** : deux photos marquées « LLC Overlay Tampa Florida / After », une avec le logo « Concrete Art Design ».
 - **Images d'autres piscinistes**, reconnaissables à leur nom de fichier : « tallahassee-pools-builder » (affichées sur leur page Gallery), « phoenix », « Platinum Pools Top 10 », « The Woodlands », « concretenetwork », « orlando-pool-deck-resurfacing ».
 - **Images de banque ou générées** :
-  - la photo d'accueil, une pergola sans piscine ;
   - les photos « pressure washing » de 2024 aux noms aléatoires ;
   - un fichier intitulé « an image of a modern pool and spa… » ;
   - des photos Unsplash.
@@ -125,7 +124,7 @@ Site analysé : https://tampadeckingandpools.com, relevé le 7 octobre 2026.
 - Le principal moyen de demander un devis est cassé. Il reste le téléphone et l'e-mail, écrits en petit.
 
 **3. L'accueil ne montre pas leur travail.**
-- La grande photo est une image de banque (une pergola, sans piscine), sous un voile sombre.
+- La grande photo est une terrasse sous pergola, assombrie par un voile ; le bassin n'en occupe qu'un coin. Rien n'indique que ce soit un de leurs chantiers (fichier « Tampa-Decking-Pools.jpeg », à faire confirmer).
 - Le titre est générique : « Tampa's Premier Pool And Decking Service ».
 - Leur travail se résume à trois cartes de services et quatre petites vignettes.
 
