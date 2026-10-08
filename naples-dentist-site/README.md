@@ -126,7 +126,7 @@ Maquette complète du nouveau site d'**Implant and Comprehensive Dentistry of Na
 ```
 npm install
 npm run build        # dist/index.html, le fichier unique à ouvrir d'un double-clic
-npm run build:web    # dist-web/, la version de production à mettre en ligne (Vercel : vercel.json)
+npm run build:web    # dist-web/, la version de production à mettre en ligne (Vercel : vercel.json ; Netlify : glisser dist-web/)
 python3 tools/images.py <dossier des photos d'origine>
 node tools/map.mjs
 python3 tools/boards.py <captures du site actuel> <nouvelles captures> <TTF d'Instrument Sans>
@@ -138,6 +138,10 @@ python3 tools/boards.py <captures du site actuel> <nouvelles captures> <TTF d'In
 - les autres photos se chargent au fur et à mesure.
 
 L'état « Open now » n'est pas figé dans le HTML pré-généré : il est calculé à la visite.
+
+**Mise en ligne sur Netlify, par glisser-déposer** : `npm run build:web`, puis glisser le dossier `dist-web/` sur app.netlify.com/drop.
+- Le fichier `public/_headers`, copié à la racine de `dist-web/`, garde scripts, styles, police et photos en cache un an.
+- Il demande aussi aux moteurs de recherche de ne pas indexer la maquette (`X-Robots-Tag: noindex`), puisque le formulaire n'envoie rien. Retirer cette ligne le jour où le site remplace celui du cabinet.
 
 ## Vérifié
 

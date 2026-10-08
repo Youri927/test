@@ -28,10 +28,13 @@ export default defineConfig(({ mode }) =>
         plugins: [react(), tailwindcss()],
         resolve: { alias: { '@': path.resolve(import.meta.dirname, './src') } },
         build: { outDir: 'dist-web' },
+        // public/ ne contient que les en-têtes Netlify (_headers), copiés à la racine de dist-web/
+        publicDir: 'public',
       }
     : {
         plugins: [inlineIcons(), react(), tailwindcss(), viteSingleFile()],
         resolve: { alias: { '@': path.resolve(import.meta.dirname, './src') } },
         build: { assetsInlineLimit: 100_000_000 },
+        publicDir: false,
       },
 )
