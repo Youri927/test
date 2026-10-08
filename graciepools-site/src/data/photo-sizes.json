@@ -1,0 +1,110 @@
+{
+ "water-aquamarine": [
+  1600,
+  900
+ ],
+ "water-arctic": [
+  1600,
+  900
+ ],
+ "water-california": [
+  1600,
+  900
+ ],
+ "water-evening-sky": [
+  1600,
+  900
+ ],
+ "water-ocean": [
+  1600,
+  900
+ ],
+ "water-sandstone": [
+  1600,
+  900
+ ],
+ "chip-evening-sky": [
+  160,
+  161
+ ],
+ "chip-sandstone": [
+  160,
+  161
+ ],
+ "chip-ocean": [
+  160,
+  161
+ ],
+ "chip-aquamarine": [
+  160,
+  161
+ ],
+ "chip-arctic": [
+  160,
+  161
+ ],
+ "chip-california": [
+  160,
+  161
+ ],
+ "laguna": [
+  2200,
+  1467
+ ],
+ "escape-ocean": [
+  1920,
+  1080
+ ],
+ "dusk-fire": [
+  2000,
+  1334
+ ],
+ "dusk-steps": [
+  1800,
+  1200
+ ],
+ "patio": [
+  1800,
+  1200
+ ],
+ "loungers": [
+  1800,
+  1200
+ ],
+ "milano": [
+  864,
+  576
+ ],
+ "oyster-arctic": [
+  600,
+  400
+ ],
+ "cove-california": [
+  600,
+  400
+ ],
+ "travertine": [
+  1174,
+  882
+ ],
+ "concrete": [
+  1024,
+  768
+ ],
+ "render-3d": [
+  1920,
+  1080
+ ],
+ "tile": [
+  1500,
+  1260
+ ],
+ "hot-tub": [
+  1500,
+  1001
+ ],
+ "liner-pattern": [
+  1500,
+  1033
+ ]
+}

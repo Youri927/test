@@ -1,0 +1,206 @@
+[
+  {
+    "id": "water-aquamarine",
+    "src": "img/aquamarine.webp",
+    "w": 1600,
+    "q": 52
+  },
+  {
+    "id": "water-arctic",
+    "src": "img/arctic.webp",
+    "w": 1600,
+    "q": 52
+  },
+  {
+    "id": "water-california",
+    "src": "img/california.webp",
+    "w": 1600,
+    "q": 52
+  },
+  {
+    "id": "water-evening-sky",
+    "src": "img/evening-sky.webp",
+    "w": 1600,
+    "q": 52
+  },
+  {
+    "id": "water-ocean",
+    "src": "img/ocean.webp",
+    "w": 1600,
+    "q": 52
+  },
+  {
+    "id": "water-sandstone",
+    "src": "img/sandstone.webp",
+    "w": 1600,
+    "q": 52
+  },
+  {
+    "id": "chip-evening-sky",
+    "src": "pdf/ext/p2-003.png",
+    "crop": [
+      0.02,
+      0.07,
+      0.98,
+      0.93
+    ],
+    "w": 160,
+    "q": 62
+  },
+  {
+    "id": "chip-sandstone",
+    "src": "pdf/ext/p2-004.png",
+    "crop": [
+      0.02,
+      0.07,
+      0.98,
+      0.93
+    ],
+    "w": 160,
+    "q": 62
+  },
+  {
+    "id": "chip-ocean",
+    "src": "pdf/ext/p2-005.png",
+    "crop": [
+      0.02,
+      0.07,
+      0.98,
+      0.93
+    ],
+    "w": 160,
+    "q": 62
+  },
+  {
+    "id": "chip-aquamarine",
+    "src": "pdf/ext/p2-009.png",
+    "crop": [
+      0.02,
+      0.07,
+      0.98,
+      0.93
+    ],
+    "w": 160,
+    "q": 62
+  },
+  {
+    "id": "chip-arctic",
+    "src": "pdf/ext/p2-010.png",
+    "crop": [
+      0.02,
+      0.07,
+      0.98,
+      0.93
+    ],
+    "w": 160,
+    "q": 62
+  },
+  {
+    "id": "chip-california",
+    "src": "pdf/ext/p2-011.png",
+    "crop": [
+      0.02,
+      0.07,
+      0.98,
+      0.93
+    ],
+    "w": 160,
+    "q": 62
+  },
+  {
+    "id": "laguna",
+    "src": "orig/Laguna.jpg",
+    "w": 2200,
+    "q": 50
+  },
+  {
+    "id": "escape-ocean",
+    "src": "orig/Escape-Ocean-1-scaled-e1647361640996-1920x1080.jpg",
+    "w": 1920,
+    "q": 50
+  },
+  {
+    "id": "dusk-fire",
+    "src": "orig/_MG_2422.jpg",
+    "w": 2000,
+    "q": 50
+  },
+  {
+    "id": "dusk-steps",
+    "src": "orig/_MG_2429.jpg",
+    "w": 1800,
+    "q": 50
+  },
+  {
+    "id": "patio",
+    "src": "orig/IMG_1956.jpg",
+    "w": 1800,
+    "q": 50
+  },
+  {
+    "id": "loungers",
+    "src": "orig/IMG_1930.jpg",
+    "w": 1800,
+    "q": 50
+  },
+  {
+    "id": "milano",
+    "src": "orig/BARRIER_REEF_FIBERGLASS_POOLS_MILANO_31.jpg",
+    "w": 864,
+    "q": 56
+  },
+  {
+    "id": "oyster-arctic",
+    "src": "img/Oyster-Actic-600x400.jpg",
+    "w": 600,
+    "q": 60
+  },
+  {
+    "id": "cove-california",
+    "src": "img/billabong-cove-california-3-1-600x400.jpg",
+    "w": 600,
+    "q": 60
+  },
+  {
+    "id": "travertine",
+    "src": "orig/travertine-0001.png",
+    "w": 1174,
+    "q": 54
+  },
+  {
+    "id": "concrete",
+    "src": "orig/concrete_pool_001-0001.jpg",
+    "w": 1024,
+    "q": 56
+  },
+  {
+    "id": "render-3d",
+    "src": "orig/pool_studio.jpg",
+    "w": 1920,
+    "q": 50
+  },
+  {
+    "id": "tile",
+    "src": "orig/pool-tile-1.jpg",
+    "crop": [
+      0,
+      0.08,
+      1,
+      0.92
+    ],
+    "w": 1500,
+    "q": 50
+  },
+  {
+    "id": "hot-tub",
+    "src": "orig/hot_tub.jpg",
+    "w": 1500,
+    "q": 50
+  },
+  {
+    "id": "liner-pattern",
+    "src": "orig/all_floor_pattern_vinyl_pool_liner.jpg",
+    "w": 1500,
+    "q": 50
+  }
+]
