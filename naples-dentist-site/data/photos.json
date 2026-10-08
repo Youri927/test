@@ -1,0 +1,20 @@
+[
+  {
+    "id": "portrait",
+    "src": "Fady_Fahkoury_old_filler_picture.jpg",
+    "w": 2010,
+    "q": 54
+  },
+  {
+    "id": "work",
+    "src": "fad.jpg",
+    "w": 848,
+    "q": 62
+  },
+  {
+    "id": "office",
+    "src": "dentistoutside.jpg",
+    "w": 1400,
+    "q": 52
+  }
+]
