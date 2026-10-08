@@ -22,25 +22,26 @@ export const End: React.FC = () => {
   const up = (at: number) => ({opacity: range(g, at, at + 30, 0, 1), transform: `translateY(${range(g, at, at + 40, 20, 0, E.out)}px)`});
   const out = range(f, len - 40, len, 1, 0, E.inOut);
   // la fenêtre de photos monte comme l'eau, puis les bassins défilent lentement
-  const rise = range(g, 20, 76, 0, 1, E.out);
-  const drift = range(g, 20, len - SWAP, 0, TILE_H * 2.4, E.linear);
+  const rise = range(g, 38, 94, 0, 1, E.out);
+  const drift = range(g, 38, len - SWAP, 0, TILE_H * 2.2, E.linear);
   return (
     <AbsoluteFill style={{background: C.abyss}}>
       <AbsoluteFill style={{opacity: out}}>
         {f < SWAP + 40 ? (
           <div style={{position: 'absolute', left: 150, top: 330, ...DISPLAY, fontSize: 132, color: C.white, transform: `translateY(${arrive}px)`}}>
-            <Line shift={f < SWAP ? shift(14) : leave(SWAP)}>You have reached</Line>
-            <Line shift={f < SWAP ? shift(26) : leave(SWAP + 6)}><span style={{color: C.sun}}>the deep end</span></Line>
+            <Line shift={f < SWAP ? shift(6) : leave(SWAP)}>You have reached</Line>
+            <Line shift={f < SWAP ? shift(18) : leave(SWAP + 6)}><span style={{color: C.sun}}>the deep end</span></Line>
           </div>
         ) : null}
         {g >= 0 ? (
           <>
             <div style={{position: 'absolute', left: 150, top: 176}}>
-              <div style={up(14)}><Logo height={128} plate /></div>
-              <div style={{marginTop: 76, ...BODY, fontSize: 28, color: 'rgba(255,255,255,.72)', ...up(34)}}>Free, up-front estimates across Tampa Bay</div>
-              <div style={{marginTop: 14, ...DISPLAY, fontSize: 116, letterSpacing: '-0.04em', color: C.white, ...up(44)}}>813-695-1458</div>
-              <div style={{marginTop: 22, width: 128, height: 5, borderRadius: 3, background: C.sun, transformOrigin: '0 50%', transform: `scaleX(${range(g, 60, 100, 0, 1, E.out)})`}} />
-              <div style={{marginTop: 34, fontFamily: F.sans, fontSize: 22, lineHeight: 1.7, color: 'rgba(255,255,255,.66)', ...up(70)}}>
+              {/* le nom n'entre qu'une fois la phrase sortie */}
+              <div style={up(40)}><Logo height={128} plate /></div>
+              <div style={{marginTop: 76, ...BODY, fontSize: 28, color: 'rgba(255,255,255,.72)', ...up(56)}}>Free, up-front estimates across Tampa Bay</div>
+              <div style={{marginTop: 14, ...DISPLAY, fontSize: 116, letterSpacing: '-0.04em', color: C.white, ...up(66)}}>813-695-1458</div>
+              <div style={{marginTop: 22, width: 128, height: 5, borderRadius: 3, background: C.sun, transformOrigin: '0 50%', transform: `scaleX(${range(g, 82, 122, 0, 1, E.out)})`}} />
+              <div style={{marginTop: 34, fontFamily: F.sans, fontSize: 22, lineHeight: 1.7, color: 'rgba(255,255,255,.66)', ...up(92)}}>
                 tampadeckingandpools.com · Tampa, Florida
                 <br />
                 Website redesign concept, October 2026
