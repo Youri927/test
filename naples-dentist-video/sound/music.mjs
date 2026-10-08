@@ -93,7 +93,8 @@ const PROG = [
   // les filets tombent du temps 5 au temps 8, la couronne se pose sur le temps 9 (nouvel accord)
   [S.Implants, 'Fmaj9'], [S.Implants + 4, 'Dm9'], [S.Implants + 9, 'Bbmaj9'], [S.Implants + 11, 'C'],
   // la course (66) : E4D arrive sur le temps 4 de la scène, la méthode habituelle sur le temps 10
-  [S.Crowns, 'Fmaj9'], [S.Crowns + 4, 'Am7'], [S.Crowns + 6, 'Bbmaj9'], [S.Crowns + 8, 'Gm9'], [S.Crowns + 10, 'C'], [S.Crowns + 12, 'Fmaj9'],
+  // (la course part en ré mineur ; E4D arrive sur la tonique, la méthode habituelle sur la dominante, en retard)
+  [S.Crowns, 'Dm9'], [S.Crowns + 4, 'Fmaj9'], [S.Crowns + 6, 'Bbmaj9'], [S.Crowns + 8, 'Gm9'], [S.Crowns + 10, 'C'], [S.Crowns + 12, 'Fmaj9'],
   // les situations (80) : la fiche s'ouvre sur le temps 8
   [S.Treatments, 'Dm9'], [S.Treatments + 4, 'Bbmaj9'], [S.Treatments + 8, 'FA'], [S.Treatments + 11, 'Gm9'], [S.Treatments + 13, 'Csus'], [S.Treatments + 14, 'C'],
   // la sédation (95) : les deux niveaux sur les temps 4 et 9

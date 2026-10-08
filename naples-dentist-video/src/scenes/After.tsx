@@ -192,7 +192,7 @@ export const AfterRequest: React.FC = () => {
         focus(B, 1000, 440, {f: len, s: 1.38, ease: E.sine}),
       ]}
     >
-      <Caption title="A form that works" text="Today’s appointment page is empty. Here: what brings you in, a number, and the office calls back." tone="dark" at={120} out={352} />
+      <Caption title="A request, not an empty page" text="Today’s appointment page is empty. Here: what brings you in, a number, and the office calls back." tone="dark" at={120} out={352} />
     </Shot>
   );
 };
