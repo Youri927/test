@@ -2,7 +2,7 @@
  * Les repères des bruitages, partagés par src/PresSound.tsx (aperçu dans Remotion) et sound/mix.mjs (bande-son finale).
  * Chaque repère : [image, bruitage, volume]. Ce fichier n'importe que beats.ts : Node le lit directement.
  */
-import {DIVE_LEN, END_SWAP, LAYER_FRAMES, MARK, OPEN_MOVES, RATE, RISES, TYPING} from './beats.ts';
+import {DIVE_LEN, END_SWAP, FROM, LAYER_FRAMES, MARK, OPEN_MOVES, RATE, RISES, TYPING} from './beats.ts';
 
 export type Cue = [number, string, number];
 
@@ -31,7 +31,7 @@ export const cues = (START: Record<string, number>, LEN: Record<string, number>,
   // les clics filmés, replacés sur la ligne de temps du montage
   const filmed = (scene: string, clip: string, rate: number) =>
     clicks(clip)
-      .map((c) => START[scene] + c / rate)
+      .map((c) => START[scene] + (c - (FROM[scene] ?? 0)) / rate)
       .filter((f) => inScene(scene, f));
   const work = filmed('Work', 'dWork', RATE.Work);
   work.forEach((f) => at(f, 'tap', 0.3));

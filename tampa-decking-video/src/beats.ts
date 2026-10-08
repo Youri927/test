@@ -41,6 +41,8 @@ export const LAYER_FRAMES = [108, 292, 471, 651];
 
 /** Vitesse de lecture des autres plans filmés */
 export const RATE = {Work: 1.25, Surfaces: 1.25, Cost: 1.2, About: 1.25, Areas: 1.25, Estimate: 1.35} as const;
+/** Première image jouée : la galerie reprend la page là où la coupe l'a laissée (pas de retour en arrière pendant la plongée) */
+export const FROM: Record<string, number> = {Work: 50};
 
 /** Saisies filmées (secondes du plan) : [début, fin, nombre de caractères tapés] */
 export const TYPING: Record<string, [number, number, number][]> = {

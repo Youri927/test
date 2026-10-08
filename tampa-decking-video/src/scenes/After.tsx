@@ -5,7 +5,7 @@ import {M} from '../clips';
 import {CameraRig, CamKey} from '../lib/camera';
 import {ease} from '../lib/ease';
 import {BrowserAt, Box, PhoneAt, focus} from '../Stage';
-import {LAYERS_CLIP, RATE} from '../beats.ts';
+import {FROM, LAYERS_CLIP, RATE} from '../beats.ts';
 import {DIVE_LEN, LEN, RISE} from '../timeline';
 import {C, E, H2, range} from '../util';
 
@@ -89,16 +89,16 @@ export const AfterWork: React.FC = () => {
       <Rig
         keys={[
           ...diveIn({...WIDE, ry: 2}),
-          {f: 96, ...WIDE, ry: 1, ease: E.sine},
-          focus(B, 720, 470, {f: 180, s: 1.3, ry: -1, ease: E.soft}),
-          focus(B, 720, 430, {f: 320, s: 1.33, ry: 0, ease: E.sine}),
-          {f: 370, ...WIDE, s: 1.0, ease: E.soft},
+          {f: 70, ...WIDE, ry: 1, ease: E.sine},
+          focus(B, 720, 470, {f: 150, s: 1.3, ry: -1, ease: E.soft}),
+          focus(B, 720, 430, {f: 282, s: 1.33, ry: 0, ease: E.sine}),
+          {f: 330, ...WIDE, s: 1.0, ease: E.soft},
           ...end(len, last),
         ]}
       >
-        <BrowserAt b={B} clip={{meta: M.dWork, rate: RATE.Work}} />
+        <BrowserAt b={B} clip={{meta: M.dWork, rate: RATE.Work, from: FROM.Work}} />
       </Rig>
-      <Caption title="15 photos of their work" text="Three columns glide at different speeds, and any photo opens full screen." at={60} out={330} right />
+      <Caption title="15 photos of their work" text="Three columns glide at different speeds, and any photo opens full screen." at={50} out={292} right />
     </AbsoluteFill>
   );
 };
