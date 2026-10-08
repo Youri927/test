@@ -31,8 +31,10 @@ export const DIVE_LEN = 24;
 /** Ouverture : la fenêtre descend d'une couche à l'autre [début, arrivée] ; les arrivées tombent sur les temps 4, 6 et 8 */
 export const OPEN_MOVES: [number, number][] = [[110, 144], [182, 216], [254, 288]];
 
-/** Aujourd'hui : image (dans la scène) où le surligneur passe sur le code brut, le temps 22 du montage */
-export const MARK = 396;
+/** Aujourd'hui : images (dans la scène) où le surligneur passe sur le code brut (temps 18 du montage)
+ * et où un contour entoure les vignettes de leurs bassins (temps 23) */
+export const MARK = 252;
+export const MARK_THUMBS = 432;
 
 /** La coupe : les couches s'allument aux images 159, 368, 571 et 775 du plan filmé (mesuré sur la vidéo).
  * Joué à 17/15 à partir de l'image 37, elles tombent sur les temps de la musique (une tous les cinq temps). */

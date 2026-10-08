@@ -75,7 +75,7 @@ export const AfterLayers: React.FC = () => {
       >
         <BrowserAt b={B} clip={{meta: M.dLayers, ...LAYERS_CLIP}} />
       </Rig>
-      <Caption title="Every layer, in section" text="A drawing of a real pool edge. As you scroll, each layer lights up, with their photos and options." at={150} out={410} right />
+      <Caption title="Every layer, in section" text="A technical drawing of a typical pool edge. As you scroll, each layer lights up, with their photos and options." at={150} out={410} right />
     </AbsoluteFill>
   );
 };
@@ -211,7 +211,7 @@ export const AfterEstimate: React.FC = () => {
       >
         <BrowserAt b={B} clip={{meta: M.dEstimate, rate: RATE.Estimate}} dark />
       </Rig>
-      <Caption title="A form that works" text="Today’s form shows raw code. The new one checks every field and confirms the request." at={40} out={300} />
+      <Caption title="A form that works" text="Today’s form shows raw code. The new one checks the details and confirms the request." at={40} out={300} />
     </AbsoluteFill>
   );
 };

@@ -16,7 +16,7 @@ Vidéo de 105 s en anglais (1920 × 1080, 60 i/s) pour présenter la refonte du 
 | Temps | Séquence |
 | --- | --- |
 | 0 – 6,6 s | Ce qu'ils font, en une phrase de leur site (« Pool resurfacing, tile, coping and new decks… ») ; à droite, une fenêtre descend de la plage jusqu'à l'enduit, sur quatre de leurs photos |
-| 6,6 – 16,2 s | Today : la page d'accueil actuelle (vraie capture) ; trois constats tirés de l'analyse ; la caméra va chercher le code brut affiché à la place du formulaire et le surligne |
+| 6,6 – 16,2 s | Today : la page d'accueil actuelle (vraie capture) et trois constats tirés de l'analyse. La caméra montre l'absence de menu, surligne le code brut affiché à la place du formulaire, puis descend jusqu'aux quatre vignettes de leurs bassins, en bas de page |
 | 16,2 – 19,8 s | « One page, from the deck to the deep end » |
 | 19,8 – 28,2 s | L'arrivée sur le nouveau site : le titre monte, la photo monte comme l'eau, survol du bouton de devis |
 | 28,2 – 42,6 s | La coupe : le dessin se construit, puis chaque couche s'allume (plage, margelle, carrelage, enduit) et le panneau change de photo |

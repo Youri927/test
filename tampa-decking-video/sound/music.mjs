@@ -284,8 +284,9 @@ for (let s16 = 0; s16 < TOTAL_BEATS * 4; s16++) {
     if (b % 1 === 0.5 && b > 15) addHat(t, 0.016, 0.55);
     if (Math.abs(b - start) < 1e-9) addBass(t, n(c.b) * 2, 0.22, BEAT * 3.6);
   }
-  // le surligneur sur le code brut (temps 22) : un accord net
-  if (b === 22) addEP(t, ['D4', 'F#4', 'B4'], 0.05, 0.6, 0.8);
+  // le surligneur sur le code brut (temps 18) : un accord net ; le contour des vignettes (temps 23) : un rappel
+  if (b === 18) addEP(t, ['D4', 'F#4', 'B4'], 0.05, 0.6, 0.8);
+  if (b === 23) addEP(t, ['C#4', 'F#4', 'B4'], 0.04, 0.5, 0.8);
   // — la bascule : montée, roulement de grosse caisse —
   if (b >= 31 && b < 32.75 && s16 % (b >= 32 ? 1 : 2) === 0) addKick(t, 0.16 + 0.1 * (b - 31));
   if (b >= 27 && b < 33 && Math.abs(b - start) < 1e-9) addBass(t, n(c.b) * 2, 0.24, BEAT * 2.8);

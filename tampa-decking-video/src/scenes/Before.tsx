@@ -4,7 +4,7 @@ import before from '../../public/before/desktop.json';
 import {Line} from '../Bits';
 import {BrowserAt, Box} from '../Stage';
 import {barH, browserH} from '../Screen';
-import {MARK} from '../beats.ts';
+import {MARK, MARK_THUMBS} from '../beats.ts';
 import {RISE} from '../timeline';
 import {BODY, C, E, F, H2, H3, range} from '../util';
 
@@ -18,16 +18,17 @@ const CODE = before.wpforms[0];
 
 /** Cadrages de la page dans le navigateur : point du document au centre de la fenêtre, et grossissement */
 type View = {t: number; cx: number; cy: number; z: number};
+// leurs propres bassins : quatre vignettes en bas de la page (px CSS du document)
+const THUMBS = {x: 152, y: 1552, w: 1138, h: 280};
 const VIEWS: View[] = [
   {t: 0, cx: 720, cy: 450, z: 1},
-  {t: 66, cx: 720, cy: 450, z: 1},
-  {t: 140, cx: 500, cy: 300, z: 1.32},
-  {t: 176, cx: 520, cy: 300, z: 1.34},
-  {t: 238, cx: 960, cy: 330, z: 1.2},
-  {t: 268, cx: 955, cy: 332, z: 1.21},
-  {t: 340, cx: CODE.x + CODE.w / 2, cy: CODE.y + CODE.h / 2, z: 2.6},
-  {t: 410, cx: CODE.x + CODE.w / 2 + 6, cy: CODE.y + CODE.h / 2, z: 2.68},
-  {t: 470, cx: 790, cy: 780, z: 1.6},
+  {t: 60, cx: 720, cy: 450, z: 1},
+  {t: 130, cx: 500, cy: 300, z: 1.32},
+  {t: 162, cx: 515, cy: 300, z: 1.34},
+  {t: 232, cx: CODE.x + CODE.w / 2, cy: CODE.y + CODE.h / 2, z: 2.6},
+  {t: 304, cx: CODE.x + CODE.w / 2 + 6, cy: CODE.y + CODE.h / 2, z: 2.68},
+  {t: 384, cx: THUMBS.x + THUMBS.w / 2, cy: THUMBS.y + THUMBS.h / 2, z: 1.22},
+  {t: 532, cx: THUMBS.x + THUMBS.w / 2, cy: THUMBS.y + THUMBS.h / 2 - 8, z: 1.26},
 ];
 const viewAt = (t: number) => {
   if (t <= VIEWS[0].t) return VIEWS[0];
@@ -45,8 +46,8 @@ const viewAt = (t: number) => {
 
 const FINDINGS: [string, string, number][] = [
   ['No menu', 'No header, no navigation. Most of their 43 pages can only be found through Google.', 74],
-  ['A stock photo up top', 'A pergola with no pool, under a dark veil. Their own pools get four small thumbnails.', 180],
-  ['The estimate form is broken', 'Where the form should be, every page shows a line of raw code.', 290],
+  ['The estimate form is broken', 'Where the form should be, every page shows a line of raw code.', 176],
+  ['Their work comes last', 'A dark patio photo and a generic headline up top. Their own pools get four small thumbnails.', 330],
 ];
 
 /** Aujourd'hui : la page actuelle dans un navigateur ; trois constats tirés de l'analyse, la caméra va chercher chaque preuve */
@@ -59,8 +60,9 @@ export const Before: React.FC = () => {
   const top = Math.min(0, Math.max(VH - PAGE_H * k, VH / 2 - v.cy * k));
   const shift = (at: number) => range(t, at, at + 44, 118, 0, E.out);
   const up = (at: number) => ({opacity: range(t, at, at + 30, 0, 1), transform: `translateY(${range(t, at, at + 40, 18, 0, E.out)}px)`});
-  // le surligneur passe sur un temps de la musique (temps 22 du montage)
+  // le surligneur passe sur un temps de la musique (temps 18 du montage), le contour des vignettes sur le temps 23
   const mark = range(t, MARK, MARK + 30, 0, 1, E.out);
+  const thumbs = range(t, MARK_THUMBS, MARK_THUMBS + 30, 0, 1, E.out);
   const current = FINDINGS.reduce((acc, [, , at], i) => (t >= at ? i : acc), -1);
   return (
     <AbsoluteFill style={{background: C.today}}>
@@ -93,6 +95,20 @@ export const Before: React.FC = () => {
               transform: `scale(${1.25 - 0.25 * mark})`,
             }}
           />
+          {/* puis les vignettes de leurs bassins */}
+          <div
+            style={{
+              position: 'absolute',
+              left: (THUMBS.x - 10) * k,
+              top: (THUMBS.y - 10) * k,
+              width: (THUMBS.w + 20) * k,
+              height: (THUMBS.h + 20) * k,
+              border: `${Math.max(2, 1.6 * k)}px solid ${C.sun}`,
+              borderRadius: 4 * k,
+              opacity: thumbs,
+              transform: `scale(${1.06 - 0.06 * thumbs})`,
+            }}
+          />
         </div>
       </BrowserAt>
 
@@ -102,7 +118,7 @@ export const Before: React.FC = () => {
           <Line shift={shift(16)}>get stuck</Line>
         </div>
         <div style={{...BODY, marginTop: 26, fontSize: 25, lineHeight: 1.45, color: C.inkSoft, ...up(40)}}>
-          No menu, a broken estimate form, and a stock photo where their pools should be.
+          No menu, a broken estimate form, and their own pools pushed to the bottom of the page.
         </div>
         <div style={{marginTop: 38, borderTop: `1.5px solid ${C.line}`}}>
           {FINDINGS.map(([h, p, at], i) => (

@@ -2,7 +2,7 @@
  * Les repères des bruitages, partagés par src/PresSound.tsx (aperçu dans Remotion) et sound/mix.mjs (bande-son finale).
  * Chaque repère : [image, bruitage, volume]. Ce fichier n'importe que beats.ts : Node le lit directement.
  */
-import {DIVE_LEN, END_SWAP, FROM, LAYER_FRAMES, MARK, OPEN_MOVES, RATE, RISES, TYPING} from './beats.ts';
+import {DIVE_LEN, END_SWAP, FROM, LAYER_FRAMES, MARK, MARK_THUMBS, OPEN_MOVES, RATE, RISES, TYPING} from './beats.ts';
 
 export type Cue = [number, string, number];
 
@@ -21,6 +21,7 @@ export const cues = (START: Record<string, number>, LEN: Record<string, number>,
   for (const [name, pre] of Object.entries(RISES)) at(START[name] - pre - 3, 'rise', 0.32);
   // le surligneur sur le code brut du site actuel
   at(START.Today + MARK, 'marker', 0.32);
+  at(START.Today + MARK_THUMBS, 'tap', 0.18);
   // les plongées d'une section à l'autre ; l'entrée dans le grand bain est plus profonde
   for (const name of ['Layers', 'Work', 'Surfaces', 'Cost', 'About', 'Areas', 'Estimate', 'Mobile', 'End']) {
     at(START[name] - DIVE_LEN, name === 'About' ? 'plunge' : 'dive', name === 'About' ? 0.36 : 0.32);
