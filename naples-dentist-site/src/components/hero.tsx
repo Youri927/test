@@ -15,7 +15,8 @@ import { photo } from '@/lib/photos'
 const P = photo('portrait')
 // la pastille (en em, dans le titre) et la zone du sourire qu'elle montre (pixels de la photo, même format)
 const PILL = { w: 2.12, h: 0.78 }
-const CROP = { x: 560, y: 572, w: 980, h: (980 * PILL.h) / PILL.w }
+// cadrage : des sourcils à la lèvre du bas, centré sur le visage (le sourire entier, les deux yeux)
+const CROP = { x: 350, y: 548, w: 1180, h: (1180 * PILL.h) / PILL.w }
 // point de la photo gardé au centre quand elle remplit l'écran (fraction de la largeur et de la hauteur)
 const FOCUS = { x: 0.5, y: 0.42 }
 // le visage dans la photo (pixels) : bords gauche et droit (oreille comprise), centre
