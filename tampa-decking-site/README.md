@@ -81,6 +81,7 @@ Leur métier, ce sont les surfaces autour et dans l'eau : la plage où l'on marc
     - **Ville recherchée** : React effaçait la marque d'apparition de la ville trouvée, qui retombait sur ses voisines.
     - **Ancres** : la hauteur de l'en-tête était décomptée deux fois.
     - **Menu mobile** : un lien restait sans effet tant que le défilement était verrouillé.
+    - **Visionneuse** (vu en filmant la vidéo de présentation) : sur ordinateur, les grandes photos dépassaient de l'écran et cachaient leur légende. Elles tiennent maintenant dans la hauteur disponible, vérifié sur les 15 photos à 1280, 1440 et 1920 px.
   - Simplifications : une seule aide de navigation, des titres découpés sans `innerHTML`, plus de ternaires imbriqués. Après une ancre, le clavier repart de la section atteinte.
 
 ## Fabrication

@@ -39,7 +39,7 @@ export function Lightbox({ items, index, onIndex }: { items: Shot[]; index: numb
         </div>
 
         <div
-          className="relative grid min-h-0 place-items-center px-[var(--gutter)]"
+          className="relative grid min-h-0 grid-cols-[minmax(0,1fr)] grid-rows-[minmax(0,1fr)] place-items-center px-[var(--gutter)] py-2 md:py-4"
           onPointerDown={(e) => (start.current = e.clientX)}
           onPointerUp={(e) => {
             if (start.current === null) return
