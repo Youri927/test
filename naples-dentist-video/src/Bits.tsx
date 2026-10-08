@@ -55,7 +55,7 @@ export const buildAt = (f: number, o: {root: number; thread0: number; threadStep
 export type Focus = {x: number; y: number; w: number; h: number};
 /** Le portrait (2010 × 1500) et la zone du sourire montrée dans la pastille du titre du site */
 export const PORTRAIT = {src: 'img/portrait.jpg', w: 2010, h: 1500};
-export const SMILE: Focus = {x: 560, y: 572, w: 980, h: (980 * 0.78) / 2.12};
+export const SMILE: Focus = {x: 350, y: 548, w: 1180, h: (1180 * 0.78) / 2.12};
 
 /** Une photo cadrée sur une zone (px de la photo) qui remplit la boîte, sans laisser de vide */
 export const PhotoCrop: React.FC<{src: string; iw: number; ih: number; focus: Focus; w: number; h: number; style?: React.CSSProperties}> = ({src, iw, ih, focus, w, h, style}) => {
