@@ -159,7 +159,7 @@ export function Planner() {
 
               {shot ? (
                 <figure className="mt-8 grid grid-cols-[112px_1fr] items-center gap-4">
-                  <img src={shot.src} alt={`${model.name} installed in a backyard`} width={shot.width} height={shot.height} loading="lazy" className="aspect-[4/3] w-[112px] rounded-[10px] object-cover" />
+                  <img src={shot.thumb ?? shot.src} srcSet={shot.thumb ? undefined : shot.srcSet} sizes="112px" alt={`${model.name} installed in a backyard`} width={shot.width} height={shot.height} loading="lazy" decoding="async" className="aspect-[4/3] w-[112px] rounded-[10px] object-cover" />
                   <figcaption className="text-[14px] leading-snug text-white/60">
                     A {model.name} in a backyard.
                     <br />

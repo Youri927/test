@@ -273,6 +273,12 @@ html.lenis, html.lenis body { height: auto; }
 .motion .hero-up { animation: up 1.1s var(--ease-out-expo) both; animation-delay: var(--d, 0s); }
 @keyframes up { from { opacity: 0; transform: translateY(18px); } }
 .motion .caption-in { animation: up 0.8s var(--ease-out-expo) both; animation-delay: 0.15s; }
+/* le bassin de l'accueil : l'eau se découvre d'un bout à l'autre au chargement (avant même le JavaScript) */
+.motion .hero-svg { animation: wipe 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.35s both; }
+@keyframes wipe { from { clip-path: inset(-10% 100% -10% -10%); } to { clip-path: inset(-10% -10% -10% -10%); } }
+/* les cotes, en unités de la scène (1000 de large) : plus grandes sur téléphone, où la scène est réduite */
+.hero-dim { font-size: 20px; }
+@media (max-width: 639px) { .hero-dim { font-size: 34px; } }
 
 .hero-seg { position: relative; width: 34px; height: 30px; display: grid; align-items: center; }
 .hero-seg::before { content: ""; height: 3px; border-radius: 3px; background: rgb(10 26 36 / 0.14); }
@@ -321,7 +327,7 @@ html.lenis, html.lenis body { height: auto; }
 .lineup-item:hover { background: rgb(255 255 255 / 0.05); }
 .lineup-item.is-on { background: rgb(255 255 255 / 0.09); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.55); }
 @media (max-width: 1023px) {
-  .lineup { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scrollbar-width: none; padding-bottom: 4px; }
+  .lineup { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter); scrollbar-width: none; padding-bottom: 4px; }
   .lineup::-webkit-scrollbar { display: none; }
   .lineup > li { scroll-snap-align: start; }
 }

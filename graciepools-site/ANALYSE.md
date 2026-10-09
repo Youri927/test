@@ -7,13 +7,14 @@ Site analysé : https://graciepools.com, relevé le 8 octobre 2026.
 ## L'entreprise, d'après son propre site
 
 - **Nom** : Gracie Pools (« Gracie Fiberglass Pools » dans le bloc de contact). Leur page de financement chez Lyon Financial dit « Gracie Pools, Inc ».
-- **Adresse** : Altamonte Springs, Floride (pas d'adresse postale sur le site).
-- **Zone** : Orlando, Winter Park, Lake Mary, et plus largement le centre de la Floride.
+- **Adresse** (page Contact) : 817 Walnut Pl, Altamonte Springs, FL 32701.
+- **Zone** : « Orlando Pool Construction serving Seminole, Orange and Volusia Counties » ; les pages citent Orlando, Winter Park et Lake Mary.
+- **Interlocuteurs** (page Contact) : Michael Stansfield pour la construction (Mike@graciepools.com), Maria Peguero pour le service client (Maria@graciepools.com).
 - **Téléphone** : (407) 866-7486, pour appeler ou envoyer un SMS. « Text pictures of your pool to 407-866-7486 for a free estimate. »
 - **E-mail** : Mike@GraciePools.com. « We respond within 24hrs! »
 - **Licence** : « Florida State Licensed Swimming Pool Contractor, CPC1458515 », « licensed and insured ». Nous l'avons retrouvée, active, à Altamonte Springs, dans un registre tiers (statecreds.com) ; à confirmer sur myfloridalicense.com.
 - **Expérience** : « 20+ years of pool construction experience ».
-- **Pas d'horaires** sur le site.
+- **Horaires** (page Contact) : du lundi au vendredi, 8 h – 17 h ; le samedi, 9 h – 17 h ; fermé le dimanche.
 
 ## Ce qu'ils proposent
 
@@ -44,6 +45,7 @@ Site analysé : https://graciepools.com, relevé le 8 octobre 2026.
 
 **Ce qui existe**
 - La licence de l'État, avec son numéro.
+- Une adresse, des horaires et deux interlocuteurs nommés, mais seulement sur la page Contact.
 - 20 ans d'expérience, une réponse sous 24 heures, un e-mail au nom de Mike.
 - Des partenaires réels : Barrier Reef (fiche 2025 officielle), Pentair, Lyon Financial.
 - L'estimation sur photo par SMS : rare, simple, et très bien adaptée au téléphone.
@@ -95,7 +97,7 @@ Site analysé : https://graciepools.com, relevé le 8 octobre 2026.
 
 **Le ton** : direct et chaleureux, en anglais, à partir de leurs phrases (« Hello Florida »). Les textes du fabricant sont attribués à Barrier Reef.
 
-**Typographie** : Host Grotesk (licence OFL), une grotesque nette et ouverte, avec des chiffres tabulaires pour les dimensions.
+**Typographie** : Familjen Grotesk (licence OFL), une grotesque nette et ouverte, qui a les signes pieds et pouces (′ ″) et des chiffres tabulaires pour les dimensions.
 
 **Couleurs** :
 - Blanc et encre bleu nuit pour le texte.
@@ -103,10 +105,10 @@ Site analysé : https://graciepools.com, relevé le 8 octobre 2026.
 - L'eau des textures pour tout le reste.
 - Pas de dégradé décoratif, pas de verre dépoli, pas de fond crème.
 
-**Mouvement** : l'eau qui ondule doucement dans les bassins ; le bassin qui grandit ou rétrécit à sa vraie taille quand on change de modèle ; les cotes qui suivent ; les titres qui montent ligne par ligne ; les photos qui se découvrent. Tout se coupe avec « réduire les animations ».
+**Mouvement** : l'eau qui dérive lentement dans les grands bassins ; le bassin qui grandit ou rétrécit à sa vraie taille quand on change de modèle ; les cotes qui suivent ; les titres qui montent ligne par ligne ; les photos qui se découvrent. Tout se coupe avec « réduire les animations ».
 
 **À confirmer avec Gracie avant la mise en ligne**
 - La gamme Sun Pools est-elle encore vendue ? Le Castaway (nouveau en 2025 sur la fiche) est-il proposé en Floride ?
 - Des photos de leurs propres chantiers, pour remplacer les photos du fabricant.
 - L'origine des photos travertin et béton.
-- Le lien vers leurs avis Google, et leurs horaires.
+- Le lien vers leurs avis Google.

@@ -1,6 +1,6 @@
 // La demande : ce que le visiteur prévoit, le bassin choisi dans le comparateur s'il y en a un, et ses coordonnées.
 // Le formulaire est une démonstration (rien n'est envoyé) : à brancher avant la mise en ligne, voir le README.
-import { ArrowRight, Mail, MapPin, MessageSquareText, Phone, X } from 'lucide-react'
+import { ArrowRight, Clock, Mail, MapPin, MessageSquareText, Phone, X } from 'lucide-react'
 import { RadioGroup } from 'radix-ui'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 
@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useChoice } from '@/lib/choice'
 import { photo } from '@/lib/photos'
 import { feet, finishById, modelById } from '@/lib/pools'
-import { AREAS, EMAIL, LICENSE, PHONE, sms, TEL } from '@/lib/site'
+import { ADDRESS, COUNTIES, hm, HOURS, LICENSE, PEOPLE, PHONE, sms, TEL } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
 const PLANS = ['New fiberglass pool', 'New concrete pool', 'Liner replacement', 'Resurfacing or tile', 'Pump, salt or automation', 'Hot tub repair'] as const
@@ -54,7 +54,7 @@ export function Contact() {
           <p className="t-lead mt-6 max-w-[30rem] text-ink-soft" data-up>
             A new pool, a liner, a repair: we answer within 24 hours.
           </p>
-          <ul className="mt-10 grid gap-5 text-[17px]" data-up>
+          <ul className="mt-10 grid gap-6 text-[17px]" data-up>
             <li className="flex gap-4">
               <Phone className="mt-1 size-5 shrink-0" aria-hidden />
               <div>
@@ -72,16 +72,31 @@ export function Contact() {
             </li>
             <li className="flex gap-4">
               <Mail className="mt-1 size-5 shrink-0" aria-hidden />
-              <a href={`mailto:${EMAIL}`} className="ul font-[650]">
-                {EMAIL}
-              </a>
+              <div className="grid gap-2.5">
+                {PEOPLE.map((p) => (
+                  <div key={p.email}>
+                    <p className="text-[15px] text-ink-soft">
+                      {p.role}, {p.name}
+                    </p>
+                    <a href={`mailto:${p.email}`} className="ul font-[650]">
+                      {p.email}
+                    </a>
+                  </div>
+                ))}
+              </div>
             </li>
             <li className="flex gap-4">
               <MapPin className="mt-1 size-5 shrink-0" aria-hidden />
               <div>
-                <p className="font-[650]">Based in Altamonte Springs</p>
-                <p className="text-[15px] text-ink-soft">Building in {AREAS.slice(1).join(', ')} and across Central Florida</p>
+                <p className="font-[650]">
+                  {ADDRESS.street}, {ADDRESS.city}, {ADDRESS.region} {ADDRESS.zip}
+                </p>
+                <p className="text-[15px] text-ink-soft">Building across {COUNTIES}</p>
               </div>
+            </li>
+            <li className="flex gap-4">
+              <Clock className="mt-1 size-5 shrink-0" aria-hidden />
+              <Hours />
             </li>
           </ul>
           <p className="mt-10 border-t border-ink/15 pt-5 text-[14.5px] leading-relaxed text-ink-soft" data-up>
@@ -140,11 +155,11 @@ export function Contact() {
                     <Input id="email" name="email" type="email" autoComplete="email" className="field" />
                   </Field>
                   <Field id="city" label="City" hint="optional">
-                    <Input id="city" name="city" autoComplete="address-level2" placeholder="Winter Park" className="field" />
+                    <Input id="city" name="city" autoComplete="address-level2" placeholder="e.g. Winter Park" className="field placeholder:text-ink/64" />
                   </Field>
                 </div>
                 <Field id="message" label="Anything we should know?" hint="optional">
-                  <Textarea id="message" name="message" rows={4} placeholder="The size of the yard, the timing, a photo you can text us…" className="field min-h-[120px]" />
+                  <Textarea id="message" name="message" rows={4} placeholder="The size of the yard, the timing, a photo you can text us…" className="field min-h-[120px] placeholder:text-ink/64" />
                 </Field>
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <button type="submit" className="btn btn-ink">
@@ -178,5 +193,27 @@ function Field({ id, label, hint, required, error, children }: { id: string; lab
         {error}
       </p>
     </div>
+  )
+}
+
+/** les horaires de leur page Contact ; le jour en cours est signalé une fois la page chargée */
+function Hours() {
+  const [today, setToday] = useState<number | null>(null)
+  useEffect(() => setToday(new Date().getDay()), [])
+  return (
+    <dl className="grid grid-cols-[auto_auto] gap-x-6 gap-y-1 text-[15.5px]">
+      {HOURS.map((h) => {
+        const on = today !== null && h.idx.includes(today)
+        return (
+          <div key={h.days} className={cn('contents', on ? 'font-[650] text-ink' : 'text-ink-soft')}>
+            <dt>
+              {h.days}
+              {on ? <span className="sr-only"> (today)</span> : null}
+            </dt>
+            <dd className="tnum">{h.from !== undefined && h.to !== undefined ? `${hm(h.from)} – ${hm(h.to)}` : 'Closed'}</dd>
+          </div>
+        )
+      })}
+    </dl>
   )
 }

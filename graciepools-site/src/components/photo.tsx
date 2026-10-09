@@ -14,6 +14,7 @@ export function Photo({
   unveil = true,
   eager = false,
   sizes,
+  portrait,
   style,
   parallax = false,
 }: {
@@ -24,7 +25,10 @@ export function Photo({
   position?: string
   unveil?: boolean
   eager?: boolean
+  /** la largeur affichée, pour choisir entre la photo et sa version allégée */
   sizes?: string
+  /** un recadrage vertical pour les téléphones (cadre 4:5), à la place de la photo entière */
+  portrait?: PhotoId
   style?: CSSProperties
   /** la photo glisse un peu moins vite que la page */
   parallax?: boolean
@@ -40,19 +44,30 @@ export function Photo({
       t.kill()
     }
   }, [parallax])
-  const img = (
+  const srcSet = portrait ? undefined : p.srcSet
+  const tag = (
     <img
       src={p.src}
+      srcSet={srcSet}
+      sizes={srcSet ? sizes : undefined}
       width={p.width}
       height={p.height}
       alt={alt}
-      sizes={sizes}
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
       className={cn('size-full object-cover', imgClassName)}
       style={position ? { objectPosition: position } : undefined}
       draggable={false}
     />
+  )
+  const tall = portrait ? photo(portrait) : null
+  const img = tall ? (
+    <picture className="contents">
+      <source media="(max-width: 639px)" srcSet={tall.src} width={tall.width} height={tall.height} />
+      {tag}
+    </picture>
+  ) : (
+    tag
   )
   // la parallaxe déplace un calque intérieur : le dévoilement (CSS) et le glissement (GSAP) ne se marchent pas dessus
   const inner = parallax ? (

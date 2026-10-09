@@ -28,7 +28,7 @@ export function FinishPicker({ value, onChange, className, dark = true }: { valu
       >
         {FINISHES.map((f) => (
           <RadioGroup.Item key={f.id} value={f.id} aria-label={f.name} className={cn('chip', dark ? 'chip-dark' : 'chip-light')}>
-            <img src={photo(`chip-${f.id}`).src} alt="" width={44} height={44} className="chip-img" draggable={false} />
+            <img src={photo(`chip-${f.id}`).src} alt="" width={44} height={44} loading="lazy" decoding="async" className="chip-img" draggable={false} />
           </RadioGroup.Item>
         ))}
       </RadioGroup.Root>

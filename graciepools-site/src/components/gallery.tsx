@@ -27,7 +27,7 @@ const SHOTS: Shot[] = [
 export function Gallery() {
   const track = useRef<HTMLDivElement>(null)
   const [edges, setEdges] = useState({ start: true, end: false })
-  const { setPick, setFinish } = useChoice()
+  const { setPick, setFinish, finish } = useChoice()
 
   useEffect(() => {
     const t = track.current
@@ -120,11 +120,11 @@ export function Gallery() {
       <div ref={track} className="gallery-track mt-10 pb-[clamp(72px,9vw,136px)]" tabIndex={0} aria-label="Photos of Barrier Reef pools, scroll sideways">
         {SHOTS.map((s, i) => (
           <figure key={s.id} className="gallery-card" style={{ '--r': s.ratio, '--d': `${Math.min(i, 3) * 0.08}s` } as CSSProperties} data-up>
-            <Photo id={s.id} alt={s.alt} className="gallery-img rounded-[18px]" unveil={false} />
+            <Photo id={s.id} alt={s.alt} className="gallery-img rounded-[18px]" sizes="(max-width: 717px) 80vw, 600px" unveil={false} />
             <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-[15px]">
               {s.model ? (
                 <button type="button" onClick={() => toScale(s)} className="group inline-flex items-center gap-3 text-left font-[600]">
-                  <MiniPlan id={s.model} finish={s.finish ?? 'california'} />
+                  <MiniPlan id={s.model} finish={finish} />
                   <span className="ul">{s.caption}</span>
                 </button>
               ) : (

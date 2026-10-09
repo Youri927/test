@@ -36,7 +36,7 @@ export function Package() {
 
           <div className="grid content-start gap-5 lg:col-span-5">
             <figure>
-              <Photo id="dusk-steps" alt="A pool at night, its entry steps lit in blue" className="aspect-[4/3] rounded-[22px]" position="50% 60%" />
+              <Photo id="dusk-steps" alt="A pool at night, its entry steps lit in blue" className="aspect-[4/3] rounded-[22px]" sizes="(max-width: 1023px) 100vw, 560px" position="50% 60%" />
               <figcaption className="mt-3 text-[14px] text-ink-soft">Lit steps after dark. Photo: Barrier Reef</figcaption>
             </figure>
             <div className="rounded-[22px] bg-azure p-7 text-ink sm:p-9" data-up>

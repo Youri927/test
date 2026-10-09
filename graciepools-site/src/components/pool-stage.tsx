@@ -66,7 +66,7 @@ export function PoolStage({
   // géométrie : marges pour les règles, puis l'échelle commune à tous les modèles
   const narrow = box.w < 640
   // la légende du bassin occupe la première ligne, la règle du haut la suivante
-  const m = { l: narrow ? 30 : 58, t: narrow ? 58 : 82, r: narrow ? 10 : 22, b: narrow ? 12 : 22 }
+  const m = { l: narrow ? 38 : 58, t: narrow ? 58 : 82, r: narrow ? 10 : 22, b: narrow ? 12 : 22 }
   const ppf = box.w ? (box.w - m.l - m.r) / MAX_FT : 0
   const height = Math.round(m.t + m.b + DEEP_FT * ppf)
   const L = (size.l / 12) * ppf
@@ -158,7 +158,7 @@ export function PoolStage({
             {ticks
               .filter((t) => t <= DEEP_FT && t % step === 0 && t)
               .map((t) => (
-                <text key={t} y={m.t + t * ppf + 4} x={m.l - 22} textAnchor="end">
+                <text key={t} y={m.t + t * ppf + 4} x={m.l - (narrow ? 17 : 22)} textAnchor="end">
                   {t}
                 </text>
               ))}

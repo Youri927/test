@@ -4,7 +4,6 @@ import { ArrowDown, MessageSquareText, Pause, Play } from 'lucide-react'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import { PoolPlan } from '@/components/pool-plan'
-import { useBox } from '@/components/pool-stage'
 import { useChoice } from '@/lib/choice'
 import { go, gsap, motion, scrollToId } from '@/lib/motion'
 import { photo } from '@/lib/photos'
@@ -60,16 +59,19 @@ export function Hero() {
   )
 }
 
+/** la scène du bassin a un système de coordonnées fixe (1000 × 640) : elle est rendue telle quelle dans le HTML pré-généré */
+const VW = 1000
+const VH = 640
+
 function HeroPool() {
-  const [ref, box] = useBox<HTMLDivElement>()
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const [stopped, setStopped] = useState(false)
   const [entered, setEntered] = useState(false)
   const { setPick } = useChoice()
   const pool = useRef<SVGGElement>(null)
-  const reveal = useRef<SVGRectElement>(null)
   const busy = useRef(false)
+  const first = useRef(true)
 
   const item = SHOW[index]
   const model = modelById(item.model)
@@ -77,16 +79,14 @@ function HeroPool() {
   const fin = finishById(item.finish)
 
   // le bassin occupe la scène en gardant ses vraies proportions ; la place des cotes est réservée autour
-  const w = box.w
-  const h = box.h
-  const side = w < 520 ? 34 : 72
+  const side = 84
   const lft = size.l / 12
   const wft = size.w / 12
-  const ppf = w && h ? Math.min((w - side * 2) / lft, (h * 0.72) / wft) : 0
+  const ppf = Math.min((VW - side * 2) / lft, (VH * 0.7) / wft)
   const L = lft * ppf
   const W = wft * ppf
-  const x = (w - L) / 2
-  const y = (h - W) / 2 + 8
+  const x = (VW - L) / 2
+  const y = (VH - W) / 2 + 12
 
   // passage au bassin suivant : l'ancien s'efface, le nouveau se pose
   const goTo = useCallback((next: number) => {
@@ -100,36 +100,39 @@ function HeroPool() {
     gsap.to(g, { opacity: 0, duration: 0.32, ease: 'power2.in', onComplete: () => setIndex(next) })
   }, [])
 
-  // défilement automatique, coupé si le visiteur demande moins d'animations ou met en pause
+  // l'entrée est une animation CSS (l'eau se découvre d'un bout à l'autre) : elle part avant même le JavaScript
   useEffect(() => {
-    if (!motion()) setStopped(true)
+    if (!motion()) {
+      setStopped(true)
+      setEntered(true)
+      return
+    }
+    const t = window.setTimeout(() => setEntered(true), 2000)
+    return () => window.clearTimeout(t)
   }, [])
+  // défilement automatique, coupé si le visiteur demande moins d'animations ou met en pause
   useEffect(() => {
     if (stopped || paused || !entered) return
     const t = window.setTimeout(() => goTo((index + 1) % SHOW.length), HOLD * 1000)
     return () => window.clearTimeout(t)
   }, [index, paused, stopped, entered, goTo])
 
-  // entrée : l'eau se découvre d'un bout à l'autre ; ensuite, chaque bassin arrive en fondu en se posant
+  // chaque bassin suivant arrive en fondu en se posant
   useLayoutEffect(() => {
-    if (!ppf || !pool.current) return
-    if (!motion()) {
-      setEntered(true)
+    if (first.current) {
+      first.current = false
       return
     }
-    if (!entered) {
-      const r = reveal.current
-      if (r) gsap.fromTo(r, { attr: { width: 0 } }, { attr: { width: w + 40 }, duration: 1.6, ease: 'power3.inOut', delay: 0.4 })
-      gsap.fromTo(pool.current, { opacity: 0 }, { opacity: 1, duration: 0.5, delay: 0.4, onComplete: () => setEntered(true) })
+    if (!pool.current || !motion()) {
+      busy.current = false
       return
     }
     gsap.fromTo(
       pool.current,
-      { opacity: 0, scale: 0.94, svgOrigin: `${w / 2} ${h / 2}` },
-      { opacity: 1, scale: 1, duration: 1.1, ease: 'expo.out', svgOrigin: `${w / 2} ${h / 2}`, onComplete: () => void (busy.current = false) },
+      { opacity: 0, scale: 0.94, svgOrigin: `${VW / 2} ${VH / 2}` },
+      { opacity: 1, scale: 1, duration: 1.1, ease: 'expo.out', svgOrigin: `${VW / 2} ${VH / 2}`, onComplete: () => void (busy.current = false) },
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, ppf > 0])
+  }, [index])
 
   const seeToScale = () => {
     setPick({ model: model.id, size: 0 })
@@ -137,50 +140,41 @@ function HeroPool() {
   }
 
   const dim = 'rgb(10 26 36 / 0.5)'
-  const fs = w < 520 ? 13 : 15
   return (
     <div className="hero-pool" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
-      <div ref={ref} className="relative aspect-[16/11] w-full sm:aspect-[16/10]">
-        {ppf ? (
-          <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} className="absolute inset-0 overflow-visible" role="img" aria-label={`${model.name}, ${feet(size.l)} by ${feet(size.w)}, seen from above in ${fin.name}`}>
-            <defs>
-              {/* une grille d'un pied, calée sur le coin du bassin, qui s'estompe vers les bords */}
-              <pattern id="hero-ft" width={ppf} height={ppf} patternUnits="userSpaceOnUse" x={x} y={y}>
-                <path d={`M${ppf} 0V${ppf}M0 ${ppf}H${ppf}`} fill="none" stroke="rgb(10 26 36 / 0.07)" strokeWidth={1} />
-              </pattern>
-              <radialGradient id="hero-fade">
-                <stop offset="0.55" stopColor="#fff" />
-                <stop offset="1" stopColor="#fff" stopOpacity="0" />
-              </radialGradient>
-              <mask id="hero-grid-mask">
-                <ellipse cx={x + L / 2} cy={y + W / 2} rx={L / 2 + ppf * 5} ry={W / 2 + ppf * 4.5} fill="url(#hero-fade)" />
-              </mask>
-              <clipPath id="hero-reveal">
-                <rect ref={reveal} x={-20} y={-20} width={entered ? w + 40 : 0} height={h + 40} />
-              </clipPath>
-            </defs>
-            <g clipPath="url(#hero-reveal)">
-              <g ref={pool} key={index}>
-                <rect x={x - ppf * 6} y={y - ppf * 6} width={L + ppf * 12} height={W + ppf * 12} fill="url(#hero-ft)" mask="url(#hero-grid-mask)" />
-                <PoolPlan model={model} size={size} finish={item.finish} ppf={ppf} x={x} y={y} />
-                {/* les cotes, comme sur un plan : la longueur au-dessus, la largeur à gauche */}
-                <g stroke={dim} strokeWidth={1} fill="none">
-                  <path d={`M${x} ${y - 26}H${x + L}M${x} ${y - 32}V${y - 20}M${x + L} ${y - 32}V${y - 20}`} />
-                  <path d={`M${x - 26} ${y}V${y + W}M${x - 32} ${y}H${x - 20}M${x - 32} ${y + W}H${x - 20}`} />
-                </g>
-                <g className="tnum" fontSize={fs} fontWeight={600} fill="var(--ink)">
-                  <text x={x + L / 2} y={y - 38} textAnchor="middle">
-                    {feet(size.l)}
-                  </text>
-                  {/* la largeur se lit le long de sa cote, comme sur un plan */}
-                  <text x={0} y={0} textAnchor="middle" transform={`translate(${x - 36} ${y + W / 2}) rotate(-90)`}>
-                    {feet(size.w)}
-                  </text>
-                </g>
-              </g>
+      <div className="relative w-full" style={{ aspectRatio: `${VW} / ${VH}` }}>
+        <svg viewBox={`0 0 ${VW} ${VH}`} className="hero-svg absolute inset-0 size-full overflow-visible" role="img" aria-label={`${model.name}, ${feet(size.l)} by ${feet(size.w)}, seen from above in ${fin.name}`}>
+          <defs>
+            {/* une grille d'un pied, calée sur le coin du bassin, qui s'estompe vers les bords */}
+            <pattern id="hero-ft" width={ppf} height={ppf} patternUnits="userSpaceOnUse" x={x} y={y}>
+              <path d={`M${ppf} 0V${ppf}M0 ${ppf}H${ppf}`} fill="none" stroke="rgb(10 26 36 / 0.075)" strokeWidth={1.2} />
+            </pattern>
+            <radialGradient id="hero-fade">
+              <stop offset="0.55" stopColor="#fff" />
+              <stop offset="1" stopColor="#fff" stopOpacity="0" />
+            </radialGradient>
+            <mask id="hero-grid-mask">
+              <ellipse cx={x + L / 2} cy={y + W / 2} rx={L / 2 + ppf * 5} ry={W / 2 + ppf * 4.5} fill="url(#hero-fade)" />
+            </mask>
+          </defs>
+          <g ref={pool} key={index}>
+            <rect x={x - ppf * 6} y={y - ppf * 6} width={L + ppf * 12} height={W + ppf * 12} fill="url(#hero-ft)" mask="url(#hero-grid-mask)" />
+            <PoolPlan model={model} size={size} finish={item.finish} ppf={ppf} x={x} y={y} />
+            {/* les cotes, comme sur un plan : la longueur au-dessus, la largeur à gauche, écrite le long de sa cote */}
+            <g stroke={dim} strokeWidth={1.4} fill="none">
+              <path d={`M${x} ${y - 34}H${x + L}M${x} ${y - 42}V${y - 26}M${x + L} ${y - 42}V${y - 26}`} />
+              <path d={`M${x - 34} ${y}V${y + W}M${x - 42} ${y}H${x - 26}M${x - 42} ${y + W}H${x - 26}`} />
             </g>
-          </svg>
-        ) : null}
+            <g className="hero-dim tnum" fontWeight={600} fill="var(--ink)">
+              <text x={x + L / 2} y={y - 52} textAnchor="middle">
+                {feet(size.l)}
+              </text>
+              <text x={0} y={0} textAnchor="middle" transform={`translate(${x - 52} ${y + W / 2}) rotate(-90)`}>
+                {feet(size.w)}
+              </text>
+            </g>
+          </g>
+        </svg>
       </div>
 
       {/* légende : le modèle, ses mesures et son coloris ; une barre par bassin, qui se remplit le temps de sa présentation */}

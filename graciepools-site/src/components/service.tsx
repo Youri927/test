@@ -108,7 +108,7 @@ export function Service() {
                         <p className="max-w-[34rem] text-[17px] leading-[1.55] text-white/80">{it.lead}</p>
                         {it.body}
                       </div>
-                      {it.photo ? <Photo id={it.photo.id} alt={it.photo.alt} className="aspect-[4/3] rounded-[16px]" unveil={false} /> : null}
+                      {it.photo ? <Photo id={it.photo.id} alt={it.photo.alt} className="aspect-[4/3] rounded-[16px]" sizes="(max-width: 767px) 100vw, 380px" unveil={false} /> : null}
                     </div>
                   </AccordionContent>
                 </AccordionItem>

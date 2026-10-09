@@ -3,7 +3,7 @@ import { NAV } from '@/components/header'
 import { Logo } from '@/components/logo'
 import { FooterLineup } from '@/components/footer-lineup'
 import { go } from '@/lib/motion'
-import { AREAS, EMAIL, LICENSE, LYON, PHONE, SHEET, sms, TEL } from '@/lib/site'
+import { ADDRESS, COUNTIES, LICENSE, LYON, PEOPLE, PHONE, SHEET, sms, TEL } from '@/lib/site'
 
 export function Footer() {
   return (
@@ -16,7 +16,12 @@ export function Footer() {
           <div className="lg:col-span-5">
             <Logo className="text-white" />
             <p className="mt-5 max-w-[26rem] text-[16px] leading-relaxed text-white/65">
-              Fiberglass and custom concrete pools, liners, resurfacing and repairs. Based in Altamonte Springs, building across Central Florida.
+              Fiberglass and custom concrete pools, liners, resurfacing and repairs, across {COUNTIES}.
+            </p>
+            <p className="mt-4 text-[16px] leading-relaxed text-white/65">
+              {ADDRESS.street}, {ADDRESS.city}, {ADDRESS.region} {ADDRESS.zip}
+              <br />
+              Mon – Fri 8 am – 5 pm · Sat 9 am – 5 pm
             </p>
           </div>
           <div className="lg:col-span-3">
@@ -32,12 +37,13 @@ export function Footer() {
                   Text a photo of your pool
                 </a>
               </li>
-              <li>
-                <a href={`mailto:${EMAIL}`} className="ul">
-                  {EMAIL}
-                </a>
-              </li>
-              <li>{AREAS.join(', ')}</li>
+              {PEOPLE.map((p) => (
+                <li key={p.email}>
+                  <a href={`mailto:${p.email}`} className="ul">
+                    {p.email}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
           <div className="lg:col-span-2">

@@ -21,7 +21,7 @@ Le site actuel héberge la fiche officielle 2025 du fabricant Barrier Reef, dont
 - **Les photos des modèles** (photos du fabricant, signées comme telles), avec le dessin du modèle à côté de sa légende : un clic ouvre le comparateur sur lui.
 - **Le béton sur mesure**, **l'ensemble autour du bassin** et le **financement** Lyon Financial (leur vraie page partenaire).
 - **Les piscines existantes** : liners (avec la liste de ce que comprend leur prestation), enduit et carrelage, pompes et sel, domotique, spas ; et leur offre la plus simple, mise en avant partout : une photo par SMS pour une estimation gratuite (le SMS s'ouvre avec un début de message, sur iPhone comme sur Android).
-- **Les questions fréquentes** (celles de leur page liners, et des réponses tirées de la fiche) et **la demande**.
+- **Les questions fréquentes** (celles de leur page liners, et des réponses tirées de la fiche) et **la demande**, avec ce que leur page Contact cache en bas : l'adresse, les horaires (le jour en cours est signalé), et leurs deux interlocuteurs, Mike Stansfield pour la construction et Maria Peguero pour le service client.
 - **Le pied de page** : toute la gamme, côte à côte à la même échelle, dans le coloris choisi.
 
 **Mouvement** : défilement fluide (Lenis) ; titres qui montent ligne par ligne ; photos qui se découvrent ; l'eau qui dérive lentement dans les grands bassins ; les fonds sombres qui s'élargissent comme des panneaux au défilement ; au survol, l'eau du coloris monte dans les boutons. Tout est coupé avec « réduire les animations ».
@@ -40,13 +40,30 @@ Le site actuel héberge la fiche officielle 2025 du fabricant Barrier Reef, dont
 
 - `npm run build` : `dist/index.html`, un seul fichier avec tout dedans (4 Mo).
 - `npm run build:web` : version de production dans `dist-web/` (HTML pré-rendu, photos et police en fichiers séparés, chargés au fur et à mesure ; la police et l'eau du premier bassin sont préchargées).
+  - Les grandes photos ont une version allégée (1200 px) que le navigateur prend quand la photo est affichée petite, sur téléphone surtout ; la photo du Laguna a un recadrage vertical pour le cadre du téléphone ; les photos de modèles ont une vignette pour le comparateur. Sur un téléphone, la page entière charge ainsi environ 0,6 Mo de photos de moins.
 - **Netlify** : `npm run build:web`, puis glisser le dossier `dist-web/` sur https://app.netlify.com/drop. Le fichier `public/_headers` y est copié : cache d'un an pour les fichiers versionnés, et `noindex` tant que c'est une maquette (à retirer à la mise en ligne).
 - **Vercel** : `vercel.json` lance `npm run build:web` et sert `dist-web/`.
 - `python3 tools/drawings.py <fiche.pdf>` : extrait les dessins de la fiche Barrier Reef 2025 (page 2, vectorielle) dans `src/data/drawings.json`. Chaque zone garde sa clarté d'origine ; le contour de l'eau est recalculé sur une grille fine (certaines parois sont tracées en anneau d'un seul trait). Il faut `pdftocairo` (poppler), OpenCV et NumPy. La fiche : https://img1.wsimg.com/blobby/go/3c088145-d2f5-4a3c-b546-e6ddb4ebd919/Barrier%20Reef%20Fiberglass%20Pools%202025%20Model%20Sheet.pdf
-- `python3 tools/images.py <dossier des originaux>` : photos, textures d'eau et pastilles de gelcoat en AVIF, d'après `data/photos.json`.
+- `python3 tools/images.py <dossier des originaux>` : photos (avec leurs versions allégées et vignettes), textures d'eau et pastilles de gelcoat en AVIF, d'après `data/photos.json`.
+- `python3 tools/boards.py …` : les planches de présentation de `boards/`, en anglais pour le client (captures du site actuel et du nouveau, voir l'en-tête du script).
+
+## Mesures
+
+Lighthouse 12, profil téléphone (4G lente et processeur ralenti simulés), mêmes réglages des deux côtés, le 8 octobre 2026. Le site actuel en ligne : ses résultats varient avec le réseau, on garde son meilleur passage sur quatre pour chaque ligne. Le nouveau site servi en local et compressé comme sur Netlify : médiane de trois passages.
+
+| Téléphone | Site actuel | Nouveau site |
+|---|---|---|
+| Performance | 51 | 87 |
+| Accessibilité | 85 | 100 |
+| Bonnes pratiques | 96 | 100 |
+| Référencement | 92 | 100 |
+| Blocage pendant le chargement (TBT) | 0,95 s | 0,12 s |
+| Téléchargé au chargement | 1 041 Ko | 541 Ko |
+
+Sur ordinateur, le nouveau site obtient 99, 100, 100 et 100 (affichage principal en 0,7 s). Les planches de `boards/` reprennent ces chiffres.
 
 ## À confirmer avec Gracie Pools
 
 - La gamme Sun Pools est-elle encore vendue ? Le Castaway (nouveau sur la fiche 2025) est-il proposé ?
 - Des photos de leurs propres chantiers, pour remplacer celles du fabricant.
-- L'origine des photos béton et travertin ; leurs horaires ; le lien vers leurs avis Google.
+- L'origine des photos béton et travertin ; le lien vers leurs avis Google.

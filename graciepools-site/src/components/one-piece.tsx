@@ -42,7 +42,7 @@ export function OnePiece() {
         </div>
 
         <figure className="mt-[clamp(36px,4.5vw,64px)]">
-          <Photo id="laguna" alt="A Laguna fiberglass pool with a light concrete deck, a lawn and a pergola" className="aspect-[4/5] rounded-[22px] sm:aspect-[16/9] lg:aspect-[21/9]" sizes="100vw" position="50% 62%" parallax />
+          <Photo id="laguna" portrait="laguna-portrait" alt="A Laguna fiberglass pool with a light concrete deck, a lawn and a pergola" className="aspect-[4/5] rounded-[22px] sm:aspect-[16/9] lg:aspect-[21/9]" position="50% 62%" parallax />
           <figcaption className="mt-3 text-[14px] text-ink-soft">Laguna, 29′. Photo: Barrier Reef</figcaption>
         </figure>
 

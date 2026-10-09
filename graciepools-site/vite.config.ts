@@ -33,7 +33,13 @@ export default defineConfig(({ mode }) =>
       }
     : {
         plugins: [inlineIcons(), react(), tailwindcss(), viteSingleFile()],
-        resolve: { alias: { '@': path.resolve(import.meta.dirname, './src') } },
+        resolve: {
+          alias: [
+            // pas de versions allégées des photos dans le fichier unique (voir src/lib/photo-small.ts)
+            { find: '@/lib/photo-small', replacement: path.resolve(import.meta.dirname, './src/lib/photo-small.stub.ts') },
+            { find: '@', replacement: path.resolve(import.meta.dirname, './src') },
+          ],
+        },
         build: { assetsInlineLimit: 100_000_000 },
         publicDir: false,
       },

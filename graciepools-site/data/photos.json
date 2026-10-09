@@ -111,55 +111,78 @@
     "id": "laguna",
     "src": "orig/Laguna.jpg",
     "w": 2200,
+    "q": 50,
+    "s": 1200,
+    "t": 336
+  },
+  {
+    "id": "laguna-portrait",
+    "src": "orig/Laguna.jpg",
+    "crop": [
+      0.262,
+      0,
+      0.738,
+      1
+    ],
+    "w": 1100,
     "q": 50
   },
   {
     "id": "escape-ocean",
     "src": "orig/Escape-Ocean-1-scaled-e1647361640996-1920x1080.jpg",
     "w": 1920,
-    "q": 50
+    "q": 50,
+    "s": 1200,
+    "t": 336
   },
   {
     "id": "dusk-fire",
     "src": "orig/_MG_2422.jpg",
     "w": 2000,
-    "q": 50
+    "q": 50,
+    "s": 1200
   },
   {
     "id": "dusk-steps",
     "src": "orig/_MG_2429.jpg",
     "w": 1800,
-    "q": 50
+    "q": 50,
+    "s": 1200
   },
   {
     "id": "patio",
     "src": "orig/IMG_1956.jpg",
     "w": 1800,
-    "q": 50
+    "q": 50,
+    "s": 1200
   },
   {
     "id": "loungers",
     "src": "orig/IMG_1930.jpg",
     "w": 1800,
-    "q": 50
+    "q": 50,
+    "s": 1200
   },
   {
     "id": "milano",
     "src": "orig/BARRIER_REEF_FIBERGLASS_POOLS_MILANO_31.jpg",
     "w": 864,
-    "q": 56
+    "q": 56,
+    "t": 336
   },
   {
     "id": "oyster-arctic",
     "src": "img/Oyster-Actic-600x400.jpg",
     "w": 600,
-    "q": 60
+    "q": 60,
+    "t": 336
   },
   {
     "id": "cove-california",
     "src": "img/billabong-cove-california-3-1-600x400.jpg",
     "w": 600,
-    "q": 60
+    "q": 60,
+    "t": 336
   },
   {
     "id": "travertine",
@@ -177,7 +200,8 @@
     "id": "render-3d",
     "src": "orig/pool_studio.jpg",
     "w": 1920,
-    "q": 50
+    "q": 50,
+    "s": 1200
   },
   {
     "id": "tile",
@@ -189,18 +213,21 @@
       0.92
     ],
     "w": 1500,
-    "q": 50
+    "q": 50,
+    "s": 1200
   },
   {
     "id": "hot-tub",
     "src": "orig/hot_tub.jpg",
     "w": 1500,
-    "q": 50
+    "q": 50,
+    "s": 1200
   },
   {
     "id": "liner-pattern",
     "src": "orig/all_floor_pattern_vinyl_pool_liner.jpg",
     "w": 1500,
-    "q": 50
+    "q": 50,
+    "s": 1200
   }
 ]

@@ -1,7 +1,7 @@
 # En-têtes lus par Netlify au déploiement (copié à la racine de dist-web/ par « npm run build:web »).
 
 # Maquette de refonte avec un formulaire de démonstration : hors des moteurs de recherche.
-# À retirer le jour où le site remplace celui du cabinet.
+# À retirer le jour où ce site remplace celui de Gracie Pools.
 /*
   X-Robots-Tag: noindex
   X-Content-Type-Options: nosniff

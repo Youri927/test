@@ -40,7 +40,7 @@ export function Concrete() {
             </figure>
             <div className="grid grid-cols-2 gap-5">
               <figure>
-                <Photo id="render-3d" alt="A 3D rendering of a pool with sun loungers, a fire bowl and an outdoor kitchen" className="aspect-[4/3] rounded-[18px]" position="62% 60%" style={{ '--d': '0.1s' } as CSSProperties} />
+                <Photo id="render-3d" alt="A 3D rendering of a pool with sun loungers, a fire bowl and an outdoor kitchen" className="aspect-[4/3] rounded-[18px]" sizes="(max-width: 1023px) 50vw, 400px" position="62% 60%" style={{ '--d': '0.1s' } as CSSProperties} />
                 <figcaption className="mt-3 text-[14px] text-ink-soft">A 3D rendering, the way a design is presented before construction</figcaption>
               </figure>
               <figure>
