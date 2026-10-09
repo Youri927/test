@@ -14,8 +14,8 @@ let html = readFileSync(file, 'utf8')
 const body = render()
 const css = html.match(/href="\/(assets\/index-[^"]+\.css)"/)?.[1]
 const styles = css && readFileSync(path.join(root, 'dist-web', css), 'utf8')
-// Archivo, la seule police du site (un fichier pour toutes les graisses et largeurs)
-const fonts = styles ? [...new Set([...styles.matchAll(/url\((\/assets\/archivo[^)]+\.woff2)\)/g)].map((m) => m[1]))] : []
+// Jost, la seule police du site (un fichier pour toutes les graisses)
+const fonts = styles ? [...new Set([...styles.matchAll(/url\((\/assets\/jost[^)]+\.woff2)\)/g)].map((m) => m[1]))] : []
 // l'image d'attente de la vidéo de Holmes Beach, affichée avant la première image de la vidéo
 const poster = body.match(/poster="(\/assets\/hero-poster-[\w-]+\.avif)"/)?.[1]
 const preload = [

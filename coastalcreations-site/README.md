@@ -4,48 +4,78 @@ Refonte complète de https://www.coastalcreationspoolsandlagoons.com, constructe
 
 **À ouvrir** : `dist/index.html`, d'un double-clic (un seul fichier, sans serveur).
 
-## L'idée : la cage
+## Pourquoi cette deuxième version
 
-En Floride, presque chaque piscine vit sous une cage moustiquaire, une charpente d'aluminium tendue de toile. Leurs propres photos le montrent : les montants blancs au-dessus de l'eau, leur ombre en quadrillage sur le fond du bassin. Le nouveau site en fait son mouvement :
+La première version (la cage moustiquaire) gardait le même squelette que nos autres sites de piscinistes :
+- une barre de navigation au milieu, avec des boutons en pilule ;
+- un très gros titre gras à côté d'une photo ;
+- dans chaque section, le titre à gauche et le paragraphe à droite ;
+- le bleu nuit et le bleu clair ;
+- un contact avec le numéro en très grand.
 
-- **chaque photo se découvre panneau par panneau**, en diagonale, avec les montants blancs qui restent un instant puis s'effacent ;
-- **les étapes de construction se montent comme une cage** : en faisant défiler, chaque nouvelle photo glisse panneau par panneau par-dessus la précédente ;
-- le fond de l'accueil est le **bleu poudré de l'enduit frais** avant la mise en eau (leurs photos de chantier), le texte le **bleu nuit du logo**, les accents l'**aqua de ses vagues** et le **cobalt de la mosaïque de verre** ;
-- les titres sont en **Archivo très large et très gras**, comme le « CREATIONS » du logo ; le texte en largeur normale, les dates et légendes en largeur étroite, comme sur un plan.
+Celle-ci repart d'une autre base, de la structure jusqu'aux détails :
+- **pas de barre de navigation en haut**, mais un en-tête de papier à lettres : leur logo en grand, le numéro, le devis, un bouton Menu. Une fois l'accueil passé, un bandeau fin descend avec le titre de la partie en cours, comme le titre courant d'un livre ;
+- **un seul très grand titre**, celui de l'accueil. Les sections ont des titres modestes, et chacune une composition à elle (voir la page, plus bas) ;
+- des **typographies légères** (Jost, l'héritière de Futura), en bas de casse ;
+- des **boutons carrés**, sans arrondi ;
+- du **blanc, du graphite, l'eau du Golfe et un jaune soleil**, au lieu du bleu nuit ;
+- un **contact en annuaire**, sur la couleur de l'eau.
+
+## L'idée : le moderne de Sarasota
+
+Leur région est celle de l'école de Sarasota, l'architecture moderne de la côte du Golfe dans les années 1950 : maisons blanches, toits plats, et des claustras, ces murs de blocs ajourés qui laissent passer l'air et la lumière. Le site en tire :
+- **l'accueil** : leur piscine de Holmes Beach vue à travers un mur de claustras ronds (joints, chaperon, l'épaisseur des blocs dans l'ombre). En faisant défiler, les ouvertures s'élargissent jusqu'à ce que le mur disparaisse et laisse la piscine ;
+- la **police** : Jost, géométrique comme les enseignes de l'époque, en graisse légère pour les titres ;
+- les **couleurs** :
+  - le blanc des murs ;
+  - le graphite des menuiseries ;
+  - l'ombre fraîche sous l'avancée du toit (#edf3f1) ;
+  - l'eau du Golfe (#0c767e) ;
+  - le jaune soleil (#f6c344) pour les actions.
 
 ## La page
 
-- **L'accueil** : « Pools built and rebuilt on the Gulf Coast. » ; leur vidéo de la location de Holmes Beach, qui se découvre panneau par panneau ; le devis gratuit et la détection de fuites (leurs deux formulaires Jobber) ; la licence, le BBB A+ et le numéro qui prend les SMS, dès le premier écran. Sur téléphone, la vidéo vient juste sous le titre.
-- **Built / Rebuilt** : les deux mots du titre, en très grand, coiffent chacun leur famille de services ; le reste de leur liste (pavés, gaz, grottes, paillotes…) et la phrase « pas d'entretien hebdomadaire ».
-- **Onze étapes, six à douze semaines** : leur page Build Process ; sur ordinateur, la section reste à l'écran pendant le défilement, l'étape en cours s'ouvre dans la liste et sa photo se monte panneau par panneau. Les photos viennent de leur construction neuve au bord d'un canal, à Bradenton, et de leur page Build Process.
-- **Before, during, after** : leurs chantiers réels, photo par photo :
-  - Holmes Beach (location de vacances) : avant, puis nouveau carrelage et nouvel enduit ;
-  - comté de Manatee, sous cage : 20 mai, 4 juin et 8 juin 2026 (les dates de leurs photos) ;
-  - Port Charlotte (piscine commerciale) : avant, puis nouvel enduit ;
-  - Brandon : pendant la rénovation, puis la vidéo de la piscine terminée (avril 2026).
-- **Choosing your pool finish** : leurs six enduits Stonescapes dans une rangée de nuanciers ; celui qu'on survole, touche ou atteint au clavier s'ouvre en entier, du rebord au grand fond ; leur explication de la couleur de l'eau (cage, profondeur, heure, saison) ; le carrelage Luv Tile et Aquabella.
-- **Find it. Fix it. Done right.** (fond bleu nuit) : leurs tarifs de détection de fuites, enfermés dans une image sur l'ancien site, écrits en clair et calculés (piscine seule ou avec spa, jeux d'eau, buses de nettoyage au fond, petites réparations à l'époxy incluses) ; leurs méthodes, les endroits qui fuient, le test du seau, et leur FAQ complète de 15 questions.
-- **Equipment above the surge** : les socles d'équipement surélevés après les ouragans de 2024, et une remise en état à Bradenton, du vert au bleu.
-- **We won't stop until it's right.** : leur devise, Owen Kay et Alberto Labrada, les règles de l'équipe, les années de métier des associés (1986, 2011, 2020, 2021), la création de la société (2023) et l'accréditation BBB (2026) ; les licences écrites en grand, avec de quoi les vérifier.
-- **Ten counties, Citrus to Charlotte** : leurs dix comtés du nord au sud, avec les villes de leurs pages.
-- **Let's build your backyard paradise.** (leur phrase) : le numéro en très grand (appel ou SMS), le second numéro, l'e-mail, leurs deux formulaires, le financement Lyon Financial ; le pied de page avec leur logo, détouré de son fond.
+- **L'accueil** : « Gulf Coast pools, built and rebuilt. », puis le mur de claustras sur leur vidéo de Holmes Beach. Sur téléphone, le mur fait trois blocs de large.
+- **Ce qu'ils font, en une phrase** : « We build new pools, bring tired ones back, find leaks from $350 and raise equipment above the storm surge, across ten counties… ». Chaque morceau mène à sa partie. Dessous :
+  - le devis gratuit et la détection de fuites (leurs deux formulaires Jobber) ;
+  - la licence, le BBB A+ ;
+  - le reste de leur liste, et ce qu'ils ne font pas (l'entretien hebdomadaire).
+- **Onze étapes, six à douze semaines** : une rangée de chantier qui défile de côté, au doigt, à la souris (on attrape et on tire), au clavier ou avec les flèches. Le titre ouvre la rangée ; un filet dessous indique l'étape en cours. Les photos viennent de leur construction neuve au bord d'un canal, à Bradenton, et de leur page Build Process.
+- **Renovations, photographed on the job** : leurs chantiers, composés comme des tirages posés sur la table :
+  - Holmes Beach, où le titre de la partie rejoint le chantier ;
+  - le comté de Manatee en trois dates (20 mai, 4 et 8 juin 2026) ;
+  - Port Charlotte, la piscine commerciale ;
+  - Brandon, avec sa vidéo.
+  Puis leurs six enduits Stonescapes : on pointe un nom, le nuancier du fabricant change.
+- **Find it. Fix it. Done right.** : leurs tarifs de détection de fuites en blanc sur un panneau graphite, comme une enseigne. Ils étaient enfermés dans une image sur l'ancien site. Suivent :
+  - le calcul selon la piscine, avec le total en jaune ;
+  - leurs méthodes, les endroits qui fuient, le test du seau ;
+  - leur FAQ complète de 15 questions.
+- **Equipment above the surge** : une remise en état à Bradenton, en trois photos bord à bord, puis les socles d'équipement surélevés après les ouragans de 2024.
+- **We won't stop until it's right.** : leur devise, Owen Kay et Alberto Labrada. Les règles de l'équipe et les années de métier tiennent en deux phrases. Leurs licences suivent, chacune avec de quoi la vérifier.
+- **Ten counties, Citrus to Charlotte** : leurs dix comtés et leurs villes, en un seul texte courant.
+- **Let's build your backyard paradise.** (leur phrase), sur la couleur de l'eau : un annuaire, une ligne par façon de les joindre :
+  - appel ou SMS, au même numéro ;
+  - devis, détection de fuites, financement Lyon ;
+  - seconde ligne, e-mail, ville.
+  Le pied de page suit, sur la même couleur, avec leur logo.
 
-**Mouvement** : défilement fluide (Lenis) et animations liées au défilement (GSAP ScrollTrigger) :
-- à l'ouverture, le titre monte ligne par ligne et la vidéo se découvre panneau par panneau ;
-- en quittant l'accueil, la vidéo se resserre et le titre file plus vite que la page ;
-- « Built » et « Rebuilt » glissent légèrement en sens contraire ;
-- les étapes de construction : la section reste en place, les photos se montent en cage, l'étape en cours s'ouvre ;
-- chaque photo de chantier se découvre en entrant à l'écran, les photos d'une même rangée l'une après l'autre ;
-- le calculateur de fuites fait défiler son total ; la frise des années se trace ; le menu souligne le chapitre en cours ;
-- l'en-tête devient blanc au défilement, se cache quand on descend et revient quand on remonte.
+**Sur téléphone et tablette** : une barre en bas (Menu, Appeler, SMS, Devis) apparaît une fois l'accueil passé et se cache au contact, qui offre les mêmes choix.
 
-Tout est coupé avec « réduire les animations » : les photos sont là d'emblée, les étapes s'affichent l'une sous l'autre, la vidéo de Brandon attend qu'on la lance. Si le script ne démarrait pas, la page s'affiche quand même au bout de 4 secondes, sans animation.
+**Mouvement** : un seul moment orchestré, le mur qui s'ouvre au défilement. Le reste répond à ce que fait le visiteur :
+- le bandeau du haut descend une fois l'accueil passé ;
+- les tirages des rénovations se posent en entrant à l'écran ;
+- le total du calcul défile jusqu'à sa nouvelle valeur ;
+- le nuancier change en fondu ;
+- les liens se surlignent en jaune au survol.
+
+Avec « réduire les animations », il n'y a pas de mur : la vidéo attend qu'on la lance, les tirages sont posés d'emblée. Si le script ne démarrait pas, la page s'affiche quand même au bout de 4 secondes, sans animation.
 
 **Composants** :
-- shadcn/ui : l'accordéon de la FAQ et le panneau du menu sur téléphone (primitives Radix) ;
-- 21st.dev : la rangée de nuanciers est adaptée de « Hover Expand Gallery » (kedhareswer) : panneaux fermés qui montrent la teinte du grand fond, nuancier entier à l'ouverture, une seule légende ; le dévoilement en cage s'inspire de « Shutter Reveal » ;
-- Facade UI a été regardé : ses sections (cartes, grilles de fonctionnalités) auraient rendu le site générique, il n'est pas utilisé ;
-- le reste est fait pour ce site : la cage, les étapes épinglées, le calculateur, les rangées de photos datées.
+- **shadcn/ui** : l'accordéon de la FAQ et le panneau du menu (primitives Radix) ;
+- **21st.dev** : regardé. Son « Hover Expand Gallery » servait aux nuanciers de la première version ; il n'est plus utilisé ;
+- **Facade UI** : regardé, mais ses sections (cartes, grilles de fonctionnalités) sont justement le gabarit à éviter ;
+- **fait pour ce site** : le mur de claustras, l'en-tête et son titre courant, la rangée de chantier, les tirages, le panneau des prix et son calcul, l'annuaire du contact.
 
 ## Rien d'inventé
 
@@ -62,14 +92,16 @@ Tout est coupé avec « réduire les animations » : les photos sont là d'embl�
 
 ## Fabrication
 
-- `npm run build` : `dist/index.html`, un seul fichier avec tout dedans (7,6 Mo, vidéos comprises).
-- `npm run build:web` : version de production dans `dist-web/` (HTML pré-rendu, styles dans la page, photos, vidéos et police en fichiers séparés ; la police et l'image d'attente de la vidéo d'accueil sont préchargées ; les grandes photos ont une version allégée pour les téléphones).
+- `npm run build` : `dist/index.html`, un seul fichier avec tout dedans (7,4 Mo, vidéos comprises).
+- `npm run build:web` : version de production dans `dist-web/`. Le HTML est pré-rendu, les styles sont dans la page, et les photos, vidéos et police sont en fichiers séparés. La police et l'image d'attente de la vidéo d'accueil sont préchargées. Les grandes photos ont une version allégée pour les téléphones.
 - **Netlify** : `npm run build:web`, puis glisser le dossier `dist-web/` sur https://app.netlify.com/drop. Le fichier `public/_headers` y est copié : cache d'un an pour les fichiers versionnés, et `noindex` tant que c'est une maquette (à retirer à la mise en ligne).
 - **Vercel** : `vercel.json` lance `npm run build:web` et sert `dist-web/`.
 - `python3 tools/images.py <dossier des originaux>` : les photos en AVIF (et leurs versions allégées), d'après `data/photos.json`.
-- `python3 -I tools/logo.py <logo d'origine> src/assets/brand/logo.avif` : leur logo sans son fond bleu nuit.
+- `python3 -I tools/logo.py <logo d'origine> src/assets/brand` : leur logo sans son fond bleu nuit. Deux versions sortent : `logo.avif` pour les fonds sombres (le pied de page), et `logo-light.avif`, avec « CREATIONS » en bleu nuit, pour les fonds clairs (l'en-tête).
 - `python3 -I tools/boards.py <captures> <image de tarifs> <dossier des TTF>` : les planches de présentation de `boards/`, en anglais pour le client (voir l'en-tête du script).
-- Les vidéos : celle de Holmes Beach en 1280 × 720, 24 images/s, débruitée (2,1 Mo) ; celle de Brandon en 540 × 960 (0,6 Mo).
+- Les vidéos :
+  - Holmes Beach : 1280 × 720, 24 images/s, débruitée (2,1 Mo) ;
+  - Brandon : 540 × 960 (0,6 Mo).
 
 ## Mesures
 
@@ -77,11 +109,11 @@ Lighthouse 12, nouveau site servi en local et compressé comme sur Netlify, le 9
 
 | | Téléphone (médiane de 3) | Ordinateur |
 |---|---|---|
-| Performance | 92 | 100 |
+| Performance | 96 | 100 |
 | Accessibilité | 100 | 100 |
 | Bonnes pratiques | 100 | 100 |
 | Référencement | 100 | 100 |
-| Affichage principal (LCP) | 3,1 s | 0,7 s |
+| Affichage principal (LCP) | 2,7 s | 0,6 s |
 | Blocage pendant le chargement (TBT) | 0,09 s | 0,01 s |
 | Décalages de mise en page (CLS) | 0 | 0 |
 

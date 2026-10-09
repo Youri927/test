@@ -1,147 +1,138 @@
-// En-tête : le nom, les chapitres, le téléphone (appel ou SMS) et le devis gratuit.
-// Transparent sur l'accueil, il devient blanc au défilement, se cache quand on descend et revient quand on remonte.
+// Le haut de page : pas de barre de navigation, mais un en-tête de papier à lettres, leur logo en grand, le numéro,
+// le devis et le menu. Une fois l'accueil passé, un bandeau fin descend (sur ordinateur) avec le titre de la partie
+// où l'on se trouve, comme le titre courant d'un livre. Sur téléphone et tablette, c'est une barre d'actions en bas.
 import { Menu, MessageSquareText, Phone } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { MenuButton } from '@/components/menu'
 import { go } from '@/lib/motion'
-import { nav, site } from '@/lib/site'
+import { site } from '@/lib/site'
+import logo from '@/assets/brand/logo-light.avif'
 
-export function Wordmark({ className = '' }: { className?: string }) {
+export function Letterhead() {
   return (
-    <span className={`flex flex-col leading-none ${className}`}>
-      <span className="text-[19px] font-[820] tracking-[-0.02em] [font-stretch:125%] sm:text-[21px]">Coastal Creations</span>
-      <span className="mt-[5px] text-[12.5px] font-[520] tracking-[0.01em] opacity-80">Pools and Lagoons</span>
-    </span>
+    <header className="w flex items-center justify-between gap-4 pt-[clamp(14px,2vw,28px)]">
+      <a href="#top" onClick={(e) => go(e, 'top')} className="flex-none">
+        <img src={logo} width={420} height={383} alt="Coastal Creations Pools and Lagoons" className="h-[60px] w-auto sm:h-[72px] lg:h-[88px]" />
+        <span className="sr-only">, back to top</span>
+      </a>
+      <div className="flex items-center gap-3 sm:gap-4 lg:gap-6">
+        <a href={site.phone.href} className="hidden text-[16.5px] font-[500] md:block">
+          <span className="font-[400] text-ink-2">Call or text </span>
+          {site.phone.label}
+        </a>
+        <a href={site.quote} target="_blank" rel="noreferrer" className="btn btn-sun hidden sm:inline-flex">
+          Free quote
+        </a>
+        <MenuButton className="btn btn-line px-5" />
+      </div>
+    </header>
   )
 }
 
-export function Header() {
-  const ref = useRef<HTMLElement>(null)
-  const [open, setOpen] = useState(false)
-  const [current, setCurrent] = useState('')
-  const jumped = useRef<string | null>(null)
+// le titre courant : la partie qui passe sous le bandeau
+const heads: [string, string][] = [
+  ['services', 'What we do'],
+  ['build', 'New pools'],
+  ['renovate', 'Renovations'],
+  ['leaks', 'Leak detection'],
+  ['storm', 'Storms and equipment'],
+  ['about', 'About us'],
+  ['area', 'Service area'],
+  ['contact', 'Contact'],
+]
 
-  // le chapitre qui passe au milieu de l'écran est souligné dans le menu
+// vrai une fois l'accueil sorti de l'écran par le haut
+function usePastHero() {
+  const [past, setPast] = useState(false)
   useEffect(() => {
+    const hero = document.getElementById('top')
+    if (!hero) return
+    const io = new IntersectionObserver(([e]) => setPast(!e.isIntersecting && e.boundingClientRect.top < 0))
+    io.observe(hero)
+    return () => io.disconnect()
+  }, [])
+  return past
+}
+
+export function Bar() {
+  const on = usePastHero()
+  const [label, setLabel] = useState('')
+  useEffect(() => {
+    const inside = new Set<string>()
     const io = new IntersectionObserver(
       (entries) => {
-        for (const e of entries) if (e.isIntersecting) setCurrent(e.target.id)
+        for (const e of entries) {
+          if (e.isIntersecting) inside.add(e.target.id)
+          else inside.delete(e.target.id)
+        }
+        // la dernière partie entrée dans la bande, dans l'ordre de la page
+        const last = heads.filter(([id]) => inside.has(id)).pop()
+        if (last) setLabel(last[1])
       },
-      { rootMargin: '-45% 0px -54% 0px' },
+      { rootMargin: '-72px 0px -62% 0px' },
     )
-    const ids = [...nav.map((n) => n.id), 'top', 'services', 'area', 'contact']
-    ids.forEach((id) => {
+    heads.forEach(([id]) => {
       const el = document.getElementById(id)
       if (el) io.observe(el)
     })
     return () => io.disconnect()
   }, [])
 
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    let last = window.scrollY
-    const onScroll = () => {
-      const y = window.scrollY
-      el.toggleAttribute('data-solid', y > 40)
-      // caché en descendant, de retour en remontant ; toujours visible en haut de page
-      el.toggleAttribute('data-hidden', y > 500 && y > last + 2)
-      if (y < last - 2) el.removeAttribute('data-hidden')
-      last = y
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
   return (
-    <header ref={ref} className="site-header text-navy">
-      <a href="#main" className="sr-only rounded bg-navy px-4 py-2 text-white focus:not-sr-only focus:absolute focus:top-3 focus:left-3">
-        Skip to content
-      </a>
-      <div className="wrap flex h-full items-center justify-between gap-6">
-        <a href="#top" onClick={(e) => go(e, 'top')}>
-          <Wordmark />
+    <div className="bar hidden lg:block" data-on={on ? '' : undefined}>
+      <div className="w flex h-[64px] items-center gap-5">
+        <a href="#top" onClick={(e) => go(e, 'top')} className="flex-none">
+          <img src={logo} width={420} height={383} alt="Coastal Creations Pools and Lagoons" className="h-[44px] w-auto" />
           <span className="sr-only">, back to top</span>
         </a>
-        <nav aria-label="Sections" className="hidden items-center gap-7 lg:flex">
-          {nav.map((n) => (
-            <a key={n.id} href={`#${n.id}`} onClick={(e) => go(e, n.id)} className="nav-link" aria-current={current === n.id ? 'true' : undefined}>
-              {n.label}
-            </a>
-          ))}
-        </nav>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <a href={site.phone.href} className="hidden items-center gap-2 px-2 text-[15.5px] font-[640] [font-stretch:108%] xl:flex">
-            <Phone aria-hidden="true" className="size-4" />
+        <p className="runhead" aria-hidden="true">
+          {label}
+        </p>
+        <div className="ml-auto flex items-center gap-5">
+          <a href={site.phone.href} className="text-[15.5px] font-[500]">
+            <span className="font-[400] text-ink-2">Call or text </span>
             {site.phone.label}
           </a>
-          <a href={site.quote} target="_blank" rel="noreferrer" className="btn btn-navy hidden min-h-[44px] px-5 text-[15px] sm:inline-flex">
+          <a href={site.quote} target="_blank" rel="noreferrer" className="btn btn-sun min-h-[44px] px-5">
             Free quote
           </a>
-          <a href={site.phone.sms} aria-label={`Text us at ${site.phone.label}`} className="grid size-11 place-items-center rounded-full border-[1.5px] border-current sm:hidden">
-            <MessageSquareText aria-hidden="true" className="size-5" />
-          </a>
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger className="grid size-11 place-items-center rounded-full bg-navy text-white lg:hidden" aria-label="Open the menu">
-              <Menu aria-hidden="true" className="size-5" />
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="on-dark w-[min(88vw,380px)] border-0 bg-navy p-0 text-white"
-              // après un lien du menu, le focus reste sur le chapitre atteint au lieu de revenir au bouton du menu
-              onCloseAutoFocus={(e) => {
-                if (!jumped.current) return
-                e.preventDefault()
-                document.getElementById(jumped.current)?.focus({ preventScroll: true })
-                jumped.current = null
-              }}
-            >
-              <SheetTitle className="sr-only">Menu</SheetTitle>
-              <SheetDescription className="sr-only">Sections of the page and ways to reach us</SheetDescription>
-              <div className="flex h-full flex-col px-7 pt-20 pb-8">
-                <nav aria-label="Sections" className="flex flex-col">
-                  {nav.map((n) => (
-                    <a
-                      key={n.id}
-                      href={`#${n.id}`}
-                      onClick={(e) => {
-                        jumped.current = n.id
-                        setOpen(false)
-                        go(e, n.id)
-                      }}
-                      className="border-b border-white/15 py-4 text-[26px] font-[760] tracking-[-0.02em] [font-stretch:120%]"
-                    >
-                      {n.label}
-                    </a>
-                  ))}
-                  <a
-                    href="#contact"
-                    onClick={(e) => {
-                      jumped.current = 'contact'
-                      setOpen(false)
-                      go(e, 'contact')
-                    }}
-                    className="py-4 text-[26px] font-[760] tracking-[-0.02em] [font-stretch:120%]"
-                  >
-                    Contact
-                  </a>
-                </nav>
-                <div className="mt-auto flex flex-col gap-3">
-                  <a href={site.quote} target="_blank" rel="noreferrer" className="btn btn-aqua w-full">
-                    Request a free quote
-                  </a>
-                  <a href={site.phone.href} className="btn btn-line w-full">
-                    <Phone aria-hidden="true" />
-                    Call {site.phone.label}
-                  </a>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <MenuButton className="btn btn-line min-h-[44px] px-5" />
         </div>
       </div>
-    </header>
+    </div>
+  )
+}
+
+// Téléphone et tablette : le menu, appeler, écrire, demander un devis, à portée de pouce une fois l'accueil passé
+// (et cachée quand la section contact, qui offre les mêmes choix, est à l'écran)
+export function ActionBar() {
+  const past = usePastHero()
+  const [atContact, setAtContact] = useState(false)
+  useEffect(() => {
+    const contact = document.getElementById('contact')
+    if (!contact) return
+    const io = new IntersectionObserver(([e]) => setAtContact(e.isIntersecting))
+    io.observe(contact)
+    return () => io.disconnect()
+  }, [])
+  return (
+    <div className="actions lg:hidden" data-on={past && !atContact ? '' : undefined} role="group" aria-label="Menu and contact">
+      <MenuButton className="">
+        <Menu aria-hidden="true" />
+        Menu
+      </MenuButton>
+      <a href={site.phone.href}>
+        <Phone aria-hidden="true" />
+        Call
+      </a>
+      <a href={site.phone.sms}>
+        <MessageSquareText aria-hidden="true" />
+        Text
+      </a>
+      <a href={site.quote} target="_blank" rel="noreferrer" className="bg-sun">
+        Free quote
+      </a>
+    </div>
   )
 }

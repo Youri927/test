@@ -35,7 +35,7 @@ function SheetOverlay({
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-navy/60 duration-200 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        "fixed inset-0 z-50 bg-ink/45 duration-200 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
         className
       )}
       {...props}
@@ -70,7 +70,7 @@ function SheetContent({
           <SheetPrimitive.Close data-slot="sheet-close" asChild>
             <Button
               variant="ghost"
-              className="absolute top-2.5 right-2.5 size-11 hover:bg-white/10 hover:text-white [&_svg:not([class*='size-'])]:size-5"
+              className="absolute top-2.5 right-2.5 size-11 hover:bg-shade hover:text-ink [&_svg:not([class*='size-'])]:size-5"
               size="icon-sm"
             >
               <XIcon

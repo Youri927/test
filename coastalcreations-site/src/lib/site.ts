@@ -29,18 +29,10 @@ export const nav = [
   { id: 'build', label: 'New pools' },
   { id: 'renovate', label: 'Renovations' },
   { id: 'leaks', label: 'Leak detection' },
-  { id: 'storm', label: 'Equipment' },
+  { id: 'storm', label: 'Storms' },
   { id: 'about', label: 'About' },
 ]
 
-// « Built » et « Rebuilt » : les deux familles de leur page Services
-export const rebuilt = [
-  { id: 'renovate', label: 'Resurfacing and waterline tile', note: 'Stonescapes finishes, Luv Tile and Aquabella tile' },
-  { id: 'leaks', label: 'Leak detection and repair', note: 'From $350, epoxy repairs included' },
-  { id: 'storm', label: 'Equipment replacement and raised pads', note: 'Pumps, heaters, plumbing and filtration' },
-  { id: 'storm', label: 'Storm recovery', note: 'Structural repairs and equipment above the surge' },
-  { id: 'commercial', label: 'Commercial pool renovation', note: 'Port Charlotte, St. Pete and Manatee County' },
-]
 // le reste de leur liste de services (« Gondolas », peu clair, n'est pas repris : à vérifier avec eux)
 export const extras =
   'Pavers, walkways and paver driveways, new lights and skimmers, gas installation and repairs, spillway and wall repairs, outdoor kitchens, grottos, tiki huts, water features and landscaping.'

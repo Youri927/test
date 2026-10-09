@@ -1,207 +1,163 @@
-// Construction neuve : leurs 11 étapes, illustrées par leurs photos (la piscine au bord d'un canal, à Bradenton).
-// Grand écran : la section reste à l'écran pendant qu'on fait défiler ; à chaque étape, la photo suivante s'installe
-// panneau par panneau, en diagonale, comme les panneaux d'une cage qu'on monte, et l'étape en cours s'ouvre dans la liste.
-// Téléphone (ou moins d'animations demandées) : les étapes l'une sous l'autre, chacune avec sa photo.
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+// Construction neuve : leurs 11 étapes en une rangée de chantier qui défile de côté, au doigt, à la souris (on attrape
+// et on tire), au clavier ou avec les flèches. Le titre ouvre la rangée ; un filet dessous indique où l'on en est.
+import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
-import { Cage } from '@/components/cage'
-import { Frame } from '@/components/frame'
-import { Lines } from '@/components/lines'
-import { gsap, motion, ScrollTrigger, useMediaQuery, useScrollAnim } from '@/lib/motion'
-import { photo } from '@/lib/photos'
+import { Photo } from '@/components/frame'
 import { stages, type Stage } from '@/lib/site'
 
-const COLS = 4
-const ROWS = 3
 const pad = (n: number) => String(n).padStart(2, '0')
 const range = (s: Stage) => (s.steps.length > 1 ? `Steps ${s.steps[0].n}–${s.steps[s.steps.length - 1].n} of 11` : `Step ${s.steps[0].n} of 11`)
 
 export function Build() {
-  const wide = useMediaQuery('(min-width: 1024px) and (min-height: 640px)')
-  const [animated, setAnimated] = useState(false)
-  useEffect(() => setAnimated(motion()), [])
+  const rail = useRef<HTMLDivElement>(null)
+  const [state, setState] = useState({ p: 0, i: 0, start: true, end: false })
+
+  // où l'on en est dans la rangée
+  useEffect(() => {
+    const el = rail.current
+    if (!el) return
+    let raf = 0
+    const update = () => {
+      raf = 0
+      const max = el.scrollWidth - el.clientWidth
+      const first = el.querySelector<HTMLElement>('.slide')
+      const step = first ? first.offsetWidth + parseFloat(getComputedStyle(first.parentElement!).columnGap || '0') : 1
+      const i = Math.min(stages.length - 1, Math.max(0, Math.round(el.scrollLeft / step) - 1))
+      setState({ p: max > 0 ? el.scrollLeft / max : 1, i, start: el.scrollLeft < 4, end: el.scrollLeft > max - 4 })
+    }
+    const on = () => {
+      if (!raf) raf = requestAnimationFrame(update)
+    }
+    update()
+    el.addEventListener('scroll', on, { passive: true })
+    window.addEventListener('resize', on)
+    return () => {
+      cancelAnimationFrame(raf)
+      el.removeEventListener('scroll', on)
+      window.removeEventListener('resize', on)
+    }
+  }, [])
+
+  // à la souris : on attrape la rangée et on la tire ; un vrai glissé n'ouvre pas de lien
+  useEffect(() => {
+    const el = rail.current
+    if (!el) return
+    let x0 = 0
+    let s0 = 0
+    let moved = false
+    let id = -1
+    const down = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return
+      id = e.pointerId
+      x0 = e.clientX
+      s0 = el.scrollLeft
+      moved = false
+    }
+    const move = (e: PointerEvent) => {
+      if (e.pointerId !== id) return
+      const dx = e.clientX - x0
+      if (!moved && Math.abs(dx) > 5) {
+        moved = true
+        el.setAttribute('data-drag', '')
+        el.setPointerCapture(id)
+      }
+      if (moved) el.scrollLeft = s0 - dx
+    }
+    const up = (e: PointerEvent) => {
+      if (e.pointerId !== id) return
+      id = -1
+      if (!moved) return
+      el.removeAttribute('data-drag')
+      // la rangée se cale sur l'étape la plus proche
+      const first = el.querySelector<HTMLElement>('.slide')
+      const step = first ? first.offsetWidth + parseFloat(getComputedStyle(first.parentElement!).columnGap || '0') : 1
+      el.scrollTo({ left: Math.round(el.scrollLeft / step) * step, behavior: 'smooth' })
+    }
+    const click = (e: MouseEvent) => {
+      if (moved) {
+        e.preventDefault()
+        e.stopPropagation()
+        moved = false
+      }
+    }
+    el.addEventListener('pointerdown', down)
+    el.addEventListener('pointermove', move)
+    el.addEventListener('pointerup', up)
+    el.addEventListener('pointercancel', up)
+    el.addEventListener('click', click, true)
+    return () => {
+      el.removeEventListener('pointerdown', down)
+      el.removeEventListener('pointermove', move)
+      el.removeEventListener('pointerup', up)
+      el.removeEventListener('pointercancel', up)
+      el.removeEventListener('click', click, true)
+    }
+  }, [])
+
+  const nudge = (dir: 1 | -1) => {
+    const el = rail.current
+    const first = el?.querySelector<HTMLElement>('.slide')
+    if (!el || !first) return
+    const step = first.offsetWidth + parseFloat(getComputedStyle(first.parentElement!).columnGap || '0')
+    el.scrollTo({ left: (Math.round(el.scrollLeft / step) + dir) * step, behavior: 'smooth' })
+  }
 
   return (
-    <section id="build" className="bg-mist-sec outline-none" aria-labelledby="build-title" tabIndex={-1}>
-      <div className={`wrap grid-12 gap-y-6 pt-[var(--section)] ${wide && animated ? 'pb-0' : 'pb-[clamp(48px,6vw,88px)]'}`}>
-        <Lines as="h2" id="build-title" className="t-h2 col-span-12 lg:col-span-7">
-          Eleven steps. Six to twelve weeks.
-        </Lines>
-        <p className="t-lead col-span-12 sm:col-span-10 lg:col-span-4 lg:col-start-9 lg:self-end">
-          That is a typical new pool with us, from the first drawing to the handover. You get your own schedule and plan when you sign.
-        </p>
-      </div>
-      {wide && animated ? <Pinned /> : <List />}
-    </section>
-  )
-}
-
-// ---------- grand écran ----------
-
-// la photo d'une étape découpée en panneaux : chacun glisse du haut de sa case vers sa place
-function Tiles({ id }: { id: Stage['photo'] }) {
-  const p = photo(id)
-  const tiles = []
-  for (let r = 0; r < ROWS; r++)
-    for (let c = 0; c < COLS; c++)
-      tiles.push(
-        <div key={`${r}-${c}`} className="tile" style={{ left: `${(c / COLS) * 100}%`, top: `${(r / ROWS) * 100}%`, width: `${100 / COLS}%`, height: `${100 / ROWS}%`, '--c': c, '--r': r } as CSSProperties}>
-          <div className="tile-slide" data-k={c + r}>
-            <img src={p.src} srcSet={p.srcSet} sizes="(min-width: 1480px) 800px, 56vw" alt="" decoding="async" />
+    <section id="build" aria-labelledby="build-title" className="pt-[var(--section)] outline-none" tabIndex={-1}>
+      <div ref={rail} className="rail" tabIndex={0} role="region" aria-label="The eleven steps of a new pool. Scroll sideways to see them all.">
+        <div className="rail-track">
+          <div className="slide slide-text">
+            <h2 id="build-title" className="h2">
+              Eleven steps,
+              <br />
+              six to twelve weeks.
+            </h2>
+            <p className="lead mt-6 text-ink-2">That is a typical new pool with us, from the first drawing to the handover. You get your own schedule and plan when you sign.</p>
           </div>
-        </div>,
-      )
-  return (
-    <div className="tiles" style={{ '--cols': COLS, '--rows': ROWS } as CSSProperties}>
-      {tiles}
-    </div>
-  )
-}
-
-function Pinned() {
-  const ref = useRef<HTMLDivElement>(null)
-  const [active, setActive] = useState(0)
-
-  useScrollAnim(ref, (q) => {
-    const layers = q('.stage[data-i]')
-    const [beams] = q('.build-frame > .cage-beams')
-    if (!layers.length || !beams) return
-    const TR = 1 // durée d'un changement d'étape (panneaux et décalages compris)
-    const HOLD = 1.1 // l'étape reste affichée
-    const starts: number[] = []
-    let shown = -1
-    const tl = gsap.timeline({
-      defaults: { ease: 'none' },
-      onUpdate() {
-        const t = tl.time()
-        // l'étape en cours change à mi-chemin de l'installation de sa photo
-        let a = 0
-        starts.forEach((s, i) => {
-          if (t >= s + TR * 0.45) a = i + 1
-        })
-        if (a !== shown) {
-          shown = a
-          setActive(a)
-        }
-        // une fois tous ses panneaux posés, la photo entière les remplace
-        layers.forEach((l, i) => {
-          const done = t >= starts[i] + TR
-          if (done !== l.hasAttribute('data-settled')) l.toggleAttribute('data-settled', done)
-        })
-      },
-    })
-    let t = 0.4
-    layers.forEach((l) => {
-      starts.push(t)
-      const slides = l.querySelectorAll<HTMLElement>('.tile-slide')
-      tl.to(beams, { opacity: 1, duration: 0.18 }, t)
-      // y: 0 des deux côtés : GSAP lit le décalage de départ posé en CSS (-101 %) comme des pixels, il ne doit pas s'ajouter
-      tl.fromTo(slides, { y: 0, yPercent: -101 }, { y: 0, yPercent: 0, duration: 0.42, ease: 'power2.out', stagger: (_i: number, el: HTMLElement) => Number(el.dataset.k) * 0.09 }, t)
-      tl.to(beams, { opacity: 0, duration: 0.3 }, t + TR - 0.1)
-      t += TR + HOLD
-    })
-    tl.to({}, { duration: 0.2 }, t - 0.2)
-
-    ScrollTrigger.create({
-      trigger: ref.current,
-      pin: true,
-      start: 'top top',
-      end: () => `+=${layers.length * window.innerHeight * 0.72}`,
-      scrub: 0.5,
-      animation: tl,
-      invalidateOnRefresh: true,
-    })
-    // la section épinglée arrive après d'autres animations déjà créées : on remet l'ordre de calcul dans celui de la page
-    ScrollTrigger.sort()
-    ScrollTrigger.refresh()
-  })
-
-  const beams = []
-  for (let c = 1; c < COLS; c++) beams.push(<div key={`v${c}`} className="cage-beam v" style={{ left: `${(c / COLS) * 100}%` }} />)
-  for (let r = 1; r < ROWS; r++) beams.push(<div key={`h${r}`} className="cage-beam h" style={{ top: `${(r / ROWS) * 100}%` }} />)
-
-  return (
-    <div ref={ref} className="build-pin">
-      <div className="wrap grid-12 h-full items-start">
-        <div className="col-span-5 pr-[clamp(0px,2vw,40px)]">
-          <ol className="build-steps" aria-label="The eleven steps of a new pool">
-            {stages.map((s, i) =>
-              s.steps.map((st) => (
-                <li key={st.n} {...(i === active ? { 'data-on': '' } : {})}>
-                  <div className="build-step-head">
-                    <span className="t-num">{pad(st.n)}</span>
-                    <span>{st.name}</span>
-                  </div>
-                  <div className="build-step-body">
-                    <div>
-                      <p>{st.text}</p>
-                    </div>
-                  </div>
-                </li>
-              )),
-            )}
+          <ol>
+            {stages.map((s) => (
+              <li key={s.id} className="slide">
+                <figure>
+                  <Photo id={s.photo} alt={s.alt} sizes="(min-width: 1024px) 36vw, 80vw" className="" />
+                  <figcaption className="note mt-3 text-ink-2">{s.caption}</figcaption>
+                </figure>
+                <ol className="mt-5 border-t border-rule">
+                  {s.steps.map((st) => (
+                    <li key={st.n} className="border-b border-rule py-4">
+                      <div className="flex items-baseline gap-4">
+                        <span className="num w-[44px] flex-none text-[34px] leading-none text-gulf" aria-hidden="true">
+                          {pad(st.n)}
+                        </span>
+                        <h3 className="h3">
+                          <span className="sr-only">Step {st.n}: </span>
+                          {st.name}
+                        </h3>
+                      </div>
+                      <p className="small mt-2 pl-[60px] text-ink-2">{st.text}</p>
+                    </li>
+                  ))}
+                </ol>
+              </li>
+            ))}
           </ol>
         </div>
-
-        <figure className="col-span-7">
-          <div className="build-frame aspect-[4/3] max-h-[calc(100svh-var(--header-h)-108px)] w-full">
-            {stages.map((s, i) => (
-              <div key={s.id} className="stage" {...(i > 0 ? { 'data-i': i } : { 'data-settled': '' })}>
-                <img className="stage-full" src={photo(s.photo).src} srcSet={photo(s.photo).srcSet} sizes="(min-width: 1480px) 800px, 56vw" alt={s.alt} decoding="async" />
-                {i > 0 && <Tiles id={s.photo} />}
-              </div>
-            ))}
-            <div className="cage-beams">{beams}</div>
-            <Cage cols={COLS} rows={ROWS} />
-          </div>
-          <figcaption className="mt-3 grid">
-            {stages.map((s, i) => (
-              <span
-                key={s.id}
-                aria-hidden={i !== active}
-                className="t-note flex justify-between gap-6 text-ink-soft transition-[opacity,transform] duration-500 ease-[var(--ease)] [grid-area:1/1]"
-                style={{ opacity: i === active ? 1 : 0, transform: i === active ? 'none' : 'translateY(6px)' }}
-              >
-                <span>{s.caption}</span>
-                <span className="t-label text-navy">{range(s)}</span>
-              </span>
-            ))}
-          </figcaption>
-        </figure>
       </div>
-    </div>
-  )
-}
 
-// ---------- téléphone, ou moins d'animations ----------
-
-function List() {
-  return (
-    <div className="wrap pb-[var(--section)]">
-      <ol className="flex flex-col gap-[clamp(56px,8vw,104px)]" aria-label="The eleven steps of a new pool">
-        {stages.map((s) => (
-          <li key={s.id} className="grid-12 items-start gap-y-5">
-            <figure className="col-span-12 md:col-span-6">
-              <Frame id={s.photo} alt={s.alt} ratio={4 / 3} sizes="(min-width: 768px) 50vw, 100vw" cage={{ cols: COLS, rows: ROWS }} />
-              <figcaption className="t-note mt-2 flex justify-between gap-4 text-ink-soft">
-                <span>{s.caption}</span>
-                <span className="t-label text-navy">{range(s)}</span>
-              </figcaption>
-            </figure>
-            <div className="col-span-12 md:col-span-6 md:col-start-7 md:pt-1">
-              {s.steps.map((st) => (
-                <div key={st.n} className="border-t border-line py-4 first:border-t-0 md:first:border-t">
-                  <h3 className="t-h4 flex items-baseline gap-3">
-                    <span className="t-num w-[22px] flex-none text-[13px]">{pad(st.n)}</span>
-                    {st.name}
-                  </h3>
-                  <p className="t-small mt-2 max-w-[34em] pl-[34px] text-ink-soft">{st.text}</p>
-                </div>
-              ))}
-            </div>
-          </li>
-        ))}
-      </ol>
-    </div>
+      <div className="w mt-8 flex items-center gap-5">
+        <div className="meter flex-1" aria-hidden="true">
+          <span style={{ width: `${Math.max(6, state.p * 100)}%` }} />
+        </div>
+        <span className="label whitespace-nowrap">{range(stages[state.i])}</span>
+        <div className="hidden gap-2 md:flex">
+          <button type="button" className="arrow" aria-label="Previous steps" disabled={state.start} onClick={() => nudge(-1)}>
+            <ArrowLeft aria-hidden="true" className="size-5" />
+          </button>
+          <button type="button" className="arrow" aria-label="Next steps" disabled={state.end} onClick={() => nudge(1)}>
+            <ArrowRight aria-hidden="true" className="size-5" />
+          </button>
+        </div>
+      </div>
+    </section>
   )
 }

@@ -1,79 +1,95 @@
-// Détection de fuites : leur slogan, leurs tarifs (enfermés dans une image sur l'ancien site, ici en clair et calculés),
-// leurs méthodes, les endroits qui fuient, le test du seau et leur FAQ complète.
-import { Minus, Plus, ShieldCheck } from 'lucide-react'
-import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
+// Détection de fuites : leur slogan et leurs prix sur un panneau graphite, en grands chiffres comme sur une enseigne
+// (ils étaient enfermés dans une image sur l'ancien site), le calcul du prix selon la piscine ; puis leurs méthodes,
+// les endroits qui fuient, le test du seau et leur FAQ complète.
+import { Minus, Plus } from 'lucide-react'
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react'
 
-import { Lines } from '@/components/lines'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { motion } from '@/lib/motion'
 import { faq, leakAreas, leakMethods, leakPrices, site } from '@/lib/site'
 
+const board = [
+  { price: `$${leakPrices.pool}`, name: 'Pool only', text: 'Leak detection for the pool structure and plumbing.' },
+  { price: `$${leakPrices.poolSpa}`, name: 'Pool and spa', text: 'For pools with an attached spa or hot tub.' },
+  { price: `+$${leakPrices.feature}`, name: 'Each water feature', text: 'Water bowls, waterfalls and other water features.' },
+  { price: `+$${leakPrices.head}`, name: 'Each cleaning head', text: 'Leak detection for in-floor cleaning systems.' },
+]
+
 export function Leaks() {
+  const half = Math.ceil(faq.length / 2)
   return (
-    <section id="leaks" className="bg-navy-sec on-dark outline-none" aria-labelledby="leaks-title" tabIndex={-1}>
-      <div className="wrap py-[var(--section)]">
-        <div className="grid-12 gap-y-14">
-          <div className="col-span-12 lg:col-span-6">
-            <Lines as="h2" id="leaks-title" className="t-h2">
+    <section id="leaks" aria-labelledby="leaks-title" className="outline-none" tabIndex={-1}>
+      <div className="on-ink bg-ink text-paper">
+        <div className="w py-[var(--section)]">
+          <div className="g12 gap-y-6">
+            <h2 id="leaks-title" className="h2 col-span-12 lg:col-span-5">
               Find it. Fix it. Done right.
-            </Lines>
-            <p className="t-lead mt-6 max-w-[30em] text-white/85">
+            </h2>
+            <p className="lead col-span-12 text-paper/80 lg:col-span-6 lg:col-start-7">
               Leak detection in and around Manatee and Sarasota counties. Whether it’s a hidden plumbing issue, a structural crack or the equipment, we find it, and as a licensed pool contractor, we fix it. Not a temporary fix.
             </p>
-            <div className="mt-[clamp(48px,6vw,88px)] flex flex-col gap-12 lg:pr-[3vw]">
-              <div>
-                <h3 className="t-h3">How we find it</h3>
-                <p className="t-small mt-4 max-w-[34em] text-white/80">
-                  {leakMethods[0]}, {leakMethods.slice(1, -1).map((m) => m.toLowerCase()).join(', ')} and {leakMethods[leakMethods.length - 1].toLowerCase()}, chosen for your symptoms and the way your pool is set up.
-                </p>
-              </div>
-              <div>
-                <h3 className="t-h3">Where pools leak</h3>
-                <ul className="mt-5 grid grid-cols-2 gap-x-6 sm:grid-cols-3">
-                  {leakAreas.map((a) => (
-                    <li key={a} className="t-small border-t border-white/15 py-2.5 text-white/85 first-letter:uppercase">
-                      {a}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="t-h3">Leak or evaporation? The bucket test</h3>
-                <p className="t-small mt-4 max-w-[34em] text-white/80">
-                  Set a bucket on the pool step and fill it to the same level as the pool. If the pool drops more than the bucket, there may be a leak. Florida pools do lose water to evaporation, more in hot, sunny, windy or dry weather.
-                </p>
-              </div>
-            </div>
           </div>
 
-          <div className="col-span-12 lg:col-span-5 lg:col-start-8">
-            <div className="lg:sticky lg:top-[calc(var(--header-h)+24px)]">
-              <LeakPrice />
-            </div>
+          <div className="posts mt-[clamp(56px,6vw,96px)]" style={{ '--n': 4 } as CSSProperties}>
+            {board.map((b) => (
+              <div key={b.name}>
+                <p className="price">{b.price}</p>
+                <p className="h3 mt-4">{b.name}</p>
+                <p className="small mt-2 text-paper/75">{b.text}</p>
+              </div>
+            ))}
+          </div>
+          <p className="small mt-8 font-[500]">Epoxy repairs included. Anything more than that will be quoted.</p>
+
+          <Calculator />
+        </div>
+      </div>
+
+      <div className="w pt-[clamp(72px,8vw,120px)]">
+        <div className="defs border-b border-rule">
+          <div>
+            <h3 className="h3">How we find it</h3>
+            <p className="small text-ink-2">
+              {leakMethods[0]}, {leakMethods.slice(1, -1).map((m) => m.toLowerCase()).join(', ')} and {leakMethods[leakMethods.length - 1].toLowerCase()}, chosen for your symptoms and the way your pool is set up.
+            </p>
+          </div>
+          <div>
+            <h3 className="h3">Where pools leak</h3>
+            <p className="small text-ink-2">{leakAreas.map((a, i) => (i === 0 ? a.charAt(0).toUpperCase() + a.slice(1) : a)).join(', ')}.</p>
+          </div>
+          <div>
+            <h3 className="h3">Leak or evaporation?</h3>
+            <p className="small text-ink-2">
+              Set a bucket on the pool step and fill it to the same level as the pool. If the pool drops more than the bucket, there may be a leak. Florida pools do lose water to evaporation, more in hot, sunny, windy or dry weather.
+            </p>
           </div>
         </div>
 
-        <div className="grid-12 mt-[clamp(72px,8vw,128px)] gap-y-8">
-          <div className="col-span-12 lg:col-span-4">
-            <h3 id="faq" className="t-h3">Leak detection questions</h3>
-            <p className="t-small mt-4 max-w-[26em] text-white/75">
-              Still not sure? Call or text{' '}
-              <a href={site.phone.sms} className="ul text-white">
-                {site.phone.label}
-              </a>
-              .
-            </p>
-          </div>
-          <Accordion type="single" collapsible className="col-span-12 lg:col-span-8">
-            {faq.map((f, i) => (
-              <AccordionItem key={f.q} value={`q${i}`} className="faq-item !border-b-0">
-                <AccordionTrigger className="rounded-none py-5 text-[17px] font-[620] [font-stretch:104%] hover:no-underline focus-visible:ring-0 **:data-[slot=accordion-trigger-icon]:size-5 **:data-[slot=accordion-trigger-icon]:text-aqua">
-                  {f.q}
-                </AccordionTrigger>
-                <AccordionContent className="t-small max-w-[44em] pb-6 text-white/80">{f.a}</AccordionContent>
-              </AccordionItem>
+        <div className="mt-[clamp(72px,8vw,120px)]">
+          <h3 id="faq" className="h2">
+            Leak detection questions
+          </h3>
+          <p className="small mt-3 text-ink-2">
+            Still not sure? Call or text{' '}
+            <a href={site.phone.sms} className="link text-ink">
+              {site.phone.label}
+            </a>
+            .
+          </p>
+          <div className="mt-10 grid gap-x-[var(--gap)] lg:grid-cols-2">
+            {[faq.slice(0, half), faq.slice(half)].map((col, c) => (
+              <Accordion key={c} type="single" collapsible className="border-t border-rule lg:[&:last-child]:border-t">
+                {col.map((f, i) => (
+                  <AccordionItem key={f.q} value={`q${c}-${i}`} className="border-b border-rule">
+                    <AccordionTrigger className="rounded-none py-5 text-[18px] font-[450] hover:no-underline focus-visible:ring-0 **:data-[slot=accordion-trigger-icon]:size-5 **:data-[slot=accordion-trigger-icon]:text-gulf">
+                      {f.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="small max-w-[40em] pb-6 text-ink-2">{f.a}</AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             ))}
-          </Accordion>
+          </div>
         </div>
       </div>
     </section>
@@ -106,16 +122,16 @@ function useTween(value: number, ms = 450) {
   return shown
 }
 
-function LeakPrice() {
+// le calcul : la piscine (avec ou sans spa), le nombre de jeux d'eau et de buses de nettoyage au fond
+function Calculator() {
   const [spa, setSpa] = useState(false)
   const [features, setFeatures] = useState(0)
   const [heads, setHeads] = useState(0)
   const total = (spa ? leakPrices.poolSpa : leakPrices.pool) + features * leakPrices.feature + heads * leakPrices.head
   const shown = useTween(total)
-  const spaRef = useRef<HTMLButtonElement>(null)
   const poolRef = useRef<HTMLButtonElement>(null)
+  const spaRef = useRef<HTMLButtonElement>(null)
 
-  // groupe de boutons radio : les flèches passent d'un choix à l'autre
   const onKey = (e: KeyboardEvent) => {
     if (!['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return
     e.preventDefault()
@@ -124,76 +140,55 @@ function LeakPrice() {
     ;(next ? spaRef : poolRef).current?.focus()
   }
 
-  const choices = [
-    { ref: poolRef, on: !spa, set: () => setSpa(false), name: 'Pool only', note: 'Leak detection for the pool structure and plumbing', price: leakPrices.pool },
-    { ref: spaRef, on: spa, set: () => setSpa(true), name: 'Pool and spa', note: 'For pools with an attached spa or hot tub', price: leakPrices.poolSpa },
-  ]
-
   return (
-    <div className="sheet">
-      <div className="px-5 pt-6 pb-5 sm:px-7">
-        <h3 className="t-h3">Leak detection pricing</h3>
-        <p className="t-note mt-2 text-white/70">Choose your setup to see the price.</p>
+    <div className="mt-[clamp(48px,6vw,80px)] grid border border-paper/35 lg:grid-cols-[1fr_auto]">
+      <div className="grid gap-6 p-5 sm:p-7 md:grid-cols-3 md:gap-8">
+        <div>
+          <p id="calc-pool" className="label">
+            Your pool
+          </p>
+          <div role="radiogroup" aria-labelledby="calc-pool" onKeyDown={onKey} className="mt-3 flex flex-wrap gap-2">
+            <button ref={poolRef} type="button" role="radio" aria-checked={!spa} tabIndex={spa ? -1 : 0} onClick={() => setSpa(false)} className="choice">
+              Pool only
+            </button>
+            <button ref={spaRef} type="button" role="radio" aria-checked={spa} tabIndex={spa ? 0 : -1} onClick={() => setSpa(true)} className="choice">
+              Pool and spa
+            </button>
+          </div>
+        </div>
+        <Counter label="Water features" value={features} set={setFeatures} max={10} />
+        <Counter label="In-floor cleaning heads" value={heads} set={setHeads} max={40} />
       </div>
-      <div role="radiogroup" aria-label="Your pool" onKeyDown={onKey}>
-        {choices.map((c) => (
-          <button key={c.name} ref={c.ref} type="button" role="radio" aria-checked={c.on} tabIndex={c.on ? 0 : -1} onClick={c.set} className="choice sheet-row sm:px-7">
-            <span className="dot" aria-hidden="true" />
-            <span className="min-w-0 flex-1">
-              <span className="block font-[640]">{c.name}</span>
-              <span className="t-note block text-white/65">{c.note}</span>
-            </span>
-            <span className="t-num text-[20px]">${c.price}</span>
-          </button>
-        ))}
-      </div>
-      <Stepper label="Water features" note="Water bowls, waterfalls and other water features" price={leakPrices.feature} value={features} set={setFeatures} max={10} />
-      <Stepper label="In-floor cleaning heads" note="Leak detection for in-floor cleaning systems" price={leakPrices.head} value={heads} set={setHeads} max={40} />
-      <div className="sheet-row flex items-end justify-between gap-4 px-5 pt-5 pb-4 sm:px-7">
-        <span className="pb-1 font-[640]">Your detection price</span>
-        <span aria-hidden="true" className="t-num text-[clamp(46px,4.8vw,68px)] leading-[0.85] text-aqua">
-          ${shown}
-        </span>
-        <span className="sr-only" aria-live="polite">
-          Your detection price: ${total}
-        </span>
-      </div>
-      <div className="px-5 pb-6 sm:px-7">
-        <p className="t-small flex items-start gap-2.5 text-white/85">
-          <ShieldCheck aria-hidden="true" className="mt-[2px] size-[18px] flex-none text-aqua" />
-          Epoxy repairs included. Anything more than that will be quoted.
-        </p>
-        <a href={site.leakRequest} target="_blank" rel="noreferrer" className="btn btn-aqua mt-6 w-full">
+      <div className="total flex flex-col justify-between gap-5 p-5 sm:p-7 lg:min-w-[340px]">
+        <div className="flex items-end justify-between gap-6">
+          <span className="label pb-2">Your price</span>
+          <span aria-hidden="true" className="price text-[clamp(56px,5.4vw,84px)]">
+            ${shown}
+          </span>
+          <span className="sr-only" aria-live="polite">
+            Your leak detection price: ${total}
+          </span>
+        </div>
+        <a href={site.leakRequest} target="_blank" rel="noreferrer" className="btn btn-ink w-full">
           Book leak detection
         </a>
-        <p className="t-note mt-3 text-center text-white/70">
-          Or call or text{' '}
-          <a href={site.phone.href} className="ul text-white">
-            {site.phone.label}
-          </a>
-        </p>
       </div>
     </div>
   )
 }
 
-function Stepper({ label, note, price, value, set, max }: { label: string; note: string; price: number; value: number; set: (n: number) => void; max: number }) {
+function Counter({ label, value, set, max }: { label: string; value: number; set: (n: number) => void; max: number }) {
   return (
-    <div className="sheet-row flex items-center gap-4 px-5 py-4 sm:px-7">
-      <div className="min-w-0 flex-1">
-        <p className="font-[640]">
-          {label} <span className="font-[460] whitespace-nowrap text-white/60">${price} each</span>
-        </p>
-        <p className="t-note text-white/65">{note}</p>
-      </div>
-      <div className="stepper flex items-center gap-2" role="group" aria-label={label}>
-        <button type="button" aria-label={`Remove one: ${label.toLowerCase()}`} disabled={value === 0} onClick={() => set(Math.max(0, value - 1))}>
+    <div role="group" aria-label={label}>
+      <p className="label">{label}</p>
+      <div className="mt-3 flex items-center gap-3">
+        <button type="button" className="step-btn" aria-label={`Remove one: ${label.toLowerCase()}`} disabled={value === 0} onClick={() => set(Math.max(0, value - 1))}>
           <Minus aria-hidden="true" className="size-4" />
         </button>
-        <span className="t-num w-7 text-center text-[20px]" aria-live="polite" aria-atomic="true">
+        <span className="num w-10 text-center text-[30px] leading-none" aria-live="polite" aria-atomic="true">
           {value}
         </span>
-        <button type="button" aria-label={`Add one: ${label.toLowerCase()}`} disabled={value === max} onClick={() => set(Math.min(max, value + 1))}>
+        <button type="button" className="step-btn" aria-label={`Add one: ${label.toLowerCase()}`} disabled={value === max} onClick={() => set(Math.min(max, value + 1))}>
           <Plus aria-hidden="true" className="size-4" />
         </button>
       </div>

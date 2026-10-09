@@ -1,9 +1,6 @@
-// Équipement et tempêtes : les socles surélevés après les ouragans de 2024 et une remise en état à Bradenton,
-// du vert au bleu (leurs pages Storm Recovery et Equipment Replacement).
-import type { CSSProperties } from 'react'
-
-import { Frame } from '@/components/frame'
-import { Lines } from '@/components/lines'
+// Tempêtes et équipement : la remise en état d'une piscine de Bradenton en trois photos bord à bord, du vert au bleu,
+// puis les socles d'équipement surélevés après les ouragans de 2024 (leurs pages Storm Recovery et Equipment Replacement).
+import { Photo } from '@/components/frame'
 import { equipment, storm } from '@/lib/site'
 
 const pads = [
@@ -14,60 +11,50 @@ const pads = [
 
 export function Storm() {
   return (
-    <section id="storm" className="bg-white-sec outline-none" aria-labelledby="storm-title" tabIndex={-1}>
-      <div className="wrap py-[var(--section)]">
-        <div className="grid-12 gap-y-12">
-          <div className="col-span-12 lg:col-span-5">
-            <Lines as="h2" id="storm-title" className="t-h2">
-              Equipment above the surge.
-            </Lines>
-            <p className="t-lead mt-6">
-              After the 2024 hurricanes, we replaced pool equipment and raised the pads, so pumps, heaters and electrical stay out of the storm surge.
-            </p>
-            <p className="t-small mt-5 max-w-[34em] text-ink-soft">
-              Storm damage goes beyond what you can see on the surface. We repair structural damage, replace damaged equipment and upgrade the weak points to better withstand the next storm, so your system keeps running when it matters most.
-            </p>
-            <ul className="mt-8 border-t border-line">
-              {equipment.map((e) => (
-                <li key={e} className="t-small border-b border-line py-3 font-[560]">
-                  {e}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <figure className="col-span-12 self-start lg:sticky lg:top-[calc(var(--header-h)+32px)] lg:col-span-7 lg:col-start-6 lg:pl-[2vw]">
-            <div className="strip">
-              {pads.map((p, k) => (
-                <figure key={p.id} style={{ '--ar': p.ar } as CSSProperties}>
-                  <Frame id={p.id} alt={p.alt} sizes={`(min-width: 1024px) ${Math.round(p.ar * 22)}vw, 60vw`} cage={{ cols: 2, rows: 4, delay: k * 0.16 }} />
-                </figure>
-              ))}
+    <section id="storm" aria-labelledby="storm-title" className="pt-[var(--section)] outline-none" tabIndex={-1}>
+      {/* les trois temps, bord à bord sur toute la largeur de l'écran */}
+      <figure>
+        <div className="grid grid-cols-3 gap-[3px]">
+          {storm.map((f) => (
+            <div key={f.photo} className="aspect-[4/5] sm:aspect-[4/3]">
+              <Photo id={f.photo} alt={f.alt} sizes="34vw" />
             </div>
-            <figcaption className="t-note mt-3 text-ink-soft">New equipment, and pads raised above the surge after the 2024 hurricanes.</figcaption>
-          </figure>
+          ))}
         </div>
+        <figcaption className="w mt-3 grid grid-cols-3 gap-[3px]">
+          {storm.map((f) => (
+            <span key={f.photo} className="label">
+              {f.label}
+            </span>
+          ))}
+        </figcaption>
+        <p className="w note mt-1 text-ink-2">Storm recovery in Bradenton: the same pool after the storm, during the repairs, and back in service.</p>
+      </figure>
 
-        <article className="grid-12 mt-[clamp(80px,9vw,150px)] items-end gap-y-6" aria-labelledby="storm-bradenton">
-          <div className="col-span-12 lg:col-span-3">
-            <h3 id="storm-bradenton" className="t-h3">
-              Bradenton
-            </h3>
-            <p className="t-label mt-2 text-cobalt">Storm recovery</p>
-            <p className="t-small mt-3 max-w-[30em] text-ink-soft">The same pool after the storm, during the repairs, and back in service.</p>
-          </div>
-          <div className="col-span-12 lg:col-span-9 lg:col-start-4">
-            <div className="strip">
-              {storm.map((f, k) => (
-                <figure key={f.photo} style={{ '--ar': f.ar } as CSSProperties}>
-                  <Frame id={f.photo} alt={f.alt} sizes="(min-width: 1024px) 24vw, 70vw" cage={{ cols: 3, rows: 3, delay: k * 0.18 }} />
-                  <figcaption className="frame-label">
-                    <span className="t-label">{f.label}</span>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
-        </article>
+      <div className="w g12 mt-[clamp(56px,7vw,104px)] gap-y-12">
+        <div className="col-span-12 lg:col-span-6">
+          <h2 id="storm-title" className="h2">
+            Equipment above the surge.
+          </h2>
+          <p className="lead mt-6 max-w-[30em]">After the 2024 hurricanes, we replaced pool equipment and raised the pads, so pumps, heaters and electrical stay out of the storm surge.</p>
+          <p className="small mt-5 max-w-[34em] text-ink-2">
+            Storm damage goes beyond what you can see on the surface. We repair structural damage, replace damaged equipment and upgrade the weak points to better withstand the next storm, so your system keeps running when it matters most.
+          </p>
+          <p className="small mt-8">
+            <span className="font-[500]">What we take on: </span>
+            <span className="text-ink-2">{equipment.join('; ').toLowerCase()}.</span>
+          </p>
+        </div>
+        <div className="col-span-12 flex items-start gap-[var(--gap)] lg:col-span-5 lg:col-start-8 lg:pt-2">
+          {pads.map((p, k) => (
+            <figure key={p.id} className="min-w-0" style={{ flex: `${p.ar} 1 0`, marginTop: k === 1 ? '12%' : k === 2 ? '4%' : 0 }}>
+              <div style={{ aspectRatio: p.ar }}>
+                <Photo id={p.id} alt={p.alt} sizes="(min-width: 1024px) 14vw, 30vw" />
+              </div>
+            </figure>
+          ))}
+        </div>
+        <p className="note col-span-12 -mt-6 text-ink-2 lg:col-span-5 lg:col-start-8">New equipment, and pads raised above the surge after the 2024 hurricanes.</p>
       </div>
     </section>
   )
