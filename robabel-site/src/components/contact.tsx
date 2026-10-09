@@ -59,7 +59,7 @@ export function Contact() {
           <div className="mt-16 max-w-[30em] border-t border-white/15 pt-6" data-up>
             <h3 className="t-h4">Financing</h3>
             <p className="t-small mt-2 text-white/72">
-              For a new pool, a remodel or added features, they work with Lyon Financial: competitive rates and payment plans that fit the budget.{' '}
+              For a new pool, a remodel or added features, we work with Lyon Financial: competitive rates and payment plans that fit the budget.{' '}
               <a href={site.financing} target="_blank" rel="noreferrer" className="flow font-semibold text-white">
                 Apply at LyonFinancial.net
               </a>

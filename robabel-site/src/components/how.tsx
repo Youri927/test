@@ -37,7 +37,7 @@ const PATHS: { id: string; tab: string; title: string; intro: string; photo: Pho
       { name: 'Assessment', text: 'The structure, plumbing, equipment and looks of the pool today; what you want to change; a budget.' },
       { name: 'Plan', text: 'What needs work: resurfacing, new features, equipment or layout, with materials and finishes that fit the budget.' },
       { name: 'Renovation', text: 'Draining if needed, repairing cracks and leaks, more efficient pumps, filters and heaters, new tile, coping and decking, safety upgrades.' },
-      { name: 'Refill and care', text: 'Refilling and checking every system. Their technicians can then handle the cleaning, the chemistry and the servicing.' },
+      { name: 'Refill and care', text: 'Refilling and checking every system. Our technicians can then handle the cleaning, the chemistry and the servicing.' },
     ],
   },
 ]

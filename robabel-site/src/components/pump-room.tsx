@@ -311,7 +311,7 @@ export function PumpRoom() {
             <div data-up>
               <h3 className="t-h4">Room for the rest</h3>
               <p className="t-small mt-2 text-white/72">The pump room also takes the outdoor surround sound equipment, a small refrigerator, the floats and the test kit.</p>
-              <h3 className="t-h4 mt-7">What they install</h3>
+              <h3 className="t-h4 mt-7">What we install</h3>
               <p className="t-small mt-2 text-white/72">
                 Pentair. Rheem heat pumps with chill mode. Solaxx UV and saline systems with clear chambers. Dolphin robotic cleaners, with a service and warranty station. Ledge Loungers.
               </p>

@@ -1,0 +1,26 @@
+{
+  "name": "robabel-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vidéo 16:9 de présentation du nouveau site de Custom Pools by Rob Abel",
+  "scripts": {
+    "studio": "remotion studio",
+    "capture:site": "node capture/shots.mjs",
+    "capture:probe": "node capture/shots.mjs --probe",
+    "capture:before": "node capture/before.mjs",
+    "sound": "node sound/music.mjs && node sound/sfx.mjs",
+    "mix": "node --no-warnings sound/mix.mjs out/audio.wav",
+    "finalize": "node sound/finalize.mjs out/presentation-robabel.mp4 renders/presentation-robabel-16x9.mp4 out/presentation-robabel-16x9-envoi.mp4",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.532",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "4.0.532"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}

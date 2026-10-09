@@ -12,7 +12,7 @@ export function Film() {
     <Dialog>
       <DialogTrigger className="btn btn-line">
         <Play aria-hidden="true" />
-        Watch their film, 1 min 19
+        Watch our film, 1 min 19
       </DialogTrigger>
       <DialogContent className="film-dialog max-w-[min(1100px,94vw)] border-0 bg-night p-0 text-white sm:max-w-[min(1100px,94vw)]">
         <DialogTitle className="sr-only">Custom Pools by Rob Abel, the film</DialogTitle>

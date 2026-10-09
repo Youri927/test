@@ -1,0 +1,233 @@
+// Capture image par image du nouveau site, en temps simulé.
+// L'horloge de la page (timers, requestAnimationFrame, Date, performance) est figée
+// par Playwright et avancée d'exactement 1/fps entre deux images ; les animations CSS
+// sont recalées sur ce même temps, GSAP tourne sur le requestAnimationFrame simulé,
+// et la boucle vidéo des fontaines suit le même temps (elle n'est jamais lue en temps réel).
+// Résultat : des animations fluides et exactes, quelle que soit la durée réelle d'une capture d'écran.
+import {spawn} from 'node:child_process';
+import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
+import {dirname, resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createRequire} from 'node:module';
+
+const require = createRequire(import.meta.url);
+const {chromium} = require(process.env.PLAYWRIGHT_MODULE || '/opt/node-tools/node_modules/playwright');
+
+const here = dirname(fileURLToPath(import.meta.url));
+export const SITE = resolve(here, '../../robabel-site/dist/index.html');
+export const OUT = resolve(here, '../public/site');
+
+// jeudi 8 octobre 2026, 10 h à Fort Walton Beach (heure du Centre, UTC−5)
+const T0 = Date.parse('2026-10-08T10:00:00-05:00');
+
+// Injecté avant les scripts du site
+const INIT = () => {
+  // Hasard reproductible : même rendu à chaque capture
+  let seed = 0x2a2a2a;
+  Math.random = () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  // Vidéos : jamais lues en temps réel ; quand le site les lance, leur temps suit l'horloge simulée (voir __seek)
+  HTMLMediaElement.prototype.play = function () {
+    if (!this.__on) {
+      this.__on = true;
+      this.__start = window.__vt || 0;
+      if (this.readyState === 0) this.load();
+      this.dispatchEvent(new Event('play'));
+    }
+    return Promise.resolve();
+  };
+  HTMLMediaElement.prototype.pause = function () {
+    if (this.__on) {
+      this.__on = false;
+      this.dispatchEvent(new Event('pause'));
+    }
+  };
+  // Animations et transitions CSS : recalées sur le temps simulé ; vidéos lancées : calées sur ce temps (renvoie
+  // une promesse tenue quand chaque vidéo a fini de se placer, pour que la capture montre la bonne image)
+  window.__seek = (vt) => {
+    for (const a of document.getAnimations()) {
+      if (a.__t0 === undefined) {
+        a.__t0 = vt;
+        a.pause();
+      }
+      a.currentTime = vt - a.__t0;
+    }
+    const seeks = [];
+    for (const v of document.querySelectorAll('video')) {
+      if (!v.__on || !(v.duration > 0)) continue;
+      const t = (((vt - v.__start) / 1000) % v.duration + v.duration) % v.duration;
+      if (Math.abs(v.currentTime - t) < 0.002) continue;
+      seeks.push(new Promise((ok) => v.addEventListener('seeked', ok, {once: true})));
+      v.currentTime = t;
+    }
+    return Promise.all(seeks);
+  };
+};
+
+export async function openSite({width, height, dsf = 2, mobile = false}) {
+  // Rendu processeur : l'émulateur graphique du conteneur laisse des bandes dupliquées sur les grands SVG
+  const browser = await chromium.launch({args: ['--hide-scrollbars', '--force-color-profile=srgb', '--disable-gpu', '--autoplay-policy=no-user-gesture-required']});
+  const context = await browser.newContext({
+    viewport: {width, height},
+    deviceScaleFactor: dsf,
+    isMobile: mobile,
+    hasTouch: mobile,
+    reducedMotion: 'no-preference',
+    colorScheme: 'light',
+    locale: 'en-US',
+  });
+  await context.addInitScript(INIT);
+  await context.clock.install({time: T0});
+  await context.clock.pauseAt(T0 + 1);
+  const page = await context.newPage();
+  await page.goto('file://' + SITE, {waitUntil: 'load'});
+  await page.evaluate(() => document.fonts.ready);
+  // la page est montée quand le script d'accueil a posé la classe motion et que la scène de l'accueil a ses calques
+  // (attente côté Node : l'horloge de la page est figée, ses minuteries ne tournent pas)
+  for (let k = 0; k < 200; k++) {
+    if (await page.evaluate(() => document.documentElement.classList.contains('motion') && document.querySelectorAll('.hero-scene img').length > 8)) break;
+    await new Promise((r) => setTimeout(r, 50));
+  }
+  const cdp = await context.newCDPSession(page);
+  return {browser, context, page, cdp, width, height, dsf};
+}
+
+/** Position (px document) du haut d'un élément */
+export const top = (page, sel) => page.evaluate((sel) => document.querySelector(sel).getBoundingClientRect().top + window.scrollY, sel);
+
+/** Centre (px viewport) d'un élément */
+export const center = (page, sel) =>
+  page.evaluate((sel) => {
+    const r = document.querySelector(sel).getBoundingClientRect();
+    return {x: r.left + r.width / 2, y: r.top + r.height / 2};
+  }, sel);
+
+// Défilement instantané, puis un événement scroll tout de suite : Lenis et ScrollTrigger
+// se mettent à jour dans la même image (l'événement natif n'arrive qu'au rendu suivant).
+export const scrollTo = (page, y) =>
+  page.evaluate((y) => {
+    if (Math.abs(window.scrollY - y) < 0.5) return;
+    window.scrollTo({top: y, behavior: 'instant'});
+    window.dispatchEvent(new Event('scroll'));
+  }, y);
+
+/** Avance le temps simulé (horloge de la page + animations CSS + vidéo) */
+export async function tick(page, ms) {
+  if (ms > 0) await page.clock.runFor(ms);
+  // une vidéo qui ne répond pas ne bloque pas la capture (2 s réelles au plus)
+  await Promise.race([
+    page.evaluate((ms) => {
+      window.__vt = (window.__vt || 0) + ms;
+      return window.__seek(window.__vt);
+    }, ms),
+    new Promise((r) => setTimeout(r, 2000)),
+  ]);
+}
+
+/** Avance le temps sans filmer (mise en place d'un plan), par pas de 1/60 s */
+export async function settle(page, ms) {
+  let done = 0;
+  for (let i = 1; done < ms; i++) {
+    const t = Math.min(ms, Math.round((i * 1000) / 60));
+    await tick(page, t - done);
+    done = t;
+  }
+}
+
+/**
+ * Filme un plan : à chaque image, `step(i, tMs)` règle défilement / souris / clics,
+ * puis le temps avance d'1/fps et l'image est capturée.
+ */
+export async function record(site, {name, fps = 30, seconds, step, watch, probe = false, quality = 92}) {
+  const {page} = site;
+  mkdirSync(OUT, {recursive: true});
+  const out = resolve(OUT, `${name}.mp4`);
+  // relevé seul (probe) : mêmes gestes, même temps simulé, sans capture ni encodage ; les repères vont dans le JSON existant
+  if (probe) return survey(site, {name, fps, seconds, step, watch});
+  const ff = spawn('ffmpeg', [
+    '-y', '-loglevel', 'error',
+    '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-',
+    '-c:v', 'libx264', '-preset', 'medium', '-crf', '14', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+    out,
+  ], {stdio: ['pipe', 'inherit', 'inherit']});
+  const done = new Promise((ok, ko) => ff.on('close', (c) => (c === 0 ? ok() : ko(new Error('ffmpeg ' + c)))));
+  const n = Math.round(seconds * fps);
+  const meta = {name, fps, frames: n, width: site.width, height: site.height, mouse: [], clicks: [], marks: {}, values: {}};
+  let last = 0;
+  const t0 = Date.now();
+  for (let i = 0; i < n; i++) {
+    const t = Math.round((i * 1000) / fps);
+    const info = (await step(i, t)) || {};
+    if (info.mouse) meta.mouse[i] = info.mouse;
+    if (info.click) meta.clicks.push(i);
+    if (info.mark) meta.marks[info.mark] = i;
+    await tick(page, t - last);
+    last = t;
+    if (watch) note(meta, i, await watch(page));
+    // clip.scale = densité de pixels : sans lui, la capture sort en 1×, quel que soit l'écran émulé.
+    // Le clip est en coordonnées de page : on le cale sur la position de défilement.
+    const {cssLayoutViewport: vp} = await site.cdp.send('Page.getLayoutMetrics');
+    const clip = {x: vp.pageX, y: vp.pageY, width: site.width, height: site.height, scale: site.dsf};
+    const {data} = await site.cdp.send('Page.captureScreenshot', {format: 'jpeg', quality, optimizeForSpeed: true, clip});
+    const buf = Buffer.from(data, 'base64');
+    if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));
+    if (i % 60 === 0) process.stdout.write(`  ${name} ${i}/${n} (${((Date.now() - t0) / 1000).toFixed(0)} s)\n`);
+  }
+  ff.stdin.end();
+  await done;
+  writeFileSync(resolve(OUT, `${name}.json`), JSON.stringify(meta));
+  console.log(`✓ ${name}.mp4  ${n} images, ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+  return meta;
+}
+
+/**
+ * État de la page relevé après chaque image (`watch` renvoie {clé: valeur}) :
+ * un booléen donne un repère à l'image où il devient vrai, un nombre est gardé image par image.
+ */
+function note(meta, i, state) {
+  for (const [k, v] of Object.entries(state || {})) {
+    if (typeof v === 'number') (meta.values[k] ||= [])[i] = Math.round(v * 1000) / 1000;
+    else if (v && meta.marks[k] === undefined) meta.marks[k] = i;
+  }
+}
+
+async function survey(site, {name, fps, seconds, step, watch}) {
+  const {page} = site;
+  const file = resolve(OUT, `${name}.json`);
+  const meta = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : {name, fps, mouse: [], clicks: []};
+  meta.marks = {};
+  meta.values = {};
+  const n = Math.round(seconds * fps);
+  let last = 0;
+  for (let i = 0; i < n; i++) {
+    const t = Math.round((i * 1000) / fps);
+    await step(i, t);
+    await tick(page, t - last);
+    last = t;
+    if (watch) note(meta, i, await watch(page));
+  }
+  writeFileSync(file, JSON.stringify(meta));
+  console.log(`✓ ${name}.json  repères ${JSON.stringify(meta.marks)}`);
+  return meta;
+}
+
+// Courbes utiles pour écrire les plans
+export const clamp01 = (v) => Math.max(0, Math.min(1, v));
+export const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+export const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+export const sine = (t) => -(Math.cos(Math.PI * t) - 1) / 2;
+/** Interpole une suite de clés [[t, valeur], …] avec un easing par segment */
+export const track = (keys, ease = sine) => (t) => {
+  if (t <= keys[0][0]) return keys[0][1];
+  for (let k = 1; k < keys.length; k++) {
+    const [ta, va] = keys[k - 1];
+    const [tb, vb, e] = keys[k];
+    if (t <= tb) return va + (vb - va) * (e || ease)((t - ta) / (tb - ta));
+  }
+  return keys[keys.length - 1][1];
+};

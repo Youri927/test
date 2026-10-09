@@ -8,6 +8,7 @@ import { Lines } from '@/components/lines'
 import { Photo } from '@/components/photo'
 import { gsap, motion, useMediaQuery, useScrollAnim } from '@/lib/motion'
 import loop from '@/assets/video/fountains.mp4?url'
+import loopWebm from '@/assets/video/fountains.webm?url'
 import poster from '@/assets/video/fountains-poster.avif?url'
 
 // La boucle des fontaines : elle tourne quand elle est à l'écran ; à l'arrêt si le visiteur a demandé moins d'animations.
@@ -54,15 +55,18 @@ function Fountains() {
     <div className="loop relative overflow-hidden bg-night">
       <video
         ref={ref}
-        src={loop}
         poster={poster}
         muted
         loop
         playsInline
         preload="none"
-        aria-label="The two motorcycle fountains running, from their film"
+        aria-label="The two motorcycle fountains running, from our film"
         className="aspect-[16/9] w-full object-cover sm:aspect-[1280/432]"
-      />
+      >
+        {/* le MP4 d'abord, codec déclaré : un navigateur sans H.264 le saute sans le charger et prend le WebM */}
+        <source src={loop} type='video/mp4; codecs="avc1.64001F"' />
+        <source src={loopWebm} type='video/webm; codecs="vp9"' />
+      </video>
       <button type="button" onClick={toggle} className="loop-btn" aria-label={playing ? 'Pause the video' : 'Play the video'} aria-pressed={paused}>
         {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
       </button>
@@ -140,7 +144,7 @@ export function Pools() {
             Two motorcycles, two fountains
           </Lines>
           <p className="t-lead max-w-[25em] text-ink-soft" data-up>
-            A rectangular pool where two motorcycles pour into the water. The loop comes from their film, the photos from their gallery.
+            A rectangular pool where two motorcycles pour into the water.
           </p>
         </div>
 

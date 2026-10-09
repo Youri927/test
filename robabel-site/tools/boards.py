@@ -1,4 +1,4 @@
-"""Planches de présentation (captures du site actuel et de la nouvelle version), en anglais pour le client.
+"""Planches de présentation (captures du site actuel et de la nouvelle version), en anglais pour le client, à qui elles s'adressent (« your »).
 
 La police est celle du site, Sofia Sans et Sofia Sans Extra Condensed, convertie en TTF statiques pour Pillow
 (fontTools, varLib.instancer) : SofiaSans-Display (Extra Condensed, graisse 760), -Regular (430), -Medium (560), -Semibold (650).
@@ -83,7 +83,7 @@ A = lambda n: Image.open(AFTER / n)
 
 row('avant-apres-ordinateur.jpg', [
     (B('d-01.jpg'), 'Before', 'Current homepage: a grey box until its 22 MB video loads', False, None),
-    (A('d-top.png'), 'After', 'New homepage: their own pool on the water, the lights coming on', True, None),
+    (A('d-top.png'), 'After', 'New homepage: your own pool on the water, the lights coming on', True, None),
 ], 1100, 'Custom Pools by Rob Abel: before and after', SUB)
 
 row('avant-apres-mobile.jpg', [
@@ -92,33 +92,33 @@ row('avant-apres-mobile.jpg', [
 ], 520, 'Before and after on a phone', SUB)
 
 grid('lumieres.jpg', [
-    ('d-light-0.png', 'Lights off', 'The page opens on their photo, at dusk, lights out'),
+    ('d-light-0.png', 'Lights off', 'The page opens on your photo, at dusk, lights out'),
     ('d-light-1.png', 'The house, then each palm', 'Then the pool: each light comes on in turn, from the real photo'),
     ('d-top.png', 'Violet', 'How the pool was photographed'),
     ('d-light-aqua.png', 'Aqua', 'Simulated, and labeled as such on the page'),
     ('d-light-white.png', 'White', 'Simulated on the same photo'),
     ('d-light-off.png', 'Off', 'The visitor picks the pool light'),
-], 3, 640, 'Lights on', 'Their photo is cut into light layers (the house, each palm, the pool): lit to the full, the layers give back the original')
+], 3, 640, 'Lights on', 'Your photo is cut into light layers (the house, each palm, the pool): lit to the full, the layers give back the original')
 
 grid('local-technique.jpg', [
     ('d-pump-flow.png', 'The water moves with the scroll', 'The circuit stays in place while the water runs through it'),
     ('d-pipe-clear.png', 'Clear PVC with UV', 'The water and the UV show through the pipe'),
-    ('d-pipe-s40.png', 'Schedule 40', 'The plumbing options from their pump room page'),
+    ('d-pipe-s40.png', 'Schedule 40', 'The plumbing options from your pump room page'),
     ('d-pipe-s80.png', 'Schedule 80', 'Same circuit, darker pipe'),
-], 2, 900, 'The pump room, as a water circuit', 'Their signature: pool, pump, filter, chemistry controller, UV, heat pump and salt system, with their own photos', crop=(0.25, 0.85))
+], 2, 900, 'The pump room, as a water circuit', 'Your signature: pool, pump, filter, chemistry controller, UV, heat pump and salt system, with your own photos', crop=(0.25, 0.85))
 
 grid('nouvelle-page-sections.jpg', [
     ('d-rob.png', 'One builder', '30 years, the meeting at home, a pool made to be easy to keep'),
-    ('d-pools.png', 'Two motorcycles, two fountains', 'A loop from their own film, and their photos'),
+    ('d-pools.png', 'Two motorcycles, two fountains', 'A loop from your own film, and your photos'),
     ('d-water.png', 'On the water, after sunset', 'The pool from the top of the page, afternoon, dusk and night'),
-    ('d-pump-room.png', 'The room behind the pool', 'Their quote, the brands they install, the room at night'),
+    ('d-pump-room.png', 'The room behind the pool', 'Your quote, the brands you install, the room at night'),
     ('d-backyard.png', 'Everything around the water', 'The photo follows the list: fire pits, turf, kitchens'),
-    ('d-how.png', 'A new pool, or the one you have', 'Their two processes, step by step'),
-    ('d-salt.png', 'Chlorine or salt?', 'Their seven points: pick what matters, the beam leans'),
+    ('d-how.png', 'A new pool, or the one you have', 'Your two processes, step by step'),
+    ('d-salt.png', 'Chlorine or salt?', 'Your seven points: pick what matters, the beam leans'),
     ('d-area.png', 'Destin to 30A', 'A real map of the coast, drawn from U.S. Census data'),
-    ('d-contact.png', 'Book an in-home meeting', 'The number in large type, a short form, their financing'),
+    ('d-contact.png', 'Book an in-home meeting', 'The number in large type, a short form, your financing'),
     ('d-footer.png', 'Footer', 'Address, hours, towns, and every section'),
-], 2, 900, 'The new page, section by section', 'Real content only: their texts, services, brands, photos, film, address, hours and contacts, nothing invented')
+], 2, 900, 'The new page, section by section', 'Real content only: your texts, services, brands, photos, film, address, hours and contacts, nothing invented')
 
 phones = [('m-top.png', 'Home'), ('m-pools.png', 'Pools'), ('m-pump-flow.png', 'Pump room'), ('m-backyard.png', 'Around the water'),
           ('m-how.png', 'New or existing'), ('m-salt.png', 'Chlorine or salt?'), ('m-contact.png', 'Contact'), ('m-menu.png', 'Menu')]
@@ -141,7 +141,7 @@ rows = [
     ('SEO', '92', '100'),
     ('Main thread blocked while loading', '0.31 s', '0.08 s'),
     ('Downloaded while loading, on a phone', '1.2 MB', '0.5 MB'),
-    ('Gallery', '5 stock photos, file names as captions', 'their own photos'),
+    ('Gallery', '5 stock photos, 4 file-name captions', 'your own photos'),
     ('Names for the company', '3', '1'),
     ('Contact form', '250 countries, 7 address lines', 'name, phone, town'),
     ('Zoom on a phone', 'blocked', 'allowed'),

@@ -60,7 +60,7 @@ Tout est coupé avec « réduire les animations » : la page s'affiche alors all
 - `python3 -I tools/hero.py <photo> src/assets/hero` : la photo lumières éteintes et les calques de lumière (maison, palmiers, piscine, couleurs simulées) en AVIF, avec leurs positions dans `hero.json`. Il faut OpenCV, NumPy et Pillow.
 - `python3 tools/images.py <dossier des originaux>` : les photos en AVIF (et leurs versions allégées), d'après `data/photos.json`.
 - `python3 tools/map.py <dossier>` : la carte, d'après les fichiers du Census (voir l'en-tête du script).
-- La boucle des fontaines (`src/assets/video/fountains.mp4`) : 3 secondes de leur film, refermées sur elles-mêmes par un fondu (ffmpeg, filtre xfade).
+- La boucle des fontaines (`src/assets/video/fountains.mp4`) : 3 secondes de leur film, refermées sur elles-mêmes par un fondu (ffmpeg, filtre xfade). Une version WebM (VP9, `fountains.webm`, 768 Ko) sert de repli aux navigateurs sans H.264, comme le Chromium des captures vidéo : le MP4 déclare son codec, ils le sautent sans le charger.
 - `python3 tools/boards.py …` : les planches de présentation de `boards/`, en anglais pour le client (captures du site actuel et du nouveau, voir l'en-tête du script).
 
 ## Mesures

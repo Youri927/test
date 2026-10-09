@@ -109,7 +109,7 @@ export function Area() {
           </div>
           <figcaption className="t-note mt-3 flex items-center gap-2 text-ink-soft">
             <MapPin aria-hidden="true" className="size-4 text-azure-ink" />
-            Their office, {site.address.street}. Coastline: U.S. Census Bureau.
+            Our office, {site.address.street}. Coastline: U.S. Census Bureau.
           </figcaption>
         </figure>
       </div>
