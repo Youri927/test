@@ -1,0 +1,654 @@
+{
+ "models": [
+  {
+   "id": "laguna",
+   "name": "Laguna",
+   "families": [
+    "rectangular"
+   ],
+   "drawing": "laguna",
+   "sizes": [
+    {
+     "l": 348,
+     "w": 165,
+     "shallow": 41,
+     "deep": 70.5,
+     "gal": 12200
+    },
+    {
+     "l": 276,
+     "w": 135,
+     "shallow": 41.5,
+     "deep": 61.5,
+     "gal": 7400
+    }
+   ]
+  },
+  {
+   "id": "grande",
+   "name": "Grande",
+   "families": [
+    "rectangular"
+   ],
+   "drawing": "grande",
+   "sizes": [
+    {
+     "l": 348,
+     "w": 165,
+     "shallow": 41,
+     "deep": 70.5,
+     "gal": 12200
+    },
+    {
+     "l": 276,
+     "w": 135,
+     "shallow": 41.5,
+     "deep": 61.5,
+     "gal": 7400
+    }
+   ]
+  },
+  {
+   "id": "bondi",
+   "name": "Bondi",
+   "families": [
+    "rectangular"
+   ],
+   "drawing": "bondi",
+   "sizes": [
+    {
+     "l": 480,
+     "w": 189,
+     "shallow": 44,
+     "deep": 75
+    },
+    {
+     "l": 420,
+     "w": 189,
+     "shallow": 42,
+     "deep": 73.5
+    }
+   ]
+  },
+  {
+   "id": "whitsunday",
+   "name": "Whitsunday",
+   "families": [
+    "rectangular"
+   ],
+   "drawing": "whitsunday",
+   "sizes": [
+    {
+     "l": 480,
+     "w": 188,
+     "shallow": 42,
+     "deep": 82,
+     "gal": 22000
+    },
+    {
+     "l": 420,
+     "w": 188,
+     "shallow": 42,
+     "deep": 76,
+     "gal": 18000
+    },
+    {
+     "l": 372,
+     "w": 188,
+     "shallow": 42,
+     "deep": 73,
+     "gal": 15000
+    }
+   ]
+  },
+  {
+   "id": "whitsunday-deep",
+   "name": "Whitsunday Deep",
+   "families": [
+    "rectangular"
+   ],
+   "drawing": "whitsunday-deep",
+   "sizes": [
+    {
+     "l": 480,
+     "w": 188,
+     "shallow": 42,
+     "deep": 102,
+     "gal": 28350
+    }
+   ]
+  },
+  {
+   "id": "whitsunday-slim",
+   "name": "Whitsunday Slim",
+   "families": [
+    "rectangular"
+   ],
+   "drawing": "whitsunday-slim",
+   "sizes": [
+    {
+     "l": 432,
+     "w": 168,
+     "shallow": 41,
+     "deep": 74,
+     "gal": 16650
+    }
+   ]
+  },
+  {
+   "id": "whitsunday-lounger",
+   "name": "Whitsunday Lounger",
+   "families": [
+    "rectangular"
+   ],
+   "drawing": "whitsunday-lounger",
+   "sizes": [
+    {
+     "l": 420,
+     "w": 188,
+     "shallow": 42,
+     "deep": 76,
+     "gal": 17800
+    },
+    {
+     "l": 372,
+     "w": 188,
+     "shallow": 42,
+     "deep": 73,
+     "gal": 14700
+    }
+   ]
+  },
+  {
+   "id": "sydney-harbour",
+   "name": "Sydney Harbour",
+   "families": [
+    "rectangular"
+   ],
+   "drawing": "sydney-harbour",
+   "sizes": [
+    {
+     "l": 480,
+     "w": 192,
+     "shallow": 42,
+     "deep": 78,
+     "gal": 17500
+    },
+    {
+     "l": 420,
+     "w": 192,
+     "shallow": 42,
+     "deep": 73,
+     "gal": 13987
+    }
+   ]
+  },
+  {
+   "id": "outback-dundee",
+   "name": "Outback Dundee",
+   "families": [
+    "rectangular"
+   ],
+   "drawing": "outback-dundee",
+   "sizes": [
+    {
+     "l": 360,
+     "w": 168,
+     "shallow": 44,
+     "deep": 70,
+     "gal": 12400,
+     "label": "Without lounger",
+     "drawing": "outback-dundee"
+    },
+    {
+     "l": 360,
+     "w": 168,
+     "shallow": 44,
+     "deep": 70,
+     "gal": 12400,
+     "label": "With lounger",
+     "drawing": "outback-dundee-lounger"
+    }
+   ]
+  },
+  {
+   "id": "outback-lounger",
+   "name": "Outback Lounger",
+   "families": [
+    "rectangular"
+   ],
+   "drawing": "outback-lounger",
+   "sizes": [
+    {
+     "l": 360,
+     "w": 168,
+     "shallow": 51,
+     "deep": 51,
+     "label": "14′ wide"
+    },
+    {
+     "l": 360,
+     "w": 135,
+     "shallow": 51,
+     "deep": 51,
+     "label": "11′ 3″ wide"
+    }
+   ]
+  },
+  {
+   "id": "coral-cay",
+   "name": "Coral Cay Plunge",
+   "families": [
+    "rectangular",
+    "plunge"
+   ],
+   "drawing": "coral-cay-30",
+   "sizes": [
+    {
+     "l": 360,
+     "w": 135,
+     "shallow": 42,
+     "deep": 63,
+     "gal": 9125,
+     "drawing": "coral-cay-30"
+    },
+    {
+     "l": 312,
+     "w": 114,
+     "shallow": 42,
+     "deep": 61.5,
+     "drawing": "coral-cay-26"
+    },
+    {
+     "l": 240,
+     "w": 114,
+     "shallow": 42,
+     "deep": 57.75,
+     "drawing": "coral-cay-26"
+    }
+   ]
+  },
+  {
+   "id": "escape",
+   "name": "Escape Plunge",
+   "families": [
+    "rectangular",
+    "plunge"
+   ],
+   "drawing": "escape",
+   "sizes": [
+    {
+     "l": 204,
+     "w": 102,
+     "shallow": 55,
+     "deep": 55,
+     "gal": 3400
+    }
+   ]
+  },
+  {
+   "id": "billabong-cove",
+   "name": "Billabong Cove",
+   "families": [
+    "freeform"
+   ],
+   "drawing": "billabong-cove",
+   "sizes": [
+    {
+     "l": 423.125,
+     "w": 192,
+     "shallow": 40,
+     "deep": 77
+    }
+   ]
+  },
+  {
+   "id": "billabong-splash",
+   "name": "Billabong Splash",
+   "families": [
+    "freeform"
+   ],
+   "drawing": "billabong-splash",
+   "sizes": [
+    {
+     "l": 324,
+     "w": 156,
+     "shallow": 43,
+     "deep": 66
+    }
+   ]
+  },
+  {
+   "id": "coral-sea",
+   "name": "Coral Sea",
+   "families": [
+    "freeform"
+   ],
+   "drawing": "coral-sea",
+   "sizes": [
+    {
+     "l": 480,
+     "w": 182,
+     "shallow": 43,
+     "deep": 81.5,
+     "gal": 19200
+    },
+    {
+     "l": 420,
+     "w": 182,
+     "shallow": 43,
+     "deep": 76,
+     "gal": 16000
+    },
+    {
+     "l": 374,
+     "w": 182,
+     "shallow": 48,
+     "deep": 76,
+     "gal": 13700
+    }
+   ]
+  },
+  {
+   "id": "coral-sea-lounger",
+   "name": "Coral Sea Lounger",
+   "families": [
+    "freeform"
+   ],
+   "drawing": "coral-sea-lounger",
+   "sizes": [
+    {
+     "l": 420,
+     "w": 182,
+     "shallow": 43,
+     "deep": 76,
+     "gal": 15800
+    },
+    {
+     "l": 374,
+     "w": 182,
+     "shallow": 48,
+     "deep": 76,
+     "gal": 13400
+    }
+   ]
+  },
+  {
+   "id": "southport",
+   "name": "Southport",
+   "families": [
+    "freeform"
+   ],
+   "drawing": "southport",
+   "sizes": [
+    {
+     "l": 336,
+     "w": 169,
+     "shallow": 43,
+     "deep": 72,
+     "gal": 11500
+    }
+   ]
+  },
+  {
+   "id": "sudbury",
+   "name": "Sudbury",
+   "families": [
+    "freeform"
+   ],
+   "drawing": "sudbury",
+   "sizes": [
+    {
+     "l": 348,
+     "w": 172,
+     "shallow": 47.5,
+     "deep": 71.5,
+     "gal": 13800
+    },
+    {
+     "l": 300,
+     "w": 172,
+     "shallow": 47.5,
+     "deep": 67.5,
+     "gal": 11500
+    }
+   ]
+  },
+  {
+   "id": "oyster",
+   "name": "Oyster",
+   "families": [
+    "kidney"
+   ],
+   "drawing": "oyster",
+   "sizes": [
+    {
+     "l": 360,
+     "w": 177,
+     "shallow": 40,
+     "deep": 75,
+     "gal": 11000
+    },
+    {
+     "l": 324,
+     "w": 163,
+     "shallow": 41.5,
+     "deep": 66,
+     "gal": 8600
+    }
+   ]
+  },
+  {
+   "id": "opal",
+   "name": "Opal",
+   "families": [
+    "kidney"
+   ],
+   "drawing": "opal",
+   "sizes": [
+    {
+     "l": 254,
+     "w": 136,
+     "shallow": 44,
+     "deep": 60,
+     "gal": 5000
+    }
+   ]
+  },
+  {
+   "id": "crispin",
+   "name": "Crispin Plunge",
+   "families": [
+    "kidney",
+    "plunge"
+   ],
+   "drawing": "crispin",
+   "sizes": [
+    {
+     "l": 198,
+     "w": 120,
+     "shallow": 47,
+     "deep": 47,
+     "gal": 3100
+    }
+   ]
+  },
+  {
+   "id": "pixie",
+   "name": "Pixie Plunge",
+   "families": [
+    "kidney",
+    "plunge"
+   ],
+   "drawing": "pixie",
+   "sizes": [
+    {
+     "l": 198,
+     "w": 120,
+     "shallow": 47,
+     "deep": 47,
+     "gal": 3100
+    }
+   ]
+  },
+  {
+   "id": "milano",
+   "name": "Milano",
+   "families": [
+    "roman"
+   ],
+   "drawing": "milano",
+   "sizes": [
+    {
+     "l": 276,
+     "w": 132,
+     "shallow": 52.5,
+     "deep": 52.5
+    }
+   ]
+  },
+  {
+   "id": "resort-spa",
+   "name": "Resort Spa",
+   "families": [
+    "spa"
+   ],
+   "drawing": "resort-spa",
+   "sizes": [
+    {
+     "l": 188,
+     "w": 106,
+     "deep": 38
+    }
+   ]
+  },
+  {
+   "id": "capri-spa",
+   "name": "Capri Spa",
+   "families": [
+    "spa"
+   ],
+   "drawing": "capri-spa",
+   "sizes": [
+    {
+     "l": 168,
+     "w": 72,
+     "deep": 36
+    }
+   ]
+  },
+  {
+   "id": "cube-spa",
+   "name": "Cube Spa",
+   "families": [
+    "spa"
+   ],
+   "drawing": "cube-spa",
+   "sizes": [
+    {
+     "l": 108,
+     "w": 108,
+     "deep": 36
+    }
+   ]
+  },
+  {
+   "id": "horseshoe-spa",
+   "name": "Horseshoe Spa",
+   "families": [
+    "spa"
+   ],
+   "drawing": "horseshoe-spa",
+   "sizes": [
+    {
+     "l": 114,
+     "w": 111,
+     "deep": 39
+    }
+   ]
+  },
+  {
+   "id": "pixie-sundeck",
+   "name": "Pixie Sundeck",
+   "families": [
+    "spa"
+   ],
+   "drawing": "pixie-sundeck",
+   "sizes": [
+    {
+     "l": 198,
+     "w": 120,
+     "deep": 10
+    }
+   ]
+  },
+  {
+   "id": "cube-sundeck",
+   "name": "Cube Sundeck",
+   "families": [
+    "spa"
+   ],
+   "drawing": "cube-sundeck",
+   "sizes": [
+    {
+     "l": 108,
+     "w": 108,
+     "deep": 10
+    }
+   ]
+  },
+  {
+   "id": "horseshoe-sundeck",
+   "name": "Horseshoe Sundeck",
+   "families": [
+    "spa"
+   ],
+   "drawing": "horseshoe-sundeck",
+   "sizes": [
+    {
+     "l": 114,
+     "w": 111,
+     "deep": 10
+    }
+   ]
+  }
+ ],
+ "finishes": [
+  {
+   "id": "aquamarine",
+   "name": "Aquamarine Shimmer",
+   "tint": "#0187bc",
+   "deep": "#00618a"
+  },
+  {
+   "id": "arctic",
+   "name": "Arctic Shimmer",
+   "tint": "#5fb2c8",
+   "deep": "#2f7f94"
+  },
+  {
+   "id": "california",
+   "name": "California Shimmer",
+   "tint": "#2f98cc",
+   "deep": "#1a6e9a"
+  },
+  {
+   "id": "evening-sky",
+   "name": "Evening Sky Shimmer",
+   "tint": "#5688a2",
+   "deep": "#3a647a"
+  },
+  {
+   "id": "sandstone",
+   "name": "Sandstone Shimmer",
+   "tint": "#6eb1ae",
+   "deep": "#3d7e7b"
+  },
+  {
+   "id": "ocean",
+   "name": "Ocean Shimmer",
+   "tint": "#1b4f9c",
+   "deep": "#143a73"
+  }
+ ]
+}
