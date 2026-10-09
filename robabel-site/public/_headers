@@ -1,0 +1,12 @@
+# En-têtes lus par Netlify au déploiement (copié à la racine de dist-web/ par « npm run build:web »).
+
+# Maquette de refonte avec un formulaire de démonstration : hors des moteurs de recherche.
+# À retirer le jour où ce site remplace celui de Custom Pools by Rob Abel.
+/*
+  X-Robots-Tag: noindex
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Scripts, styles, police et photos : noms de fichiers versionnés, gardés en cache un an
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
