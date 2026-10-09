@@ -15,7 +15,7 @@ OUT = Path(__file__).resolve().parent.parent / 'boards'
 OUT.mkdir(exist_ok=True)
 # les couleurs du site : fond « salt », bleu nuit du logo, texte secondaire, azur du logo
 BG, INK, SOFT, AZURE, GREY, LINE = (242, 245, 248), (12, 36, 72), (61, 81, 112), (0, 156, 204), (170, 180, 190), (214, 222, 231)
-SUB = 'custompoolsbyrobabel.com · website redesign concept, October 2026'
+SUB = 'custompoolsbyrobabel.com, website redesign concept, October 2026'
 
 
 def font(name, size):

@@ -2,7 +2,7 @@
 // Usage : node tools/stills.mjs <dossier> <image> [<image> …]   (numéros d'image à 60 i/s)
 import {bundle} from '@remotion/bundler';
 import {renderStill, selectComposition} from '@remotion/renderer';
-import {existsSync, mkdirSync} from 'node:fs';
+import {existsSync, mkdirSync, rmSync} from 'node:fs';
 import {resolve} from 'node:path';
 
 const [dir, ...frames] = process.argv.slice(2);
@@ -15,3 +15,5 @@ for (const f of frames.map(Number)) {
   process.stdout.write(`${f} `);
 }
 console.log('✓');
+// le paquet de Remotion (une copie de public/, 160 Mo) reste sinon dans /tmp à chaque appel
+if (serveUrl.includes('remotion-webpack-bundle-')) rmSync(serveUrl, {recursive: true, force: true});
