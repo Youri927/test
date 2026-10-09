@@ -278,19 +278,6 @@ const addBell = (t0, freq, gain, pan, len = 4) => {
     add(i0 + j, s * (1 - pan), s * pan, 0.9);
   }
 };
-// ——— Montée de bruit filtré ———
-const addRiser = (b0, b1, gain) => {
-  const i0 = Math.floor(b0 * BEAT * SR);
-  const i1 = Math.floor(b1 * BEAT * SR);
-  const st = [svf(), svf()];
-  for (let i = i0; i < i1; i++) {
-    const p = (i - i0) / (i1 - i0);
-    const fc = 320 + 5200 * p * p;
-    const a = gain * Math.pow(p, 1.8) * (p > 0.97 ? (1 - p) / 0.03 : 1);
-    add(i, band(st[0], rnd() * 2 - 1, fc, 0.7) * a, band(st[1], rnd() * 2 - 1, fc * 1.04, 0.7) * a, 0.4);
-  }
-};
-
 // ——— Partition ———
 const at = (b) => b * BEAT;
 const isStart = (b, start) => Math.abs(b - start) < 1e-9;
@@ -388,9 +375,8 @@ for (let s16 = 0; s16 < TOTAL_BEATS * 4; s16++) {
 // le site actuel : un accord net à chaque constat, une note pour chaque preuve mesurée (src/beats.ts : TODAY)
 for (const k of [5, 12, 18]) addEP(at(S.Today + k), ['F#4', 'A4', 'C#5'], 0.03, 0.7, 0.8, false);
 for (const k of [7, 8, 14, 15, 19, 23]) addMarimba(at(S.Today + k), n(['C#6', 'E6', 'A5', 'C#6', 'F#5', 'A5'][[7, 8, 14, 15, 19, 23].indexOf(k)]), 0.05, 0.5, false, 0.8);
-// la fiche : un accord quand la note « not to scale » est mesurée ; la montée vers le titre ; le titre
+// la fiche : un accord quand la note « not to scale » est mesurée ; le titre (pas de souffle : la grosse caisse seule fait la montée)
 addEP(at(S.Sheet + (SHEET.note + 30) / FR), ['D4', 'F#4', 'A4', 'E5'], 0.035, 1.2, 0.9, false);
-addRiser(S.Sheet + 8, GROOVE0, 0.055);
 addKick(at(GROOVE0), 0.46, false);
 addEP(at(GROOVE0), ['A2', 'E3', 'C#4', 'G#4', 'B4'], 0.06, BEAT * 3, 1, false, 0.012);
 // l'accueil : un coup sourd et l'accord quand le nouveau site arrive

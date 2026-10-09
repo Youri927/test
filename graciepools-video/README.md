@@ -54,9 +54,9 @@ Vidéo de 102,6 s en anglais (1920 × 1080, 60 i/s) pour présenter la refonte d
    - **Musique** : 100 BPM, la majeur : marimba, piano électrique (synthèse FM), basse ronde, grosse caisse douce, rimshot, claquement et shaker.
      - L'ouverture se pose sur la majeur quand l'eau remplit le bassin.
      - Le site actuel passe en fa dièse mineur, sur une pulsation sourde.
-     - La fiche tient un accord pendant que la caméra lit la note, puis monte pendant que les dessins se posent ; le groove part sur « Every model, drawn to scale ».
+     - La fiche tient un accord pendant que la caméra lit la note, puis la grosse caisse monte pendant que les dessins se posent ; le groove part sur « Every model, drawn to scale ».
      - Les panneaux sombres du site (comparateur, piscines existantes) : le groove passe dans un filtre qui se referme à moitié, et se rouvre avec la galerie et la demande.
-   - **Bruitages** : la cote qui compte, le contour qui se trace, l'eau qui remplit, le ruban de la règle qu'on tire et ses mâchoires qui s'écartent, les preuves mesurées, les 23 dessins qui se posent (une note de marimba chacun, en la majeur pentatonique), le bassin qui s'étire ou se rétracte, l'épingle, la goutte de chaque coloris, la bande qu'on fait glisser, les clics, la frappe au clavier, le carillon du formulaire envoyé.
+   - **Bruitages** : peu de sons, courts et nets, mixés bas sous la musique (24 dB dessous en moyenne), sans aucun souffle ni glissé : les déclics de la cote qui compte, une goutte quand l'eau arrive, un déclic feutré quand les mâchoires de la règle s'écartent, une note de marimba pour chacun des 23 dessins qui se posent (en la majeur pentatonique), les clics, l'épingle, une goutte par coloris, la frappe au clavier et le carillon du formulaire envoyé.
    - Tous les points de synchronisation sont dans `src/beats.ts` : les coupes tombent sur les temps de la musique. Les repères des bruitages sont partagés entre l'aperçu Remotion et le mixage (`src/cues.ts`).
 3. **Rendu.**
    - `bash tools/render.sh` : rendu muet par segments (`out/seg/`), raccord avec ffmpeg, bande-son mixée à part (`npm run mix`), puis assemblage dans `out/presentation-gracie.mp4`.
