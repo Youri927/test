@@ -46,7 +46,8 @@ export const extras =
   'Pavers, walkways and paver driveways, new lights and skimmers, gas installation and repairs, spillway and wall repairs, outdoor kitchens, grottos, tiki huts, water features and landscaping.'
 
 // Les 11 étapes de leur page « Build Process », regroupées en 7 temps.
-// Les photos : la construction neuve au bord d'un canal à Bradenton (leur page Projets), sauf le plan et l'enduit.
+// Les photos : la construction neuve au bord d'un canal à Bradenton (leur page Projets) quand la légende le dit ;
+// les autres viennent de leur page Build Process, sans lieu précisé.
 export type Stage = { id: string; photo: PhotoKey; alt: string; steps: { n: number; name: string; text: string }[]; caption: string }
 type PhotoKey = 'b-plan' | 'b-excavation' | 'b-steel' | 'b-gunite' | 'b-deck' | 'b-plaster' | 'pool-canal'
 export const stages: Stage[] = [
@@ -64,7 +65,7 @@ export const stages: Stage[] = [
     id: 'dig',
     photo: 'b-excavation',
     alt: 'A small excavator digging a pool in a backyard on a canal, a crew member checking the layout stakes',
-    caption: 'Bradenton, on the canal: the dig',
+    caption: 'Excavation on a canal-front lot',
     steps: [{ n: 3, name: 'Layout & excavation', text: 'The design is staked out on the ground, then dug to specification for the structural work.' }],
   },
   {
@@ -88,7 +89,7 @@ export const stages: Stage[] = [
     id: 'tile',
     photo: 'b-deck',
     alt: 'Pavers laid around the empty pool, with a raised wall faced in blue tile',
-    caption: 'Bradenton: tile, coping and pavers',
+    caption: 'Tile, coping and pavers going in',
     steps: [
       { n: 7, name: 'Tile, coping & features', text: 'Waterline tile, coping, and the features you chose: spa, sun shelf, waterfalls.' },
       { n: 8, name: 'Decking', text: 'Pavers, travertine or concrete around the pool, laid for durability, safety and looks.' },

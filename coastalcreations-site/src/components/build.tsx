@@ -23,7 +23,7 @@ export function Build() {
 
   return (
     <section id="build" className="bg-mist-sec outline-none" aria-labelledby="build-title" tabIndex={-1}>
-      <div className="wrap grid-12 gap-y-6 pt-[var(--section)] pb-[clamp(48px,6vw,88px)]">
+      <div className={`wrap grid-12 gap-y-6 pt-[var(--section)] ${wide && animated ? 'pb-0' : 'pb-[clamp(48px,6vw,88px)]'}`}>
         <Lines as="h2" id="build-title" className="t-h2 col-span-12 lg:col-span-7">
           Eleven steps. Six to twelve weeks.
         </Lines>
@@ -122,7 +122,7 @@ function Pinned() {
 
   return (
     <div ref={ref} className="build-pin">
-      <div className="wrap grid-12 h-full items-center">
+      <div className="wrap grid-12 h-full items-start">
         <div className="col-span-5 pr-[clamp(0px,2vw,40px)]">
           <ol className="build-steps" aria-label="The eleven steps of a new pool">
             {stages.map((s, i) =>

@@ -61,8 +61,9 @@ export function Header() {
         Skip to content
       </a>
       <div className="wrap flex h-full items-center justify-between gap-6">
-        <a href="#top" onClick={(e) => go(e, 'top')} aria-label="Coastal Creations Pools and Lagoons, back to top">
+        <a href="#top" onClick={(e) => go(e, 'top')}>
           <Wordmark />
+          <span className="sr-only">, back to top</span>
         </a>
         <nav aria-label="Sections" className="hidden items-center gap-7 lg:flex">
           {nav.map((n) => (

@@ -320,6 +320,16 @@
   .motion .lines[data-shown] .ln > span {
     transform: none;
   }
+  /* page pré-générée : le titre attend d'être découpé en lignes (au plus 2,5 s, au cas où le script ne viendrait pas) */
+  .motion .lines:not([data-split]) {
+    visibility: hidden;
+    animation: lines-wait 0s 2.5s forwards;
+  }
+  @keyframes lines-wait {
+    to {
+      visibility: visible;
+    }
+  }
   /* blocs qui montent doucement en entrant à l'écran (lib/motion.ts, watchReveals) */
   .motion [data-up] {
     opacity: 0;
@@ -521,7 +531,7 @@
     position: relative;
     overflow: hidden;
     border-radius: 6px;
-    background: var(--navy);
+    background: var(--plaster-2);
   }
   .hero-frame video,
   .hero-frame img {
@@ -546,7 +556,7 @@
   /* ===== construction neuve : les étapes ===== */
   .build-pin {
     height: 100svh;
-    padding-top: calc(var(--header-h) + 20px);
+    padding-top: calc(var(--header-h) + 36px);
     padding-bottom: 28px;
   }
   .build-steps > li {
@@ -563,7 +573,8 @@
     font-weight: 600;
     font-size: 16.5px;
     font-stretch: 104%;
-    color: rgb(12 36 60 / 0.42);
+    /* les étapes à venir restent lisibles (contraste 4,8:1 sur le fond) */
+    color: rgb(12 36 60 / 0.66);
     transition: color 0.4s var(--ease);
   }
   .build-step-head .t-num {
@@ -590,6 +601,7 @@
   }
   .build-steps > li[data-on] .build-step-head {
     color: var(--navy);
+    font-weight: 720;
   }
   .build-steps > li[data-on] .build-step-body {
     grid-template-rows: 1fr;
@@ -729,13 +741,19 @@
     .finish[data-open] {
       height: calc((100vw - 2 * var(--side)) * 0.545);
     }
+    /* fermé, la rangée montre le bout « grand fond », sombre : le nom en blanc y reste lisible */
     .finish > img {
       height: 100%;
+      object-position: 100% 50%;
+    }
+    .finish[data-open] > img {
       object-position: 50% 50%;
     }
     .finish-name {
       top: 0;
       bottom: auto;
+      left: auto;
+      right: 0;
       padding: 18px 16px;
       writing-mode: horizontal-tb;
       transform: none;

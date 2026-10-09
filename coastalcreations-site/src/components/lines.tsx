@@ -1,11 +1,12 @@
 // Titre qui apparaît ligne par ligne quand il entre à l'écran.
 // Le découpage suit les vraies lignes affichées ; il est refait quand la police est chargée et quand la largeur change.
-import { useEffect, useRef, type CSSProperties, type ElementType } from 'react'
+import { useLayoutEffect, useRef, type CSSProperties, type ElementType } from 'react'
 
 export function Lines({ as: Tag = 'h2', children, className = '', delay = 0, id }: { as?: ElementType; children: string; className?: string; delay?: number; id?: string }) {
   const ref = useRef<HTMLElement>(null)
 
-  useEffect(() => {
+  // avant le premier affichage : le titre n'apparaît jamais d'un bloc avant son animation
+  useLayoutEffect(() => {
     const el = ref.current
     if (!el) return
     let alive = true
@@ -27,6 +28,7 @@ export function Lines({ as: Tag = 'h2', children, className = '', delay = 0, id 
         }
         lines[lines.length - 1].push(s.textContent ?? '')
       }
+      el.setAttribute('data-split', '')
       el.replaceChildren(
         ...lines.map((l, i) => {
           const ln = document.createElement('span')

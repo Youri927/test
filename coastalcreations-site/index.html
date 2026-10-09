@@ -25,7 +25,15 @@
         "description": "Custom pool construction, pool renovation and resurfacing, leak detection and repair, equipment replacement, storm recovery and commercial pool renovation."
       }
     </script>
-    <script>if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion')</script>
+    <script>
+      // animations seulement si le visiteur ne les a pas réduites ; si le script du site ne démarre pas en 4 s, tout s'affiche sans elles
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('motion')
+        setTimeout(function () {
+          if (!document.documentElement.hasAttribute('data-ready')) document.documentElement.classList.remove('motion')
+        }, 4000)
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

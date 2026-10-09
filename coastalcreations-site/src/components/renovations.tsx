@@ -19,7 +19,7 @@ export function Renovations() {
               Before, during, after.
             </Lines>
             <p className="t-lead col-span-12 sm:col-span-10 lg:col-span-4 lg:col-start-9 lg:self-end">
-              Resurfacing, waterline tile and repairs for homes, vacation rentals and commercial pools. Same pool, same spot, photographed on the job.
+              Resurfacing, waterline tile and repairs for homes, vacation rentals and commercial pools, photographed on the job.
             </p>
           </div>
           <div className="mt-[clamp(56px,7vw,112px)]">

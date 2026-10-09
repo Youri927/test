@@ -55,7 +55,7 @@ export function Leaks() {
 
         <div className="grid-12 mt-[clamp(72px,8vw,128px)] gap-y-8">
           <div className="col-span-12 lg:col-span-4">
-            <h3 className="t-h3">Leak detection questions</h3>
+            <h3 id="faq" className="t-h3">Leak detection questions</h3>
             <p className="t-small mt-4 max-w-[26em] text-white/75">
               Still not sure? Call or text{' '}
               <a href={site.phone.sms} className="ul text-white">

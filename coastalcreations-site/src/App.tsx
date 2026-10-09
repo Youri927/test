@@ -14,6 +14,7 @@ import { startSmoothScroll, watchReveals } from '@/lib/motion'
 
 export default function App() {
   useEffect(() => {
+    document.documentElement.setAttribute('data-ready', '')
     startSmoothScroll()
     return watchReveals()
   }, [])
