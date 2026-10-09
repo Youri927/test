@@ -1,12 +1,16 @@
 // Une piscine neuve ou une piscine existante : leurs deux pages (construction, rénovation), en étapes.
-import { useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Tabs } from 'radix-ui'
 
 import { Lines } from '@/components/lines'
 import { Photo } from '@/components/photo'
+import { later, motion, ScrollTrigger } from '@/lib/motion'
 import type { PhotoId } from '@/lib/photos'
+import { cn } from '@/lib/utils'
 
-const PATHS: { id: string; tab: string; title: string; intro: string; photo: PhotoId; alt: string; steps: { name: string; text: string }[] }[] = [
+type Step = { name: string; text: string }
+
+const PATHS: { id: string; tab: string; title: string; intro: string; photo: PhotoId; alt: string; steps: Step[] }[] = [
   {
     id: 'new',
     tab: 'A new pool',
@@ -38,6 +42,77 @@ const PATHS: { id: string; tab: string; title: string; intro: string; photo: Pho
   },
 ]
 
+// Les étapes, reliées par un tuyau qui se remplit au défilement, comme celui du local technique :
+// chaque étape s'allume quand l'eau atteint son numéro. Seul l'onglet affiché est suivi.
+function Steps({ steps, active }: { steps: Step[]; active: boolean }) {
+  const wrap = useRef<HTMLDivElement>(null)
+  const [reached, setReached] = useState(-1)
+  useEffect(() => {
+    const el = wrap.current
+    if (!el || !active) return
+    const pipe = el.querySelector<HTMLElement>('.steps-pipe')!
+    const dots = [...el.querySelectorAll<HTMLElement>('.step-n')]
+    let centers: number[] = []
+    // le tuyau va du centre du premier numéro au centre du dernier
+    const measure = () => {
+      const base = el.getBoundingClientRect().top
+      const c = dots.map((d) => {
+        const r = d.getBoundingClientRect()
+        return r.top + r.height / 2 - base
+      })
+      pipe.style.top = `${c[0]}px`
+      pipe.style.height = `${c[c.length - 1] - c[0]}px`
+      centers = c.map((v) => v - c[0])
+    }
+    measure()
+    if (!motion()) {
+      pipe.style.setProperty('--fill', '1')
+      setReached(steps.length)
+      return
+    }
+    const fill = (p: number) => {
+      pipe.style.setProperty('--fill', p.toFixed(4))
+      const px = p * (centers[centers.length - 1] ?? 0)
+      setReached(p === 0 ? -1 : centers.filter((c) => c <= px + 2).length - 1)
+    }
+    let st: ScrollTrigger | undefined
+    const cancel = later(() => {
+      st = ScrollTrigger.create({ trigger: pipe, start: 'top 62%', end: 'bottom 62%', scrub: 0.4, onUpdate: (s) => fill(s.progress), onRefresh: (s) => fill(s.progress) })
+    })
+    const ro = new ResizeObserver(() => {
+      measure()
+      st?.refresh()
+    })
+    ro.observe(el)
+    return () => {
+      cancel()
+      ro.disconnect()
+      st?.kill()
+    }
+  }, [active, steps.length])
+
+  return (
+    <div ref={wrap} className="steps-wrap lg:col-span-6 lg:col-start-7">
+      <span className="steps-pipe" aria-hidden="true">
+        <span className="steps-water" />
+      </span>
+      <ol className="steps">
+        {steps.map((s, i) => (
+          <li key={s.name} className={cn('step', i <= reached && 'is-on')} style={{ '--i': i } as CSSProperties}>
+            <span className="step-n tnum" aria-hidden="true">
+              {i + 1}
+            </span>
+            <div>
+              <h4 className="t-h4">{s.name}</h4>
+              <p className="t-small mt-1.5 max-w-[34em] text-ink-soft">{s.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}
+
 export function How() {
   const [tab, setTab] = useState('new')
   return (
@@ -61,21 +136,9 @@ export function How() {
               <div className="lg:col-span-5">
                 <h3 className="t-h3 max-w-[12em]">{p.title}</h3>
                 <p className="t-lead mt-4 max-w-[28em] text-ink-soft">{p.intro}</p>
-                <Photo id={p.photo} alt={p.alt} unveil={false} className="how-photo mt-10 aspect-[4/3] rounded-md" sizes="(min-width: 1024px) 38vw, 92vw" />
+                <Photo id={p.photo} alt={p.alt} unveil={false} parallax className="how-photo mt-10 aspect-[4/3] rounded-md" sizes="(min-width: 1024px) 38vw, 92vw" />
               </div>
-              <ol className="steps lg:col-span-6 lg:col-start-7">
-                {p.steps.map((s, i) => (
-                  <li key={s.name} className="step" style={{ '--i': i } as CSSProperties}>
-                    <span className="step-n tnum" aria-hidden="true">
-                      {i + 1}
-                    </span>
-                    <div>
-                      <h4 className="t-h4">{s.name}</h4>
-                      <p className="t-small mt-1.5 max-w-[34em] text-ink-soft">{s.text}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
+              <Steps steps={p.steps} active={tab === p.id} />
             </Tabs.Content>
           ))}
         </Tabs.Root>

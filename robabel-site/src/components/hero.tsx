@@ -7,7 +7,7 @@ import { RadioGroup } from 'radix-ui'
 
 import scene from '@/assets/hero/hero.json'
 import { small } from '@/lib/hero-small'
-import { go, motion } from '@/lib/motion'
+import { go, gsap, motion, useScrollAnim } from '@/lib/motion'
 import { site } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
@@ -58,6 +58,7 @@ export function Hero() {
   const [light, setLight] = useState<Light>('violet')
   // off : avant l'allumage ; intro : les lumières s'allument l'une après l'autre ; on : réponse immédiate au réglage
   const [phase, setPhase] = useState<'off' | 'intro' | 'on'>('off')
+  const root = useRef<HTMLElement>(null)
   const pending = useRef(new Set(['house', 'pool-violet', ...palms.map((p) => p.name)]))
 
   const ready = (name: string) => {
@@ -78,6 +79,16 @@ export function Hero() {
     return () => window.clearTimeout(t)
   }, [])
 
+  // en quittant l'accueil : la scène avance doucement, le titre file plus vite que la page en s'effaçant, et la nuit tombe sur la photo
+  useScrollAnim(root, (q) => {
+    gsap
+      .timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true } })
+      .to(q('.hero-scene'), { scale: 1.12 }, 0)
+      .to(q('.hero-title'), { yPercent: -28 }, 0)
+      .to(q('.hero-title'), { opacity: 0, duration: 0.24 }, 0.02)
+      .to(q('.hero-shade'), { opacity: 0.6 }, 0)
+  })
+
   const lit = phase !== 'off' && light !== 'off'
   const delay = (s: number) => (phase === 'intro' ? `${s}s` : '0s')
   const note =
@@ -88,7 +99,7 @@ export function Hero() {
         : `${LIGHTS.find((l) => l.id === light)?.label} is simulated on the same photo.`
 
   return (
-    <section id="top" tabIndex={-1} aria-labelledby="hero-title" className="hero on-dark relative bg-night text-white">
+    <section ref={root} id="top" tabIndex={-1} aria-labelledby="hero-title" className="hero on-dark relative bg-night text-white">
       {/* le décor : cadré comme une photo en « cover », point de mire sur la piscine */}
       <div className="hero-frame">
         <div className="hero-scene" aria-hidden="true">
@@ -114,6 +125,7 @@ export function Hero() {
               .filter((l) => l.group === 'color')
               .map((l) => <Img key={l.name} name={l.name} className="hero-layer" style={{ ...box(l), opacity: lit && light === l.name.replace('pool-', '') ? 1 : 0 }} />)}
         </div>
+        <div className="hero-shade" aria-hidden="true" />
       </div>
 
       <div className="hero-copy wrap">

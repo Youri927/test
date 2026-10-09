@@ -27,7 +27,16 @@ Leur meilleure photo est une piscine et son spa au bord de l'eau, au crépuscule
 - **Destin à 30A** : une vraie carte de la côte, tracée d'après les données du Census américain (la baie de Choctawhatchee, le golfe, la route 30A), avec leur bureau.
 - **Le rendez-vous** : 850-362-POOL en très grand, un formulaire court (nom, téléphone, ville, projet), et leur financement Lyon Financial.
 
-**Mouvement** : défilement fluide (Lenis) ; titres qui montent ligne par ligne ; photos qui se découvrent ; l'allumage de l'accueil ; l'eau du local technique liée au défilement (GSAP ScrollTrigger) ; au survol, l'eau circule dans le soulignement des liens. Tout est coupé avec « réduire les animations » : la page s'affiche alors allumée, le circuit plein.
+**Mouvement** : défilement fluide (Lenis) et animations liées au défilement (GSAP ScrollTrigger), toutes sur le thème de l'eau et de la lumière :
+- en quittant l'accueil, la scène avance vers la piscine, le titre file en s'effaçant et la nuit tombe sur la photo ;
+- la boucle des fontaines part de la largeur du texte et s'élargit jusqu'aux bords de l'écran ;
+- les photos de nuit s'allument au fil du défilement ; l'après-midi, le crépuscule et la nuit montent à des vitesses différentes ;
+- sur ordinateur, le circuit du local technique (avec le choix de la tuyauterie) reste fixé au milieu de l'écran le temps que l'eau le parcoure ;
+- les étapes de construction et de rénovation sont reliées par un tuyau qui se remplit, chaque numéro s'allume quand l'eau l'atteint ;
+- la carte part de leur bureau et recule jusqu'à toute la côte, les villes apparaissent, la route 30A se trace ;
+- les grandes photos glissent un peu moins vite que la page ; les titres montent ligne par ligne ; au survol, l'eau circule dans le soulignement des liens.
+
+Tout est coupé avec « réduire les animations » : la page s'affiche alors allumée, le circuit et les étapes pleins. Chaque animation est préparée dans sa propre tâche, pour ne pas bloquer le chargement.
 
 **Typographie et couleurs** : Sofia Sans Extra Condensed pour les titres, très grands et serrés, et Sofia Sans pour le texte (une seule famille, licence OFL, chiffres tabulaires pour le téléphone). Les deux couleurs du logo : le bleu nuit (#0C2448) et l'azur (#009CCC), avec un bleu presque noir pour la nuit et le local technique.
 
@@ -60,14 +69,14 @@ Lighthouse 12, profil téléphone (4G lente et processeur ralenti simulés), mê
 
 | Téléphone | Site actuel | Nouveau site |
 |---|---|---|
-| Performance | 89 | 90 |
+| Performance | 89 | 89 |
 | Accessibilité | 84 | 100 |
 | Bonnes pratiques | 61 | 100 |
 | Référencement | 92 | 100 |
-| Blocage pendant le chargement (TBT) | 0,31 s | 0,07 s |
-| Téléchargé au chargement | 1 179 Ko | 480 Ko |
+| Blocage pendant le chargement (TBT) | 0,31 s | 0,08 s |
+| Téléchargé au chargement | 1 179 Ko | 481 Ko |
 
-Sur ordinateur, le nouveau site obtient 99, 100, 100 et 100 (affichage principal en 0,8 s). La performance est à égalité sur téléphone : le site actuel est léger tant que sa vidéo d'accueil de 22 Mo ne s'est pas chargée (il affiche un cadre gris en attendant), le nouveau charge et anime la vraie photo dès l'ouverture. Les planches de `boards/` reprennent ces chiffres.
+Sur ordinateur, le nouveau site obtient 99, 100, 100 et 100 (affichage principal en 0,9 s). La performance est à égalité sur téléphone : le site actuel est léger tant que sa vidéo d'accueil de 22 Mo ne s'est pas chargée (il affiche un cadre gris en attendant), le nouveau charge et anime la vraie photo dès l'ouverture. Les planches de `boards/` reprennent ces chiffres.
 
 ## À confirmer avec Rob Abel
 

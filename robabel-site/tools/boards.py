@@ -101,11 +101,11 @@ grid('lumieres.jpg', [
 ], 3, 640, 'Lights on', 'Their photo is cut into light layers (the house, each palm, the pool): lit to the full, the layers give back the original')
 
 grid('local-technique.jpg', [
-    ('d-pump-flow.png', 'The water moves with the scroll', 'Each machine lights up when the water reaches it', (0.13, 0.93)),
+    ('d-pump-flow.png', 'The water moves with the scroll', 'The circuit stays in place while the water runs through it'),
     ('d-pipe-clear.png', 'Clear PVC with UV', 'The water and the UV show through the pipe'),
     ('d-pipe-s40.png', 'Schedule 40', 'The plumbing options from their pump room page'),
     ('d-pipe-s80.png', 'Schedule 80', 'Same circuit, darker pipe'),
-], 2, 900, 'The pump room, as a water circuit', 'Their signature: pool, pump, filter, chemistry controller, UV, heat pump and salt system, with their own photos', crop=(0.08, 0.88))
+], 2, 900, 'The pump room, as a water circuit', 'Their signature: pool, pump, filter, chemistry controller, UV, heat pump and salt system, with their own photos', crop=(0.25, 0.85))
 
 grid('nouvelle-page-sections.jpg', [
     ('d-rob.png', 'One builder', '30 years, the meeting at home, a pool made to be easy to keep'),
@@ -135,11 +135,11 @@ print('✓ telephone.jpg', b.size)
 # chiffres mesurés (voir README) : Lighthouse mobile, mêmes réglages des deux côtés ; le site actuel en ligne, meilleur
 # de quatre passages ; le nouveau servi en local et compressé, médiane de trois ; puis le contenu des deux sites
 rows = [
-    ('Performance (Lighthouse, phone)', '89', '90'),
+    ('Performance (Lighthouse, phone)', '89', '89'),
     ('Accessibility', '84', '100'),
     ('Best practices', '61', '100'),
     ('SEO', '92', '100'),
-    ('Main thread blocked while loading', '0.31 s', '0.07 s'),
+    ('Main thread blocked while loading', '0.31 s', '0.08 s'),
     ('Downloaded while loading, on a phone', '1.2 MB', '0.5 MB'),
     ('Gallery', '5 stock photos, file names as captions', 'their own photos'),
     ('Names for the company', '3', '1'),

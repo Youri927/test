@@ -1,7 +1,7 @@
 // Une photo du site, recadrée par son conteneur, qui se dévoile de bas en haut en entrant à l'écran.
 import { useEffect, useRef, type CSSProperties } from 'react'
 
-import { gsap, motion } from '@/lib/motion'
+import { gsap, later, motion } from '@/lib/motion'
 import { photo, type PhotoId } from '@/lib/photos'
 import { cn } from '@/lib/utils'
 
@@ -33,20 +33,40 @@ export function Photo({
   style?: CSSProperties
   /** la photo glisse un peu moins vite que la page */
   parallax?: boolean
-  /** photo de nuit : ses lumières s'allument en arrivant à l'écran (au lieu du dévoilement) */
+  /** photo de nuit : ses lumières s'allument avec le défilement (au lieu du dévoilement) */
   lightsOn?: boolean
 }) {
   const p = photo(id)
   const frame = useRef<HTMLDivElement>(null)
   const shift = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    if (!parallax || !motion() || !frame.current || !shift.current) return
-    const t = gsap.fromTo(shift.current, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: frame.current, start: 'top bottom', end: 'bottom top', scrub: true } })
+    const f = frame.current
+    const sh = shift.current
+    if (!parallax || !motion() || !f || !sh) return
+    let t: gsap.core.Tween | undefined
+    const cancel = later(() => {
+      t = gsap.fromTo(sh, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: f, start: 'top bottom', end: 'bottom top', scrub: true } })
+    })
     return () => {
-      t.scrollTrigger?.kill()
-      t.kill()
+      cancel()
+      t?.scrollTrigger?.kill()
+      t?.kill()
     }
   }, [parallax])
+  // photo de nuit : ses lumières montent avec le défilement, de l'entrée à l'écran jusqu'au milieu (--lit, de 0 à 1, voir index.css)
+  useEffect(() => {
+    const f = frame.current
+    if (!lightsOn || !motion() || !f) return
+    let t: gsap.core.Tween | undefined
+    const cancel = later(() => {
+      t = gsap.fromTo(f, { '--lit': 0 }, { '--lit': 1, ease: 'none', scrollTrigger: { trigger: f, start: 'top 88%', end: 'center 48%', scrub: true } })
+    })
+    return () => {
+      cancel()
+      t?.scrollTrigger?.kill()
+      t?.kill()
+    }
+  }, [lightsOn])
   const srcSet = portrait ? undefined : p.srcSet
   const tag = (
     <img

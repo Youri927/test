@@ -7,7 +7,7 @@ import { ToggleGroup } from 'radix-ui'
 
 import { Lines } from '@/components/lines'
 import { Photo } from '@/components/photo'
-import { gsap, motion, ScrollTrigger, useMediaQuery } from '@/lib/motion'
+import { gsap, later, motion, ScrollTrigger, useMediaQuery } from '@/lib/motion'
 import type { PhotoId } from '@/lib/photos'
 import { cn } from '@/lib/utils'
 
@@ -137,29 +137,68 @@ export function PumpRoom() {
   const [reached, setReached] = useState(-1)
   const section = useRef<HTMLElement>(null)
   const circuit = useRef<HTMLDivElement>(null)
+  const track = useRef<HTMLDivElement>(null)
+  const stick = useRef<HTMLDivElement>(null)
   const wide = useMediaQuery('(min-width: 1024px)')
 
   // l'eau avance avec le défilement ; chaque appareil s'allume quand elle l'atteint
   useEffect(() => {
     const el = circuit.current
-    if (!el) return
+    const tr = track.current
+    const sk = stick.current
+    if (!el || !tr || !sk) return
     if (!motion()) {
       el.style.setProperty('--flow', '1')
       setReached(STATIONS.length)
       return
     }
-    const st = ScrollTrigger.create({
-      trigger: el,
-      start: wide ? 'top 64%' : 'top 70%',
-      end: wide ? 'bottom 48%' : 'bottom 60%',
-      scrub: 0.6,
-      onUpdate: (s) => {
-        el.style.setProperty('--flow', s.progress.toFixed(4))
-        // les appareils sont répartis régulièrement entre l'entrée et la sortie du tuyau
-        setReached(Math.floor(s.progress * (STATIONS.length + 1) - 0.35))
-      },
+    const flow = (p: number) => {
+      el.style.setProperty('--flow', p.toFixed(4))
+      // les appareils sont répartis régulièrement entre l'entrée et la sortie du tuyau
+      setReached(p === 0 ? -1 : Math.floor(p * (STATIONS.length + 1) - 0.35))
+    }
+    if (!wide) {
+      // téléphone et tablette : le circuit est vertical, l'eau suit la lecture
+      let st: ScrollTrigger | undefined
+      const cancel = later(() => {
+        st = ScrollTrigger.create({ trigger: el, start: 'top 70%', end: 'bottom 60%', scrub: 0.6, onUpdate: (s) => flow(s.progress) })
+      })
+      return () => {
+        cancel()
+        st?.kill()
+      }
+    }
+    // ordinateur : le circuit et le choix de la tuyauterie restent au milieu de l'écran (position sticky, index.css)
+    // le temps d'un écran de défilement, pendant que l'eau parcourt le circuit ; ils repartent une fois le circuit plein
+    const measure = () => {
+      const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header')) || 78
+      const h = sk.offsetHeight
+      tr.style.setProperty('--ch', `${h}px`)
+      tr.style.setProperty('--stick', `${Math.max(header + 24, Math.round((window.innerHeight - h + header) / 2))}px`)
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(sk)
+    window.addEventListener('resize', measure)
+    let st: ScrollTrigger | undefined
+    const cancel = later(() => {
+      st = ScrollTrigger.create({
+        trigger: tr,
+        start: () => `top ${parseFloat(tr.style.getPropertyValue('--stick'))}px`,
+        end: () => `+=${window.innerHeight}`,
+        scrub: 0.5,
+        invalidateOnRefresh: true,
+        onUpdate: (s) => flow(Math.min(1, s.progress / 0.8)),
+      })
     })
-    return () => st.kill()
+    return () => {
+      cancel()
+      st?.kill()
+      ro.disconnect()
+      window.removeEventListener('resize', measure)
+      tr.style.removeProperty('--ch')
+      tr.style.removeProperty('--stick')
+    }
   }, [wide])
 
   // le titre de la section glisse un peu au début : rien d'autre ne bouge sans le visiteur
@@ -191,55 +230,57 @@ export function PumpRoom() {
   return (
     <section ref={section} id="pump-room" aria-labelledby="pr-title" tabIndex={-1} className="pump-room on-dark bg-night py-[clamp(88px,11vw,176px)] text-white" data-pipe={pipe}>
       <div className="wrap">
-        <div className="grid gap-x-[var(--gutter)] gap-y-10 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <Lines id="pr-title" className="t-h2 max-w-[8em]">
-              The room behind the pool
-            </Lines>
-            <p className="t-lead mt-8 max-w-[34em] text-white/80" data-up>
-              Pool equipment is expensive. Rob moves it indoors, into an air-conditioned pump room: out of the weather and out of view, it lasts far longer. The air conditioner removes moisture and
-              keeps a healthy temperature.
-            </p>
-          </div>
-          <div className="lg:col-span-5 lg:self-end" data-up>
-            <p id="pipe-label" className="t-small font-semibold">
-              Plumbing
-            </p>
-            <ToggleGroup.Root type="single" value={pipe} onValueChange={(v) => v && setPipe(v as Pipe)} aria-labelledby="pipe-label" className="pipe-switch mt-3">
-              {PIPES.map((p) => (
-                <ToggleGroup.Item key={p.id} value={p.id} className="pipe-opt">
-                  {p.label}
-                </ToggleGroup.Item>
-              ))}
-            </ToggleGroup.Root>
-            <p className="t-small mt-3 text-white/70" aria-live="polite">
-              {note}
-            </p>
-          </div>
+        <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-8">
+          <Lines id="pr-title" className="t-h2 max-w-[8em]">
+            The room behind the pool
+          </Lines>
+          <p className="t-lead max-w-[30em] text-white/80" data-up>
+            Pool equipment is expensive. Rob moves it indoors, into an air-conditioned pump room: out of the weather and out of view, it lasts far longer. The air conditioner removes moisture and
+            keeps a healthy temperature.
+          </p>
         </div>
 
-        {/* le circuit */}
-        <div ref={circuit} className="circuit mt-16 lg:mt-24" style={{ '--n': STATIONS.length } as CSSProperties}>
-          <div className="pipe" aria-hidden="true">
-            <span className="pipe-water" />
-            <span className="pipe-shine" />
+        {/* le circuit (sur ordinateur, sa piste lui laisse un écran de défilement pendant que l'eau coule) */}
+        <div ref={track} className="circuit-track mt-14 lg:mt-20">
+          <div ref={stick} className="circuit-stick">
+            <div className="pipe-row" data-up>
+              <p id="pipe-label" className="t-small font-semibold">
+                Plumbing
+              </p>
+              <ToggleGroup.Root type="single" value={pipe} onValueChange={(v) => v && setPipe(v as Pipe)} aria-labelledby="pipe-label" className="pipe-switch">
+                {PIPES.map((p) => (
+                  <ToggleGroup.Item key={p.id} value={p.id} className="pipe-opt">
+                    {p.label}
+                  </ToggleGroup.Item>
+                ))}
+              </ToggleGroup.Root>
+              <p className="t-small text-white/70" aria-live="polite">
+                {note}
+              </p>
+            </div>
+            <div ref={circuit} className="circuit mt-16 lg:mt-14" style={{ '--n': STATIONS.length } as CSSProperties}>
+              <div className="pipe" aria-hidden="true">
+                <span className="pipe-water" />
+                <span className="pipe-shine" />
+              </div>
+              <p className="circuit-end circuit-in t-small">From the pool</p>
+              <ol className="stations">
+                {STATIONS.map((s, i) => (
+                  <li key={s.id} className={cn('station', i <= reached && 'is-on', s.id === 'uv' && 'is-uv')}>
+                    <svg className="station-sym" viewBox="0 0 64 64" aria-hidden="true">
+                      {SYMBOLS[s.symbol]}
+                    </svg>
+                    <div className="station-body">
+                      <Photo id={s.photo} alt={s.alt} unveil={false} className="station-photo aspect-[4/3] rounded-sm" sizes="240px" />
+                      <h3 className="station-name mt-5">{s.name}</h3>
+                      <p className="station-text t-small mt-2">{s.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <p className="circuit-end circuit-out t-small">Back to the pool, through the returns and the fountains</p>
+            </div>
           </div>
-          <p className="circuit-end circuit-in t-small">From the pool</p>
-          <ol className="stations">
-            {STATIONS.map((s, i) => (
-              <li key={s.id} className={cn('station', i <= reached && 'is-on', s.id === 'uv' && 'is-uv')}>
-                <svg className="station-sym" viewBox="0 0 64 64" aria-hidden="true">
-                  {SYMBOLS[s.symbol]}
-                </svg>
-                <div className="station-body">
-                  <Photo id={s.photo} alt={s.alt} unveil={false} className="station-photo aspect-[4/3] rounded-sm" sizes="240px" />
-                  <h3 className="station-name mt-5">{s.name}</h3>
-                  <p className="station-text t-small mt-2">{s.text}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <p className="circuit-end circuit-out t-small">Back to the pool, through the returns and the fountains</p>
         </div>
 
         {/* la pièce elle-même */}
@@ -249,6 +290,7 @@ export function PumpRoom() {
             alt="Inside a pump room: the filter tank, the pumps, the clear pipes with their valves, and the air conditioner"
             className="aspect-[4/3] rounded-md lg:col-span-5"
             sizes="(min-width: 1024px) 40vw, 92vw"
+            parallax
           />
           <figure className="lg:col-span-3">
             <Photo

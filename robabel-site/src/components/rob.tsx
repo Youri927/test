@@ -30,6 +30,7 @@ export function Rob() {
             className="aspect-[4/5] rounded-md lg:aspect-[4/5]"
             sizes="(min-width: 1024px) 38vw, 92vw"
             position="50% 60%"
+            parallax
           />
           <figcaption className="t-note mt-3 text-ink-soft">Before the water: the steel, and the shell sprayed over it.</figcaption>
         </figure>

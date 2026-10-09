@@ -6,7 +6,7 @@ import { Pause, Play } from 'lucide-react'
 import { Film, hasFilm } from '@/components/film'
 import { Lines } from '@/components/lines'
 import { Photo } from '@/components/photo'
-import { motion } from '@/lib/motion'
+import { gsap, motion, useMediaQuery, useScrollAnim } from '@/lib/motion'
 import loop from '@/assets/video/fountains.mp4?url'
 import poster from '@/assets/video/fountains-poster.avif?url'
 
@@ -51,7 +51,7 @@ function Fountains() {
     }
   }
   return (
-    <div className="relative overflow-hidden rounded-md bg-night">
+    <div className="loop relative overflow-hidden bg-night">
       <video
         ref={ref}
         src={loop}
@@ -99,6 +99,39 @@ const WATER = [
 ] as const
 
 export function Pools() {
+  const bleed = useRef<HTMLDivElement>(null)
+  const water = useRef<HTMLDivElement>(null)
+  const md = useMediaQuery('(min-width: 768px)')
+
+  // la boucle des fontaines part de la largeur du texte et s'élargit jusqu'aux bords de l'écran en montant
+  useScrollAnim(bleed, () => {
+    const el = bleed.current!
+    const wrap = el.parentElement!
+    // l'écart entre le bord de l'écran et la colonne de texte, de chaque côté
+    const side = (left: boolean) => {
+      const r = wrap.getBoundingClientRect()
+      const pad = parseFloat(getComputedStyle(wrap).paddingLeft)
+      return `${(left ? r.left : window.innerWidth - r.right) + pad}px`
+    }
+    gsap.fromTo(
+      el,
+      { '--cl': () => side(true), '--cr': () => side(false), '--lr': '6px' },
+      { '--cl': '0px', '--cr': '0px', '--lr': '0px', ease: 'none', scrollTrigger: { trigger: el, start: 'top 92%', end: 'top 22%', scrub: true, invalidateOnRefresh: true } },
+    )
+  })
+
+  // l'après-midi, le crépuscule et la nuit montent à des vitesses différentes, comme le temps qui passe (à partir de la tablette)
+  useScrollAnim(
+    water,
+    (q) => {
+      if (!md) return
+      q('figure').forEach((f, i) => {
+        gsap.fromTo(f, { y: i * 48 }, { y: -i * 48, ease: 'none', scrollTrigger: { trigger: water.current, start: 'top bottom', end: 'bottom top', scrub: true } })
+      })
+    },
+    [md],
+  )
+
   return (
     <section id="pools" aria-labelledby="pools-title" tabIndex={-1} className="bg-white pb-[clamp(88px,11vw,176px)] pt-[clamp(80px,10vw,160px)]">
       <div className="wrap">
@@ -111,7 +144,7 @@ export function Pools() {
           </p>
         </div>
 
-        <div className="mt-12 md:mt-16" data-up>
+        <div ref={bleed} className="loop-bleed mt-12 md:mt-16">
           <Fountains />
         </div>
 
@@ -121,12 +154,14 @@ export function Pools() {
             alt="The motorcycle painted with the flag, on its tiled plinth, pouring water into the pool, with turf and a ping-pong table behind"
             className="aspect-[16/10] rounded-md md:col-span-8"
             sizes="(min-width: 768px) 64vw, 92vw"
+            parallax
           />
           <Photo
             id="moto-top"
             alt="The pool from straight above: the sun shelf with three loungers, the two motorcycles, the turf, an umbrella and a ping-pong table"
             className="aspect-[4/5] rounded-md md:col-span-4 md:aspect-auto"
             sizes="(min-width: 768px) 30vw, 92vw"
+            parallax
             style={{ '--d': '0.12s' } as CSSProperties}
           />
         </div>
@@ -174,7 +209,7 @@ export function Pools() {
             A pool and spa on a waterfront lot, with color lights, uplit palms and a paver deck facing the docks. The pool from the top of the page.
           </p>
         </div>
-        <div className="mt-12 grid gap-[var(--gutter)] md:mt-16 md:grid-cols-3">
+        <div ref={water} className="mt-12 grid gap-[var(--gutter)] md:mt-16 md:grid-cols-3">
           {WATER.map((w, i) => (
             <figure key={w.id}>
               <Photo

@@ -3,7 +3,7 @@
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
-import { useSyncExternalStore, type MouseEvent } from 'react'
+import { useEffect, useSyncExternalStore, type DependencyList, type MouseEvent, type RefObject } from 'react'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -57,10 +57,38 @@ export function go(e: MouseEvent, id: string) {
   scrollToId(id)
 }
 
-// Fait apparaître [data-up], .unveil et .lights-on quand ils entrent à l'écran. La marque est un attribut (data-shown) :
+// Animations liées au défilement d'un bloc : créées dans un contexte GSAP limité au bloc (q cherche dedans),
+// défaites au démontage ; rien du tout si le visiteur a demandé moins d'animations.
+// Chaque bloc est préparé dans sa propre tâche (later) : le chargement de la page n'est pas bloqué d'un seul tenant.
+export function useScrollAnim(ref: RefObject<HTMLElement | null>, build: (q: (selector: string) => HTMLElement[]) => void | (() => void), deps: DependencyList = []) {
+  useEffect(() => {
+    const el = ref.current
+    if (!el || !motion()) return
+    let cleanup: void | (() => void)
+    let ctx: gsap.Context | undefined
+    const cancel = later(() => {
+      ctx = gsap.context(() => {
+        cleanup = build((selector) => gsap.utils.toArray<HTMLElement>(selector, el))
+      }, el)
+    })
+    return () => {
+      cancel()
+      cleanup?.()
+      ctx?.revert()
+    }
+  }, deps)
+}
+
+// Lance une fonction dans une tâche à part, dès que possible ; renvoie de quoi l'annuler
+export function later(fn: () => void) {
+  const id = window.setTimeout(fn, 0)
+  return () => window.clearTimeout(id)
+}
+
+// Fait apparaître [data-up] et .unveil quand ils entrent à l'écran. La marque est un attribut (data-shown) :
 // React réécrit la classe d'un élément quand son état change, il effacerait une classe ajoutée ici.
 export function watchReveals(root: ParentNode = document) {
-  const targets = root.querySelectorAll<HTMLElement>('[data-up], .unveil, .lights-on')
+  const targets = root.querySelectorAll<HTMLElement>('[data-up], .unveil')
   if (!motion()) {
     targets.forEach((t) => t.setAttribute('data-shown', ''))
     return () => {}
