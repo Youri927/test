@@ -30,7 +30,7 @@ La direction est franche et colorée : les couleurs de l'eau du Golfe, une typog
 
 ## La page
 
-- **L'accueil** : leur vidéo de Holmes Beach, vue à travers le mot « CREATIONS », découpé dans un voile bleu canard. En faisant défiler, l'écran reste en place et on plonge dans le « I » : le voile s'ouvre, la piscine remplit l'écran et sa légende apparaît. Le titre : « Gulf Coast pools, built and rebuilt. », avec le devis gratuit, l'appel et le SMS.
+- **L'accueil** : leur deuxième construction de Bradenton en plein écran, une photo nette en pleine résolution : l'eau claire, la plage en pavés multicolores, la piscine entière. Par-dessus, le titre « Gulf Coast pools, built and rebuilt. », le devis gratuit, l'appel et le SMS. Sur téléphone, la même photo est recadrée sur l'eau et l'angle de la plage.
 - **Ce qu'ils font, en une phrase** : « We build new pools, bring tired ones back, find leaks from $350 and raise equipment above the storm surge, across ten counties of the Gulf Coast. » Les mots s'allument au fil de la lecture. Dessous, quatre chiffres qui défilent :
   - 50 ans de métier à deux associés ;
   - 10 comtés ;
@@ -80,14 +80,14 @@ La direction est franche et colorée : les couleurs de l'eau du Golfe, une typog
 **Sur téléphone** : une barre en bas (Appeler, SMS, Devis gratuit) apparaît une fois l'accueil passé, et s'efface au contact. Le menu s'ouvre en plein écran.
 
 **Mouvement** : tout est lié au défilement.
-- le plongeon dans le « I » de l'accueil ;
+- à l'ouverture, la photo de l'accueil se pose et le titre monte un peu ; au défilement, la photo glisse moins vite que la page ;
 - les titres qui montent ligne par ligne, la phrase d'introduction qui s'allume mot à mot, les chiffres qui défilent ;
 - les cartes qui s'empilent, le chantier qui avance ;
 - les photos « après » qui s'ouvrent, les « avant » qui dérivent ;
 - les photos de la tempête dévoilées dans l'ordre ;
 - le total du calcul qui défile jusqu'à sa nouvelle valeur, le nuancier qui change en fondu.
 
-Il n'y a ni WebGL, ni curseur personnalisé, ni fond animé. Avec « réduire les animations », il n'y a ni voile ni écran épinglé : tout est affiché d'emblée, et les vidéos attendent qu'on les lance.
+Il n'y a ni WebGL, ni curseur personnalisé, ni fond animé, ni vidéo à l'accueil. Avec « réduire les animations », il n'y a pas d'écran épinglé : tout est affiché d'emblée, et la vidéo de Brandon attend qu'on la lance.
 
 ## Rien d'inventé
 
@@ -107,8 +107,8 @@ Il n'y a ni WebGL, ni curseur personnalisé, ni fond animé. Avec « réduire le
 ## Fabrication
 
 `node build.mjs` fait deux sorties :
-- `dist/index.html` : un seul fichier avec tout dedans (6,6 Mo, vidéos comprises), à ouvrir d'un double-clic. Les vidéos sont en fin de fichier, pour que l'accueil s'affiche sans les attendre.
-- `dist-web/` : la version à mettre en ligne. La page pèse 227 Ko ; les photos, vidéos et polices sont en fichiers séparés. Les polices et l'image d'attente de la vidéo d'accueil sont préchargées.
+- `dist/index.html` : un seul fichier avec tout dedans (4,4 Mo, vidéo comprise), à ouvrir d'un double-clic. La vidéo est en fin de fichier, pour que l'accueil s'affiche sans l'attendre.
+- `dist-web/` : la version à mettre en ligne. La page pèse 225 Ko ; les photos, la vidéo et les polices sont en fichiers séparés. Les polices et la photo d'accueil sont préchargées, chaque écran ne chargeant que sa version (2560 px pour l'ordinateur, 1000 px pour le téléphone). L'image d'attente de la vidéo de Brandon n'arrive qu'à son approche.
 
 Il n'y a rien à installer : Node suffit. GSAP 3.15, ScrollTrigger et Lenis 1.3 sont dans `vendor/`, avec les deux polices et leurs licences.
 
@@ -117,31 +117,28 @@ Pour la mise en ligne :
 - **Vercel** : choisir `coastalcreations-site` comme dossier racine du projet ; `vercel.json` sert `dist-web/` avec les mêmes en-têtes.
 
 Les outils :
-- `python3 -I tools/images.py <dossier des originaux>` : les photos en AVIF dans `src/img/`, d'après `data/photos.json`. L'option `--sizes` recalcule seulement `data/photo-sizes.json`.
-- `python3 -I tools/logo.py <logo d'origine> src/img` : leur logo sans son fond bleu nuit. Le site utilise `logo.avif`.
+- `python3 -I tools/images.py <dossier des originaux>` : les photos en AVIF dans `src/img/`, d'après `data/photos.json` (recadrage, taille, qualité, et pour la photo d'accueil une couleur légèrement relevée). `--only hero,hero-m` n'exporte que ces photos ; `--sizes` recalcule seulement `data/photo-sizes.json`.
+- `python3 -I tools/logo.py <logo d'origine> src/img` : leur logo sans son fond bleu nuit. Le site utilise `logo-sm.avif` dans l'en-tête et `logo.avif` dans le pied de page.
 - `python3 -I tools/boards.py <captures> <image des anciens tarifs> <dossier des TTF>` : les planches de `boards/`, en anglais pour le client.
 
-Les vidéos :
-- Holmes Beach : 1280 × 720, 24 images/s, débruitée (2,1 Mo) ;
-- Brandon : 540 × 960 (0,6 Mo).
+La vidéo de Brandon : 540 × 960 (0,6 Mo). La vidéo de Holmes Beach n'est plus utilisée : sa qualité ne tenait pas en plein écran.
 
 ## Mesures
 
-Lighthouse 12.8, le 10 octobre 2026, sur `dist-web/` servi en local et compressé comme sur Netlify. Le site actuel ne peut pas être mesuré de la même façon : il est derrière une vérification Cloudflare qui bloque les navigateurs automatisés.
+Lighthouse 12.8, le 10 octobre 2026, sur `dist-web/` servi en local et compressé comme sur Netlify (trois passages sur téléphone, un sur ordinateur). Le site actuel ne peut pas être mesuré de la même façon : il est derrière une vérification Cloudflare qui bloque les navigateurs automatisés.
 
 | | Téléphone | Ordinateur |
 |---|---|---|
-| Performance | 95 | 100 |
+| Performance | 95 à 97 | 100 |
 | Accessibilité | 100 | 100 |
 | Bonnes pratiques | 100 | 100 |
 | Référencement | 100 | 100 |
-| Affichage principal (LCP) | 2,6 s | 0,6 s |
-| Blocage pendant le chargement (TBT) | 0 à 0,06 s | 0 |
+| Affichage principal (LCP) | 2,6 s | 0,8 s |
+| Blocage pendant le chargement (TBT) | 0 à 0,04 s | 0 |
 | Décalages de mise en page (CLS) | 0 | 0 |
+| Poids chargé à l'ouverture | 336 Ko | 624 Ko |
 
-Sur téléphone, 4 passages sur 5 donnent ces chiffres. Le cinquième a donné 85, à cause d'un pic de calcul sur la machine de test (TBT 0,42 s).
-
-Le fichier unique `dist/index.html` est fait pour être ouvert en local. En ligne, il faut publier `dist-web/` : les 6,6 Mo d'un seul tenant mettraient plus de 20 secondes à s'afficher sur un téléphone en 4G simulée.
+Le fichier unique `dist/index.html` est fait pour être ouvert en local. En ligne, il faut publier `dist-web/` : les 4,4 Mo d'un seul tenant seraient beaucoup trop lents sur un téléphone.
 
 Les planches de `boards/` reprennent ces chiffres.
 

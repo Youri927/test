@@ -37,8 +37,10 @@ const html = read('./src/index.html')
     const src = n > 1 ? `src="${PIXEL}" data-dup="${name}"` : `src="data:image/avif;base64,${b64(`./src/img/${name}.avif`)}" data-img="${name}"`;
     return `<img${a}${src}${dims}${b}>`;
   })
+  // la version téléphone de la photo d'accueil (<source srcset>)
+  .replace(/srcset="img\/([\w-]+)\.avif"/g, (m, n) => `srcset="data:image/avif;base64,${b64(`./src/img/${n}.avif`)}"`)
   .replace(/poster="img\/([\w-]+)\.avif"/g, (m, n) => `poster="data:image/avif;base64,${b64(`./src/img/${n}.avif`)}"`)
-  // les vidéos arrivent en fin de fichier : le premier écran (avec l'image d'attente) s'affiche sans attendre leurs 2,7 Mo
+  // les vidéos arrivent en fin de fichier : le premier écran s'affiche sans les attendre
   .replace(/src="video\/([\w-]+)\.mp4"/g, (m, n) => {
     videos.add(n);
     return `data-video="${n}"`;
@@ -66,7 +68,9 @@ const cssWeb = fontsWeb + '\n' + read('./src/styles.css').replace(/url\(img\/([\
 const preload = [
   '<link rel="preload" as="font" type="font/woff2" href="assets/fonts/Unbounded.woff2" crossorigin>',
   '<link rel="preload" as="font" type="font/woff2" href="assets/fonts/Figtree.woff2" crossorigin>',
-  '<link rel="preload" as="image" href="assets/img/hero-poster.avif" fetchpriority="high">',
+  // la photo d'accueil : chaque écran ne précharge que la sienne
+  '<link rel="preload" as="image" href="assets/img/hero.avif" media="(min-width: 761px)" fetchpriority="high">',
+  '<link rel="preload" as="image" href="assets/img/hero-m.avif" media="(max-width: 760px)" fetchpriority="high">',
 ].join('\n');
 const htmlWeb = read('./src/index.html')
   .replace(/<img\b([^>]*?)src="img\/([\w-]+)\.avif"([^>]*)>/g, (m, a, name, b) => {
@@ -75,6 +79,7 @@ const htmlWeb = read('./src/index.html')
     const dims = /\bwidth=/.test(a + b) ? '' : ` width="${w}" height="${h}"`;
     return `<img${a}src="assets/img/${name}.avif"${dims}${b}>`;
   })
+  .replace(/srcset="img\/([\w-]+)\.avif"/g, (m, n) => (used.add(n), `srcset="assets/img/${n}.avif"`))
   .replace(/poster="img\/([\w-]+)\.avif"/g, (m, n) => (used.add(n), `poster="assets/img/${n}.avif"`))
   .replace(/src="video\/([\w-]+)\.mp4"/g, (m, n) => {
     copyFileSync(here(`./src/video/${n}.mp4`), web(`assets/video/${n}.mp4`));

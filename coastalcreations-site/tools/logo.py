@@ -21,16 +21,17 @@ a = np.clip((a - 0.06) / 0.94, 0, 1)  # le grain du JPEG autour du fond dispara�
 fg = np.clip((im - (1 - a[..., None]) * bg) / np.maximum(a[..., None], 1e-3), 0, 255)
 
 
-def save(rgb, name):
+def save(rgb, name, w=420):
     img = Image.fromarray(np.dstack([rgb, a * 255]).astype(np.uint8), 'RGBA')
     img = img.crop(img.getchannel('A').point(lambda v: 255 if v > 20 else 0).getbbox())
-    w = 420
     img = img.resize((w, round(img.height * w / img.width)), Image.LANCZOS)
     img.save(out / name, 'AVIF', quality=62)
     print(out / name, img.size)
 
 
 save(fg, 'logo.avif')
+# la version de l'en-tête (50 px de haut, nette jusqu'aux écrans 3×), chargée dès l'ouverture : 5 fois plus légère
+save(fg, 'logo-sm.avif', 154)
 
 # fond clair : la saturation sépare le blanc (lettres) de l'aqua (vagues, « POOLS AND LAGOONS »)
 mx, mn = fg.max(axis=2), fg.min(axis=2)

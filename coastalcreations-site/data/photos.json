@@ -1,5 +1,6 @@
 [
-  {"id": "hero-poster", "src": "man-ami-video-poster.jpg", "w": 1600, "q": 52, "s": 800},
+  {"id": "hero", "src": "man-bradenton-newbuild.jpg", "crop": [0, 0.2745, 1, 1], "w": 2560, "q": 50, "color": 1.12, "contrast": 1.04},
+  {"id": "hero-m", "src": "man-bradenton-newbuild.jpg", "crop": [0.274, 0.2745, 0.646, 1], "w": 1000, "q": 40, "color": 1.12, "contrast": 1.04},
   {"id": "pool-canal", "src": "proj-completed.jpg", "w": 1320, "s": 720},
   {"id": "pool-ocher", "src": "man-bradenton-newbuild.jpg", "w": 1600, "s": 800},
   {"id": "ami-after", "src": "home-new-tile.jpg", "w": 1386, "s": 720},

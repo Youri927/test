@@ -31,7 +31,7 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="hd" data-hd>
-  <a class="hd__logo" href="#top" aria-label="Coastal Creations Pools and Lagoons, back to top"><img src="img/logo.avif" alt="" width="420" height="383"></a>
+  <a class="hd__logo" href="#top" aria-label="Coastal Creations Pools and Lagoons, back to top"><img src="img/logo-sm.avif" alt="" width="154" height="140"></a>
   <nav class="hd__nav" aria-label="Sections">
     <a href="#build">New pools</a>
     <a href="#renovate">Renovations</a>
@@ -64,27 +64,23 @@
 
 <main id="main" tabindex="-1">
 
-  <!-- 1. Accueil : leur piscine de Holmes Beach à travers le mot CREATIONS, qui s'ouvre au défilement -->
+  <!-- 1. Accueil : leur deuxième construction de Bradenton en plein écran, le titre et le devis par-dessus -->
   <section class="hero" id="top" aria-labelledby="hero-title">
     <div class="hero__stage">
-      <video class="hero__video" src="video/holmes-beach.mp4" poster="img/hero-poster.avif" muted loop playsinline preload="auto" aria-label="The pool and spa of a vacation rental in Holmes Beach after our renovation, with new blue glass waterline tile"></video>
-      <svg class="hero__knock" aria-hidden="true" focusable="false">
-        <defs>
-          <mask id="knock-mask" maskUnits="userSpaceOnUse" x="0" y="0">
-            <rect class="knock__all" fill="#fff"/>
-            <g class="knock__word"><text class="knock__text" fill="#000" text-anchor="middle" dominant-baseline="central">CREATIONS</text></g>
-          </mask>
-        </defs>
-        <rect class="knock__fill" mask="url(#knock-mask)"/>
-      </svg>
+      <div class="hero__media">
+        <picture>
+          <source media="(max-width: 760px)" srcset="img/hero-m.avif">
+          <img class="hero__img" src="img/hero.avif" alt="A new pool we built in Bradenton: light blue water, a multicolor paver deck and coping all around" fetchpriority="high">
+        </picture>
+      </div>
+      <p class="hero__where chip">A new pool we built in Bradenton</p>
       <div class="hero__copy">
-        <h1 id="hero-title" class="hero__title"><span>Gulf Coast pools,</span> <span>built and rebuilt.</span></h1>
+        <h1 id="hero-title" class="hero__title title"><span>Gulf Coast pools,</span> <span>built and rebuilt.</span></h1>
         <div class="hero__cta">
           <a class="btn btn--coral" href="https://clienthub.getjobber.com/hubs/992a4611-43c9-4ba3-9195-87993143c24d/public/requests/1141425/new" target="_blank" rel="noopener">Get a free quote</a>
           <a class="hero__call" href="sms:+19417797007">Call or text <b>(941) 779-7007</b></a>
         </div>
       </div>
-      <p class="hero__caption">Holmes Beach, Anna Maria Island: full resurfacing, new waterline tile and a spa drain repair for a vacation rental.</p>
     </div>
   </section>
 
@@ -236,7 +232,7 @@
     </article>
 
     <article class="brandon" aria-labelledby="job-brandon">
-      <figure class="brandon__video"><video data-loop src="video/brandon.mp4" poster="img/brandon-poster.avif" muted loop playsinline preload="none" aria-label="Short video of the finished pool and spa in Brandon"></video><figcaption class="chip chip--aqua">Finished, April 2026</figcaption></figure>
+      <figure class="brandon__video"><video data-loop src="video/brandon.mp4" data-poster="img/brandon-poster.avif" muted loop playsinline preload="none" aria-label="Short video of the finished pool and spa in Brandon"></video><figcaption class="chip chip--aqua">Finished, April 2026</figcaption></figure>
       <figure class="brandon__before" data-drift><img src="img/brandon-before.avif" alt="The drained spa, with its blue tile, under a white screen enclosure" loading="lazy"><figcaption class="chip">During the resurfacing</figcaption></figure>
       <div class="job__text">
         <h3 id="job-brandon">Brandon</h3>

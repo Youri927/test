@@ -84,24 +84,19 @@ main:focus { outline: none; }
 
 /* ——— 1. accueil ——— */
 .hero { position: relative; background: var(--ink); }
-.hero__stage { position: relative; height: 100vh; height: 100svh; overflow: hidden; color: var(--paper); }
-.hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.hero__knock { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-/* un voile en haut, pour que le menu reste lisible quand la vidéo claire remplit l'écran */
-.hero__stage::before { content: ""; position: absolute; inset: 0 0 auto; height: 160px; z-index: 1; background: linear-gradient(rgb(5 42 48 / 0.55), rgb(5 42 48 / 0)); pointer-events: none; }
-.knock__fill { fill: var(--ink); fill-opacity: 0.86; }
-.knock__text { font-family: var(--display); font-weight: 900; letter-spacing: -0.02em; }
-.hero__copy { position: absolute; left: var(--side); right: var(--side); bottom: clamp(28px, 6vh, 64px); display: flex; align-items: end; justify-content: space-between; gap: 32px; }
-.hero__title { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 3.4vw, 54px); line-height: 1.02; letter-spacing: -0.03em; max-width: 13em; }
-.hero__title span { display: block; }
-.hero__cta { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+.hero__stage { position: relative; height: 100vh; height: 100svh; min-height: 540px; overflow: hidden; color: var(--paper); }
+.hero__media { position: absolute; inset: 0; }
+.hero__media picture { display: block; height: 100%; }
+.hero__img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+/* deux voiles : en haut sous le menu, en bas sous le titre (sur les pavés) */
+.hero__stage::before { content: ""; position: absolute; inset: 0 0 auto; height: 180px; z-index: 1; background: linear-gradient(rgb(5 42 48 / 0.62), rgb(5 42 48 / 0)); pointer-events: none; }
+.hero__stage::after { content: ""; position: absolute; inset: auto 0 0; height: 64%; z-index: 1; background: linear-gradient(rgb(5 42 48 / 0), rgb(5 42 48 / 0.72) 62%, rgb(5 42 48 / 0.9)); pointer-events: none; }
+.hero__where { left: auto; right: var(--side); top: calc(var(--hd) + 18px); z-index: 2; }
+.hero__copy { position: absolute; z-index: 2; left: var(--side); right: var(--side); bottom: clamp(32px, 7vh, 72px); display: flex; align-items: end; justify-content: space-between; gap: 32px; }
+.hero__title { font-size: clamp(36px, 5.4vw, 92px); }
+.hero__cta { flex: none; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
 .hero__call { font-size: 16px; text-decoration: none; opacity: 0.92; }
 .hero__call b { font-weight: 700; }
-.hero__caption { position: absolute; left: var(--side); right: var(--side); bottom: 22px; font-size: 14px; opacity: 0; color: var(--paper); text-shadow: 0 1px 12px rgb(0 0 0 / 0.5); }
-/* sans animation (ou sans script) : la vidéo seule, le titre lisible sur un voile */
-.no-motion .hero__knock, html:not(.js) .hero__knock { display: none; }
-.no-motion .hero__stage::after, html:not(.js) .hero__stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(5 42 48 / 0.15) 40%, rgb(5 42 48 / 0.85)); }
-.no-motion .hero__copy, html:not(.js) .hero__copy { z-index: 2; }
 
 /* ——— 2. la phrase et les chiffres ——— */
 .intro { max-width: var(--max); margin: 0 auto; padding: clamp(96px, 14vw, 200px) var(--side) clamp(72px, 9vw, 130px); }
@@ -331,8 +326,8 @@ main:focus { outline: none; }
 .contact__phone > a { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 6vw, 100px); line-height: 1; letter-spacing: -0.05em; text-decoration: none; }
 .contact__btns { display: flex; gap: 12px; flex-wrap: wrap; }
 .contact__ways { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: clamp(48px, 6vw, 80px); }
-.way { display: flex; flex-direction: column; gap: 12px; min-height: 260px; padding: 28px; border-radius: var(--r); background: var(--ink); color: var(--paper); text-decoration: none; transition: transform 0.45s var(--ease), background-color 0.3s; }
-.way:hover { transform: translateY(-6px); background: var(--deep); }
+.way { display: flex; flex-direction: column; gap: 12px; min-height: 260px; padding: 28px; border-radius: var(--r); background: var(--ink); color: var(--paper); text-decoration: none; transition: translate 0.45s var(--ease), background-color 0.3s; }
+.way:hover { translate: 0 -6px; background: var(--deep); }
 .way b { font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; }
 .way span { opacity: 0.8; font-size: 16px; }
 .way i { margin-top: auto; font-style: normal; font-weight: 700; color: var(--aqua); }
@@ -388,9 +383,11 @@ main:focus { outline: none; }
   .hd { gap: 12px; }
   .hd__logo img { height: 42px; }
   .hd__tel, .hd__end > .btn { display: none; }
-  .hero__copy { flex-direction: column; align-items: flex-start; gap: 18px; bottom: 28px; }
+  .hero__copy { flex-direction: column; align-items: flex-start; gap: 20px; bottom: 28px; }
   .hero__cta { align-items: flex-start; }
-  .hero__title { font-size: clamp(26px, 7.6vw, 34px); }
+  .hero__title { font-size: clamp(27px, 7.6vw, 38px); }
+  .hero__where { right: auto; left: var(--side); top: calc(var(--hd) + 12px); }
+  .hero__img { object-position: 50% 50%; }
   .stats { gap: 32px 20px; }
   .stats span { font-size: 15px; }
   /* sur téléphone le prix et le texte suivent le flux : sur un écran bas, la carte s'allonge au lieu de les superposer */

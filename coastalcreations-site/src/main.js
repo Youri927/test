@@ -42,7 +42,7 @@
     menu.hidden = !open;
     menuBtn.setAttribute('aria-expanded', String(open));
     menuBtn.querySelector('span').textContent = open ? 'Close' : 'Menu';
-    hd.classList.toggle('is-solid', open || pastHero);
+    hd.classList.toggle('is-solid', open || scrollY > 40);
     lock(open);
     if (open) $('a', menu).focus();
   };
@@ -67,7 +67,7 @@
     target.focus({preventScroll: true});
   });
 
-  /* ——— en-tête : plein une fois l'accueil quitté, caché en descendant, rubrique en cours ——— */
+  /* ——— en-tête : plein dès qu'on descend, caché en descendant une fois l'accueil quitté, rubrique en cours ——— */
   const hd = $('[data-hd]');
   const dock = $('[data-dock]');
   let lastY = scrollY;
@@ -75,7 +75,7 @@
   let atContact = false;
   const onScroll = () => {
     const y = scrollY;
-    hd.classList.toggle('is-solid', pastHero || !menu.hidden);
+    hd.classList.toggle('is-solid', y > 40 || !menu.hidden);
     if (menu.hidden && y > lastY + 4 && pastHero) hd.classList.add('is-hidden');
     else if (y < lastY - 4 || !pastHero) hd.classList.remove('is-hidden');
     lastY = y;
@@ -91,7 +91,15 @@
   }), {rootMargin: '-45% 0px -50% 0px'});
   ['build', 'renovate', 'leaks', 'storm', 'about'].forEach((id) => navIO.observe(document.getElementById(id)));
 
-  /* ——— vidéos : elles ne tournent qu'à l'écran ; sans animation, elles attendent qu'on les lance ——— */
+  /* ——— vidéos : l'image d'attente arrive à l'approche ; elles ne tournent qu'à l'écran ; sans animation, elles attendent qu'on les lance ——— */
+  $$('video[data-poster]').forEach((v) => {
+    const io = new IntersectionObserver(([en]) => {
+      if (!en.isIntersecting) return;
+      v.poster = v.dataset.poster;
+      io.disconnect();
+    }, {rootMargin: '100% 0px'});
+    io.observe(v);
+  });
   $$('video').forEach((v) => {
     if (reduce) {
       v.controls = true;
@@ -178,68 +186,18 @@
 
   /* ════════════ animations au défilement ════════════ */
 
-  /* 1. l'accueil : le mot CREATIONS laisse voir la piscine, puis s'ouvre jusqu'à ce qu'elle remplisse l'écran */
+  /* 1. l'accueil : la photo se pose à l'ouverture ; au défilement, elle glisse moins vite que la page et le titre s'efface */
   const stage = $('.hero__stage');
-  const svg = $('.hero__knock');
-  const word = $('.knock__word');
-  const text = $('.knock__text');
-  const copy = $('.hero__copy');
-  const caption = $('.hero__caption');
-  const video = $('.hero__video');
-  const knock = {ox: 0, oy: 0, max: 30};
-  const layoutKnock = () => {
-    const W = stage.clientWidth;
-    const H = stage.clientHeight;
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    $$('rect', svg).forEach((r) => { r.setAttribute('width', W); r.setAttribute('height', H); });
-    $('#knock-mask').setAttribute('width', W);
-    $('#knock-mask').setAttribute('height', H);
-    text.setAttribute('font-size', 100);
-    text.setAttribute('x', W / 2);
-    text.setAttribute('y', H * (W < 760 ? 0.4 : 0.44));
-    const len = text.getComputedTextLength() || 1;
-    const size = Math.min((W * (W < 760 ? 0.92 : 0.9) * 100) / len, H * 0.42);
-    text.setAttribute('font-size', size.toFixed(1));
-    // le zoom part du milieu du I : un trait plein, qui finit par couvrir tout l'écran
-    let box;
-    try { box = text.getExtentOfChar(5); } catch (e) { box = null; }
-    if (box) {
-      knock.ox = box.x + box.width / 2;
-      knock.oy = box.y + box.height * 0.52;
-      const stemW = Math.max(4, box.width * 0.42);
-      const stemH = Math.max(8, size * 0.7);
-      knock.max = Math.max(W / stemW, H / stemH) * 1.35;
-    } else {
-      knock.ox = W / 2;
-      knock.oy = H * 0.44;
-      knock.max = 40;
-    }
-  };
-  const setKnock = (p) => {
-    const s = Math.pow(knock.max, Math.pow(p, 1.25));
-    word.setAttribute('transform', `translate(${knock.ox} ${knock.oy}) scale(${s.toFixed(4)}) translate(${-knock.ox} ${-knock.oy})`);
-    svg.style.visibility = p >= 0.995 ? 'hidden' : 'visible';
-  };
-  const heroTl = G.timeline({
-    defaults: {ease: 'none'},
-    scrollTrigger: {trigger: stage, start: 'top top', end: () => '+=' + Math.round(stage.clientHeight * 1.5), pin: true, scrub: 0.6, anticipatePin: 1},
-  });
-  const prog = {p: 0};
-  heroTl
-    .to(prog, {p: 1, duration: 1, onUpdate: () => setKnock(prog.p)}, 0)
-    .to(copy, {autoAlpha: 0, y: -30, duration: 0.22}, 0)
-    .fromTo(video, {scale: 1.12}, {scale: 1, duration: 1}, 0)
-    .to(caption, {opacity: 1, duration: 0.15}, 0.85);
-  const relayout = () => { layoutKnock(); setKnock(prog.p); };
-  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { relayout(); ST.refresh(); });
-  relayout();
-  addEventListener('resize', () => requestAnimationFrame(relayout));
-  // à l'ouverture : le mot monte doucement
-  G.from(word, {opacity: 0, duration: 1.4, ease: 'power2.out'});
-  G.from(copy.children, {y: 40, opacity: 0, duration: 1.1, stagger: 0.12, ease: 'power3.out', delay: 0.25});
+  G.from('.hero__img', {scale: 1.1, duration: 2.2, ease: 'power2.out'});
+  // le titre est lisible dès le premier affichage : il ne fait que monter un peu
+  G.from('.hero__title', {y: 28, duration: 1.4, ease: 'power3.out'});
+  G.from('.hero__cta > *', {y: 24, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out', delay: 0.5});
+  G.from('.hero__where', {y: -12, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.9});
+  G.to('.hero__media', {yPercent: 16, ease: 'none', scrollTrigger: {trigger: stage, start: 'top top', end: 'bottom top', scrub: true}});
+  G.to('.hero__copy', {y: -50, opacity: 0, ease: 'none', scrollTrigger: {trigger: stage, start: '12% top', end: '60% top', scrub: true}});
 
   /* 2. les titres : chaque ligne monte de derrière son masque */
-  $$('.title').forEach((t) => {
+  $$('.title:not(.hero__title)').forEach((t) => {
     const lines = t.children.length ? [...t.children] : [t];
     if (!t.children.length) t.innerHTML = `<span>${t.innerHTML}</span>`;
     const spans = t.children.length ? [...t.children] : lines;

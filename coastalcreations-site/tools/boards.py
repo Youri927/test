@@ -90,23 +90,11 @@ def grid(name, views, cols, w, title, sub, crop=None):
     print('✓', name, b.size)
 
 
-# l'accueil : le mot CREATIONS, puis la piscine qui remplit l'écran au défilement
-pad, gap = 80, 56
-top, phone, steps = A('d-top.png'), A('m-top.png'), [A('d-zoom-1.png'), A('d-zoom-2.png'), A('d-open.png')]
-w1, w2 = 1180, 420
-h1 = max(height(top, w1), height(phone, w2, (0, 0.62)))
-ws = (w1 + w2 + gap - 2 * gap) // 3
-h2 = height(steps[0], ws)
-W = pad * 2 + w1 + w2 + gap
-b = Image.new('RGB', (W, 226 + 80 + h1 + 72 + 80 + h2 + pad), BG)
-header(ImageDraw.Draw(b), pad, 'Your pool, through your name', SUB)
-panel(b, top, (pad, 226), w1, 'On a computer', 'Your Holmes Beach video, seen through the word CREATIONS')
-panel(b, phone, (pad + w1 + gap, 226), w2, 'On a phone', 'Same idea, the call button at hand', (0, 0.62))
-y2 = 226 + 80 + h1 + 72
-for i, (im, lab, s_) in enumerate(zip(steps, ['As you scroll', 'The letters open', 'And the pool fills the screen'], ['', '', ''])):
-    panel(b, im, (pad + i * (ws + gap), y2), ws, lab, s_)
-b.save(OUT / 'accueil.jpg', quality=88)
-print('✓ accueil.jpg', b.size)
+# l'accueil : leur construction de Bradenton en plein écran, le titre et le devis par-dessus
+row('accueil.jpg', [
+    (A('d-top.png'), 'On a computer', 'A new pool you built in Bradenton, in full resolution', None),
+    (A('m-top.png'), 'On a phone', 'Same pool, quote at hand', None),
+], [1180, 340], 'Opening on your own work', SUB)
 
 grid('construction.jpg', [
     ('d-build-0.png', 'The screen holds still', 'Scroll, and the build moves on: plan, dig, steel, shell, tile, plaster, water'),
