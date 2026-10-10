@@ -4,7 +4,7 @@ Deux versions :
   - pour fond sombre (pied de page) : les couleurs d'origine, blanc et aqua ;
   - pour fond clair (en-tête) : le blanc devient le bleu nuit de leur marque, l'aqua devient un aqua plus soutenu.
 
-    python3 -I tools/logo.py <logo d'origine, jpg> src/assets/brand
+    python3 -I tools/logo.py <logo d'origine, jpg> src/img
 """
 import sys
 from pathlib import Path
