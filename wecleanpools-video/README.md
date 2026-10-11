@@ -50,6 +50,12 @@ Dans les vidéos précédentes, les fenêtres et les téléphones « sautillaien
   - Il n'y a pas de flou de mouvement.
 - **Fondus avec zoom** : ici, les passages par le noir ne jouent que sur l'opacité.
 
+**Contrôlé sur le rendu** (`tools/motion.py`) :
+- la mise de côté du navigateur suit la courbe prévue à 0,3 px près, sans arrondi au pixel ;
+- les trois téléphones montent sur leur courbe à 0,5 px près, puis ne bougent plus ;
+- dans la capture, le défilement avance de 4 px exactement à chaque image ;
+- aucune image doublée ni sautée pendant un mouvement.
+
 ## Fabrication
 
 1. **Captures :** `npm run capture` filme le site avec Playwright (`capture/shots.mjs`, `capture/lib.mjs`). On peut filmer un seul plan : `node capture/shots.mjs d-remodels`.
@@ -67,6 +73,11 @@ Dans les vidéos précédentes, les fenêtres et les téléphones « sautillaien
    - Il crée aussi la version muette, et une version légère de moins de 30 Mo pour l'envoi (`out/`).
 
 `node tools/stills.mjs <dossier> <image> …` sort des images fixes du montage pour vérifier une scène.
+
+`python3 -I tools/motion.py …` mesure les mouvements sur des images du rendu :
+- `col` et `row` : la position d'un bord au sous-pixel ;
+- `track` : le suivi d'un morceau d'image ;
+- `dup` : les images doublées ou sautées d'une vidéo.
 
 `node_modules` est un lien vers celui de `../enhance-video` (mêmes versions de Remotion) ; sinon, `npm install`.
 
