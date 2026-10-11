@@ -153,12 +153,13 @@ figure, blockquote { margin: 0; }
   12%, 88% { opacity: 1; }
   100% { opacity: 0; transform: translateX(730%) skewX(-18deg); }
 }
-.waterline__surface { position: absolute; left: 0; right: 0; bottom: 0; top: calc(18px + var(--band) * .56); overflow: hidden; z-index: 1; }
+/* la vague oscille autour de la ligne de réfraction de la frise (crêtes et creux de 5 px) */
+.waterline__surface { position: absolute; left: 0; right: 0; bottom: 0; top: calc(18px + var(--band) * .56 - 7px); overflow: hidden; z-index: 1; }
 .waterline__wave {
-  position: absolute; left: 0; top: -6px; bottom: 0; width: calc(100% + 240px);
+  position: absolute; left: 0; top: 0; bottom: 0; width: calc(100% + 240px);
   background:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='14' viewBox='0 0 240 14'%3E%3Cpath d='M0 7 C30 2 90 2 120 7 S210 12 240 7 V14 H0Z' fill='%235cc0e3' fill-opacity='.42'/%3E%3Cpath d='M0 7 C30 2 90 2 120 7 S210 12 240 7' fill='none' stroke='%23ffffff' stroke-opacity='.85' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x 0 0 / 240px 14px,
-    linear-gradient(rgba(92, 192, 227, .42), rgba(70, 170, 210, .5)) no-repeat 0 13px / 100% 100%;
+    linear-gradient(rgba(92, 192, 227, .42), rgba(70, 170, 210, .5)) no-repeat 0 14px / 100% 100%;
   animation: wave 7s linear infinite;
 }
 @keyframes wave { to { transform: translateX(-240px); } }
