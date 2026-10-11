@@ -83,21 +83,21 @@ const PROG = [
   // ouverture : une nappe, puis l'accord s'ouvre quand le logo arrive
   [0, 'Abmaj7'], [POOL, 'Ebmaj9'], [POOL + 2, 'Abmaj9'], [S.Hero - 1, 'Bbsus'],
   // l'accueil : le groove part
-  [S.Hero, 'Ebmaj9'], [S.Hero + 4, 'Cm9'],
+  [S.Hero, 'Ebmaj9'], [S.Hero + 4, 'Cm9'], [S.Hero + 7, 'Bbsus'],
   // la phrase et les cartes
-  [S.Cards, 'Abmaj9'], [S.Cards + 4, 'Bbsus'], [S.Cards + 6, 'Bb13'],
+  [S.Cards, 'Abmaj9'], [S.Cards + 4, 'Fm9'], [S.Cards + 7, 'Bb13'],
   // la construction (sombre)
-  [S.Build, 'Cm9'], [S.Build + 4, 'Abmaj9'],
+  [S.Build, 'Cm9'], [S.Build + 4, 'Abmaj9'], [S.Build + 8, 'Bbsus'],
   // avant / après
   [S.Reno, 'Ebmaj9'], [S.Reno + 4, 'Gm7'], [S.Reno + 6, 'Bbsus'],
   // le nuancier (sombre)
   [S.Finish, 'Abmaj9'], [S.Finish + 4, 'Fm9'],
   // les tarifs
-  [S.Leaks, 'Ebmaj9'], [S.Leaks + 4, 'Cm9'], [S.Leaks + 6, 'Bbsus'],
+  [S.Leaks, 'Ebmaj9'], [S.Leaks + 4, 'Cm9'], [S.Leaks + 7, 'Bbsus'],
   // le contact
   [S.Contact, 'Abmaj9'], [S.Contact + 4, 'Bb13'],
   // téléphones
-  [S.Mobile, 'Ebmaj9'], [S.Mobile + 4, 'AbBb'],
+  [S.Mobile, 'Ebmaj9'], [S.Mobile + 4, 'Gm7'], [S.Mobile + 7, 'AbBb'],
   // fin
   [S.End, 'Abmaj9'], [S.End + 3, 'Bbsus'], [S.End + 4, 'Eb69'],
 ];
