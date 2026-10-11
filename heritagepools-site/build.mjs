@@ -66,7 +66,7 @@ const fontsWeb = FONTS.map((f) => {
   copyFileSync(here(`./vendor/fonts/${f.file}.woff2`), web(`assets/fonts/${f.file}.woff2`));
   return face(`assets/fonts/${f.file}.woff2`, f.family, f.weight);
 }).join('');
-const HERO_SIZES = (src.match(/class="film__frame is-on"[^>]*?sizes="([^"]+)"/) || [])[1];
+const HERO_SIZES = (src.match(/class="frame is-on"[^>]*?sizes="([^"]+)"/) || [])[1];
 if (!HERO_SIZES) throw new Error('tailles de la première image du film introuvables');
 const preload = [
   ...FONTS.map((f) => `<link rel="preload" as="font" type="font/woff2" href="assets/fonts/${f.file}.woff2" crossorigin>`),

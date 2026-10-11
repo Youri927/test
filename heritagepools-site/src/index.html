@@ -34,7 +34,7 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="hd" data-hd>
-  <a class="brand" href="#top" aria-label="Heritage Pools Texas, back to top"><span class="brand__a">Heritage</span><span class="brand__b">Pools Texas</span></a>
+  <a class="brand" href="#top" aria-label="Heritage Pools Texas, back to top"><span class="brand__a">Heritage</span> <span class="brand__b">Pools Texas</span></a>
   <nav class="hd__nav" aria-label="Main">
     <a href="#build">The build</a>
     <a href="#services">Services</a>
@@ -65,53 +65,59 @@
 
 <main id="main">
 
-  <!-- ——— Accueil : le chantier en accéléré, de la pelouse aux lumières ——— -->
-  <section class="hero" id="top" aria-labelledby="hero-title">
-    <div class="wrap hero__grid">
-      <h1 class="hero__title" id="hero-title"><span>Lawn to</span> <span>lights in</span> <span>41 days.</span></h1>
-      <figure class="film" data-film>
-        <div class="film__frames" role="img" aria-label="Eleven photos of one pool build, from the bare lawn on January 7, 2018 to the lights on February 17, 2018.">
-          <img class="film__frame is-on" src="img/log-01.avif" srcset="img/log-01-s.avif 760w, img/log-01.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" fetchpriority="high" data-day="0" data-when="Jan 7, 2018, 1:26 PM">
-          <img class="film__frame" fetchpriority="low" data-src="img/log-02.avif" data-srcset="img/log-02-s.avif 760w, img/log-02.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="1" data-when="Jan 8, 2018, 10:15 AM">
-          <img class="film__frame" fetchpriority="low" data-src="img/log-03.avif" data-srcset="img/log-03-s.avif 760w, img/log-03.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="1" data-when="Jan 8, 2018, 3:40 PM">
-          <img class="film__frame" fetchpriority="low" data-src="img/log-04.avif" data-srcset="img/log-04-s.avif 760w, img/log-04.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="2" data-when="Jan 9, 2018, 11:36 AM">
-          <img class="film__frame" fetchpriority="low" data-src="img/log-05.avif" data-srcset="img/log-05-s.avif 760w, img/log-05.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="3" data-when="Jan 10, 2018, 11:07 AM">
-          <img class="film__frame" fetchpriority="low" data-src="img/log-06.avif" data-srcset="img/log-06-s.avif 760w, img/log-06.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="4" data-when="Jan 11, 2018, 12:09 PM">
-          <img class="film__frame" fetchpriority="low" data-src="img/log-07.avif" data-srcset="img/log-07-s.avif 760w, img/log-07.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="23" data-when="Jan 30, 2018, 9:59 AM">
-          <img class="film__frame" fetchpriority="low" data-src="img/log-08.avif" data-srcset="img/log-08-s.avif 760w, img/log-08.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="25" data-when="Feb 1, 2018, 3:59 PM">
-          <img class="film__frame" fetchpriority="low" data-src="img/log-09.avif" data-srcset="img/log-09-s.avif 760w, img/log-09.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="29" data-when="Feb 5, 2018, 1:40 PM">
-          <img class="film__frame" fetchpriority="low" data-src="img/log-10.avif" data-srcset="img/log-10-s.avif 760w, img/log-10.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="30" data-when="Feb 6, 2018, 4:35 PM">
-          <img class="film__frame" fetchpriority="low" data-src="img/log-11.avif" data-srcset="img/log-11-s.avif 760w, img/log-11.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="41" data-when="Feb 17, 2018, 6:27 PM">
+  <!-- ——— L'ouverture : le chantier en 41 jours. Au défilement, le compteur avance, la couleur suit le matériau, l'eau monte, les lumières s'allument ——— -->
+  <section class="opening" id="top" aria-labelledby="hero-title" data-opening>
+    <div class="stage" data-stage data-fg="white">
+      <div class="stage__fill" aria-hidden="true"><svg class="stage__wave" viewBox="0 0 1440 40" preserveAspectRatio="none"><path d="M0 22C120 6 240 6 360 22s240 16 360 0 240-16 360 0 240 16 360 0V40H0Z"/></svg></div>
+      <div class="stage__grid">
+        <div class="stage__text">
+          <div class="stage__intro" data-intro>
+            <h1 class="hero__title" id="hero-title"><span>Lawn to</span> <span>lights in</span> <span>41 days.</span></h1>
+            <p class="hero__lead">New pools, repairs and maintenance in Texas. This build was photographed on the job, from the bare lawn on January&nbsp;7, 2018 to the lights on February&nbsp;17.</p>
+            <div class="hero__cta">
+              <a class="btn btn--inv" href="#contact">Schedule an appointment</a>
+              <a class="btn btn--line" href="tel:+12818965061">Call 281-896-5061</a>
+            </div>
+          </div>
+          <div class="stage__info" data-info aria-hidden="true">
+            <p class="info__day"><span class="info__label">Day</span> <span class="info__num" data-num>0</span></p>
+            <p class="info__when" data-when>Jan 7, 2018, 1:26 PM</p>
+            <p class="info__what" data-what>The lawn, with marker flags where the pool will go.</p>
+            <p class="info__count" data-count>Photo 1 of 11</p>
+            <div class="info__end" data-end><a class="btn btn--inv" href="#contact" tabindex="-1">Schedule an appointment</a></div>
+          </div>
         </div>
-        <figcaption class="film__bar">
-          <span class="film__day" data-film-day aria-hidden="true">Day 0</span>
-          <span class="film__when" data-film-when aria-hidden="true">Jan 7, 2018, 1:26 PM</span>
-          <span class="film__track" aria-hidden="true"><span></span></span>
-          <span class="sr">One of our builds, photographed on the job.</span>
-          <button class="film__again" type="button" data-again disabled>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
-            Watch it again
-          </button>
-        </figcaption>
-      </figure>
-      <p class="hero__lead">New pools, repairs and maintenance in Texas. This build was photographed on the job, from the bare lawn on January&nbsp;7, 2018 to the lights on February&nbsp;17.</p>
-      <div class="hero__cta">
-        <a class="btn btn--white" href="#contact">Schedule an appointment</a>
-        <a class="btn btn--line" href="tel:+12818965061">Call 281-896-5061</a>
+        <figure class="stage__photo" data-photo>
+          <div class="stage__frames" role="img" aria-label="Eleven photos of one pool build, from the bare lawn on January 7, 2018 to the lights on February 17, 2018.">
+            <img class="frame is-on" src="img/log-01.avif" srcset="img/log-01-s.avif 760w, img/log-01.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="" fetchpriority="high">
+            <img class="frame" fetchpriority="low" data-src="img/log-02.avif" data-srcset="img/log-02-s.avif 760w, img/log-02.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="img/log-03.avif" data-srcset="img/log-03-s.avif 760w, img/log-03.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="img/log-04.avif" data-srcset="img/log-04-s.avif 760w, img/log-04.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="img/log-05.avif" data-srcset="img/log-05-s.avif 760w, img/log-05.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="img/log-06.avif" data-srcset="img/log-06-s.avif 760w, img/log-06.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="img/log-07.avif" data-srcset="img/log-07-s.avif 760w, img/log-07.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="img/log-08.avif" data-srcset="img/log-08-s.avif 760w, img/log-08.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="img/log-09.avif" data-srcset="img/log-09-s.avif 760w, img/log-09.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="img/log-10.avif" data-srcset="img/log-10-s.avif 760w, img/log-10.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="img/log-11.avif" data-srcset="img/log-11-s.avif 760w, img/log-11.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+          </div>
+          <figcaption class="stage__cap">Day 0, January 7, 2018: the lawn. The 41 days follow below.</figcaption>
+        </figure>
       </div>
+      <div class="ruler" data-ruler role="slider" tabindex="0" aria-label="Day of the build" aria-valuemin="0" aria-valuemax="41" aria-valuenow="0" aria-valuetext="Day 0, Jan 7, 2018, 1:26 PM. The lawn, with marker flags where the pool will go.">
+        <div class="ruler__track" data-track><span class="ruler__now" aria-hidden="true"><b></b><em data-now>Jan 7</em></span></div>
+        <div class="ruler__labels" aria-hidden="true"><span style="--d:0">Jan 7</span><span style="--d:7">Jan 14</span><span style="--d:14">Jan 21</span><span style="--d:21">Jan 28</span><span style="--d:28">Feb 4</span><span style="--d:35">Feb 11</span><span style="--d:41">Feb 17</span></div>
+      </div>
+      <p class="stage__cue" data-cue aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 4h2v12.2l4.6-4.6 1.4 1.4-7 7-7-7 1.4-1.4 4.6 4.6z"/></svg>Scroll to watch the 41 days</p>
     </div>
-  </section>
-
-  <!-- ——— Le chantier, jour par jour : l'écran tient, la couleur suit le matériau ——— -->
-  <section class="build" id="build" aria-labelledby="build-title">
-    <div class="wrap build__head">
-      <h2 class="title" id="build-title"><span>One backyard,</span> <span>41 days.</span></h2>
-      <p class="build__intro">Eleven photos from the same job, each with the date and time it was taken.</p>
-    </div>
-    <div class="log" data-log>
+    <div class="build" id="build">
+      <div class="wrap build__head">
+        <h2 class="title" id="build-title"><span>One backyard,</span> <span>41 days.</span></h2>
+        <p class="build__intro">Eleven photos from the same job, each with the date and time it was taken.</p>
+      </div>
       <ol class="log__list">
         <li class="entry" data-tone="grass" data-day="0">
-          <figure class="entry__photo"><img src="img/log-01.avif" srcset="img/log-01-s.avif 760w, img/log-01.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="Backyard lawn with small marker flags, behind a brick house." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-01.avif" srcset="img/log-01-s.avif 760w, img/log-01.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="Backyard lawn with small marker flags, behind a brick house." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">0</span></h3>
             <p class="entry__when"><time datetime="2018-01-07T13:26">Jan 7, 2018, 1:26 PM</time></p>
@@ -120,7 +126,7 @@
           </div>
         </li>
         <li class="entry" data-tone="grass" data-day="1">
-          <figure class="entry__photo"><img src="img/log-02.avif" srcset="img/log-02-s.avif 760w, img/log-02.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="A worker marking the pool layout on the grass." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-02.avif" srcset="img/log-02-s.avif 760w, img/log-02.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="A worker marking the pool layout on the grass." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">1</span></h3>
             <p class="entry__when"><time datetime="2018-01-08T10:15">Jan 8, 2018, 10:15 AM</time></p>
@@ -129,7 +135,7 @@
           </div>
         </li>
         <li class="entry" data-tone="clay" data-day="1">
-          <figure class="entry__photo"><img src="img/log-03.avif" srcset="img/log-03-s.avif 760w, img/log-03.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="An excavator in the freshly dug pool, wood forms along the edges." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-03.avif" srcset="img/log-03-s.avif 760w, img/log-03.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="An excavator in the freshly dug pool, wood forms along the edges." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">1</span></h3>
             <p class="entry__when"><time datetime="2018-01-08T15:40">Jan 8, 2018, 3:40 PM</time></p>
@@ -138,7 +144,7 @@
           </div>
         </li>
         <li class="entry" data-tone="clay" data-day="2">
-          <figure class="entry__photo"><img src="img/log-04.avif" srcset="img/log-04-s.avif 760w, img/log-04.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="Rebar grid tied across the floor and up the walls of the dig." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-04.avif" srcset="img/log-04-s.avif 760w, img/log-04.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="Rebar grid tied across the floor and up the walls of the dig." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">2</span></h3>
             <p class="entry__when"><time datetime="2018-01-09T11:36">Jan 9, 2018, 11:36 AM</time></p>
@@ -147,7 +153,7 @@
           </div>
         </li>
         <li class="entry" data-tone="gunite" data-day="3">
-          <figure class="entry__photo"><img src="img/log-05.avif" srcset="img/log-05-s.avif 760w, img/log-05.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="Crew spraying gunite, plastic sheets hung over the fence and the house." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-05.avif" srcset="img/log-05-s.avif 760w, img/log-05.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="Crew spraying gunite, plastic sheets hung over the fence and the house." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">3</span></h3>
             <p class="entry__when"><time datetime="2018-01-10T11:07">Jan 10, 2018, 11:07 AM</time></p>
@@ -156,7 +162,7 @@
           </div>
         </li>
         <li class="entry" data-tone="gunite" data-day="4">
-          <figure class="entry__photo"><img src="img/log-06.avif" srcset="img/log-06-s.avif 760w, img/log-06.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="The bare concrete shell with steps, a bench and a raised back wall." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-06.avif" srcset="img/log-06-s.avif 760w, img/log-06.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="The bare concrete shell with steps, a bench and a raised back wall." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">4</span></h3>
             <p class="entry__when"><time datetime="2018-01-11T12:09">Jan 11, 2018, 12:09 PM</time></p>
@@ -165,7 +171,7 @@
           </div>
         </li>
         <li class="entry" data-tone="stone" data-day="23">
-          <figure class="entry__photo"><img src="img/log-07.avif" srcset="img/log-07-s.avif 760w, img/log-07.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="Tile and coping along the raised wall, the deck not yet laid." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-07.avif" srcset="img/log-07-s.avif 760w, img/log-07.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="Tile and coping along the raised wall, the deck not yet laid." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">23</span></h3>
             <p class="entry__when"><time datetime="2018-01-30T09:59">Jan 30, 2018, 9:59 AM</time></p>
@@ -174,7 +180,7 @@
           </div>
         </li>
         <li class="entry" data-tone="stone" data-day="25">
-          <figure class="entry__photo"><img src="img/log-08.avif" srcset="img/log-08-s.avif 760w, img/log-08.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="A worker on her knees laying the stone deck by the house." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-08.avif" srcset="img/log-08-s.avif 760w, img/log-08.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="A worker on her knees laying the stone deck by the house." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">25</span></h3>
             <p class="entry__when"><time datetime="2018-02-01T15:59">Feb 1, 2018, 3:59 PM</time></p>
@@ -183,7 +189,7 @@
           </div>
         </li>
         <li class="entry" data-tone="plaster" data-day="29">
-          <figure class="entry__photo"><img src="img/log-09.avif" srcset="img/log-09-s.avif 760w, img/log-09.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="A worker inside the empty pool, the walls now blue-gray." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-09.avif" srcset="img/log-09-s.avif 760w, img/log-09.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="A worker inside the empty pool, the walls now blue-gray." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">29</span></h3>
             <p class="entry__when"><time datetime="2018-02-05T13:40">Feb 5, 2018, 1:40 PM</time></p>
@@ -192,7 +198,7 @@
           </div>
         </li>
         <li class="entry" data-tone="water" data-day="30">
-          <figure class="entry__photo"><img src="img/log-10.avif" srcset="img/log-10-s.avif 760w, img/log-10.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="The pool full of water, two scuppers pouring and two fire bowls on stone pillars." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-10.avif" srcset="img/log-10-s.avif 760w, img/log-10.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="The pool full of water, two scuppers pouring and two fire bowls on stone pillars." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">30</span></h3>
             <p class="entry__when"><time datetime="2018-02-06T16:35">Feb 6, 2018, 4:35 PM</time></p>
@@ -201,7 +207,7 @@
           </div>
         </li>
         <li class="entry" data-tone="night" data-day="41">
-          <figure class="entry__photo"><img src="img/log-11.avif" srcset="img/log-11-s.avif 760w, img/log-11.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="The pool at dusk, lit turquoise, with fire in both bowls." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="img/log-11.avif" srcset="img/log-11-s.avif 760w, img/log-11.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="The pool at dusk, lit turquoise, with fire in both bowls." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">41</span></h3>
             <p class="entry__when"><time datetime="2018-02-17T18:27">Feb 17, 2018, 6:27 PM</time></p>
@@ -210,18 +216,6 @@
           </div>
         </li>
       </ol>
-      <div class="ruler" aria-hidden="true">
-        <div class="ruler__track" data-track><span class="ruler__now"><b></b></span></div>
-        <div class="ruler__labels">
-          <span style="--d:0">Jan 7</span>
-          <span style="--d:7">Jan 14</span>
-          <span style="--d:14">Jan 21</span>
-          <span style="--d:21">Jan 28</span>
-          <span style="--d:28">Feb 4</span>
-          <span style="--d:35">Feb 11</span>
-          <span style="--d:41">Feb 17</span>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -255,7 +249,10 @@
         <p class="pools__intro">Other jobs, in the order the photos were taken, from 2018 to 2022. Select a photo to see it larger.</p>
       </div>
 
-      <div class="year">
+      <div class="pools__body">
+      <p class="pools__year" aria-hidden="true" data-odo></p>
+      <div class="pools__years">
+      <div class="year" data-gy="2018">
         <p class="year__label" aria-hidden="true">2018</p>
         <div class="year__jobs">
           <article class="job">
@@ -286,7 +283,7 @@
         </div>
       </div>
 
-      <div class="year">
+      <div class="year" data-gy="2019">
         <p class="year__label" aria-hidden="true">2019</p>
         <div class="year__jobs">
           <article class="job">
@@ -320,7 +317,7 @@
         </div>
       </div>
 
-      <div class="year">
+      <div class="year" data-gy="2020">
         <p class="year__label" aria-hidden="true">2020</p>
         <div class="year__jobs">
           <article class="job">
@@ -357,7 +354,7 @@
         </div>
       </div>
 
-      <div class="year">
+      <div class="year" data-gy="2022">
         <p class="year__label" aria-hidden="true">2022</p>
         <div class="year__jobs">
           <article class="job">
@@ -373,6 +370,8 @@
           </article>
         </div>
       </div>
+      </div>
+      </div>
     </div>
   </section>
 
@@ -385,6 +384,7 @@
       </div>
       <div class="night__grid">
         <figure class="lights">
+          <div class="lights__glow" aria-hidden="true"><i class="is-on" data-color="blue" style="--c:rgba(47, 91, 255, 0.75)"></i><i data-color="red" style="--c:rgba(255, 59, 59, 0.7)"></i></div>
           <div class="lights__imgs">
             <img class="lights__img is-on" src="img/n-blue.avif" alt="A curved pool at night, lit blue." data-color="blue" loading="lazy">
             <img class="lights__img" src="img/n-red.avif" alt="The same pool at night, lit red." data-color="red" loading="lazy" aria-hidden="true">
@@ -417,7 +417,7 @@
         <blockquote><p>You’ll feel confident knowing that a professional is overseeing the design and construction of your new pool while you focus on enjoying your family.</p></blockquote>
         <figcaption>Heritage Pools Texas Team</figcaption>
       </figure>
-      <p class="team__values">Trust, integrity and honesty are what we stand for.</p>
+      <p class="team__values" data-words>Trust, integrity and honesty are what we stand for.</p>
       <p class="team__more">A great pool requires more than providing a product or service. We go the extra mile to make sure you are happy with your new pool.</p>
     </div>
   </section>
@@ -473,7 +473,7 @@
 <footer class="ft">
   <div class="wrap">
     <div class="ft__top">
-      <p class="ft__brand"><span class="brand__a">Heritage</span><span class="brand__b">Pools Texas</span></p>
+      <p class="ft__brand"><span class="brand__a">Heritage</span> <span class="brand__b">Pools Texas</span></p>
       <p class="ft__slogan">Amazing pools at amazing prices.</p>
     </div>
     <div class="ft__cols">
@@ -490,6 +490,7 @@
         <p><a href="#build">The build</a><br><a href="#services">Services</a><br><a href="#pools">Our pools</a><br><a href="#night">After dark</a><br><a href="#contact">Contact</a></p>
       </nav>
     </div>
+    <p class="ft__word" aria-hidden="true">Heritage</p>
     <p class="ft__legal">© <span data-year>2026</span> Heritage Pools Texas. All photos are from our own jobs, 2018 to 2022.</p>
   </div>
 </footer>

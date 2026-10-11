@@ -30,12 +30,13 @@
 </script>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/Ultra.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/LibreFranklin.woff2" crossorigin>
-<link rel="preload" as="image" href="assets/img/log-01.avif" imagesrcset="assets/img/log-01-s.avif 760w, assets/img/log-01.avif 1008w" imagesizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/img/log-01.avif" imagesrcset="assets/img/log-01-s.avif 760w, assets/img/log-01.avif 1008w" imagesizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" fetchpriority="high">
 <style>
 @font-face{font-family:"Ultra";src:url(assets/fonts/Ultra.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}@font-face{font-family:"Libre Franklin";src:url(assets/fonts/LibreFranklin.woff2) format("woff2");font-weight:300 900;font-style:normal;font-display:swap}
 /* Heritage Pools Texas : styles de la page.
  * Bleu roi de leur icône, Ultra (slab très gras) pour les titres et les chiffres, Libre Franklin pour le texte.
- * Le chantier du début de 2018 prend la couleur de chaque matériau : gazon, terre, béton, pierre, enduit, eau, nuit.
+ * L'ouverture déroule le chantier de 2018 au défilement : la page prend la couleur de chaque matériau
+ * (gazon, terre, béton, pierre, enduit, eau, nuit), l'eau monte au jour 30, les lumières s'allument au jour 41.
  */
 :root {
   --blue: #0b2fb3;
@@ -79,6 +80,7 @@ a { color: inherit; }
 button { font: inherit; color: inherit; cursor: pointer; }
 time { font-variant-numeric: tabular-nums; }
 :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 4px; }
+[tabindex="-1"]:focus { outline: none; }
 
 .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gut); }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
@@ -88,7 +90,7 @@ time { font-variant-numeric: tabular-nums; }
 }
 .skip:focus { transform: none; }
 
-/* titres en Ultra : un seul corps de graisse, l'interlignage serré mais sans que les jambages se touchent */
+/* titres en Ultra : une seule graisse, l'interlignage serré sans que les jambages se touchent */
 .title {
   font-family: var(--display);
   font-weight: 400;
@@ -103,7 +105,7 @@ time { font-variant-numeric: tabular-nums; }
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   min-height: 54px; padding: 0 26px; border: 2px solid transparent; border-radius: 10px;
   font: 600 17px/1.1 var(--text); text-decoration: none; text-align: center;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, opacity 0.2s;
 }
 .btn--blue { background: var(--blue); color: #fff; }
 .btn--blue:hover { background: var(--blue-2); }
@@ -111,13 +113,16 @@ time { font-variant-numeric: tabular-nums; }
 .btn--white:hover { background: var(--mist); }
 .btn--line { border-color: currentColor; color: inherit; }
 .btn--line:hover { background: rgba(255, 255, 255, 0.14); }
+/* sur l'ouverture : le bouton prend la couleur du texte, et son texte celle du fond (elles changent avec le chantier) */
+.btn--inv { background: var(--fg); color: var(--bg); }
+.btn--inv:hover { opacity: 0.88; }
 
-/* ——— en-tête : transparent sur le bleu de l'accueil, blanc dès qu'on descend ——— */
+/* ——— en-tête : transparent sur l'ouverture (aux couleurs du chantier), blanc ensuite ——— */
 .hd {
   position: fixed; inset: 0 0 auto; z-index: 50; height: var(--hd);
   display: flex; align-items: center; gap: 36px; padding: 0 var(--gut);
-  color: #fff; --focus: var(--water);
-  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, transform 0.45s var(--ease);
+  color: var(--hd-fg, #fff); --focus: currentColor;
+  transition: background-color 0.3s, color 0.35s, box-shadow 0.3s, transform 0.45s var(--ease);
 }
 .hd.is-solid { background: #fff; color: var(--ink); box-shadow: 0 1px 0 var(--line); --focus: var(--blue); }
 .hd.is-hidden { transform: translateY(-100%); }
@@ -135,10 +140,9 @@ time { font-variant-numeric: tabular-nums; }
 .hd__nav a.is-on { background-size: 100% 2px; }
 .hd__cta { display: flex; align-items: center; gap: 20px; }
 .hd__tel { font-weight: 600; font-size: 16px; text-decoration: none; font-variant-numeric: tabular-nums; }
-.btn--hd { min-height: 44px; padding: 0 18px; font-size: 16px; background: #fff; color: var(--blue); }
-.btn--hd:hover { background: var(--mist); }
+.btn--hd { min-height: 44px; padding: 0 18px; font-size: 16px; background: var(--hd-fg, #fff); color: var(--hd-bg, var(--blue)); }
+.btn--hd:hover { opacity: 0.88; }
 .hd.is-solid .btn--hd { background: var(--blue); color: #fff; }
-.hd.is-solid .btn--hd:hover { background: var(--blue-2); }
 .hd__menu {
   display: none; margin-left: auto; min-height: 44px; padding: 0 18px; border: 2px solid currentColor; border-radius: 10px;
   background: none; font-weight: 600; font-size: 16px;
@@ -167,63 +171,7 @@ time { font-variant-numeric: tabular-nums; }
   .brand__b { font-size: 15px; }
 }
 
-/* ——— accueil ——— */
-.hero {
-  display: flex; align-items: center; min-height: 100svh;
-  padding: calc(var(--hd) + clamp(28px, 5vh, 64px)) 0 clamp(44px, 7vh, 88px);
-  background: var(--blue); color: #fff; --focus: var(--water);
-}
-.hero__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  grid-template-rows: 1fr auto auto auto 1fr;
-  column-gap: clamp(36px, 5vw, 80px);
-}
-.hero__title {
-  grid-column: 1; grid-row: 2;
-  font-family: var(--display); font-weight: 400;
-  font-size: clamp(52px, 6.7vw, 100px); line-height: 1.02; letter-spacing: -0.012em;
-}
-.hero__title span { display: block; }
-.hero__lead { grid-column: 1; grid-row: 3; max-width: 36ch; margin-top: 30px; font-size: clamp(18px, 1.45vw, 21px); line-height: 1.5; color: rgba(255, 255, 255, 0.9); }
-.hero__cta { grid-column: 1; grid-row: 4; display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
-.film { grid-column: 2; grid-row: 1 / -1; align-self: center; }
-.film__frames { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 12px; background: var(--blue-2); }
-.film__frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.14s linear; }
-.film__frame.is-on { opacity: 1; }
-.film__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 16px; font-variant-numeric: tabular-nums; }
-.film__day { min-width: 3.6em; font-family: var(--display); font-size: 26px; line-height: 1; white-space: nowrap; }
-.film__when { font-size: 16px; white-space: nowrap; color: rgba(255, 255, 255, 0.9); }
-.film__track { order: 3; flex: 1 1 100%; height: 3px; overflow: hidden; border-radius: 2px; background: rgba(255, 255, 255, 0.28); }
-.film__track span { display: block; height: 100%; background: #fff; transform: scaleX(0); transform-origin: 0 50%; transition: transform 0.25s var(--ease); }
-.film__again {
-  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px;
-  margin-left: auto; border: 2px solid rgba(255, 255, 255, 0.7); border-radius: 10px; background: none;
-  font-weight: 600; font-size: 15px; white-space: nowrap; transition: opacity 0.3s, background-color 0.2s;
-}
-.film__again:hover { background: rgba(255, 255, 255, 0.14); }
-.film__again:disabled { opacity: 0.45; cursor: default; background: none; }
-.film__again svg { width: 18px; height: 18px; fill: currentColor; }
-.no-motion .film__again { display: none; }
-
-@media (max-width: 899px) {
-  .hero { align-items: flex-start; min-height: 0; padding-top: calc(var(--hd) + 26px); }
-  .hero__grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
-  .hero__title, .hero__lead, .hero__cta, .film { grid-column: 1; grid-row: auto; }
-  .hero__title { font-size: min(16.4vw, 92px); }
-  .film { margin-top: 26px; }
-  .film__bar { gap: 8px 14px; }
-  .film__again { order: 4; margin-left: 0; }
-  .hero__lead { margin-top: 26px; }
-  .hero__cta { margin-top: 28px; }
-}
-@media (max-width: 520px) {
-  .film__day { font-size: 22px; }
-  .film__when { font-size: 15px; }
-  .hero__cta .btn { flex: 1 1 100%; }
-}
-
-/* ——— le chantier, jour par jour ——— */
+/* ════════ l'ouverture ════════ */
 [data-tone="grass"] { --bg: #4c6a2e; --fg: #fff; --fg2: rgba(255, 255, 255, 0.9); }
 [data-tone="clay"] { --bg: #8f4a28; --fg: #fff; --fg2: rgba(255, 255, 255, 0.9); }
 [data-tone="gunite"] { --bg: #62676d; --fg: #fff; --fg2: rgba(255, 255, 255, 0.92); }
@@ -232,11 +180,85 @@ time { font-variant-numeric: tabular-nums; }
 [data-tone="water"] { --bg: #3cc3d0; --fg: var(--ink); --fg2: rgba(10, 18, 56, 0.8); }
 [data-tone="night"] { --bg: #081033; --fg: #fff; --fg2: rgba(255, 255, 255, 0.86); }
 
-.build { background: #4c6a2e; color: #fff; --focus: #fff; }
-.build__head { padding-top: var(--pad); padding-bottom: clamp(48px, 7vw, 88px); }
-.build__intro { max-width: 44ch; margin-top: 22px; font-size: clamp(18px, 1.5vw, 21px); color: rgba(255, 255, 255, 0.9); }
+.opening { --bg: #4c6a2e; background: var(--bg); }
+.stage {
+  --fg: #fff; --fg2: rgba(255, 255, 255, 0.88);
+  position: relative; overflow: hidden;
+  display: grid; grid-template-rows: minmax(0, 1fr) auto auto;
+  min-height: 100svh;
+  padding: calc(var(--hd) + clamp(18px, 4vh, 48px)) var(--gut) clamp(18px, 3.2vh, 34px);
+  background: var(--bg); color: var(--fg); --focus: var(--fg);
+  transition: color 0.35s;
+}
+.stage[data-fg="ink"] { --fg: var(--ink); --fg2: rgba(10, 18, 56, 0.8); }
+/* l'eau qui monte au jour 30, avec sa vague */
+.stage__fill { position: absolute; inset: 0; z-index: 0; background: #3cc3d0; transform: translateY(105%); pointer-events: none; will-change: transform; }
+.stage__wave { position: absolute; left: 0; bottom: calc(100% - 1px); width: 100%; height: clamp(22px, 3.6vh, 40px); fill: #3cc3d0; }
+.stage__grid {
+  position: relative; z-index: 1; align-self: center;
+  display: grid; grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr); gap: clamp(32px, 4vw, 72px); align-items: center;
+  width: 100%; max-width: 1640px; margin: 0 auto;
+}
+.stage__text { display: grid; }
+.stage__intro,
+.stage__info { grid-area: 1 / 1; align-self: center; }
+.hero__title {
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(52px, 6.6vw, 112px); line-height: 1.02; letter-spacing: -0.012em;
+}
+.hero__title > span { display: block; }
+.hero__lead { max-width: 36ch; margin-top: 28px; font-size: clamp(18px, 1.4vw, 21px); line-height: 1.5; color: var(--fg2); }
+.hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
 
-/* sans écran épinglé (téléphone, ou moins d'animations) : une bande de couleur par photo */
+.stage__info { display: none; }
+.info__day { display: flex; flex-direction: column; }
+.info__label { font: 600 clamp(16px, 1.3vw, 20px)/1 var(--text); color: var(--fg2); }
+.info__num { margin-top: 10px; font-family: var(--display); font-size: clamp(110px, min(15vw, 25vh), 240px); line-height: 0.88; letter-spacing: -0.02em; }
+.info__when { margin-top: clamp(16px, 2.6vh, 26px); font-size: 18px; color: var(--fg2); font-variant-numeric: tabular-nums; }
+.info__what { max-width: 22ch; min-height: 2.6em; margin-top: 8px; font-size: clamp(22px, 2vw, 30px); font-weight: 500; line-height: 1.3; }
+.info__count { margin-top: clamp(12px, 2vh, 20px); font-size: 15px; color: var(--fg2); }
+.info__end { margin-top: clamp(16px, 2.6vh, 26px); opacity: 0; visibility: hidden; transform: translateY(14px); transition: opacity 0.5s, transform 0.6s var(--ease), visibility 0s 0.5s; }
+.info__end.is-on { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+
+.stage__photo { position: relative; justify-self: end; width: min(100%, 1008px, calc((100svh - var(--hd) - 210px) * 4 / 3)); }
+/* la lueur de la piscine, quand les lumières s'allument */
+.stage__photo::before {
+  content: ""; position: absolute; inset: -24% -16%; z-index: -1; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(42, 209, 223, 0.62), rgba(42, 209, 223, 0)); opacity: var(--glow, 0); pointer-events: none;
+}
+.stage__frames { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 14px; background: rgba(0, 0, 0, 0.18); }
+.frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.05); transition: opacity 0.4s linear, transform 1.1s var(--ease); }
+.frame.is-on { opacity: 1; transform: none; }
+.stage__cap { margin-top: 14px; font-size: 16px; color: var(--fg2); }
+
+/* la règle des jours, du 7 janvier au 17 février : on peut la faire glisser */
+.ruler { display: none; position: relative; z-index: 1; width: 100%; max-width: 1640px; margin: clamp(14px, 2.6vh, 30px) auto 0; padding-top: 34px; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.ruler:active { cursor: grabbing; }
+.ruler:focus-visible { outline-offset: 6px; }
+.ruler__track { position: relative; height: 24px; border-bottom: 2px solid currentColor; }
+.ruler__track i { position: absolute; bottom: 0; left: calc(var(--d) / 41 * 100%); width: 2px; height: 7px; margin-left: -1px; background: currentColor; opacity: 0.5; }
+.ruler__track i.is-week { height: 14px; opacity: 1; }
+.ruler__dot { position: absolute; bottom: -6px; left: calc(var(--d) / 41 * 100%); width: 10px; height: 10px; margin-left: -5px; border: 2px solid currentColor; border-radius: 50%; background: var(--bg); }
+.ruler__dot.is-past { background: currentColor; }
+.ruler__now { position: absolute; inset: 0; transform: translateX(calc(var(--d, 0) / 41 * 100%)); pointer-events: none; will-change: transform; }
+.ruler__now b { position: absolute; left: -9px; bottom: -10px; width: 18px; height: 18px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 4px var(--bg); }
+.ruler__now em {
+  position: absolute; left: 0; bottom: calc(100% + 6px); transform: translateX(-50%);
+  padding: 3px 10px; border-radius: 999px; background: var(--fg); color: var(--bg);
+  font: 700 13px/1.3 var(--text); font-style: normal; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.ruler__labels { position: relative; height: 20px; margin-top: 12px; font-size: 13px; font-weight: 500; white-space: nowrap; color: var(--fg2); }
+.ruler__labels span { position: absolute; left: calc(var(--d) / 41 * 100%); transform: translateX(-50%); }
+.ruler__labels span:first-child { transform: none; }
+.ruler__labels span:last-child { transform: translateX(-100%); }
+.stage__cue { display: none; position: relative; z-index: 1; align-items: center; gap: 8px; margin-top: 12px; font-size: 14px; font-weight: 600; color: var(--fg2); }
+.stage__cue svg { width: 18px; height: 18px; fill: currentColor; animation: cue 1.8s var(--ease) infinite; }
+@keyframes cue { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(4px); } }
+
+/* la liste des onze photos : bandes de couleur sans écran épinglé (lue aussi par les lecteurs d'écran) */
+.build { background: #4c6a2e; color: #fff; --focus: #fff; }
+.build__head { padding-top: clamp(64px, 9vw, 120px); padding-bottom: clamp(40px, 6vw, 72px); }
+.build__intro { max-width: 44ch; margin-top: 22px; font-size: clamp(18px, 1.5vw, 21px); color: rgba(255, 255, 255, 0.9); }
 .entry { background: var(--bg); color: var(--fg); padding: clamp(36px, 6vw, 64px) 0; }
 .entry__photo { padding: 0 var(--gut); }
 .entry__photo img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; }
@@ -247,10 +269,9 @@ time { font-variant-numeric: tabular-nums; }
 .entry__when { color: var(--fg2); font-size: 16px; font-variant-numeric: tabular-nums; }
 .entry__what { margin-top: 4px; font-size: 19px; font-weight: 500; line-height: 1.35; }
 .entry__count { margin-top: 8px; color: var(--fg2); font-size: 14px; }
-.ruler { display: none; }
 
 @media (min-width: 900px) {
-  .entry { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(32px, 4vw, 64px); align-items: center; max-width: none; padding: clamp(40px, 5vw, 72px) max(var(--gut), calc((100% - var(--max)) / 2 + var(--gut))); }
+  .entry { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(32px, 4vw, 64px); align-items: center; padding: clamp(40px, 5vw, 72px) max(var(--gut), calc((100% - var(--max)) / 2 + var(--gut))); }
   .entry__photo { grid-column: 2; grid-row: 1; padding: 0; }
   .entry__text { grid-column: 1; grid-row: 1; display: block; padding: 0; }
   .entry__day { display: block; }
@@ -261,69 +282,69 @@ time { font-variant-numeric: tabular-nums; }
   .entry__count { margin-top: 22px; font-size: 15px; }
 }
 
-/* écran épinglé (grand écran) : les onze photos au même endroit, la couleur change avec le matériau */
-@media (min-width: 900px) and (min-height: 600px) {
-  .motion .log {
-    position: relative; height: 100vh; overflow: hidden;
-    background: var(--bg, #4c6a2e); color: var(--fg, #fff);
-    transition: background-color 0.7s var(--ease), color 0.7s var(--ease);
-  }
-  .motion .log__list {
-    position: absolute; left: 0; right: 0; top: calc(var(--hd) + 12px); bottom: 118px;
-    max-width: var(--max); margin: 0 auto;
-  }
-  .motion .entry {
-    position: absolute; inset: 0; padding: 0 var(--gut);
-    background: none; color: inherit; opacity: 0; transition: opacity 0.4s linear;
-  }
-  .motion .entry.is-on { opacity: 1; }
-  .motion .entry__photo { display: flex; align-items: center; height: 100%; }
-  .motion .entry__photo img { width: auto; max-width: 100%; max-height: 100%; margin-left: auto; }
-  .motion .entry__text { transform: translateY(18px); transition: transform 0.7s var(--ease); }
-  .motion .entry.is-on .entry__text { transform: none; }
-  .motion .entry__label,
-  .motion .entry__when,
-  .motion .entry__count { color: inherit; opacity: 0.88; }
-
-  .motion .ruler { display: block; position: absolute; left: 0; right: 0; bottom: 34px; max-width: var(--max); margin: 0 auto; padding: 0 var(--gut); }
-  .ruler__track { position: relative; height: 26px; border-bottom: 2px solid currentColor; }
-  .ruler__track i { position: absolute; bottom: 0; left: calc(var(--d) / 41 * 100%); width: 2px; height: 7px; margin-left: -1px; background: currentColor; opacity: 0.55; }
-  .ruler__track i.is-week { height: 14px; opacity: 1; }
-  .ruler__dot { position: absolute; bottom: -6px; left: calc(var(--d) / 41 * 100%); width: 10px; height: 10px; margin-left: -5px; border: 2px solid currentColor; border-radius: 50%; background: var(--bg, #4c6a2e); transition: background-color 0.7s var(--ease); }
-  .ruler__dot.is-past { background: currentColor; }
-  .ruler__now { position: absolute; inset: 0; transform: translateX(calc(var(--d, 0) / 41 * 100%)); transition: transform 0.7s var(--ease); pointer-events: none; }
-  .ruler__now b { position: absolute; left: -9px; bottom: -10px; width: 18px; height: 18px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 4px var(--bg, #4c6a2e); transition: box-shadow 0.7s var(--ease); }
-  .ruler__labels { position: relative; height: 22px; margin-top: 12px; font-size: 14px; font-weight: 500; white-space: nowrap; }
-  .ruler__labels span { position: absolute; left: calc(var(--d) / 41 * 100%); transform: translateX(-50%); opacity: 0.88; }
-  .ruler__labels span:first-child { transform: none; }
-  .ruler__labels span:last-child { transform: translateX(-100%); }
+/* écran épinglé (assez haut, animations permises) : le chantier se déroule au défilement */
+@media (min-height: 560px) {
+  .motion .stage { height: 100svh; min-height: 0; }
+  .motion .stage__info { display: block; opacity: 0; }
+  .motion .ruler { display: block; }
+  .motion .stage__cue { display: flex; }
+  .motion .stage__cap { display: none; }
+  .motion .build { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .motion .entry__photo { display: none; }
 }
 
-/* ——— ce qu'ils font ——— */
-.services { padding: var(--pad) 0; background: #fff; }
-.services .title { color: var(--blue); }
-.services__intro { max-width: 46ch; margin-top: 22px; font-size: clamp(18px, 1.5vw, 21px); color: var(--muted); }
-.svc { margin-top: clamp(40px, 6vw, 72px); border-bottom: 2px solid var(--blue); }
-.svc li {
-  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 64px; align-items: baseline;
-  padding: clamp(20px, 2.4vw, 30px) 0;
+@media (max-width: 899px) {
+  .stage__grid { grid-template-columns: minmax(0, 1fr); align-self: start; align-content: start; gap: 18px; }
+  .stage__photo { justify-self: stretch; width: 100%; }
+  .hero__title { font-size: min(15.6vw, 88px); }
+  .hero__lead { margin-top: 18px; }
+  .hero__cta { margin-top: 22px; }
+  .info__num { font-size: clamp(72px, 21vw, 120px); }
+  .info__what { font-size: 20px; }
+  .ruler { padding-top: 30px; }
+  .ruler__labels span:not(:first-child):not(:last-child):not(:nth-child(4)) { display: none; }
 }
-.svc li::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--blue); transform: scaleX(var(--rule, 1)); transform-origin: 0 50%; }
-.svc h3 { font-family: var(--display); font-weight: 400; font-size: clamp(30px, 3.6vw, 54px); line-height: 1.05; color: var(--ink); }
-.svc p { font-size: clamp(18px, 1.5vw, 21px); color: var(--muted); }
+@media (max-width: 899px) and (max-height: 799px) {
+  .motion .hero__lead { display: none; }
+}
+@media (max-width: 520px) {
+  .hero__cta .btn { flex: 1 1 100%; }
+  .motion .hero__cta .btn--line { display: none; }
+}
+
+/* ════════ ce qu'ils font : les mots glissent au défilement ════════ */
+.services { padding: var(--pad) 0; background: var(--blue); color: #fff; overflow: hidden; --focus: var(--water); }
+.services__intro { max-width: 46ch; margin-top: 22px; font-size: clamp(18px, 1.5vw, 21px); color: rgba(255, 255, 255, 0.88); }
+.svc { margin-top: clamp(40px, 6vw, 80px); border-bottom: 2px solid rgba(255, 255, 255, 0.55); }
+.svc li { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 48px; align-items: end; padding: clamp(16px, 2vw, 26px) 0 clamp(18px, 2.2vw, 30px); }
+.svc li::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: rgba(255, 255, 255, 0.55); transform: scaleX(var(--rule, 1)); transform-origin: 0 50%; }
+.svc h3 { font-family: var(--display); font-weight: 400; font-size: clamp(42px, 7vw, 104px); line-height: 0.98; letter-spacing: -0.015em; white-space: nowrap; will-change: transform; }
+.svc p { max-width: 24ch; padding-bottom: 0.5em; text-align: right; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.45; color: rgba(255, 255, 255, 0.9); }
 .services__end { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 48px; margin-top: clamp(40px, 5vw, 64px); }
 .services__end p { max-width: 40ch; font-size: clamp(19px, 1.7vw, 24px); font-weight: 500; line-height: 1.4; }
 
-@media (max-width: 760px) {
+@media (max-width: 899px) {
   .svc li { grid-template-columns: minmax(0, 1fr); }
+  .svc h3 { font-size: clamp(32px, 10.8vw, 64px); }
+  .svc p { text-align: left; padding-bottom: 0; }
 }
 
-/* ——— leurs autres chantiers, par année ——— */
+/* ════════ leurs autres chantiers : l'année tourne comme un compteur ════════ */
 .pools { padding: var(--pad) 0; background: var(--mist); }
 .pools .title { color: var(--blue); }
 .pools__intro { max-width: 46ch; margin-top: 22px; font-size: clamp(18px, 1.5vw, 21px); color: var(--muted); }
-.year { display: grid; grid-template-columns: minmax(170px, 0.24fr) minmax(0, 1fr); gap: 24px clamp(28px, 4vw, 64px); margin-top: clamp(48px, 6vw, 80px); padding-top: clamp(28px, 3vw, 40px); border-top: 3px solid var(--blue); }
-.year__label { position: sticky; top: calc(var(--hd) + 20px); align-self: start; font-family: var(--display); font-size: clamp(44px, 5vw, 72px); line-height: 0.9; letter-spacing: -0.02em; color: var(--blue); }
+.pools__body { display: grid; grid-template-columns: minmax(170px, 0.24fr) minmax(0, 1fr); gap: 0 clamp(28px, 4vw, 64px); margin-top: clamp(48px, 6vw, 80px); }
+.pools__year {
+  position: sticky; top: calc(var(--hd) + 24px); align-self: start;
+  display: flex; height: 1em; margin-top: clamp(28px, 3vw, 40px); overflow: hidden;
+  font-family: var(--display); font-size: clamp(44px, 5vw, 72px); line-height: 1; letter-spacing: -0.02em; color: var(--blue);
+}
+.odo { display: block; width: var(--w, 0.7em); height: 1em; overflow: hidden; transition: width 0.9s var(--ease); }
+.odo > span { display: flex; flex-direction: column; transition: transform 0.9s var(--ease); }
+.odo i { display: block; height: 1em; font-style: normal; text-align: center; }
+.year { padding-top: clamp(28px, 3vw, 40px); border-top: 3px solid var(--blue); }
+.year + .year { margin-top: clamp(48px, 6vw, 80px); }
+.year__label { display: none; font-family: var(--display); font-size: 52px; line-height: 0.9; letter-spacing: -0.02em; color: var(--blue); }
 .job + .job { margin-top: clamp(40px, 5vw, 64px); }
 .job__when { font-family: var(--display); font-weight: 400; font-size: clamp(24px, 2.3vw, 34px); line-height: 1.1; }
 .job__what { max-width: 58ch; margin-top: 8px; color: var(--muted); }
@@ -336,23 +357,27 @@ time { font-variant-numeric: tabular-nums; }
 .shot figcaption { margin-top: 6px; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 @media (max-width: 760px) {
-  .year { grid-template-columns: minmax(0, 1fr); }
-  .year__label { position: static; font-size: 56px; }
+  .pools__body { grid-template-columns: minmax(0, 1fr); }
+  .pools__year { display: none; }
+  .year__label { display: block; margin-bottom: 18px; }
   .strip { flex-wrap: nowrap; overflow-x: auto; margin: 18px calc(-1 * var(--gut)) 0; padding: 0 var(--gut) 8px; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gut); scrollbar-width: none; }
   .strip::-webkit-scrollbar { display: none; }
   .strip::after { flex: 0 0 1px; }
   .shot { flex: 0 0 auto; width: min(calc(var(--r, 1.5) * 190px), 82vw); scroll-snap-align: start; }
 }
 
-/* ——— la nuit ——— */
-.night { padding: var(--pad) 0; background: var(--night); color: #fff; --focus: var(--water); }
+/* ════════ la nuit : la piscine s'allume quand on arrive, sa lueur prend la couleur choisie ════════ */
+.night { padding: var(--pad) 0; background: var(--night); color: #fff; overflow: hidden; --focus: var(--water); }
 .night__intro { margin-top: 18px; font-size: clamp(18px, 1.5vw, 21px); color: rgba(255, 255, 255, 0.86); }
 .night__grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); grid-template-rows: auto auto; gap: 28px clamp(20px, 2.4vw, 32px); margin-top: clamp(40px, 5vw, 64px); }
-.lights { grid-row: 1 / span 2; }
+.lights { position: relative; grid-row: 1 / span 2; }
+.lights__glow { position: absolute; inset: -18% -14% 4%; pointer-events: none; }
+.lights__glow i { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(closest-side, var(--c), transparent); opacity: 0; transition: opacity 0.9s ease; }
+.lights__glow i.is-on { opacity: 1; }
 .lights__imgs { position: relative; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 12px; background: #000; }
 .lights__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.6s ease; }
 .lights__img.is-on { opacity: 1; }
-.lights__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-top: 16px; color: rgba(255, 255, 255, 0.86); }
+.lights__bar { position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-top: 16px; color: rgba(255, 255, 255, 0.86); }
 .lights__pick { display: inline-flex; gap: 8px; }
 .pick {
   display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px;
@@ -361,7 +386,8 @@ time { font-variant-numeric: tabular-nums; }
 }
 .pick i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); }
 .pick:hover { border-color: #fff; }
-.pick[aria-pressed="true"] { border-color: var(--water); background: var(--water); color: var(--night); }
+.pick[aria-pressed="true"] { border-color: #fff; background: #fff; color: var(--night); }
+.night__shot { position: relative; }
 .night__shot img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 12px; }
 .night__shot figcaption { margin-top: 10px; font-size: 15px; line-height: 1.45; color: rgba(255, 255, 255, 0.86); }
 .night__shot time { color: #fff; font-weight: 600; }
@@ -374,7 +400,7 @@ time { font-variant-numeric: tabular-nums; }
   .night__grid { grid-template-columns: minmax(0, 1fr); }
 }
 
-/* ——— le mot des fondateurs ——— */
+/* ════════ le mot des fondateurs ════════ */
 .team { padding: var(--pad) 0; background: #fff; }
 .team__title { font: 600 18px/1.3 var(--text); color: var(--muted); }
 .team__quote { margin-top: 22px; }
@@ -383,7 +409,7 @@ time { font-variant-numeric: tabular-nums; }
 .team__values { margin-top: clamp(56px, 8vw, 112px); max-width: 15ch; font-family: var(--display); font-size: clamp(42px, 7vw, 116px); line-height: 1.02; letter-spacing: -0.015em; color: var(--blue); }
 .team__more { max-width: 46ch; margin-top: 28px; font-size: clamp(18px, 1.5vw, 21px); color: var(--muted); }
 
-/* ——— contact ——— */
+/* ════════ contact ════════ */
 .contact { padding: var(--pad) 0; background: var(--blue); color: #fff; --focus: var(--water); }
 .contact__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px clamp(40px, 6vw, 96px); align-items: start; }
 .contact .title { font-size: clamp(40px, 4.4vw, 64px); }
@@ -425,8 +451,8 @@ time { font-variant-numeric: tabular-nums; }
   .form__send { justify-self: stretch; }
 }
 
-/* ——— pied de page ——— */
-.ft { padding: clamp(64px, 8vw, 104px) 0 calc(36px + env(safe-area-inset-bottom)); background: var(--night); color: #fff; --focus: var(--water); }
+/* ════════ pied de page : le nom en très grand ════════ */
+.ft { padding: clamp(64px, 8vw, 104px) 0 0; background: var(--night); color: #fff; overflow: hidden; --focus: var(--water); }
 .ft__top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 40px; padding-bottom: 36px; border-bottom: 1px solid rgba(255, 255, 255, 0.25); }
 .ft__brand { display: flex; align-items: baseline; gap: 12px; }
 .ft__brand .brand__a { font-size: clamp(40px, 5vw, 64px); }
@@ -437,11 +463,12 @@ time { font-variant-numeric: tabular-nums; }
 .ft__cols p { margin-top: 10px; font-size: 16px; line-height: 1.8; }
 .ft__cols a { text-decoration: none; overflow-wrap: anywhere; }
 .ft__cols a:hover { text-decoration: underline; }
-.ft__legal { padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.25); font-size: 14px; color: rgba(255, 255, 255, 0.72); }
+.ft__word { margin: clamp(24px, 4vw, 56px) 0 0; font-family: var(--display); font-size: min(15.6vw, 222px); line-height: 0.78; letter-spacing: -0.03em; text-align: center; white-space: nowrap; color: #4466ff; will-change: transform; }
+.ft__legal { padding: 24px 0 calc(28px + env(safe-area-inset-bottom)); border-top: 1px solid rgba(255, 255, 255, 0.25); font-size: 14px; color: rgba(255, 255, 255, 0.72); }
 
 @media (max-width: 760px) {
   .ft__cols { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .ft { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
+  .ft__legal { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
 }
 
 /* ——— barre d'appel (téléphone) ——— */
@@ -475,9 +502,8 @@ time { font-variant-numeric: tabular-nums; }
 [data-line] > span { display: inline-block; }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; scroll-behavior: auto !important; }
 }
-[tabindex="-1"]:focus { outline: none; }
 
 </style>
 </head>
@@ -485,7 +511,7 @@ time { font-variant-numeric: tabular-nums; }
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="hd" data-hd>
-  <a class="brand" href="#top" aria-label="Heritage Pools Texas, back to top"><span class="brand__a">Heritage</span><span class="brand__b">Pools Texas</span></a>
+  <a class="brand" href="#top" aria-label="Heritage Pools Texas, back to top"><span class="brand__a">Heritage</span> <span class="brand__b">Pools Texas</span></a>
   <nav class="hd__nav" aria-label="Main">
     <a href="#build">The build</a>
     <a href="#services">Services</a>
@@ -516,53 +542,59 @@ time { font-variant-numeric: tabular-nums; }
 
 <main id="main">
 
-  <!-- ——— Accueil : le chantier en accéléré, de la pelouse aux lumières ——— -->
-  <section class="hero" id="top" aria-labelledby="hero-title">
-    <div class="wrap hero__grid">
-      <h1 class="hero__title" id="hero-title"><span>Lawn to</span> <span>lights in</span> <span>41 days.</span></h1>
-      <figure class="film" data-film>
-        <div class="film__frames" role="img" aria-label="Eleven photos of one pool build, from the bare lawn on January 7, 2018 to the lights on February 17, 2018.">
-          <img class="film__frame is-on" src="assets/img/log-01.avif" width="1008" height="756" srcset="assets/img/log-01-s.avif 760w, assets/img/log-01.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" fetchpriority="high" data-day="0" data-when="Jan 7, 2018, 1:26 PM">
-          <img class="film__frame" fetchpriority="low" data-src="assets/img/log-02.avif" width="1008" height="756" data-srcset="assets/img/log-02-s.avif 760w, assets/img/log-02.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="1" data-when="Jan 8, 2018, 10:15 AM">
-          <img class="film__frame" fetchpriority="low" data-src="assets/img/log-03.avif" width="1008" height="756" data-srcset="assets/img/log-03-s.avif 760w, assets/img/log-03.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="1" data-when="Jan 8, 2018, 3:40 PM">
-          <img class="film__frame" fetchpriority="low" data-src="assets/img/log-04.avif" width="1008" height="756" data-srcset="assets/img/log-04-s.avif 760w, assets/img/log-04.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="2" data-when="Jan 9, 2018, 11:36 AM">
-          <img class="film__frame" fetchpriority="low" data-src="assets/img/log-05.avif" width="1008" height="756" data-srcset="assets/img/log-05-s.avif 760w, assets/img/log-05.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="3" data-when="Jan 10, 2018, 11:07 AM">
-          <img class="film__frame" fetchpriority="low" data-src="assets/img/log-06.avif" width="1008" height="756" data-srcset="assets/img/log-06-s.avif 760w, assets/img/log-06.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="4" data-when="Jan 11, 2018, 12:09 PM">
-          <img class="film__frame" fetchpriority="low" data-src="assets/img/log-07.avif" width="1008" height="756" data-srcset="assets/img/log-07-s.avif 760w, assets/img/log-07.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="23" data-when="Jan 30, 2018, 9:59 AM">
-          <img class="film__frame" fetchpriority="low" data-src="assets/img/log-08.avif" width="1008" height="756" data-srcset="assets/img/log-08-s.avif 760w, assets/img/log-08.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="25" data-when="Feb 1, 2018, 3:59 PM">
-          <img class="film__frame" fetchpriority="low" data-src="assets/img/log-09.avif" width="1008" height="756" data-srcset="assets/img/log-09-s.avif 760w, assets/img/log-09.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="29" data-when="Feb 5, 2018, 1:40 PM">
-          <img class="film__frame" fetchpriority="low" data-src="assets/img/log-10.avif" width="1008" height="756" data-srcset="assets/img/log-10-s.avif 760w, assets/img/log-10.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="30" data-when="Feb 6, 2018, 4:35 PM">
-          <img class="film__frame" fetchpriority="low" data-src="assets/img/log-11.avif" width="1008" height="756" data-srcset="assets/img/log-11-s.avif 760w, assets/img/log-11.avif 1008w" sizes="(min-width: 1440px) 640px, (min-width: 900px) 46vw, calc(100vw - 40px)" alt="" data-day="41" data-when="Feb 17, 2018, 6:27 PM">
+  <!-- ——— L'ouverture : le chantier en 41 jours. Au défilement, le compteur avance, la couleur suit le matériau, l'eau monte, les lumières s'allument ——— -->
+  <section class="opening" id="top" aria-labelledby="hero-title" data-opening>
+    <div class="stage" data-stage data-fg="white">
+      <div class="stage__fill" aria-hidden="true"><svg class="stage__wave" viewBox="0 0 1440 40" preserveAspectRatio="none"><path d="M0 22C120 6 240 6 360 22s240 16 360 0 240-16 360 0 240 16 360 0V40H0Z"/></svg></div>
+      <div class="stage__grid">
+        <div class="stage__text">
+          <div class="stage__intro" data-intro>
+            <h1 class="hero__title" id="hero-title"><span>Lawn to</span> <span>lights in</span> <span>41 days.</span></h1>
+            <p class="hero__lead">New pools, repairs and maintenance in Texas. This build was photographed on the job, from the bare lawn on January&nbsp;7, 2018 to the lights on February&nbsp;17.</p>
+            <div class="hero__cta">
+              <a class="btn btn--inv" href="#contact">Schedule an appointment</a>
+              <a class="btn btn--line" href="tel:+12818965061">Call 281-896-5061</a>
+            </div>
+          </div>
+          <div class="stage__info" data-info aria-hidden="true">
+            <p class="info__day"><span class="info__label">Day</span> <span class="info__num" data-num>0</span></p>
+            <p class="info__when" data-when>Jan 7, 2018, 1:26 PM</p>
+            <p class="info__what" data-what>The lawn, with marker flags where the pool will go.</p>
+            <p class="info__count" data-count>Photo 1 of 11</p>
+            <div class="info__end" data-end><a class="btn btn--inv" href="#contact" tabindex="-1">Schedule an appointment</a></div>
+          </div>
         </div>
-        <figcaption class="film__bar">
-          <span class="film__day" data-film-day aria-hidden="true">Day 0</span>
-          <span class="film__when" data-film-when aria-hidden="true">Jan 7, 2018, 1:26 PM</span>
-          <span class="film__track" aria-hidden="true"><span></span></span>
-          <span class="sr">One of our builds, photographed on the job.</span>
-          <button class="film__again" type="button" data-again disabled>
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
-            Watch it again
-          </button>
-        </figcaption>
-      </figure>
-      <p class="hero__lead">New pools, repairs and maintenance in Texas. This build was photographed on the job, from the bare lawn on January&nbsp;7, 2018 to the lights on February&nbsp;17.</p>
-      <div class="hero__cta">
-        <a class="btn btn--white" href="#contact">Schedule an appointment</a>
-        <a class="btn btn--line" href="tel:+12818965061">Call 281-896-5061</a>
+        <figure class="stage__photo" data-photo>
+          <div class="stage__frames" role="img" aria-label="Eleven photos of one pool build, from the bare lawn on January 7, 2018 to the lights on February 17, 2018.">
+            <img class="frame is-on" src="assets/img/log-01.avif" width="1008" height="756" srcset="assets/img/log-01-s.avif 760w, assets/img/log-01.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="" fetchpriority="high">
+            <img class="frame" fetchpriority="low" data-src="assets/img/log-02.avif" width="1008" height="756" data-srcset="assets/img/log-02-s.avif 760w, assets/img/log-02.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="assets/img/log-03.avif" width="1008" height="756" data-srcset="assets/img/log-03-s.avif 760w, assets/img/log-03.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="assets/img/log-04.avif" width="1008" height="756" data-srcset="assets/img/log-04-s.avif 760w, assets/img/log-04.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="assets/img/log-05.avif" width="1008" height="756" data-srcset="assets/img/log-05-s.avif 760w, assets/img/log-05.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="assets/img/log-06.avif" width="1008" height="756" data-srcset="assets/img/log-06-s.avif 760w, assets/img/log-06.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="assets/img/log-07.avif" width="1008" height="756" data-srcset="assets/img/log-07-s.avif 760w, assets/img/log-07.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="assets/img/log-08.avif" width="1008" height="756" data-srcset="assets/img/log-08-s.avif 760w, assets/img/log-08.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="assets/img/log-09.avif" width="1008" height="756" data-srcset="assets/img/log-09-s.avif 760w, assets/img/log-09.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="assets/img/log-10.avif" width="1008" height="756" data-srcset="assets/img/log-10-s.avif 760w, assets/img/log-10.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+            <img class="frame" fetchpriority="low" data-src="assets/img/log-11.avif" width="1008" height="756" data-srcset="assets/img/log-11-s.avif 760w, assets/img/log-11.avif 1008w" sizes="(min-width: 1700px) 1008px, (min-width: 900px) 56vw, calc(100vw - 40px)" alt="">
+          </div>
+          <figcaption class="stage__cap">Day 0, January 7, 2018: the lawn. The 41 days follow below.</figcaption>
+        </figure>
       </div>
+      <div class="ruler" data-ruler role="slider" tabindex="0" aria-label="Day of the build" aria-valuemin="0" aria-valuemax="41" aria-valuenow="0" aria-valuetext="Day 0, Jan 7, 2018, 1:26 PM. The lawn, with marker flags where the pool will go.">
+        <div class="ruler__track" data-track><span class="ruler__now" aria-hidden="true"><b></b><em data-now>Jan 7</em></span></div>
+        <div class="ruler__labels" aria-hidden="true"><span style="--d:0">Jan 7</span><span style="--d:7">Jan 14</span><span style="--d:14">Jan 21</span><span style="--d:21">Jan 28</span><span style="--d:28">Feb 4</span><span style="--d:35">Feb 11</span><span style="--d:41">Feb 17</span></div>
+      </div>
+      <p class="stage__cue" data-cue aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11 4h2v12.2l4.6-4.6 1.4 1.4-7 7-7-7 1.4-1.4 4.6 4.6z"/></svg>Scroll to watch the 41 days</p>
     </div>
-  </section>
-
-  <!-- ——— Le chantier, jour par jour : l'écran tient, la couleur suit le matériau ——— -->
-  <section class="build" id="build" aria-labelledby="build-title">
-    <div class="wrap build__head">
-      <h2 class="title" id="build-title"><span>One backyard,</span> <span>41 days.</span></h2>
-      <p class="build__intro">Eleven photos from the same job, each with the date and time it was taken.</p>
-    </div>
-    <div class="log" data-log>
+    <div class="build" id="build">
+      <div class="wrap build__head">
+        <h2 class="title" id="build-title"><span>One backyard,</span> <span>41 days.</span></h2>
+        <p class="build__intro">Eleven photos from the same job, each with the date and time it was taken.</p>
+      </div>
       <ol class="log__list">
         <li class="entry" data-tone="grass" data-day="0">
-          <figure class="entry__photo"><img src="assets/img/log-01.avif" width="1008" height="756" srcset="assets/img/log-01-s.avif 760w, assets/img/log-01.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="Backyard lawn with small marker flags, behind a brick house." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-01.avif" width="1008" height="756" srcset="assets/img/log-01-s.avif 760w, assets/img/log-01.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="Backyard lawn with small marker flags, behind a brick house." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">0</span></h3>
             <p class="entry__when"><time datetime="2018-01-07T13:26">Jan 7, 2018, 1:26 PM</time></p>
@@ -571,7 +603,7 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
         <li class="entry" data-tone="grass" data-day="1">
-          <figure class="entry__photo"><img src="assets/img/log-02.avif" width="1008" height="756" srcset="assets/img/log-02-s.avif 760w, assets/img/log-02.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="A worker marking the pool layout on the grass." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-02.avif" width="1008" height="756" srcset="assets/img/log-02-s.avif 760w, assets/img/log-02.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="A worker marking the pool layout on the grass." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">1</span></h3>
             <p class="entry__when"><time datetime="2018-01-08T10:15">Jan 8, 2018, 10:15 AM</time></p>
@@ -580,7 +612,7 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
         <li class="entry" data-tone="clay" data-day="1">
-          <figure class="entry__photo"><img src="assets/img/log-03.avif" width="1008" height="756" srcset="assets/img/log-03-s.avif 760w, assets/img/log-03.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="An excavator in the freshly dug pool, wood forms along the edges." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-03.avif" width="1008" height="756" srcset="assets/img/log-03-s.avif 760w, assets/img/log-03.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="An excavator in the freshly dug pool, wood forms along the edges." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">1</span></h3>
             <p class="entry__when"><time datetime="2018-01-08T15:40">Jan 8, 2018, 3:40 PM</time></p>
@@ -589,7 +621,7 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
         <li class="entry" data-tone="clay" data-day="2">
-          <figure class="entry__photo"><img src="assets/img/log-04.avif" width="1008" height="756" srcset="assets/img/log-04-s.avif 760w, assets/img/log-04.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="Rebar grid tied across the floor and up the walls of the dig." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-04.avif" width="1008" height="756" srcset="assets/img/log-04-s.avif 760w, assets/img/log-04.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="Rebar grid tied across the floor and up the walls of the dig." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">2</span></h3>
             <p class="entry__when"><time datetime="2018-01-09T11:36">Jan 9, 2018, 11:36 AM</time></p>
@@ -598,7 +630,7 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
         <li class="entry" data-tone="gunite" data-day="3">
-          <figure class="entry__photo"><img src="assets/img/log-05.avif" width="1008" height="756" srcset="assets/img/log-05-s.avif 760w, assets/img/log-05.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="Crew spraying gunite, plastic sheets hung over the fence and the house." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-05.avif" width="1008" height="756" srcset="assets/img/log-05-s.avif 760w, assets/img/log-05.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="Crew spraying gunite, plastic sheets hung over the fence and the house." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">3</span></h3>
             <p class="entry__when"><time datetime="2018-01-10T11:07">Jan 10, 2018, 11:07 AM</time></p>
@@ -607,7 +639,7 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
         <li class="entry" data-tone="gunite" data-day="4">
-          <figure class="entry__photo"><img src="assets/img/log-06.avif" width="1008" height="756" srcset="assets/img/log-06-s.avif 760w, assets/img/log-06.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="The bare concrete shell with steps, a bench and a raised back wall." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-06.avif" width="1008" height="756" srcset="assets/img/log-06-s.avif 760w, assets/img/log-06.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="The bare concrete shell with steps, a bench and a raised back wall." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">4</span></h3>
             <p class="entry__when"><time datetime="2018-01-11T12:09">Jan 11, 2018, 12:09 PM</time></p>
@@ -616,7 +648,7 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
         <li class="entry" data-tone="stone" data-day="23">
-          <figure class="entry__photo"><img src="assets/img/log-07.avif" width="1008" height="756" srcset="assets/img/log-07-s.avif 760w, assets/img/log-07.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="Tile and coping along the raised wall, the deck not yet laid." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-07.avif" width="1008" height="756" srcset="assets/img/log-07-s.avif 760w, assets/img/log-07.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="Tile and coping along the raised wall, the deck not yet laid." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">23</span></h3>
             <p class="entry__when"><time datetime="2018-01-30T09:59">Jan 30, 2018, 9:59 AM</time></p>
@@ -625,7 +657,7 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
         <li class="entry" data-tone="stone" data-day="25">
-          <figure class="entry__photo"><img src="assets/img/log-08.avif" width="1008" height="756" srcset="assets/img/log-08-s.avif 760w, assets/img/log-08.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="A worker on her knees laying the stone deck by the house." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-08.avif" width="1008" height="756" srcset="assets/img/log-08-s.avif 760w, assets/img/log-08.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="A worker on her knees laying the stone deck by the house." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">25</span></h3>
             <p class="entry__when"><time datetime="2018-02-01T15:59">Feb 1, 2018, 3:59 PM</time></p>
@@ -634,7 +666,7 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
         <li class="entry" data-tone="plaster" data-day="29">
-          <figure class="entry__photo"><img src="assets/img/log-09.avif" width="1008" height="756" srcset="assets/img/log-09-s.avif 760w, assets/img/log-09.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="A worker inside the empty pool, the walls now blue-gray." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-09.avif" width="1008" height="756" srcset="assets/img/log-09-s.avif 760w, assets/img/log-09.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="A worker inside the empty pool, the walls now blue-gray." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">29</span></h3>
             <p class="entry__when"><time datetime="2018-02-05T13:40">Feb 5, 2018, 1:40 PM</time></p>
@@ -643,7 +675,7 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
         <li class="entry" data-tone="water" data-day="30">
-          <figure class="entry__photo"><img src="assets/img/log-10.avif" width="1008" height="756" srcset="assets/img/log-10-s.avif 760w, assets/img/log-10.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="The pool full of water, two scuppers pouring and two fire bowls on stone pillars." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-10.avif" width="1008" height="756" srcset="assets/img/log-10-s.avif 760w, assets/img/log-10.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="The pool full of water, two scuppers pouring and two fire bowls on stone pillars." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">30</span></h3>
             <p class="entry__when"><time datetime="2018-02-06T16:35">Feb 6, 2018, 4:35 PM</time></p>
@@ -652,7 +684,7 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
         <li class="entry" data-tone="night" data-day="41">
-          <figure class="entry__photo"><img src="assets/img/log-11.avif" width="1008" height="756" srcset="assets/img/log-11-s.avif 760w, assets/img/log-11.avif 1008w" sizes="(min-width: 1440px) 700px, (min-width: 900px) 52vw, calc(100vw - 40px)" alt="The pool at dusk, lit turquoise, with fire in both bowls." loading="lazy"></figure>
+          <figure class="entry__photo"><img src="assets/img/log-11.avif" width="1008" height="756" srcset="assets/img/log-11-s.avif 760w, assets/img/log-11.avif 1008w" sizes="(min-width: 1440px) 760px, (min-width: 900px) 54vw, calc(100vw - 40px)" alt="The pool at dusk, lit turquoise, with fire in both bowls." loading="lazy"></figure>
           <div class="entry__text">
             <h3 class="entry__day"><span class="entry__label">Day</span> <span class="entry__num">41</span></h3>
             <p class="entry__when"><time datetime="2018-02-17T18:27">Feb 17, 2018, 6:27 PM</time></p>
@@ -661,18 +693,6 @@ time { font-variant-numeric: tabular-nums; }
           </div>
         </li>
       </ol>
-      <div class="ruler" aria-hidden="true">
-        <div class="ruler__track" data-track><span class="ruler__now"><b></b></span></div>
-        <div class="ruler__labels">
-          <span style="--d:0">Jan 7</span>
-          <span style="--d:7">Jan 14</span>
-          <span style="--d:14">Jan 21</span>
-          <span style="--d:21">Jan 28</span>
-          <span style="--d:28">Feb 4</span>
-          <span style="--d:35">Feb 11</span>
-          <span style="--d:41">Feb 17</span>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -706,7 +726,10 @@ time { font-variant-numeric: tabular-nums; }
         <p class="pools__intro">Other jobs, in the order the photos were taken, from 2018 to 2022. Select a photo to see it larger.</p>
       </div>
 
-      <div class="year">
+      <div class="pools__body">
+      <p class="pools__year" aria-hidden="true" data-odo></p>
+      <div class="pools__years">
+      <div class="year" data-gy="2018">
         <p class="year__label" aria-hidden="true">2018</p>
         <div class="year__jobs">
           <article class="job">
@@ -737,7 +760,7 @@ time { font-variant-numeric: tabular-nums; }
         </div>
       </div>
 
-      <div class="year">
+      <div class="year" data-gy="2019">
         <p class="year__label" aria-hidden="true">2019</p>
         <div class="year__jobs">
           <article class="job">
@@ -771,7 +794,7 @@ time { font-variant-numeric: tabular-nums; }
         </div>
       </div>
 
-      <div class="year">
+      <div class="year" data-gy="2020">
         <p class="year__label" aria-hidden="true">2020</p>
         <div class="year__jobs">
           <article class="job">
@@ -808,7 +831,7 @@ time { font-variant-numeric: tabular-nums; }
         </div>
       </div>
 
-      <div class="year">
+      <div class="year" data-gy="2022">
         <p class="year__label" aria-hidden="true">2022</p>
         <div class="year__jobs">
           <article class="job">
@@ -824,6 +847,8 @@ time { font-variant-numeric: tabular-nums; }
           </article>
         </div>
       </div>
+      </div>
+      </div>
     </div>
   </section>
 
@@ -836,6 +861,7 @@ time { font-variant-numeric: tabular-nums; }
       </div>
       <div class="night__grid">
         <figure class="lights">
+          <div class="lights__glow" aria-hidden="true"><i class="is-on" data-color="blue" style="--c:rgba(47, 91, 255, 0.75)"></i><i data-color="red" style="--c:rgba(255, 59, 59, 0.7)"></i></div>
           <div class="lights__imgs">
             <img class="lights__img is-on" src="assets/img/n-blue.avif" width="1100" height="825" alt="A curved pool at night, lit blue." data-color="blue" loading="lazy">
             <img class="lights__img" src="assets/img/n-red.avif" width="1100" height="825" alt="The same pool at night, lit red." data-color="red" loading="lazy" aria-hidden="true">
@@ -868,7 +894,7 @@ time { font-variant-numeric: tabular-nums; }
         <blockquote><p>You’ll feel confident knowing that a professional is overseeing the design and construction of your new pool while you focus on enjoying your family.</p></blockquote>
         <figcaption>Heritage Pools Texas Team</figcaption>
       </figure>
-      <p class="team__values">Trust, integrity and honesty are what we stand for.</p>
+      <p class="team__values" data-words>Trust, integrity and honesty are what we stand for.</p>
       <p class="team__more">A great pool requires more than providing a product or service. We go the extra mile to make sure you are happy with your new pool.</p>
     </div>
   </section>
@@ -924,7 +950,7 @@ time { font-variant-numeric: tabular-nums; }
 <footer class="ft">
   <div class="wrap">
     <div class="ft__top">
-      <p class="ft__brand"><span class="brand__a">Heritage</span><span class="brand__b">Pools Texas</span></p>
+      <p class="ft__brand"><span class="brand__a">Heritage</span> <span class="brand__b">Pools Texas</span></p>
       <p class="ft__slogan">Amazing pools at amazing prices.</p>
     </div>
     <div class="ft__cols">
@@ -941,6 +967,7 @@ time { font-variant-numeric: tabular-nums; }
         <p><a href="#build">The build</a><br><a href="#services">Services</a><br><a href="#pools">Our pools</a><br><a href="#night">After dark</a><br><a href="#contact">Contact</a></p>
       </nav>
     </div>
+    <p class="ft__word" aria-hidden="true">Heritage</p>
     <p class="ft__legal">© <span data-year>2026</span> Heritage Pools Texas. All photos are from our own jobs, 2018 to 2022.</p>
   </div>
 </footer>
@@ -993,9 +1020,12 @@ time { font-variant-numeric: tabular-nums; }
 //# sourceMappingURL=lenis.min.js.map
 ;
 /* Heritage Pools Texas : interactions de la page.
- * Défilement doux (Lenis) et animations au défilement (GSAP + ScrollTrigger) : le film de l'accueil, le chantier épinglé
- * dont la couleur suit le matériau, la visionneuse des photos, les deux couleurs de lumière, les horaires et le formulaire.
- * Si le visiteur a demandé moins d'animations : pas de film ni d'écran épinglé, tout est affiché d'emblée.
+ * Défilement doux (Lenis) et animations au défilement (GSAP + ScrollTrigger).
+ * L'ouverture déroule le chantier de 2018 : l'écran tient, le compteur des jours avance, la page prend la couleur
+ * du matériau, l'eau monte au jour 30 et les lumières s'allument au jour 41 ; la règle des jours se fait glisser.
+ * Puis : les services qui glissent, l'année-compteur de la galerie, la visionneuse, la nuit qui s'allume,
+ * les valeurs mot à mot, les horaires et le formulaire.
+ * Si le visiteur a demandé moins d'animations : rien d'épinglé, les onze photos se suivent, tout est affiché d'emblée.
  */
 (function () {
   const root = document.documentElement;
@@ -1010,6 +1040,18 @@ time { font-variant-numeric: tabular-nums; }
   root.classList.toggle('no-motion', reduce);
   const hd = $('[data-hd]');
   const hdH = () => hd.offsetHeight;
+  const clamp01 = (v) => Math.min(1, Math.max(0, v));
+  const smooth = (a, b, x) => {
+    const t = clamp01((x - a) / (b - a));
+    return t * t * (3 - 2 * t);
+  };
+
+  // l'ouverture : part du défilement pour passer du titre au compteur (I), part finale où les lumières s'allument (O),
+  // et moment, dans chaque étape, où la photo suivante arrive (LAND)
+  const I = 0.06;
+  const O = 0.1;
+  const LAND = 0.86;
+  const open = {pinned: false, st: null, end: 0};
 
   /* ——— défilement doux, liens internes ——— */
   let lenis = null;
@@ -1019,11 +1061,15 @@ time { font-variant-numeric: tabular-nums; }
     G.ticker.add((t) => lenis.raf(t * 1000));
     G.ticker.lagSmoothing(0);
   }
+  const scrollToY = (y, opts = {}) => {
+    if (lenis) lenis.scrollTo(y, opts.immediate ? {immediate: true} : {duration: opts.duration || 1.4});
+    else scrollTo({top: y, behavior: opts.immediate || reduce ? 'auto' : 'smooth'});
+  };
   const goTo = (target) => {
-    // le chantier s'ouvre sur son écran épinglé : on s'arrête sur son titre, sous l'en-tête
-    const y = target.id === 'top' ? 0 : target.getBoundingClientRect().top + scrollY - hdH() + 1;
-    if (lenis) lenis.scrollTo(y, {duration: 1.4});
-    else scrollTo({top: y, behavior: reduce ? 'auto' : 'smooth'});
+    if (target.id === 'top') return scrollToY(0);
+    // « The build » : le début du chantier, dans l'écran épinglé
+    if (target.id === 'build' && open.st) return scrollToY(open.st.start + (open.st.end - open.st.start) * (I + 0.004));
+    scrollToY(target.getBoundingClientRect().top + scrollY - hdH() + 1);
   };
   const lock = (on) => {
     root.classList.toggle('is-locked', on);
@@ -1033,13 +1079,13 @@ time { font-variant-numeric: tabular-nums; }
   /* ——— menu (tablette et téléphone) ——— */
   const menu = $('#menu');
   const menuBtn = $('[data-menu]');
-  const setMenu = (open) => {
-    menu.hidden = !open;
-    menuBtn.setAttribute('aria-expanded', String(open));
-    menuBtn.querySelector('span').textContent = open ? 'Close' : 'Menu';
-    hd.classList.toggle('is-menu', open);
-    lock(open);
-    if (open) $('a', menu).focus();
+  const setMenu = (isOpen) => {
+    menu.hidden = !isOpen;
+    menuBtn.setAttribute('aria-expanded', String(isOpen));
+    menuBtn.querySelector('span').textContent = isOpen ? 'Close' : 'Menu';
+    hd.classList.toggle('is-menu', isOpen);
+    lock(isOpen);
+    if (isOpen) $('a', menu).focus();
   };
   menuBtn.addEventListener('click', () => setMenu(menu.hidden));
   addEventListener('keydown', (e) => {
@@ -1063,143 +1109,284 @@ time { font-variant-numeric: tabular-nums; }
     target.focus({preventScroll: true});
   });
 
-  /* ——— en-tête : blanc dès qu'on descend, caché en descendant une fois l'accueil quitté ; barre d'appel ; rubrique en cours ——— */
+  /* ——— en-tête : transparent pendant l'ouverture, blanc ensuite, caché en descendant ; barre d'appel ; rubrique en cours ——— */
   const dock = $('[data-dock]');
   let lastY = scrollY;
-  let pastHero = false;
   let atContact = false;
   const onScroll = () => {
     const y = scrollY;
-    hd.classList.toggle('is-solid', y > 40);
+    const pastHero = y > innerHeight * 0.45;
+    const inOpening = open.pinned && y < open.end - 2;
+    hd.classList.toggle('is-solid', !inOpening && y > 40);
     if (menu.hidden && y > lastY + 4 && pastHero) hd.classList.add('is-hidden');
     else if (y < lastY - 4 || !pastHero) hd.classList.remove('is-hidden');
     lastY = y;
     dock.classList.toggle('is-on', pastHero && !atContact);
   };
   addEventListener('scroll', onScroll, {passive: true});
-  onScroll();
-  new IntersectionObserver(([en]) => { pastHero = !en.isIntersecting && en.boundingClientRect.top < 0; onScroll(); }).observe($('.hero__cta'));
   new IntersectionObserver(([en]) => { atContact = en.isIntersecting; onScroll(); }, {rootMargin: '0px 0px -25% 0px'}).observe($('#contact'));
   const navLinks = $$('.hd__nav a');
   const navIO = new IntersectionObserver((entries) => entries.forEach((en) => {
     if (!en.isIntersecting) return;
     navLinks.forEach((a) => a.classList.toggle('is-on', a.getAttribute('href') === '#' + en.target.id));
   }), {rootMargin: '-45% 0px -50% 0px'});
-  ['top', 'build', 'services', 'pools', 'night', 'team', 'contact'].forEach((id) => navIO.observe(document.getElementById(id)));
+  ['services', 'pools', 'night', 'team', 'contact'].forEach((id) => navIO.observe(document.getElementById(id)));
 
   /* ——— année du pied de page ——— */
   const year = $('[data-year]');
   if (year) year.textContent = String(new Date().getFullYear());
 
-  /* ——— le film de l'accueil : les onze photos du chantier, de la pelouse aux lumières ——— */
-  const LAST_DAY = 41;
-  const film = $('[data-film]');
-  const frames = $$('.film__frame', film);
-  const fDay = $('[data-film-day]', film);
-  const fWhen = $('[data-film-when]', film);
-  const fBar = $('.film__track span', film);
-  const again = $('[data-again]', film);
-  let frame = 0;
-  const showFrame = (i) => {
-    frame = i;
-    frames.forEach((f, j) => f.classList.toggle('is-on', j === i));
-    fDay.textContent = 'Day ' + frames[i].dataset.day;
-    fWhen.textContent = frames[i].dataset.when;
-    fBar.style.transform = `scaleX(${frames[i].dataset.day / LAST_DAY})`;
+  /* ════════ l'ouverture : le chantier en 41 jours ════════ */
+  const opening = $('[data-opening]');
+  const stage = $('[data-stage]');
+  const intro = $('[data-intro]');
+  const info = $('[data-info]');
+  const cue = $('[data-cue]');
+  const endBox = $('[data-end]');
+  const endBtn = $('a', endBox);
+  const fill = $('.stage__fill', stage);
+  const photo = $('[data-photo]');
+  const frames = $$('.frame', stage);
+  const numEl = $('[data-num]');
+  const whenEl = $('[data-when]');
+  const whatEl = $('[data-what]');
+  const countEl = $('[data-count]');
+  const ruler = $('[data-ruler]');
+  const track = $('[data-track]');
+  const needle = $('.ruler__now', track);
+  const nowEl = $('[data-now]');
+  // les onze étapes viennent de la liste (jour, matériau, date, légende)
+  const STEPS = $$('.entry').map((e) => ({day: Number(e.dataset.day), tone: e.dataset.tone, when: $('time', e).textContent, what: $('.entry__what', e).textContent}));
+  const N = STEPS.length;
+  const LAST_DAY = STEPS[N - 1].day;
+  const TONES = {grass: [76, 106, 46], clay: [143, 74, 40], gunite: [98, 103, 109], stone: [214, 196, 161], plaster: [65, 103, 159], water: [60, 195, 208], night: [8, 16, 51]};
+  const INK = {stone: true, water: true};
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const dateOf = (d) => {
+    const x = new Date(2018, 0, 7 + Math.floor(d));
+    return MONTHS[x.getMonth()] + ' ' + x.getDate();
   };
-  // en ligne, les photos 2 à 11 n'arrivent qu'une fois la page chargée (data-src) ; le film attend qu'elles soient prêtes
+  const mix = (a, b, t) => a.map((v, j) => Math.round(v + (b[j] - v) * t));
+  const rgb = (c) => `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+
+  // la règle : une coche par jour (plus grande chaque semaine), un point par photo
+  for (let d = 0; d <= LAST_DAY; d++) {
+    const tick = document.createElement('i');
+    tick.style.setProperty('--d', d);
+    if (d % 7 === 0 || d === LAST_DAY) tick.className = 'is-week';
+    track.insertBefore(tick, needle);
+  }
+  const dots = STEPS.map((step) => {
+    const dot = document.createElement('b');
+    dot.className = 'ruler__dot';
+    dot.style.setProperty('--d', step.day);
+    track.insertBefore(dot, needle);
+    return dot;
+  });
+
+  let shown = -1;
+  let shownDay = -1;
+  let fgInk = null;
+  let endOn = false;
+  const render = (p) => {
+    // le titre laisse la place au compteur
+    const a = smooth(0, I, p);
+    intro.style.opacity = String(1 - a);
+    intro.style.transform = `translate3d(0, ${(-36 * a).toFixed(1)}px, 0)`;
+    intro.style.visibility = a > 0.98 ? 'hidden' : '';
+    info.style.opacity = String(a);
+    info.style.transform = `translate3d(0, ${(28 * (1 - a)).toFixed(1)}px, 0)`;
+    cue.style.opacity = String(1 - smooth(0, I * 0.7, p));
+
+    // l'étape en cours : de la photo i à la photo i + 1
+    const s = clamp01((p - I) / (1 - I - O)) * (N - 1);
+    const i = Math.min(N - 2, Math.floor(s));
+    const t = s - i;
+    const A = STEPS[i];
+    const B = STEPS[i + 1];
+    const k = t >= LAND ? i + 1 : i;
+    const d = A.day + (B.day - A.day) * clamp01(t / LAND);
+
+    // la couleur du matériau ; entre l'enduit et l'eau, l'eau monte
+    let bg;
+    let ink;
+    if (A.tone === 'plaster' && B.tone === 'water') {
+      const w = smooth(0.36, LAND, t);
+      fill.style.transform = `translate3d(0, ${((1 - w) * 105).toFixed(2)}%, 0)`;
+      bg = t >= LAND ? TONES.water : TONES.plaster;
+      ink = w > 0.5;
+    } else {
+      fill.style.transform = 'translate3d(0, 105%, 0)';
+      const c = smooth(0.6, LAND, t);
+      bg = mix(TONES[A.tone], TONES[B.tone], c);
+      ink = c < 0.5 ? !!INK[A.tone] : !!INK[B.tone];
+    }
+    opening.style.setProperty('--bg', rgb(bg));
+    root.style.setProperty('--hd-bg', rgb(bg));
+    if (ink !== fgInk) {
+      fgInk = ink;
+      stage.dataset.fg = ink ? 'ink' : 'white';
+      root.style.setProperty('--hd-fg', ink ? '#0a1238' : '#fff');
+    }
+
+    // la photo, la date, la légende
+    if (k !== shown) {
+      shown = k;
+      frames.forEach((f, j) => f.classList.toggle('is-on', j <= k));
+      whenEl.textContent = STEPS[k].when;
+      whatEl.textContent = STEPS[k].what;
+      countEl.textContent = `Photo ${k + 1} of ${N}`;
+      ruler.setAttribute('aria-valuetext', `Day ${STEPS[k].day}, ${STEPS[k].when}. ${STEPS[k].what}`);
+    }
+    // le compteur des jours et la règle
+    const day = Math.floor(d + 1e-6);
+    if (day !== shownDay) {
+      shownDay = day;
+      numEl.textContent = String(day);
+      nowEl.textContent = dateOf(day);
+      ruler.setAttribute('aria-valuenow', String(day));
+      dots.forEach((dot, j) => dot.classList.toggle('is-past', STEPS[j].day <= day));
+    }
+    needle.style.setProperty('--d', d.toFixed(3));
+
+    // jour 41 : les lumières s'allument, la lueur se répand, le bouton arrive
+    const lit = smooth(1 - O, 1 - O * 0.2, p);
+    frames[N - 1].style.filter = k === N - 1 && lit < 1 ? `brightness(${(0.3 + 0.7 * lit).toFixed(3)})` : '';
+    photo.style.setProperty('--glow', (k === N - 1 ? lit : 0).toFixed(3));
+    const on = lit > 0.55;
+    if (on !== endOn) {
+      endOn = on;
+      endBox.classList.toggle('is-on', on);
+      endBtn.tabIndex = on ? 0 : -1;
+    }
+  };
+  const resetOpening = () => {
+    [intro, info, cue, fill, frames[N - 1]].forEach((el) => el.removeAttribute('style'));
+    frames.forEach((f, j) => f.classList.toggle('is-on', j === 0));
+    opening.style.removeProperty('--bg');
+    photo.style.removeProperty('--glow');
+    ['--hd-fg', '--hd-bg'].forEach((v) => root.style.removeProperty(v));
+    stage.dataset.fg = 'white';
+    endBox.classList.remove('is-on');
+    shown = -1;
+    shownDay = -1;
+    fgInk = null;
+    endOn = false;
+  };
+
+  // les photos 2 à 11 ne se chargent qu'ensuite (data-src) : le premier écran garde la connexion pour lui
   const loadImg = (img) => {
     if (img.dataset.srcset && !img.getAttribute('srcset')) img.srcset = img.dataset.srcset;
     if (!img.getAttribute('src') && img.dataset.src) img.src = img.dataset.src;
     return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
   };
-  let ready = null;
-  const loadAll = () => ready || (ready = Promise.all(frames.map(loadImg)));
-  // temps de pose de chaque photo (s) : la pelouse un peu plus longtemps, l'eau aussi, avant la nuit
-  const HOLD = [0.55, 0.3, 0.3, 0.3, 0.3, 0.3, 0.34, 0.3, 0.3, 0.8];
-  let tl = null;
-  const play = () => {
-    again.disabled = true;
-    loadAll().then(() => {
-      if (tl) tl.kill();
-      tl = G.timeline({onComplete: () => { again.disabled = false; }});
-      let t = 0;
-      frames.forEach((f, i) => {
-        tl.call(showFrame, [i], t);
-        t += HOLD[i] || 0;
-      });
-    });
-  };
-  if (reduce) {
-    // sans animation : la piscine terminée, directement
-    const last = frames.length - 1;
-    loadImg(frames[last]).then(() => showFrame(last));
-  } else {
-    again.addEventListener('click', play);
-    // le film ne part qu'une fois la première image réellement affichée : c'est elle que le visiteur voit en premier
-    const afterFirstPaint = (fn) => {
-      const painted = () => performance.getEntriesByType('paint').some((e) => e.name === 'first-contentful-paint');
-      if (!window.PerformanceObserver || painted()) return fn();
-      try {
-        const po = new PerformanceObserver(() => {
-          if (!painted()) return;
-          po.disconnect();
-          fn();
-        });
-        po.observe({type: 'paint', buffered: true});
-      } catch (err) {
+  let loading = null;
+  const loadFrames = () => loading || (loading = Promise.all(frames.map(loadImg)));
+  const afterFirstPaint = (fn) => {
+    const painted = () => performance.getEntriesByType('paint').some((e) => e.name === 'first-contentful-paint');
+    if (!window.PerformanceObserver || painted()) return fn();
+    try {
+      const po = new PerformanceObserver(() => {
+        if (!painted()) return;
+        po.disconnect();
         fn();
-      }
-    };
-    // puis au premier geste du visiteur (clic, doigt, molette, clavier ; pas un simple mouvement de souris, que le navigateur
-    // simule lui-même après chaque mise en page), ou au bout de deux secondes : le premier écran
-    // garde toute la connexion pour lui, les photos 2 à 11 viennent ensuite
-    const GESTURES = ['pointerdown', 'touchstart', 'wheel', 'keydown'];
-    const start = () => afterFirstPaint(() => {
-      let timer = 0;
-      const kick = () => {
-        clearTimeout(timer);
-        GESTURES.forEach((t) => removeEventListener(t, kick));
-        G.delayedCall(0.35, play);
-      };
-      timer = setTimeout(kick, 2200);
-      GESTURES.forEach((t) => addEventListener(t, kick, {passive: true}));
-    });
-    if (document.readyState === 'complete') start();
-    else addEventListener('load', start, {once: true});
-  }
-
-  /* ——— le chantier : la règle des jours (du 7 janvier au 17 février), une coche par jour, un point par photo ——— */
-  const log = $('[data-log]');
-  const entries = $$('.entry', log);
-  const track = $('[data-track]', log);
-  const now = $('.ruler__now', track);
-  for (let d = 0; d <= LAST_DAY; d++) {
-    const tick = document.createElement('i');
-    tick.style.setProperty('--d', d);
-    if (d % 7 === 0 || d === LAST_DAY) tick.className = 'is-week';
-    track.insertBefore(tick, now);
-  }
-  const dots = entries.map((e) => {
-    const dot = document.createElement('b');
-    dot.className = 'ruler__dot';
-    dot.style.setProperty('--d', e.dataset.day);
-    track.insertBefore(dot, now);
-    return dot;
-  });
-  let cur = -1;
-  const setEntry = (i) => {
-    if (i === cur) return;
-    cur = i;
-    entries.forEach((e, j) => e.classList.toggle('is-on', j === i));
-    log.dataset.tone = entries[i].dataset.tone;
-    now.style.setProperty('--d', entries[i].dataset.day);
-    dots.forEach((dot, j) => dot.classList.toggle('is-past', j <= i));
+      });
+      po.observe({type: 'paint', buffered: true});
+    } catch (err) {
+      fn();
+    }
   };
+  // au premier geste du visiteur (clic, doigt, molette, clavier, défilement ; pas un simple mouvement de souris, que le
+  // navigateur simule lui-même après chaque mise en page) ; tout de suite si la page s'ouvre déjà défilée
+  const GESTURES = ['pointerdown', 'touchstart', 'wheel', 'keydown', 'scroll'];
+  const onFirstGesture = (fn, timeout) => {
+    let done = false;
+    let timer = 0;
+    const go = () => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      GESTURES.forEach((t) => removeEventListener(t, go));
+      fn();
+    };
+    if (scrollY > 0) return go();
+    if (timeout) timer = setTimeout(go, timeout);
+    GESTURES.forEach((t) => addEventListener(t, go, {passive: true}));
+  };
+  const whenLoaded = new Promise((ok) => (document.readyState === 'complete' ? ok() : addEventListener('load', ok, {once: true})));
+  const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+  // les photos 2 à 11 : au premier geste, ou deux secondes après le premier affichage
+  const armFrames = () => whenLoaded.then(() => afterFirstPaint(() => onFirstGesture(loadFrames, 2200)));
 
-  /* ——— les lumières : bleu ou rouge ——— */
+  // la règle se fait glisser (souris, doigt) ou se pilote au clavier : elle fait défiler la page jusqu'au jour choisi
+  const progressOfDay = (d) => {
+    for (let i = 0; i < N - 1; i++) {
+      const a = STEPS[i].day;
+      const b = STEPS[i + 1].day;
+      if (d <= b) return I + ((i + (b === a ? LAND : (LAND * (d - a)) / (b - a))) / (N - 1)) * (1 - I - O);
+    }
+    return 1;
+  };
+  const progressOfStep = (k) => (k <= 0 ? I + 0.001 : k >= N - 1 ? 1 : I + ((k - 1 + LAND) / (N - 1)) * (1 - I - O) + 0.001);
+  const toProgress = (p, opts) => {
+    if (!open.st) return;
+    loadFrames();
+    scrollToY(open.st.start + (open.st.end - open.st.start) * p, opts);
+  };
+  const dayAt = (x) => clamp01((x - track.getBoundingClientRect().left) / track.offsetWidth) * LAST_DAY;
+  let dragging = false;
+  ruler.addEventListener('pointerdown', (e) => {
+    if (!open.pinned) return;
+    dragging = true;
+    ruler.setPointerCapture(e.pointerId);
+    toProgress(progressOfDay(dayAt(e.clientX)), {duration: 0.8});
+  });
+  ruler.addEventListener('pointermove', (e) => { if (dragging) toProgress(progressOfDay(dayAt(e.clientX)), {immediate: true}); });
+  ['pointerup', 'pointercancel'].forEach((t) => ruler.addEventListener(t, () => { dragging = false; }));
+  ruler.addEventListener('keydown', (e) => {
+    if (!open.pinned) return;
+    const step = {ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1}[e.key];
+    if (step) toProgress(progressOfStep(Math.max(0, Math.min(N - 1, Math.max(shown, 0) + step))), {duration: 0.9});
+    else if (e.key === 'Home') toProgress(progressOfStep(0), {duration: 1.2});
+    else if (e.key === 'End') toProgress(1, {duration: 1.2});
+    else return;
+    e.preventDefault();
+  });
+
+  // l'écran ne tient que s'il est assez haut et si les animations sont permises ; sinon les onze photos se suivent
+  const mm = G.matchMedia();
+  mm.add('(min-height: 560px)', () => {
+    if (reduce) return;
+    open.pinned = true;
+    const st = ST.create({
+      trigger: stage,
+      start: 'top top',
+      end: () => '+=' + Math.round(innerHeight * 5.4),
+      pin: true,
+      anticipatePin: 1,
+      onUpdate: (self) => render(self.progress),
+      onRefresh: (self) => {
+        open.end = self.end;
+        requestAnimationFrame(() => render(self.progress));
+      },
+    });
+    open.st = st;
+    open.end = st.end;
+    render(st.progress);
+    armFrames();
+    return () => {
+      st.kill();
+      open.pinned = false;
+      open.st = null;
+      resetOpening();
+    };
+  });
+  onScroll();
+
+  /* ——— les lumières : bleu ou rouge, la lueur suit ——— */
   const picks = $$('[data-light]');
   const lights = $$('.lights__img');
+  const glows = $$('.lights__glow i');
   picks.forEach((b) => b.addEventListener('click', () => {
     picks.forEach((p) => p.setAttribute('aria-pressed', String(p === b)));
     lights.forEach((img) => {
@@ -1208,6 +1395,7 @@ time { font-variant-numeric: tabular-nums; }
       if (on) img.removeAttribute('aria-hidden');
       else img.setAttribute('aria-hidden', 'true');
     });
+    glows.forEach((g) => g.classList.toggle('is-on', g.dataset.color === b.dataset.light));
   }));
 
   /* ——— la visionneuse : une photo en grand, la précédente et la suivante, Échap pour fermer ——— */
@@ -1245,6 +1433,49 @@ time { font-variant-numeric: tabular-nums; }
   // un clic sur le fond sombre ferme la visionneuse
   lb.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
 
+  /* ——— la galerie : l'année tourne comme un compteur quand on passe d'une année à l'autre ——— */
+  const odo = $('[data-odo]');
+  const odoCols = [];
+  for (let j = 0; j < 4; j++) {
+    const col = document.createElement('span');
+    col.className = 'odo';
+    const strip = document.createElement('span');
+    for (let n = 0; n <= 9; n++) {
+      const digit = document.createElement('i');
+      digit.textContent = String(n);
+      strip.append(digit);
+    }
+    col.append(strip);
+    odo.append(col);
+    odoCols.push(strip);
+  }
+  // chaque chiffre a sa largeur (Ultra n'a pas de chiffres à chasse fixe) : la colonne prend celle du chiffre affiché
+  let digitW = null;
+  let shownYear = '2018';
+  const measureDigits = () => {
+    const probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap';
+    odo.append(probe);
+    const size = parseFloat(getComputedStyle(odo).fontSize);
+    digitW = [...'0123456789'].map((n) => {
+      probe.textContent = n;
+      return probe.getBoundingClientRect().width / size;
+    });
+    probe.remove();
+  };
+  const setYear = (y) => {
+    shownYear = String(y);
+    [...shownYear].forEach((ch, j) => {
+      odoCols[j].style.transform = `translateY(${-Number(ch)}em)`;
+      if (digitW) odoCols[j].parentNode.style.setProperty('--w', digitW[Number(ch)].toFixed(3) + 'em');
+    });
+  };
+  setYear(2018);
+  if (document.fonts) document.fonts.ready.then(() => { measureDigits(); setYear(shownYear); });
+  else { measureDigits(); setYear(shownYear); }
+  const yearIO = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) setYear(en.target.dataset.gy); }), {rootMargin: '-35% 0px -60% 0px'});
+  $$('.year').forEach((y) => yearIO.observe(y));
+
   /* ——— ouvert maintenant ? (heure du Texas, fuseau du Centre) ——— */
   const openNow = $('[data-open]');
   try {
@@ -1254,15 +1485,15 @@ time { font-variant-numeric: tabular-nums; }
     const h = (Number(part('hour')) % 24) + Number(part('minute')) / 60;
     if (day >= 0 && !Number.isNaN(h)) {
       const weekday = day >= 1 && day <= 5;
-      const open = weekday && h >= 8 && h < 16;
-      openNow.textContent = open
+      const isOpen = weekday && h >= 8 && h < 16;
+      openNow.textContent = isOpen
         ? 'Open now, until 4 PM Central Time.'
         : weekday && h < 8
           ? 'Closed now. Opens today at 8 AM Central Time.'
           : day >= 1 && day <= 4
             ? 'Closed now. Opens tomorrow at 8 AM Central Time.'
             : 'Closed now. Opens Monday at 8 AM Central Time.';
-      openNow.dataset.state = open ? 'open' : 'closed';
+      openNow.dataset.state = isOpen ? 'open' : 'closed';
       openNow.hidden = false;
       $$('.hours li').forEach((li) => {
         const [a, b = a] = li.dataset.days.split('-').map(Number);
@@ -1307,57 +1538,78 @@ time { font-variant-numeric: tabular-nums; }
 
   if (reduce) return;
 
-  /* ════════════ animations au défilement ════════════ */
+  /* ════════ animations ════════ */
 
-  /* 1. l'accueil : le titre (lisible dès le premier affichage) monte un peu, le film aussi ; au défilement, le film glisse moins vite */
-  G.from('.hero__title', {y: 30, duration: 1.3, ease: 'power3.out'});
-  G.from('.film', {y: 40, duration: 1.3, ease: 'power3.out'});
-  G.from(['.hero__lead', '.hero__cta'], {y: 24, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out', delay: 0.35});
-  G.to('.film', {yPercent: -8, ease: 'none', scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}});
-
-  /* 2. les titres : chaque ligne monte de derrière son masque */
-  $$('.title').forEach((t) => {
-    if (!t.children.length) t.innerHTML = `<span>${t.innerHTML}</span>`;
-    [...t.children].forEach((sp) => {
-      sp.setAttribute('data-line', '');
-      sp.innerHTML = `<span>${sp.innerHTML}</span>`;
-    });
-    G.from($$('[data-line] > span', t), {yPercent: 110, duration: 1.1, stagger: 0.09, ease: 'power4.out', scrollTrigger: {trigger: t, start: 'top 86%'}});
+  /* 1. l'arrivée : les lignes du titre montent de derrière leur masque, la photo se pose, les coches de la règle poussent */
+  $$('.hero__title > span').forEach((line) => {
+    line.setAttribute('data-line', '');
+    line.innerHTML = `<span>${line.innerHTML}</span>`;
   });
+  G.from('.hero__title [data-line] > span', {yPercent: 110, duration: 1.1, stagger: 0.1, ease: 'power4.out', delay: 0.1});
+  G.from(['.hero__lead', '.hero__cta'], {y: 22, opacity: 0, duration: 1, stagger: 0.1, ease: 'power3.out', delay: 0.45});
+  G.from('.stage__frames', {scale: 1.06, duration: 1.6, ease: 'power3.out'});
+  G.from('.ruler__track i', {scaleY: 0, transformOrigin: '50% 100%', duration: 0.5, stagger: 0.012, ease: 'power2.out', delay: 0.5});
+  G.from(['.ruler__now', '.ruler__labels'], {opacity: 0, duration: 0.8, ease: 'power2.out', delay: 0.9});
 
-  /* 3. le chantier : l'écran tient pendant les onze photos (grand écran seulement) */
-  const mm = G.matchMedia();
-  mm.add('(min-width: 900px) and (min-height: 600px)', () => {
-    cur = -1;
-    setEntry(0);
-    const st = ST.create({
-      trigger: log,
-      start: 'top top',
-      end: () => '+=' + Math.round(innerHeight * 0.5 * (entries.length - 1)),
-      pin: true,
-      anticipatePin: 1,
-      onUpdate: (self) => setEntry(Math.min(entries.length - 1, Math.floor(self.progress * entries.length * 0.999))),
-    });
-    return () => {
-      st.kill();
-      entries.forEach((e) => e.classList.remove('is-on'));
-      delete log.dataset.tone;
-      cur = -1;
-    };
-  });
-
-  /* 4. les services : le filet de chaque ligne se trace, le nom et la phrase suivent */
-  $$('.svc li').forEach((li) => {
-    const trigger = {trigger: li, start: 'top 90%'};
-    G.fromTo(li, {'--rule': 0}, {'--rule': 1, duration: 1.1, ease: 'power3.inOut', scrollTrigger: trigger});
-    G.from(li.children, {y: 18, opacity: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: 0.15, scrollTrigger: {...trigger}});
-  });
-
-  /* 5. la nuit : la grande photo s'allume quand on arrive dessus */
-  G.fromTo('.lights__imgs', {filter: 'brightness(0.2)'}, {filter: 'brightness(1)', duration: 1.6, ease: 'power2.out', scrollTrigger: {trigger: '.lights', start: 'top 72%'}});
-
-  if (document.fonts) document.fonts.ready.then(() => ST.refresh());
-  addEventListener('load', () => ST.refresh());
+  // les parties suivantes sont loin sous l'ouverture : leurs animations se posent au premier geste du visiteur,
+  // en petites étapes (le navigateur respire entre deux), et non au chargement
+  const steps = [
+    () => {
+      // découpes du texte d'abord (écritures), les déclencheurs ensuite (lectures)
+      $$('.title').forEach((t) => {
+        if (!t.children.length) t.innerHTML = `<span>${t.innerHTML}</span>`;
+        [...t.children].forEach((sp) => {
+          sp.setAttribute('data-line', '');
+          sp.innerHTML = `<span>${sp.innerHTML}</span>`;
+        });
+      });
+      $$('[data-words]').forEach((p) => {
+        p.innerHTML = p.textContent.trim().split(/\s+/).map((w) => `<span class="w">${w}</span>`).join(' ');
+      });
+    },
+    () => {
+      /* 2. les titres : chaque ligne monte de derrière son masque */
+      $$('.title').forEach((t) => {
+        G.from($$('[data-line] > span', t), {yPercent: 110, duration: 1.1, stagger: 0.09, ease: 'power4.out', scrollTrigger: {trigger: t, start: 'top 86%'}});
+      });
+    },
+    () => {
+      /* 3. les services : chaque nom arrive en glissant, d'un côté puis de l'autre ; le filet se trace, la phrase suit */
+      $$('.svc li').forEach((li, i) => {
+        const dir = i % 2 ? 1 : -1;
+        // une seule ligne de temps par service, liée au défilement : le nom glisse (0 → 0,75), le filet se trace, la phrase arrive (0,7 → 1)
+        G.timeline({scrollTrigger: {trigger: li, start: 'top bottom', end: 'top 48%', scrub: true, invalidateOnRefresh: true}})
+          .fromTo($('h3', li), {x: () => dir * innerWidth * 0.3}, {x: 0, ease: 'none', duration: 0.75}, 0)
+          .fromTo(li, {'--rule': 0}, {'--rule': 1, ease: 'none', duration: 0.6}, 0.05)
+          .fromTo($('p', li), {opacity: 0, y: 16}, {opacity: 1, y: 0, ease: 'none', duration: 0.3}, 0.7);
+      });
+    },
+    () => {
+      /* 4. la galerie : les photos de chaque chantier se découvrent l'une après l'autre */
+      $$('.strip').forEach((strip) => {
+        G.fromTo($$('.shot__btn', strip), {clipPath: 'inset(0% 0% 100% 0% round 8px)'}, {clipPath: 'inset(0% 0% 0% 0% round 8px)', duration: 1.1, stagger: 0.07, ease: 'power3.inOut', scrollTrigger: {trigger: strip, start: 'top 88%'}});
+      });
+    },
+    () => {
+      /* 5. la nuit : la grande photo s'allume à mesure qu'on arrive, sa lueur se répand */
+      G.fromTo('.lights__imgs', {filter: 'brightness(0.16)'}, {filter: 'brightness(1)', ease: 'none', scrollTrigger: {trigger: '.lights', start: 'top 82%', end: 'top 24%', scrub: true}});
+      G.fromTo('.lights__glow', {opacity: 0, scale: 0.85}, {opacity: 1, scale: 1, ease: 'none', scrollTrigger: {trigger: '.lights', start: 'top 62%', end: 'top 18%', scrub: true}});
+      /* 6. les valeurs s'allument mot à mot, du bleu pâle au bleu roi (contraste de 3:1 au moins pour ce très grand texte) */
+      $$('[data-words]').forEach((p) => {
+        G.fromTo($$('.w', p), {color: '#7a8bd0'}, {color: '#0b2fb3', stagger: 0.14, ease: 'none', scrollTrigger: {trigger: p, start: 'top 80%', end: 'bottom 45%', scrub: 0.4}});
+      });
+      /* 7. le pied de page : le nom monte en très grand */
+      G.fromTo('.ft__word', {yPercent: 60}, {yPercent: 0, ease: 'none', scrollTrigger: {trigger: '.ft', start: 'top bottom', end: 'bottom bottom', scrub: true}});
+    },
+  ];
+  const runSteps = () => {
+    const step = steps.shift();
+    if (!step) return;
+    step();
+    setTimeout(runSteps, 0);
+  };
+  Promise.all([fontsReady, whenLoaded]).then(() => onFirstGesture(runSteps));
+  fontsReady.then(() => ST.refresh());
 })();
 
 </script>
