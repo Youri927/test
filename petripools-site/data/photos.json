@@ -1,0 +1,15 @@
+[
+ {"id": "spa-before", "src": "2016_02_Before.jpg", "w": 700, "q": 62, "date": "avant (page Pool Remodeling)"},
+ {"id": "spa-after", "src": "2016_02_After.jpg", "w": 700, "q": 62, "date": "après (page Pool Remodeling)"},
+ {"id": "pad", "src": "2016_02_IMG_5393.jpg", "w": 1800, "q": 50, "date": "local technique d'un client (page Pool Repair)"},
+ {"id": "pad-s", "src": "2016_02_IMG_5393.jpg", "w": 900, "q": 52},
+ {"id": "tile", "src": "2016_02_s4.jpg", "w": 1400, "q": 52, "date": "spa surélevé en mosaïque de verre (diaporama de l'accueil)"},
+ {"id": "tile-s", "src": "2016_02_s4.jpg", "w": 800, "q": 54},
+ {"id": "coping", "src": "2016_02_s1.jpg", "w": 1400, "q": 52, "date": "piscine aux trois lames d'eau (diaporama de l'accueil)"},
+ {"id": "coping-s", "src": "2016_02_s1.jpg", "w": 800, "q": 54},
+ {"id": "finish", "src": "2016_01_INTERIOR-SURFACES.jpg", "w": 1000, "q": 54, "date": "l'équipe dans le bassin vide (page Pool Construction)"},
+ {"id": "deck", "src": "2016_01_DECKING-PAVERS-OR-CONCRETE.jpg", "w": 1000, "q": 54, "date": "pose du travertin (page Pool Construction)"},
+ {"id": "tiler", "src": "2016_01_TILE-COPING.jpg", "w": 1000, "q": 54, "date": "pose de la mosaïque du spa (page Pool Construction)"},
+ {"id": "grotto", "src": "2016_02_s3.jpg", "w": 1400, "q": 52, "date": "grotte et toboggan au coucher du soleil (diaporama de l'accueil)"},
+ {"id": "grotto-s", "src": "2016_02_s3.jpg", "w": 800, "q": 54}
+]
