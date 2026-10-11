@@ -1,0 +1,170 @@
+{
+ "dallas": [
+  570,
+  608
+ ],
+ "drain-after": [
+  800,
+  600
+ ],
+ "drain-before": [
+  800,
+  600
+ ],
+ "filter-half": [
+  458,
+  504
+ ],
+ "filter-rinse": [
+  850,
+  634
+ ],
+ "pad": [
+  1024,
+  768
+ ],
+ "pump": [
+  1024,
+  768
+ ],
+ "remodel-01-after": [
+  902,
+  826
+ ],
+ "remodel-01-before": [
+  902,
+  826
+ ],
+ "remodel-01-thumb": [
+  240,
+  220
+ ],
+ "remodel-02-after": [
+  902,
+  826
+ ],
+ "remodel-02-before": [
+  902,
+  826
+ ],
+ "remodel-02-thumb": [
+  240,
+  220
+ ],
+ "remodel-03-after": [
+  902,
+  826
+ ],
+ "remodel-03-before": [
+  902,
+  826
+ ],
+ "remodel-03-thumb": [
+  240,
+  220
+ ],
+ "remodel-04-after": [
+  902,
+  826
+ ],
+ "remodel-04-before": [
+  902,
+  826
+ ],
+ "remodel-04-thumb": [
+  240,
+  220
+ ],
+ "remodel-05-after": [
+  902,
+  826
+ ],
+ "remodel-05-before": [
+  902,
+  826
+ ],
+ "remodel-05-thumb": [
+  240,
+  220
+ ],
+ "remodel-06-after": [
+  902,
+  826
+ ],
+ "remodel-06-before": [
+  902,
+  826
+ ],
+ "remodel-06-thumb": [
+  240,
+  220
+ ],
+ "remodel-07-after": [
+  902,
+  826
+ ],
+ "remodel-07-before": [
+  902,
+  826
+ ],
+ "remodel-07-thumb": [
+  240,
+  220
+ ],
+ "remodel-08-after": [
+  902,
+  826
+ ],
+ "remodel-08-before": [
+  902,
+  826
+ ],
+ "remodel-08-thumb": [
+  240,
+  220
+ ],
+ "remodel-09-after": [
+  902,
+  826
+ ],
+ "remodel-09-before": [
+  902,
+  826
+ ],
+ "remodel-09-thumb": [
+  240,
+  220
+ ],
+ "remodel-garden": [
+  1000,
+  750
+ ],
+ "remodel-spa": [
+  1440,
+  1080
+ ],
+ "spring-after": [
+  800,
+  600
+ ],
+ "spring-before": [
+  800,
+  600
+ ],
+ "tile-after": [
+  850,
+  638
+ ],
+ "tile-before": [
+  850,
+  638
+ ],
+ "weekly-skim": [
+  1024,
+  768
+ ],
+ "weekly-sweep": [
+  1024,
+  768
+ ]
+}

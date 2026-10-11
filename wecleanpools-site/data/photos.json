@@ -1,0 +1,416 @@
+[
+ {
+  "id": "remodel-01-before",
+  "src": "ba/Remodel-BA-01.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.00651,
+   0.01412,
+   0.4962,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-01-after",
+  "src": "ba/Remodel-BA-01.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-01-thumb",
+  "src": "ba/Remodel-BA-01.jpg",
+  "w": 240,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-02-before",
+  "src": "ba/Remodel-BA-02.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.00651,
+   0.01412,
+   0.4962,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-02-after",
+  "src": "ba/Remodel-BA-02.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-02-thumb",
+  "src": "ba/Remodel-BA-02.jpg",
+  "w": 240,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-03-before",
+  "src": "ba/Remodel-BA-03.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.00651,
+   0.01412,
+   0.4962,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-03-after",
+  "src": "ba/Remodel-BA-03.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-03-thumb",
+  "src": "ba/Remodel-BA-03.jpg",
+  "w": 240,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-04-before",
+  "src": "ba/Remodel-BA-04.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.00651,
+   0.01412,
+   0.4962,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-04-after",
+  "src": "ba/Remodel-BA-04.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-04-thumb",
+  "src": "ba/Remodel-BA-04.jpg",
+  "w": 240,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-05-before",
+  "src": "ba/Remodel-BA-05.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.00651,
+   0.01412,
+   0.4962,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-05-after",
+  "src": "ba/Remodel-BA-05.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-05-thumb",
+  "src": "ba/Remodel-BA-05.jpg",
+  "w": 240,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-06-before",
+  "src": "ba/Remodel-BA-06.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.00651,
+   0.01412,
+   0.4962,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-06-after",
+  "src": "ba/Remodel-BA-06.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-06-thumb",
+  "src": "ba/Remodel-BA-06.jpg",
+  "w": 240,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-07-before",
+  "src": "ba/Remodel-BA-07.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.00651,
+   0.01412,
+   0.4962,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-07-after",
+  "src": "ba/Remodel-BA-07.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-07-thumb",
+  "src": "ba/Remodel-BA-07.jpg",
+  "w": 240,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-08-before",
+  "src": "ba/Remodel-BA-08.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.00651,
+   0.01412,
+   0.4962,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-08-after",
+  "src": "ba/Remodel-BA-08.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-08-thumb",
+  "src": "ba/Remodel-BA-08.jpg",
+  "w": 240,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-09-before",
+  "src": "ba/Remodel-BA-09.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.00651,
+   0.01412,
+   0.4962,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-09-after",
+  "src": "ba/Remodel-BA-09.jpg",
+  "w": 902,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "remodel-09-thumb",
+  "src": "ba/Remodel-BA-09.jpg",
+  "w": 240,
+  "q": 50,
+  "crop": [
+   0.5038,
+   0.01412,
+   0.99349,
+   0.98588
+  ]
+ },
+ {
+  "id": "weekly-skim",
+  "src": "site/WeeklyService-1.jpg",
+  "w": 1024,
+  "q": 52
+ },
+ {
+  "id": "weekly-sweep",
+  "src": "site/WeeklyService-2.jpg",
+  "w": 1024,
+  "q": 52
+ },
+ {
+  "id": "drain-before",
+  "src": "site/DrainClean-1.jpg",
+  "w": 800,
+  "q": 56
+ },
+ {
+  "id": "drain-after",
+  "src": "site/DrainClean-2.jpg",
+  "w": 800,
+  "q": 56
+ },
+ {
+  "id": "spring-before",
+  "src": "site/SpringCleans-1.jpg",
+  "w": 800,
+  "q": 56
+ },
+ {
+  "id": "spring-after",
+  "src": "site/SpringCleans-2.jpg",
+  "w": 800,
+  "q": 56
+ },
+ {
+  "id": "filter-half",
+  "src": "site/FilterCleans-2.jpg",
+  "w": 458,
+  "q": 56
+ },
+ {
+  "id": "filter-rinse",
+  "src": "site/FilterCleans-1.jpg",
+  "w": 850,
+  "q": 56
+ },
+ {
+  "id": "tile-before",
+  "src": "site/TileCleaning-1.jpg",
+  "w": 850,
+  "q": 56
+ },
+ {
+  "id": "tile-after",
+  "src": "site/TileCleaning-2.jpg",
+  "w": 850,
+  "q": 56
+ },
+ {
+  "id": "pad",
+  "src": "site/PoolRepair-2.jpg",
+  "w": 1024,
+  "q": 52
+ },
+ {
+  "id": "pump",
+  "src": "site/PoolRepair-1.jpg",
+  "w": 1024,
+  "q": 52
+ },
+ {
+  "id": "remodel-spa",
+  "src": "site/IMG_2204.jpeg",
+  "w": 1440,
+  "q": 52
+ },
+ {
+  "id": "remodel-garden",
+  "src": "site/IMG_6302-new.jpg",
+  "w": 1000,
+  "q": 52
+ },
+ {
+  "id": "dallas",
+  "src": "site/officer-img.webp",
+  "w": 570,
+  "q": 62
+ }
+]
