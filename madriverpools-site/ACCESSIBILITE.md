@@ -21,6 +21,8 @@ Pas de test avec un vrai lecteur d'écran (VoiceOver ou NVDA) : il reste à fair
 
 **Les 10 sont corrigés dans cette version.**
 
+La photo de nuit derrière le formulaire a été éclaircie après la revue de design. Tous les textes posés dessus ont été remesurés sur les pixels réels, sur ordinateur et sur téléphone. Les petites mentions du formulaire ont été rehaussées de 55–62 % à 66–70 % de blanc.
+
 Lighthouse Accessibilité : 100 sur ordinateur, 100 sur téléphone.
 
 ### Constats
@@ -31,7 +33,7 @@ Lighthouse Accessibilité : 100 sur ordinateur, 100 sur téléphone.
 | 1 | Les 8 photos de « Vinyl liner shapes » étaient toutes annoncées alors qu'une seule est visible, et toute la figure était une zone annoncée à chaque changement. | 1.3.1 Information et relations | 🟡 Majeur | Corrigé : seule la photo visible reste lue (`aria-hidden` sur les autres). Seule la légende (« Kidney, 15 × 30 ft ») est annoncée au changement. |
 | 2 | Défilement horizontal à 320 px : la plus longue forme (18 × 75 ft) dépassait de 37 px. | 1.4.10 Redistribution | 🟡 Majeur | Corrigé : l'échelle en pieds se calcule sur la largeur de l'écran. Les formes restent toutes à la même échelle. Plus aucun débordement de 1440 à 320 px. |
 | 3 | Contour de focus bleu canard sur les fonds sombres (contact, pied de page, barre d'appel, visionneuse) : 2,83:1. | 1.4.11 Contraste du non-textuel | 🟡 Majeur | Corrigé : le contour passe au bleu clair (#3FD0E8) sur fond sombre, soit 9,62:1. |
-| 4 | Bords des cases « What are you thinking about? » (2,57:1) et des champs du formulaire (2,39:1). | 1.4.11 Contraste du non-textuel | 🟢 Mineur | Corrigé : bords à 50 % de blanc. Mesuré sur les pixels réels : 4,25:1 et 4,78:1. |
+| 4 | Bords des cases « What are you thinking about? » (2,57:1) et des champs du formulaire (2,39:1). | 1.4.11 Contraste du non-textuel | 🟢 Mineur | Corrigé : bords à 50 % de blanc. Mesuré sur les pixels réels : 4,18:1 et 4,79:1. |
 | 5 | Contour de focus des vignettes de la galerie dessiné sur la photo : contraste variable selon l'image. | 1.4.11 Contraste du non-textuel | 🟢 Mineur | Corrigé : triple contour sombre, clair, sombre, visible sur n'importe quelle photo. |
 | 6 | Avec l'espacement du texte élargi, le titre de l'accueil débordait de 27 px sur téléphone. | 1.4.12 Espacement du texte | 🟢 Mineur | Corrigé : chaque morceau du titre peut passer à la ligne si nécessaire. Rien n'est coupé à 1440, 1180, 1024, 390 et 320 px. |
 
@@ -72,10 +74,13 @@ Chaque texte a aussi été mesuré sur les vrais pixels, en ne gardant que la zo
 | Pastille « Open now » | #3FD0E8 | bleu clair à 16 % sur la nuit | 6,89:1 | 4,5:1 | ✅ |
 | Pastille « Closed now » | rgba(244,245,241,.75) | blanc à 10 % sur la nuit | 7,70:1 | 4,5:1 | ✅ |
 | Case cochée du formulaire | #0A1A23 | #3FD0E8 | 9,62:1 | 4,5:1 | ✅ |
+| Petites mentions du formulaire : « optional », compteur, note (pixels réels) | blanc à 66–70 % | fond du formulaire sur la photo de nuit | 5,44 à 6,66:1 | 4,5:1 | ✅ |
+| Message d'erreur du formulaire (pixels réels) | #FFB48C | fond du formulaire | 6,20:1 | 4,5:1 | ✅ |
+| Textes de la section de nuit sur la photo (pixels réels) | blanc, blanc à 62 % | photo de nuit voilée | 5,23 à 14,74:1 | 4,5:1 | ✅ |
 | Contour de focus, fonds clairs | #076A7B | #F4F5F1 / #E8E0D2 | 5,71 / 4,77:1 | 3:1 | ✅ |
 | Contour de focus, fonds sombres | #3FD0E8 | #0A1A23 | 9,62:1 | 3:1 | ✅ |
 | Bords des onglets et filtres | #17232B | #F4F5F1 | 14,62:1 | 3:1 | ✅ |
-| Bords des cases et des champs (pixels réels) | blanc à 50 % | fond du formulaire | 4,25 / 4,78:1 | 3:1 | ✅ |
+| Bords des cases et des champs (pixels réels) | blanc à 50 % | fond du formulaire | 4,18 / 4,79:1 | 3:1 | ✅ |
 
 Le rond orange du logo (2,50:1 sur le fond clair) fait partie du logo : il est exempté.
 

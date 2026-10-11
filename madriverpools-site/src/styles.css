@@ -589,7 +589,7 @@ main > section > * {
   transition-delay: 0.45s;
 }
 
-/* les photos remplissent le plan dès qu'elles sont arrivées (et pas avant que le tracé ait commencé) */
+/* l'eau monte dans le bassin déjà dessiné : la photo se dévoile du fond vers le haut, puis le spa arrive */
 .plan.is-filled .plan__pool {
   clip-path: inset(0 0 0 0 round 3.4cqw);
   transition: clip-path 1.1s var(--ease-io);
@@ -1386,6 +1386,28 @@ main > section > * {
   clip-path: inset(9px round calc(var(--r-small) - 9px));
 }
 
+/* sur téléphone, la galerie s'arrête à 11 photos (une rangée pleine) ; le bouton montre le reste */
+.work__more {
+  display: none;
+  margin: 24px 0 0;
+}
+
+.work__all {
+  width: 100%;
+  min-height: 52px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background-color 0.25s;
+}
+
+.work__all:hover {
+  background: rgba(23, 35, 43, 0.07);
+}
+
 /* ——— Le propriétaire, la licence ——— */
 .owner {
   display: grid;
@@ -1628,15 +1650,17 @@ main > .visit > * {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.6;
+  object-position: 50% 92%;
+  opacity: 0.92;
 }
 
+/* la piscine éclairée reste lisible sous le formulaire ; le texte garde un fond sombre à gauche */
 .visit::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, var(--night) 0%, rgba(10, 26, 35, 0.5) 30%, rgba(10, 26, 35, 0.62) 68%, var(--night) 100%), linear-gradient(90deg, rgba(10, 26, 35, 0.55), rgba(10, 26, 35, 0) 60%);
+  background: linear-gradient(180deg, var(--night) 0%, rgba(10, 26, 35, 0.62) 26%, rgba(10, 26, 35, 0.3) 64%, rgba(10, 26, 35, 0.5) 86%, var(--night) 100%), linear-gradient(90deg, rgba(10, 26, 35, 0.72), rgba(10, 26, 35, 0.2) 52%, rgba(10, 26, 35, 0) 75%);
 }
 
 .visit__inner {
@@ -1794,7 +1818,7 @@ main > .visit > * {
 }
 
 .opt {
-  color: rgba(244, 245, 241, 0.55);
+  color: rgba(244, 245, 241, 0.66);
   font-weight: 450;
 }
 
@@ -1834,7 +1858,7 @@ main > .visit > * {
 
 .field__count {
   justify-self: end;
-  color: rgba(244, 245, 241, 0.55);
+  color: rgba(244, 245, 241, 0.7);
   font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
@@ -1855,7 +1879,7 @@ main > .visit > * {
 
 .form__note {
   max-width: 32ch;
-  color: rgba(244, 245, 241, 0.62);
+  color: rgba(244, 245, 241, 0.7);
   font-size: 13.5px;
   line-height: 1.45;
 }
@@ -2144,10 +2168,28 @@ main > .visit > * {
     grid-column: 1 / 13;
   }
 
+  /* la photo choisie reste en haut de l'écran pendant qu'on parcourt les formes */
   .shapes__view {
     grid-column: 1 / 13;
-    position: relative;
+    top: var(--top);
+    z-index: 2;
+    padding: 10px 0 14px;
+    background: var(--trav);
+    transition: top 0.45s var(--ease-out);
+  }
+
+  .top-away .shapes__view {
     top: 0;
+  }
+
+  /* sur une tablette à l'horizontale, la photo laisse de la place à la liste */
+  .shapes__photos {
+    aspect-ratio: 16 / 9;
+    max-height: 38vh;
+  }
+
+  .shapes__caption {
+    margin-top: 10px;
   }
 
   .shapes__pick {
@@ -2265,6 +2307,20 @@ main > .visit > * {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: 42vw;
     gap: 8px;
+  }
+
+  .js .grid:not(.is-all) .tile:nth-child(n + 12) {
+    display: none;
+  }
+
+  .js .grid:not(.is-all) + .work__more {
+    display: block;
+  }
+
+  /* l'avant et l'après l'un sous l'autre, en pleine largeur */
+  .ba__pair {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
   }
 
   .owner__text,

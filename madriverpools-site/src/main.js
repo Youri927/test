@@ -28,6 +28,7 @@
     if (doc.classList.contains('menu-open') || y < 520 || y < lastY - 3) top.classList.remove('is-away');
     else if (y > lastY + 3 && !top.contains(document.activeElement)) top.classList.add('is-away');
     lastY = y;
+    doc.classList.toggle('top-away', top.classList.contains('is-away'));
     if (dock) dock.classList.toggle('is-on', y > heroH * 0.7 && !atVisit);
     // le spa remonte un peu plus vite que le bassin
     if (!still && y < window.innerHeight * 1.3) {
@@ -91,7 +92,7 @@
 
   /* ——— Ouverture : le cordeau se trace, les photos remplissent le plan, le slogan s'élargit ——— */
   // le slogan et le cordeau partent dès que la police est là (au plus tard après 0,6 s) ;
-  // chaque photo remplit le plan dès qu'elle est chargée, jamais avant 0,45 s de tracé
+  // les photos remplissent le bassin une fois son contour presque fermé (1 s de tracé), ou dès qu'elles arrivent si c'est plus tard
   const plan = $('[data-plan]');
   const fill = () => plan.classList.add('is-filled');
   const ready = () => doc.classList.add('is-ready');
@@ -104,7 +105,7 @@
     Promise.race([font, later(600)]).then(() => {
       requestAnimationFrame(() => requestAnimationFrame(ready));
       const photos = Promise.all($$('.plan img').map((i) => i.decode().catch(() => {})));
-      Promise.all([photos, later(450)]).then(fill);
+      Promise.all([photos, later(1000)]).then(fill);
     });
   }
   onScroll(window.scrollY);
@@ -199,13 +200,22 @@
   once($('.reno'), () => revealPanel($('.reno [role="tabpanel"]:not([hidden])')), 0.25);
 
   /* ——— Galerie : filtres (les photos glissent à leur nouvelle place) et visionneuse ——— */
-  const tiles = $$('[data-grid] .tile');
+  const grid = $('[data-grid]');
+  const tiles = $$('.tile', grid);
   const filterBtns = $$('[data-filter]');
+  // sur téléphone, les photos au-delà de la onzième attendent le bouton « Show all »
+  const allBtn = $('[data-all]');
+  allBtn.textContent = `Show all ${tiles.length} photos`;
+  allBtn.addEventListener('click', () => {
+    grid.classList.add('is-all');
+    $('button', tiles[11]).focus({preventScroll: true});
+  });
   filterBtns.forEach((b) =>
     b.addEventListener('click', () => {
       const f = b.dataset.filter;
       filterBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-      const before = new Map(tiles.filter((t) => !t.hidden).map((t) => [t, t.getBoundingClientRect()]));
+      const before = new Map(tiles.filter((t) => t.getClientRects().length).map((t) => [t, t.getBoundingClientRect()]));
+      grid.classList.add('is-all');
       tiles.forEach((t) => (t.hidden = !(f === 'all' || t.dataset.cat.split(' ').includes(f))));
       if (still) return;
       tiles
