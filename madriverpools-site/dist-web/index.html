@@ -1,0 +1,3252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mad River Pools: Central Florida pool builder since 1998</title>
+<meta name="description" content="Concrete, fiberglass and vinyl liner pools, spas, decks and renovations across Central Florida since 1998. Book a free, no-obligation home visit.">
+<link rel="canonical" href="https://madriverpools.com/">
+<meta name="theme-color" content="#F4F5F1">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Mad River Pools">
+<meta property="og:title" content="Nothing’s as cool as a Mad River Pool.">
+<meta property="og:description" content="Pools, spas and backyards built across Central Florida since 1998. Book a free home visit.">
+<meta property="og:url" content="https://madriverpools.com/">
+<meta property="og:image" content="https://madriverpools.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2317232B'/%3E%3Crect x='10' y='8' width='17' height='12' rx='3' fill='none' stroke='%23C9ECEF' stroke-width='2'/%3E%3Ccircle cx='11' cy='20' r='5' fill='%2317232B' stroke='%23F57A1F' stroke-width='2'/%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/MonaSans.woff2" crossorigin>
+<link rel="preload" as="image" type="image/avif" imagesrcset="assets/img/hero-pool.w640.avif 640w, assets/img/hero-pool.w900.avif 900w, assets/img/hero-pool.avif 1600w" imagesizes="(max-width: 1080px) 76vw, min(48vw, 680px)" fetchpriority="high">
+<style>
+@font-face{font-family:"Mona Sans";src:url(assets/fonts/MonaSans.woff2) format("woff2");font-weight:200 900;font-stretch:75% 125%;font-style:normal;font-display:swap}@font-face{font-family:"Mona Fallback";src:local("Arial"),local("Liberation Sans"),local("Helvetica");size-adjust:104.88%;ascent-override:103.93%;descent-override:30.51%;line-gap-override:0%}
+/* Mad River Pools : le plan de la piscine. Une seule famille (Mona Sans), un seul trait, une seule couleur vive. */
+
+:root {
+  --deck: #F4F5F1;
+  --ink: #17232B;
+  --ink-2: #4A5861;
+  --line: rgba(23, 35, 43, 0.16);
+  --trav: #E8E0D2;
+  --shallow: #C9ECEF;
+  --pool: #0A8EA3;
+  --pool-ink: #076A7B;
+  --orange: #F57A1F;
+  --orange-hi: #FF8E3C;
+  --night: #0A1A23;
+  --glow: #3FD0E8;
+  --pad: clamp(20px, 4.2vw, 64px);
+  --max: 1360px;
+  --gap: clamp(16px, 1.8vw, 28px);
+  --r-photo: 28px;
+  --r-small: 18px;
+  --top: 76px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  interpolate-size: allow-keywords;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: var(--top);
+  background: var(--deck);
+}
+
+body {
+  margin: 0;
+  background: var(--deck);
+  color: var(--ink);
+  font-family: "Mona Sans", "Mona Fallback", ui-sans-serif, system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 430;
+  line-height: 1.55;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus, var(--pool-ink));
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* sur les fonds sombres, le contour passe au bleu clair (9,6:1 sur la nuit) */
+/* les zones de clic agrandies (marges négatives) gardent le texte en place ; le contour les suit */
+.contact a,
+.foot a,
+.more,
+.hero__tel {
+  padding-inline: 8px;
+  margin-inline: -8px;
+}
+
+.contact a:focus-visible,
+.foot a:focus-visible,
+.more:focus-visible,
+.hero__tel:focus-visible {
+  outline-offset: -2px;
+}
+
+.visit,
+.foot,
+.dock,
+.lightbox {
+  --focus: var(--glow);
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--deck);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip:focus {
+  top: 12px;
+}
+
+/* ——— Gabarit commun : marges, largeur, grille de 12 colonnes ——— */
+main > section {
+  padding-inline: var(--pad);
+}
+
+main > section > * {
+  max-width: var(--max);
+  margin-inline: auto;
+}
+
+.h2 {
+  margin: 0;
+  font-size: clamp(34px, 4.5vw, 66px);
+  font-stretch: 125%;
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.034em;
+  text-wrap: balance;
+}
+
+.h3 {
+  margin: 0 0 14px;
+  font-size: clamp(26px, 2.3vw, 34px);
+  font-stretch: 120%;
+  font-weight: 780;
+  line-height: 1.05;
+  letter-spacing: -0.026em;
+}
+
+.head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: end;
+  margin-bottom: clamp(40px, 5vw, 76px);
+}
+
+.head .h2 {
+  grid-column: 1 / 8;
+}
+
+.head__text {
+  grid-column: 8 / 13;
+  max-width: 44ch;
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 18px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--orange);
+  color: var(--ink);
+  font-size: 16px;
+  font-stretch: 112%;
+  font-weight: 720;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s var(--ease-out);
+}
+
+.btn:hover {
+  background: var(--orange-hi);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--small {
+  min-height: 42px;
+  padding: 0 20px;
+  font-size: 14.5px;
+}
+
+.more {
+  display: inline-block;
+  padding-block: 10px;
+  margin-block: -10px;
+  color: var(--pool-ink);
+  font-weight: 650;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  transition: text-underline-offset 0.2s;
+}
+
+.more:hover {
+  text-underline-offset: 8px;
+}
+
+/* ——— En-tête ——— */
+.top {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  padding-inline: var(--pad);
+  transition: transform 0.45s var(--ease-out), background-color 0.3s, box-shadow 0.3s;
+}
+
+.top.is-solid {
+  background: rgba(244, 245, 241, 0.9);
+  box-shadow: 0 1px 0 var(--line);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
+}
+
+.top.is-away {
+  transform: translateY(-100%);
+}
+
+.top__bar {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  max-width: var(--max);
+  height: var(--top);
+  margin: 0 auto;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  margin-right: auto;
+  text-decoration: none;
+}
+
+.brand__mark {
+  width: 40px;
+  height: 28px;
+  overflow: visible;
+  fill: var(--deck);
+  stroke-width: 1.7;
+}
+
+.brand__mark rect {
+  fill: none;
+  stroke: var(--ink);
+}
+
+.brand__mark circle {
+  stroke: var(--orange);
+}
+
+.brand__name {
+  font-size: 19px;
+  font-stretch: 125%;
+  font-weight: 820;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav ul {
+  display: flex;
+  gap: 26px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav ul a,
+.nav__tel {
+  font-size: 15px;
+  font-weight: 560;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav ul a {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat;
+  padding-bottom: 3px;
+  transition: background-size 0.35s var(--ease-out);
+}
+
+.nav ul a:hover,
+.nav ul a[aria-current="true"] {
+  background-size: 100% 1.5px;
+}
+
+.nav__more {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin: 0;
+}
+
+.menu {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 4px 0 12px;
+  border: 0;
+  background: none;
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.menu__lines {
+  position: relative;
+  width: 22px;
+  height: 12px;
+}
+
+.menu__lines::before,
+.menu__lines::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.35s var(--ease-out), top 0.35s var(--ease-out);
+}
+
+.menu__lines::before {
+  top: 0;
+}
+
+.menu__lines::after {
+  top: 10px;
+}
+
+.menu[aria-expanded="true"] .menu__lines::before {
+  top: 5px;
+  transform: rotate(45deg);
+}
+
+.menu[aria-expanded="true"] .menu__lines::after {
+  top: 5px;
+  transform: rotate(-45deg);
+}
+
+/* ——— Ouverture ——— */
+.hero {
+  padding-top: calc(var(--top) + clamp(22px, 4.2vh, 60px));
+  padding-bottom: clamp(48px, 6vw, 88px);
+}
+
+.hero__title {
+  margin: 0;
+  font-size: clamp(44px, 6.55vw, 104px);
+  font-stretch: 125%;
+  font-weight: 820;
+  line-height: 0.92;
+  letter-spacing: -0.038em;
+}
+
+.hero__line {
+  display: block;
+  white-space: nowrap;
+}
+
+.hero__body {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0 var(--gap);
+  align-items: start;
+  margin-top: clamp(24px, 2.8vw, 40px);
+}
+
+.hero__text {
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / 5;
+  grid-row: 1;
+  align-self: stretch;
+  padding-top: 6px;
+}
+
+.hero__lede {
+  max-width: 33ch;
+  margin: 0;
+  color: var(--ink-2);
+  font-size: clamp(17px, 1.3vw, 20px);
+  line-height: 1.5;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
+  margin: 30px 0 0;
+}
+
+.hero__tel {
+  padding-block: 10px;
+  margin-block: -10px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hero__tel span {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+
+/* Le plan : rectangle du bassin et cercle du spa, dans une boîte de 1000 × 640 unités (1 unité = 0,1 % de la largeur) */
+.plan {
+  position: relative;
+  grid-column: 5 / 13;
+  grid-row: 1;
+  aspect-ratio: 1000 / 640;
+  margin: 0;
+  container-type: inline-size;
+}
+
+.plan > * {
+  position: absolute;
+}
+
+.plan__line {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  pointer-events: none;
+}
+
+.plan__line path,
+.plan__line circle {
+  stroke-width: calc(1.6 * var(--u, 1));
+  vector-effect: non-scaling-stroke;
+}
+
+.js .plan__line path,
+.js .plan__line circle,
+.js .shape path {
+  vector-effect: none;
+}
+
+.plan__line--pool {
+  z-index: 0;
+}
+
+.plan__pool {
+  z-index: 1;
+  left: 18.2%;
+  top: 3.4375%;
+  width: 79.6%;
+  height: 93.125%;
+  overflow: hidden;
+  border-radius: 3.4cqw;
+  background: var(--shallow);
+}
+
+.plan__pool img,
+.plan__spa img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* un peu de marge pour le léger décalage au défilement */
+.plan__pool img {
+  scale: 1.07;
+}
+
+.plan__spa {
+  z-index: 2;
+  left: 5.5%;
+  top: 47.1875%;
+  width: 30%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--shallow);
+  box-shadow: 0 0 0 1.2cqw var(--deck);
+}
+
+.plan__line--spa {
+  z-index: 3;
+}
+
+.proof {
+  display: grid;
+  gap: 10px;
+  margin: auto 0 0;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 15px;
+  list-style: none;
+}
+
+.proof strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.proof a {
+  margin-left: 6px;
+  color: var(--pool-ink);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+/* La mise en scène : seulement si le script tourne */
+.js .plan__line path,
+.js .plan__line circle {
+  stroke-dasharray: 1.01;
+  stroke-dashoffset: 1.01;
+}
+
+.js .plan__pool {
+  clip-path: inset(100% 0 0 0 round 3.4cqw);
+}
+
+.js .plan__pool img {
+  transform: scale(1.1);
+}
+
+.js .plan__spa {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.js .hero__line {
+  opacity: 0;
+  font-stretch: 75%;
+}
+
+.js .hero__text,
+.js .proof {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.is-ready .plan__line path,
+.is-ready .plan__line circle {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.25s var(--ease-io) 0.1s;
+}
+
+.is-ready .plan__line circle {
+  transition-delay: 0.45s;
+}
+
+/* les photos remplissent le plan dès qu'elles sont arrivées (et pas avant que le tracé ait commencé) */
+.plan.is-filled .plan__pool {
+  clip-path: inset(0 0 0 0 round 3.4cqw);
+  transition: clip-path 1.1s var(--ease-io);
+}
+
+.plan.is-filled .plan__pool img {
+  transform: scale(1);
+  transition: transform 2s var(--ease-out);
+}
+
+.plan.is-filled .plan__spa {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.5s 0.45s, transform 1.1s var(--ease-out) 0.45s;
+}
+
+.is-ready .hero__line {
+  animation: flow 1.6s var(--ease-out) forwards;
+}
+
+.is-ready .hero__line + .hero__line {
+  animation-delay: 0.12s;
+}
+
+.is-ready .hero__text,
+.is-ready .proof {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.9s 1.25s, transform 1s var(--ease-out) 1.25s;
+}
+
+.is-ready .proof {
+  transition-delay: 1.45s;
+}
+
+@keyframes flow {
+  0% {
+    opacity: 0;
+    font-stretch: 75%;
+  }
+
+  14% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 1;
+    font-stretch: 125%;
+  }
+}
+
+/* ——— Trois façons de construire ——— */
+.pools {
+  padding-block: clamp(80px, 10vw, 160px);
+}
+
+.types {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 3vw, 48px) var(--gap);
+}
+
+.type {
+  display: flex;
+  flex-direction: column;
+}
+
+.type__photo {
+  aspect-ratio: 4 / 3;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--r-photo);
+  background: var(--shallow);
+}
+
+.type__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.type__name {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 24px 0 10px;
+  font-size: clamp(27px, 2.3vw, 34px);
+  font-stretch: 122%;
+  font-weight: 790;
+  line-height: 1;
+  letter-spacing: -0.028em;
+}
+
+.type__name span {
+  color: var(--ink-2);
+  font-size: 15px;
+  font-stretch: 100%;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.type__pitch {
+  max-width: 40ch;
+  margin: 0 0 20px;
+  color: var(--ink-2);
+}
+
+.type__facts {
+  margin: 0 0 22px;
+  border-top: 1px solid var(--line);
+}
+
+.type__facts div {
+  display: grid;
+  grid-template-columns: 8.6em minmax(0, 1fr);
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.type__facts dt {
+  font-size: 14.5px;
+  font-weight: 650;
+}
+
+.type__facts dd {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 15.5px;
+  line-height: 1.45;
+}
+
+.type__facts a {
+  color: var(--pool-ink);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.type .more {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+/* Le graphique « dig to deck » */
+.dig {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  margin-top: clamp(72px, 8vw, 120px);
+  margin-bottom: 0;
+  --name: 8.5rem;
+  --time: 8.8rem;
+  --col-gap: 18px;
+}
+
+.dig__head {
+  grid-column: 1 / 4;
+}
+
+.dig__title {
+  margin: 0 0 10px;
+  font-size: clamp(26px, 2.3vw, 32px);
+  font-stretch: 122%;
+  font-weight: 790;
+  line-height: 1.02;
+  letter-spacing: -0.028em;
+}
+
+.dig__text {
+  max-width: 26ch;
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 15.5px;
+}
+
+.dig__chart {
+  grid-column: 4 / 13;
+}
+
+.dig__axis {
+  position: relative;
+  height: 26px;
+  margin: 0 calc(var(--time) + var(--col-gap)) 0 calc(var(--name) + var(--col-gap));
+  padding: 0;
+  list-style: none;
+  color: var(--ink-2);
+  font-size: 13.5px;
+}
+
+.dig__axis li {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.dig__axis li:nth-child(1) {
+  left: 0;
+  transform: none;
+}
+
+.dig__axis li:nth-child(2) {
+  left: 25%;
+}
+
+.dig__axis li:nth-child(3) {
+  left: 50%;
+}
+
+.dig__axis li:nth-child(4) {
+  left: 75%;
+}
+
+.dig__axis li:nth-child(5) {
+  left: 100%;
+  transform: translateX(-100%);
+}
+
+.dig__rows {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ink);
+}
+
+/* les semaines, en traits fins derrière les barres */
+.dig__rows::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--name) + var(--col-gap));
+  right: calc(var(--time) + var(--col-gap));
+  border-right: 1px solid var(--line);
+  background: repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 25%);
+  pointer-events: none;
+}
+
+.dig__row {
+  display: grid;
+  grid-template-columns: var(--name) minmax(0, 1fr) var(--time);
+  gap: var(--col-gap);
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.dig__name {
+  font-stretch: 112%;
+  font-weight: 700;
+}
+
+.dig__track {
+  position: relative;
+  height: 14px;
+}
+
+.dig__bar,
+.dig__range {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transform-origin: 0 50%;
+}
+
+.dig__bar {
+  left: 0;
+  width: calc(var(--from) / 4 * 100%);
+  border-radius: 999px;
+  background: var(--pool);
+}
+
+/* la fin de la fourchette, hachurée : « 3 à 3½ semaines » */
+.dig__range {
+  left: calc(var(--from) / 4 * 100% - 7px);
+  width: calc((var(--to) - var(--from)) / 4 * 100% + 7px);
+  border-radius: 0 999px 999px 0;
+  background: repeating-linear-gradient(-45deg, var(--pool) 0 2px, transparent 2px 6px);
+  box-shadow: inset 0 0 0 1.5px var(--pool);
+}
+
+.dig__row--about .dig__range {
+  display: none;
+}
+
+.dig__time {
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.js .dig__bar,
+.js .dig__range {
+  transform: scaleX(0);
+}
+
+.dig.is-on .dig__bar,
+.dig.is-on .dig__range {
+  transform: scaleX(1);
+  transition: transform 1.3s var(--ease-out);
+}
+
+.dig.is-on .dig__range {
+  transition-duration: 0.7s;
+  transition-delay: 1.05s;
+}
+
+.dig.is-on .dig__row:nth-child(2) .dig__bar {
+  transition-delay: 0.12s;
+}
+
+.dig.is-on .dig__row:nth-child(3) .dig__bar {
+  transition-delay: 0.24s;
+}
+
+.dig.is-on .dig__row:nth-child(3) .dig__range {
+  transition-delay: 1.29s;
+}
+
+/* ——— Les formes, à l'échelle ——— */
+.shapes {
+  padding-block: clamp(80px, 10vw, 150px);
+  background: var(--trav);
+}
+
+.shapes__body {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: start;
+}
+
+.shapes__view {
+  position: sticky;
+  top: calc(var(--top) + 24px);
+  grid-column: 1 / 6;
+  margin: 0;
+}
+
+.shapes__photos {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--r-photo);
+  background: var(--ink);
+}
+
+.shapes__photos img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.55s var(--ease-io);
+}
+
+.shapes__photos img:first-child,
+.js .shapes__photos img.is-on {
+  opacity: 1;
+}
+
+.js .shapes__photos img:first-child:not(.is-on) {
+  opacity: 0;
+}
+
+.shapes__caption {
+  margin-top: 16px;
+  font-size: 18px;
+  font-stretch: 112%;
+  font-weight: 680;
+}
+
+.shapes__pick {
+  grid-column: 7 / 13;
+  --ft: 7.4px;
+}
+
+.shapes__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 34px 36px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shape {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  padding: 6px;
+  margin: -6px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.shape svg {
+  width: calc((var(--l) + 2) * var(--ft));
+  height: calc((var(--w) + 2) * var(--ft));
+  margin-bottom: 8px;
+  overflow: visible;
+}
+
+.shape path {
+  fill: transparent;
+  stroke: var(--ink);
+  stroke-width: calc(var(--sw, 1.5) * var(--u, 1));
+  vector-effect: non-scaling-stroke;
+  transition: fill 0.35s, stroke 0.35s;
+}
+
+.shape:hover path {
+  fill: rgba(201, 236, 239, 0.55);
+}
+
+.shape[aria-pressed="true"] path {
+  --sw: 2;
+  fill: var(--shallow);
+  stroke: var(--pool-ink);
+}
+
+.shape__name {
+  font-size: 15px;
+  font-stretch: 100%;
+  font-weight: 650;
+  line-height: 1.2;
+  transition: font-stretch 0.5s var(--ease-out);
+}
+
+.shape[aria-pressed="true"] .shape__name {
+  font-stretch: 125%;
+}
+
+.shape__size {
+  color: var(--ink-2);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.js .shape path {
+  stroke-dasharray: 1.01;
+  stroke-dashoffset: 1.01;
+}
+
+.shapes.is-on .shape path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.1s var(--ease-io) calc(var(--i, 0) * 80ms), fill 0.35s, stroke 0.35s;
+}
+
+.shapes__scale {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 52ch;
+  margin: 40px 0 0;
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.shapes__ruler {
+  flex: none;
+  width: calc(10 * var(--ft));
+  height: 9px;
+  border: 1.5px solid var(--ink);
+  border-top: 0;
+}
+
+/* ——— Spas, terrasses, et tout le reste ——— */
+.yard {
+  padding-block: clamp(80px, 10vw, 160px);
+}
+
+.yard__pair {
+  display: grid;
+  gap: clamp(56px, 7vw, 110px);
+}
+
+.feature {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: center;
+}
+
+.feature__photo {
+  grid-column: 1 / 8;
+  grid-row: 1;
+  aspect-ratio: 4 / 3;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--r-photo);
+}
+
+.feature__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.feature__text {
+  grid-column: 9 / 13;
+  grid-row: 1;
+}
+
+.feature__text p {
+  max-width: 42ch;
+  color: var(--ink-2);
+}
+
+.feature--flip .feature__photo {
+  grid-column: 6 / 13;
+}
+
+.feature--flip .feature__text {
+  grid-column: 1 / 5;
+}
+
+.feature__note {
+  color: var(--pool-ink) !important;
+  font-weight: 620;
+}
+
+.onecall {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: end;
+  margin-top: clamp(80px, 10vw, 150px);
+}
+
+.onecall__text {
+  grid-column: 1 / 9;
+  margin: 0;
+  font-size: clamp(27px, 3.15vw, 48px);
+  font-stretch: 116%;
+  font-weight: 720;
+  line-height: 1.14;
+  letter-spacing: -0.024em;
+  text-wrap: pretty;
+}
+
+/* chaque poste passe sous la ligne d'eau, l'un après l'autre */
+.onecall__text span {
+  background: linear-gradient(transparent 58%, var(--shallow) 58%, var(--shallow) 92%, transparent 92%) 0 0 / 100% 100% no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.js .onecall__text span {
+  background-size: 0 100%;
+}
+
+.onecall.is-on .onecall__text span {
+  background-size: 100% 100%;
+  transition: background-size 0.7s var(--ease-io) calc(var(--i, 0) * 110ms);
+}
+
+.onecall__photo {
+  grid-column: 9 / 13;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--r-photo);
+}
+
+.onecall__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ——— Rénovation ——— */
+.reno {
+  padding-block: clamp(80px, 10vw, 150px);
+  background: var(--trav);
+}
+
+.reno__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: clamp(32px, 4vw, 52px);
+}
+
+.tab,
+.filters button {
+  min-height: 46px;
+  padding: 8px 20px;
+  text-align: left;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 15.5px;
+  font-weight: 620;
+  cursor: pointer;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+.tab:hover,
+.filters button:hover {
+  background: rgba(23, 35, 43, 0.07);
+}
+
+.tab[aria-selected="true"],
+.filters button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--deck);
+}
+
+.panel {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: start;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.panel__text {
+  grid-column: 1 / 5;
+  font-size: 18px;
+}
+
+.panel__text p {
+  max-width: 34ch;
+  margin-bottom: 20px;
+}
+
+.ba,
+.panel__photo,
+.pip {
+  grid-column: 5 / 13;
+  margin: 0;
+}
+
+.ba__pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ba__pair[hidden] {
+  display: none;
+}
+
+.ba__shot {
+  margin: 0;
+}
+
+.ba__shot img {
+  width: 100%;
+  aspect-ratio: 550 / 321;
+  object-fit: cover;
+  border-radius: var(--r-small);
+}
+
+.ba__shot figcaption {
+  margin-top: 10px;
+  font-size: 14.5px;
+  font-weight: 650;
+}
+
+.js .ba__shot--after img {
+  clip-path: inset(0 100% 0 0 round var(--r-small));
+}
+
+.ba__pair.is-shown .ba__shot--after img {
+  clip-path: inset(0 0 0 0 round var(--r-small));
+  transition: clip-path 1.1s var(--ease-io) 0.2s;
+}
+
+.ba__pick {
+  display: flex;
+  gap: 8px;
+  margin: 18px 0 0;
+}
+
+.ba__pick button {
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: transparent;
+  font-size: 14.5px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+.ba__pick button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--deck);
+}
+
+.panel__photo img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--r-photo);
+}
+
+.panel__photo figcaption,
+.pip figcaption {
+  margin-top: 10px;
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+
+.pip img {
+  width: 100%;
+  border-radius: var(--r-small);
+}
+
+/* ——— Réalisations ——— */
+.work {
+  padding-block: clamp(80px, 10vw, 160px);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: clamp(150px, 15.5vw, 236px);
+  grid-auto-flow: dense;
+  gap: 12px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-small);
+  background: var(--shallow);
+}
+
+.tile[hidden] {
+  display: none;
+}
+
+.tile--wide {
+  grid-column: span 2;
+}
+
+.tile--tall {
+  grid-row: span 2;
+}
+
+.tile button {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  cursor: zoom-in;
+}
+
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s var(--ease-out);
+}
+
+.tile button:hover img {
+  transform: scale(1.045);
+}
+
+.tile button:focus-visible {
+  outline: 3px solid var(--deck);
+  outline-offset: -6px;
+  box-shadow: inset 0 0 0 9px var(--ink);
+}
+
+.tile button:focus-visible img {
+  clip-path: inset(9px round calc(var(--r-small) - 9px));
+}
+
+/* ——— Le propriétaire, la licence ——— */
+.owner {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: start;
+  padding-block: clamp(80px, 10vw, 150px);
+  border-top: 1px solid var(--line);
+}
+
+main > .owner {
+  max-width: none;
+}
+
+.owner > * {
+  margin-inline: 0;
+}
+
+.owner__text {
+  grid-column: 1 / 7;
+}
+
+.owner__text p {
+  max-width: 46ch;
+  margin-top: 28px;
+  color: var(--ink-2);
+  font-size: 18px;
+}
+
+.owner__facts {
+  grid-column: 8 / 13;
+  margin: 0;
+}
+
+.fact {
+  padding: 18px 0 20px;
+  border-top: 1px solid var(--line);
+}
+
+.fact:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.fact dt {
+  color: var(--ink-2);
+  font-size: 14.5px;
+}
+
+.fact dd {
+  margin: 0;
+}
+
+.fact__big {
+  margin-top: 4px !important;
+  font-size: clamp(32px, 3.1vw, 46px);
+  font-stretch: 125%;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.fact dd + dd {
+  margin-top: 6px;
+  color: var(--ink-2);
+  font-size: 15px;
+}
+
+.fact a {
+  color: var(--pool-ink);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+/* ——— Financement ——— */
+.finance {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: center;
+  padding-block: clamp(56px, 7vw, 100px);
+  border-top: 1px solid var(--line);
+}
+
+.finance > * {
+  margin-inline: 0;
+}
+
+.finance__text {
+  grid-column: 1 / 7;
+}
+
+.finance__text p {
+  max-width: 40ch;
+  margin: 20px 0 0;
+  color: var(--ink-2);
+  font-size: 18px;
+}
+
+.finance__list {
+  display: grid;
+  grid-column: 7 / 13;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.finance__list a {
+  display: grid;
+  gap: 4px;
+  height: 100%;
+  padding: 24px 26px 26px;
+  border: 1.5px solid var(--ink);
+  border-radius: 22px;
+  text-decoration: none;
+  transition: background-color 0.25s;
+}
+
+.finance__list a:hover {
+  background: var(--shallow);
+}
+
+.finance__list strong {
+  font-size: 21px;
+  font-stretch: 116%;
+  font-weight: 760;
+  letter-spacing: -0.02em;
+}
+
+.finance__list span {
+  color: var(--ink-2);
+  font-size: 15px;
+}
+
+/* ——— Questions ——— */
+.faq {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: start;
+  padding-block: clamp(56px, 7vw, 110px) clamp(80px, 10vw, 150px);
+  border-top: 1px solid var(--line);
+}
+
+.faq > * {
+  margin-inline: 0;
+}
+
+.faq .h2 {
+  grid-column: 1 / 5;
+}
+
+.faq__list {
+  grid-column: 5 / 13;
+}
+
+.faq details {
+  border-top: 1px solid var(--line);
+}
+
+.faq details:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq summary {
+  position: relative;
+  padding: 20px 52px 20px 0;
+  font-size: 18.5px;
+  font-weight: 650;
+  line-height: 1.35;
+  list-style: none;
+  cursor: pointer;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::before,
+.faq summary::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  width: 16px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.faq summary::after {
+  transform: rotate(90deg);
+}
+
+.faq details[open] summary::after {
+  transform: rotate(0deg);
+}
+
+.faq details p {
+  max-width: 60ch;
+  margin: 0 0 22px;
+  color: var(--ink-2);
+}
+
+.faq details p a {
+  color: var(--pool-ink);
+  font-weight: 600;
+}
+
+.faq details::details-content {
+  height: 0;
+  overflow: clip;
+  transition: height 0.45s var(--ease-io), content-visibility 0.45s allow-discrete;
+}
+
+.faq details[open]::details-content {
+  height: auto;
+}
+
+/* ——— La visite gratuite, à la nuit ——— */
+.visit {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(96px, 11vw, 170px);
+  background: var(--night);
+  color: var(--deck);
+}
+
+main > .visit > * {
+  max-width: none;
+}
+
+.visit__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+}
+
+.visit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, var(--night) 0%, rgba(10, 26, 35, 0.5) 30%, rgba(10, 26, 35, 0.62) 68%, var(--night) 100%), linear-gradient(90deg, rgba(10, 26, 35, 0.55), rgba(10, 26, 35, 0) 60%);
+}
+
+.visit__inner {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: start;
+  max-width: var(--max) !important;
+}
+
+.visit__intro {
+  grid-column: 1 / 6;
+}
+
+.visit .h2 {
+  color: #fff;
+}
+
+.visit__intro > p {
+  max-width: 40ch;
+  margin: 26px 0 0;
+  color: rgba(244, 245, 241, 0.82);
+  font-size: 18px;
+}
+
+.contact {
+  display: grid;
+  gap: 14px;
+  margin: 40px 0 0;
+  padding: 26px 0 0;
+  border-top: 1px solid rgba(244, 245, 241, 0.18);
+  list-style: none;
+}
+
+.contact li {
+  display: grid;
+  grid-template-columns: 5.2rem minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+}
+
+.contact__label {
+  color: rgba(244, 245, 241, 0.62);
+  font-size: 14px;
+}
+
+.contact a {
+  display: inline-block;
+  justify-self: start;
+  padding-block: 10px;
+  margin-block: -10px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration-color: rgba(244, 245, 241, 0.4);
+  text-underline-offset: 4px;
+}
+
+.open {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 10px 2px;
+  border-radius: 999px;
+  background: rgba(63, 208, 232, 0.16);
+  color: var(--glow);
+  font-size: 13.5px;
+  font-style: normal;
+  font-weight: 650;
+}
+
+.open.is-closed {
+  background: rgba(244, 245, 241, 0.1);
+  color: rgba(244, 245, 241, 0.75);
+}
+
+.form {
+  grid-column: 7 / 13;
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid rgba(244, 245, 241, 0.16);
+  border-radius: var(--r-photo);
+  background: rgba(10, 26, 35, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.form__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 24px;
+  padding: 0;
+  border: 0;
+}
+
+.form__chips legend {
+  margin-bottom: 12px;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.form__chips label {
+  position: relative;
+}
+
+.form__chips input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.form__chips span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid rgba(244, 245, 241, 0.5);
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 600;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.form__chips input:checked + span {
+  border-color: var(--glow);
+  background: var(--glow);
+  color: var(--night);
+}
+
+.form__chips input:focus-visible + span {
+  outline: 3px solid var(--glow);
+  outline-offset: 2px;
+}
+
+.form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.field--wide {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  color: rgba(244, 245, 241, 0.86);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.opt {
+  color: rgba(244, 245, 241, 0.55);
+  font-weight: 450;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid rgba(244, 245, 241, 0.5);
+  border-radius: 14px;
+  background: rgba(10, 26, 35, 0.6);
+  color: #fff;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--glow);
+  outline: none;
+  background: rgba(10, 26, 35, 0.85);
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--glow);
+  outline-offset: 1px;
+}
+
+.field [aria-invalid="true"] {
+  border-color: #FF9E6E;
+}
+
+.field__count {
+  justify-self: end;
+  color: rgba(244, 245, 241, 0.55);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.form__error {
+  margin: 18px 0 0;
+  color: #FFB48C;
+  font-weight: 600;
+}
+
+.form__send {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+  margin: 22px 0 0;
+}
+
+.form__note {
+  max-width: 32ch;
+  color: rgba(244, 245, 241, 0.62);
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+/* ——— Pied de page ——— */
+.foot {
+  padding: 44px var(--pad) 48px;
+  background: var(--night);
+  color: rgba(244, 245, 241, 0.7);
+  border-top: 1px solid rgba(244, 245, 241, 0.1);
+  font-size: 15px;
+}
+
+.foot__inner {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 18px var(--gap);
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.foot__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  grid-column: 1 / 5;
+  margin: 0;
+  color: #fff;
+  font-size: 17px;
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.foot .brand__mark {
+  fill: var(--night);
+}
+
+.foot .brand__mark rect {
+  stroke: var(--shallow);
+}
+
+.foot__line {
+  grid-column: 5 / 9;
+  margin: 0;
+}
+
+.foot__facts {
+  grid-column: 9 / 13;
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.foot a {
+  display: inline-block;
+  padding-block: 4px;
+  margin-block: -4px;
+  color: #fff;
+  text-decoration-color: rgba(244, 245, 241, 0.35);
+  text-underline-offset: 3px;
+}
+
+.foot__copy {
+  grid-column: 1 / -1;
+  margin: 18px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(244, 245, 241, 0.1);
+  font-size: 13.5px;
+}
+
+/* ——— Barre d'appel, sur téléphone ——— */
+.dock {
+  display: none;
+}
+
+/* ——— Visionneuse ——— */
+.lightbox {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--night);
+  color: var(--deck);
+}
+
+.lightbox::backdrop {
+  background: transparent;
+}
+
+.lightbox[open] {
+  display: grid;
+  place-items: center;
+  animation: fade 0.3s ease-out;
+}
+
+.lightbox__figure {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  margin: 0;
+  padding: 72px 96px 64px;
+}
+
+.lightbox__figure img {
+  max-width: min(1400px, 100%);
+  max-height: calc(100vh - 190px);
+  max-height: calc(100dvh - 190px);
+  width: auto;
+  height: auto;
+  border-radius: var(--r-small);
+  animation: rise 0.45s var(--ease-out);
+}
+
+.lightbox__figure figcaption {
+  max-width: 60ch;
+  text-align: center;
+  font-size: 15.5px;
+  color: rgba(244, 245, 241, 0.86);
+}
+
+.lightbox__btn,
+.lightbox__close {
+  position: absolute;
+  border: 1px solid rgba(244, 245, 241, 0.5);
+  background: rgba(10, 26, 35, 0.5);
+  color: var(--deck);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.lightbox__btn {
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-top: -28px;
+  border-radius: 50%;
+}
+
+.lightbox__btn svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lightbox__btn:hover,
+.lightbox__close:hover {
+  background: rgba(244, 245, 241, 0.14);
+}
+
+.lightbox__prev {
+  left: 22px;
+}
+
+.lightbox__next {
+  right: 22px;
+}
+
+.lightbox__close {
+  top: 18px;
+  right: 22px;
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.lightbox__count {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  margin: 0;
+  color: rgba(244, 245, 241, 0.7);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: scale(0.965);
+  }
+}
+
+/* ——— Écrans moyens ——— */
+@media (max-width: 1180px) {
+  .nav {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: grid;
+    align-content: start;
+    gap: 36px;
+    padding: calc(var(--top) + 24px) var(--pad) 40px;
+    background: var(--deck);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s, visibility 0s 0.35s;
+  }
+
+  .nav ul {
+    display: grid;
+    gap: 6px;
+  }
+
+  .nav ul a {
+    font-size: clamp(30px, 7vw, 44px);
+    font-stretch: 125%;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .nav__more {
+    flex-wrap: wrap;
+  }
+
+  .nav__tel {
+    font-size: 18px;
+  }
+
+  .menu {
+    display: inline-flex;
+  }
+
+  .menu-open .nav {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.35s;
+  }
+
+  .menu-open .top {
+    background: var(--deck);
+    box-shadow: none;
+    transform: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (max-width: 1080px) {
+  .hero__text {
+    grid-column: 1 / 13;
+    grid-row: 2;
+    margin-top: 36px;
+  }
+
+  .proof {
+    margin-top: 32px;
+  }
+
+  .plan {
+    grid-column: 1 / 13;
+  }
+
+  .hero__lede {
+    max-width: 52ch;
+  }
+
+  .types {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dig__head {
+    grid-column: 1 / 13;
+  }
+
+  .dig__chart {
+    grid-column: 1 / 13;
+  }
+
+  .shapes__view {
+    grid-column: 1 / 13;
+    position: relative;
+    top: 0;
+  }
+
+  .shapes__pick {
+    grid-column: 1 / 13;
+    margin-top: 24px;
+  }
+
+  .onecall__text {
+    grid-column: 1 / 13;
+  }
+
+  .onecall__photo {
+    grid-column: 1 / 8;
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ——— Téléphones ——— */
+@media (max-width: 760px) {
+  body {
+    font-size: 16.5px;
+  }
+
+  .head {
+    margin-bottom: 32px;
+  }
+
+  .head .h2,
+  .head__text {
+    grid-column: 1 / 13;
+  }
+
+  .head__text {
+    font-size: 17px;
+  }
+
+  /* une ligne par morceau ; il peut passer à la ligne si l'on élargit l'espacement du texte */
+  .hero__line > span {
+    display: block;
+    white-space: normal;
+  }
+
+  .hero__title {
+    font-size: clamp(40px, 11.6vw, 64px);
+    line-height: 0.95;
+  }
+
+  .types {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dig {
+    --name: 6.4rem;
+    --time: 0rem;
+    --col-gap: 12px;
+  }
+
+  .dig__row {
+    grid-template-columns: var(--name) minmax(0, 1fr);
+    row-gap: 8px;
+  }
+
+  .dig__time {
+    grid-column: 2;
+    font-size: 15px;
+  }
+
+  .dig__axis li {
+    font-size: 12px;
+  }
+
+  .dig__axis li:nth-child(2),
+  .dig__axis li:nth-child(4) {
+    display: none;
+  }
+
+  /* la plus longue forme (75 + 2 pieds) tient toujours dans la largeur, même à 320 px */
+  .shapes__pick {
+    --ft: min(4.3px, (100vw - 2 * var(--pad)) / 77);
+  }
+
+  .shapes__list {
+    gap: 26px 26px;
+  }
+
+  .feature__photo,
+  .feature--flip .feature__photo,
+  .feature__text,
+  .feature--flip .feature__text {
+    grid-column: 1 / 13;
+    grid-row: auto;
+  }
+
+  .onecall__photo {
+    grid-column: 1 / 13;
+  }
+
+  .panel__text,
+  .ba,
+  .panel__photo,
+  .pip {
+    grid-column: 1 / 13;
+  }
+
+  .pip {
+    overflow-x: auto;
+  }
+
+  .pip img {
+    width: 760px;
+    max-width: none;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 42vw;
+    gap: 8px;
+  }
+
+  .owner__text,
+  .owner__facts,
+  .finance__text,
+  .finance__list,
+  .faq .h2,
+  .faq__list,
+  .visit__intro,
+  .form {
+    grid-column: 1 / 13;
+  }
+
+  .owner__facts {
+    margin-top: 20px;
+  }
+
+  .finance__list {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 12px;
+  }
+
+  .faq__list {
+    margin-top: 8px;
+  }
+
+  .form {
+    margin-top: 28px;
+  }
+
+  .form__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .foot {
+    padding-bottom: 104px;
+  }
+
+  .foot__brand,
+  .foot__line,
+  .foot__facts {
+    grid-column: 1 / 13;
+  }
+
+  .dock {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 8px;
+    margin: 0;
+    padding: 8px;
+    border-radius: 999px;
+    background: rgba(23, 35, 43, 0.92);
+    box-shadow: 0 10px 30px rgba(10, 26, 35, 0.28);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    transform: translateY(140%);
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  .dock.is-on {
+    transform: none;
+  }
+
+  .dock__call {
+    display: grid;
+    place-items: center;
+    min-height: 48px;
+    border: 1px solid rgba(244, 245, 241, 0.5);
+    border-radius: 999px;
+    color: var(--deck);
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .dock .btn {
+    min-height: 48px;
+    padding-inline: 12px;
+    white-space: nowrap;
+  }
+
+  .lightbox__figure {
+    padding: 72px 14px 96px;
+  }
+
+  .lightbox__btn {
+    top: auto;
+    bottom: 22px;
+    margin-top: 0;
+  }
+
+  .lightbox__prev {
+    left: calc(50% - 68px);
+  }
+
+  .lightbox__next {
+    right: calc(50% - 68px);
+  }
+}
+
+@media (max-width: 420px) {
+  .brand__name {
+    font-size: 17px;
+  }
+
+  .tab {
+    padding-inline: 14px;
+    font-size: 15px;
+  }
+
+  /* l'adresse courriel tient sur une ligne jusqu'à 320 px */
+  .contact li {
+    grid-template-columns: 4.2rem minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  /* le mot reste lu par les lecteurs d'écran */
+  .menu__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "HomeAndConstructionBusiness",
+      "@id": "https://madriverpools.com/#business",
+      "name": "Mad River Pools",
+      "legalName": "Mad River Pool Construction",
+      "slogan": "Nothing’s as cool as a Mad River Pool.",
+      "url": "https://madriverpools.com/",
+      "image": "https://madriverpools.com/assets/og.jpg",
+      "telephone": "+1-407-810-3453",
+      "email": "madriverpool@gmail.com",
+      "foundingDate": "1998",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1704 Shawnee Trail",
+        "addressLocality": "Maitland",
+        "addressRegion": "FL",
+        "postalCode": "32751",
+        "addressCountry": "US"
+      },
+      "geo": {"@type": "GeoCoordinates", "latitude": 28.624364, "longitude": -81.353549},
+      "areaServed": "Central Florida",
+      "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "09:00", "closes": "17:00"}],
+      "hasCredential": {"@type": "EducationalOccupationalCredential", "credentialCategory": "license", "name": "Florida state license CPC 1457780"},
+      "sameAs": ["https://www.facebook.com/MadRiverPoolConstruction"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Pool construction and renovation",
+        "itemListElement": [
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Concrete and gunite pool construction"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Fiberglass pool installation"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Vinyl liner pool installation"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Spa and hot tub installation"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Paver and travertine pool decks"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Pool renovation and repair"}}
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "How long does it take to build a pool?", "acceptedAnswer": {"@type": "Answer", "text": "From dig to deck: 3 to 3½ weeks for a concrete pool, 2 to 2½ weeks for a vinyl liner pool, and about two weeks for a fiberglass pool."}},
+        {"@type": "Question", "name": "Do you take care of the permits?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We handle permitting, excavation, decking, electrical work, screen enclosures, landscaping, low-voltage lighting, irrigation and retaining walls."}},
+        {"@type": "Question", "name": "Can you add a spa to my existing pool?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We can install a spa or hot tub in your existing pool area, or build a new spa with its own landscaping and paver deck."}},
+        {"@type": "Question", "name": "Do you repair fiberglass, vinyl and concrete pools?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. We repair cracked, faded or worn fiberglass, replace ripped or rotted vinyl liners, and renovate cracking or deteriorating concrete and gunite pools."}},
+        {"@type": "Question", "name": "Do you offer financing?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, through HFS Financial and Lyon Financial."}},
+        {"@type": "Question", "name": "What does the first visit cost?", "acceptedAnswer": {"@type": "Answer", "text": "Nothing. The home visit is free and comes with no obligation."}}
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top" data-top>
+  <div class="top__bar">
+    <a class="brand" href="#top" aria-label="Mad River Pools, back to top">
+      <svg class="brand__mark" viewBox="0 0 44 30" aria-hidden="true"><rect x="12" y="2" width="30" height="20" rx="5"/><circle cx="12" cy="20" r="8"/></svg>
+      <span class="brand__name">Mad River Pools</span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <ul>
+        <li><a href="#pools">Pools</a></li>
+        <li><a href="#shapes">Shapes</a></li>
+        <li><a href="#backyard">Spas &amp; decks</a></li>
+        <li><a href="#renovation">Renovation</a></li>
+        <li><a href="#work">Our work</a></li>
+        <li><a href="#financing">Financing</a></li>
+      </ul>
+      <p class="nav__more">
+        <a class="nav__tel" href="tel:+14078103453">(407) 810-3453</a>
+        <a class="btn btn--small" href="#visit">Free home visit</a>
+      </p>
+    </nav>
+    <button class="menu" type="button" aria-expanded="false" aria-controls="nav" data-menu><span class="menu__lines" aria-hidden="true"></span><span class="menu__label">Menu</span></button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ——— Ouverture : le plan qui se trace, puis se remplit ——— -->
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <h1 class="hero__title" id="hero-title"><span class="hero__line"><span>Nothing’s as</span> <span>cool as</span></span> <span class="hero__line"><span>a Mad River</span> <span>Pool.</span></span></h1>
+  <div class="hero__body">
+    <div class="hero__text">
+      <p class="hero__lede">Pools, spas and backyards built across Central Florida since 1998. Every job is supervised by owner and master pool builder Mike Ramée, from the dig to the deck.</p>
+      <p class="hero__actions">
+        <a class="btn" href="#visit">Book a free home visit</a>
+        <a class="hero__tel" href="tel:+14078103453">or call <span>(407) 810-3453</span></a>
+      </p>
+      <ul class="proof">
+        <li><strong>Since 1998</strong> in Central Florida</li>
+        <li><strong>State license CPC 1457780</strong> <a href="https://www.myfloridalicense.com/wl11.asp" rel="noopener" target="_blank">Look it up<span class="sr"> on the Florida license portal (opens in a new tab)</span></a></li>
+        <li><strong>Latham Pools</strong> dealer</li>
+      </ul>
+    </div>
+    <figure class="plan" data-plan>
+      <svg class="plan__line plan__line--pool" viewBox="0 0 1000 640" aria-hidden="true"><path pathLength="1" d="M216 10H944A46 46 0 0 1 990 56V584A46 46 0 0 1 944 630H216A46 46 0 0 1 170 584V56A46 46 0 0 1 216 10Z"/></svg>
+      <div class="plan__pool"><img src="assets/img/hero-pool.avif" srcset="assets/img/hero-pool.w640.avif 640w, assets/img/hero-pool.w900.avif 900w, assets/img/hero-pool.avif 1600w" width="1600" height="1068" sizes="(max-width: 1080px) 76vw, min(48vw, 680px)" alt="Long concrete pool with a raised spa, wall spillways and a travertine deck" fetchpriority="high"></div>
+      <div class="plan__spa"><img src="assets/img/hero-spa.avif" srcset="assets/img/hero-spa.w360.avif 360w, assets/img/hero-spa.avif 760w" width="760" height="762" sizes="(max-width: 1080px) 28vw, min(17vw, 270px)" alt="Round raised spa with a travertine cap and a glass tile band"></div>
+      <svg class="plan__line plan__line--spa" viewBox="0 0 1000 640" aria-hidden="true"><circle pathLength="1" cx="205" cy="452" r="174"/></svg>
+    </figure>
+  </div>
+</section>
+
+<!-- ——— Trois façons de construire ——— -->
+<section class="pools" id="pools" aria-labelledby="pools-title">
+  <header class="head">
+    <h2 class="h2" id="pools-title">Three ways to build a pool. We build all three.</h2>
+    <p class="head__text">Concrete, fiberglass and vinyl liner each have their strengths. Our design team will help you decide what fits your yard best, and where.</p>
+  </header>
+
+  <div class="types">
+    <article class="type">
+      <figure class="type__photo"><img src="assets/img/type-concrete.avif" srcset="assets/img/type-concrete.w700.avif 700w, assets/img/type-concrete.avif 1100w" width="1100" height="759" sizes="(max-width: 760px) 92vw, (max-width: 1080px) 46vw, 31vw" alt="Dark-finish concrete pool with a raised spa under a screen enclosure, early morning" loading="lazy"></figure>
+      <h3 class="type__name">Concrete <span>gunite</span></h3>
+      <p class="type__pitch">Total design freedom. Size, shape and features are limited only by your yard and your imagination.</p>
+      <dl class="type__facts">
+        <div><dt>Finishes</dt><dd>Quartz aggregate (Diamond Brite), pebble (PebbleTec) or Beadcrete</dd></div>
+        <div><dt>Made for Florida</dt><dd>Won’t tear, warp or discolor under the sun, and keeps its strength for years</dd></div>
+        <div><dt>Value</dt><dd>A well-built concrete pool can significantly raise the value of your home</dd></div>
+      </dl>
+      <a class="more" href="#visit" data-interest="New pool">Ask about a concrete pool</a>
+    </article>
+    <article class="type">
+      <figure class="type__photo"><img src="assets/img/type-fiberglass.avif" srcset="assets/img/type-fiberglass.w700.avif 700w, assets/img/type-fiberglass.avif 1100w" width="1100" height="759" sizes="(max-width: 760px) 92vw, (max-width: 1080px) 46vw, 31vw" alt="Freeform fiberglass pool with a raised round spa and a travertine deck" loading="lazy"></figure>
+      <h3 class="type__name">Fiberglass</h3>
+      <p class="type__pitch">One-piece shells from Latham, the largest manufacturer of fabricated pools in the world, set by Central Florida’s most experienced fiberglass contractor.</p>
+      <dl class="type__facts">
+        <div><dt>Warranty</dt><dd>Limited lifetime warranties</dd></div>
+        <div><dt>Your way</dt><dd>A complete installation, or our support if you’d rather do it yourself</dd></div>
+        <div><dt>Repairs</dt><dd>Cracks, fading and worn surfaces on existing fiberglass pools</dd></div>
+      </dl>
+      <a class="more" href="#visit" data-interest="New pool">Ask about a fiberglass pool</a>
+    </article>
+    <article class="type">
+      <figure class="type__photo"><img src="assets/img/type-vinyl.avif" width="720" height="540" alt="Vinyl liner pool with a modified Roman end and deck jets" loading="lazy"></figure>
+      <h3 class="type__name">Vinyl liner</h3>
+      <p class="type__pitch">Custom shapes and a wide choice of liner patterns and colors, on polymer or concrete walls.</p>
+      <dl class="type__facts">
+        <div><dt>Warranty</dt><dd>Lifetime warranty on the superstructure</dd></div>
+        <div><dt>Easy care</dt><dd>Liners engineered to keep chemical balancing to a minimum</dd></div>
+        <div><dt>Shapes</dt><dd><a href="#shapes">See the shapes we’ve installed</a></dd></div>
+      </dl>
+      <a class="more" href="#visit" data-interest="New pool">Ask about a vinyl liner pool</a>
+    </article>
+  </div>
+
+  <figure class="dig" data-dig aria-labelledby="dig-title">
+    <figcaption class="dig__head">
+      <h3 class="dig__title" id="dig-title">From dig to deck</h3>
+      <p class="dig__text">Typical time from the first day of digging to the finished deck.</p>
+    </figcaption>
+    <div class="dig__chart">
+      <ol class="dig__axis" aria-hidden="true"><li>Dig</li><li>Week 1</li><li>Week 2</li><li>Week 3</li><li>Week 4</li></ol>
+      <ul class="dig__rows">
+        <li class="dig__row" style="--from:3;--to:3.5"><span class="dig__name">Concrete</span><span class="dig__track" aria-hidden="true"><span class="dig__bar"></span><span class="dig__range"></span></span><span class="dig__time">3 to 3½ weeks</span></li>
+        <li class="dig__row dig__row--about" style="--from:2;--to:2"><span class="dig__name">Fiberglass</span><span class="dig__track" aria-hidden="true"><span class="dig__bar"></span><span class="dig__range"></span></span><span class="dig__time">About 2 weeks</span></li>
+        <li class="dig__row" style="--from:2;--to:2.5"><span class="dig__name">Vinyl liner</span><span class="dig__track" aria-hidden="true"><span class="dig__bar"></span><span class="dig__range"></span></span><span class="dig__time">2 to 2½ weeks</span></li>
+      </ul>
+    </div>
+  </figure>
+</section>
+
+<!-- ——— Les formes, à l'échelle ——— -->
+<section class="shapes" id="shapes" aria-labelledby="shapes-title">
+  <header class="head">
+    <h2 class="h2" id="shapes-title">Vinyl liner shapes, drawn to scale.</h2>
+    <p class="head__text">A few of the vinyl liner pools we’ve installed, all at the same scale. Choose a shape to see the pool.</p>
+  </header>
+  <div class="shapes__body">
+    <figure class="shapes__view">
+      <div class="shapes__photos">
+        <img src="assets/img/shape-15x30k.avif" width="720" height="540" alt="15 by 30 foot kidney-shaped vinyl liner pool with a rock waterfall" data-shape-photo="15x30k" loading="lazy">
+        <img src="assets/img/shape-18x75.avif" width="720" height="540" alt="18 by 75 foot rectangular vinyl liner pool stretching across a lawn" data-shape-photo="18x75" loading="lazy">
+        <img src="assets/img/shape-18x40.avif" width="720" height="540" alt="18 by 40 foot vinyl liner pool with modified Roman ends, a slide and deck jets" data-shape-photo="18x40" loading="lazy">
+        <img src="assets/img/shape-15x30g.avif" width="720" height="540" alt="15 by 30 foot modified Grecian vinyl liner pool with a palm planter" data-shape-photo="15x30g" loading="lazy">
+        <img src="assets/img/shape-14x30.avif" width="720" height="540" alt="14 by 30 foot rectangular vinyl liner pool under a screen enclosure" data-shape-photo="14x30" loading="lazy">
+        <img src="assets/img/shape-12x30.avif" width="720" height="540" alt="12 by 30 foot modified ell vinyl liner pool under a screen enclosure" data-shape-photo="12x30" loading="lazy">
+        <img src="assets/img/shape-12x24.avif" width="720" height="540" alt="12 by 24 foot Roman end vinyl liner pool under a screen enclosure" data-shape-photo="12x24" loading="lazy">
+        <img src="assets/img/shape-10x22.avif" width="720" height="540" alt="10 by 22 foot Roman end vinyl liner pool with steps on the side" data-shape-photo="10x22" loading="lazy">
+      </div>
+      <figcaption class="shapes__caption" aria-live="polite"><span data-shape-name>Kidney</span>, <span data-shape-size>15 × 30 ft</span></figcaption>
+    </figure>
+    <div class="shapes__pick">
+      <ul class="shapes__list" role="list">
+        <li><button class="shape" type="button" aria-pressed="false" data-shape="18x75" data-name="Rectangle" data-size="18 × 75 ft" style="--l:75;--w:18"><svg viewBox="-1 -1 77 20" aria-hidden="true"><path pathLength="1" d="M1.5 0H73.5A1.5 1.5 0 0 1 75 1.5V16.5A1.5 1.5 0 0 1 73.5 18H1.5A1.5 1.5 0 0 1 0 16.5V1.5A1.5 1.5 0 0 1 1.5 0Z"/></svg><span class="shape__name">Rectangle</span><span class="shape__size">18 × 75 ft</span></button></li>
+        <li><button class="shape" type="button" aria-pressed="false" data-shape="18x40" data-name="Modified Roman end" data-size="18 × 40 ft" style="--l:40;--w:18"><svg viewBox="-1 -1 42 20" aria-hidden="true"><path pathLength="1" d="M4 0H36V1A10 10 0 0 1 36 17V18H4V17A10 10 0 0 1 4 1Z"/></svg><span class="shape__name">Modified Roman end</span><span class="shape__size">18 × 40 ft</span></button></li>
+        <li><button class="shape" type="button" aria-pressed="true" data-shape="15x30k" data-name="Kidney" data-size="15 × 30 ft" style="--l:30;--w:15"><svg viewBox="-1 -1 32 17" aria-hidden="true"><path pathLength="1" d="M0 8C0 3 4 0 9 0C12 0 13 3.2 15 3.6C17.2 4 18.5 1.5 22.5 1.5C27 1.5 30 4.2 30 7.6C30 11.6 26.5 14.2 22 14.6C18 15 14 15 10 15C4 15 0 12.6 0 8Z"/></svg><span class="shape__name">Kidney</span><span class="shape__size">15 × 30 ft</span></button></li>
+        <li><button class="shape" type="button" aria-pressed="false" data-shape="15x30g" data-name="Modified Grecian" data-size="15 × 30 ft" style="--l:30;--w:15"><svg viewBox="-1 -1 32 17" aria-hidden="true"><path pathLength="1" d="M2.5 0H27.5L30 2.5V12.5L27.5 15H2.5L0 12.5V2.5Z"/></svg><span class="shape__name">Modified Grecian</span><span class="shape__size">15 × 30 ft</span></button></li>
+        <li><button class="shape" type="button" aria-pressed="false" data-shape="14x30" data-name="Rectangle" data-size="14 × 30 ft" style="--l:30;--w:14"><svg viewBox="-1 -1 32 16" aria-hidden="true"><path pathLength="1" d="M1 0H29A1 1 0 0 1 30 1V13A1 1 0 0 1 29 14H1A1 1 0 0 1 0 13V1A1 1 0 0 1 1 0Z"/></svg><span class="shape__name">Rectangle</span><span class="shape__size">14 × 30 ft</span></button></li>
+        <li><button class="shape" type="button" aria-pressed="false" data-shape="12x30" data-name="Modified ell" data-size="12 × 30 ft" style="--l:30;--w:12"><svg viewBox="-1 -1 32 14" aria-hidden="true"><path pathLength="1" d="M0.8 0H29.2A0.8 0.8 0 0 1 30 0.8V8.2A0.8 0.8 0 0 1 29.2 9H10V11.2A0.8 0.8 0 0 1 9.2 12H0.8A0.8 0.8 0 0 1 0 11.2V0.8A0.8 0.8 0 0 1 0.8 0Z"/></svg><span class="shape__name">Modified ell</span><span class="shape__size">12 × 30 ft</span></button></li>
+        <li><button class="shape" type="button" aria-pressed="false" data-shape="12x24" data-name="Roman end" data-size="12 × 24 ft" style="--l:24;--w:12"><svg viewBox="-1 -1 26 14" aria-hidden="true"><path pathLength="1" d="M1 0H21V1A5.667 5.667 0 0 1 21 11V12H1A1 1 0 0 1 0 11V1A1 1 0 0 1 1 0Z"/></svg><span class="shape__name">Roman end</span><span class="shape__size">12 × 24 ft</span></button></li>
+        <li><button class="shape" type="button" aria-pressed="false" data-shape="10x22" data-name="Roman end" data-size="10 × 22 ft" style="--l:22;--w:10"><svg viewBox="-1 -1 24 12" aria-hidden="true"><path pathLength="1" d="M1 0H19.5V1A4.45 4.45 0 0 1 19.5 9V10H1A1 1 0 0 1 0 9V1A1 1 0 0 1 1 0Z"/></svg><span class="shape__name">Roman end</span><span class="shape__size">10 × 22 ft</span></button></li>
+      </ul>
+      <p class="shapes__scale"><span class="shapes__ruler" aria-hidden="true"></span>10 ft. Outlines are simplified; sizes are those of the finished pools.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ——— Spas, terrasses, et tout le reste ——— -->
+<section class="yard" id="backyard" aria-labelledby="yard-title">
+  <header class="head">
+    <h2 class="h2" id="yard-title">Spas, decks and everything around the pool.</h2>
+  </header>
+  <div class="yard__pair">
+    <article class="feature">
+      <figure class="feature__photo"><img src="assets/img/spa-wall.avif" srcset="assets/img/spa-wall.w800.avif 800w, assets/img/spa-wall.avif 1280w" width="1280" height="960" sizes="(max-width: 760px) 92vw, 55vw" alt="Octagonal spa with a sheer water wall set in stacked stone" loading="lazy"></figure>
+      <div class="feature__text">
+        <h3 class="h3">Spas and hot tubs</h3>
+        <p>Add a spa to the pool you already have, or build a new one with its own landscaping and paver deck. Pick from our manufacturers’ designs, sizes and colors, or have one designed for you. We build spools and swim spas too.</p>
+        <p class="feature__note">Tired spa? We renovate fiberglass and concrete spas.</p>
+      </div>
+    </article>
+    <article class="feature feature--flip">
+      <figure class="feature__photo"><img src="assets/img/deck-patio.avif" srcset="assets/img/deck-patio.w800.avif 800w, assets/img/deck-patio.avif 1600w" width="1600" height="1199" sizes="(max-width: 760px) 92vw, 55vw" alt="Travertine patio under a cedar pergola, with outdoor seating and a rock waterfall" loading="lazy"></figure>
+      <div class="feature__text">
+        <h3 class="h3">Pavers and decks</h3>
+        <p>Pavers, travertine, or concrete finished with Kool Deck, for pool decks, patios, walkways and driveways. We work with you on colors and textures that suit your home.</p>
+      </div>
+    </article>
+  </div>
+  <div class="onecall">
+    <p class="onecall__text">One call covers the whole project: <span>the permits</span>, <span>the dig</span>, <span>the deck</span>, <span>the electrical</span>, <span>the screen enclosure</span>, <span>the landscaping</span>, <span>the low-voltage lighting</span>, <span>the irrigation</span> and <span>the retaining walls</span>.</p>
+    <figure class="onecall__photo"><img src="assets/img/deck-water.avif" srcset="assets/img/deck-water.w800.avif 800w, assets/img/deck-water.avif 1600w" width="1600" height="1199" sizes="(max-width: 760px) 92vw, (max-width: 1080px) 56vw, 31vw" alt="Rock water feature with a stone bridge, new plantings and a pergola" loading="lazy"></figure>
+  </div>
+</section>
+
+<!-- ——— Rénovation ——— -->
+<section class="reno" id="renovation" aria-labelledby="reno-title">
+  <header class="head">
+    <h2 class="h2" id="reno-title">Is your pool showing its age?</h2>
+    <p class="head__text">We renovate, remodel and repair pools of every kind. Tell us what’s going on.</p>
+  </header>
+  <div class="reno__tabs" role="tablist" aria-label="What’s wrong with your pool?">
+    <button class="tab" type="button" role="tab" id="tab-liner" aria-controls="panel-liner" aria-selected="true">The liner is ripped or rotted</button>
+    <button class="tab" type="button" role="tab" id="tab-fiber" aria-controls="panel-fiber" aria-selected="false" tabindex="-1">The fiberglass is cracked or faded</button>
+    <button class="tab" type="button" role="tab" id="tab-concrete" aria-controls="panel-concrete" aria-selected="false" tabindex="-1">The concrete is cracking</button>
+    <button class="tab" type="button" role="tab" id="tab-look" aria-controls="panel-look" aria-selected="false" tabindex="-1">It’s time for a new look</button>
+  </div>
+
+  <div class="panel" role="tabpanel" id="panel-liner" aria-labelledby="tab-liner" tabindex="0">
+    <div class="panel__text">
+      <p>A worn liner, a structure that needs attention, or a design you’ve outgrown: we bring vinyl liner pools back to life.</p>
+      <a class="more" href="#visit" data-interest="Renovation">Ask about your liner</a>
+    </div>
+    <div class="ba" data-ba>
+      <div class="ba__pair is-on" data-pair>
+        <figure class="ba__shot"><img src="assets/img/reno-a-before.avif" srcset="assets/img/reno-a-before.w600.avif 600w, assets/img/reno-a-before.avif 1100w" width="1100" height="660" sizes="(max-width: 760px) 46vw, 30vw" alt="Before: vinyl pool with green water and a cracked concrete deck" loading="lazy"><figcaption>Before</figcaption></figure>
+        <figure class="ba__shot ba__shot--after"><img src="assets/img/reno-a-after.avif" srcset="assets/img/reno-a-after.w600.avif 600w, assets/img/reno-a-after.avif 1100w" width="1100" height="660" sizes="(max-width: 760px) 46vw, 30vw" alt="After: the same pool with a new blue liner and a brick paver deck" loading="lazy"><figcaption>After</figcaption></figure>
+      </div>
+      <div class="ba__pair" data-pair hidden>
+        <figure class="ba__shot"><img src="assets/img/reno-b-before.avif" width="550" height="321" alt="Before: collapsed vinyl pool walls and a torn liner" loading="lazy"><figcaption>Before</figcaption></figure>
+        <figure class="ba__shot ba__shot--after"><img src="assets/img/reno-b-after.avif" width="550" height="321" alt="After: rebuilt rectangular vinyl pool with a new deck" loading="lazy"><figcaption>After</figcaption></figure>
+      </div>
+      <div class="ba__pair" data-pair hidden>
+        <figure class="ba__shot"><img src="assets/img/reno-f-before.avif" width="550" height="321" alt="Before: 19 by 37 foot pool emptied down to its walls under a screen enclosure" loading="lazy"><figcaption>Before</figcaption></figure>
+        <figure class="ba__shot ba__shot--after"><img src="assets/img/reno-f-after.avif" width="550" height="321" alt="After: the 19 by 37 foot pool with a new liner and a paver deck" loading="lazy"><figcaption>After</figcaption></figure>
+      </div>
+      <p class="ba__pick"><button type="button" aria-pressed="true" aria-label="Project 1 of 3">1</button><button type="button" aria-pressed="false" aria-label="Project 2 of 3">2</button><button type="button" aria-pressed="false" aria-label="Project 3 of 3">3</button></p>
+    </div>
+  </div>
+
+  <div class="panel" role="tabpanel" id="panel-fiber" aria-labelledby="tab-fiber" tabindex="0" hidden>
+    <div class="panel__text">
+      <p>Cracks, fading, or a surface that’s breaking down? Act quickly to keep it from getting worse. We repair and renovate fiberglass pools with top-quality materials and proven techniques, from small fixes to a complete renovation.</p>
+      <a class="more" href="#visit" data-interest="Renovation">Ask about your fiberglass pool</a>
+    </div>
+    <figure class="panel__photo"><img src="assets/img/g-viking.avif" srcset="assets/img/g-viking.w700.avif 700w, assets/img/g-viking.avif 1400w" width="1400" height="1050" sizes="(max-width: 760px) 92vw, 58vw" alt="Fiberglass pool with a raised round spa under a screen enclosure" loading="lazy"><figcaption>A fiberglass pool and spa we installed.</figcaption></figure>
+  </div>
+
+  <div class="panel" role="tabpanel" id="panel-concrete" aria-labelledby="tab-concrete" tabindex="0" hidden>
+    <div class="panel__text">
+      <p>Cracking or deteriorating concrete and gunite: we give tired pools new finishes and a refreshed setting, and can add water features or lighting while we’re at it.</p>
+      <a class="more" href="#visit" data-interest="Renovation">Ask about your concrete pool</a>
+    </div>
+    <div class="ba" data-ba>
+      <div class="ba__pair is-on" data-pair>
+        <figure class="ba__shot"><img src="assets/img/reno-c-before.avif" width="550" height="321" alt="Before: drained kidney-shaped concrete pool with a worn surface" loading="lazy"><figcaption>Before</figcaption></figure>
+        <figure class="ba__shot ba__shot--after"><img src="assets/img/reno-c-after.avif" width="550" height="321" alt="After: the same pool refinished and refilled" loading="lazy"><figcaption>After</figcaption></figure>
+      </div>
+      <div class="ba__pair" data-pair hidden>
+        <figure class="ba__shot"><img src="assets/img/reno-d-before.avif" width="550" height="321" alt="Before: concrete pool stripped back during a remodel under a screen enclosure" loading="lazy"><figcaption>Before</figcaption></figure>
+        <figure class="ba__shot ba__shot--after"><img src="assets/img/reno-d-after.avif" width="550" height="321" alt="After: remodeled pool with a rock feature and a paver deck" loading="lazy"><figcaption>After</figcaption></figure>
+      </div>
+      <div class="ba__pair" data-pair hidden>
+        <figure class="ba__shot"><img src="assets/img/reno-e-before.avif" width="550" height="321" alt="Before: empty concrete pool with peeling walls" loading="lazy"><figcaption>Before</figcaption></figure>
+        <figure class="ba__shot ba__shot--after"><img src="assets/img/reno-e-after.avif" width="550" height="321" alt="After: the same pool renovated with a blue liner" loading="lazy"><figcaption>After</figcaption></figure>
+      </div>
+      <p class="ba__pick"><button type="button" aria-pressed="true" aria-label="Project 1 of 3">1</button><button type="button" aria-pressed="false" aria-label="Project 2 of 3">2</button><button type="button" aria-pressed="false" aria-label="Project 3 of 3">3</button></p>
+    </div>
+  </div>
+
+  <div class="panel" role="tabpanel" id="panel-look" aria-labelledby="tab-look" tabindex="0" hidden>
+    <div class="panel__text">
+      <p>Or you’re simply ready for a fresh look in your backyard. This pool-in-pool renovation built a new pool inside the old one, from the old green water to the finished pool.</p>
+      <a class="more" href="#visit" data-interest="Renovation">Talk about a new look</a>
+    </div>
+    <figure class="pip"><img src="assets/img/reno-pip.avif" width="1920" height="300" alt="Five stages of a pool-in-pool renovation: the old pool with green water, the excavation, the new forms, the new shell and the finished pool" loading="lazy"><figcaption>Pool-in-pool renovation, start to finish.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ——— Réalisations ——— -->
+<section class="work" id="work" aria-labelledby="work-title">
+  <header class="head">
+    <h2 class="h2" id="work-title">Pools we’ve built.</h2>
+    <p class="head__text">Projects across Central Florida. Choose a photo to see it large.</p>
+  </header>
+  <div class="filters" role="group" aria-label="Show projects">
+    <button type="button" aria-pressed="true" data-filter="all">All</button>
+    <button type="button" aria-pressed="false" data-filter="concrete">Concrete</button>
+    <button type="button" aria-pressed="false" data-filter="fiberglass">Fiberglass</button>
+    <button type="button" aria-pressed="false" data-filter="spa">Spas</button>
+    <button type="button" aria-pressed="false" data-filter="deck">Decks and patios</button>
+  </div>
+  <ul class="grid" data-grid>
+    <li class="tile tile--wide" data-cat="concrete spa"><button type="button"><img src="assets/img/g-firepit.avif" srcset="assets/img/g-firepit.w700.avif 700w, assets/img/g-firepit.avif 1400w" width="1400" height="1049" alt="Concrete pool and raised spa set in artificial turf, with palms along a white fence" sizes="(max-width: 760px) 92vw, 48vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="fiberglass"><button type="button"><img src="assets/img/g-rock.avif" srcset="assets/img/g-rock.w700.avif 700w, assets/img/g-rock.avif 1400w" width="1400" height="1050" alt="Freeform fiberglass pool with a rock waterfall, under a screen enclosure" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="concrete"><button type="button"><img src="assets/img/g-infinity2.avif" srcset="assets/img/g-infinity2.w700.avif 700w, assets/img/g-infinity2.avif 1400w" width="1400" height="1050" alt="Dark-finish concrete pool with a raised spa, next to a covered lanai" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="concrete spa"><button type="button"><img src="assets/img/g-cps2.avif" srcset="assets/img/g-cps2.w700.avif 700w, assets/img/g-cps2.avif 1400w" width="1400" height="1050" alt="Long concrete pool with a raised, tiled spa and a travertine deck" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile tile--tall" data-cat="fiberglass spa"><button type="button"><img src="assets/img/g-viking.avif" srcset="assets/img/g-viking.w700.avif 700w, assets/img/g-viking.avif 1400w" width="1400" height="1050" alt="Fiberglass pool with a raised round spa under a screen enclosure" sizes="(max-width: 760px) 92vw, 48vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="concrete deck"><button type="button"><img src="assets/img/g-combo.avif" srcset="assets/img/g-combo.w700.avif 700w, assets/img/g-combo.avif 1400w" width="1400" height="1049" alt="Concrete pool and spa with a travertine deck, surrounded by palms" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="concrete"><button type="button"><img src="assets/img/g-night.avif" srcset="assets/img/g-night.w700.avif 700w, assets/img/g-night.avif 1280w" width="1280" height="960" alt="14 by 30 foot gunite pool lit blue at night, with bubblers" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile tile--wide" data-cat="fiberglass"><button type="button"><img src="assets/img/g-fg-spa.avif" srcset="assets/img/g-fg-spa.w700.avif 700w, assets/img/g-fg-spa.avif 1400w" width="1400" height="1049" alt="Fiberglass pool and spa under a screen enclosure, with a lake view" sizes="(max-width: 760px) 92vw, 48vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="concrete spa"><button type="button"><img src="assets/img/g-combo2.avif" srcset="assets/img/g-combo2.w700.avif 700w, assets/img/g-combo2.avif 1400w" width="1400" height="1049" alt="Raised concrete spa on a stacked stone wall, spilling into the pool" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="spa"><button type="button"><img src="assets/img/g-mystic.avif" srcset="assets/img/g-mystic.w700.avif 700w, assets/img/g-mystic.avif 1280w" width="1280" height="960" alt="Round spa with a travertine cap and a stacked stone wall" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="concrete deck"><button type="button"><img src="assets/img/g-14x30.avif" srcset="assets/img/g-14x30.w700.avif 700w, assets/img/g-14x30.avif 1400w" width="1400" height="1049" alt="14 by 30 foot concrete pool with a sun shelf and a paver deck, under a screen enclosure" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="fiberglass deck"><button type="button"><img src="assets/img/g-viking4.avif" srcset="assets/img/g-viking4.w700.avif 700w, assets/img/g-viking4.avif 1400w" width="1400" height="1050" alt="Freeform fiberglass pool with a paver deck" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile tile--wide" data-cat="concrete"><button type="button"><img src="assets/img/g-900.avif" srcset="assets/img/g-900.w700.avif 700w, assets/img/g-900.avif 1400w" width="1400" height="1050" alt="900 square foot concrete pool under a large screen enclosure" sizes="(max-width: 760px) 92vw, 48vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="spa"><button type="button"><img src="assets/img/g-spool.avif" srcset="assets/img/g-spool.w700.avif 700w, assets/img/g-spool.avif 1280w" width="1280" height="960" alt="Spool with a sun shelf, loungers in the water and deck jets" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="fiberglass"><button type="button"><img src="assets/img/g-lap.avif" srcset="assets/img/g-lap.w700.avif 700w, assets/img/g-lap.avif 1400w" width="1400" height="1050" alt="Long fiberglass pool with an attached spa, under a screen enclosure" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="concrete"><button type="button"><img src="assets/img/g-freeform.avif" srcset="assets/img/g-freeform.w700.avif 700w, assets/img/g-freeform.avif 1400w" width="1400" height="1049" alt="Freeform concrete pool with a raised spa, under a screen enclosure" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="concrete spa"><button type="button"><img src="assets/img/g-mini.avif" srcset="assets/img/g-mini.w700.avif 700w, assets/img/g-mini.avif 1400w" width="1400" height="1049" alt="Small concrete pool with blue glass tile and a tiled spa" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="deck"><button type="button"><img src="assets/img/g-paver.avif" srcset="assets/img/g-paver.w700.avif 700w, assets/img/g-paver.avif 1400w" width="1400" height="1049" alt="Freeform pool with a travertine deck and a bubbler" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile tile--wide" data-cat="fiberglass spa"><button type="button"><img src="assets/img/g-fg-round.avif" srcset="assets/img/g-fg-round.w700.avif 700w, assets/img/g-fg-round.avif 1400w" width="1400" height="1050" alt="Fiberglass pool with a round raised spa on a paver deck, under a screen enclosure" sizes="(max-width: 760px) 92vw, 48vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="concrete"><button type="button"><img src="assets/img/g-sunshelf.avif" srcset="assets/img/g-sunshelf.w700.avif 700w, assets/img/g-sunshelf.avif 1400w" width="1400" height="1050" alt="Small concrete pool with a sun shelf, artificial turf and stepping stones" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile" data-cat="fiberglass"><button type="button"><img src="assets/img/g-fg-andspa.avif" srcset="assets/img/g-fg-andspa.w700.avif 700w, assets/img/g-fg-andspa.avif 1400w" width="1400" height="1049" alt="Fiberglass pool and spa in a fenced backyard" sizes="(max-width: 760px) 46vw, 24vw" loading="lazy"></button></li>
+    <li class="tile tile--wide" data-cat="deck spa"><button type="button"><img src="assets/img/g-kitchen.avif" srcset="assets/img/g-kitchen.w700.avif 700w, assets/img/g-kitchen.avif 1024w" width="1024" height="768" alt="Pool and spa beside an outdoor kitchen and pergola" sizes="(max-width: 760px) 92vw, 48vw" loading="lazy"></button></li>
+  </ul>
+</section>
+
+<!-- ——— Le propriétaire, la licence ——— -->
+<section class="owner" id="about" aria-labelledby="owner-title">
+  <div class="owner__text">
+    <h2 class="h2" id="owner-title">The owner supervises every job.</h2>
+    <p>Mike Ramée, master pool builder and owner of Mad River Pools, oversees each project with a tight network of trusted subcontractors. Since 1998 we’ve designed, built and renovated thousands of pools for Central Florida families, and built our reputation by exceeding what our customers expect.</p>
+  </div>
+  <dl class="owner__facts">
+    <div class="fact"><dt>In Central Florida since</dt><dd class="fact__big">1998</dd></div>
+    <div class="fact fact--license"><dt>State license</dt><dd class="fact__big">CPC 1457780</dd><dd><a href="https://www.myfloridalicense.com/wl11.asp" rel="noopener" target="_blank">Look it up on myfloridalicense.com<span class="sr"> (opens in a new tab)</span></a></dd></div>
+    <div class="fact"><dt>Proud dealer of</dt><dd class="fact__big">Latham Pools</dd><dd>The largest manufacturer of fabricated pools in the world</dd></div>
+  </dl>
+</section>
+
+<!-- ——— Financement ——— -->
+<section class="finance" id="financing" aria-labelledby="finance-title">
+  <div class="finance__text">
+    <h2 class="h2" id="finance-title">Pay for it over time.</h2>
+    <p>We work with two lenders, so you can get started now with payments that fit your budget.</p>
+  </div>
+  <ul class="finance__list">
+    <li><a href="https://www.hfsfinancial.net/" rel="noopener" target="_blank"><strong>HFS Financial</strong><span>Home improvement loans</span><span class="sr"> (opens in a new tab)</span></a></li>
+    <li><a href="https://www.lyonfinancial.net/dealer/mad-river-pools-fl/" rel="noopener" target="_blank"><strong>Lyon Financial</strong><span>Apply through our dealer page</span><span class="sr"> (opens in a new tab)</span></a></li>
+  </ul>
+</section>
+
+<!-- ——— Questions ——— -->
+<section class="faq" id="faq" aria-labelledby="faq-title">
+  <h2 class="h2" id="faq-title">Good to know.</h2>
+  <div class="faq__list">
+    <details><summary>How long does it take to build a pool?</summary><p>From dig to deck: 3 to 3½ weeks for a concrete pool, 2 to 2½ weeks for a vinyl liner pool, and about two weeks for a fiberglass pool.</p></details>
+    <details><summary>Do you take care of the permits?</summary><p>Yes. We handle permitting, excavation, decking, electrical work, screen enclosures, landscaping, low-voltage lighting, irrigation and retaining walls.</p></details>
+    <details><summary>Can you add a spa to my existing pool?</summary><p>Yes. We can install a spa or hot tub in your existing pool area, or build a new spa with its own landscaping and paver deck.</p></details>
+    <details><summary>Do you repair fiberglass, vinyl and concrete pools?</summary><p>Yes. We repair cracked, faded or worn fiberglass, replace ripped or rotted vinyl liners, and renovate cracking or deteriorating concrete and gunite pools.</p></details>
+    <details><summary>Do you offer financing?</summary><p>Yes, through HFS Financial and Lyon Financial. <a href="#financing">See financing</a>.</p></details>
+    <details><summary>What does the first visit cost?</summary><p>Nothing. The home visit is free and comes with no obligation.</p></details>
+  </div>
+</section>
+
+<!-- ——— La visite gratuite, à la nuit ——— -->
+<section class="visit" id="visit" aria-labelledby="visit-title">
+  <img class="visit__bg" src="assets/img/night.avif" srcset="assets/img/night.w1000.avif 1000w, assets/img/night.avif 1800w" width="1800" height="1147" sizes="100vw" alt="" loading="lazy">
+  <div class="visit__inner">
+    <div class="visit__intro">
+      <h2 class="h2" id="visit-title">Book a free home visit.</h2>
+      <p>Tell us about your project and we’ll get back to you within 48 hours. The visit is free, with no obligation: we come to your home, talk through your project and answer your questions.</p>
+      <ul class="contact">
+        <li><span class="contact__label">Call</span><a href="tel:+14078103453">(407) 810-3453</a></li>
+        <li><span class="contact__label">Email</span><a href="mailto:madriverpool@gmail.com">madriverpool@gmail.com</a></li>
+        <li><span class="contact__label">Hours</span><span>Monday to Friday, 9 am to 5 pm <em class="open" data-open hidden></em></span></li>
+        <li><span class="contact__label">Office</span><a href="https://www.google.com/maps/search/?api=1&amp;query=1704+Shawnee+Trail+Maitland+FL+32751" rel="noopener" target="_blank">1704 Shawnee Trail, Maitland, FL 32751<span class="sr"> (map, opens in a new tab)</span></a></li>
+      </ul>
+    </div>
+    <form class="form" data-form novalidate>
+      <fieldset class="form__chips">
+        <legend>What are you thinking about?</legend>
+        <label><input type="checkbox" name="interest" value="New pool"><span>New pool</span></label>
+        <label><input type="checkbox" name="interest" value="Spa"><span>Spa</span></label>
+        <label><input type="checkbox" name="interest" value="Pavers and deck"><span>Pavers and deck</span></label>
+        <label><input type="checkbox" name="interest" value="Renovation"><span>Renovation</span></label>
+        <label><input type="checkbox" name="interest" value="Not sure yet"><span>Not sure yet</span></label>
+      </fieldset>
+      <div class="form__grid">
+        <p class="field"><label for="f-first">First name</label><input id="f-first" name="first" autocomplete="given-name" required></p>
+        <p class="field"><label for="f-last">Last name</label><input id="f-last" name="last" autocomplete="family-name" required></p>
+        <p class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></p>
+        <p class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required></p>
+        <p class="field"><label for="f-address">Street address <span class="opt">(optional)</span></label><input id="f-address" name="address" autocomplete="street-address"></p>
+        <p class="field"><label for="f-city">City <span class="opt">(optional)</span></label><input id="f-city" name="city" autocomplete="address-level2"></p>
+        <p class="field field--wide"><label for="f-msg">Tell us about your project <span class="opt">(optional)</span></label><textarea id="f-msg" name="message" rows="4" maxlength="600" aria-describedby="f-count"></textarea><span class="field__count" id="f-count">0 of 600 characters</span></p>
+      </div>
+      <p class="form__error" id="f-error" data-error role="alert" hidden></p>
+      <p class="form__send"><button class="btn" type="submit">Send my request</button><span class="form__note">This opens your email app with your request ready to send to madriverpool@gmail.com.</span></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <p class="foot__brand"><svg class="brand__mark" viewBox="0 0 44 30" aria-hidden="true"><rect x="12" y="2" width="30" height="20" rx="5"/><circle cx="12" cy="20" r="8"/></svg><span>Mad River Pool Construction</span></p>
+    <p class="foot__line">Nothing’s as cool as a Mad River Pool.</p>
+    <ul class="foot__facts">
+      <li>1704 Shawnee Trail, Maitland, FL 32751</li>
+      <li><a href="tel:+14078103453">(407) 810-3453</a></li>
+      <li>State license CPC 1457780</li>
+      <li><a href="https://www.facebook.com/MadRiverPoolConstruction" rel="noopener" target="_blank">Facebook<span class="sr"> (opens in a new tab)</span></a></li>
+    </ul>
+    <p class="foot__copy">© <span data-year>2026</span> Mad River Pool Construction</p>
+  </div>
+</footer>
+
+<p class="dock" data-dock><a class="dock__call" href="tel:+14078103453">Call</a><a class="btn" href="#visit">Free home visit</a></p>
+
+<dialog class="lightbox" data-lightbox aria-label="Project photo">
+  <figure class="lightbox__figure"><img alt="" data-lightbox-img><figcaption data-lightbox-cap></figcaption></figure>
+  <button class="lightbox__btn lightbox__prev" type="button" data-lightbox-prev aria-label="Previous photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="lightbox__btn lightbox__next" type="button" data-lightbox-next aria-label="Next photo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  <button class="lightbox__close" type="button" data-lightbox-close>Close</button>
+  <p class="lightbox__count" data-lightbox-count></p>
+</dialog>
+
+<script>
+(function(){var e=`1.3.26`;function t(e,t,n){return Math.max(e,Math.min(t,n))}function n(e,t,n){return(1-n)*e+n*t}function r(e,t,r,i){return n(e,t,1-Math.exp(-r*i))}function i(e,t){return(e%t+t)%t}var a=class{isRunning=!1;value=0;from=0;to=0;currentTime=0;lerp;duration;easing;onUpdate;advance(e){if(!this.isRunning)return;let n=!1;if(this.duration&&this.easing){this.currentTime+=e;let r=t(0,this.currentTime/this.duration,1);n=r>=1;let i=n?1:this.easing(r);this.value=this.from+(this.to-this.from)*i}else this.lerp?(this.value=r(this.value,this.to,this.lerp*60,e),Math.round(this.value)===Math.round(this.to)&&(this.value=this.to,n=!0)):(this.value=this.to,n=!0);n&&this.stop(),this.onUpdate?.(this.value,n)}stop(){this.isRunning=!1}fromTo(e,t,{lerp:n,duration:r,easing:i,onStart:a,onUpdate:o}){this.from=this.value=e,this.to=t,this.lerp=n,this.duration=r,this.easing=i,this.currentTime=0,this.isRunning=!0,a?.(),this.onUpdate=o}};function o(e,t){let n;return function(...r){clearTimeout(n),n=setTimeout(()=>{n=void 0,e.apply(this,r)},t)}}var s=class{width=0;height=0;scrollHeight=0;scrollWidth=0;debouncedResize;wrapperResizeObserver;contentResizeObserver;constructor(e,t,{autoResize:n=!0,debounce:r=250}={}){this.wrapper=e,this.content=t,n&&(this.debouncedResize=o(this.resize,r),this.wrapper instanceof Window?window.addEventListener(`resize`,this.debouncedResize):(this.wrapperResizeObserver=new ResizeObserver(this.debouncedResize),this.wrapperResizeObserver.observe(this.wrapper)),this.contentResizeObserver=new ResizeObserver(this.debouncedResize),this.contentResizeObserver.observe(this.content)),this.resize()}destroy(){this.wrapperResizeObserver?.disconnect(),this.contentResizeObserver?.disconnect(),this.wrapper===window&&this.debouncedResize&&window.removeEventListener(`resize`,this.debouncedResize)}resize=()=>{this.onWrapperResize(),this.onContentResize()};onWrapperResize=()=>{this.wrapper instanceof Window?(this.width=window.innerWidth,this.height=window.innerHeight):(this.width=this.wrapper.clientWidth,this.height=this.wrapper.clientHeight)};onContentResize=()=>{this.wrapper instanceof Window?(this.scrollHeight=this.content.scrollHeight,this.scrollWidth=this.content.scrollWidth):(this.scrollHeight=this.wrapper.scrollHeight,this.scrollWidth=this.wrapper.scrollWidth)};get limit(){return{x:this.scrollWidth-this.width,y:this.scrollHeight-this.height}}},c=class{events={};emit(e,...t){let n=this.events[e]||[];for(let e=0,r=n.length;e<r;e++)n[e]?.(...t)}on(e,t){return this.events[e]?this.events[e].push(t):this.events[e]=[t],()=>{this.events[e]=this.events[e]?.filter(e=>t!==e)}}off(e,t){this.events[e]=this.events[e]?.filter(e=>t!==e)}destroy(){this.events={}}};let l={passive:!1};function u(e,t){return e===1?16.666666666666668:e===2?t:1}var d=class{touchStart={x:0,y:0};lastDelta={x:0,y:0};window={width:0,height:0};emitter=new c;constructor(e,t={wheelMultiplier:1,touchMultiplier:1}){this.element=e,this.options=t,window.addEventListener(`resize`,this.onWindowResize),this.onWindowResize(),this.element.addEventListener(`wheel`,this.onWheel,l),this.element.addEventListener(`touchstart`,this.onTouchStart,l),this.element.addEventListener(`touchmove`,this.onTouchMove,l),this.element.addEventListener(`touchend`,this.onTouchEnd,l)}on(e,t){return this.emitter.on(e,t)}destroy(){this.emitter.destroy(),window.removeEventListener(`resize`,this.onWindowResize),this.element.removeEventListener(`wheel`,this.onWheel,l),this.element.removeEventListener(`touchstart`,this.onTouchStart,l),this.element.removeEventListener(`touchmove`,this.onTouchMove,l),this.element.removeEventListener(`touchend`,this.onTouchEnd,l)}onTouchStart=e=>{let{clientX:t,clientY:n}=e.targetTouches?e.targetTouches[0]:e;this.touchStart.x=t,this.touchStart.y=n,this.lastDelta={x:0,y:0},this.emitter.emit(`scroll`,{deltaX:0,deltaY:0,event:e})};onTouchMove=e=>{let{clientX:t,clientY:n}=e.targetTouches?e.targetTouches[0]:e,r=-(t-this.touchStart.x)*this.options.touchMultiplier,i=-(n-this.touchStart.y)*this.options.touchMultiplier;this.touchStart.x=t,this.touchStart.y=n,this.lastDelta={x:r,y:i},this.emitter.emit(`scroll`,{deltaX:r,deltaY:i,event:e})};onTouchEnd=e=>{this.emitter.emit(`scroll`,{deltaX:this.lastDelta.x,deltaY:this.lastDelta.y,event:e})};onWheel=e=>{let{deltaX:t,deltaY:n,deltaMode:r}=e,i=u(r,this.window.width),a=u(r,this.window.height);t*=i,n*=a,t*=this.options.wheelMultiplier,n*=this.options.wheelMultiplier,this.emitter.emit(`scroll`,{deltaX:t,deltaY:n,event:e})};onWindowResize=()=>{this.window={width:window.innerWidth,height:window.innerHeight}}};let f=e=>Math.min(1,1.001-2**(-10*e));var p=class{_isScrolling=!1;_isStopped=!1;_isLocked=!1;_preventNextNativeScrollEvent=!1;_resetVelocityTimeout=null;_rafId=null;_isDraggingSelection=!1;reducedMotionMediaQuery=window.matchMedia(`(prefers-reduced-motion: reduce)`);isTouching;isIos;time=0;userData={};lastVelocity=0;velocity=0;direction=0;options;targetScroll;animatedScroll;animate=new a;emitter=new c;dimensions;virtualScroll;constructor({wrapper:t=window,content:n=document.documentElement,eventsTarget:r=t,smoothWheel:i=!0,syncTouch:a=!1,syncTouchLerp:o=.075,touchInertiaExponent:c=1.7,duration:l,easing:u,lerp:p=.1,infinite:m=!1,orientation:h=`vertical`,gestureOrientation:g=h===`horizontal`?`both`:`vertical`,touchMultiplier:_=1,wheelMultiplier:v=1,autoResize:y=!0,prevent:b,virtualScroll:x,overscroll:S=!0,autoRaf:C=!1,anchors:w=!1,autoToggle:T=!1,allowNestedScroll:E=!1,__experimental__naiveDimensions:D=!1,naiveDimensions:O=D,stopInertiaOnNavigate:k=!1,respectReducedMotion:A=!0}={}){window.lenisVersion=e,window.lenis||(window.lenis={}),window.lenis.version=e,h===`horizontal`&&(window.lenis.horizontal=!0),a===!0&&(window.lenis.touch=!0),this.isIos=/(iPad|iPhone|iPod)/g.test(navigator.userAgent),(!t||t===document.documentElement)&&(t=window),typeof l==`number`&&typeof u!=`function`?u=f:typeof u==`function`&&typeof l!=`number`&&(l=1),this.options={wrapper:t,content:n,eventsTarget:r,smoothWheel:i,syncTouch:a,syncTouchLerp:o,touchInertiaExponent:c,duration:l,easing:u,lerp:p,infinite:m,gestureOrientation:g,orientation:h,touchMultiplier:_,wheelMultiplier:v,autoResize:y,prevent:b,virtualScroll:x,overscroll:S,autoRaf:C,anchors:w,autoToggle:T,allowNestedScroll:E,naiveDimensions:O,stopInertiaOnNavigate:k,respectReducedMotion:A},this.dimensions=new s(t,n,{autoResize:y}),this.updateClassName(),this.targetScroll=this.animatedScroll=this.actualScroll,this.options.wrapper.addEventListener(`scroll`,this.onNativeScroll),this.options.wrapper.addEventListener(`scrollend`,this.onScrollEnd,{capture:!0}),(this.options.anchors||this.options.stopInertiaOnNavigate)&&this.options.wrapper.addEventListener(`click`,this.onClick),this.options.wrapper.addEventListener(`pointerdown`,this.onPointerDown),this.virtualScroll=new d(r,{touchMultiplier:_,wheelMultiplier:v}),this.virtualScroll.on(`scroll`,this.onVirtualScroll),this.options.autoToggle&&(this.checkOverflow(),this.rootElement.addEventListener(`transitionend`,this.onTransitionEnd)),this.options.autoRaf&&(this._rafId=requestAnimationFrame(this.raf))}destroy(){this.emitter.destroy(),this.options.wrapper.removeEventListener(`scroll`,this.onNativeScroll),this.options.wrapper.removeEventListener(`scrollend`,this.onScrollEnd,{capture:!0}),this.options.wrapper.removeEventListener(`pointerdown`,this.onPointerDown),(this.options.anchors||this.options.stopInertiaOnNavigate)&&this.options.wrapper.removeEventListener(`click`,this.onClick),this.virtualScroll.destroy(),this.dimensions.destroy(),this.cleanUpClassName(),this._rafId&&cancelAnimationFrame(this._rafId)}on(e,t){return this.emitter.on(e,t)}off(e,t){return this.emitter.off(e,t)}onScrollEnd=e=>{e instanceof CustomEvent||(this.isScrolling===`smooth`||this.isScrolling===!1)&&e.stopPropagation()};dispatchScrollendEvent=()=>{this.options.wrapper.dispatchEvent(new CustomEvent(`scrollend`,{bubbles:this.options.wrapper===window,detail:{lenisScrollEnd:!0}}))};get overflow(){let e=this.isHorizontal?`overflow-x`:`overflow-y`;return getComputedStyle(this.rootElement)[e]}checkOverflow(){[`hidden`,`clip`].includes(this.overflow)?this.internalStop():this.internalStart()}onTransitionEnd=e=>{e.propertyName?.includes(`overflow`)&&e.target===this.rootElement&&this.checkOverflow()};setScroll(e){this.isHorizontal?this.options.wrapper.scrollTo({left:e,behavior:`instant`}):this.options.wrapper.scrollTo({top:e,behavior:`instant`})}onClick=e=>{let t=e.composedPath().filter(e=>e instanceof HTMLAnchorElement&&e.href).map(e=>new URL(e.href)),n=new URL(window.location.href);if(this.options.anchors){let e=t.find(e=>n.host===e.host&&n.pathname===e.pathname&&e.hash);if(e){let t=typeof this.options.anchors==`object`&&this.options.anchors?this.options.anchors:void 0,n=decodeURIComponent(e.hash);this.scrollTo(n,t);return}}if(this.options.stopInertiaOnNavigate&&t.some(e=>n.host===e.host&&n.pathname!==e.pathname)){this.reset();return}};onPointerDown=e=>{e.button===1&&this.reset()};isTouchOnSelectionHandle(e){let t=window.getSelection();if(!t||t.isCollapsed||t.rangeCount===0)return!1;let n=e.targetTouches[0]??e.changedTouches[0];if(!n)return!1;let r=t.getRangeAt(0).getClientRects();if(r.length===0)return!1;let i=r[0],a=r[r.length-1],o=Math.hypot(n.clientX-i.left,n.clientY-i.top)<=40,s=Math.hypot(n.clientX-a.right,n.clientY-a.bottom)<=40;return o||s}onVirtualScroll=e=>{if(typeof this.options.virtualScroll==`function`&&this.options.virtualScroll(e)===!1)return;let{deltaX:t,deltaY:n,event:r}=e;if(this.emitter.emit(`virtual-scroll`,{deltaX:t,deltaY:n,event:r}),r.ctrlKey||r.lenisStopPropagation)return;let i=r.type.includes(`touch`),a=r.type.includes(`wheel`);if(i&&this.isIos&&(r.type===`touchstart`&&(this._isDraggingSelection=this.isTouchOnSelectionHandle(r)),this._isDraggingSelection)){r.type===`touchend`&&(this._isDraggingSelection=!1);return}this.isTouching=r.type===`touchstart`||r.type===`touchmove`;let o=t===0&&n===0;if(this.options.syncTouch&&i&&r.type===`touchstart`&&o&&!this.isStopped&&!this.isLocked){this.reset();return}let s=this.options.gestureOrientation===`vertical`&&n===0||this.options.gestureOrientation===`horizontal`&&t===0;if(o||s)return;let c=r.composedPath();c=c.slice(0,c.indexOf(this.rootElement));let l=this.options.prevent,u=Math.abs(t)>=Math.abs(n)?`horizontal`:`vertical`;if(c.find(e=>e instanceof HTMLElement&&(typeof l==`function`&&l?.(e)||e.hasAttribute?.(`data-lenis-prevent`)||u===`vertical`&&e.hasAttribute?.(`data-lenis-prevent-vertical`)||u===`horizontal`&&e.hasAttribute?.(`data-lenis-prevent-horizontal`)||i&&e.hasAttribute?.(`data-lenis-prevent-touch`)||a&&e.hasAttribute?.(`data-lenis-prevent-wheel`)||this.options.allowNestedScroll&&this.hasNestedScroll(e,{deltaX:t,deltaY:n}))))return;if(this.isStopped||this.isLocked){r.cancelable&&r.preventDefault();return}if(!(this.options.syncTouch&&i||this.options.smoothWheel&&a)){this.isScrolling=`native`,this.animate.stop(),r.lenisStopPropagation=!0;return}let d=n;this.options.gestureOrientation===`both`?d=Math.abs(n)>Math.abs(t)?n:t:this.options.gestureOrientation===`horizontal`&&(d=t),(!this.options.overscroll||this.options.infinite||this.options.wrapper!==window&&this.limit>0&&(this.animatedScroll>0&&this.animatedScroll<this.limit||this.animatedScroll===0&&n>0||this.animatedScroll===this.limit&&n<0))&&(r.lenisStopPropagation=!0),r.cancelable&&r.preventDefault();let f=i&&this.options.syncTouch,p=i&&r.type===`touchend`;p&&(d=Math.sign(d)*Math.abs(this.velocity)**this.options.touchInertiaExponent),this.scrollTo(this.targetScroll+d,{programmatic:!1,...f?{lerp:p?this.options.syncTouchLerp:1}:{lerp:this.options.lerp,duration:this.options.duration,easing:this.options.easing}})};resize(){this.dimensions.resize(),this.animatedScroll=this.targetScroll=this.actualScroll,this.emit()}emit(){this.emitter.emit(`scroll`,this)}onNativeScroll=()=>{if(this._resetVelocityTimeout!==null&&(clearTimeout(this._resetVelocityTimeout),this._resetVelocityTimeout=null),this._preventNextNativeScrollEvent){this._preventNextNativeScrollEvent=!1;return}if(this.isScrolling===!1||this.isScrolling===`native`){let e=this.animatedScroll;this.animatedScroll=this.targetScroll=this.actualScroll,this.lastVelocity=this.velocity,this.velocity=this.animatedScroll-e,this.direction=Math.sign(this.animatedScroll-e),this.isStopped||(this.isScrolling=`native`),this.emit(),this.velocity!==0&&(this._resetVelocityTimeout=setTimeout(()=>{this.lastVelocity=this.velocity,this.velocity=0,this.isScrolling=!1,this.emit()},400))}};reset(){this.isLocked=!1,this.isScrolling=!1,this.animatedScroll=this.targetScroll=this.actualScroll,this.lastVelocity=this.velocity=0,this.animate.stop()}start(){if(this.isStopped){if(this.options.autoToggle){this.rootElement.style.removeProperty(`overflow`);return}this.internalStart()}}internalStart(){this.isStopped&&(this.reset(),this.isStopped=!1,this.emit())}stop(){if(!this.isStopped){if(this.options.autoToggle){this.rootElement.style.setProperty(`overflow`,`clip`);return}this.internalStop()}}internalStop(){this.isStopped||(this.reset(),this.isStopped=!0,this.emit())}raf=e=>{let t=e-(this.time||e);this.time=e,this.animate.advance(t*.001),this.options.autoRaf&&(this._rafId=requestAnimationFrame(this.raf))};scrollTo(e,{offset:n=0,immediate:r=!1,lock:i=!1,programmatic:a=!0,lerp:o=a?this.options.lerp:void 0,duration:s=a?this.options.duration:void 0,easing:c=a?this.options.easing:void 0,onStart:l,onComplete:u,force:d=!1,userData:p}={}){if(this.prefersReducedMotion&&(a?r=!0:(o=1,s=void 0,c=void 0)),(this.isStopped||this.isLocked)&&!d)return;let m=e,h=n;if(typeof m==`string`&&[`top`,`left`,`start`,`#`].includes(m))m=0;else if(typeof m==`string`&&[`bottom`,`right`,`end`].includes(m))m=this.limit;else{let e=null;if(typeof m==`string`?(e=m.startsWith(`#`)?document.getElementById(m.slice(1)):document.querySelector(m),e||(m===`#top`?m=0:console.warn(`Lenis: Target not found`,m))):m instanceof HTMLElement&&m?.nodeType&&(e=m),e){if(this.options.wrapper!==window){let e=this.rootElement.getBoundingClientRect();h-=this.isHorizontal?e.left:e.top}let t=e.getBoundingClientRect(),n=getComputedStyle(e),r=this.isHorizontal?Number.parseFloat(n.scrollMarginLeft):Number.parseFloat(n.scrollMarginTop),i=getComputedStyle(this.rootElement),a=this.isHorizontal?Number.parseFloat(i.scrollPaddingLeft):Number.parseFloat(i.scrollPaddingTop);m=(this.isHorizontal?t.left:t.top)+this.animatedScroll-(Number.isNaN(r)?0:r)-(Number.isNaN(a)?0:a)}}if(typeof m==`number`){if(m+=h,this.options.infinite){if(a){this.targetScroll=this.animatedScroll=this.scroll;let e=m-this.animatedScroll;e>this.limit/2?m-=this.limit:e<-this.limit/2&&(m+=this.limit)}}else m=t(0,m,this.limit);if(m===this.targetScroll){l?.(this),u?.(this);return}if(this.userData=p??{},r){this.animatedScroll=this.targetScroll=m,this.setScroll(this.scroll),this.reset(),this.preventNextNativeScrollEvent(),this.emit(),u?.(this),this.userData={},requestAnimationFrame(()=>{this.dispatchScrollendEvent()});return}a||(this.targetScroll=m),typeof s==`number`&&typeof c!=`function`?c=f:typeof c==`function`&&typeof s!=`number`&&(s=1),this.animate.fromTo(this.animatedScroll,m,{duration:s,easing:c,lerp:o,onStart:()=>{i&&(this.isLocked=!0),this.isScrolling=`smooth`,l?.(this)},onUpdate:(e,t)=>{this.isScrolling=`smooth`,this.lastVelocity=this.velocity,this.velocity=e-this.animatedScroll,this.direction=Math.sign(this.velocity),this.animatedScroll=e,this.setScroll(this.scroll),a&&(this.targetScroll=e),t||this.emit(),t&&(this.reset(),this.emit(),u?.(this),this.userData={},requestAnimationFrame(()=>{this.dispatchScrollendEvent()}),this.preventNextNativeScrollEvent())}})}}preventNextNativeScrollEvent(){this._preventNextNativeScrollEvent=!0,requestAnimationFrame(()=>{this._preventNextNativeScrollEvent=!1})}hasNestedScroll(e,{deltaX:t,deltaY:n}){let r=Date.now();e._lenis||={};let i=e._lenis,a,o,s,c,l,u,d,f,p,m;if(r-(i.time??0)>2e3){i.time=Date.now();let t=window.getComputedStyle(e);if(i.computedStyle=t,a=[`auto`,`overlay`,`scroll`].includes(t.overflowX),o=[`auto`,`overlay`,`scroll`].includes(t.overflowY),l=[`auto`].includes(t.overscrollBehaviorX),u=[`auto`].includes(t.overscrollBehaviorY),i.hasOverflowX=a,i.hasOverflowY=o,!(a||o))return!1;d=e.scrollWidth,f=e.scrollHeight,p=e.clientWidth,m=e.clientHeight,s=d>p,c=f>m,i.isScrollableX=s,i.isScrollableY=c,i.scrollWidth=d,i.scrollHeight=f,i.clientWidth=p,i.clientHeight=m,i.hasOverscrollBehaviorX=l,i.hasOverscrollBehaviorY=u}else s=i.isScrollableX,c=i.isScrollableY,a=i.hasOverflowX,o=i.hasOverflowY,d=i.scrollWidth,f=i.scrollHeight,p=i.clientWidth,m=i.clientHeight,l=i.hasOverscrollBehaviorX,u=i.hasOverscrollBehaviorY;if(!(a&&s||o&&c))return!1;let h=Math.abs(t)>=Math.abs(n)?`horizontal`:`vertical`,g,_,v,y,b,x;if(h===`horizontal`)g=Math.round(e.scrollLeft),_=d-p,v=t,y=a,b=s,x=l;else if(h===`vertical`)g=Math.round(e.scrollTop),_=f-m,v=n,y=o,b=c,x=u;else return!1;return!x&&(g>=_||g<=0)?!0:(v>0?g<_:g>0)&&y&&b}get rootElement(){return this.options.wrapper===window?document.documentElement:this.options.wrapper}get limit(){return this.options.naiveDimensions?this.isHorizontal?this.rootElement.scrollWidth-this.rootElement.clientWidth:this.rootElement.scrollHeight-this.rootElement.clientHeight:this.dimensions.limit[this.isHorizontal?`x`:`y`]}get isHorizontal(){return this.options.orientation===`horizontal`}get actualScroll(){let e=this.options.wrapper;return this.isHorizontal?e.scrollX??e.scrollLeft:e.scrollY??e.scrollTop}get scroll(){return this.options.infinite?i(this.animatedScroll,this.limit):this.animatedScroll}get progress(){return this.limit===0?1:this.scroll/this.limit}get isScrolling(){return this._isScrolling}set isScrolling(e){this._isScrolling!==e&&(this._isScrolling=e,this.updateClassName())}get isStopped(){return this._isStopped}set isStopped(e){this._isStopped!==e&&(this._isStopped=e,this.updateClassName())}get isLocked(){return this._isLocked}set isLocked(e){this._isLocked!==e&&(this._isLocked=e,this.updateClassName())}get isSmooth(){return this.isScrolling===`smooth`}get prefersReducedMotion(){return this.options.respectReducedMotion&&this.reducedMotionMediaQuery.matches}get className(){let e=`lenis`;return this.options.autoToggle&&(e+=` lenis-autoToggle`),this.isStopped&&(e+=` lenis-stopped`),this.isLocked&&(e+=` lenis-locked`),this.isScrolling&&(e+=` lenis-scrolling`),this.isScrolling===`smooth`&&(e+=` lenis-smooth`),e}updateClassName(){this.cleanUpClassName(),this.className.split(` `).forEach(e=>{this.rootElement.classList.add(e)})}cleanUpClassName(){for(let e of Array.from(this.rootElement.classList))(e===`lenis`||e.startsWith(`lenis-`))&&this.rootElement.classList.remove(e)}};globalThis.Lenis=p,globalThis.Lenis.prototype=p.prototype})();
+//# sourceMappingURL=lenis.min.js.map
+;
+/* Mad River Pools : défilement doux, ouverture du plan, graphique « dig to deck », formes à l'échelle,
+   rénovation, galerie filtrable et visionneuse, formulaire qui prépare le courriel. */
+(() => {
+  const doc = document.documentElement;
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const io = 'IntersectionObserver' in window;
+
+  /* ——— Défilement doux (les ancres tiennent compte de scroll-padding) ——— */
+  let lenis = null;
+  if (!still && window.Lenis) {
+    lenis = new window.Lenis({autoRaf: true, anchors: {offset: 0}, lerp: 0.11});
+  }
+
+  /* ——— En-tête : fond dès qu'on défile, s'efface en descendant, revient en remontant ——— */
+  const top = $('[data-top]');
+  const hero = $('.hero');
+  const dock = $('[data-dock]');
+  let lastY = window.scrollY;
+  let atVisit = false;
+  let heroH = hero.offsetHeight;
+  window.addEventListener('resize', () => (heroH = hero.offsetHeight));
+  const spa = $('.plan__spa');
+  const poolImg = $('.plan__pool img');
+  const onScroll = (y) => {
+    top.classList.toggle('is-solid', y > 8);
+    if (doc.classList.contains('menu-open') || y < 520 || y < lastY - 3) top.classList.remove('is-away');
+    else if (y > lastY + 3 && !top.contains(document.activeElement)) top.classList.add('is-away');
+    lastY = y;
+    if (dock) dock.classList.toggle('is-on', y > heroH * 0.7 && !atVisit);
+    // le spa remonte un peu plus vite que le bassin
+    if (!still && y < window.innerHeight * 1.3) {
+      spa.style.translate = `0 ${(-y * 0.07).toFixed(1)}px`;
+      poolImg.style.translate = `0 ${(y * 0.04).toFixed(1)}px`;
+    }
+  };
+  if (lenis) lenis.on('scroll', ({scroll}) => onScroll(scroll));
+  window.addEventListener('scroll', () => onScroll(window.scrollY), {passive: true});
+  top.addEventListener('focusin', () => top.classList.remove('is-away'));
+
+  /* ——— Menu sur petit écran ——— */
+  const menu = $('[data-menu]');
+  const setMenu = (open) => {
+    menu.setAttribute('aria-expanded', String(open));
+    doc.classList.toggle('menu-open', open);
+    // la page sous le menu ouvert ne reçoit plus le focus
+    for (const el of $$('body > :not(header, script)')) el.inert = open;
+    if (lenis) open ? lenis.stop() : lenis.start();
+  };
+  menu.addEventListener('click', () => setMenu(menu.getAttribute('aria-expanded') !== 'true'));
+  $$('#nav a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && doc.classList.contains('menu-open')) {
+      setMenu(false);
+      menu.focus();
+    }
+  });
+  matchMedia('(min-width: 1181px)').addEventListener('change', (e) => e.matches && setMenu(false));
+
+  /* le lien du menu de la section à l'écran */
+  if (io) {
+    const links = new Map($$('#nav ul a').map((a) => [a.getAttribute('href').slice(1), a]));
+    const spy = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const a = links.get(e.target.id);
+          if (a && e.isIntersecting) {
+            links.forEach((l) => l.removeAttribute('aria-current'));
+            a.setAttribute('aria-current', 'true');
+          }
+        }
+      },
+      {rootMargin: '-45% 0px -50% 0px'},
+    );
+    links.forEach((a, id) => {
+      const s = document.getElementById(id);
+      if (s) spy.observe(s);
+    });
+  }
+
+  /* ——— Traits des plans : 1,5 px à l'écran quelle que soit l'échelle du dessin ——— */
+  const planSvgs = $$('.plan__line, .shape svg');
+  const setScale = () =>
+    planSvgs.forEach((svg) => {
+      const m = svg.getScreenCTM();
+      if (m && m.a) svg.style.setProperty('--u', (1 / m.a).toFixed(5));
+    });
+  setScale();
+  window.addEventListener('resize', setScale);
+
+  /* ——— Ouverture : le cordeau se trace, les photos remplissent le plan, le slogan s'élargit ——— */
+  // le slogan et le cordeau partent dès que la police est là (au plus tard après 0,6 s) ;
+  // chaque photo remplit le plan dès qu'elle est chargée, jamais avant 0,45 s de tracé
+  const plan = $('[data-plan]');
+  const fill = () => plan.classList.add('is-filled');
+  const ready = () => doc.classList.add('is-ready');
+  const later = (ms) => new Promise((r) => setTimeout(r, ms));
+  if (still) {
+    ready();
+    fill();
+  } else {
+    const font = document.fonts ? document.fonts.load('800 16px "Mona Sans"').catch(() => {}) : Promise.resolve();
+    Promise.race([font, later(600)]).then(() => {
+      requestAnimationFrame(() => requestAnimationFrame(ready));
+      const photos = Promise.all($$('.plan img').map((i) => i.decode().catch(() => {})));
+      Promise.all([photos, later(450)]).then(fill);
+    });
+  }
+  onScroll(window.scrollY);
+
+  /* ——— Révélations, une fois, quand la section arrive ——— */
+  const once = (el, fn, threshold = 0.3) => {
+    if (!el) return;
+    if (still || !io) return fn(el);
+    const o = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          fn(el);
+          o.disconnect();
+        }
+      },
+      {threshold},
+    );
+    o.observe(el);
+  };
+  const on = (el) => el.classList.add('is-on');
+  once($('[data-dig]'), on, 0.45);
+  $$('.shape').forEach((b, i) => b.style.setProperty('--i', i));
+  once($('.shapes'), on, 0.18);
+  $$('.onecall__text span').forEach((s, i) => s.style.setProperty('--i', i));
+  once($('.onecall'), on, 0.5);
+
+  /* ——— Les formes : la forme choisie montre la photo du vrai bassin ——— */
+  const shapeBtns = $$('[data-shape]');
+  const shapePhotos = $$('[data-shape-photo]');
+  const shapeName = $('[data-shape-name]');
+  const shapeSize = $('[data-shape-size]');
+  const pickShape = (btn) => {
+    shapeBtns.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    shapePhotos.forEach((p) => {
+      const on = p.dataset.shapePhoto === btn.dataset.shape;
+      p.classList.toggle('is-on', on);
+      // seule la photo visible est lue par les lecteurs d'écran
+      p.setAttribute('aria-hidden', String(!on));
+    });
+    shapeName.textContent = btn.dataset.name;
+    shapeSize.textContent = btn.dataset.size;
+  };
+  shapeBtns.forEach((b) => b.addEventListener('click', () => pickShape(b)));
+  const firstShape = shapeBtns.find((b) => b.getAttribute('aria-pressed') === 'true');
+  if (firstShape) pickShape(firstShape);
+
+  /* ——— Rénovation : onglets, et l'après qui se dévoile à côté de l'avant ——— */
+  const showPair = (pair) => {
+    if (!pair) return;
+    pair.classList.remove('is-shown');
+    void pair.offsetWidth;
+    requestAnimationFrame(() => pair.classList.add('is-shown'));
+  };
+  const revealPanel = (panel) => showPair(panel.querySelector('.ba__pair:not([hidden])'));
+  const tabs = $$('.reno [role="tab"]');
+  const showTab = (tab, focus) => {
+    tabs.forEach((t) => {
+      const sel = t === tab;
+      t.setAttribute('aria-selected', String(sel));
+      t.tabIndex = sel ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute('aria-controls'));
+      panel.hidden = !sel;
+      if (sel) revealPanel(panel);
+    });
+    if (focus) tab.focus();
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => showTab(t));
+    t.addEventListener('keydown', (e) => {
+      const step = {ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1}[e.key];
+      let next = null;
+      if (step) next = tabs[(i + step + tabs.length) % tabs.length];
+      if (e.key === 'Home') next = tabs[0];
+      if (e.key === 'End') next = tabs[tabs.length - 1];
+      if (next) {
+        e.preventDefault();
+        showTab(next, true);
+      }
+    });
+  });
+  $$('[data-ba]').forEach((ba) => {
+    const pairs = $$('[data-pair]', ba);
+    const btns = $$('.ba__pick button', ba);
+    btns.forEach((b, i) =>
+      b.addEventListener('click', () => {
+        btns.forEach((x, j) => x.setAttribute('aria-pressed', String(i === j)));
+        pairs.forEach((p, j) => (p.hidden = i !== j));
+        showPair(pairs[i]);
+      }),
+    );
+  });
+  once($('.reno'), () => revealPanel($('.reno [role="tabpanel"]:not([hidden])')), 0.25);
+
+  /* ——— Galerie : filtres (les photos glissent à leur nouvelle place) et visionneuse ——— */
+  const tiles = $$('[data-grid] .tile');
+  const filterBtns = $$('[data-filter]');
+  filterBtns.forEach((b) =>
+    b.addEventListener('click', () => {
+      const f = b.dataset.filter;
+      filterBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      const before = new Map(tiles.filter((t) => !t.hidden).map((t) => [t, t.getBoundingClientRect()]));
+      tiles.forEach((t) => (t.hidden = !(f === 'all' || t.dataset.cat.split(' ').includes(f))));
+      if (still) return;
+      tiles
+        .filter((t) => !t.hidden)
+        .forEach((t, k) => {
+          const a = before.get(t);
+          const z = t.getBoundingClientRect();
+          if (a) {
+            const dx = a.left - z.left;
+            const dy = a.top - z.top;
+            if (dx || dy) t.animate([{transform: `translate(${dx}px, ${dy}px)`}, {transform: 'none'}], {duration: 650, easing: 'cubic-bezier(.22,1,.36,1)'});
+          } else {
+            t.animate([{opacity: 0, transform: 'scale(.94)'}, {opacity: 1, transform: 'none'}], {duration: 500, delay: k * 18, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards'});
+          }
+        });
+    }),
+  );
+
+  const lb = $('[data-lightbox]');
+  const lbImg = $('[data-lightbox-img]');
+  const lbCap = $('[data-lightbox-cap]');
+  const lbCount = $('[data-lightbox-count]');
+  let shown = [];
+  let at = 0;
+  let opener = null;
+  const showAt = (i) => {
+    at = (i + shown.length) % shown.length;
+    const img = $('img', shown[at]);
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbCap.textContent = img.alt;
+    lbCount.textContent = `${at + 1} of ${shown.length}`;
+    lbImg.style.animation = 'none';
+    void lbImg.offsetWidth;
+    lbImg.style.animation = '';
+  };
+  tiles.forEach((t) =>
+    $('button', t).addEventListener('click', (e) => {
+      shown = tiles.filter((x) => !x.hidden);
+      opener = e.currentTarget;
+      showAt(shown.indexOf(t));
+      lb.showModal();
+      if (lenis) lenis.stop();
+    }),
+  );
+  lb.addEventListener('close', () => {
+    if (lenis) lenis.start();
+    if (opener) opener.focus();
+  });
+  $('[data-lightbox-prev]').addEventListener('click', () => showAt(at - 1));
+  $('[data-lightbox-next]').addEventListener('click', () => showAt(at + 1));
+  $('[data-lightbox-close]').addEventListener('click', () => lb.close());
+  lb.addEventListener('click', (e) => {
+    if (e.target === lb || e.target.classList.contains('lightbox__figure')) lb.close();
+  });
+  lb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') showAt(at - 1);
+    if (e.key === 'ArrowRight') showAt(at + 1);
+  });
+  let startX = null;
+  lb.addEventListener('pointerdown', (e) => (startX = e.clientX));
+  lb.addEventListener('pointerup', (e) => {
+    if (startX === null) return;
+    const dx = e.clientX - startX;
+    startX = null;
+    if (Math.abs(dx) > 60) showAt(at + (dx < 0 ? 1 : -1));
+  });
+
+  /* ——— Formulaire : vérifie, puis prépare le courriel ——— */
+  const form = $('[data-form]');
+  const err = $('[data-error]');
+  const msg = $('#f-msg');
+  const count = $('#f-count');
+  msg.addEventListener('input', () => (count.textContent = `${msg.value.length} of 600 characters`));
+  $$('[data-interest]').forEach((a) =>
+    a.addEventListener('click', () => {
+      const box = form.querySelector(`input[name="interest"][value="${a.dataset.interest}"]`);
+      if (box) box.checked = true;
+    }),
+  );
+  const and = (xs) => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = (n) => form.elements[n].value.trim();
+    const checks = [
+      ['first', () => v('first') !== '', 'your first name'],
+      ['last', () => v('last') !== '', 'your last name'],
+      ['email', () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email')), 'a valid email address'],
+      ['phone', () => v('phone').replace(/\D/g, '').length >= 10, 'a phone number with its area code'],
+    ];
+    const bad = checks.filter(([n, ok]) => {
+      const fail = !ok();
+      form.elements[n].setAttribute('aria-invalid', String(fail));
+      // le champ en erreur renvoie au message qui dit quoi corriger
+      form.elements[n].toggleAttribute('aria-describedby', fail);
+      if (fail) form.elements[n].setAttribute('aria-describedby', 'f-error');
+      return fail;
+    });
+    if (bad.length) {
+      err.textContent = `To send your request, add ${and(bad.map((b) => b[2]))}.`;
+      err.hidden = false;
+      form.elements[bad[0][0]].focus();
+      return;
+    }
+    err.hidden = true;
+    const interests = $$('input[name="interest"]:checked', form).map((i) => i.value);
+    const lines = [
+      `Name: ${v('first')} ${v('last')}`,
+      `Email: ${v('email')}`,
+      `Phone: ${v('phone')}`,
+      v('address') ? `Address: ${v('address')}` : '',
+      v('city') ? `City: ${v('city')}` : '',
+      interests.length ? `Interested in: ${interests.join(', ')}` : '',
+    ].filter(Boolean);
+    if (v('message')) lines.push('', v('message'));
+    const subject = `Free home visit request from ${v('first')} ${v('last')}`;
+    window.location.href = `mailto:madriverpool@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+  });
+  form.addEventListener('input', (e) => {
+    if (e.target.getAttribute('aria-invalid') === 'true') {
+      e.target.removeAttribute('aria-invalid');
+      e.target.removeAttribute('aria-describedby');
+    }
+  });
+
+  /* ——— Ouvert ou fermé, à l'heure de Maitland ——— */
+  const openEl = $('[data-open]');
+  try {
+    const parts = new Intl.DateTimeFormat('en-US', {timeZone: 'America/New_York', weekday: 'short', hour: 'numeric', minute: 'numeric', hourCycle: 'h23'}).formatToParts(new Date());
+    const get = (t) => parts.find((p) => p.type === t).value;
+    const mins = (Number(get('hour')) % 24) * 60 + Number(get('minute'));
+    const open = !['Sat', 'Sun'].includes(get('weekday')) && mins >= 540 && mins < 1020;
+    openEl.textContent = open ? 'Open now' : 'Closed now';
+    openEl.classList.toggle('is-closed', !open);
+    openEl.hidden = false;
+  } catch (_) {
+    /* sans fuseau horaire, on n'affiche rien */
+  }
+
+  /* la barre d'appel s'efface quand le formulaire est à l'écran */
+  if (dock && io) {
+    new IntersectionObserver(
+      ([e]) => {
+        atVisit = e.isIntersecting;
+        onScroll(window.scrollY);
+      },
+      {threshold: 0.12},
+    ).observe($('#visit'));
+  }
+
+  const year = $('[data-year]');
+  if (year) year.textContent = String(new Date().getFullYear());
+})();
+
+</script>
+</body>
+</html>
