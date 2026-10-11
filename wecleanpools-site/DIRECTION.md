@@ -109,9 +109,10 @@ CONTACT  le numéro en très grand, les horaires et « Open now » à l'heure du
 ## Mouvement
 
 - **L'ouverture** est le seul mouvement qui n'est pas déclenché par le visiteur : l'eau s'éclaircit au défilement.
-- **Les coches** de l'entretien hebdomadaire se tracent au fil de la lecture : le défilement suit la tournée d'un technicien.
+- **Les coches** de l'entretien hebdomadaire se tracent au fil de la lecture, reliées par un trait qui se remplit : le défilement suit la tournée d'un technicien.
 - **Les lignes de prix** s'ouvrent au clic, sur la paire avant/après.
 - **La rénovation** affiche l'avant tant qu'on appuie, avec une seule démonstration à l'arrivée.
+- **Les grandes photos** (rénovations, local technique) glissent de quelques pour cent dans leur cadre au défilement : une profondeur, pas un effet.
 - **Le défilement est doux** (Lenis).
 - **Pas d'apparition en fondu** à chaque partie.
 - **Avec le réglage « moins d'animations »,** l'ouverture s'affiche directement limpide, et les coches sont déjà tracées.

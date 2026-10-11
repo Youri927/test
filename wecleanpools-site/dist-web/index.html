@@ -325,7 +325,8 @@ small { font-size: inherit; font-weight: 400; color: var(--ink-2); }
   display: flex; align-items: center; gap: 12px;
   position: absolute; z-index: 6;
   left: var(--qx); bottom: clamp(20px, 5cqh, 48px);
-  color: rgba(255, 255, 255, .86); font-size: .9375rem; font-weight: 600;
+  color: #fff; font-size: .9375rem; font-weight: 600;
+  text-shadow: 0 1px 12px rgba(14, 22, 6, .45);
   will-change: opacity;
 }
 .pool__hint::before {
@@ -349,7 +350,7 @@ small { font-size: inherit; font-weight: 400; color: var(--ink-2); }
 .pool__facts { grid-column: 7 / -1; grid-row: 1 / span 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); }
 .pool__facts li { display: flex; flex-direction: column; gap: 3px; padding-top: 14px; border-top: 2px solid var(--ink); color: var(--ink-2); font-size: .9375rem; line-height: 1.35; }
 .pool__facts b { color: var(--ink); font-size: 1.0625rem; font-weight: 800; letter-spacing: -.01em; }
-.pool__facts a { color: var(--water-ink); font-weight: 700; }
+.pool__facts a { display: inline-block; padding: 3px 0; color: var(--water-ink); font-weight: 700; }
 
 /* ——— L'entretien hebdomadaire ——— */
 .weekly { padding-block: var(--sec); }
@@ -363,7 +364,14 @@ small { font-size: inherit; font-weight: 400; color: var(--ink-2); }
 .weekly__body { grid-column: 7 / -1; }
 .weekly__list-title { margin-bottom: 18px; font-size: var(--fs-h3); font-weight: 800; letter-spacing: -.02em; }
 .visit { border-bottom: 1px solid var(--line); }
-.visit__item { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 22px; align-items: center; padding: 20px 0 18px; border-top: 1px solid var(--line); }
+.visit__item { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 22px; align-items: center; padding: 20px 0 18px; border-top: 1px solid var(--line); }
+/* la tournée : un trait relie chaque coche à la suivante, et se remplit quand la coche est faite */
+.visit__item:not(:last-child)::before, .visit__item:not(:last-child)::after {
+  content: ""; position: absolute; left: 19.25px; top: 60px; width: 1.5px; height: calc(100% - 40px);
+  background: var(--line-strong);
+}
+.visit__item:not(:last-child)::after { background: var(--water); transform-origin: top; transition: transform .5s var(--ease) .55s; }
+.js .visit__item:not(.is-done)::after { transform: scaleY(0); }
 .visit__item b { font-size: clamp(1.1875rem, 1rem + .55vw, 1.4375rem); font-weight: 700; letter-spacing: -.015em; line-height: 1.25; padding-top: .1em; }
 .visit__item span { grid-column: 2; margin-top: 4px; color: var(--ink-2); line-height: 1.45; }
 .visit__check { grid-row: 1 / span 2; align-self: start; width: 40px; height: 40px; fill: none; stroke-linecap: round; stroke-linejoin: round; }
@@ -600,7 +608,7 @@ small { font-size: inherit; font-weight: 400; color: var(--ink-2); }
 }
 .field textarea { resize: vertical; min-height: 116px; }
 .field input:hover, .field textarea:hover { border-color: var(--line-strong); }
-.field input:focus, .field textarea:focus { outline: none; border-color: var(--water); background: #fff; box-shadow: 0 0 0 4px rgba(17, 144, 188, .18); }
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--water); background: #fff; box-shadow: 0 0 0 4px rgba(17, 144, 188, .3); }
 .field input[aria-invalid="true"] { border-color: #b3261e; background: #fff6f5; }
 .field__err { color: #a11d16; font-size: .875rem; font-style: normal; font-weight: 600; }
 .field ::placeholder { color: #6a7b88; opacity: 1; }
@@ -743,7 +751,8 @@ small { font-size: inherit; font-weight: 400; color: var(--ink-2); }
   .js .pool__stage { position: relative; }
   .js .pool__haze, .js .pool__murk, .js .pool__question, .js .pool__hint { display: none; }
   .pool__light i, .estimate__light i { animation: none; }
-  .visit__ring, .visit__check path { transition: none; }
+  .visit__ring, .visit__check path, .visit__item::after { transition: none; }
+  .js .visit__item:not(.is-done)::after { transform: none; }
   .js .visit__item:not(.is-done) .visit__ring, .js .visit__item:not(.is-done) .visit__check path { stroke-dashoffset: 0; }
   .fix__body, .fix__sign::before, .fix__sign::after, .viewer__before, .btn { transition: none; }
   .viewer__shot.is-on { animation: none; }
@@ -1075,7 +1084,7 @@ small { font-size: inherit; font-weight: 400; color: var(--ink-2); }
     <div class="wrap school__grid">
       <h2 class="school__title" id="school-title">Rather do it yourself?</h2>
       <div class="school__text">
-        <p>Pool School is for new pool owners tired of guessing. We teach you routine cleaning, water chemistry, and how to look after and run your equipment, with 27 years of practice behind every answer.</p>
+        <p>Pool School is for new pool owners tired of guessing. We teach you routine cleaning, water chemistry, and how to look after and run your equipment. We’ve been doing it ourselves since 1999.</p>
         <a class="school__link" href="#estimate" data-need="Pool School">Ask about Pool School</a>
       </div>
     </div>
@@ -1095,7 +1104,7 @@ small { font-size: inherit; font-weight: 400; color: var(--ink-2); }
         <ul class="creds">
           <li><b>Certified Pool Operator</b><span>Trained in water chemistry and pool operation.</span></li>
           <li><b>License TICL 410</b><span>Texas Residential Appliance Installer. <a href="https://www.tdlr.texas.gov/LicenseSearch/" rel="noopener">Look it up on the state’s site</a></span></li>
-          <li><b>Licensed and insured</b><span>For repairs and remodels as much as for weekly service.</span></li>
+          <li><b>Licensed and insured</b><span>The same company remodels pools, as D’s Pool Care &amp; Remodels.</span></li>
           <li><b>Family owned</b><span>Since 1999, and not a franchise.</span></li>
         </ul>
       </div>
@@ -1282,7 +1291,7 @@ small { font-size: inherit; font-weight: 400; color: var(--ink-2); }
         if (!en.isIntersecting) continue;
         io.unobserve(en.target);
         const now = performance.now();
-        next = Math.max(now, next + 170);
+        next = Math.max(now, next + 320);
         setTimeout(() => en.target.classList.add('is-done'), next - now);
       }
     }, {rootMargin: '0px 0px -26% 0px'});

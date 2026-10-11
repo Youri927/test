@@ -77,7 +77,7 @@
         if (!en.isIntersecting) continue;
         io.unobserve(en.target);
         const now = performance.now();
-        next = Math.max(now, next + 170);
+        next = Math.max(now, next + 320);
         setTimeout(() => en.target.classList.add('is-done'), next - now);
       }
     }, {rootMargin: '0px 0px -26% 0px'});
