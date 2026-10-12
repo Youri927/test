@@ -1,0 +1,66 @@
+{
+ "case-after": [
+  640,
+  480
+ ],
+ "case-before": [
+  640,
+  480
+ ],
+ "case-during": [
+  640,
+  480
+ ],
+ "entrance": [
+  945,
+  580
+ ],
+ "facade-m-plate": [
+  450,
+  150
+ ],
+ "facade-m": [
+  1200,
+  900
+ ],
+ "facade-plate": [
+  500,
+  120
+ ],
+ "facade": [
+  2880,
+  840
+ ],
+ "team-alexis": [
+  420,
+  606
+ ],
+ "team-amanda": [
+  420,
+  606
+ ],
+ "team-castor": [
+  420,
+  606
+ ],
+ "team-cindy": [
+  420,
+  606
+ ],
+ "team-denise": [
+  420,
+  606
+ ],
+ "team-shana": [
+  420,
+  606
+ ],
+ "team-terri": [
+  420,
+  606
+ ],
+ "team-tina": [
+  420,
+  606
+ ]
+}

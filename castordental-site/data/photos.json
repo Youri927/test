@@ -1,0 +1,16 @@
+[
+ {"id": "facade", "src": "efd44a_cfa3dc45cb284bc586cc256651ed6491~mv2.jpg", "box": [0, 1040, 4032, 2216], "w": 2880, "q": 52, "ws": [1440, 2160]},
+ {"id": "facade-m", "src": "efd44a_cfa3dc45cb284bc586cc256651ed6491~mv2.jpg", "box": [1800, 600, 4032, 2274], "w": 1200, "q": 54, "ws": [800]},
+ {"id": "entrance", "src": "efd44a_cfa3dc45cb284bc586cc256651ed6491~mv2.jpg", "box": [2040, 1380, 2985, 1960], "w": 945, "q": 56},
+ {"id": "case-before", "src": "efd44a_fd346f35854740bb930cd293ddcfe809.jpg", "w": 640, "q": 64},
+ {"id": "case-during", "src": "efd44a_d556af2ea2ee42ed820eea867f20a827.jpg", "w": 640, "q": 64},
+ {"id": "case-after", "src": "efd44a_ae189c0a56a745d3bf96b07061bf3821.jpg", "w": 640, "q": 64},
+ {"id": "team-castor", "face": "castor", "w": 420, "q": 56},
+ {"id": "team-denise", "face": "denise", "w": 420, "q": 56},
+ {"id": "team-tina", "face": "tina", "w": 420, "q": 56},
+ {"id": "team-shana", "face": "shana", "w": 420, "q": 56},
+ {"id": "team-cindy", "face": "cindy", "w": 420, "q": 56},
+ {"id": "team-alexis", "face": "alexis", "w": 420, "q": 56},
+ {"id": "team-terri", "face": "terri", "w": 420, "q": 56},
+ {"id": "team-amanda", "face": "amanda", "w": 420, "q": 56}
+]
