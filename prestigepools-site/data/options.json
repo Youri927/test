@@ -1,0 +1,155 @@
+{
+ "water": [
+  {
+   "id": "o-ledge",
+   "wide": true,
+   "title": "Tanning ledge",
+   "text": "A shallow ledge to lounge in a few inches of water.",
+   "alt": "In-water loungers on a tanning ledge, under a white pergola."
+  },
+  {
+   "id": "o-spillover",
+   "wide": false,
+   "title": "Spillover spa",
+   "text": "Raised above the pool, sharing its equipment.",
+   "alt": "A raised square spa in stacked stone, spilling into the pool."
+  },
+  {
+   "id": "o-spa",
+   "wide": false,
+   "title": "Stand-alone spa",
+   "text": "With its own equipment, apart from the pool.",
+   "alt": "A round raised spa in stacked stone with a light coping."
+  },
+  {
+   "id": "o-jets",
+   "wide": false,
+   "title": "Deck jets",
+   "text": "Crystal Fountains jets that arc into the pool.",
+   "alt": "Three deck jets arching into a small pool."
+  },
+  {
+   "id": "o-cascade",
+   "wide": false,
+   "title": "Cascades",
+   "text": "Water features that start right in the coping.",
+   "alt": "A sheet of water falling from a stone wall into the pool."
+  },
+  {
+   "id": "o-rocks",
+   "wide": false,
+   "title": "Rock waterfalls",
+   "text": "RicoRock waterfalls and boulders to jump from.",
+   "alt": "A stacked rock waterfall pouring into a pool."
+  },
+  {
+   "id": "o-slide",
+   "wide": false,
+   "title": "Slides",
+   "text": "S.R. Smith slides, from the Cyclone to the BigRide.",
+   "alt": "A gray pool slide at the edge of a rectangular pool."
+  }
+ ],
+ "around": [
+  {
+   "id": "o-stamped",
+   "wide": true,
+   "title": "Stamped concrete",
+   "text": "Gray or color, pressed with shells and starfish if you like.",
+   "alt": "Stamped concrete deck with shells and a starfish pressed into it."
+  },
+  {
+   "id": "o-seashell",
+   "wide": false,
+   "title": "Seashell finish",
+   "text": "Concrete with real shells exposed in the surface.",
+   "alt": "Close-up of seashell-finish concrete with crushed shells in it."
+  },
+  {
+   "id": "o-coping",
+   "wide": false,
+   "title": "Coping",
+   "text": "The rounded edge between the water and the deck.",
+   "alt": "Close-up of a rounded coping edge between seashell concrete and pool water."
+  },
+  {
+   "id": "o-stone",
+   "wide": false,
+   "title": "Stamped stone",
+   "text": "Concrete stamped in a cut-stone pattern.",
+   "alt": "Concrete deck stamped in a cut-stone pattern."
+  },
+  {
+   "id": "o-travertine",
+   "wide": false,
+   "title": "Travertine",
+   "text": "Travertine decking and coping, here with stepping stones.",
+   "alt": "A freeform pool with travertine decking and stepping stones set in black pebbles."
+  },
+  {
+   "id": "o-pavers",
+   "wide": false,
+   "title": "Pavers",
+   "text": "Paver decks and coping in your choice of color.",
+   "alt": "A rectangular pool with a gray paver deck."
+  },
+  {
+   "id": "o-fence",
+   "wide": false,
+   "title": "Fences and gates",
+   "text": "Pool barrier compliant, so the pool is closed when you want it to be.",
+   "alt": "A rectangular pool behind a black mesh safety fence."
+  }
+ ],
+ "back": [
+  {
+   "id": "o-firepit",
+   "wide": true,
+   "title": "Fire pits",
+   "text": "Stone fire pits, with a place for the firewood.",
+   "alt": "A stone fire pit circled by white Adirondack chairs, with a firewood rack behind."
+  },
+  {
+   "id": "o-fireplace",
+   "wide": false,
+   "title": "Fireplaces",
+   "text": "Outdoor stone fireplaces and seating areas.",
+   "alt": "An outdoor stone fireplace with sofas on a stamped concrete patio."
+  },
+  {
+   "id": "o-kitchen",
+   "wide": false,
+   "title": "Outdoor kitchens",
+   "text": "Built-in grills and counters by the pool.",
+   "alt": "An outdoor kitchen with a built-in grill and white cabinets."
+  },
+  {
+   "id": "o-pergola",
+   "wide": false,
+   "title": "Pergolas",
+   "text": "Shade over the deck, or right over the water.",
+   "alt": "A white pergola beside a rectangular pool."
+  },
+  {
+   "id": "o-gazebo",
+   "wide": false,
+   "title": "Gazebos",
+   "text": "A covered room by the pool.",
+   "alt": "A metal gazebo with sofas and curtains on a concrete deck."
+  },
+  {
+   "id": "o-shower",
+   "wide": false,
+   "title": "Outdoor showers",
+   "text": "Rinse off on the way in.",
+   "alt": "An outdoor shower against a brick wall."
+  },
+  {
+   "id": "o-enclosure",
+   "wide": false,
+   "title": "Pool enclosures",
+   "text": "Keep swimming after the weather cools down.",
+   "alt": "A pool inside a screened enclosure."
+  }
+ ]
+}

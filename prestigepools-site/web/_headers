@@ -1,0 +1,3 @@
+# Netlify : la maquette ne doit pas être indexée par les moteurs de recherche (à retirer au lancement)
+/*
+  X-Robots-Tag: noindex, nofollow

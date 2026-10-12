@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiberglass pools and spas in Wilmington, NC | Prestige Pools</title>
+<meta name="description" content="Latham fiberglass pools and spas, set by our own crews with our own machines. Family-owned at Monkey Junction in Wilmington, NC, since 1999.">
+<link rel="canonical" href="https://www.prestigepoolsofwilmington.com/">
+<meta name="theme-color" content="#E4EBEF" id="theme-color">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Prestige Pools of Wilmington">
+<meta property="og:title" content="Fiberglass pools for long days and late swims.">
+<meta property="og:description" content="Latham fiberglass pools and spas in Wilmington, NC, set by a family-owned crew since 1999.">
+<meta property="og:url" content="https://www.prestigepoolsofwilmington.com/">
+<meta property="og:image" content="https://www.prestigepoolsofwilmington.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230C1838'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%233550FF'/%3E%3Ccircle cx='16' cy='16' r='10.5' fill='none' stroke='%233550FF' stroke-opacity='.45' stroke-width='2'/%3E%3C/svg%3E">
+<script>
+  // Avant tout affichage : les lumières de la piscine. Le choix du visiteur s'il en a fait un, sinon la nuit à Wilmington :
+  // lever et coucher du soleil du jour (équation du lever du soleil, à la minute près), 20 minutes de marge.
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    function sun(now) {
+      try {
+        var p = new Intl.DateTimeFormat('en-US', {timeZone: 'America/New_York', year: 'numeric', month: 'numeric', day: 'numeric'}).formatToParts(now);
+        var g = function (t) { return +p.find(function (x) { return x.type === t; }).value; };
+        var r = Math.PI / 180, lat = 34.2257 * r;
+        var n = Math.round(Date.UTC(g('year'), g('month') - 1, g('day'), 12) / 864e5 + 2440587.5 - 2451545);
+        var j = n + 77.9447 / 360;
+        var M = (357.5291 + 0.98560028 * j) % 360;
+        var C = 1.9148 * Math.sin(M * r) + 0.02 * Math.sin(2 * M * r) + 0.0003 * Math.sin(3 * M * r);
+        var L = (M + C + 282.9372) % 360;
+        var T = 2451545 + j + 0.0053 * Math.sin(M * r) - 0.0069 * Math.sin(2 * L * r);
+        var s = Math.sin(L * r) * Math.sin(23.4397 * r), c = Math.sqrt(1 - s * s);
+        var w = Math.acos((Math.sin(-0.833 * r) - Math.sin(lat) * s) / (Math.cos(lat) * c)) / r / 360;
+        var ms = function (J) { return new Date((J - 2440587.5) * 864e5); };
+        return {rise: ms(T - w), set: ms(T + w)};
+      } catch (e) { return null; }
+    }
+    var k = null, q = location.search.match(/[?&]lights=(on|off)/);
+    try { k = localStorage.getItem('ppw-lights'); } catch (e) {}
+    if (q) k = q[1];
+    var s = sun(new Date()), t = Date.now();
+    var auto = !!s && (t > s.set.getTime() + 12e5 || t < s.rise.getTime() - 12e5);
+    if (k ? k === 'on' : auto) d.classList.add('night');
+    window.ppw = {sun: sun, auto: auto, forced: !!q};
+  })();
+</script>
+<!--STYLES-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "HomeAndConstructionBusiness",
+      "@id": "https://www.prestigepoolsofwilmington.com/#business",
+      "name": "Prestige Pools of Wilmington",
+      "legalName": "Prestige Pools of Wilmington, Inc.",
+      "url": "https://www.prestigepoolsofwilmington.com/",
+      "image": "https://www.prestigepoolsofwilmington.com/assets/og.jpg",
+      "telephone": "+1-910-509-2370",
+      "email": "sales.ppow@gmail.com",
+      "foundingDate": "1999",
+      "founder": {"@type": "Person", "name": "Shane Kosnik"},
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "5307 S College Rd",
+        "addressLocality": "Wilmington",
+        "addressRegion": "NC",
+        "postalCode": "28412",
+        "addressCountry": "US"
+      },
+      "areaServed": "Wilmington, NC and surrounding areas",
+      "openingHoursSpecification": [
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "08:00", "closes": "17:00"},
+        {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "10:00", "closes": "14:00"}
+      ],
+      "award": "WECT Best of the Cape Fear, 2024 winner",
+      "sameAs": [
+        "https://www.facebook.com/pages/Prestige-Pools-and-Spas-of-Wilmington/152224861622962",
+        "https://www.instagram.com/prestigepoolswilmington/",
+        "https://www.houzz.com/pro/prestigepoolsofwilmington/prestige-pools-of-wilmington"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Pools, spas and outdoor living",
+        "itemListElement": [
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Latham fiberglass pool installation"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Spa and hot tub installation"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Pool decks, coping and outdoor living"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Pentair pool equipment and automation"}},
+          {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Pool leak detection"}}
+        ]
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.prestigepoolsofwilmington.com/#website",
+      "url": "https://www.prestigepoolsofwilmington.com/",
+      "name": "Prestige Pools of Wilmington",
+      "publisher": {"@id": "https://www.prestigepoolsofwilmington.com/#business"}
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top" id="top">
+  <div class="top__in">
+    <a class="brand" href="#main" aria-label="Prestige Pools of Wilmington, back to top">
+      <span class="brand__light" aria-hidden="true"></span>
+      <span class="brand__name">Prestige Pools</span>
+      <span class="brand__place">of Wilmington</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <ul>
+        <li><a href="#fiberglass">Why fiberglass</a></li>
+        <li><a href="#work">Our work</a></li>
+        <li><a href="#options">Options</a></li>
+        <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#family">About</a></li>
+        <li><a href="#service">Service</a></li>
+      </ul>
+    </nav>
+    <a class="top__tel" href="tel:+19105092370">910-509-2370</a>
+    <button class="lights" type="button" aria-pressed="false" data-lights>
+      <span class="lights__knob" aria-hidden="true"></span><span class="lights__label">Pool lights</span>
+    </button>
+    <a class="btn btn--light top__cta" href="#plan">Plan your pool</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+  </div>
+</header>
+
+<div class="menu" id="menu" hidden>
+  <nav aria-label="Menu">
+    <ul>
+      <li><a href="#fiberglass">Why fiberglass</a></li>
+      <li><a href="#work">Our work</a></li>
+      <li><a href="#options">Options</a></li>
+      <li><a href="#after-dark">After dark</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#family">About us</a></li>
+      <li><a href="#financing">Financing</a></li>
+      <li><a href="#service">Service</a></li>
+    </ul>
+  </nav>
+  <a class="btn btn--light" href="#plan">Plan your pool</a>
+  <a class="menu__tel" href="tel:+19105092370">Call 910-509-2370</a>
+</div>
+
+<main id="main">
+
+<!-- ——— OUVERTURE ——— -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__text">
+    <h1 class="hero__title" id="hero-title"><span class="hero__line">Fiberglass pools for</span> <span class="hero__line">long days and</span> <span class="hero__line">late swims.</span></h1>
+    <p class="hero__lead">Latham fiberglass pools and spas, set by our own crews with our own machines. Family-owned at Monkey Junction since 1999.</p>
+    <p class="hero__ctas"><a class="btn btn--light" href="#plan">Plan your pool</a> <a class="hero__call" href="tel:+19105092370">or call 910-509-2370</a></p>
+    <ul class="facts">
+      <li><strong>Since 1999</strong> in Wilmington, NC</li>
+      <li><strong>Latham Grand Dealer</strong> fiberglass only</li>
+      <li><strong>Best of the Cape Fear</strong> WECT, 2024 winner</li>
+    </ul>
+  </div>
+  <figure class="hero__fig">
+    <div class="hero__photo">
+      <img class="hero__day" src="img/hero-day.avif" alt="A rectangular Prestige pool at dusk, with palm trees uplit along a wood fence." fetchpriority="high" decoding="async" sizes="(max-width: 860px) 92vw, 44vw">
+      <img class="hero__night" src="img/hero-night.avif" alt="" aria-hidden="true" decoding="async" sizes="(max-width: 860px) 92vw, 44vw">
+    </div>
+    <figcaption class="hero__cap">
+      <button class="lights lights--big" type="button" aria-pressed="false" data-lights>
+        <span class="lights__knob" aria-hidden="true"></span><span class="lights__label">Pool lights</span>
+      </button>
+      <span class="hero__note"><span class="hero__state">A Prestige pool at dusk.</span> <span class="sunset" data-sunset></span></span>
+    </figcaption>
+  </figure>
+</section>
+
+<!-- ——— POURQUOI LA FIBRE ——— -->
+<section class="glass" id="fiberglass" aria-labelledby="glass-title">
+  <div class="glass__head">
+    <h2 id="glass-title">Made in one piece. Set in days.</h2>
+    <p class="lead">A Latham fiberglass pool is built at the factory as a single shell. We bring it to your yard, set it in place and finish everything around it.</p>
+  </div>
+  <div class="glass__photos">
+    <figure class="glass__big">
+      <img class="reveal" src="img/yard-air.avif" alt="Aerial view of the Prestige Pools yard at Monkey Junction, with pool shells, trucks and the office." loading="lazy" decoding="async" sizes="(max-width: 860px) 92vw, 600px">
+      <figcaption>Our 2-acre yard at Monkey Junction, with Latham shells on site.</figcaption>
+    </figure>
+    <figure class="glass__small">
+      <img class="reveal" src="img/shell-set.avif" alt="A Prestige excavator carrying a white fiberglass pool shell across a backyard." loading="lazy" decoding="async" sizes="(max-width: 860px) 92vw, 420px">
+      <figcaption>One of our excavators moving a shell into place.</figcaption>
+    </figure>
+  </div>
+  <dl class="pros">
+    <div><dt>3 to 5 days</dt><dd>to install a fiberglass pool, against 4 to 8 weeks for concrete.</dd></div>
+    <div><dt>Smooth to the touch</dt><dd>No scraped feet or knees. The surface is non-porous, so it needs fewer chemicals and resists algae.</dd></div>
+    <div><dt>Built to flex</dt><dd>Fiberglass bends instead of cracking through freeze and thaw.</dd></div>
+    <div><dt>Lifetime warranty</dt><dd>on the structure of the pool, and 20 years on the surface.</dd></div>
+  </dl>
+  <div class="compare">
+    <p class="compare__intro">Shane has built concrete, vinyl liner and fiberglass pools since 1991. Today Prestige installs one kind only: Latham fiberglass.</p>
+    <table>
+      <caption class="sr">Fiberglass, concrete and vinyl liner pools compared</caption>
+      <thead><tr><th scope="col"><span class="sr">Point</span></th><th scope="col">Fiberglass</th><th scope="col">Concrete</th><th scope="col">Vinyl liner</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">The upside</th><td data-label="Fiberglass">In the ground in 3 to 5 days</td><td data-label="Concrete">Any shape you can design</td><td data-label="Vinyl liner">Low cost up front</td></tr>
+        <tr><th scope="row">Surface</th><td data-label="Fiberglass">Smooth and non-porous</td><td data-label="Concrete">Rough, porous, stains easily</td><td data-label="Vinyl liner">Can puncture, rip and tear</td></tr>
+        <tr><th scope="row">Upkeep</th><td data-label="Fiberglass">Fewer chemicals, resists algae</td><td data-label="Concrete">Acid washing and replastering</td><td data-label="Vinyl liner">Liners replaced periodically</td></tr>
+        <tr><th scope="row">Over time</th><td data-label="Fiberglass">Flexes instead of cracking</td><td data-label="Concrete">Cracks through freeze and thaw</td><td data-label="Vinyl liner">Walls deteriorate, liners wrinkle</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ——— LA POSE ——— -->
+<section class="build" id="build" aria-labelledby="build-title">
+  <div class="build__head">
+    <h2 id="build-title">Our machines. Our crews.</h2>
+    <p class="lead">We own the dump trucks, excavators, track loaders and trailers that build your pool, so we can schedule your build more efficiently. Our construction crews have been with the Prestige family for more than 12 years.</p>
+  </div>
+  <div class="build__photos">
+    <figure><img class="reveal" src="img/loader.avif" alt="A Prestige track loader digging in a backyard next to a dump truck." loading="lazy" decoding="async" sizes="(max-width: 860px) 46vw, 300px"><figcaption>Our track loader on a dig.</figcaption></figure>
+    <figure><img class="reveal" src="img/truck.avif" alt="A white Prestige dump truck with the company name on its door." loading="lazy" decoding="async" sizes="(max-width: 860px) 46vw, 300px"><figcaption>One of our dump trucks.</figcaption></figure>
+  </div>
+  <ol class="steps" aria-label="How a Prestige pool goes in">
+    <li><h3>Layout</h3><p>The pool layout is carefully marked on your lawn.</p></li>
+    <li><h3>Dig</h3><p>The dig begins.</p></li>
+    <li><h3>Shape</h3><p>The hole is prepared to the exact shape and depth of your pool.</p></li>
+    <li><h3>Set</h3><p>The shell is set in place.</p></li>
+    <li><h3>Fill</h3><p>The pool is filled with water as the backfill begins.</p></li>
+    <li><h3>Wire</h3><p>Plumbing and electrical equipment go in, under Shane’s pool electrical license.</p></li>
+    <li><h3>Deck</h3><p>The concrete is poured around the pool.</p></li>
+    <li><h3>Swim</h3><p>Your Latham pool is ready, with its lifetime warranty on the structure.</p></li>
+  </ol>
+</section>
+
+<!-- ——— LES PISCINES ——— -->
+<section class="work" id="work" aria-labelledby="work-title">
+  <div class="work__head">
+    <h2 id="work-title">Every pool here is one of ours.</h2>
+    <p class="lead">Built by our crews in backyards around Wilmington: rectangles and freeforms, spas and tanning ledges, and a few right on the water.</p>
+  </div>
+  <div class="filters" role="group" aria-label="Show pools">
+    <button type="button" aria-pressed="true" data-filter="all">All</button>
+    <button type="button" aria-pressed="false" data-filter="rect">Rectangles</button>
+    <button type="button" aria-pressed="false" data-filter="free">Freeform</button>
+    <button type="button" aria-pressed="false" data-filter="spa">With a spa</button>
+    <button type="button" aria-pressed="false" data-filter="water">By the water</button>
+    <button type="button" aria-pressed="false" data-filter="night">After dark</button>
+  </div>
+  <p class="work__count" aria-live="polite" data-count></p>
+  <ul class="grid" data-grid>
+<!--GALLERY-->
+  </ul>
+  <p class="work__more-wrap"><button class="btn btn--line work__more" type="button" data-more hidden>Show all photos</button></p>
+</section>
+
+<dialog class="box" aria-label="Photo viewer" data-box>
+  <figure class="box__fig">
+    <img class="box__img" alt="" data-box-img>
+    <figcaption class="box__cap"><span data-box-cap></span> <span class="box__n" data-box-n></span></figcaption>
+  </figure>
+  <button class="box__btn box__prev" type="button" aria-label="Previous photo" data-box-prev><span aria-hidden="true">‹</span></button>
+  <button class="box__btn box__next" type="button" aria-label="Next photo" data-box-next><span aria-hidden="true">›</span></button>
+  <button class="box__close" type="button" data-box-close>Close</button>
+</dialog>
+
+<!-- ——— LES OPTIONS ——— -->
+<section class="opts" id="options" aria-labelledby="opts-title">
+  <div class="opts__head">
+    <h2 id="opts-title">Make it yours.</h2>
+    <p class="lead">Choose your shell from more than 50 Latham models. Everything around it, we design and build with you.</p>
+  </div>
+
+  <div class="opt-group" aria-labelledby="g-water">
+    <h3 class="opt-group__title" id="g-water">In the water</h3>
+    <ul class="board">
+<!--OPT-WATER-->
+    </ul>
+    <p class="opt-group__more">Also: vanishing edges, waterline tile and mosaics set at the factory (optional with Latham’s gel coats), CoverStar automatic covers, and gel coats in Sapphire Blue, Ocean Blue, Night Sky, Coastal Bronze, Shale Gray, Pearl White and Whisper White.</p>
+  </div>
+
+  <div class="opt-group" aria-labelledby="g-around">
+    <h3 class="opt-group__title" id="g-around">Around the water</h3>
+    <ul class="board">
+<!--OPT-AROUND-->
+    </ul>
+    <p class="opt-group__more">Also: coping in 3 × 9 in., 9 in. and 13 in. widths or veneer stone, pool barrier compliant fencing and gates, landscaping and stormwater drainage.</p>
+  </div>
+
+  <div class="opt-group" aria-labelledby="g-back">
+    <h3 class="opt-group__title" id="g-back">Out back</h3>
+    <ul class="board">
+<!--OPT-BACK-->
+    </ul>
+  </div>
+
+  <aside class="cocktail" aria-labelledby="cocktail-title">
+    <p class="cocktail__size" aria-hidden="true">10 × 16<span> ft</span></p>
+    <div>
+      <h3 id="cocktail-title">Small yard? The cocktail pool.</h3>
+      <p>Our Latham cocktail pool measures 10 by 16 feet, with one full-width set of steps and benches all the way around, so there is room to sit for everyone. It is ready for an automatic cover, costs less to heat and maintain than a full-size pool, and can be heated like a hot tub for early spring and late fall.</p>
+      <a class="link" href="#plan" data-topic="pool">Ask about the cocktail pool</a>
+    </div>
+  </aside>
+</section>
+
+<!-- ——— LA NUIT ——— -->
+<section class="dark" id="after-dark" aria-labelledby="dark-title">
+  <div class="dark__in">
+    <div class="dark__text">
+      <h2 id="dark-title">Pool time doesn’t end at sunset.</h2>
+      <p class="lead">Pentair LED pool lights give more light for less power. Pick one of 5 colors or one of 7 color-changing shows, and control them from anywhere with Pentair automation.</p>
+      <fieldset class="hues">
+        <legend>Light this pool in</legend>
+        <label><input type="radio" name="hue" value="white" checked><span>White</span></label>
+        <label><input type="radio" name="hue" value="blue"><span>Blue</span></label>
+        <label><input type="radio" name="hue" value="red"><span>Red</span></label>
+      </fieldset>
+      <p class="dark__more">We also light the yard around it: uplit palms and paths, string lights, fire bowls and fireplaces.</p>
+    </div>
+    <figure class="dark__fig">
+      <div class="dark__photo reveal" data-hues>
+        <img src="img/lights-white.avif" alt="A freeform Prestige pool at night, lit white." loading="lazy" decoding="async" data-hue="white" sizes="(max-width: 860px) 92vw, 760px">
+        <img src="img/lights-blue.avif" alt="The same pool lit blue." loading="lazy" decoding="async" data-hue="blue" aria-hidden="true" sizes="(max-width: 860px) 92vw, 760px">
+        <img src="img/lights-red.avif" alt="The same pool lit red." loading="lazy" decoding="async" data-hue="red" aria-hidden="true" sizes="(max-width: 860px) 92vw, 760px">
+      </div>
+      <figcaption>One of our freeform pools, photographed the same night in three colors.</figcaption>
+    </figure>
+  </div>
+  <div class="dark__row">
+    <figure><img src="img/night-fire.avif" alt="A lit pool and a fire bowl on a deck above the water at dusk." loading="lazy" decoding="async" sizes="(max-width: 860px) 92vw, 33vw"><figcaption>Fire and water, at the edge of the sound.</figcaption></figure>
+    <figure><img src="img/night-pier.avif" alt="A pool glowing blue at sunset, with a long pier on the water behind it." loading="lazy" decoding="async" sizes="(max-width: 860px) 92vw, 33vw"><figcaption>Sunset over the dock, pool lights on.</figcaption></figure>
+    <figure><img src="img/night-strings.avif" alt="A pool lit green under string lights and hammocks." loading="lazy" decoding="async" sizes="(max-width: 860px) 92vw, 33vw"><figcaption>String lights, hammocks and a green glow.</figcaption></figure>
+  </div>
+</section>
+
+<!-- ——— SPAS ET ÉQUIPEMENT ——— -->
+<section class="spas" id="spas" aria-labelledby="spas-title">
+  <h2 class="sr" id="spas-title">Spas, hot tubs and pool equipment</h2>
+  <div class="spas__col">
+    <figure class="spas__fig"><img class="reveal" src="img/spa.avif" alt="A raised stone spa spilling into a Prestige pool." loading="lazy" decoding="async" sizes="(max-width: 960px) 92vw, 730px"></figure>
+    <h3>Spas and hot tubs</h3>
+    <p>Latham spas built in with your pool: elevated spillover spas that share the pool’s equipment, or stand-alone spas with their own. For a hot tub on its own, we carry Nordic Hot Tubs, made in America with simple controls in sizes from 2 to 8 people, and Marquis.</p>
+    <a class="link" href="#plan" data-topic="spa">Ask about spas and hot tubs</a>
+  </div>
+  <div class="spas__col">
+    <figure class="spas__fig"><img class="reveal" src="img/spa-night.avif" alt="A Prestige pool lit purple at night, with a hot tub glowing blue under the pergola." loading="lazy" decoding="async" sizes="(max-width: 960px) 92vw, 520px"></figure>
+    <h3>Run it from your phone</h3>
+    <p>We are a certified Pentair provider: variable-speed pumps, filters, IntelliChlor salt chlorine generators, heaters and heat pumps, robotic cleaners, LED lights, and IntelliCenter automation you control from the Pentair Home app.</p>
+    <ul class="ticks">
+      <li>IntelliChlor makes chlorine from common table salt: no chlorine to buy, carry or store.</li>
+      <li>Real-time alerts help you keep an eye on pH and sanitizer.</li>
+      <li>Variable-speed pumps adjust to what your pool needs. Ask us about the Duke Energy rebate on pool pumps.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ——— LES AVIS ——— -->
+<section class="reviews" id="reviews" aria-labelledby="reviews-title">
+  <div class="reviews__head">
+    <h2 id="reviews-title">Our customers keep mentioning Jordan.</h2>
+    <p class="lead">Jordan Whitaker is our project manager. Here is what customers wrote about him, Shane and the crews on Google and Facebook.</p>
+  </div>
+  <figure class="quote quote--big">
+    <blockquote><p>Our pool was being installed while we were not yet living here full-time. Jordan went above and beyond with pictures and texts keeping us involved and updated at every step of the process.</p></blockquote>
+    <figcaption>Debbie &amp; John, <cite>Google</cite></figcaption>
+  </figure>
+  <div class="quotes">
+    <figure class="quote"><blockquote><p>Jordan from Prestige Pools was not only the first person to call us back (same day) but the only person who called us back within a week…</p></blockquote><figcaption>Ashlee, <cite>Google</cite></figcaption></figure>
+    <figure class="quote"><blockquote><p>He even drove with me to other clients’ houses so I could see for myself what they looked like fully installed.</p></blockquote><figcaption>Stephanie, <cite>Facebook</cite></figcaption></figure>
+    <figure class="quote"><blockquote><p>They were there to start when he told me they would, and they were actually done ahead of schedule…</p></blockquote><figcaption>Lee, <cite>Google</cite></figcaption></figure>
+    <figure class="quote"><blockquote><p>He came to our house on several occasions before we even decided on a pool, presenting design ideas, […] painted multiple layouts of our pool in the back yard and worked directly with us through every part from design to pool school afterwards…</p></blockquote><figcaption>Chris, about Shane, <cite>Facebook</cite></figcaption></figure>
+    <figure class="quote"><blockquote><p>Jordan, Murillo, Matt, and Matty are all awesome!! […] Matt and Murillo were on point, got things done quickly, but right, and went above and beyond expectations! Their detail was incredible!</p></blockquote><figcaption>Toni, <cite>Facebook</cite></figcaption></figure>
+    <figure class="quote"><blockquote><p>My family and I just moved to Wilmington at the beginning of the year and decided to have a pool put in. Prestige had good reviews, so I called and Jordan came out that afternoon.</p></blockquote><figcaption>Sandy, <cite>Facebook</cite></figcaption></figure>
+    <figure class="quote"><blockquote><p>Not only is he there to walk you through the project, he also has helped us stabilize our spa after the project was completed…</p></blockquote><figcaption>Kristin, <cite>Facebook</cite></figcaption></figure>
+    <figure class="quote"><blockquote><p>I am a pool lover and I know pools! I bought a vacation house here in Wilmington. This is how I met Shane and Jordan and let me tell you both of these gentlemen are top shelf.</p></blockquote><figcaption>Jerry, <cite>Google</cite></figcaption></figure>
+    <figure class="quote"><blockquote><p>A pleasure to work with, very responsive and spent time explaining every bit of the process to me. The pool turned out better than I could have imagined.</p></blockquote><figcaption>Corey, <cite>Google</cite></figcaption></figure>
+  </div>
+  <p class="reviews__more">More reviews on <a class="link" href="https://www.facebook.com/pages/Prestige-Pools-and-Spas-of-Wilmington/152224861622962" rel="noopener">our Facebook page</a>.</p>
+</section>
+
+<!-- ——— LA FAMILLE ——— -->
+<section class="family" id="family" aria-labelledby="family-title">
+  <div class="family__text">
+    <h2 id="family-title">Shane has been building pools since 1991.</h2>
+    <p class="lead">He started in South Carolina, building concrete, vinyl liner and fiberglass pools in Mt Pleasant, Isle of Palms and Sullivan’s Island. In 1999 he founded Prestige Pools of Wilmington.</p>
+    <p>Shane and Darlene Kosnik own the company today, on 2 acres at Monkey Junction. In their words, it is “a testament to the dedication we have to our customers: we will be here for many years to come.”</p>
+    <p class="family__motto">Helping families have fun. That’s us.</p>
+  </div>
+  <div class="family__facts">
+    <h3>Licensed and certified</h3>
+    <ul class="ticks">
+      <li>North Carolina General Contractor license</li>
+      <li>SP-SP Electrical Contractor license, for swimming pool construction</li>
+      <li>National Swimming Pool Foundation Certified Pool Operator</li>
+      <li>Certified Solar PV Installer</li>
+      <li>Leaktronics certified leak detection</li>
+      <li>Member of the Better Business Bureau and the Wilmington Chamber of Commerce</li>
+    </ul>
+    <h3>Recognized</h3>
+    <ul class="ticks">
+      <li>WECT Best of the Cape Fear, 2024 winner</li>
+      <li>Latham Grand Dealer</li>
+      <li>Best of Houzz 2016, service</li>
+    </ul>
+    <h3>Close to home</h3>
+    <p>Our giving back has included the Ashley High School Marching Band, the Carolina Beach and Kure Beach fire departments, a youth baseball team and Touch-a-Truck.</p>
+  </div>
+</section>
+
+<!-- ——— FINANCEMENT ET SERVICE ——— -->
+<section class="money" aria-label="Financing and service">
+  <div class="money__col" id="financing">
+    <h2>Pay for it over time.</h2>
+    <p>We work with several lenders, so you can choose the loan that fits. Loans are subject to credit approval; ask us for the application link.</p>
+    <dl class="lenders">
+      <div><dt>Lyon Financial</dt><dd>Unsecured pool loans, no equity or appraisal required.</dd></div>
+      <div><dt>HFS Financial</dt><dd>Personal loans; check your rates with a soft credit check.</dd></div>
+      <div><dt>LightStream</dt><dd>The unsecured AnythingLoan, for good to excellent credit.</dd></div>
+      <div><dt>Upgrade</dt><dd>See if you pre-qualify with no impact to your credit score.</dd></div>
+      <div><dt>AMS Financial</dt><dd>A lender that specializes in swimming pool loans.</dd></div>
+      <div><dt>USAlliance</dt><dd>A home equity line of credit from $25,000 to $500,000, through LoanStar.</dd></div>
+    </dl>
+  </div>
+  <div class="money__col" id="service">
+    <h2>Already swimming in a Prestige pool?</h2>
+    <p>For service on a pool we installed, email <a class="link" href="mailto:service.ppow@gmail.com">service.ppow@gmail.com</a> or call <a class="link" href="tel:+19105092370">910-509-2370</a>.</p>
+    <h3>Leak detection</h3>
+    <p>We are a certified Leaktronics leak detection provider. We listen for leaks with SM1 SideMic equipment, test the plumbing with a closed plug kit, and walk you through what we find.</p>
+    <p class="money__cta"><a class="btn btn--line" href="#plan" data-topic="service">Request service</a></p>
+  </div>
+</section>
+
+<!-- ——— LE PROJET ——— -->
+<section class="plan" id="plan" aria-labelledby="plan-title">
+  <div class="plan__in">
+    <div class="plan__form-wrap">
+      <h2 id="plan-title">Plan your pool.</h2>
+      <p class="lead">Tell us about your yard and what you have in mind. Our sales team will get back to you.</p>
+      <form class="form" novalidate data-form>
+        <fieldset class="chips">
+          <legend>What are you planning?</legend>
+          <label><input type="radio" name="topic" value="pool" checked><span>A new pool</span></label>
+          <label><input type="radio" name="topic" value="spa"><span>A spa or hot tub</span></label>
+          <label><input type="radio" name="topic" value="outdoor"><span>Outdoor living</span></label>
+          <label><input type="radio" name="topic" value="service"><span>Service for my Prestige pool</span></label>
+        </fieldset>
+        <div class="form__row">
+          <p class="field"><label for="f-first">First name</label><input id="f-first" name="first" autocomplete="given-name" required></p>
+          <p class="field"><label for="f-last">Last name</label><input id="f-last" name="last" autocomplete="family-name" required></p>
+        </div>
+        <div class="form__row">
+          <p class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></p>
+          <p class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" required></p>
+        </div>
+        <p class="field"><label for="f-where">Where will it go? <span class="opt">Optional</span></label><input id="f-where" name="where" autocomplete="street-address" placeholder="Street address or neighborhood"></p>
+        <p class="field"><label for="f-msg">Anything else? <span class="opt">Optional</span></label><textarea id="f-msg" name="msg" rows="4" placeholder="Yard size, the pool you like, when you would like to swim"></textarea></p>
+        <p class="form__error" id="f-error" role="alert" hidden></p>
+        <p class="form__send"><button class="btn btn--light" type="submit">Email my request</button> <span class="form__note" data-note>Opens your email app with the request written out, ready to send to sales.ppow@gmail.com.</span></p>
+      </form>
+    </div>
+    <aside class="visit" aria-labelledby="visit-title">
+      <div class="visit__photo">
+        <img class="visit__day" src="img/yard-air-w.avif" alt="Aerial view of the Prestige Pools yard at Monkey Junction." loading="lazy" decoding="async" sizes="(max-width: 860px) 92vw, 460px">
+        <img class="visit__night" src="img/display-night.avif" alt="" aria-hidden="true" loading="lazy" decoding="async" sizes="(max-width: 860px) 92vw, 460px">
+      </div>
+      <h3 id="visit-title">Visit us at Monkey Junction</h3>
+      <p class="visit__status" data-open></p>
+      <address>5307 S College Rd<br>Wilmington, NC 28412</address>
+      <p class="visit__hours">Monday to Friday, 8 am to 5 pm<br>Saturday, 10 am to 2 pm</p>
+      <p class="visit__links"><a class="link" href="tel:+19105092370">910-509-2370</a><br><a class="link" href="https://www.google.com/maps/search/?api=1&amp;query=Prestige+Pools+of+Wilmington+5307+S+College+Rd+Wilmington+NC+28412" rel="noopener">Get directions</a></p>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__in">
+    <div class="foot__brand">
+      <p class="brand brand--foot"><span class="brand__light" aria-hidden="true"></span><span class="brand__name">Prestige Pools</span><span class="brand__place">of Wilmington</span></p>
+      <p>Helping families have fun. That’s us.</p>
+    </div>
+    <div class="foot__col">
+      <h2 class="foot__title">Talk to us</h2>
+      <p><a href="tel:+19105092370">910-509-2370</a><br>Sales: <a href="mailto:sales.ppow@gmail.com">sales.ppow@gmail.com</a><br>Service: <a href="mailto:service.ppow@gmail.com">service.ppow@gmail.com</a></p>
+    </div>
+    <div class="foot__col">
+      <h2 class="foot__title">Find us</h2>
+      <p>5307 S College Rd<br>Wilmington, NC 28412</p>
+      <p><a href="https://www.facebook.com/pages/Prestige-Pools-and-Spas-of-Wilmington/152224861622962" rel="noopener">Facebook</a><br><a href="https://www.instagram.com/prestigepoolswilmington/" rel="noopener">Instagram</a><br><a href="https://www.houzz.com/pro/prestigepoolsofwilmington/prestige-pools-of-wilmington" rel="noopener">Houzz</a></p>
+    </div>
+  </div>
+  <p class="foot__small">© 2026 Prestige Pools of Wilmington, Inc. Website redesign concept.</p>
+</footer>
+
+<!--SCRIPTS-->
+</body>
+</html>
