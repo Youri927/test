@@ -409,6 +409,8 @@ main > section > * {
 
 .hero__title {
   margin: 0;
+  /* chasses fractionnaires : pendant l'élargissement, les lettres glissent au lieu de sauter d'un pixel à l'autre */
+  text-rendering: geometricPrecision;
   font-size: clamp(44px, 6.55vw, 104px);
   font-stretch: 125%;
   font-weight: 820;
@@ -590,9 +592,11 @@ main > section > * {
   transform: scale(0.5);
 }
 
+/* l'axe de largeur est animé directement (font-variation-settings) : Chrome arrondit font-stretch par crans de 0,25 %,
+   ce qui ferait avancer le slogan par petits sauts */
 .js .hero__line {
   opacity: 0;
-  font-stretch: 75%;
+  font-variation-settings: "wdth" 75;
 }
 
 .js .hero__text,
@@ -650,7 +654,7 @@ main > section > * {
 @keyframes flow {
   0% {
     opacity: 0;
-    font-stretch: 75%;
+    font-variation-settings: "wdth" 75;
   }
 
   14% {
@@ -659,7 +663,7 @@ main > section > * {
 
   100% {
     opacity: 1;
-    font-stretch: 125%;
+    font-variation-settings: "wdth" 125;
   }
 }
 

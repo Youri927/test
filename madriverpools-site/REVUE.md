@@ -54,6 +54,15 @@ Le plus gros manque était sur téléphone : les preuves les plus fortes (avant/
 | Typographie | Une seule famille (Mona Sans) : la largeur varie avec le rôle (titres larges, texte normal). Échelle tenue d'un bout à l'autre. | Rien à changer. |
 | Rayons | Photos à 28 px, petites photos à 18 px, boutons en pilule : trois rayons, chacun pour un rôle. | Rien à changer. |
 
+### Fluidité de l'ouverture
+Elle a été mesurée image par image en filmant la vidéo de présentation.
+
+**Le slogan s'élargissait par petits sauts**, avec des arrêts : des pas de 2 à 6 px au lieu d'un mouvement continu. Il y avait deux causes :
+- Chrome arrondit `font-stretch` par crans de 0,25 % ;
+- sous Linux et Android, les chasses des lettres sont arrondies au pixel.
+
+**Corrigé :** l'axe de largeur de la police est animé directement (`font-variation-settings: "wdth"`), et le titre utilise `text-rendering: geometricPrecision`. Mesuré sur la capture, le bord du slogan avance maintenant par pas qui décroissent régulièrement (22, 20, 19… 1 px), sans arrêt.
+
 ### Accessibilité
 - **Contrastes :** tout le texte passe de 4,77:1 à 17,7:1 (détail dans `ACCESSIBILITE.md`).
 - **Cibles tactiles :** 44 px partout sur téléphone, sauf trois liens dans des phrases (exemptés) et deux liens du pied de page à 29 px.
