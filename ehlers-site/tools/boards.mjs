@@ -39,18 +39,18 @@ const four = (items) => ({cols: 'repeat(4, 1fr)', items});
 const BOARDS = {
   ouverture: {
     title: 'L’ouverture : la ligne d’horizon',
-    sub: 'Un trait d’encre se tend à travers la page, puis le séjour de Park Shore s’ouvre verticalement à partir de lui. Le trait est posé sur l’horizon de la baie, à 40 % de la hauteur de la photo, quel que soit l’écran. Les repères lisent ensuite la pièce comme un plan. 2,7 s, une fois, au chargement ; rien ne se décale, la photo n’est pas zoomée.',
+    sub: 'Un trait d’encre se tend à travers la page, puis le séjour de Park Shore s’ouvre verticalement à partir de lui. Le trait est posé sur l’horizon de la baie, à 40 % de la hauteur de la photo, quel que soit l’écran. Le titre se découvre en même temps. 2,7 s, une fois, au chargement ; rien ne se décale, la photo n’est pas zoomée.',
     rows: [
       three([['o-d-0300.png', '<strong>0,3 s.</strong> La ligne d’horizon se tend depuis le milieu.'], ['o-d-0700.png', '<strong>0,7 s.</strong> Elle traverse la page ; le titre se découvre.'], ['o-d-0900.png', '<strong>0,9 s.</strong> La photo s’ouvre à partir de la ligne, sur l’horizon de la baie.']]),
-      three([['o-d-1200.png', '<strong>1,2 s.</strong> La photo s’ouvre en haut et en bas ; le texte et les boutons suivent le titre.'], ['o-d-1800.png', '<strong>1,8 s.</strong> La ligne s’est effacée ; les repères se posent.'], ['o-d-2700.png', '<strong>2,7 s.</strong> Trois repères, la légende « Park Shore, Naples » ; plus rien ne bouge.']]),
-      four([['o-m-0500.png', '<strong>Téléphone, 0,5 s.</strong> La ligne.'], ['o-m-0900.png', '<strong>0,9 s.</strong> La photo s’ouvre.'], ['o-m-1500.png', '<strong>1,5 s.</strong> La photo cadrée en hauteur.'], ['o-m-2700.png', '<strong>Fin.</strong> Deux repères, placés pour ce cadrage.']]),
+      three([['o-d-1200.png', '<strong>1,2 s.</strong> La photo s’ouvre en haut et en bas ; le texte et les boutons suivent le titre.'], ['o-d-1800.png', '<strong>1,8 s.</strong> La ligne s’est effacée ; la photo est entière.'], ['o-d-2700.png', '<strong>2,7 s.</strong> La légende « Park Shore, Naples » ; plus rien ne bouge.']]),
+      four([['o-m-0500.png', '<strong>Téléphone, 0,5 s.</strong> La ligne.'], ['o-m-0900.png', '<strong>0,9 s.</strong> La photo s’ouvre.'], ['o-m-1500.png', '<strong>1,5 s.</strong> La photo s’est ouverte, cadrée en hauteur.'], ['o-m-2700.png', '<strong>Fin.</strong> Le titre, le texte et les boutons.']]),
     ],
   },
   sections: {
     title: 'Les parties du site',
     sub: 'Une seule page, dans l’ordre des questions d’un propriétaire : qui est Rick, à quoi ressemble son travail, ce qu’il construit et combien ça coûte, s’il est en règle, comment le joindre. Captures à la taille d’un écran d’ordinateur (1440 × 900).',
     rows: [
-      two([['1440-hero.png', '<strong>L’accueil.</strong> Leur métier et leur ville, une vraie photo de leur travail lue par trois repères, le téléphone.'], ['1440-rick.png', '<strong>Rick.</strong> Son entreprise, sa licence, son ancrage à Naples, son portrait.']]),
+      two([['1440-hero.png', '<strong>L’accueil.</strong> Leur métier et leur ville, une vraie photo de leur travail, le téléphone.'], ['1440-rick.png', '<strong>Rick.</strong> Son entreprise, sa licence, son ancrage à Naples, son portrait.']]),
       two([['1440-read-1.png', '<strong>Le travail.</strong> Une cuisine de Park Shore, lue détail par détail : la photo reste à l’écran, le détail lu est cadré.'], ['1440-services.png', '<strong>Les services.</strong> Un tableau : ce que couvre chaque service, et des exemples tirés de leurs permis.']]),
       two([['1440-record.png', '<strong>Le registre.</strong> La licence CBC1250125 en grand, son statut, le lien pour la vérifier sur le site de l’État.'], ['1440-contact.png', '<strong>Le contact.</strong> Le téléphone et le courriel en grand, et un formulaire qui rédige le courriel.']]),
       two([['1440-span.png', '<strong>Comment se passe un projet.</strong> Une ligne de cote : Rick, du concept à la fin du chantier, en cinq étapes.'], ['1440-foot.png', '<strong>Le pied de page.</strong> Un cartouche de plan : entrepreneur, licence, téléphone, courriel, ville.']]),

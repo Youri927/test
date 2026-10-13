@@ -7,7 +7,7 @@ Ehlers Contracting Services, Inc. est l'entreprise de Rick Ehlers, à Naples, en
 - cuisines, salles de bain, rénovations complètes, condominiums, cages moustiquaires de piscine et de lanai, agrandissements, sols, rénovations commerciales ;
 - leur promesse : un service personnel et courtois, et Rick impliqué dans chaque détail, « from conception to completion ».
 
-- **À ouvrir** : `dist/index.html`, d'un double-clic. C'est un seul fichier (592 Ko, les photos, la police et le script compris), qui marche sans serveur ni connexion.
+- **À ouvrir** : `dist/index.html`, d'un double-clic. C'est un seul fichier (587 Ko, les photos, la police et le script compris), qui marche sans serveur ni connexion.
 - **À mettre en ligne** : le dossier `dist-web/`.
   - On le glisse sur app.netlify.com/drop, ou on le publie sur Vercel avec `vercel.json`.
   - `_headers` (Netlify) et `vercel.json` demandent aux moteurs de recherche de ne pas indexer la maquette. Ils sont à retirer au lancement.
@@ -61,8 +61,7 @@ Ehlers Contracting Services, Inc. est l'entreprise de Rick Ehlers, à Naples, en
 ## L'idée : des plans de construction pour une maison de Naples
 
 Rick dépose des permis et passe des inspections. Le site se lit comme un jeu de plans :
-- **des repères numérotés** qui lisent la photo ;
-- **une cuisine cadrée détail par détail**, comme sur un relevé ;
+- **une cuisine lue détail par détail**, comme sur un relevé : des repères numérotés sur la photo, chacun renvoyant au détail décrit à côté ;
 - **des lignes de cote, seulement pour de vraies mesures** : les étapes d'un projet, les cages moustiquaires à l'échelle de leurs permis, la fourchette de prix ;
 - **un cartouche de plan** en pied de page : l'entrepreneur, la licence, le téléphone, le courriel, la ville.
 
@@ -70,7 +69,7 @@ Rick dépose des permis et passe des inspections. Le site se lit comme un jeu de
 1. un trait d'encre se tend à travers la page, comme le cordeau qu'on claque sur un chantier ;
 2. la photo du séjour de Park Shore s'ouvre verticalement à partir de lui. Le trait est posé à 40 % de la hauteur de la photo, exactement sur l'horizon de la baie, quel que soit l'écran ;
 3. le titre, puis le texte et les boutons, se découvrent de gauche à droite ;
-4. le trait s'efface, et trois repères (deux au téléphone) nomment ce qu'on voit : les baies vitrées sur la baie, le parquet large, le plan de travail ouvert sur la pièce.
+4. le trait s'efface, puis la légende « Park Shore, Naples » apparaît.
 
 Rien ne se décale dans la page (CLS 0), la photo n'est pas zoomée, et rien ne bloque la page pendant ce temps. Avec « réduire les animations », on voit directement l'état final.
 
@@ -82,11 +81,11 @@ Rien ne se décale dans la page (CLS 0), la photo n'est pas zoomée, et rien ne 
   - la brume de la baie (#E6EEEC) pour la cuisine ;
   - le chêne du parquet (#A27C4B), seulement pour les lignes de cote, jamais pour du texte.
 - **Typographie :** une seule famille, Host Grotesk (Element Type, licence OFL, hébergée avec le site), variable de 300 à 800. Une police de secours aux mêmes mesures évite tout saut au chargement.
-- **Mise en page :** une seule longue page sur une grille de 12 colonnes, alignée à gauche ; titres à gauche et chapôs à droite ; un fond blanc, puis la brume, puis l'estuaire pour la partie « officielle ». Pas de cartes identiques, pas de numérotation décorative : les seuls numéros sont des repères sur une photo.
+- **Mise en page :** une seule longue page sur une grille de 12 colonnes, alignée à gauche ; titres à gauche et chapôs à droite ; un fond blanc, puis la brume, puis l'estuaire pour la partie « officielle ». Pas de cartes identiques, pas de numérotation décorative : les seuls numéros sont les repères de la cuisine, qui renvoient chacun à un détail.
 
 ## La page
 
-1. **L'accueil** : la ligne d'horizon et le séjour de Park Shore avec ses repères, « Kitchens, baths and whole homes, remodeled in Naples. », qui est Rick, « Call (239) 289-0896 » et « Email Rick ».
+1. **L'accueil** : la ligne d'horizon et le séjour de Park Shore, « Kitchens, baths and whole homes, remodeled in Naples. », qui est Rick, « Call (239) 289-0896 » et « Email Rick ».
 2. **Rick** : « One builder, from concept to completion. », son portrait, ses faits (licence, 20 ans à Naples, maisons et commerces), puis les étapes d'un projet sur une ligne de cote : Concept, Design, Permit, Build, Completion.
 3. **« Park Shore, detail by detail. »** : la cuisine reste à l'écran pendant qu'on lit cinq détails ; celui qu'on lit est cadré sur la photo (vitrines à croisillons, suspension lanterne, crédence en mosaïque, portes Shaker, mur d'armoires).
 4. **« What Rick builds. »** : un tableau des huit services, ce que chacun couvre, et des exemples tirés de leurs permis ; les deux cages d'Ave Maria dessinées à l'échelle ; la fourchette de prix.
@@ -95,7 +94,7 @@ Rien ne se décale dans la page (CLS 0), la photo n'est pas zoomée, et rien ne 
 
 **Au téléphone :**
 - l'en-tête se resserre : le nom, « Call » et « Menu », qui ouvre un menu plein écran (la page derrière devient inerte) ;
-- la photo de l'accueil est cadrée en hauteur, avec ses propres repères ;
+- la photo de l'accueil est cadrée en hauteur ;
 - la photo de la cuisine reste en haut, et le détail cadré est celui qu'on lit juste dessous ;
 - les exemples du tableau des services gardent leur intitulé.
 
@@ -135,13 +134,13 @@ Le site actuel n'a pas pu être mesuré : il ne répond pas depuis notre environ
 | Navigation par agents (Lighthouse) | **100** |
 | Affichage du contenu principal (LCP) | **0,20 s** sur ordinateur, **0,66 s** au téléphone ralenti (médiane de cinq chargements) |
 | Décalage de mise en page (CLS) | **0** |
-| Premier chargement, ordinateur | **5 requêtes, 368 Ko, 1 domaine** |
-| Premier chargement, téléphone | **5 requêtes, 292 Ko, 1 domaine** (la photo de l'accueil en hauteur, plus légère) |
+| Premier chargement, ordinateur | **5 requêtes, 363 Ko, 1 domaine** |
+| Premier chargement, téléphone | **5 requêtes, 287 Ko, 1 domaine** (la photo de l'accueil en hauteur, plus légère) |
 | Données structurées | **`GeneralContractor`** : téléphone, courriel, ville, zone servie, huit services, Rick, la licence reconnue par le DBPR |
 
 **Notes sur ces chiffres :**
-- Servie compressée par l'hébergeur (Netlify et Vercel le font d'office), la page passe de 89 à 23 Ko.
-- La trace signale un calcul de mise en page forcé au démarrage (Lenis mesure la page, les repères se posent sur la photo) : c'est le premier calcul de la page de toute façon, et Chrome n'estime aucun gain possible. Ensuite, pendant toute l'ouverture, aucune image de l'animation ne prend plus de 50 ms à calculer, à l'ordinateur comme au téléphone ralenti.
+- Servie compressée par l'hébergeur (Netlify et Vercel le font d'office), la page passe de 85 à 22 Ko.
+- La trace signale un calcul de mise en page forcé au démarrage (Lenis mesure la page) : c'est le premier calcul de la page de toute façon, et Chrome n'estime aucun gain possible. Ensuite, pendant toute l'ouverture, aucune image de l'animation ne prend plus de 50 ms à calculer, à l'ordinateur comme au téléphone ralenti.
 
 **Les mêmes contrôles SEO/GEO que pour le site actuel :**
 - un titre de 60 caractères et une description de 159 ;
@@ -156,11 +155,11 @@ Le site actuel n'a pas pu être mesuré : il ne répond pas depuis notre environ
 - de 320 à 1920 px (19 largeurs), sans débordement, y compris avec l'espacement du texte élargi ;
 - au clavier : 30 arrêts sur ordinateur et 26 sur téléphone, focus toujours visible, jamais caché sous l'en-tête ;
 - le lien « Skip to content », qui mène bien au contenu ;
-- les contrastes mesurés sur les vrais pixels (74 mesures de texte, de 5,25:1 à 13,46:1 ; les contours et les repères au-dessus de 3:1) ;
+- les contrastes mesurés sur les vrais pixels (72 mesures de texte, de 5,25:1 à 13,46:1 ; les contours et les repères de la cuisine au-dessus de 3:1) ;
 - avec « moins d'animations », et en arrivant par un lien vers une partie ;
 - les 49 essais d'interaction de `tools/interact.mjs` :
   - l'ouverture, en cours et terminée ;
-  - les repères posés dans l'écran, sur ordinateur et au téléphone ;
+  - la légende de la photo, sur ordinateur et au téléphone ;
   - les liens de l'en-tête et le focus qui les suit ;
   - la ligne de cote, le plan des cages et la fourchette qui se tracent ;
   - la cuisine détail par détail, sur ordinateur et au téléphone ;
@@ -171,8 +170,8 @@ Le site actuel n'a pas pu être mesuré : il ne répond pas depuis notre environ
 ## Fabrication
 
 - **`node build.mjs`** assemble :
-  - `dist/index.html`, tout intégré (592 Ko) ;
-  - `dist-web/`, une page légère (89 Ko), avec les photos et la police en fichiers séparés, la photo de l'accueil préchargée dans la bonne version (large ou en hauteur), et les fichiers de `web/`.
+  - `dist/index.html`, tout intégré (587 Ko) ;
+  - `dist-web/`, une page légère (85 Ko), avec les photos et la police en fichiers séparés, la photo de l'accueil préchargée dans la bonne version (large ou en hauteur), et les fichiers de `web/`.
 
   Il vérifie au passage que les nombres affichés correspondent au contenu (chantiers de chaque filtre) et que chaque détail de la cuisine a son repère.
 - **`src/`** : `index.html`, `styles.css`, `main.js` et `img/` (les photos en AVIF).

@@ -10,7 +10,7 @@ Méthode :
     - parcours complet au clavier, focus caché ou non ;
     - cibles tactiles, menu ouvert compris ;
     - contrastes mesurés sur les vrais pixels : tout le texte de la page est masqué, pour ne garder que le fond ;
-    - contours, repères posés sur les photos et contours de focus ;
+    - contours, repères posés sur la photo de la cuisine et contours de focus ;
     - espacement du texte élargi ;
     - titres, noms des contrôles, textes alternatifs, références entre éléments ;
   - `tools/interact.mjs` : 49 essais de chaque interaction à la souris, au doigt et au clavier, mouvement réduit, arrivée au milieu de la page, débordements sur 19 largeurs d'écran ;
@@ -32,7 +32,7 @@ Lighthouse Accessibilité : 100 sur ordinateur et sur téléphone (Bonnes pratiq
 |---|----------|--------------|---------|------------|
 | 1 | Au téléphone, le titre de la partie Rick (« One builder, from concept to completion. ») et le portrait tombaient chacun dans une seule des 12 colonnes de la grille : le titre s'empilait lettre par lettre et était coupé, illisible. | 1.4.10 Redistribution | 🔴 Critique | Corrigé : au téléphone, le titre, le portrait et le texte prennent toute la largeur, dans l'ordre du code (titre, portrait, texte, faits). Vu sur les captures de la revue. |
 | 2 | Cuisine : les détails qui ne sont pas cadrés sur la photo étaient atténués à 38 % : 2,1:1 sur le fond vert d'eau. | 1.4.3 Contraste (minimum) | 🟡 Majeur | Corrigé : plus d'atténuation. Les détails non cadrés gardent un texte lisible (#4D6168, 5,52:1) ; celui qui est cadré passe à l'encre (11,41:1) et son numéro se remplit. |
-| 3 | Avec un espacement du texte élargi, une étiquette des repères de l'accueil sortait de l'écran au téléphone. | 1.4.12 Espacement du texte | 🟡 Majeur | Corrigé : les repères se replacent dès qu'une étiquette change de taille (police chargée, texte agrandi ou espacé). Une étiquette va à droite du point, ou à gauche s'il n'y a pas la place, et passe à la ligne du côté le plus large si elle ne tient d'aucun côté. Aucun texte coupé ni sorti de l'écran, à 1440 et à 390 px. |
+| 3 | Avec un espacement du texte élargi, une étiquette des repères de l'accueil sortait de l'écran au téléphone. | 1.4.12 Espacement du texte | 🟡 Majeur | Corrigé, puis sans objet : les repères de l'accueil ont été retirés (voir `REVUE.md`). Aucun texte coupé ni sorti de l'écran, à 1440 et à 390 px. |
 | 4 | Tableau des services : le rôle de cellule était posé sur les titres (`<h3>`) et les listes eux-mêmes ; les huit titres de service disparaissaient de la navigation par titres, et les listes d'exemples n'étaient plus des listes. | 1.3.1 Information et relations | 🟡 Majeur | Corrigé : les rôles sont portés par des enveloppes ; chaque service garde son titre de niveau 3, et chaque exemple sa liste. |
 | 5 | Cuisine : les numéros posés sur la photo, blancs, se perdaient sur les meubles blancs (1,23:1). | 1.4.11 Contraste du non-textuel | 🟢 Mineur | Corrigé : un filet d'encre de 2 px autour de chaque numéro (6,95:1 au plus faible). Le numéro du détail cadré est plein, à l'encre, avec un anneau blanc (13,46:1). |
 | 6 | Au téléphone, l'en-tête du tableau des services est masqué : les exemples tirés des permis n'avaient plus d'intitulé et pouvaient passer pour des services. | 1.3.1 Information et relations | 🟢 Mineur | Corrigé : au téléphone, chaque liste d'exemples reprend son intitulé, « From recent permits ». |
@@ -63,7 +63,7 @@ Rien ne change au focus seul (3.2.1) : les filtres et « Show all 16 jobs » n'a
 Chaque composant expose son nom, son rôle et son état (tableau « Lecteur d'écran »). Aucun identifiant en double, aucune référence cassée (`aria-labelledby`, `aria-describedby`, `aria-controls`, `for`).
 
 ### Contrôle des contrastes
-74 mesures de texte : tout est au-dessus du seuil, de 5,25:1 à 13,46:1. Le texte courant ne descend pas sous 5,52:1.
+72 mesures de texte : tout est au-dessus du seuil, de 5,25:1 à 13,46:1. Le texte courant ne descend pas sous 5,52:1.
 
 | Élément | Texte | Fond | Rapport | Exigé | OK ? |
 |---------|-------|------|---------|-------|------|
@@ -71,7 +71,7 @@ Chaque composant expose son nom, son rôle et son état (tableau « Lecteur d'é
 | Texte secondaire (chapôs, faits, étapes, exemples, aides) | #4D6168 | #FFFFFF | 6,51:1 | 4,5:1 | ✅ |
 | Cuisine : titres et texte (détail cadré) | #12333A / #4D6168 | #E6EEEC | 11,41 / 5,52:1 | 4,5:1 | ✅ |
 | Cuisine : titres et texte (détails non cadrés) | #4D6168 | #E6EEEC | 5,52:1 | 4,5:1 | ✅ |
-| Étiquettes des repères de l'accueil, légende de la photo | #12333A | #FFFFFF | 13,46:1 | 4,5:1 | ✅ |
+| Légende de la photo de l'accueil | #12333A | #FFFFFF | 13,46:1 | 4,5:1 | ✅ |
 | Bouton plein, numéros pleins | #FFFFFF | #12333A | 13,46:1 | 4,5:1 | ✅ |
 | Registre et pied de page : texte | #FFFFFF | #12333A | 13,46:1 | 4,5:1 | ✅ |
 | Registre : chapô, lieux des chantiers | blanc à 74 % et 70 % | #12333A | 8,07 / 7,40:1 | 4,5:1 | ✅ |
@@ -85,7 +85,7 @@ Chaque composant expose son nom, son rôle et son état (tableau « Lecteur d'é
 | Numéros des détails non cadrés | #4D6168 | #E6EEEC | 5,52:1 | 3:1 | ✅ |
 | Plan des cages : traits / cotes | #12333A / #A27C4B | #FFFFFF | 13,46 / 3,80:1 | 3:1 | ✅ |
 | Cadre du cartouche | blanc à 55 % | #12333A | 5,16:1 | 3:1 | ✅ |
-| Repères sur les photos (pire direction autour du repère) | encre et anneau blanc ; blanc et filet d'encre | la photo | 12,81 / 6,95:1 | 3:1 | ✅ |
+| Repères sur la photo de la cuisine (pire direction autour du repère) | encre et anneau blanc ; blanc et filet d'encre | la photo | 13,46 / 6,95:1 | 3:1 | ✅ |
 | Contour de focus | #12333A / #FFFFFF | fonds clairs / encre | 13,46:1 | 3:1 | ✅ |
 
 Le cadre qui désigne un détail de la cuisine est un trait blanc de 2 px doublé d'un halo d'encre : il se voit sur les parties claires comme sur les parties sombres de la photo, et la photo autour est voilée.
@@ -117,7 +117,7 @@ Relevé dans l'arbre d'accessibilité de Chromium. Reste à confirmer avec Voice
 |---------|---------------|----------|
 | Repères | bannière, navigation « Main », principal, pied de page ; chaque partie est une région nommée par son titre | Aucun |
 | Nom de l'en-tête | lien « Ehlers Contracting Services, Inc., back to the top » | Aucun |
-| Accueil | figure nommée par sa légende (« Park Shore, Naples ») ; photo décrite (« A Park Shore living room remodeled by Ehlers Contracting: white sofas and armchairs… ») ; liste « In this room » de trois repères, sans leurs numéros (décor) ; puis le titre de niveau 1 | Aucun |
+| Accueil | figure nommée par sa légende (« Park Shore, Naples ») ; photo décrite (« A Park Shore living room remodeled by Ehlers Contracting: white sofas and armchairs… ») ; puis le titre de niveau 1 | Aucun |
 | Rick | titre de niveau 2 ; figure « Rick Ehlers, Owner, Certified Building Contractor » ; liste de définitions (Licensed, Local, Homes and businesses) ; liste « How a project runs » de cinq étapes | Aucun |
 | Cuisine | photo décrite ; liste de cinq détails, chacun avec son titre de niveau 3 et sa phrase. Le cadre, le voile et les numéros posés sur la photo sont masqués : ils doublent la liste | Aucun |
 | Services | tableau « Services » : 3 colonnes (Service, What it covers, From recent permits), 8 lignes ; chaque service est un en-tête de ligne et un titre de niveau 3. Le plan des cages est une image : « Two screen enclosures drawn to the same scale: 32 by 10 feet, and 16 by 12.5 feet. » | Aucun |
@@ -128,13 +128,13 @@ Relevé dans l'arbre d'accessibilité de Chromium. Reste à confirmer avec Voice
 
 ### Mouvement
 - Avec « réduire les animations » :
-  - pas d'ouverture : la photo, les repères et le titre sont là dès l'affichage ;
+  - pas d'ouverture : la photo, sa légende et le titre sont là dès l'affichage ;
   - pas de défilement doux ;
   - la cote du projet, le plan des cages et la fourchette sont tracés d'emblée ;
   - le cadre de la cuisine passe d'un détail à l'autre sans glisser ;
   - aucune transition.
 - Sans ce réglage :
-  - une seule ouverture, 2,7 s, jouée au chargement : une ligne d'horizon se tend (0,12 à 0,67 s), la photo s'ouvre verticalement à partir d'elle (0,62 à 1,72 s), le titre et le texte se découvrent de gauche à droite, puis les repères et la légende ; rien ne clignote, la photo n'est pas zoomée, la page ne se décale pas (CLS 0) ; rien ne bloque la page pendant ce temps ;
+  - une seule ouverture, 2,7 s, jouée au chargement : une ligne d'horizon se tend (0,12 à 0,67 s), la photo s'ouvre verticalement à partir d'elle (0,62 à 1,72 s), le titre et le texte se découvrent de gauche à droite, puis la légende ; rien ne clignote, la photo n'est pas zoomée, la page ne se décale pas (CLS 0) ; rien ne bloque la page pendant ce temps ;
   - les titres des parties se découvrent (1,1 s), la cote du projet, le plan des cages et la fourchette se tracent, une fois, quand ils arrivent à l'écran ;
   - en réponse au défilement ou à un geste : le cadre de la cuisine glisse vers le détail qu'on lit (0,7 s), les chantiers filtrés apparaissent (0,45 s) ;
   - rien ne se répète en boucle.

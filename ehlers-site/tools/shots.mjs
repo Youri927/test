@@ -56,7 +56,7 @@ if (want('intro')) {
     const p = await ctx.newPage();
     await p.goto(URL_, {waitUntil: 'load'});
     await p.evaluate(() => document.fonts.ready);
-    await p.waitForFunction(() => document.getAnimations().length > 6);
+    await p.waitForFunction(() => document.getAnimations().length >= 5);
     for (const ms of [0, 300, 500, 700, 900, 1200, 1500, 1800, 2100, 2700]) {
       await p.evaluate((t) => document.getAnimations().forEach((a) => (a.pause(), (a.currentTime = t))), ms);
       await p.waitForTimeout(80);

@@ -5,7 +5,7 @@
 Rick est un entrepreneur certifié par l'État, qui dépose ses permis et passe ses inspections. Il travaille dans les plus beaux quartiers de Naples. Le site lui ressemble : une page claire et précise, construite comme un jeu de plans d'architecte.
 
 On y retrouve les codes de ces plans, chacun pour une raison :
-- **les repères numérotés et les cadres de détail**, qui lisent la photo ;
+- **les repères numérotés et les cadres de détail**, qui lisent la photo de la cuisine ;
 - **les lignes de cote**, mais seulement pour de vraies mesures : les dimensions des cages moustiquaires, la fourchette de prix, la durée d'un projet ;
 - **le cartouche**, cet encadré en bas des plans qui porte le nom de l'entreprise et son numéro de licence, en pied de page.
 
@@ -15,7 +15,7 @@ On y retrouve les codes de ces plans, chacun pour une raison :
 
 À l'ouverture, une ligne fine se tend d'un bord à l'autre de la page, comme le cordeau à tracer qu'on claque sur un chantier. La photo du séjour s'ouvre ensuite à partir de cette ligne, vers le haut et vers le bas. La ligne est posée exactement à la hauteur de l'horizon de la baie dans la photo : la ligne du constructeur et l'horizon du golfe ne font qu'une.
 
-Viennent ensuite trois repères (deux au téléphone, où la photo est cadrée en hauteur), qui nomment ce qu'on voit dans la pièce. C'est la seule animation qui se joue sans geste du visiteur. Le reste répond au défilement ou à la main : on survole, on choisit, on ouvre.
+Viennent ensuite le titre et la légende. C'est la seule animation qui se joue sans geste du visiteur. (Trois repères nommaient aussi ce qu'on voit dans la pièce ; ils ont été retirés : selon le recadrage de la photo, ils tombaient à côté ou sortaient du cadre.) Le reste répond au défilement ou à la main : on survole, on choisit, on ouvre.
 
 ## Couleurs
 
@@ -47,7 +47,7 @@ Pas de crème ni de terre cuite, et pas d'accent vif. L'audace est dans la mise 
 │ Ehlers          Rick  Work  Services  License  Contact  Call │
 ├──────────────────────────────────────────────────────────────┤
 │ ━━━━━━━━━━━━━━━━━ ligne d'horizon ━━━━━━━━━━━━━━━━━━━━━━━━━━ │
-│ [séjour sur la baie, pleine largeur, repères 1-3]            │
+│ [séjour sur la baie, pleine largeur, légende]                │
 ├──────────────────────────────────────────────────────────────┤
 │ Kitchens, baths and whole homes,  │ Rick Ehlers… [Call][Email]│
 │ remodeled in Naples.              │                          │

@@ -103,7 +103,7 @@ const OFF = (n) => `(() => { const it = [...document.querySelectorAll('[data-det
 const ERR = `document.querySelectorAll('.field__err').forEach((e) => (e.hidden = false))`;
 const checks = [
   ['.top .brand__name'], ['.brand__sub'], ['.nav a'], ['.top__call'],
-  ['.hero__title'], ['.hero__side p'], ['.hero .btn--solid'], ['.hero .btn--line'], ['.pin__label'], ['.pin__dot'], ['.hero__cap'],
+  ['.hero__title'], ['.hero__side p'], ['.hero .btn--solid'], ['.hero .btn--line'], ['.hero__cap'],
   ['#rick-title'], ['.rick .lead'], ['.facts dt'], ['.facts dd'], ['.facts a'], ['.rick__id b'], ['.rick__id figcaption > span'], ['.span__dim span'], ['.span__steps b'], ['.span__steps span'],
   ['#work-title'], ['.work .lead'],
   ['[data-detail="2"] h3', OFF(2)], ['[data-detail="2"] p', OFF(2)], ['[data-detail="2"] h3', OFF(1)], ['[data-detail="2"] p', OFF(1)], ['[data-detail="2"] .read__n', OFF(1)], ['.read__pins li'],
@@ -228,7 +228,7 @@ for (const u of ui) {
   console.log('  ', pass ? '✓' : '✗', u.label.padEnd(40), `${rr.toFixed(2)}:1`, `rgb(${u.fg}) sur rgb(${u.bg})`);
 }
 // les repères posés sur les photos : leur anneau ou leur ombre contre les pixels voisins
-for (const [sel, label] of [['.pin__dot', 'repère de l’accueil (point)'], ['.read__pins li.is-on', 'repère de la cuisine (cadré)'], ['.read__pins li:not(.is-on)', 'repère de la cuisine (autre)']]) {
+for (const [sel, label] of [['.read__pins li.is-on', 'repère de la cuisine (cadré)'], ['.read__pins li:not(.is-on)', 'repère de la cuisine (autre)']]) {
   const el = await p.$(sel);
   await el.evaluate((e) => e.scrollIntoView({block: 'center'}));
   await p.waitForTimeout(1300);
@@ -316,7 +316,7 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
     }
     // les étiquettes des repères et le texte ne doivent pas sortir de l'écran
     const wide = [...document.querySelectorAll('body *')].filter((e) => {
-      if (!e.offsetParent || e.closest('[aria-hidden="true"], .sr, .skip, .pin.is-out')) return false;
+      if (!e.offsetParent || e.closest('[aria-hidden="true"], .sr, .skip')) return false;
       const r = e.getBoundingClientRect();
       return r.width && (r.right > innerWidth + 1 || r.left < -1);
     }).map((e) => `${e.tagName.toLowerCase()}.${String(e.className).split(' ')[0]}`);

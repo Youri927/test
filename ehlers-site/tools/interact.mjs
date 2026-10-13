@@ -46,7 +46,7 @@ const catchMail = (p) =>
 let ctx = await b.newContext({viewport: {width: 1440, height: 900}});
 let p = await open(ctx);
 
-// l'ouverture : la ligne d'horizon se tend, la photo s'ouvre depuis elle, puis les repères
+// l'ouverture : la ligne d'horizon se tend, la photo s'ouvre depuis elle, puis la légende
 await p.waitForFunction(() => {
   const a = document.getAnimations().find((x) => x.effect?.target?.classList?.contains('hero__img'));
   return a && a.currentTime >= 1050;
@@ -54,7 +54,7 @@ await p.waitForFunction(() => {
 const mid = await p.evaluate(() => {
   const img = document.querySelector('.hero__img');
   const line = document.querySelector('.hero__line');
-  return {clip: getComputedStyle(img).clipPath, line: +getComputedStyle(line).opacity, dot: getComputedStyle(document.querySelector('.pin__dot')).transform};
+  return {clip: getComputedStyle(img).clipPath, line: +getComputedStyle(line).opacity};
 });
 const band = /inset\(([\d.]+)%/.exec(mid.clip);
 ok(band && +band[1] > 3 && +band[1] < 38, `ouverture, en cours : la photo s'ouvre depuis l'horizon (${mid.clip})`);
@@ -64,15 +64,12 @@ await p.waitForTimeout(1900);
 const end = await p.evaluate(() => ({
   clip: getComputedStyle(document.querySelector('.hero__img')).clipPath,
   line: +getComputedStyle(document.querySelector('.hero__line')).opacity,
-  pins: [...document.querySelectorAll('.pin')].filter((x) => !x.classList.contains('is-out')).map((x) => {
-    const r = x.querySelector('.pin__label').getBoundingClientRect();
-    return {l: Math.round(r.left), r: Math.round(r.right)};
-  }),
+  cap: getComputedStyle(document.querySelector('.hero__cap')).clipPath,
   title: getComputedStyle(document.querySelector('.hero__title')).maskPosition,
 }));
 ok(/^(inset\(0(%|px)?( 0(%|px)?)*\)|none)$/.test(end.clip), `ouverture, finie : la photo est entière (${end.clip})`);
 ok(end.line === 0, "ouverture, finie : la ligne s'est effacée");
-ok(end.pins.length === 3 && end.pins.every((x) => x.l >= 0 && x.r <= 1440), `ordinateur : les trois repères sont posés, étiquettes dans l'écran (${end.pins.map((x) => `${x.l}-${x.r}`).join(', ')})`);
+ok(/^(inset\(0(%|px)?( 0(%|px)?)*\)|none)$/.test(end.cap), `ouverture, finie : la légende « Park Shore, Naples » est découverte (${end.cap})`);
 ok(/^0(%|px)? 0(%|px)?$/.test(end.title), `le titre est entièrement découvert (${end.title})`);
 await p.screenshot({path: `${out}/i-hero.png`});
 
@@ -199,10 +196,10 @@ const rm = await p.evaluate(() => ({
   clip: getComputedStyle(document.querySelector('.hero__img')).clipPath,
   lenis: document.documentElement.classList.contains('lenis'),
   anims: document.getAnimations().length,
-  pins: [...document.querySelectorAll('.pin__dot')].map((d) => getComputedStyle(d).transform),
+  cap: getComputedStyle(document.querySelector('.hero__cap')).clipPath,
 }));
 ok(rm.clip === 'none' && !rm.lenis && rm.anims === 0, `moins d'animations : tout est en place dès l'ouverture, sans défilement doux ni transition (${rm.anims} animation)`);
-ok(rm.pins.every((t) => t === 'none'), 'moins d\'animations : les repères sont là');
+ok(rm.cap === 'none', 'moins d\'animations : la légende de la photo est là');
 await p.$eval('[data-span]', (e) => e.scrollIntoView());
 await p.waitForTimeout(300);
 ok(await p.$eval('[data-span]', (e) => e.classList.contains('is-drawn')), "moins d'animations : la cote est là sans attendre");
@@ -214,14 +211,14 @@ p = await open(ctx);
 await p.waitForTimeout(2800);
 const mp = await p.evaluate(() => ({
   src: document.querySelector('.hero__img').naturalHeight > document.querySelector('.hero__img').naturalWidth,
-  pins: [...document.querySelectorAll('.pin')].map((x) => {
-    const r = x.querySelector('.pin__label').getBoundingClientRect();
-    return {out: x.classList.contains('is-out'), l: Math.round(r.left), r: Math.round(r.right)};
-  }),
+  cap: (() => {
+    const r = document.querySelector('.hero__cap').getBoundingClientRect();
+    const m = document.querySelector('.hero__media').getBoundingClientRect();
+    return {l: Math.round(r.left), r: Math.round(r.right), inside: r.bottom <= m.bottom && r.top >= m.top};
+  })(),
 }));
 ok(mp.src, 'téléphone : la photo en hauteur est chargée');
-const vis = mp.pins.filter((x) => !x.out);
-ok(vis.length === 2 && vis.every((x) => x.l >= 0 && x.r <= 390), `téléphone : deux repères, étiquettes dans l'écran (${vis.map((x) => `${x.l}-${x.r}`).join(', ')})`);
+ok(mp.cap.inside && mp.cap.l >= 0 && mp.cap.r <= 390, `téléphone : la légende de la photo est dans l'écran (${mp.cap.l}-${mp.cap.r})`);
 await p.screenshot({path: `${out}/i-phone-hero.png`});
 // le menu
 await p.click('[data-menu-open]');
@@ -266,7 +263,7 @@ for (const w of [320, 360, 375, 390, 414, 480, 600, 700, 768, 820, 860, 900, 100
     const over = document.documentElement.scrollWidth > document.documentElement.clientWidth;
     const els = [...document.querySelectorAll('body *')].filter((e) => {
       const r = e.getBoundingClientRect();
-      return r.width && (r.right > document.documentElement.clientWidth + 1 || r.left < -1) && !e.closest('.pins, .read__pins, .sr, .skip, [hidden], .menu');
+      return r.width && (r.right > document.documentElement.clientWidth + 1 || r.left < -1) && !e.closest('.read__pins, .sr, .skip, [hidden], .menu');
     }).slice(0, 3).map((e) => `${e.tagName.toLowerCase()}.${e.className}`);
     return {over, els};
   });

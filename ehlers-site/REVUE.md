@@ -19,8 +19,7 @@ On comprend en deux secondes chez qui l'on est :
 Le moment dont on se souvient est la ligne d'horizon. Un trait d'encre se tend à travers la page, puis la photo s'ouvre verticalement à partir de lui. Le trait est posé à 40 % de la hauteur, exactement sur l'horizon de la baie, quel que soit le cadrage.
 
 Le reste du site parle la langue des plans d'un chantier :
-- des repères numérotés qui lisent la photo ;
-- une cuisine lue détail par détail, cadrée comme sur un relevé ;
+- une cuisine lue détail par détail, cadrée comme sur un relevé, avec des repères numérotés qui renvoient aux détails ;
 - des lignes de cote, seulement pour de vraies mesures : les étapes de Rick, les cages moustiquaires à l'échelle, la fourchette de prix ;
 - un cartouche de plan en pied de page.
 
@@ -40,7 +39,7 @@ Les plus gros défauts trouvés par cette revue :
 | Services, téléphone : l'en-tête du tableau est masqué ; les exemples tirés des permis perdaient leur intitulé et pouvaient passer pour des services. | 🟢 Mineur | Corrigé : chaque liste d'exemples reprend « From recent permits ». |
 | Plan des cages : les cotes verticales « 10 ft » et « 12.5 ft » étaient barrées par leur propre ligne de cote. | 🟢 Mineur | Corrigé : la ligne s'interrompt autour du texte, comme sur un plan. |
 | Rick, ordinateur : environ 250 px de vide entre le titre et le portrait, poussé en bas de la colonne. | 🟢 Mineur | Corrigé : le portrait suit le titre, à 96 px au lieu de 72 (la photo d'origine fait 208 px : pas d'agrandissement). |
-| Accueil : avec un texte agrandi ou espacé, une étiquette des repères sortait de l'écran au téléphone. | 🟢 Mineur | Corrigé : les repères se replacent dès qu'une étiquette change de taille, et l'étiquette passe à la ligne si elle ne tient d'aucun côté du point. |
+| Accueil : trois repères numérotés nommaient ce qu'on voit sur la photo (baies vitrées, parquet, plan de travail). Selon le recadrage de la photo, ils tombaient à côté (« Wide-plank wood floor » sur un fauteuil) ou sortaient du cadre (un « 1 » seul sur un écran large), et leurs numéros ne renvoyaient à rien. | 🟡 Moyen | Corrigé : retirés. L'accueil garde la ligne d'horizon et la légende ; les repères numérotés restent dans la cuisine, où chacun renvoie à un détail décrit à côté. Vu par vous sur un écran de 1860 px. |
 | Menu : « Rick » n'était que dans le menu du téléphone, et les liens n'y suivaient pas l'ordre de la page. | 🟢 Mineur | Corrigé : les mêmes cinq liens sur ordinateur et au téléphone, dans l'ordre de la page (Rick, Work, Services, License, Contact). |
 | Téléphone : les boutons « Call », « Menu » et « Close » faisaient 42 px de haut, le courriel du contact 28 px, les liens du cartouche 20 px. | 🟢 Mineur | Corrigé : 44 px, sans rien déplacer. |
 
@@ -56,7 +55,6 @@ Le texte reste celui de l'entreprise ; la relecture a retiré les redites et tou
 | Étape Completion | « Final inspection, then the walkthrough. » | « The final inspection closes the permit. » | Une visite de fin de chantier n'est dite nulle part ; l'inspection finale, si. |
 | Whole homes | « …with one builder from start to finish. » | « Several rooms, or the whole house, remodeled as one project. » | Redite. |
 | Floors | « …installed or repaired. » | « Tile and wood floors, plus vinyl and laminate. » | La réparation n'est dite nulle part. |
-| Repère de l'accueil | « Kitchen island open to the room » | « Kitchen counter open to the room » | La photo montre un plan de travail en pierre et un tabouret : îlot ou retour, on ne peut pas trancher. |
 | Registre | « In the words of their county permits » | « From Collier County permits » | Les descriptions sont résumées, pas citées ; « their » était ambigu. |
 | Menu | « Record » | « License » | Le mot dit ce qu'on trouve : la licence, puis les chantiers sous permis. |
 | Titres de parties | « What Rick builds », « On the record » | « What Rick builds. », « On the record. » | Tous les grands titres finissent par un point. |
@@ -91,7 +89,7 @@ Gardés tels quels, parce qu'ils disent exactement ce qui se passe :
 | Têtes de partie | Titre à gauche, chapô à droite, sur la même grille ; empilés au téléphone. | Rien à changer. |
 | Repères numérotés | Toujours le même cercle : sur la photo de l'accueil, sur la cuisine, devant les détails de la cuisine. Plein quand il désigne ce qu'on regarde. | Rien à changer. |
 | Lignes de cote | Seulement pour de vraies mesures : la durée de l'engagement de Rick (d'une étape à l'autre), les pieds des cages moustiquaires, les deux montants de la fourchette. | Rien à changer. |
-| Formes | Boutons et filtres en pilule ; photos et plan à angles vifs ; repères ronds. | Rien à changer : les formes suivent la hiérarchie. |
+| Formes | Boutons et filtres en pilule ; photos et plan à angles vifs ; repères de la cuisine ronds. | Rien à changer : les formes suivent la hiérarchie. |
 | Typographie | Host Grotesk seule : 560 pour les titres, 400 pour le texte, 500 pour les étiquettes ; chiffres et mesures écrits en texte (« 12.5 × 16 ft »). | Rien à changer. |
 | Contours de focus | 2 px d'encre sur les fonds clairs, de blanc sur l'encre. | Rien à changer. |
 
@@ -101,21 +99,19 @@ Mesurée à intervalles fixes, sur ordinateur et sur téléphone :
 - **0,5 à 1,9 s :** le titre, puis le texte et les boutons, se découvrent de gauche à droite ;
 - **0,62 à 1,72 s :** la photo s'ouvre verticalement à partir de la ligne, sans zoom ;
 - **1,45 à 1,95 s :** la ligne s'efface ;
-- **à partir de 1,55 s :** les repères apparaissent l'un après l'autre, puis leurs étiquettes ;
 - **2,1 à 2,65 s :** la légende « Park Shore, Naples » ;
 - **après 2,7 s :** plus rien ne bouge.
 
 Rien ne bloque la page pendant ce temps, et rien ne se décale (CLS 0). Avec « réduire les animations », on voit directement l'état final.
 
 ### Accessibilité
-- **Contrastes :** 74 mesures de texte, de 5,25:1 à 13,46:1 ; le texte courant ne descend pas sous 5,52:1 (détail dans `ACCESSIBILITE.md`).
+- **Contrastes :** 72 mesures de texte, de 5,25:1 à 13,46:1 ; le texte courant ne descend pas sous 5,52:1 (détail dans `ACCESSIBILITE.md`).
 - **Cibles tactiles :** 44 px pour tous les boutons et liens du téléphone, sauf « See the license », pris dans une phrase (exempté par 2.5.8).
 - **Lisibilité :** texte courant à 17 px, lignes de moins de 75 caractères ; aucun texte coupé avec un espacement élargi.
-- **Chargement :** Lighthouse 100 en accessibilité, bonnes pratiques, SEO et navigation par agents, sur ordinateur et sur téléphone. Le titre, plus grand élément de l'écran, est affiché en 0,66 s au téléphone ralenti (médiane de cinq chargements, processeur 4 fois plus lent, 4G lente) et en 0,20 s sur ordinateur ; aucun décalage de mise en page (CLS 0). La page pèse 89 Ko, plus 20 Ko de police et de 180 Ko (téléphone) à 260 Ko (ordinateur) de photos.
+- **Chargement :** Lighthouse 100 en accessibilité, bonnes pratiques, SEO et navigation par agents, sur ordinateur et sur téléphone. Le titre, plus grand élément de l'écran, est affiché en 0,66 s au téléphone ralenti (médiane de cinq chargements, processeur 4 fois plus lent, 4G lente) et en 0,20 s sur ordinateur ; aucun décalage de mise en page (CLS 0). La page pèse 85 Ko, plus 20 Ko de police et de 180 Ko (téléphone) à 260 Ko (ordinateur) de photos.
 
 ### Ce qui marche bien
 - **La ligne d'horizon :** l'ouverture vient de la photo elle-même. Rien n'est ajouté ; le trait est l'horizon de leur baie.
-- **Les repères :** la photo se lit comme un plan. Les trois repères nomment ce qu'on voit, sans rien inventer.
 - **La cuisine :** une seule vraie cuisine, cinq détails ; le cadre glisse vers celui qu'on lit, la photo reste à l'écran.
 - **La licence au premier plan :** le numéro en très grand, son statut, la date d'expiration et le lien pour la vérifier sur le site de l'État. Leur site actuel ne la donne pas.
 - **Les permis :** 16 chantiers réels de 2024 et 2025, avec l'année et le quartier, filtrables par type ; aucune adresse, aucun nom de client.

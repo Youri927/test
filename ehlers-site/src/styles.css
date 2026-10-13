@@ -336,9 +336,7 @@ textarea {
 }
 .hero__media {
   position: relative;
-  /* sur un écran large, la photo grandit avec la largeur : le bas de la pièce (parquet, plan de travail) reste
-     dans le cadre, avec ses repères */
-  height: clamp(380px, max(58vh, 30vw + 70px), 860px);
+  height: clamp(380px, 58vh, 720px);
   overflow: hidden;
   background: var(--paper);
 }
@@ -359,69 +357,6 @@ textarea {
   background: var(--ink);
   opacity: 0;
   pointer-events: none;
-}
-.pin {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: 0;
-  height: 0;
-}
-.pin__dot {
-  position: absolute;
-  left: -13px;
-  top: -13px;
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--ink);
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.75rem;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.88);
-}
-.pin__label {
-  position: absolute;
-  left: 30px;
-  top: 0;
-  transform: translateY(-50%);
-  padding: 6px 10px 7px;
-  background: #fff;
-  color: var(--ink);
-  font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.2;
-  white-space: nowrap;
-  box-shadow: 0 1px 2px rgba(18, 51, 58, 0.18);
-}
-.pin__label::before {
-  /* le trait de rappel, du point à l'étiquette */
-  content: '';
-  position: absolute;
-  right: 100%;
-  top: 50%;
-  width: 13px;
-  height: 1.5px;
-  margin-top: -0.75px;
-  background: #fff;
-}
-.pin--left .pin__label {
-  left: auto;
-  right: 30px;
-}
-.pin--left .pin__label::before {
-  right: auto;
-  left: 100%;
-}
-.pin--wrap .pin__label {
-  /* pas la place d'un côté ni de l'autre : l'étiquette passe à la ligne */
-  width: max-content;
-  white-space: normal;
-}
-.pin.is-out {
-  display: none;
 }
 .hero__cap {
   position: absolute;
@@ -476,15 +411,12 @@ textarea {
   .hero__side {
     grid-column: 1 / -1;
   }
-  .pin__label {
-    font-size: 0.8125rem;
-  }
   .ctas .btn {
     flex: 1 1 auto;
   }
 }
 
-/* l'ouverture : la ligne se tend, la photo s'ouvre depuis elle, les repères se posent, le titre se découvre */
+/* l'ouverture : la ligne se tend, la photo s'ouvre depuis elle, le titre se découvre, puis la légende */
 @media (prefers-reduced-motion: no-preference) {
   .hero__img {
     clip-path: inset(40% 0 60% 0);
@@ -497,22 +429,9 @@ textarea {
       hz-line 0.55s var(--snap) 0.12s forwards,
       hz-fade 0.5s ease 1.45s forwards;
   }
-  .pin__dot {
-    transform: scale(0);
-    animation: pin-dot 0.45s var(--ease) forwards;
-    animation-delay: calc(1.55s + var(--i, 0) * 0.16s);
-  }
-  .pin__label {
-    clip-path: inset(0 100% 0 0);
-    animation: pin-label 0.55s var(--ease) forwards;
-    animation-delay: calc(1.72s + var(--i, 0) * 0.16s);
-  }
-  .pin--left .pin__label {
-    clip-path: inset(0 0 0 100%);
-  }
   .hero__cap {
     clip-path: inset(0 100% 0 0);
-    animation: pin-label 0.55s var(--ease) 2.1s forwards;
+    animation: cap-in 0.55s var(--ease) 2.1s forwards;
   }
   .hero__title,
   .hero__side {
@@ -543,12 +462,7 @@ textarea {
     clip-path: inset(0 0 0 0);
   }
 }
-@keyframes pin-dot {
-  to {
-    transform: scale(1);
-  }
-}
-@keyframes pin-label {
+@keyframes cap-in {
   to {
     clip-path: inset(0 0 0 0);
   }

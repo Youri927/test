@@ -1,4 +1,4 @@
-/* Ehlers Contracting : défilement doux, menu, repères de l'accueil, la cuisine détail par détail, la cote du projet,
+/* Ehlers Contracting : défilement doux, menu, la cuisine détail par détail, la cote du projet,
    les chantiers du registre et le formulaire. Le site reste lisible et utilisable sans ce script. */
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
@@ -87,58 +87,6 @@
     }
   });
   matchMedia('(min-width: 861px)').addEventListener('change', (e) => e.matches && closeMenu(false));
-
-  /* ——— les repères de l'accueil : posés sur la photo, quel que soit le cadrage ——— */
-  const heroBox = $('.hero__media');
-  const heroImg = $('.hero__img');
-  const pins = $$('.pin', heroBox);
-  const placePins = () => {
-    const iw = heroImg.naturalWidth;
-    const ih = heroImg.naturalHeight;
-    if (!iw || !ih) return;
-    // la photo en hauteur (téléphone) est plus haute que large
-    const tall = ih > iw;
-    const W = heroBox.clientWidth;
-    const H = heroBox.clientHeight;
-    const s = Math.max(W / iw, H / ih);
-    const dw = iw * s;
-    const dh = ih * s;
-    // object-position: 50% 40%
-    const ox = (W - dw) * 0.5;
-    const oy = (H - dh) * 0.4;
-    for (const p of pins) {
-      const fx = parseFloat(tall ? p.dataset.mx : p.dataset.x);
-      const fy = parseFloat(tall ? p.dataset.my : p.dataset.y);
-      const x = ox + dw * fx;
-      const y = oy + dh * fy;
-      // un repère sans position pour ce cadrage, ou trop près d'un bord pour son étiquette, n'est pas montré
-      const out = Number.isNaN(fx) || x < 24 || x > W - 24 || y < 24 || y > H - 28;
-      p.classList.toggle('is-out', out);
-      p.style.left = `${x.toFixed(1)}px`;
-      p.style.top = `${y.toFixed(1)}px`;
-      if (out) continue;
-      // l'étiquette va à droite du point ; s'il n'y a pas la place, à gauche ; sinon elle passe à la ligne du côté
-      // le plus large (texte agrandi ou espacé)
-      const label = p.querySelector('.pin__label');
-      p.classList.remove('pin--wrap');
-      label.style.maxWidth = '';
-      const lw = label.offsetWidth;
-      const right = W - 12 - (x + 30);
-      const left = x - 30 - 12;
-      const wrap = lw > right && lw > left;
-      p.classList.toggle('pin--left', wrap ? left > right : lw > right);
-      p.classList.toggle('pin--wrap', wrap);
-      if (wrap) label.style.maxWidth = `${Math.floor(Math.max(left, right))}px`;
-    }
-  };
-  if (heroImg.complete) placePins();
-  heroImg.addEventListener('load', placePins);
-  // le cadre change de taille, ou les étiquettes (police chargée, texte agrandi) : les repères se replacent
-  if ('ResizeObserver' in window) {
-    const ro = new ResizeObserver(() => requestAnimationFrame(placePins));
-    ro.observe(heroBox);
-    pins.forEach((p) => ro.observe(p.querySelector('.pin__label')));
-  } else addEventListener('resize', placePins, {passive: true});
 
   /* ——— vu une fois : la cote du projet, la fourchette de prix, le plan des cages, les titres ——— */
   const once = $$('[data-span], [data-range], [data-plan]');
