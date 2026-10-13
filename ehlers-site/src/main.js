@@ -112,7 +112,7 @@
       const x = ox + dw * fx;
       const y = oy + dh * fy;
       // un repère sans position pour ce cadrage, ou trop près d'un bord pour son étiquette, n'est pas montré
-      const out = Number.isNaN(fx) || x < 24 || x > W - 24 || y < 24 || y > H - 40;
+      const out = Number.isNaN(fx) || x < 24 || x > W - 24 || y < 24 || y > H - 28;
       p.classList.toggle('is-out', out);
       p.style.left = `${x.toFixed(1)}px`;
       p.style.top = `${y.toFixed(1)}px`;

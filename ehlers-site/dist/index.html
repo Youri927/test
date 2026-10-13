@@ -391,7 +391,9 @@ textarea {
 }
 .hero__media {
   position: relative;
-  height: clamp(380px, 58vh, 720px);
+  /* sur un écran large, la photo grandit avec la largeur : le bas de la pièce (parquet, plan de travail) reste
+     dans le cadre, avec ses repères */
+  height: clamp(380px, max(58vh, 30vw + 70px), 860px);
   overflow: hidden;
   background: var(--paper);
 }
@@ -2159,7 +2161,7 @@ textarea {
       const x = ox + dw * fx;
       const y = oy + dh * fy;
       // un repère sans position pour ce cadrage, ou trop près d'un bord pour son étiquette, n'est pas montré
-      const out = Number.isNaN(fx) || x < 24 || x > W - 24 || y < 24 || y > H - 40;
+      const out = Number.isNaN(fx) || x < 24 || x > W - 24 || y < 24 || y > H - 28;
       p.classList.toggle('is-out', out);
       p.style.left = `${x.toFixed(1)}px`;
       p.style.top = `${y.toFixed(1)}px`;
