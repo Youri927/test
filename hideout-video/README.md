@@ -15,8 +15,8 @@ L'ouverture est celle du site, filmée dès sa première image :
 
 | Fichier | Usage |
 | --- | --- |
-| `renders/presentation-hob-16x9.mp4` | présentation avec musique (−14 LUFS) |
-| `renders/presentation-hob-16x9-muet.mp4` | même vidéo sans son |
+| `renders/presentation-hob-16x9.mp4` | présentation avec musique (−14 LUFS), 16,7 Mo |
+| `renders/presentation-hob-16x9-muet.mp4` | même vidéo sans son, 15,4 Mo |
 
 | Temps | Séquence |
 | --- | --- |
@@ -50,7 +50,16 @@ Mêmes règles que pour les vidéos précédentes :
 - **L'ouverture est celle du site**, filmée sur l'horloge simulée (2 s). Les animations sont tenues en pause et placées image par image : la fin de l'ouverture, qui retire normalement ses animations, ne se déclenche donc pas, mais leur dernier état reste en place (identique à l'œil).
 - **Au téléphone, la page est filmée en 390 × 797** (l'écran moins la barre d'état) : rien n'est coupé en bas, la barre « Book now / Call » reste entière.
 
-**Contrôlé dans les captures** (`tools/motion.py track`) : le défilement avance par pas entiers et réguliers, 1, 2 puis 3 px par image, puis 4 px, identiques d'une image à l'autre.
+**Contrôlé sur le rendu** (`tools/motion.py` et `tools/curves.py`) :
+- la mise de côté du navigateur suit la courbe prévue à 0,50 px près sur son bord gauche (0,15 px en moyenne) et à 0,52 px près sur son bord haut (0,14 px en moyenne), sans arrondi au pixel ;
+- les trois téléphones montent sur leur courbe à 0,23 px près (0,06 px en moyenne au plus), puis ne bougent plus (0,18 px d'écart au plus) ;
+- dans les captures, le défilement avance par pas entiers et réguliers (1, 2, 3 puis 4 px par image, identiques d'une image à l'autre) ;
+- les fondus par le noir changent la luminosité moyenne de 31 niveaux au plus d'une image à l'autre (sur 255), sans saut, et chaque coupe passe par deux images noires ;
+- aucune image doublée ni sautée pendant un mouvement. Les seules alertes tombent :
+  - sur les coupes, où deux images noires se suivent, et sur les images presque noires des fondus ;
+  - au début et à la fin d'un fondu ou d'un geste (une image immobile à côté d'une image qui bouge) ;
+  - sur les gestes qui changent beaucoup de pixels d'un coup, comme sur le site : le filtre des résultats, qui retire les photos d'un coup avant de faire monter celles de la famille, et « Facials and body » touché au téléphone, dont le panneau part vite.
+- Le son de la présentation mesure −13,9 LUFS.
 
 ## Fabrication
 
