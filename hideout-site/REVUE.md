@@ -32,6 +32,8 @@ Les plus gros défauts de la première version étaient dans cette ouverture : l
 | Téléphone : des noms Instagram de l'équipe dépassaient de leur colonne entre 320 et 375 px. | 🟢 Mineur | Corrigé : ils passent à la ligne. Aucun débordement sur 19 largeurs, familles ouvertes. |
 | Téléphone : dans le pied de page, le courriel se coupait en « HideoutBoutique@gmai / l.com ». | 🟢 Mineur | Corrigé : il se coupe avant l'arobase, « HideoutBoutique / @gmail.com ». |
 | Pied de page : la phrase « Where results and relaxation collide. » prenait le style des petits textes. | 🟢 Mineur | Corrigé : elle garde sa taille de titre. |
+| Carte : le cadre se posait dès l'arrivée de la carte, quand le cabinet était encore sous le bas de l'écran ; en défilant lentement, on ne le voyait que fini. | 🟢 Mineur | Corrigé : il se pose quand le cadre du cabinet est entier à l'écran, au-dessus du bas (15 %), sur ordinateur comme au téléphone. Vu en filmant la vidéo de présentation. |
+| Téléphone : Chrome dessinait un rectangle gris sous le doigt à chaque toucher (une famille, un filtre). | 🟢 Mineur | Corrigé : il est retiré ; chaque contrôle répond déjà lui-même (le panneau s'ouvre, le filtre se remplit). |
 | Carte : le nom « Alliance for the Arts » chevauchait une rue. | 🟢 Mineur | Corrigé (`tools/map.py`) : il est retiré ; il reste « Broadway Palm » comme repère, et aucun nom ne croise plus un trait. |
 | Logo : refait en vectoriel, le sous-titre « BOUTIQUE & MED SPA » était trop grand et un peu trop bas. | 🟢 Mineur | Corrigé (`tools/logo.py`) : tailles et positions mesurées sur leur fichier. |
 

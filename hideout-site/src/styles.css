@@ -44,6 +44,8 @@ html {
   scroll-padding-bottom: 16px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* pas de rectangle gris au toucher : chaque contrôle répond lui-même (panneau qui s'ouvre, filtre qui se remplit) */
+  -webkit-tap-highlight-color: transparent;
 }
 body {
   margin: 0;

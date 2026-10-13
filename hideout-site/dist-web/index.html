@@ -75,6 +75,8 @@ html {
   scroll-padding-bottom: 16px;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* pas de rectangle gris au toucher : chaque contrôle répond lui-même (panneau qui s'ouvre, filtre qui se remplit) */
+  -webkit-tap-highlight-color: transparent;
 }
 body {
   margin: 0;
@@ -2791,19 +2793,21 @@ button {
     upd();
   }
 
-  /* ——— les cadres qui se tracent : autour de la photo de groupe, et sur l'adresse de la carte ——— */
+  /* ——— les cadres qui se tracent : autour de la photo de groupe quand elle arrive, et sur l'adresse de la carte quand
+     le cabinet lui-même est à l'écran (la carte est haute : à son arrivée, le cabinet est encore sous le bord) ——— */
   const draw = $$('[data-draw], [data-map]');
   if ('IntersectionObserver' in window && !still) {
-    const io = new IntersectionObserver(
-      (es) =>
-        es.forEach((e) => {
-          if (!e.isIntersecting) return;
-          e.target.classList.add('is-drawn');
-          io.unobserve(e.target);
-        }),
-      {threshold: 0.35},
-    );
-    draw.forEach((el) => io.observe(el));
+    const seen = (host) => (es, io) =>
+      es.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.closest(host).classList.add('is-drawn');
+        io.unobserve(e.target);
+      });
+    const group = new IntersectionObserver(seen('[data-draw]'), {threshold: 0.35});
+    $$('[data-draw]').forEach((el) => group.observe(el));
+    // le cadre du cabinet, dans la carte affichée (large ou en hauteur), en entier et au-dessus du bas de l'écran
+    const office = new IntersectionObserver(seen('[data-map]'), {threshold: 1, rootMargin: '0px 0px -15% 0px'});
+    $$('[data-map] [data-frame]').forEach((el) => office.observe(el));
   } else draw.forEach((el) => el.classList.add('is-drawn'));
 
   /* ——— la barre du téléphone : après l'accueil, et pas sur la visite ni le pied de page ——— */

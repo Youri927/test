@@ -159,9 +159,14 @@ ok((await p.textContent('[data-bank-total]')) === '$1,089', 'au clavier : un moi
 await p.locator('.team__group').scrollIntoViewIfNeeded();
 await p.waitForTimeout(500);
 ok(await p.$eval('[data-draw]', (e) => e.classList.contains('is-drawn')), "équipe : le cadre se trace autour de la photo de groupe à son arrivée");
-await p.locator('.map').scrollIntoViewIfNeeded();
+// la carte haute à plus de moitié à l'écran, le cabinet encore sous le bas : le cadre attend
+const mapAt = (y) => p.evaluate((y) => window.scrollTo(0, Math.round(document.querySelector('.map').getBoundingClientRect().top + scrollY - y)), y);
+await mapAt(495);
 await p.waitForTimeout(500);
-ok(await p.$eval('.map', (e) => e.classList.contains('is-drawn')), "carte : le cadre se pose sur l'adresse");
+ok(!(await p.$eval('.map', (e) => e.classList.contains('is-drawn'))), "carte : pas de cadre tant que le cabinet est sous le bas de l'écran");
+await mapAt(120);
+await p.waitForTimeout(500);
+ok(await p.$eval('.map', (e) => e.classList.contains('is-drawn')), "carte : le cadre se pose sur l'adresse quand le cabinet est à l'écran");
 ok((await p.$eval('.map__wide', (e) => getComputedStyle(e).display)) === 'block', 'ordinateur : la carte large');
 
 // la réservation : hors ligne (fichier local), le bouton ouvre leur page Boulevard dans un onglet

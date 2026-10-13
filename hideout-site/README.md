@@ -43,7 +43,7 @@ Hideout Boutique est un med spa de Fort Myers, en Floride, ouvert en 2017 par Je
 - **Les outils de Chrome** : Lighthouse et les traces de chargement, au téléphone ralenti et à l'ordinateur, sur le nouveau site et sur l'actuel (voir « Mesures »).
 - **Playwright** :
   - l'ouverture capturée image par image, l'horloge des animations arrêtée et calée, pour régler chaque instant ;
-  - les 49 essais d'interaction (`tools/interact.mjs`), dont un contrôle des débordements à 19 largeurs ;
+  - les 50 essais d'interaction (`tools/interact.mjs`), dont un contrôle des débordements à 19 largeurs ;
   - le parcours au clavier, le focus caché ou non et le contraste mesuré sur les pixels (`tools/a11y.mjs`) ;
   - les planches et l'image de partage (`tools/shots.mjs`, `tools/boards.mjs`, `tools/og.mjs`).
 - **fontTools** : leur logo redessiné en vectoriel, lettre par lettre, d'après leur fichier (`tools/logo.py`).
@@ -159,7 +159,7 @@ Lighthouse et traces de chargement de Chrome, téléphone simulé (4G lente, pro
 - le lien « Skip to content », qui mène bien au contenu ;
 - les contrastes mesurés sur les vrais pixels (97 mesures : le texte de 4,82:1 à 17,11:1, les contours au-dessus de 3:1) ;
 - avec « moins d'animations », et en arrivant par un lien vers une section ;
-- les 49 essais d'interaction de `tools/interact.mjs` :
+- les 50 essais d'interaction de `tools/interact.mjs` :
   - l'ouverture, en cours et terminée, et la touche qui l'achève ;
   - les liens de l'en-tête et le focus qui les suit ;
   - les familles (lettres qui s'élargissent, photo encadrée, ouverture au clavier), les préoccupations ;
@@ -182,7 +182,7 @@ Lighthouse et traces de chargement de Chrome, téléphone simulé (4G lente, pro
   - `images.py` refait les photos depuis les fichiers téléchargés sur leur site : `python3 -I tools/images.py <dossier des téléchargements>` ;
   - `logo.py` redessine le logo avec la police Lato (`vendor/fonts/lato/`) : `python3 -I tools/logo.py` ;
   - `map.py` redessine les deux cartes depuis un extrait OpenStreetMap (API `/api/0.6/map`) : `python3 -I tools/map.py <extrait.osm>` ;
-  - `interact.mjs` rejoue les 49 essais d'interaction sur `dist/index.html` ;
+  - `interact.mjs` rejoue les 50 essais d'interaction sur `dist/index.html` ;
   - `a11y.mjs` fait le parcours au clavier, les cibles tactiles et les contrastes, sur le site servi en local (`python3 -m http.server 8771 --bind 127.0.0.1 --directory dist-web`) ;
   - `shots.mjs` fait les captures, `boards.mjs` compose les planches, `og.mjs` l'image de partage.
 - **`web/`** : les fichiers de mise en ligne (`_headers`, `vercel.json`, `robots.txt`, `sitemap.xml`, `llms.txt`, `og.jpg`).

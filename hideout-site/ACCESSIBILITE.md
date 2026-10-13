@@ -7,7 +7,7 @@ Méthode :
 - Lighthouse, sur ordinateur et sur téléphone ;
 - scripts Playwright :
   - `tools/a11y.mjs` : parcours complet au clavier, focus caché ou non, cibles tactiles, contrastes mesurés sur les vrais pixels (tout le texte de la page masqué, pour ne garder que le fond, familles ouvertes), contours et repères, espacement du texte élargi ;
-  - `tools/interact.mjs` : 49 essais de chaque interaction à la souris, au doigt et au clavier, mouvement réduit, arrivée au milieu de la page, débordements sur 19 largeurs d'écran ;
+  - `tools/interact.mjs` : 50 essais de chaque interaction à la souris, au doigt et au clavier, mouvement réduit, arrivée au milieu de la page, débordements sur 19 largeurs d'écran ;
 - arbre d'accessibilité de Chromium, lu composant par composant.
 
 Pas de test avec un vrai lecteur d'écran (VoiceOver ou NVDA) : il reste à faire avant la mise en ligne.
