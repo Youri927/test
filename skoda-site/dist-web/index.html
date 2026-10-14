@@ -426,33 +426,41 @@ p + p { margin-top: 1em; }
   .js .story__bar > span { position: absolute; inset: 0; background: var(--sky-on-dark); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
   .js .story__to { grid-column: 3; grid-row: 1; }
   .js .story__steps { position: relative; padding: 0; margin-top: 28px; }
+  /* d'une étape à l'autre, un fondu enchaîné : l'étape qui part s'efface sur place (elle reste affichée le temps de son
+     fondu), puis celle qui arrive monte ; `--d` décale chaque photo et chaque ligne à l'arrivée */
   .js .story__step {
     position: absolute; inset: 0;
     grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: center;
-    visibility: hidden;
+    visibility: hidden; transition: visibility 0s linear 0.5s;
   }
-  .js .story__step.is-on { visibility: visible; }
+  .js .story__step.is-on { visibility: visible; transition-delay: 0s; }
   .js .story__copy { grid-column: 1 / 4; align-self: center; }
   .js .story__media { grid-column: 5 / 13; height: 100%; position: relative; display: block; }
-  .js .story__media img { position: absolute; opacity: 0; transform: translateY(28px); transition: opacity 0.6s, transform 0.9s var(--ease); }
-  .js .story__copy > * { opacity: 0; transform: translateY(14px); transition: opacity 0.5s, transform 0.7s var(--ease); }
-  .js .story__step.is-on .story__copy > * { opacity: 1; transform: none; }
-  .js .story__step.is-on .story__copy > :nth-child(2) { transition-delay: 0.05s; }
-  .js .story__step.is-on .story__copy > :nth-child(3) { transition-delay: 0.1s; }
-  .js .story__step.is-on img { opacity: 1; transform: none; }
+  .js .story__media img { position: absolute; opacity: 0; transform: translateY(28px); transition: opacity 0.4s, transform 0s 0.4s; }
+  .js .story__copy > * { opacity: 0; transform: translateY(14px); transition: opacity 0.3s, transform 0s 0.3s; }
+  .js .story__step.is-on .story__copy > * {
+    opacity: 1; transform: none;
+    transition: opacity 0.5s calc(0.18s + var(--d, 0s)), transform 0.7s var(--ease) calc(0.18s + var(--d, 0s));
+  }
+  .js .story__copy > :nth-child(2) { --d: 0.05s; }
+  .js .story__copy > :nth-child(3) { --d: 0.1s; }
+  .js .story__step.is-on img {
+    opacity: 1; transform: none;
+    transition: opacity 0.6s calc(0.18s + var(--d, 0s)), transform 0.9s var(--ease) calc(0.18s + var(--d, 0s));
+  }
   /* novembre 2022 : les petites photos de téléphone, à leur taille réelle, et la grande de dessous la maison */
   /* posées côte à côte, sans se chevaucher, comme des pièces d'un dossier d'assurance */
   .js .b--4 { width: 50%; right: 0; top: 0; }
-  .js .b--1 { width: 240px; left: 0; top: 0; transition-delay: 0.08s; }
-  .js .b--3 { width: 180px; left: calc(240px + 16px); top: 0; transition-delay: 0.14s; }
-  .js .b--2 { width: 312px; left: 0; top: calc(240px + 16px); transition-delay: 0.2s; }
+  .js .b--1 { width: 240px; left: 0; top: 0; --d: 0.08s; }
+  .js .b--3 { width: 180px; left: calc(240px + 16px); top: 0; --d: 0.14s; }
+  .js .b--2 { width: 312px; left: 0; top: calc(240px + 16px); --d: 0.2s; }
   /* le séchage */
   .js .d--1 { width: 56%; left: 0; top: 0; }
-  .js .d--2 { width: 40%; right: 0; top: 8%; transition-delay: 0.1s; }
-  .js .d--3 { width: 46%; right: 6%; bottom: 0; transition-delay: 0.18s; }
+  .js .d--2 { width: 40%; right: 0; top: 8%; --d: 0.1s; }
+  .js .d--3 { width: 46%; right: 6%; bottom: 0; --d: 0.18s; }
   /* décembre 2023 : la maison refaite, grande */
   .js .a--1 { width: 74%; left: 0; top: 0; max-height: 100%; object-fit: cover; }
-  .js .a--2 { width: 30%; right: 0; bottom: 0; transition-delay: 0.12s; }
+  .js .a--2 { width: 30%; right: 0; bottom: 0; --d: 0.12s; }
 }
 @media (min-width: 1000px) and (max-height: 760px) and (prefers-reduced-motion: no-preference) {
   .js .b--1 { width: 200px; }
@@ -648,6 +656,11 @@ p + p { margin-top: 1em; }
 }
 .viewer[open] { display: grid; grid-template-columns: 1fr; place-items: center; }
 .viewer::backdrop { background: rgba(15, 21, 30, 0.6); }
+/* elle s'ouvre en fondu (et la photo arrive en fondu, du côté où l'on va : src/main.js) */
+@media (prefers-reduced-motion: no-preference) {
+  .viewer[open], .viewer[open]::backdrop { animation: viewer-in 0.3s var(--ease) both; }
+}
+@keyframes viewer-in { from { opacity: 0; } }
 .viewer__fig { display: grid; gap: 14px; justify-items: center; padding: 70px 20px 90px; max-width: 100%; }
 .viewer__fig img { max-width: min(92vw, 1600px); max-height: calc(100dvh - 190px); width: auto; height: auto; object-fit: contain; background: #26313f; }
 .viewer figcaption { font-size: 16px; color: #e3e8ee; text-align: center; }
@@ -1268,7 +1281,10 @@ p + p { margin-top: 1em; }
   const items = $$('.rooms__grid .ph');
   let at = 0;
   let opener = null;
-  const load = (i) => {
+  let seq = 0;
+  // `dir` : −1 précédente, 1 suivante, 0 à l'ouverture. La photo reste cachée jusqu'à ce qu'elle soit prête (jamais
+  // l'ancienne ni une image à moitié chargée), puis elle arrive en fondu, un peu glissée du côté où l'on va.
+  const load = (i, dir = 0) => {
     at = (i + items.length) % items.length;
     const btn = items[at];
     const img = $('img', btn);
@@ -1276,6 +1292,15 @@ p + p { margin-top: 1em; }
     vImg.alt = img.alt;
     vCap.textContent = btn.parentElement.querySelector('p').textContent;
     vCount.textContent = `${at + 1} of ${items.length}`;
+    if (still.matches) return;
+    vImg.getAnimations().forEach((a) => a.cancel());
+    const fade = vImg.animate(
+      [{opacity: 0, transform: `translateX(${dir * 20}px)`}, {opacity: 1, transform: 'none'}],
+      {duration: 380, easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)'},
+    );
+    fade.pause();
+    const n = ++seq;
+    vImg.decode().catch(() => null).then(() => n === seq && fade.play());
   };
   items.forEach((btn, i) =>
     btn.addEventListener('click', () => {
@@ -1285,12 +1310,12 @@ p + p { margin-top: 1em; }
       if (lenis) lenis.stop();
     }),
   );
-  $('[data-prev]', viewer).addEventListener('click', () => load(at - 1));
-  $('[data-next]', viewer).addEventListener('click', () => load(at + 1));
+  $('[data-prev]', viewer).addEventListener('click', () => load(at - 1, -1));
+  $('[data-next]', viewer).addEventListener('click', () => load(at + 1, 1));
   $('[data-close]', viewer).addEventListener('click', () => viewer.close());
   viewer.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') load(at - 1);
-    if (e.key === 'ArrowRight') load(at + 1);
+    if (e.key === 'ArrowLeft') load(at - 1, -1);
+    if (e.key === 'ArrowRight') load(at + 1, 1);
   });
   viewer.addEventListener('click', (e) => {
     if (e.target === viewer) viewer.close();

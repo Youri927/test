@@ -131,7 +131,10 @@
   const items = $$('.rooms__grid .ph');
   let at = 0;
   let opener = null;
-  const load = (i) => {
+  let seq = 0;
+  // `dir` : −1 précédente, 1 suivante, 0 à l'ouverture. La photo reste cachée jusqu'à ce qu'elle soit prête (jamais
+  // l'ancienne ni une image à moitié chargée), puis elle arrive en fondu, un peu glissée du côté où l'on va.
+  const load = (i, dir = 0) => {
     at = (i + items.length) % items.length;
     const btn = items[at];
     const img = $('img', btn);
@@ -139,6 +142,15 @@
     vImg.alt = img.alt;
     vCap.textContent = btn.parentElement.querySelector('p').textContent;
     vCount.textContent = `${at + 1} of ${items.length}`;
+    if (still.matches) return;
+    vImg.getAnimations().forEach((a) => a.cancel());
+    const fade = vImg.animate(
+      [{opacity: 0, transform: `translateX(${dir * 20}px)`}, {opacity: 1, transform: 'none'}],
+      {duration: 380, easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)'},
+    );
+    fade.pause();
+    const n = ++seq;
+    vImg.decode().catch(() => null).then(() => n === seq && fade.play());
   };
   items.forEach((btn, i) =>
     btn.addEventListener('click', () => {
@@ -148,12 +160,12 @@
       if (lenis) lenis.stop();
     }),
   );
-  $('[data-prev]', viewer).addEventListener('click', () => load(at - 1));
-  $('[data-next]', viewer).addEventListener('click', () => load(at + 1));
+  $('[data-prev]', viewer).addEventListener('click', () => load(at - 1, -1));
+  $('[data-next]', viewer).addEventListener('click', () => load(at + 1, 1));
   $('[data-close]', viewer).addEventListener('click', () => viewer.close());
   viewer.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') load(at - 1);
-    if (e.key === 'ArrowRight') load(at + 1);
+    if (e.key === 'ArrowLeft') load(at - 1, -1);
+    if (e.key === 'ArrowRight') load(at + 1, 1);
   });
   viewer.addEventListener('click', (e) => {
     if (e.target === viewer) viewer.close();

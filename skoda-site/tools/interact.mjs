@@ -105,7 +105,7 @@ const scrollToEl = (p, sel, off = 0) =>
       const run = s.offsetHeight - (innerHeight - top);
       window.scrollTo(0, s.getBoundingClientRect().top + scrollY - top + f * run);
     }, f);
-    await p.waitForTimeout(1100);
+    await p.waitForTimeout(1400);
     return p.evaluate(() => ({
       on: [...document.querySelectorAll('.story__step')].findIndex((s) => s.classList.contains('is-on')),
       p: +getComputedStyle(document.querySelector('[data-story]')).getPropertyValue('--p'),
@@ -141,11 +141,36 @@ const scrollToEl = (p, sel, off = 0) =>
     });
     ok(o.pairs === 0 && !o.out, `étape ${f === 0.1 ? 'novembre 2022' : 'séchage'} : photos sans chevauchement, dans le cadre`);
   }
+  // d'une étape à l'autre, un fondu enchaîné : l'étape qui part reste affichée pendant que ses photos s'effacent
+  await at(0.1);
+  const cross = await p.evaluate(async () => {
+    const s = document.querySelector('[data-story]');
+    const top = document.querySelector('[data-top]').offsetHeight;
+    const run = s.offsetHeight - (innerHeight - top);
+    window.scrollTo(0, s.getBoundingClientRect().top + scrollY - top + 0.5 * run);
+    const frame = () => new Promise((r) => requestAnimationFrame(() => r()));
+    await frame();
+    await frame();
+    const first = document.querySelector('.story__step');
+    const fading = first.getAnimations({subtree: true}).filter((t) => t.transitionProperty === 'opacity').length;
+    const during = getComputedStyle(first).visibility;
+    await new Promise((r) => setTimeout(r, 800));
+    return {fading, during, after: getComputedStyle(first).visibility};
+  });
+  ok(
+    cross.fading >= 4 && cross.during === 'visible' && cross.after === 'hidden',
+    `vers le séchage : novembre 2022 s’efface en fondu, puis se retire (${cross.fading} fondus, ${cross.during} puis ${cross.after})`,
+  );
 
   // la visionneuse des pièces
   await scrollToEl(p, '.rooms', -100);
   await p.waitForTimeout(600);
   await p.click('.r--b .ph');
+  const opening = await p.evaluate(() => ({
+    dialog: document.querySelector('[data-viewer]').getAnimations().some((a) => a.animationName === 'viewer-in'),
+    photo: document.querySelector('[data-viewer-img]').getAnimations().length,
+  }));
+  ok(opening.dialog && opening.photo === 1, 'la visionneuse s’ouvre en fondu, la photo arrive en fondu');
   await p.waitForTimeout(500);
   let v = await p.evaluate(() => ({
     open: document.querySelector('[data-viewer]').open,
@@ -157,6 +182,8 @@ const scrollToEl = (p, sel, off = 0) =>
   ok(v.w >= 1300, `la grande photo est la plus grande version (${v.w} px)`);
   await p.screenshot({path: `${out}/d-viewer.png`});
   await p.keyboard.press('ArrowRight');
+  const slide = await p.$eval('[data-viewer-img]', (i) => i.getAnimations().map((a) => a.effect.getKeyframes()[0].transform));
+  ok(slide.length === 1 && slide[0] === 'translateX(20px)', `la photo suivante arrive de la droite (${slide.join(', ')})`);
   await p.waitForTimeout(200);
   ok((await p.$eval('[data-viewer-count]', (e) => e.textContent)) === '3 of 12', 'flèche droite : photo suivante');
   await p.keyboard.press('ArrowLeft');
@@ -288,6 +315,14 @@ const scrollToEl = (p, sel, off = 0) =>
   ok(st.every((x) => x.pos === 'static' && x.vis === 'visible' && x.h > 200), 'mouvement réduit : les trois étapes de l’histoire sont visibles, l’une sous l’autre');
   const imgs = await p.$$eval('.story img', (im) => im.filter((i) => getComputedStyle(i).opacity !== '1').length);
   ok(imgs === 0, 'mouvement réduit : toutes les photos de l’histoire sont visibles');
+  await scrollToEl(p, '.rooms', -100);
+  await p.click('.r--b .ph');
+  await p.keyboard.press('ArrowRight');
+  const still = await p.evaluate(() => ({
+    open: document.querySelector('[data-viewer]').open,
+    moves: document.querySelector('[data-viewer]').getAnimations().length + document.querySelector('[data-viewer-img]').getAnimations().length,
+  }));
+  ok(still.open && still.moves === 0, 'mouvement réduit : la visionneuse s’ouvre et change de photo sans fondu');
   await ctx.close();
 }
 
