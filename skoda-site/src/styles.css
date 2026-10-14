@@ -604,6 +604,8 @@ p + p { margin-top: 1em; }
 .viewer__fig { display: grid; gap: 14px; justify-items: center; padding: 70px 20px 90px; max-width: 100%; }
 .viewer__fig img { max-width: min(92vw, 1600px); max-height: calc(100dvh - 190px); width: auto; height: auto; object-fit: contain; background: #26313f; }
 .viewer figcaption { font-size: 16px; color: #e3e8ee; text-align: center; }
+/* la photo qui part, posée par-dessus la nouvelle le temps du fondu enchaîné (src/main.js) */
+.viewer__ghost { position: fixed; margin: 0; opacity: 0; pointer-events: none; }
 .viewer__count { color: #9aa5b1; margin-left: 10px; font-variant-numeric: tabular-nums; }
 .viewer__btn, .viewer__close {
   position: fixed; background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.55);

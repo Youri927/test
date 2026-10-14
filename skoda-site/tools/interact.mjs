@@ -183,7 +183,9 @@ const scrollToEl = (p, sel, off = 0) =>
   await p.screenshot({path: `${out}/d-viewer.png`});
   await p.keyboard.press('ArrowRight');
   const slide = await p.$eval('[data-viewer-img]', (i) => i.getAnimations().map((a) => a.effect.getKeyframes()[0].transform));
+  const ghosts = await p.$$eval('.viewer__ghost', (g) => g.map((x) => x.getAnimations().length));
   ok(slide.length === 1 && slide[0] === 'translateX(20px)', `la photo suivante arrive de la droite (${slide.join(', ')})`);
+  ok(ghosts.length === 1 && ghosts[0] === 1, 'l’ancienne photo s’efface par-dessus : un fondu enchaîné');
   await p.waitForTimeout(200);
   ok((await p.$eval('[data-viewer-count]', (e) => e.textContent)) === '3 of 12', 'flèche droite : photo suivante');
   await p.keyboard.press('ArrowLeft');
@@ -195,8 +197,8 @@ const scrollToEl = (p, sel, off = 0) =>
   ok((await p.$eval('[data-viewer-count]', (e) => e.textContent)) === '12 of 12', 'avant la première, la dernière');
   await p.keyboard.press('Escape');
   await p.waitForTimeout(300);
-  v = await p.evaluate(() => ({open: document.querySelector('[data-viewer]').open, focus: document.activeElement.closest('.r')?.className}));
-  ok(!v.open && /r--b/.test(v.focus || ''), 'Échap ferme la visionneuse et rend le focus à la photo');
+  v = await p.evaluate(() => ({open: document.querySelector('[data-viewer]').open, focus: document.activeElement.closest('.r')?.className, ghosts: document.querySelectorAll('.viewer__ghost').length}));
+  ok(!v.open && /r--b/.test(v.focus || '') && v.ghosts === 0, 'Échap ferme la visionneuse et rend le focus à la photo');
 
   // le formulaire
   await scrollToEl(p, '#consultation', -80);
@@ -328,7 +330,7 @@ const scrollToEl = (p, sel, off = 0) =>
   await p.keyboard.press('ArrowRight');
   const still = await p.evaluate(() => ({
     open: document.querySelector('[data-viewer]').open,
-    moves: document.querySelector('[data-viewer]').getAnimations().length + document.querySelector('[data-viewer-img]').getAnimations().length,
+    moves: document.querySelector('[data-viewer]').getAnimations().length + document.querySelector('[data-viewer-img]').getAnimations().length + document.querySelectorAll('.viewer__ghost').length,
   }));
   ok(still.open && still.moves === 0, 'mouvement réduit : la visionneuse s’ouvre et change de photo sans fondu');
   await p.keyboard.press('Escape');

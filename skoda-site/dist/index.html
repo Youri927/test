@@ -662,6 +662,8 @@ p + p { margin-top: 1em; }
 .viewer__fig { display: grid; gap: 14px; justify-items: center; padding: 70px 20px 90px; max-width: 100%; }
 .viewer__fig img { max-width: min(92vw, 1600px); max-height: calc(100dvh - 190px); width: auto; height: auto; object-fit: contain; background: #26313f; }
 .viewer figcaption { font-size: 16px; color: #e3e8ee; text-align: center; }
+/* la photo qui part, posée par-dessus la nouvelle le temps du fondu enchaîné (src/main.js) */
+.viewer__ghost { position: fixed; margin: 0; opacity: 0; pointer-events: none; }
 .viewer__count { color: #9aa5b1; margin-left: 10px; font-variant-numeric: tabular-nums; }
 .viewer__btn, .viewer__close {
   position: fixed; background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.55);
@@ -1154,6 +1156,8 @@ document.querySelectorAll('img[data-same]').forEach(function(i){var s=document.q
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const still = matchMedia('(prefers-reduced-motion: reduce)');
   const wide = matchMedia('(min-width: 1000px)');
+  // la courbe des réponses aux gestes, la même que --ease dans styles.css
+  const EASE = 'cubic-bezier(0.2, 0.7, 0.1, 1)';
 
   /* ——— l'ouverture : quand les polices sont là (ou au bout de 1,2 s), le titre puis les lettres du nom ——— */
   const ready = () => requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-ready')));
@@ -1282,8 +1286,21 @@ document.querySelectorAll('img[data-same]').forEach(function(i){var s=document.q
   let opener = null;
   let seq = 0;
   // `dir` : −1 précédente, 1 suivante, 0 à l'ouverture. La photo reste cachée jusqu'à ce qu'elle soit prête (jamais
-  // l'ancienne ni une image à moitié chargée), puis elle arrive en fondu, un peu glissée du côté où l'on va.
+  // l'ancienne ni une image à moitié chargée), puis elle arrive en fondu, un peu glissée du côté où l'on va. D'une photo
+  // à l'autre, l'ancienne reste par-dessus, en calque, et s'efface pendant ce temps : un fondu enchaîné, sans trou noir.
   const load = (i, dir = 0) => {
+    if (dir && !still.matches && vImg.complete && vImg.naturalWidth) {
+      const r = vImg.getBoundingClientRect();
+      const from = Number(getComputedStyle(vImg).opacity);
+      const ghost = vImg.cloneNode();
+      ghost.removeAttribute('data-viewer-img');
+      ghost.alt = '';
+      ghost.className = 'viewer__ghost';
+      Object.assign(ghost.style, {left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px`});
+      viewer.prepend(ghost);
+      const gone = () => ghost.remove();
+      ghost.animate([{opacity: from}, {opacity: 0, transform: `translateX(${-dir * 20}px)`}], {duration: 300, easing: EASE}).finished.then(gone, gone);
+    }
     at = (i + items.length) % items.length;
     const btn = items[at];
     const img = $('img', btn);
@@ -1295,7 +1312,7 @@ document.querySelectorAll('img[data-same]').forEach(function(i){var s=document.q
     vImg.getAnimations().forEach((a) => a.cancel());
     const fade = vImg.animate(
       [{opacity: 0, transform: `translateX(${dir * 20}px)`}, {opacity: 1, transform: 'none'}],
-      {duration: 380, easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)'},
+      {duration: 380, easing: EASE},
     );
     fade.pause();
     const n = ++seq;
@@ -1320,6 +1337,7 @@ document.querySelectorAll('img[data-same]').forEach(function(i){var s=document.q
     if (e.target === viewer) viewer.close();
   });
   viewer.addEventListener('close', () => {
+    $$('.viewer__ghost', viewer).forEach((g) => g.remove());
     if (lenis) lenis.start();
     if (opener) opener.focus();
   });
@@ -1333,7 +1351,6 @@ document.querySelectorAll('img[data-same]').forEach(function(i){var s=document.q
     remodel: ['$250,000 to $500,000', '$500,000 to $1 million', '$1 million or more', 'Not sure yet'],
   };
   const KIND = {'New custom home': 'home', 'Building on my lot': 'home', Remodel: 'remodel'};
-  const EASE = 'cubic-bezier(0.2, 0.7, 0.1, 1)';
   let kind = null;
   let moving = [];
   // Le budget arrive sans à-coup : la suite du formulaire glisse de son ancienne place à la nouvelle (mesurées avant et
