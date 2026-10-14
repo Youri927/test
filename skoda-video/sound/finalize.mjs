@@ -30,7 +30,9 @@ const af = `loudnorm=${target}:measured_I=${m.input_i}:measured_TP=${m.input_tp}
 const dur = duration(input);
 const big = statSync(input).size > MAX;
 const video = big ? twoPass(input, basename(output, '.mp4'), Math.floor((MAX * 0.97 * 8) / dur / 1000 - 192)) : ['-c:v', 'copy'];
-execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', input, ...video, '-af', af, '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', output]);
+// le son AAC peut finir quelques millisecondes avant l'image : il est complété par du silence jusqu'à la durée exacte de
+// l'image (-t), plutôt que de couper la dernière image (-shortest)
+execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', input, ...video, '-af', `${af},apad`, '-c:a', 'aac', '-b:a', '192k', '-t', String(dur), '-movflags', '+faststart', output]);
 const muted = output.replace(/\.mp4$/, '-muet.mp4');
 execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', output, '-an', '-c:v', 'copy', '-movflags', '+faststart', muted]);
 const mb = (p) => (statSync(p).size / 1024 / 1024).toFixed(1);
@@ -44,6 +46,6 @@ if (light && statSync(output).size <= LIGHT_MAX) {
   // débit calculé pour rester sous 30 Mo avec un son AAC à 128 kb/s ; l'image vient du rendu d'origine, le son de la version normalisée
   const kbps = Math.floor((LIGHT_MAX * 8) / dur / 1000 - 128);
   const v = twoPass(input, basename(light, '.mp4'), kbps);
-  execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', input, '-i', output, '-map', '0:v', '-map', '1:a', ...v, '-c:a', 'aac', '-b:a', '128k', '-shortest', '-movflags', '+faststart', light]);
+  execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', input, '-i', output, '-map', '0:v', '-map', '1:a', ...v, '-af', 'apad', '-c:a', 'aac', '-b:a', '128k', '-t', String(dur), '-movflags', '+faststart', light]);
   console.log(`✓ ${light}  ${mb(light)} Mo (vidéo ${kbps} kb/s)`);
 }

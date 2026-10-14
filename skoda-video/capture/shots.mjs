@@ -287,15 +287,26 @@ const desktop = [
       });
       const y1 = Math.round(start + run * 0.97);
       await park(site, y0, 900);
-      // le départ du défilement : le séchage (p = 0,34) commence sur le temps EVENTS.story.second
+      // Deux temps. La page descend jusqu'à l'épinglage en freinant : elle s'y pose au pas de 1 px, sans arrêt sec (à
+      // vitesse constante, la partie s'arrêterait net d'une image à l'autre en s'épinglant). Puis le défilement reprend
+      // sous la partie épinglée, où seule la barre du temps le montre. Le départ est choisi pour que le séchage
+      // (p = 0,34) commence sur le temps EVENTS.story.second.
+      const pin = Math.ceil(start);
       const target = B(EVENTS.story.second);
       let best = null;
       for (let from = 0; from < 120; from++) {
-        const ys = glideTo({y0, y1, from, v: 6, ramp: 36, frames: LEN.Story});
+        const a = glideTo({y0, y1: pin, from, v: 6, ramp: 30, frames: LEN.Story});
+        const stop = a.indexOf(a[LEN.Story - 1]);
+        const b = glideTo({y0: a[stop], y1, from: stop, v: 6, ramp: 24, frames: LEN.Story});
+        const ys = [...a.slice(0, stop + 1), ...b.slice(stop + 1)];
         const k = ys.findIndex((y) => (y - start) / run >= 0.34);
-        if (!best || Math.abs(k - target) < Math.abs(best.k - target)) best = {from, ys, k};
+        if (!best || Math.abs(k - target) < Math.abs(best.k - target)) best = {from, ys, k, stop};
       }
-      console.log(`  d-story : départ à l'image ${best.from}, séchage à l'image ${best.k} (cible ${target}), arrivée p = ${((best.ys[LEN.Story - 1] - start) / run).toFixed(3)}`);
+      const p = (y) => ((y - start) / run).toFixed(3);
+      console.log(
+        `  d-story : départ à l'image ${best.from}, posée à l'image ${best.stop} (${best.ys[best.stop] - pin} px de l'épinglage), ` +
+          `séchage à l'image ${best.k} (cible ${target}), arrivée p = ${p(best.ys[LEN.Story - 1])}`,
+      );
       return {ys: best.ys};
     },
     async step(site, ctx, i) {

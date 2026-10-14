@@ -22,10 +22,10 @@ navigateur se range ensuite de côté pour la légende de la vidéo.
 | 0 – 7,2 s | L'ouverture : le titre, les lettres du nom qui montent, la première photo qui entre ; légende « Your new website » avec la fenêtre en arc |
 | 7,2 – 16,8 s | Un Skoda derrière chaque chantier : la page descend dans l'accueil, le nom reste en place et leurs chantiers passent devant lui (le terrain, la coque en blocs, la maison finie, la cuisine, la maison refaite, le studio de fitness), jusqu'à « All our jobs are owner supervised. » ; « A Skoda behind every job » |
 | 16,8 – 21,6 s | Les maisons neuves : le texte reste en place, la coque et la maison finie se découvrent en arrivant ; « From the lot up » |
-| 21,6 – 27,6 s | Les pièces : des six métiers aux photos ; un clic ouvre la cuisine à l'îlot de pierre dans la visionneuse, puis deux fois « Next photo » ; « Rooms you've built » |
-| 27,6 – 37,2 s | Better than new : la page descend dans l'histoire épinglée ; la maison passe de novembre 2022 au séchage (sur un temps), puis à décembre 2023 ; « Better than new » |
+| 21,6 – 27,6 s | Les pièces : des six métiers aux photos ; un clic ouvre la cuisine à l'îlot de pierre dans la visionneuse, qui s'ouvre en fondu, puis deux fois « Next photo », en fondu enchaîné ; « Rooms you've built » |
+| 27,6 – 37,2 s | Better than new : la page descend et se pose sur l'histoire épinglée ; la maison passe de novembre 2022 au séchage (sur un temps), puis à décembre 2023, en fondu enchaîné ; « Better than new » |
 | 37,2 – 42 s | La famille : la ligne des dates se trace (1950, 1985, 2014, 2023), puis Chris et Mike ; « Since 1950 » |
-| 42 – 49,2 s | La consultation : « A new home », leurs fourchettes de budget apparaissent, « $1 million to $5 million », puis « Write my email to Skoda » : la demande est prête et la page l'amène à l'écran ; « A consultation, by email » |
+| 42 – 49,2 s | La consultation : « A new home », la suite du formulaire glisse et leurs fourchettes de budget apparaissent, « $1 million to $5 million », puis « Write my email to Skoda » : la demande prête monte et la page l'amène à l'écran ; « A consultation, by email » |
 | 49,2 – 55,2 s | Trois téléphones : l'ouverture, le nom avec les chantiers qui passent devant, la maison restaurée étape par étape ; « On a phone » |
 | 55,2 – 61,2 s | Sur le bleu du pied de page : la fenêtre en arc, les lettres du nom qui montent, « Built from your job sites, your family and your license. » ; fondu au noir |
 
@@ -52,8 +52,13 @@ Mêmes règles que pour les vidéos précédentes :
   première de la suivante sont noires.
 - **L'ouverture est celle du site**, filmée sur l'horloge simulée : ses transitions (les lettres, la photo) sont tenues
   en pause et placées image par image.
-- **La maison restaurée défile à vitesse constante**, réglée pour que le séchage arrive exactement sur un temps de la
-  musique ; décembre 2023 suit.
+- **La maison restaurée** : la page ralentit jusqu'à l'épinglage et s'y pose au pas de 1 px (à vitesse constante, la
+  partie s'arrêterait net d'une image à l'autre en s'épinglant). Puis le défilement reprend sous la partie épinglée, à
+  vitesse constante, réglé pour que le séchage arrive exactement sur un temps de la musique ; décembre 2023 suit.
+- **Rien ne change d'un coup en plein plan.** Le site a été retouché pour que ses réponses aux gestes soient des
+  fondus : les étapes de la maison restaurée en fondu enchaîné, la visionneuse qui s'ouvre en fondu et passe d'une
+  photo à l'autre en fondu enchaîné, la suite du formulaire qui glisse pour faire place au budget, la demande prête
+  qui monte.
 - **Après le clic sur « Write my email to Skoda »**, la caméra laisse le site amener lui-même la demande prête à
   l'écran (son défilement doux, sur l'horloge simulée).
 - **Au téléphone, la page est filmée en 390 × 797** (l'écran moins la barre d'état) : rien n'est coupé en bas.
@@ -92,7 +97,8 @@ plus bas.
      rendent.
 3. **Rendu :** `bash tools/render.sh` rend l'image par segments, les raccorde, mixe la musique (`sound/mix.mjs`) et
    assemble `out/presentation-skoda.mp4`. Ses fichiers temporaires vont en mémoire (`/dev/shm`).
-   - Puis `npm run finalize` normalise le son à −14 LUFS.
+   - Puis `npm run finalize` normalise le son à −14 LUFS. Le son y est complété par du silence jusqu'à la durée exacte
+     de l'image : aucune image n'est coupée à la fin.
    - Il crée aussi la version muette, et une version d'envoi de moins de 30 Mo (`out/`).
 
 `node tools/stills.mjs <dossier> <image> …` sort des images fixes du montage pour vérifier une scène.
