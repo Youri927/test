@@ -259,7 +259,12 @@ const desktop = [
         keepFocus: true,
       };
     },
-    step: mouseStep,
+    async step(site, ctx, i, t) {
+      const out = await mouseStep(site, ctx, i, t);
+      // la grande photo chargée et décodée avant l'image suivante : son fondu part de l'image du clic, sans trou
+      if (out?.click) await site.page.evaluate(() => document.querySelector('[data-viewer-img]').decode().catch(() => null));
+      return out;
+    },
     watch: (page) =>
       page.evaluate(() => {
         const v = document.querySelector('[data-viewer]');
