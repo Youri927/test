@@ -46,7 +46,7 @@
 <link rel="preload" as="image" type="image/avif" imagesrcset="assets/img/hero-800.avif 800w, assets/img/hero-1280.avif 1280w, assets/img/hero-1920.avif 1920w" imagesizes="100vw" media="(min-width: 701px)" fetchpriority="high">
 <link rel="preload" as="image" type="image/avif" href="assets/img/hero-tall.avif" media="(max-width: 700px)" fetchpriority="high">
 <style>
-@font-face{font-family:"Encode Sans";src:url(assets/fonts/EncodeSans.woff2) format("woff2");font-weight:100 900;font-stretch:75% 125%;font-style:normal;font-display:swap}@font-face{font-family:"Encode Fallback";src:local("Arial"),local("Liberation Sans"),local("Helvetica");size-adjust:100%;ascent-override:92%;descent-override:24%;line-gap-override:0%}
+@font-face{font-family:"Encode Sans";src:url(assets/fonts/EncodeSans.woff2) format("woff2");font-weight:100 900;font-stretch:75% 125%;font-style:normal;font-display:swap}@font-face{font-family:"Encode Fallback";src:local("Arial"),local("Liberation Sans"),local("Helvetica");size-adjust:97.2%;ascent-override:105.9%;descent-override:22.6%;line-gap-override:0%}
 /* Mendieta Roofing Corp. — couche par couche.
    Bleu du blason, lumière blanche, un jaune réservé à ce qui agit. Encode Sans : titres en chasse élargie, texte en
    chasse normale. */
@@ -1105,13 +1105,24 @@ textarea {
   color: var(--ink-soft);
 }
 
+/* les photos sont posées comme des rangs de tuiles : un rang de quatre, puis un rang de trois décalé d'une
+   demi-photo, chaque photo à cheval sur le joint du rang du dessous (21 photos : trois paires de rangs) */
 .work {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 22px 16px;
   margin: 24px 0 0;
   padding: 0;
+}
+
+.work li {
+  grid-column: span 2;
+}
+
+.work:not([data-filtered]) li:nth-child(7n + 5),
+.work[data-filtered] li.is-shift {
+  grid-column: 2 / span 2;
 }
 
 .work li[hidden] {
@@ -1745,6 +1756,21 @@ textarea {
   color: var(--ink-2);
 }
 
+/* la note dit ce que fait le bouton : la messagerie au téléphone, le texte à copier sur ordinateur (comme main.js) */
+.form__note--phone {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .form__note--phone {
+    display: block;
+  }
+
+  .form__note--computer {
+    display: none;
+  }
+}
+
 .form__ready {
   display: grid;
   gap: 12px;
@@ -1827,6 +1853,10 @@ textarea {
 }
 
 .foot__dl a {
+  /* 44 px de zone cliquable sans bouger la ligne */
+  display: inline-block;
+  padding-block: 11px;
+  margin-block: -11px;
   font-weight: 650;
   text-decoration: none;
 }
@@ -1989,10 +2019,6 @@ textarea {
     align-items: start;
   }
 
-  .work {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .quotes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2081,9 +2107,18 @@ textarea {
     gap: 28px;
   }
 
+  /* sur téléphone : des rangs de deux, et la dernière photo seule se pose au milieu */
   .work {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 18px 10px;
+  }
+
+  .work:not([data-filtered]) li:nth-child(7n + 5) {
+    grid-column: span 2;
+  }
+
+  .work:not([data-filtered]) li:last-child:nth-child(odd) {
+    grid-column: 2 / span 2;
   }
 
   .quotes {
@@ -2335,7 +2370,7 @@ textarea {
         <li data-step="3">
           <img width="800" height="600" class="layers__ph" src="assets/img/s3.avif" srcset="assets/img/s3-480.avif 480w, assets/img/s3.avif 800w" sizes="92vw" alt="Two roofers setting tile on a white house. Rows of tile are stacked on the underlayment and a ladder leans on the wall." loading="lazy" decoding="async">
           <h3><span class="layers__n">3</span> Tile, from the eave up</h3>
-          <p>The tile goes up on the roof in stacks, then it is set course by course, starting at the bottom edge.</p>
+          <p>The tile is loaded onto the roof in stacks, then laid course by course from the bottom edge up.</p>
         </li>
         <li data-step="4">
           <span class="layers__ph duo"><span class="duo__c"><img width="800" height="600" src="assets/img/s1.avif" srcset="assets/img/s1-480.avif 480w, assets/img/s1.avif 800w" sizes="46vw" alt="House A during the job, the old roof off down to the wood deck." loading="lazy" decoding="async"><span class="duo__t">During</span></span><span class="duo__c"><img width="800" height="600" src="assets/img/s2.avif" srcset="assets/img/s2-480.avif 480w, assets/img/s2.avif 800w" sizes="46vw" alt="House B during the job, the roof covered in underlayment." loading="lazy" decoding="async"><span class="duo__t">During</span></span><span class="duo__c"><img width="800" height="600" src="assets/img/s4a.avif" srcset="assets/img/s4a-480.avif 480w, assets/img/s4a.avif 800w" sizes="46vw" alt="House A finished with a white tile roof." loading="lazy" decoding="async"><span class="duo__t">Done</span></span><span class="duo__c"><img width="800" height="600" src="assets/img/s4b.avif" srcset="assets/img/s4b-480.avif 480w, assets/img/s4b.avif 800w" sizes="46vw" alt="House B finished with a terracotta tile roof." loading="lazy" decoding="async"><span class="duo__t">Done</span></span></span>
@@ -2383,26 +2418,26 @@ textarea {
       <p class="sr" aria-live="polite" data-tabs-status></p>
       <div class="work-panel" id="work" role="tabpanel" aria-labelledby="tab-all">
       <ul class="work" data-work>
-        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g29.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g29-480.avif" srcset="assets/img/g29-480.avif 480w, assets/img/g29.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A house with a white tile roof under a blue sky." loading="lazy" decoding="async"></button><p>White tile</p></li>
-        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g20.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g20-480.avif" srcset="assets/img/g20-480.avif 480w, assets/img/g20.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A cream house with a brown shingle roof and palms in the front yard." loading="lazy" decoding="async"></button><p>Shingle</p></li>
-        <li data-k="tile job"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g22.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g22-480.avif" srcset="assets/img/g22-480.avif 480w, assets/img/g22.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="Roofers at the ridge of a terracotta tile roof, with a Mendieta truck in the driveway." loading="lazy" decoding="async"></button><p>Terracotta tile, crew at the ridge</p></li>
-        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g45.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g45-480.avif" srcset="assets/img/g45-480.avif 480w, assets/img/g45.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A white house with a white tile roof and a Mendieta truck parked by the garage." loading="lazy" decoding="async"></button><p>White tile</p></li>
-        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g41.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g41-480.avif" srcset="assets/img/g41-480.avif 480w, assets/img/g41.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A long yellow single-story house with a brown shingle roof." loading="lazy" decoding="async"></button><p>Shingle</p></li>
-        <li data-k="tile job"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g11.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g11-480.avif" srcset="assets/img/g11-480.avif 480w, assets/img/g11.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A house with its old roof removed down to the wood deck, a roofer on top and a Mendieta truck out front." loading="lazy" decoding="async"></button><p>Old roof off, down to the deck</p></li>
-        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g30.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g30-480.avif" srcset="assets/img/g30-480.avif 480w, assets/img/g30.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A pale pink house with a white tile roof behind tall palms." loading="lazy" decoding="async"></button><p>White tile</p></li>
-        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g25.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g25-480.avif" srcset="assets/img/g25-480.avif 480w, assets/img/g25.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A blue-gray house with a dark shingle roof." loading="lazy" decoding="async"></button><p>Dark shingle</p></li>
-        <li data-k="shingle job"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g15.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g15-480.avif" srcset="assets/img/g15-480.avif 480w, assets/img/g15.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="Three roofers installing shingles, with bundles on the roof and a dump trailer in the driveway." loading="lazy" decoding="async"></button><p>Shingles going on</p></li>
-        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g49.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g49-480.avif" srcset="assets/img/g49-480.avif 480w, assets/img/g49.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A taupe house with a dark brown tile roof and a wide lawn." loading="lazy" decoding="async"></button><p>Brown tile</p></li>
-        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g42.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g42-480.avif" srcset="assets/img/g42-480.avif 480w, assets/img/g42.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A long ranch house with a shingle roof at the end of a curved driveway." loading="lazy" decoding="async"></button><p>Shingle</p></li>
+        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g29.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g29-480.avif" srcset="assets/img/g29-480.avif 480w, assets/img/g29.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A house with a white tile roof under a blue sky." loading="lazy" decoding="async"></button><p>White tile</p></li>
+        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g20.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g20-480.avif" srcset="assets/img/g20-480.avif 480w, assets/img/g20.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A cream house with a brown shingle roof and palms in the front yard." loading="lazy" decoding="async"></button><p>Shingle</p></li>
+        <li data-k="tile job"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g22.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g22-480.avif" srcset="assets/img/g22-480.avif 480w, assets/img/g22.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="Roofers at the ridge of a terracotta tile roof, with a Mendieta truck in the driveway." loading="lazy" decoding="async"></button><p>Terracotta tile, crew at the ridge</p></li>
+        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g45.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g45-480.avif" srcset="assets/img/g45-480.avif 480w, assets/img/g45.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A white house with a white tile roof and a Mendieta truck parked by the garage." loading="lazy" decoding="async"></button><p>White tile</p></li>
+        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g41.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g41-480.avif" srcset="assets/img/g41-480.avif 480w, assets/img/g41.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A long yellow single-story house with a brown shingle roof." loading="lazy" decoding="async"></button><p>Shingle</p></li>
+        <li data-k="tile job"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g11.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g11-480.avif" srcset="assets/img/g11-480.avif 480w, assets/img/g11.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A house with its old roof removed down to the wood deck, a roofer on top and a Mendieta truck out front." loading="lazy" decoding="async"></button><p>Old roof off, down to the deck</p></li>
+        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g30.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g30-480.avif" srcset="assets/img/g30-480.avif 480w, assets/img/g30.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A pale pink house with a white tile roof behind tall palms." loading="lazy" decoding="async"></button><p>White tile</p></li>
+        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g25.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g25-480.avif" srcset="assets/img/g25-480.avif 480w, assets/img/g25.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A blue-gray house with a dark shingle roof." loading="lazy" decoding="async"></button><p>Dark shingle</p></li>
+        <li data-k="shingle job"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g15.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g15-480.avif" srcset="assets/img/g15-480.avif 480w, assets/img/g15.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="Three roofers installing shingles, with bundles on the roof and a dump trailer in the driveway." loading="lazy" decoding="async"></button><p>Shingles going on</p></li>
+        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g49.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g49-480.avif" srcset="assets/img/g49-480.avif 480w, assets/img/g49.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A taupe house with a dark brown tile roof and a wide lawn." loading="lazy" decoding="async"></button><p>Brown tile</p></li>
+        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g42.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g42-480.avif" srcset="assets/img/g42-480.avif 480w, assets/img/g42.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A long ranch house with a shingle roof at the end of a curved driveway." loading="lazy" decoding="async"></button><p>Shingle</p></li>
         <li data-k="tile job"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/gs3.avif" data-w="430" data-h="340"><img width="430" height="340" src="assets/img/gs3.avif" alt="A tile roof under repair, with rows of tile lifted where the roof is being fixed." loading="lazy" decoding="async"></button><p>Tile repair</p></li>
-        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g9.avif" data-w="800" data-h="799"><img width="480" height="479" src="assets/img/g9-480.avif" srcset="assets/img/g9-480.avif 480w, assets/img/g9.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A tan house with a gray-brown tile roof, palms and red plants in the front yard." loading="lazy" decoding="async"></button><p>Tile</p></li>
-        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g24.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g24-480.avif" srcset="assets/img/g24-480.avif 480w, assets/img/g24.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A single-story house with a light brown shingle roof under a blue sky." loading="lazy" decoding="async"></button><p>Shingle</p></li>
-        <li data-k="tile job"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g34.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g34-480.avif" srcset="assets/img/g34-480.avif 480w, assets/img/g34.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A roofer on a flat tile roof, with a Mendieta truck in the driveway." loading="lazy" decoding="async"></button><p>Flat tile, crew on the roof</p></li>
-        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g33.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g33-480.avif" srcset="assets/img/g33-480.avif 480w, assets/img/g33.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A white house with blue shutters and a light tile roof, a butterfly on the gable." loading="lazy" decoding="async"></button><p>Light tile</p></li>
-        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g40.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g40-480.avif" srcset="assets/img/g40-480.avif 480w, assets/img/g40.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A yellow house with a shingle roof behind palm trees." loading="lazy" decoding="async"></button><p>Shingle</p></li>
-        <li data-k="metal"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g44.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g44-480.avif" srcset="assets/img/g44-480.avif 480w, assets/img/g44.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A green house and garage with silver metal roofs." loading="lazy" decoding="async"></button><p>Metal</p></li>
-        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/gct.avif" data-w="630" data-h="396"><img width="480" height="302" src="assets/img/gct-480.avif" srcset="assets/img/gct-480.avif 480w, assets/img/gct.avif 630w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A two-story white house with a gray shingle roof among pine trees." loading="lazy" decoding="async"></button><p>Shingle, two stories</p></li>
-        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g10.avif" data-w="800" data-h="799"><img width="480" height="479" src="assets/img/g10-480.avif" srcset="assets/img/g10-480.avif 480w, assets/img/g10.avif 800w" sizes="(max-width: 699px) 46vw, (max-width: 1099px) 30vw, 22vw" alt="A pink house with a brown shingle roof and a ladder against the wall." loading="lazy" decoding="async"></button><p>Shingle</p></li>
+        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g9.avif" data-w="800" data-h="799"><img width="480" height="479" src="assets/img/g9-480.avif" srcset="assets/img/g9-480.avif 480w, assets/img/g9.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A tan house with a gray-brown tile roof, palms and red plants in the front yard." loading="lazy" decoding="async"></button><p>Tile</p></li>
+        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g24.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g24-480.avif" srcset="assets/img/g24-480.avif 480w, assets/img/g24.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A single-story house with a light brown shingle roof under a blue sky." loading="lazy" decoding="async"></button><p>Shingle</p></li>
+        <li data-k="tile job"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g34.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g34-480.avif" srcset="assets/img/g34-480.avif 480w, assets/img/g34.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A roofer on a flat tile roof, with a Mendieta truck in the driveway." loading="lazy" decoding="async"></button><p>Flat tile, crew on the roof</p></li>
+        <li data-k="tile"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g33.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g33-480.avif" srcset="assets/img/g33-480.avif 480w, assets/img/g33.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A white house with blue shutters and a light tile roof, a butterfly on the gable." loading="lazy" decoding="async"></button><p>Light tile</p></li>
+        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g40.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g40-480.avif" srcset="assets/img/g40-480.avif 480w, assets/img/g40.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A yellow house with a shingle roof behind palm trees." loading="lazy" decoding="async"></button><p>Shingle</p></li>
+        <li data-k="metal"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g44.avif" data-w="800" data-h="600"><img width="480" height="360" src="assets/img/g44-480.avif" srcset="assets/img/g44-480.avif 480w, assets/img/g44.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A green house and garage with silver metal roofs." loading="lazy" decoding="async"></button><p>Metal</p></li>
+        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/gct.avif" data-w="630" data-h="396"><img width="480" height="302" src="assets/img/gct-480.avif" srcset="assets/img/gct-480.avif 480w, assets/img/gct.avif 630w" sizes="(max-width: 699px) 46vw, 22vw" alt="A two-story white house with a gray shingle roof among pine trees." loading="lazy" decoding="async"></button><p>Shingle, two stories</p></li>
+        <li data-k="shingle"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/g10.avif" data-w="800" data-h="799"><img width="480" height="479" src="assets/img/g10-480.avif" srcset="assets/img/g10-480.avif 480w, assets/img/g10.avif 800w" sizes="(max-width: 699px) 46vw, 22vw" alt="A pink house with a brown shingle roof and a ladder against the wall." loading="lazy" decoding="async"></button><p>Shingle</p></li>
         <li data-k="job"><button class="ph" type="button" aria-haspopup="dialog" data-full="assets/img/gs2.avif" data-w="430" data-h="340"><img width="430" height="340" src="assets/img/gs2.avif" alt="A gray house with its roof covered in light underlayment, partway through the job." loading="lazy" decoding="async"></button><p>Underlayment on</p></li>
       </ul>
       </div>
@@ -2415,12 +2450,12 @@ textarea {
       <div class="stars"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg></div>
       <h2 id="reviews-t">16 reviews on our website. All five stars.</h2>
       <figure class="big-quote">
-        <blockquote><p>Mario was a pleasure to work with. He responded within minutes to my request and followed thru with estimate same day. It was a pleasure to deal with a true professional and a gentleman.</p></blockquote>
+        <blockquote><p>Mario was a pleasure to work with! He responded within minutes to my request and followed thru with estimate same day! … it was a pleasure to deal with a true professional and a gentleman!</p></blockquote>
         <figcaption><b>Mary S.</b> West Palm Beach</figcaption>
       </figure>
       <ul class="quotes">
-        <li><figure><blockquote><p>Well groomed, professional, fair estimate. Great to work with. Recommended to many of my real estate clients and friends.</p></blockquote><figcaption><b>Eva H.</b> West Palm Beach</figcaption></figure></li>
-        <li><figure><blockquote><p>Two men arrived early and worked throughout the day. They were able to complete the job by mid-afternoon.</p></blockquote><figcaption><b>A homeowner</b> West Palm Beach</figcaption></figure></li>
+        <li><figure><blockquote><p>He was on time, well groomed, professional, fair estimate. Great to work with. Recommended to many of my real estate clients and friends.</p></blockquote><figcaption><b>Eva H.</b> West Palm Beach</figcaption></figure></li>
+        <li><figure><blockquote><p>Very professional. Two men arrived early and worked throughout the day. They were able to complete the job by mid-afternoon.</p></blockquote><figcaption><b>A homeowner</b></figcaption></figure></li>
         <li><figure><blockquote><p>Always on time, knows this trade thoroughly, fair price.</p></blockquote><figcaption><b>Clay M.</b> Royal Palm Beach</figcaption></figure></li>
         <li><figure><blockquote><p>Prompt, quick and efficient. My roof does not leak any longer.</p></blockquote><figcaption><b>A homeowner</b> Lake Worth</figcaption></figure></li>
         <li><figure><blockquote><p>Very professional. They did a great job. I would highly recommend.</p></blockquote><figcaption><b>Mark M.</b> Lake Worth</figcaption></figure></li>
@@ -2544,10 +2579,11 @@ textarea {
           <textarea id="f-msg" name="msg" rows="3"></textarea>
         </div>
         <button class="btn btn--sun form__go" type="submit">Write my text to Mendieta</button>
-        <p class="form__note">This opens your phone's messages with your request written out, addressed to our cell. Nothing is sent until you press send.</p>
+        <p class="form__note form__note--phone">This opens your messages with your request written out, addressed to our cell. Nothing is sent until you press send.</p>
+        <p class="form__note form__note--computer">This writes out your request for you to copy and text to our cell. Nothing is sent from this page.</p>
         <div class="form__ready" hidden tabindex="-1" data-ready>
           <p class="form__ready-t">Your request is ready.</p>
-          <p>On a computer, copy it and text it to (561) 543-6287, or call the office at (561) 797-5457.</p>
+          <p>Copy it and text it to our cell at (561) 543-6287, or call the office at (561) 797-5457.</p>
           <pre class="form__msg" data-msg></pre>
           <button class="btn btn--ink" type="button" data-copy>Copy the message</button>
         </div>
@@ -2767,10 +2803,20 @@ textarea {
   const items = $$('[data-work] li');
   const status = $('[data-tabs-status]');
   const NAMES = {all: 'photos', tile: 'tile roof photos', shingle: 'shingle roof photos', job: 'photos taken during the job'};
-  const columns = () => getComputedStyle($('[data-work]')).gridTemplateColumns.split(' ').length;
+  const work = $('[data-work]');
+  const columns = () => getComputedStyle(work).gridTemplateColumns.split(' ').length;
+  // sur grand écran, les rangs alternent n photos et n − 1 décalées d'une demi-photo ; sur téléphone, des rangs de deux
+  // et la dernière photo seule au milieu. Sans filtre, la feuille de styles s'en charge ; avec un filtre, le décalage
+  // suit les photos qui restent.
   const numberCols = () => {
-    const n = columns();
-    items.filter((li) => !li.hidden).forEach((li, i) => li.style.setProperty('--c', i % n));
+    const n = columns() / 2;
+    const shown = items.filter((li) => !li.hidden);
+    shown.forEach((li, i) => {
+      const q = n > 2 ? i % (2 * n - 1) : i % 2;
+      const shift = n > 2 ? q === n : i === shown.length - 1 && q === 0;
+      li.classList.toggle('is-shift', shift);
+      li.style.setProperty('--c', q < n ? q : q - n);
+    });
   };
   const select = (tab, focus) => {
     const k = tab.dataset.k;
@@ -2786,6 +2832,7 @@ textarea {
       if (show) n++;
       li.classList.remove('is-in');
     });
+    work.toggleAttribute('data-filtered', k !== 'all');
     numberCols();
     requestAnimationFrame(() => items.forEach((li) => !li.hidden && li.classList.add('is-in')));
     status.textContent = `Showing ${n} ${NAMES[k]}.`;
@@ -2957,7 +3004,7 @@ textarea {
       r.selectNodeContents(msgBox);
       getSelection().removeAllRanges();
       getSelection().addRange(r);
-      e.target.textContent = 'Selected: press Ctrl+C';
+      e.target.textContent = `Selected: press ${/Mac|iPhone|iPad/.test(navigator.userAgent) ? 'Cmd' : 'Ctrl'}+C`;
     }
   });
 

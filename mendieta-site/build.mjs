@@ -11,7 +11,7 @@ const b64 = (p) => readFileSync(here(p)).toString('base64');
 
 // Encode Sans (Impallari Type et al., licence OFL), variable : graisse 100 à 900, chasse 75 à 125 %.
 // La police de secours reprend la chasse et la hauteur d'Encode Sans en chasse normale (Arial ajustée, mesurée sur
-// un paragraphe du site) : le texte courant ne bouge pas au chargement.
+// les paragraphes du site) : le texte courant ne bouge pas au chargement.
 const FONT = 'EncodeSans.woff2';
 const FALLBACK = JSON.parse(read('./data/fallback.json'));
 const fontCss = (url) =>

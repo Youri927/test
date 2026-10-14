@@ -114,7 +114,7 @@ const checks = [
   ['#reviews-t'], ['.big-quote p'], ['.big-quote figcaption'], ['.big-quote figcaption b'], ['.quotes p'], ['.quotes figcaption'], ['.reviews__porch'],
   ['#license-t'], ['.license__text p'], ['.card__k'], ['.card__n'], ['.card__dl dt'], ['.card__dl dd'], ['.card__a'], ['.facts dt'], ['.facts dd'],
   ['#area-t'], ['.area__text > p'], ['.check label'], ['.check input'], ['.check__out', CHECK], ['.counties h3'], ['.counties li'], ['.map__lab.is-anchor text'], ['.map__county'], ['.map__sea-t'], ['.area__map figcaption'],
-  ['#estimate-t'], ['.estimate__text > p'], ['.way span'], ['.way b'], ['.form__set legend'], ['.chips span'], ['.field label'], ['.field label span'], ['.field__e', ERR], ['.form__go'], ['.form__note'], ['.form__ready-t', READY], ['.form__msg', READY],
+  ['#estimate-t'], ['.estimate__text > p'], ['.way span'], ['.way b'], ['.form__set legend'], ['.chips span'], ['.field label'], ['.field label span'], ['.field__e', ERR], ['.form__go'], ['.form__note--computer'], ['.form__ready-t', READY], ['.form__msg', READY],
   ['.foot__name'], ['.foot__brand p:last-child'], ['.foot__dl dt'], ['.foot__dl dd'], ['.foot__nav a'],
   ['.lb__fig figcaption', LB], ['.lb__count', LB], ['.lb__close', LB],
 ];

@@ -1056,13 +1056,24 @@ textarea {
   color: var(--ink-soft);
 }
 
+/* les photos sont posées comme des rangs de tuiles : un rang de quatre, puis un rang de trois décalé d'une
+   demi-photo, chaque photo à cheval sur le joint du rang du dessous (21 photos : trois paires de rangs) */
 .work {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 22px 16px;
   margin: 24px 0 0;
   padding: 0;
+}
+
+.work li {
+  grid-column: span 2;
+}
+
+.work:not([data-filtered]) li:nth-child(7n + 5),
+.work[data-filtered] li.is-shift {
+  grid-column: 2 / span 2;
 }
 
 .work li[hidden] {
@@ -1696,6 +1707,21 @@ textarea {
   color: var(--ink-2);
 }
 
+/* la note dit ce que fait le bouton : la messagerie au téléphone, le texte à copier sur ordinateur (comme main.js) */
+.form__note--phone {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .form__note--phone {
+    display: block;
+  }
+
+  .form__note--computer {
+    display: none;
+  }
+}
+
 .form__ready {
   display: grid;
   gap: 12px;
@@ -1778,6 +1804,10 @@ textarea {
 }
 
 .foot__dl a {
+  /* 44 px de zone cliquable sans bouger la ligne */
+  display: inline-block;
+  padding-block: 11px;
+  margin-block: -11px;
   font-weight: 650;
   text-decoration: none;
 }
@@ -1940,10 +1970,6 @@ textarea {
     align-items: start;
   }
 
-  .work {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .quotes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2032,9 +2058,18 @@ textarea {
     gap: 28px;
   }
 
+  /* sur téléphone : des rangs de deux, et la dernière photo seule se pose au milieu */
   .work {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 18px 10px;
+  }
+
+  .work:not([data-filtered]) li:nth-child(7n + 5) {
+    grid-column: span 2;
+  }
+
+  .work:not([data-filtered]) li:last-child:nth-child(odd) {
+    grid-column: 2 / span 2;
   }
 
   .quotes {

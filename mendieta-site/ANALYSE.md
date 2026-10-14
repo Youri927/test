@@ -4,7 +4,7 @@ Site analysé : https://mendietaroofingcorp.com, le 14 octobre 2026.
 
 ## Le problème numéro un : le site ne s'ouvre plus normalement
 
-Le certificat HTTPS servi par le site a **expiré le 2 octobre 2026**. Depuis, tout visiteur voit l'écran d'alerte du navigateur (« Votre connexion n'est pas privée ») avant la moindre page. La version HTTP redirige vers HTTPS, donc il n'y a pas d'autre porte d'entrée.
+Le certificat HTTPS servi par le site a **expiré le 2 octobre 2026**. Depuis, tout visiteur voit l'écran d'alerte du navigateur (« Votre connexion n'est pas privée ») avant la moindre page. L'accueil en HTTP redirige vers HTTPS ; les pages intérieures répondent encore en HTTP, mais les liens, Google et les balises canoniques mènent tous au HTTPS, donc à l'alerte.
 
 Le registre public des certificats (crt.sh) montre qu'un **nouveau certificat GoDaddy a été émis le 1er septembre 2026**, valable jusqu'au 18 mars 2027. Il n'a simplement pas été installé sur le serveur. C'est réparable en quelques minutes depuis l'hébergement GoDaddy, et c'est la première chose à leur dire.
 
@@ -72,7 +72,7 @@ Le module d'avis annonce **16 avis, note moyenne 5,0**. Seule la première page 
 | Mark M. | Lake Worth | « Very professional. They did a great job. I would highly recommend. » |
 | Clay M. | Royal Palm Beach | « always on time, knowes this trade throughly, fair price » |
 | Jay B. | West Palm Beach | « Very good installation, Great service. » |
-| Un propriétaire | West Palm Beach | « Very professional. Two men arrived early and worked throughout the day. They were able to complete the job by mid-afternoon. » |
+| Un propriétaire | West Palm Beach d'après le module d'avis, Lake Worth d'après la fiche témoignage de l'accueil : ville non affichée | « Very professional. Two men arrived early and worked throughout the day. They were able to complete the job by mid-afternoon. » |
 | Un propriétaire | Lake Worth | « prompt, quick and efficient. my roof does not leak any longer. » |
 | Chris C. | North Palm Beach | 5 étoiles, sans texte |
 

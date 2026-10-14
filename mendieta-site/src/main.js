@@ -166,10 +166,20 @@
   const items = $$('[data-work] li');
   const status = $('[data-tabs-status]');
   const NAMES = {all: 'photos', tile: 'tile roof photos', shingle: 'shingle roof photos', job: 'photos taken during the job'};
-  const columns = () => getComputedStyle($('[data-work]')).gridTemplateColumns.split(' ').length;
+  const work = $('[data-work]');
+  const columns = () => getComputedStyle(work).gridTemplateColumns.split(' ').length;
+  // sur grand écran, les rangs alternent n photos et n − 1 décalées d'une demi-photo ; sur téléphone, des rangs de deux
+  // et la dernière photo seule au milieu. Sans filtre, la feuille de styles s'en charge ; avec un filtre, le décalage
+  // suit les photos qui restent.
   const numberCols = () => {
-    const n = columns();
-    items.filter((li) => !li.hidden).forEach((li, i) => li.style.setProperty('--c', i % n));
+    const n = columns() / 2;
+    const shown = items.filter((li) => !li.hidden);
+    shown.forEach((li, i) => {
+      const q = n > 2 ? i % (2 * n - 1) : i % 2;
+      const shift = n > 2 ? q === n : i === shown.length - 1 && q === 0;
+      li.classList.toggle('is-shift', shift);
+      li.style.setProperty('--c', q < n ? q : q - n);
+    });
   };
   const select = (tab, focus) => {
     const k = tab.dataset.k;
@@ -185,6 +195,7 @@
       if (show) n++;
       li.classList.remove('is-in');
     });
+    work.toggleAttribute('data-filtered', k !== 'all');
     numberCols();
     requestAnimationFrame(() => items.forEach((li) => !li.hidden && li.classList.add('is-in')));
     status.textContent = `Showing ${n} ${NAMES[k]}.`;
@@ -356,7 +367,7 @@
       r.selectNodeContents(msgBox);
       getSelection().removeAllRanges();
       getSelection().addRange(r);
-      e.target.textContent = 'Selected: press Ctrl+C';
+      e.target.textContent = `Selected: press ${/Mac|iPhone|iPad/.test(navigator.userAgent) ? 'Cmd' : 'Ctrl'}+C`;
     }
   });
 

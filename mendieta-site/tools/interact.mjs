@@ -29,6 +29,20 @@ const open = async (ctx, u = url) => {
 };
 const topOf = (p, sel) => p.$eval(sel, (e) => Math.round(e.getBoundingClientRect().top));
 const visible = (p) => p.$$eval('[data-work] li', (it) => it.filter((i) => !i.hidden).length);
+// les rangs de photos : combien par rang, la place du premier (depuis le bord de la grille) et du dernier
+const courses = (p) =>
+  p.$$eval('[data-work] li:not([hidden]) .ph', (it) => {
+    const g = it[0].closest('ul').getBoundingClientRect();
+    const rows = [];
+    for (const e of it) {
+      const r = e.getBoundingClientRect();
+      let row = rows.find((x) => Math.abs(x.top - r.top) < 2);
+      if (!row) rows.push((row = {top: r.top, xs: []}));
+      row.xs.push({l: r.left - g.left, w: r.width});
+    }
+    return {gw: g.width, rows: rows.map((r) => ({n: r.xs.length, l: r.xs[0].l, w: r.xs[0].w, end: r.xs.at(-1).l + r.xs.at(-1).w}))};
+  });
+const shape = (C) => C.rows.map((r) => `${r.n}@${Math.round(r.l)}`).join(' ');
 // la place dans la partie « couche par couche » (0 à 1), sur ordinateur
 const toLayers = async (p, v) => {
   await p.evaluate((v) => {
@@ -122,13 +136,22 @@ ok(L.stage === '1' && L.set === 0 && L.under === 0, 'coupe : en remontant, le de
 // les photos : filtre
 await p.$eval('#roofs', (e) => window.scrollTo(0, e.getBoundingClientRect().top + scrollY + 600));
 await p.waitForTimeout(700);
-for (const [k, want] of [['tile', 10], ['shingle', 9], ['job', 6], ['all', 21]]) {
+// posées comme des rangs de tuiles : quatre, puis trois décalées d'une demi-photo (le milieu de la photo sur le joint)
+const bond = (C, want) => {
+  const w = C.rows[0].w;
+  const half = w / 2 + (C.gw - 4 * w) / 3 / 2;
+  return C.rows.map((r) => r.n).join() === want && C.rows.every((r, i) => Math.abs(r.l - (i % 2 ? half : 0)) < 2) && C.rows.every((r) => r.end <= C.gw + 1);
+};
+let C = await courses(p);
+ok(bond(C, '4,3,4,3,4,3'), `photos : six rangs, de quatre et de trois décalées d'une demi-photo (${shape(C)})`);
+for (const [k, want, rows] of [['tile', 10, '4,3,3'], ['shingle', 9, '4,3,2'], ['job', 6, '4,2'], ['all', 21, '4,3,4,3,4,3']]) {
   await p.click(`[data-tabs] [data-k="${k}"]`);
   await p.waitForTimeout(300);
   const s = await visible(p);
   const sel = await p.$eval(`[data-tabs] [data-k="${k}"]`, (e) => e.getAttribute('aria-selected'));
   const st = await p.$eval('[data-tabs-status]', (e) => e.textContent);
-  ok(s === want && sel === 'true', `photos : « ${k} » montre ${s} photo(s) ; annoncé « ${st} »`);
+  C = await courses(p);
+  ok(s === want && sel === 'true' && bond(C, rows), `photos : « ${k} » montre ${s} photo(s), rangs ${shape(C)} ; annoncé « ${st} »`);
 }
 await p.focus('[data-tabs] [data-k="all"]');
 await p.keyboard.press('ArrowRight');
@@ -238,8 +261,10 @@ const ready = await p.evaluate(() => ({
   msg: document.querySelector('[data-msg]').textContent,
   focus: document.activeElement === document.querySelector('[data-ready]'),
   errs: [...document.querySelectorAll('[data-error]')].filter((x) => x.textContent.trim()).length,
+  notes: [...document.querySelectorAll('.form__note')].map((e) => getComputedStyle(e).display).join(),
 }));
 ok(!ready.hidden && ready.focus && ready.errs === 0, 'formulaire rempli (ordinateur) : le message est prêt à copier, le focus y va');
+ok(ready.notes === 'none,block', `formulaire (ordinateur) : la note parle du texte à copier, pas de la messagerie (${ready.notes})`);
 ok(ready.msg === "Hi Mendieta Roofing, this is Dana. I'd like a free estimate.\nRoof: Tile. I need: A leak fixed.\nCity: Wellington. My number: 561 555 0123.\nWater stain on the ceiling after the last storm.", 'formulaire : le message reprend les choix et les champs');
 await p.screenshot({path: `${out}/i-form-ready.png`});
 await ctx.close();
@@ -292,6 +317,8 @@ const mp = await p.evaluate(() => {
   };
 });
 ok(mp.tall, 'téléphone : la photo en hauteur est chargée');
+const notes = await p.$$eval('.form__note', (n) => n.map((e) => getComputedStyle(e).display));
+ok(notes.join() === 'block,none', `téléphone : la note du formulaire parle de la messagerie (${notes})`);
 ok(mp.cta === 'none' && mp.name, "téléphone : l'en-tête garde le nom entier et le menu");
 await p.screenshot({path: `${out}/i-phone-hero.png`});
 // la barre d'appel : absente sur l'accueil, présente ensuite, absente sur le devis
@@ -342,6 +369,25 @@ ok(ms.vb === '252 112 712 488', 'téléphone : la coupe est recadrée sur le toi
 ms = await mStep(3, 0.9);
 ok(ms.stage === '3' && ms.set === 3, `téléphone : à l'étape 3, les tuiles sont posées (${ms.set})`);
 await p.screenshot({path: `${out}/i-phone-layers.png`});
+// les photos au téléphone : deux par deux, et la dernière seule se pose au milieu
+const pairs = (C, n) => {
+  const last = C.rows.at(-1);
+  const full = Math.floor(n / 2);
+  return C.rows.length === full + (n % 2) && C.rows.slice(0, full).every((r) => r.n === 2 && r.l < 1 && r.end > C.gw - 1) && (n % 2 === 0 || (last.n === 1 && Math.abs(last.l + last.w / 2 - C.gw / 2) < 2));
+};
+await p.$eval('#roofs', (e) => window.scrollTo(0, e.getBoundingClientRect().top + scrollY + 900));
+await p.waitForTimeout(500);
+C = await courses(p);
+ok(pairs(C, 21), `téléphone : les 21 photos deux par deux, la dernière au milieu (${C.rows.length} rangs, dernier ${shape({rows: [C.rows.at(-1)]})})`);
+await p.click('[data-tabs] [data-k="shingle"]');
+await p.waitForTimeout(300);
+C = await courses(p);
+ok(pairs(C, 9), `téléphone : filtre Shingle, 9 photos, la dernière au milieu (${shape({rows: [C.rows.at(-1)]})})`);
+await p.click('[data-tabs] [data-k="tile"]');
+await p.waitForTimeout(300);
+C = await courses(p);
+ok(pairs(C, 10) && C.rows.at(-1).n === 2, 'téléphone : filtre Tile, 10 photos en cinq rangs de deux');
+await p.click('[data-tabs] [data-k="all"]');
 // le formulaire au téléphone : la messagerie s'ouvre avec le texte, adressée au portable
 await catchSms(p);
 await p.$eval('[data-form]', (e) => window.scrollTo(0, e.getBoundingClientRect().top + scrollY - 80));
