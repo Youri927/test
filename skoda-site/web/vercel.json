@@ -1,0 +1,214 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/florida-southwest-luxury-home-construction",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/build-on-your-lot-custom-homes-florida-sanibel",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/custom-luxury-home-builder-florida-naples",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/custom-luxury-home-builder-florida-marco-island",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/custom-luxury-home-builder-florida-estero",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/sanibel-florida-custom-luxury-home-builder",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/fort-myers-beach-florida-custom-luxury-home-builder",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/captiva-florida-custom-luxury-home-builder",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/bonita-springs-florida-custom-luxury-home-builder",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/fort-myers-fl-custom-luxury-home-builder",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/boca-grande-fl-custom-luxury-home-builder",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/port-charlotte-florida-custom-luxury-home-builder",
+      "destination": "/#homes",
+      "permanent": true
+    },
+    {
+      "source": "/luxury-home-remodeling",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/luxury-custom-home-remodeling-florida-naples",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/luxury-custom-home-remodeling-florida-sanibel",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/luxury-custom-home-remodeling-florida-bonita-springs",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/luxury-custom-home-remodeling-florida-estero",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/luxury-custom-home-remodeling-florida-captiva",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/luxury-custom-home-remodeling-florida-fort-myers-beach",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/fort-myers-fl-luxury-custom-home-remodeling",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/marco-island-fl-luxury-custom-home-remodeling",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/port-charlotte-fl-luxury-custom-home-remodeling",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/boca-grande-fl-luxury-custom-home-remodeling",
+      "destination": "/#remodels",
+      "permanent": true
+    },
+    {
+      "source": "/storm-damage-repair",
+      "destination": "/#restoration",
+      "permanent": true
+    },
+    {
+      "source": "/storm-damage-repair-florida-naples-marco-island",
+      "destination": "/#restoration",
+      "permanent": true
+    },
+    {
+      "source": "/storm-damage-repair-florida-fort-myers-beach",
+      "destination": "/#restoration",
+      "permanent": true
+    },
+    {
+      "source": "/naples-fl-storm-damage-repair",
+      "destination": "/#restoration",
+      "permanent": true
+    },
+    {
+      "source": "/marco-island-fl-storm-damage-repair",
+      "destination": "/#restoration",
+      "permanent": true
+    },
+    {
+      "source": "/florida-sanibel-storm-damage-repair",
+      "destination": "/#restoration",
+      "permanent": true
+    },
+    {
+      "source": "/storm-damage-repair-fl-captiva",
+      "destination": "/#restoration",
+      "permanent": true
+    },
+    {
+      "source": "/storm-damage-repair-fl-fort-myers-beach",
+      "destination": "/#restoration",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-construction",
+      "destination": "/#commercial",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-construction-florida-naples-ft-myers-estero",
+      "destination": "/#commercial",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-contractor-florida-fort-myers",
+      "destination": "/#commercial",
+      "permanent": true
+    },
+    {
+      "source": "/office-build-out-construction-florida-naples",
+      "destination": "/#commercial",
+      "permanent": true
+    },
+    {
+      "source": "/office-build-out-construction-florida-fort-myers",
+      "destination": "/#commercial",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-renovations-construction-florida-estero",
+      "destination": "/#commercial",
+      "permanent": true
+    }
+  ]
+}
