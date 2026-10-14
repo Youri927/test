@@ -158,7 +158,7 @@
   } else {
     addEventListener('scroll', later, {passive: true});
     addEventListener('resize', later, {passive: true});
-    layersTick();
+    later(); // la première lecture au prochain rafraîchissement, pas pendant le chargement
   }
 
   /* ——— les photos des toits : filtre et apparition ——— */
@@ -188,6 +188,7 @@
     numberCols();
     requestAnimationFrame(() => items.forEach((li) => !li.hidden && li.classList.add('is-in')));
     status.textContent = `Showing ${n} ${NAMES[k]}.`;
+    $('#work').setAttribute('aria-labelledby', tab.id);
     if (focus) tab.focus();
   };
   tabs.forEach((t, i) => {
@@ -199,7 +200,7 @@
       select(tabs[(go + tabs.length) % tabs.length], true);
     });
   });
-  numberCols();
+  requestAnimationFrame(numberCols);
   addEventListener('resize', numberCols, {passive: true});
   // chaque rangée se découvre de bas en haut quand elle arrive à l'écran
   if ('IntersectionObserver' in window && !reduce) {
