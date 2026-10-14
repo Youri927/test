@@ -13,8 +13,8 @@ l'égout. Le navigateur se range ensuite de côté pour la légende de la vidéo
 
 | Fichier | Usage |
 | --- | --- |
-| `renders/presentation-mendieta-16x9.mp4` | présentation avec musique (−14 LUFS) |
-| `renders/presentation-mendieta-16x9-muet.mp4` | même vidéo sans son |
+| `renders/presentation-mendieta-16x9.mp4` | présentation avec musique (−14 LUFS), 20,5 Mo : elle tient sous 30 Mo et s'envoie telle quelle |
+| `renders/presentation-mendieta-16x9-muet.mp4` | même vidéo sans son, 19,1 Mo |
 
 | Temps | Séquence |
 | --- | --- |
@@ -54,7 +54,23 @@ Mêmes règles que pour les vidéos précédentes :
 - **Au téléphone, la page est filmée en 390 × 797** (l'écran moins la barre d'état) : rien n'est coupé en bas, la barre
   « Call / Free estimate » reste entière.
 
-CONTROLES
+**Contrôlé sur le rendu** (`tools/motion.py`, `tools/curves.py` et `tools/fades.py`) :
+- la mise de côté du navigateur suit la courbe prévue à 0,63 px près sur son bord gauche (0,14 px en moyenne) et à
+  0,61 px près sur son bord haut (0,15 px en moyenne), sans arrondi au pixel ;
+- les trois téléphones montent sur leur courbe à 0,20 px près (0,05 px en moyenne au plus), puis ne bougent plus
+  (0,16 px d'écart au plus) ;
+- dans les captures, le défilement avance par pas entiers et réguliers (1, 2, 3, 4 puis 5 px par image, identiques d'une
+  image à l'autre) ;
+- les fondus par le noir changent la luminosité moyenne de 31 niveaux au plus d'une image à l'autre (sur 255), sans
+  saut, et chaque coupe passe par deux images noires ;
+- aucune image doublée ni sautée pendant un mouvement. Les seules alertes tombent :
+  - sur les coupes, où deux images noires se suivent, et sur les images presque noires des fondus (sur l'encre de la
+    fin, la lumière monte d'un ou deux niveaux par image) ;
+  - au début et à la fin d'un fondu (une image immobile à côté d'une image qui bouge) ;
+  - sur les deux gestes qui changent beaucoup de pixels d'un coup, comme sur le site, et qui tombent chacun sur un temps
+    de la musique : le filtre « Tile », qui retire les autres photos d'un coup avant de découvrir les siennes une à une,
+    et le message prêt du devis, qui apparaît d'un coup et pousse le pied de page vers le bas.
+- Le son de la présentation mesure −13,9 LUFS.
 
 ## Fabrication
 
@@ -98,6 +114,9 @@ CONTROLES
 
 `python3 -I tools/curves.py …` compare la mise de côté du navigateur et la montée des téléphones à leur courbe prévue
 (les formules du montage).
+
+`python3 -I tools/fades.py <vidéo.mp4> 512,1152,…` mesure la luminosité moyenne image par image autour de chaque coupe :
+la plus forte marche de lumière et les images noires.
 
 Police : Encode Sans (licence OFL, `public/fonts/OFL-EncodeSans.txt`), la même que le site. Le blason est l'image du
 site (`public/img/`).
