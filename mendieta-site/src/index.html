@@ -361,7 +361,7 @@
 <footer class="foot">
   <div class="wrap foot__grid">
     <div class="foot__brand">
-      <img class="foot__crest" src="img/crest-rev.avif" alt="">
+      <img class="foot__crest" src="img/crest-rev.avif" alt="" loading="lazy" decoding="async">
       <p class="foot__name">Mendieta Roofing Corp.</p>
       <p>Family-owned roofers in West Palm Beach, Florida, since 1988.</p>
     </div>
@@ -389,8 +389,8 @@
 
 <dialog class="lb" aria-label="Photo" data-lb>
   <div class="lb__in">
-    <figure class="lb__fig"><img alt="" data-lb-img><figcaption data-lb-cap></figcaption></figure>
-    <p class="lb__count" data-lb-count></p>
+    <figure class="lb__fig"><img alt="" data-lb-img><figcaption data-lb-cap aria-live="polite"></figcaption></figure>
+    <p class="lb__count" data-lb-count aria-live="polite"></p>
     <button class="lb__btn lb__prev" type="button" data-lb-prev>Previous</button>
     <button class="lb__btn lb__next" type="button" data-lb-next>Next</button>
     <button class="lb__close" type="button" data-lb-close>Close</button>

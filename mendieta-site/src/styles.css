@@ -1200,6 +1200,7 @@ textarea {
 }
 
 .reviews__porch {
+  max-width: 32em;
   margin-top: clamp(40px, 5vw, 64px);
   font-size: 15px;
   color: var(--ink-soft);
@@ -1702,7 +1703,7 @@ textarea {
 }
 
 .form__note {
-  max-width: 34em;
+  max-width: 31em;
   font-size: 15px;
   color: var(--ink-2);
 }

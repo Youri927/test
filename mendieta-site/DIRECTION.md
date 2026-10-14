@@ -64,7 +64,7 @@ DEVIS : appeler le bureau, écrire au portable, ou un formulaire court qui rédi
 
 1. **Une seule audace** : la coupe qui se monte couche par couche. Les autres parties sont sobres.
 2. **Rien d'inventé** : chaque étape du chantier est une vraie photo de leurs chantiers ; chaque fait vient de leur site ou du registre de l'État.
-3. **Le mouvement répond au geste** : en dehors de l'ouverture (1,4 s, une fois), tout bouge parce qu'on fait défiler, qu'on choisit un type de toit, qu'on cherche une ville ou qu'on ouvre une photo.
+3. **Le mouvement répond au geste** : en dehors de l'ouverture (1,9 s, une fois), tout bouge parce qu'on fait défiler, qu'on choisit un type de toit, qu'on cherche une ville ou qu'on ouvre une photo.
 4. **La confiance d'abord** : licence vérifiable dès l'accueil, téléphones partout, avis avec prénom et ville.
 5. **Petites photos, bien traitées** : grilles nettes à la taille réelle, une visionneuse, légendes factuelles ; numéros de maison et plaques floutés.
 
@@ -85,3 +85,11 @@ Ce qui sortait par défaut et ce que j'ai changé :
 - **shadcn** : des composants d'interface React, hors de notre méthode.
 
 Tout est donc fait sur mesure en HTML, CSS et JavaScript, avec Lenis pour le défilement : la coupe qui se monte, les profils des toits, la carte et sa recherche, la visionneuse, le formulaire qui rédige le SMS.
+
+## Ce qui a changé en construisant
+
+- **Les types de toit et le filtre** sont séparés : trois petites coupes (tuile, bardeau, toit plat) disent ce qu'ils font, puis des onglets (All, Tile, Shingle, On the job) trient les photos. Les toits plats n'ont pas de photo : un filtre « Flat » aurait été vide.
+- **Les photos sont posées comme des rangs de tuiles** : quatre, puis trois décalées d'une demi-photo, chacune à cheval sur le joint du rang du dessous ; au téléphone, deux par deux, et la dernière seule se pose au milieu. La grille uniforme de départ laissait une photo seule au dernier rang et ne disait rien du métier (voir `REVUE.md`).
+- **La licence** est une ligne sous les boutons de l'accueil, avec un lien vers sa propre partie, où elle est présentée en grand comme une pièce officielle.
+- **L'ouverture** dure 1,9 s : le titre monte ligne par ligne, la photo se découvre du bas vers le haut, puis le texte et la légende.
+
