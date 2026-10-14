@@ -14,7 +14,7 @@ Méthode :
     - contours, repères de la frise, côte de la carte, contours de focus ;
     - espacement du texte élargi ;
     - titres, noms des contrôles, textes alternatifs, références entre éléments ;
-  - `tools/interact.mjs` : 60 essais de chaque interaction à la souris, au doigt et au clavier, mouvement réduit,
+  - `tools/interact.mjs` : 63 essais de chaque interaction à la souris, au doigt et au clavier, mouvement réduit,
     lien d'évitement, débordements sur les largeurs de 320 à 1920 px ;
 - arbre d'accessibilité de Chromium, lu partie par partie.
 
@@ -143,7 +143,7 @@ Avec le mouvement réduit, Lenis n'est pas chargé : le défilement est celui du
   se répète pas.
 - La maison restaurée ne s'épingle que sur ordinateur, et seulement si le mouvement n'est pas réduit.
 - Avec « réduire les animations » : pas de Lenis, pas d'ouverture, pas de dévoilement des photos ; les trois étapes
-  de la restauration sont posées l'une sous l'autre. Les 60 essais le vérifient.
+  de la restauration sont posées l'une sous l'autre. Les 63 essais le vérifient.
 - Rien ne clignote, rien ne bouge seul plus de 5 secondes (2.2.2).
 
 ### Corrections par ordre de priorité

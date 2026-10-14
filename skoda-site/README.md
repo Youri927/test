@@ -56,7 +56,7 @@ seule page, avec les villes sur une vraie carte, et redirige les anciennes adres
 - **Les outils de Chrome** : Lighthouse et les traces de chargement, au téléphone ralenti et à l'ordinateur.
 - **Playwright** :
   - l'ouverture capturée image par image, l'horloge des transitions arrêtée et calée ;
-  - les 60 essais d'interaction (`tools/interact.mjs`), dont un contrôle des débordements à 8 largeurs ;
+  - les 63 essais d'interaction (`tools/interact.mjs`), dont un contrôle des débordements à 8 largeurs ;
   - le parcours au clavier, les cibles tactiles et le contraste mesuré sur les pixels (`tools/a11y.mjs`) ;
   - les planches et l'image de partage (`tools/shots.mjs`, `tools/boards.mjs`, `tools/og.mjs`).
 - **Les sources publiques**, pour ne rien inventer :
@@ -103,7 +103,8 @@ on voit directement l'état final.
   place et la nouvelle monte (un fondu enchaîné, jamais d'écran vide) ;
 - la famille : la ligne des dates se trace une fois ;
 - les réponses aux gestes : la visionneuse (elle s'ouvre en fondu, et chaque photo arrive du côté où l'on va), le
-  budget qui suit le projet choisi, la demande prête.
+  budget qui suit le projet choisi (la suite du formulaire glisse pour lui faire place, ses fourchettes apparaissent
+  en fondu), la demande prête, qui arrive en montant un peu.
 
 ## La direction
 
@@ -217,7 +218,7 @@ ordinateur, sur le nouveau site servi en local.
 - les contrastes mesurés sur les vrais pixels (89 mesures de texte, toutes au-dessus du seuil ; les contours et les
   repères au-dessus de 3:1) ;
 - avec « moins d'animations » ;
-- les 60 essais d'interaction de `tools/interact.mjs` :
+- les 63 essais d'interaction de `tools/interact.mjs` :
   - l'ouverture, le nom qui tient dans ses marges et reste épinglé, les photos qui passent devant ;
   - les liens de l'en-tête, la partie courante du menu ;
   - le terrain, la coque et la maison qui se découvrent ;
@@ -225,8 +226,8 @@ ordinateur, sur le nouveau site servi en local.
     d'une étape à l'autre ;
   - la visionneuse (son ouverture en fondu, la bonne photo, sa plus grande version, la photo suivante qui arrive de
     la droite, Échap et le focus rendu) ;
-  - le formulaire : les erreurs, le focus, les fourchettes de budget selon le projet, l'e-mail mal formé, la demande
-    rédigée ;
+  - le formulaire : les erreurs, le focus, les fourchettes de budget selon le projet (et leur arrivée sans à-coup),
+    l'e-mail mal formé, la demande rédigée ;
   - le lien d'évitement, le menu du téléphone, le mouvement réduit, les photos et la console.
 
 ## Fabrication
@@ -249,7 +250,7 @@ ordinateur, sur le nouveau site servi en local.
     `python3 -I tools/geo.py <dossier de pyshp> <dossier des fichiers du Census>` ;
   - `fallback.py` calcule les polices de secours ;
   - `redirects.py` écrit les redirections des anciennes pages (`web/_redirects` et `web/vercel.json`) ;
-  - `interact.mjs` rejoue les 60 essais d'interaction ;
+  - `interact.mjs` rejoue les 63 essais d'interaction ;
   - `a11y.mjs` fait le parcours au clavier, les cibles tactiles, les contrastes et la structure, sur le site servi en
     local (`python3 -m http.server 8790 --bind 127.0.0.1 --directory dist-web`) ;
   - `shots.mjs` fait les captures, `boards.mjs` compose les planches, `og.mjs` l'image de partage.

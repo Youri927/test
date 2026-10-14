@@ -215,15 +215,22 @@ const scrollToEl = (p, sel, off = 0) =>
   await p.screenshot({path: `${out}/d-form-errors.png`});
   const budgets = async (label) => {
     await p.click(`.chips label:has(input[value="${label}"])`);
+    // tout de suite : la suite du formulaire glisse-t-elle, les fourchettes arrivent-elles en fondu ?
+    const moves = await p.evaluate(() => ({
+      slide: document.getElementById('f-where').closest('.field').getAnimations().length,
+      fade: document.querySelector('[data-budget]').getAnimations().length,
+    }));
     await p.waitForTimeout(100);
-    return p.evaluate(() => ({hidden: document.querySelector('[data-budget]').hidden, list: [...document.querySelectorAll('[data-budget-list] input')].map((i) => i.value)}));
+    return p.evaluate((moves) => ({...moves, hidden: document.querySelector('[data-budget]').hidden, list: [...document.querySelectorAll('[data-budget-list] input')].map((i) => i.value)}), moves);
   };
   let bud = await budgets('Remodel');
   ok(!bud.hidden && bud.list[0] === '$250,000 to $500,000' && bud.list.length === 4, 'rénovation : leurs fourchettes de 250 000 $ à plus de 1 M$');
+  ok(bud.slide === 1 && bud.fade === 1, 'le budget arrive sans à-coup : la suite du formulaire glisse, les fourchettes en fondu');
   bud = await budgets('New custom home');
   ok(!bud.hidden && bud.list[0] === '$1 million to $5 million' && bud.list[2] === '$10 million or more', 'maison neuve : de 1 M$ à plus de 10 M$');
   bud = await budgets('Storm damage restoration');
   ok(bud.hidden, 'tempête : pas de fourchette de budget');
+  ok(bud.slide === 1, 'le budget retiré, la suite du formulaire remonte en glissant');
   bud = await budgets('Building on my lot');
   ok(!bud.hidden && bud.list[0] === '$1 million to $5 million', 'construire sur mon terrain : les fourchettes des maisons neuves');
   await p.click('.chips label:has(input[value="$5 million to $10 million"])');
@@ -245,9 +252,10 @@ const scrollToEl = (p, sel, off = 0) =>
   });
   const nav = p.waitForEvent('request', {predicate: (r) => r.url().startsWith('mailto:'), timeout: 1500}).catch(() => null);
   await p.click('[data-form] button[type="submit"]');
+  const rise = await p.$eval('[data-ready]', (b) => b.getAnimations().length);
   await p.waitForTimeout(1600);
   f = await p.evaluate(() => ({ready: !document.querySelector('[data-ready]').hidden, text: document.querySelector('[data-ready-text]').textContent}));
-  ok(f.ready, 'la demande est prête');
+  ok(f.ready && rise === 1, 'la demande est prête, elle arrive en fondu');
   ok(/To: skodabuilding@gmail\.com/.test(f.text) && /Subject: Consultation request: building on my lot in Sanibel/.test(f.text), 'le message est adressé et titré');
   ok(/Budget: \$5 million to \$10 million/.test(f.text) && /Name: Dana/.test(f.text) && /Phone: \(239\) 555-0123/.test(f.text) && /A four-bedroom home/.test(f.text), 'le message reprend les champs');
   await nav;
@@ -323,6 +331,14 @@ const scrollToEl = (p, sel, off = 0) =>
     moves: document.querySelector('[data-viewer]').getAnimations().length + document.querySelector('[data-viewer-img]').getAnimations().length,
   }));
   ok(still.open && still.moves === 0, 'mouvement réduit : la visionneuse s’ouvre et change de photo sans fondu');
+  await p.keyboard.press('Escape');
+  await scrollToEl(p, '#consultation', -80);
+  await p.click('.chips label:has(input[value="Remodel"])');
+  const calm = await p.evaluate(() => ({
+    shown: !document.querySelector('[data-budget]').hidden,
+    moves: [...document.querySelector('[data-form]').children].reduce((n, el) => n + el.getAnimations().length, 0),
+  }));
+  ok(calm.shown && calm.moves === 0, 'mouvement réduit : le budget apparaît, sans glisser');
   await ctx.close();
 }
 

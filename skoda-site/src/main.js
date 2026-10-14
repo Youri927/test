@@ -184,17 +184,33 @@
     remodel: ['$250,000 to $500,000', '$500,000 to $1 million', '$1 million or more', 'Not sure yet'],
   };
   const KIND = {'New custom home': 'home', 'Building on my lot': 'home', Remodel: 'remodel'};
+  const EASE = 'cubic-bezier(0.2, 0.7, 0.1, 1)';
   let kind = null;
+  let moving = [];
+  // Le budget arrive sans à-coup : la suite du formulaire glisse de son ancienne place à la nouvelle (mesurées avant et
+  // après, animées en transform seulement), puis les fourchettes apparaissent en fondu. Rien de tout ça en mouvement réduit.
+  const setBudget = (k) => {
+    const after = [...form.children].slice([...form.children].indexOf(budgetBox) + 1);
+    const was = after.map((el) => el.getBoundingClientRect().top);
+    moving.forEach((a) => a.cancel());
+    budgetBox.hidden = !k;
+    budgetList.innerHTML = k
+      ? BUDGETS[k].map((b) => `<label><input type="radio" name="budget" value="${b}"><span>${b}</span></label>`).join('')
+      : '';
+    if (still.matches) return;
+    moving = after.flatMap((el, i) => {
+      const dy = was[i] - el.getBoundingClientRect().top;
+      return Math.abs(dy) < 0.5 ? [] : [el.animate([{transform: `translateY(${dy}px)`}, {transform: 'none'}], {duration: 450, easing: EASE})];
+    });
+    if (k) moving.push(budgetBox.animate([{opacity: 0}, {opacity: 1}], {duration: 320, delay: 140, easing: 'ease-out', fill: 'backwards'}));
+  };
   form.addEventListener('change', (e) => {
     if (e.target.name === 'project') {
       const k = KIND[e.target.value] || null;
       setError('project', false);
       if (k === kind) return;
       kind = k;
-      budgetBox.hidden = !k;
-      budgetList.innerHTML = k
-        ? BUDGETS[k].map((b) => `<label><input type="radio" name="budget" value="${b}"><span>${b}</span></label>`).join('')
-        : '';
+      setBudget(k);
     }
   });
   const field = (n) => form.elements[n];
@@ -266,6 +282,8 @@
     box.hidden = false;
     box.focus({preventScroll: true});
     go(box);
+    // la demande arrive en montant un peu (après le calcul du défilement, qui mesure sa place sans ce décalage)
+    if (!still.matches) box.animate([{opacity: 0, transform: 'translateY(16px)'}, {opacity: 1, transform: 'none'}], {duration: 500, easing: EASE});
     window.location.href = `mailto:skodabuilding@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;
   });
   $('[data-copy]', form).addEventListener('click', async () => {
