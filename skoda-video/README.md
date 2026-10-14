@@ -16,6 +16,7 @@ navigateur se range ensuite de côté pour la légende de la vidéo.
 | --- | --- |
 | `renders/presentation-skoda-16x9.mp4` | présentation avec musique (−14 LUFS) |
 | `renders/presentation-skoda-16x9-muet.mp4` | même vidéo sans son |
+| `out/presentation-skoda-16x9-envoi.mp4` | version d'envoi, moins de 30 Mo (refaite par `npm run finalize`, non versionnée) |
 
 | Temps | Séquence |
 | --- | --- |
@@ -63,8 +64,22 @@ Mêmes règles que pour les vidéos précédentes :
   l'écran (son défilement doux, sur l'horloge simulée).
 - **Au téléphone, la page est filmée en 390 × 797** (l'écran moins la barre d'état) : rien n'est coupé en bas.
 
-**Contrôlé sur le rendu** (`tools/motion.py`, `tools/curves.py` et `tools/fades.py`) : voir la partie « Contrôles »
-plus bas.
+**Contrôlé sur le rendu** (`tools/motion.py`, `tools/curves.py` et `tools/fades.py`) :
+- la mise de côté du navigateur suit la courbe prévue à 0,53 px près sur son bord gauche (0,16 px en moyenne) et à
+  0,52 px près sur son bord haut (0,11 px en moyenne), sans arrondi au pixel ;
+- les trois téléphones montent sur leur courbe à 0,15 px près (0,04 px en moyenne au plus), puis ne bougent plus
+  (0,14 px d'écart au plus) ;
+- en arrivant sur la maison restaurée, la page ralentit pas à pas jusqu'à 1 px par image et se pose sur l'épinglage :
+  plus d'arrêt sec ;
+- les fondus par le noir changent la luminosité moyenne de 31 niveaux au plus d'une image à l'autre (sur 255), sans
+  saut, et chaque coupe passe par deux images noires (trois aux deux dernières) ;
+- aucune image doublée ni sautée pendant un mouvement. Les seules alertes tombent :
+  - sur les coupes, où deux images noires se suivent ;
+  - au début et à la fin d'un fondu (une image immobile à côté d'une image qui bouge) ;
+  - sur l'image même des trois clics de la visionneuse (l'ouverture et les deux « Next photo ») : comme dans un vrai
+    navigateur, la page répond à l'image suivante, puis le fondu part.
+- Le son de la présentation mesure −13,9 LUFS (crête à −2,8 dBFS).
+- La version d'envoi (28,6 Mo) garde ses 3672 images ; elle ne se distingue pas de la présentation (SSIM 0,998).
 
 ## Fabrication
 
