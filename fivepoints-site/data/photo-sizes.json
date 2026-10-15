@@ -1,0 +1,42 @@
+{
+ "lanai-house": [
+  639,
+  517
+ ],
+ "reroof-house": [
+  639,
+  300
+ ],
+ "rotten-deck": [
+  750,
+  543
+ ],
+ "shingles": [
+  639,
+  517
+ ],
+ "storm-crew": [
+  639,
+  517
+ ],
+ "truck": [
+  639,
+  517
+ ],
+ "underlayment": [
+  750,
+  543
+ ],
+ "van-inspection": [
+  550,
+  379
+ ],
+ "van-rear": [
+  550,
+  413
+ ],
+ "van-side": [
+  550,
+  413
+ ]
+}
