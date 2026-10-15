@@ -187,6 +187,9 @@ main > section {
 .gable { position: relative; max-width: 1180px; margin: 0 auto; container-type: inline-size; }
 .gable__svg { display: block; width: 100%; height: auto; overflow: visible; }
 .gable__line { fill: none; stroke: var(--gold); stroke-width: 9; stroke-linecap: butt; }
+@media (max-width: 699px) {
+  .gable__line { stroke-width: 13; }
+}
 .gable__word { font-family: var(--cond); font-size: 119px; font-weight: 800; font-stretch: 62.5%; fill: var(--asphalt); }
 .gable__h1 { margin-top: 26px; font-size: clamp(34px, 3.6vw + 12px, 54px); max-width: 15em; }
 @media (min-width: 1000px) {
@@ -266,7 +269,7 @@ main > section {
 .dot line { stroke: var(--asphalt); stroke-width: 1.6; }
 .dot__at { fill: var(--asphalt); }
 .dot__n { fill: var(--asphalt); transition: fill 0.25s; }
-.dot text { fill: var(--membrane); font: 700 20px var(--sans); font-stretch: 100%; text-anchor: middle; dominant-baseline: central; transition: fill 0.25s; }
+.dot text { pointer-events: none; fill: var(--membrane); font: 700 20px var(--sans); font-stretch: 100%; text-anchor: middle; dominant-baseline: central; transition: fill 0.25s; }
 .dot.is-hot .dot__n { fill: var(--gold); }
 .dot.is-hot text { fill: var(--asphalt); }
 .profile__dots { transition: opacity 0.3s; }
@@ -371,12 +374,12 @@ main > section {
 }
 .ruler { margin-top: clamp(40px, 4vw, 60px); }
 .ruler__scale {
-  position: relative; height: 34px; font-size: 14px; color: var(--slate); font-variant-numeric: tabular-nums;
+  position: relative; height: 40px; font-size: 14px; color: var(--slate); font-variant-numeric: tabular-nums;
   background: repeating-linear-gradient(90deg, var(--flash) 0 1px, transparent 1px calc(100% / 36)) left bottom / 100% 9px no-repeat;
   border-bottom: 1px solid var(--slate);
 }
 .ruler__scale span { position: absolute; top: 0; left: calc(var(--at) * 100% / 36); transform: translateX(-50%); white-space: nowrap; }
-.ruler__scale span::after { content: ''; position: absolute; left: calc(50% - 0.75px); top: 18px; width: 1.5px; height: 16px; background: var(--slate); }
+.ruler__scale span::after { content: ''; position: absolute; left: calc(50% - 0.75px); top: 25px; width: 1.5px; height: 15px; background: var(--slate); }
 .ruler__scale span:first-child { transform: none; }
 .ruler__scale span:first-child::after { left: 0; }
 /* « 30 years » : le chiffre au-dessus de sa graduation */
@@ -515,7 +518,7 @@ main > section {
 .field label, .field legend { padding: 0; font-weight: 600; font-size: 16px; }
 .opt { font-weight: 400; color: var(--slate); }
 .field input, .field textarea {
-  width: 100%; min-height: 50px; padding: 12px 14px; border: 1px solid #9aa1a8; border-radius: 2px; background: var(--white);
+  width: 100%; min-height: 50px; padding: 12px 14px; border: 1px solid #7f878e; border-radius: 2px; background: var(--white);
   font: 400 17px/1.4 var(--sans); font-stretch: 100%; color: var(--asphalt);
 }
 .field textarea { resize: vertical; min-height: 120px; }
@@ -527,7 +530,7 @@ main > section {
 .chips label { position: relative; font-weight: 500; }
 .chips input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
 .chips span {
-  display: inline-flex; align-items: center; min-height: 46px; padding: 0 18px; border: 1px solid #9aa1a8; border-radius: 2px;
+  display: inline-flex; align-items: center; min-height: 46px; padding: 0 18px; border: 1px solid #7f878e; border-radius: 2px;
   background: var(--white); font-size: 16px; transition: border-color 0.2s, background-color 0.2s, color 0.2s;
 }
 .chips label:hover span { border-color: var(--asphalt); }
@@ -550,6 +553,9 @@ main > section {
 .call { position: relative; max-width: 1100px; margin: 0 auto; padding: clamp(64px, 8vw, 112px) var(--pad) 0; container-type: inline-size; text-align: center; }
 .call__gable { display: block; width: 100%; height: auto; overflow: visible; }
 .call__line { fill: none; stroke: var(--gold); stroke-width: 6; }
+@media (max-width: 759px) {
+  .call__line { stroke-width: 12; }
+}
 .call__star { transform-box: fill-box; transform-origin: 50% 54%; }
 .call__text { margin-top: 22px; }
 .call__lead { margin-top: 6px; font-size: clamp(18px, 0.5vw + 15px, 21px); color: #fff; }
@@ -998,7 +1004,7 @@ main > section {
     <p>Tell us about the roof. We’ll get back to you to set up a visit and a free estimate.</p>
     <ul class="direct">
       <li><span>Call</span> <a href="tel:+18636605834">863-660-5834</a></li>
-      <li><span>Email</span> <a href="mailto:fivepointsroofingfl@gmail.com">fivepointsroofingfl@gmail.com</a></li>
+      <li><span>Email</span> <a href="mailto:fivepointsroofingfl@gmail.com">fivepointsroofingfl@<wbr>gmail.com</a></li>
       <li><span>Hours</span> Monday to Friday, 7 AM to 7 PM</li>
     </ul>
   </div>
@@ -1047,11 +1053,11 @@ main > section {
     </div>
     <div class="form__go">
       <button class="btn" type="submit">Write my request</button>
-      <p class="form__note">This opens your email app with your request filled in, addressed to fivepointsroofingfl@gmail.com. Nothing is sent from this page.</p>
+      <p class="form__note">This opens your email app with your request filled in, addressed to fivepointsroofingfl@<wbr>gmail.com. Nothing is sent from this page.</p>
     </div>
     <div class="ready" data-ready hidden tabindex="-1">
       <h3>Your request is ready.</h3>
-      <p>If your email app didn’t open, copy it and send it to <a href="mailto:fivepointsroofingfl@gmail.com">fivepointsroofingfl@gmail.com</a>, or call 863-660-5834.</p>
+      <p>If your email app didn’t open, copy it and send it to <a href="mailto:fivepointsroofingfl@gmail.com">fivepointsroofingfl@<wbr>gmail.com</a>, or call 863-660-5834.</p>
       <pre class="ready__text" data-ready-text></pre>
       <p class="ready__act"><button class="btn btn--small" type="button" data-copy>Copy the request</button> <span class="ready__done" data-copied aria-live="polite"></span></p>
     </div>
@@ -1087,7 +1093,7 @@ main > section {
         <h2>Contact</h2>
         <ul>
           <li><a href="tel:+18636605834">863-660-5834</a></li>
-          <li><a href="mailto:fivepointsroofingfl@gmail.com">fivepointsroofingfl@gmail.com</a></li>
+          <li><a href="mailto:fivepointsroofingfl@gmail.com">fivepointsroofingfl@<wbr>gmail.com</a></li>
           <li><a href="https://www.facebook.com/profile.php?id=100089237822189" rel="noopener">Facebook</a></li>
         </ul>
       </div>
@@ -1387,12 +1393,13 @@ main > section {
   function finishDraw() {
     if (drawn) return;
     drawn = true;
-    drawing.forEach((a) => a.finish());
+    // les styles posés pour l'attente, puis les animations (qui gardent leur état final tant qu'on ne les annule pas)
     roofPath.style.strokeDasharray = '';
     roofPath.style.strokeDashoffset = '';
     homeSet.style.opacity = '';
     bodyPath.style.opacity = '';
     dots.style.opacity = '';
+    drawing.forEach((a) => a.cancel());
   }
   if (!drawn) {
     const len = roofPath.getTotalLength();

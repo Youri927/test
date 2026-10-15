@@ -274,12 +274,13 @@
   function finishDraw() {
     if (drawn) return;
     drawn = true;
-    drawing.forEach((a) => a.finish());
+    // les styles posés pour l'attente, puis les animations (qui gardent leur état final tant qu'on ne les annule pas)
     roofPath.style.strokeDasharray = '';
     roofPath.style.strokeDashoffset = '';
     homeSet.style.opacity = '';
     bodyPath.style.opacity = '';
     dots.style.opacity = '';
+    drawing.forEach((a) => a.cancel());
   }
   if (!drawn) {
     const len = roofPath.getTotalLength();
