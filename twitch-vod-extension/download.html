@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Téléchargement — Twitch Redif</title>
+  <link rel="icon" href="icons/icon32.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="dl">
+    <div class="card">
+      <div class="head">
+        <img id="thumb" alt="">
+        <div>
+          <h1 id="title">Chargement…</h1>
+          <dl>
+            <dt>Chaîne</dt><dd id="channel">—</dd>
+            <dt>Qualité</dt><dd id="quality">—</dd>
+            <dt>Plage</dt><dd id="range">—</dd>
+            <dt>Fichier</dt><dd id="file">—</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="bar" id="bar"><div></div></div>
+      <div class="stats">
+        <span id="progress">Prêt</span>
+        <span id="speed"></span>
+        <span id="eta"></span>
+      </div>
+      <div id="error" class="error hidden"></div>
+
+      <div class="actions">
+        <button class="primary" id="start" disabled>Choisir l'emplacement et télécharger</button>
+        <button id="cancel" class="hidden">Annuler</button>
+      </div>
+
+      <p class="note">
+        Garde cet onglet ouvert pendant le téléchargement. La vidéo est écrite directement sur le disque,
+        segment par segment : même une rediffusion de plusieurs heures ne remplit pas la mémoire.
+      </p>
+    </div>
+  </main>
+  <script type="module" src="download.js"></script>
+</body>
+</html>

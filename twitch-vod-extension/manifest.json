@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Twitch Redif",
+  "version": "1.0.0",
+  "description": "Récupère les rediffusions (VOD) Twitch : liste les vidéos d'une chaîne, choisit la qualité et la plage, télécharge en local.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Twitch Redif",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["activeTab", "cookies"],
+  "host_permissions": [
+    "https://*.twitch.tv/*",
+    "https://*.ttvnw.net/*",
+    "https://*.cloudfront.net/*",
+    "https://*.akamaized.net/*"
+  ]
+}

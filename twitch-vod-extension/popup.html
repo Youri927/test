@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Twitch Redif</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="popup">
+  <header>
+    <img src="icons/icon48.png" alt="">
+    <h1>Twitch Redif</h1>
+  </header>
+
+  <form class="search" id="search">
+    <input id="q" placeholder="Chaîne, lien de VOD ou ID" autocomplete="off" spellcheck="false">
+    <button class="primary" type="submit">OK</button>
+  </form>
+
+  <div id="status" class="muted hidden"></div>
+
+  <section id="channel" class="hidden">
+    <div class="channel-bar">
+      <strong id="channel-name"></strong>
+      <select id="type" aria-label="Type de vidéo">
+        <option value="ARCHIVE">Rediffusions</option>
+        <option value="HIGHLIGHT">Temps forts</option>
+        <option value="UPLOAD">Mises en ligne</option>
+        <option value="">Tout</option>
+      </select>
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <section id="vod" class="vod hidden">
+    <button class="back hidden" id="back" type="button">← Liste</button>
+    <div class="hero"><img id="vod-thumb" alt=""></div>
+    <h2 id="vod-title"></h2>
+    <div class="sub muted" id="vod-sub"></div>
+
+    <div class="field">
+      <label for="quality">Qualité</label>
+      <select id="quality"></select>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="start">Début</label>
+        <input id="start" placeholder="0:00:00">
+      </div>
+      <div class="field">
+        <label for="end">Fin</label>
+        <input id="end">
+      </div>
+    </div>
+    <div id="vod-error" class="error hidden"></div>
+    <div class="actions">
+      <button class="primary" id="download" type="button">Télécharger</button>
+      <button id="copy" type="button" title="Lien à ouvrir dans VLC, mpv ou ffmpeg">Copier le m3u8</button>
+    </div>
+  </section>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
