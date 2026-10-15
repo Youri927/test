@@ -52,7 +52,7 @@ main > section {
 }
 .head { max-width: 50em; }
 .head h2, .family h2, .area h2, .estimate h2 { font-size: clamp(36px, 2.4vw + 20px, 60px); }
-.head p { margin-top: 18px; font-size: clamp(18px, 0.4vw + 16px, 20px); color: var(--slate); max-width: 40em; }
+.head p { margin-top: 18px; font-size: clamp(18px, 0.4vw + 16px, 20px); color: var(--slate); max-width: 36em; }
 
 /* ——— boutons et liens ——— */
 .btn {
@@ -428,7 +428,7 @@ main > section {
 }
 .faq details[open]:not(.is-closing) summary::after { transform: translateY(-25%) rotate(-135deg); }
 .faq summary:hover { color: var(--gold-ink); }
-.faq details p { max-width: 42em; padding: 0 0 22px; color: var(--slate); }
+.faq details p { max-width: 35em; padding: 0 0 22px; color: var(--slate); }
 @media (max-width: 899px) {
   .faq { grid-template-columns: 1fr; }
 }

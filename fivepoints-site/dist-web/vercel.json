@@ -1,0 +1,484 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/category/announcements/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/category/announcements",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/services",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/roof-installation/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/roof-installation",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/mobile-home-roofing/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/mobile-home-roofing",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/commercial-roof-repair/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/commercial-roof-repair",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/roof-maintenance-and-repair/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/roof-maintenance-and-repair",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/built-up-roofing-bur/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/built-up-roofing-bur",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/elastomeric-roof-coating/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/elastomeric-roof-coating",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/coal-tar-pitch-roofing/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/coal-tar-pitch-roofing",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/metal-roofing/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/metal-roofing",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/modified-bitumen-roofing/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/modified-bitumen-roofing",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/tpo-roofing/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/tpo-roofing",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/epdm-roofing/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/epdm-roofing",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/pvc-roofing/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/pvc-roofing",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/3-best-roof-types-in-florida/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/3-best-roof-types-in-florida",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/cypress-gardens-roofing-3-popular-options/",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/cypress-gardens-roofing-3-popular-options",
+      "destination": "/#roofs",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/hail-storm-damage-repair/",
+      "destination": "/#storm",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/hail-storm-damage-repair",
+      "destination": "/#storm",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/roof-inspection/",
+      "destination": "/#storm",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/roof-inspection",
+      "destination": "/#storm",
+      "permanent": true
+    },
+    {
+      "source": "/mobile-home-roof-storm-damage-how-to-stop-the-leaking/",
+      "destination": "/#storm",
+      "permanent": true
+    },
+    {
+      "source": "/mobile-home-roof-storm-damage-how-to-stop-the-leaking",
+      "destination": "/#storm",
+      "permanent": true
+    },
+    {
+      "source": "/is-there-a-roof-inspection-needed-after-a-storm/",
+      "destination": "/#storm",
+      "permanent": true
+    },
+    {
+      "source": "/is-there-a-roof-inspection-needed-after-a-storm",
+      "destination": "/#storm",
+      "permanent": true
+    },
+    {
+      "source": "/review-insurance/",
+      "destination": "/#storm",
+      "permanent": true
+    },
+    {
+      "source": "/review-insurance",
+      "destination": "/#storm",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/roof-replacement/",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/roof-replacement",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/reroofing/",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/reroofing",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/roof-repairs-and-maintenance/",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/roof-repairs-and-maintenance",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/commercial-roof-replacement/",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/commercial-roofing/commercial-roof-replacement",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/replace-or-repair-your-roof/",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/replace-or-repair-your-roof",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/5-roof-repair-tips/",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/5-roof-repair-tips",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/test/",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/test",
+      "destination": "/#replace",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/roof-warranties/",
+      "destination": "/#warranty",
+      "permanent": true
+    },
+    {
+      "source": "/residential-roofing/roof-warranties",
+      "destination": "/#warranty",
+      "permanent": true
+    },
+    {
+      "source": "/about/",
+      "destination": "/#family",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/#family",
+      "permanent": true
+    },
+    {
+      "source": "/testimonials/",
+      "destination": "/#reviews",
+      "permanent": true
+    },
+    {
+      "source": "/testimonials",
+      "destination": "/#reviews",
+      "permanent": true
+    },
+    {
+      "source": "/category/lakeland-fl/",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/lakeland-fl",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/highlands-fl/",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/highlands-fl",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/winter-haven-fl/",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/winter-haven-fl",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/cypress-gardens-fl/",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/cypress-gardens-fl",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/haines-city-fl/",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/haines-city-fl",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/bartow-fl/",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/category/bartow-fl",
+      "destination": "/#area",
+      "permanent": true
+    },
+    {
+      "source": "/lakeland-mobile-home-roofing-faqs/",
+      "destination": "/#faq",
+      "permanent": true
+    },
+    {
+      "source": "/lakeland-mobile-home-roofing-faqs",
+      "destination": "/#faq",
+      "permanent": true
+    },
+    {
+      "source": "/how-often-should-you-seal-mobile-home-roof/",
+      "destination": "/#faq",
+      "permanent": true
+    },
+    {
+      "source": "/how-often-should-you-seal-mobile-home-roof",
+      "destination": "/#faq",
+      "permanent": true
+    },
+    {
+      "source": "/how-do-you-prepare-a-mobile-home-roof-for-coating/",
+      "destination": "/#faq",
+      "permanent": true
+    },
+    {
+      "source": "/how-do-you-prepare-a-mobile-home-roof-for-coating",
+      "destination": "/#faq",
+      "permanent": true
+    },
+    {
+      "source": "/what-is-the-best-roof-for-a-mobile-home-near-lakeland-fl/",
+      "destination": "/#faq",
+      "permanent": true
+    },
+    {
+      "source": "/what-is-the-best-roof-for-a-mobile-home-near-lakeland-fl",
+      "destination": "/#faq",
+      "permanent": true
+    },
+    {
+      "source": "/roof-estimate/",
+      "destination": "/#estimate",
+      "permanent": true
+    },
+    {
+      "source": "/roof-estimate",
+      "destination": "/#estimate",
+      "permanent": true
+    },
+    {
+      "source": "/contact/",
+      "destination": "/#estimate",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/#estimate",
+      "permanent": true
+    },
+    {
+      "source": "/thanks/",
+      "destination": "/#estimate",
+      "permanent": true
+    },
+    {
+      "source": "/thanks",
+      "destination": "/#estimate",
+      "permanent": true
+    }
+  ]
+}
