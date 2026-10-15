@@ -159,7 +159,9 @@ main > section {
 .nav a:hover { box-shadow: inset 0 -2px 0 var(--flash); }
 .nav a[aria-current='true'] { box-shadow: inset 0 -2px 0 var(--gold); }
 .top__tel { padding: 10px 0; text-decoration: none; font-weight: 600; font-variant-numeric: tabular-nums; }
-.top__menu { display: none; min-height: 44px; padding: 0 16px; border: 1px solid var(--asphalt); border-radius: 2px; background: none; font-weight: 600; cursor: pointer; }
+.top__menu, .top__call { display: none; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--asphalt); border-radius: 2px; background: none; font-weight: 600; cursor: pointer; }
+.top__call { text-decoration: none; }
+.top__call:hover, .top__menu:hover { background: var(--white); }
 .menu { border-top: 1px solid var(--flash); background: var(--membrane); padding: 8px var(--pad) 22px; }
 .menu nav { display: grid; }
 .menu nav a { padding: 12px 0; border-bottom: 1px solid var(--flash); text-decoration: none; font: 700 26px/1.1 var(--cond); font-stretch: 70%; }
@@ -176,10 +178,17 @@ main > section {
 @media (max-width: 999px) {
   .brand svg { height: 42px; }
   .top__tel { display: none; }
+  /* au téléphone, appeler est le premier geste : un bouton dans l'en-tête */
+  .top__call { display: inline-flex; }
 }
-@media (max-width: 459px) {
+@media (max-width: 599px) {
   .top__cta { display: none; }
   .brand svg { height: 38px; }
+}
+@media (max-width: 379px) {
+  .top__in { gap: 8px; }
+  .brand svg { height: 33px; }
+  .top__menu, .top__call { padding: 0 12px; }
 }
 
 /* ——— l'accueil : un pignon de mots, l'étoile au faîte ——— */
@@ -509,6 +518,8 @@ main > section {
 .direct li { display: grid; grid-template-columns: 4.5em minmax(0, 1fr); gap: 12px; padding: 11px 0; border-top: 1px solid var(--flash); }
 .direct span { color: var(--slate); }
 .direct a { font-weight: 600; padding: 10px 0; margin: -10px 0; overflow-wrap: anywhere; }
+.next__t { margin-top: 8px; font-size: clamp(24px, 1vw + 18px, 28px); }
+.next { margin-top: 10px; }
 .form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px var(--gap); padding: clamp(20px, 3vw, 40px); background: var(--white); border: 1px solid var(--flash); }
 .field { grid-column: 1 / -1; display: grid; gap: 8px; margin: 0; padding: 0; border: 0; min-width: 0; }
 .field--half { grid-column: span 1; }
@@ -558,7 +569,8 @@ main > section {
 }
 .call__star { transform-box: fill-box; transform-origin: 50% 54%; }
 .call__text { margin-top: 22px; }
-.call__lead { margin-top: 6px; font-size: clamp(18px, 0.5vw + 15px, 21px); color: #fff; }
+.call__lead { font-size: clamp(18px, 0.5vw + 15px, 21px); color: #fff; }
+.call__tel { margin-top: 4px; }
 .call__tel a {
   display: inline-block; padding: 2px 0 6px; color: var(--gold); text-decoration: none;
   font: 800 clamp(58px, 8cqi, 104px)/1 var(--cond); font-stretch: 62.5%; letter-spacing: 0.01em; font-variant-numeric: lining-nums;
@@ -568,7 +580,7 @@ main > section {
 .call__hours { font-size: 16px; color: var(--on-dark-2); }
 @container (min-width: 760px) {
   /* sous le toit, comme le titre de l'accueil */
-  .call__text { position: absolute; left: 50%; bottom: 3%; width: 60%; margin: 0; transform: translateX(-50%); }
+  .call__text { position: absolute; left: 50%; bottom: 1%; width: 60%; margin: 0; transform: translateX(-50%); }
 }
 .js .call__line { stroke-dasharray: 604; stroke-dashoffset: 604; transition: stroke-dashoffset 1.2s var(--ease); }
 .js .call__star { opacity: 0; transform: rotate(-72deg) scale(0.62); transition: opacity 0.4s 0.75s, transform 1s 0.75s var(--ease); }
@@ -644,6 +656,7 @@ main > section {
       <a href="#reviews">Reviews</a>
     </nav>
     <a class="top__tel" href="tel:+18636605834">863-660-5834</a>
+    <a class="top__call" href="tel:+18636605834" aria-label="Call 863-660-5834">Call</a>
     <a class="btn btn--small top__cta" href="#estimate">Free estimate</a>
     <button class="top__menu" type="button" aria-expanded="false" aria-controls="menu" data-menu>Menu</button>
   </div>
@@ -1007,6 +1020,12 @@ main > section {
       <li><span>Email</span> <a href="mailto:fivepointsroofingfl@gmail.com">fivepointsroofingfl@<wbr>gmail.com</a></li>
       <li><span>Hours</span> Monday to Friday, 7 AM to 7 PM</li>
     </ul>
+    <h3 class="next__t">What happens next</h3>
+    <ol class="steps next">
+      <li><p>We get back to you to set up a visit.</p></li>
+      <li><p>A free inspection on site, within five days or less.</p></li>
+      <li><p>A detailed estimate for every repair we recommend, with financing if you ask.</p></li>
+    </ol>
   </div>
   <form class="form" data-form novalidate>
     <fieldset class="field field--choice" aria-describedby="err-kind">
@@ -1074,9 +1093,9 @@ main > section {
       <g transform="translate(555 -42) scale(0.9)"><g class="call__star"><path d="M40.29 37.89L50.00 8.00L59.71 37.89ZM45.13 37.89L50.00 22.89L54.87 37.89Z" fill="#F4F5F2" fill-rule="evenodd"/><path d="M39.67 39.79L60.33 39.79L60.33 39.79L93.75 39.79L87.42 44.39L12.58 44.39L6.25 39.79L39.67 39.79Z" fill="#C3A046"/><path d="M50.95 46.29L84.80 46.29L66.71 59.43L77.04 91.21L50.95 72.26ZM50.95 46.29L76.98 46.29L61.30 57.67L68.29 79.17L50.95 66.57Z" fill="#F4F5F2" fill-rule="evenodd"/><path d="M49.05 46.29L49.05 72.26L22.96 91.21L33.29 59.43L15.20 46.29ZM49.05 46.29L49.05 66.57L31.71 79.17L38.70 57.67L23.02 46.29Z" fill="#C3A046" fill-rule="evenodd"/><path d="M49.4 66.06Q48.41 66.06 47.21 65.98Q46 65.89 44.81 65.76Q43.62 65.62 42.62 65.42V61.39Q43.64 61.48 44.76 61.56Q45.89 61.64 46.92 61.69Q47.95 61.73 48.71 61.73Q49.79 61.73 50.45 61.65Q51.11 61.56 51.46 61.32Q51.82 61.08 51.95 60.61Q52.08 60.13 52.08 59.36Q52.08 58.57 51.94 58.09Q51.8 57.62 51.43 57.39Q51.07 57.16 50.4 57.09Q49.73 57.01 48.65 57.01Q47.84 57.01 46.82 57.05Q45.8 57.1 44.77 57.16Q43.74 57.23 42.86 57.33V45.18H56.37V49.58H47.83V52.96Q48.36 52.9 48.98 52.85Q49.61 52.8 50.27 52.77Q50.94 52.75 51.51 52.75Q53.44 52.75 54.68 53.17Q55.92 53.59 56.62 54.4Q57.33 55.2 57.62 56.36Q57.9 57.51 57.9 59Q57.9 60.83 57.54 62.16Q57.17 63.49 56.25 64.36Q55.33 65.22 53.67 65.64Q52 66.06 49.4 66.06Z" fill="#C3A046" stroke="#1C1E21" stroke-width="2.2" paint-order="stroke" stroke-linejoin="round"/></g></g>
     </svg>
     <div class="call__text">
-      <p class="call__tel"><a href="tel:+18636605834">863-660-5834</a></p>
       <p class="call__lead">Free inspection, free estimate.</p>
       <p class="call__hours">Monday to Friday, 7 AM to 7 PM</p>
+      <p class="call__tel"><a href="tel:+18636605834">863-660-5834</a></p>
     </div>
   </div>
   <div class="foot__in">

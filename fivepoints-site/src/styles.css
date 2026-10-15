@@ -81,7 +81,9 @@ main > section {
 .nav a:hover { box-shadow: inset 0 -2px 0 var(--flash); }
 .nav a[aria-current='true'] { box-shadow: inset 0 -2px 0 var(--gold); }
 .top__tel { padding: 10px 0; text-decoration: none; font-weight: 600; font-variant-numeric: tabular-nums; }
-.top__menu { display: none; min-height: 44px; padding: 0 16px; border: 1px solid var(--asphalt); border-radius: 2px; background: none; font-weight: 600; cursor: pointer; }
+.top__menu, .top__call { display: none; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--asphalt); border-radius: 2px; background: none; font-weight: 600; cursor: pointer; }
+.top__call { text-decoration: none; }
+.top__call:hover, .top__menu:hover { background: var(--white); }
 .menu { border-top: 1px solid var(--flash); background: var(--membrane); padding: 8px var(--pad) 22px; }
 .menu nav { display: grid; }
 .menu nav a { padding: 12px 0; border-bottom: 1px solid var(--flash); text-decoration: none; font: 700 26px/1.1 var(--cond); font-stretch: 70%; }
@@ -98,10 +100,17 @@ main > section {
 @media (max-width: 999px) {
   .brand svg { height: 42px; }
   .top__tel { display: none; }
+  /* au téléphone, appeler est le premier geste : un bouton dans l'en-tête */
+  .top__call { display: inline-flex; }
 }
-@media (max-width: 459px) {
+@media (max-width: 599px) {
   .top__cta { display: none; }
   .brand svg { height: 38px; }
+}
+@media (max-width: 379px) {
+  .top__in { gap: 8px; }
+  .brand svg { height: 33px; }
+  .top__menu, .top__call { padding: 0 12px; }
 }
 
 /* ——— l'accueil : un pignon de mots, l'étoile au faîte ——— */
@@ -431,6 +440,8 @@ main > section {
 .direct li { display: grid; grid-template-columns: 4.5em minmax(0, 1fr); gap: 12px; padding: 11px 0; border-top: 1px solid var(--flash); }
 .direct span { color: var(--slate); }
 .direct a { font-weight: 600; padding: 10px 0; margin: -10px 0; overflow-wrap: anywhere; }
+.next__t { margin-top: 8px; font-size: clamp(24px, 1vw + 18px, 28px); }
+.next { margin-top: 10px; }
 .form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px var(--gap); padding: clamp(20px, 3vw, 40px); background: var(--white); border: 1px solid var(--flash); }
 .field { grid-column: 1 / -1; display: grid; gap: 8px; margin: 0; padding: 0; border: 0; min-width: 0; }
 .field--half { grid-column: span 1; }
@@ -480,7 +491,8 @@ main > section {
 }
 .call__star { transform-box: fill-box; transform-origin: 50% 54%; }
 .call__text { margin-top: 22px; }
-.call__lead { margin-top: 6px; font-size: clamp(18px, 0.5vw + 15px, 21px); color: #fff; }
+.call__lead { font-size: clamp(18px, 0.5vw + 15px, 21px); color: #fff; }
+.call__tel { margin-top: 4px; }
 .call__tel a {
   display: inline-block; padding: 2px 0 6px; color: var(--gold); text-decoration: none;
   font: 800 clamp(58px, 8cqi, 104px)/1 var(--cond); font-stretch: 62.5%; letter-spacing: 0.01em; font-variant-numeric: lining-nums;
@@ -490,7 +502,7 @@ main > section {
 .call__hours { font-size: 16px; color: var(--on-dark-2); }
 @container (min-width: 760px) {
   /* sous le toit, comme le titre de l'accueil */
-  .call__text { position: absolute; left: 50%; bottom: 3%; width: 60%; margin: 0; transform: translateX(-50%); }
+  .call__text { position: absolute; left: 50%; bottom: 1%; width: 60%; margin: 0; transform: translateX(-50%); }
 }
 .js .call__line { stroke-dasharray: 604; stroke-dashoffset: 604; transition: stroke-dashoffset 1.2s var(--ease); }
 .js .call__star { opacity: 0; transform: rotate(-72deg) scale(0.62); transition: opacity 0.4s 0.75s, transform 1s 0.75s var(--ease); }

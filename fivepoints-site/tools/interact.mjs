@@ -184,6 +184,21 @@ const state = (p) =>
   ok(wipe.length === 8 && wipe.every((w) => w.in && /^polygon\(0px 0(px|%)/.test(w.clip)), `les ${wipe.length} photos se sont découvertes`);
   ok(wipe.every((w) => parseFloat(w.k) > 40 && parseFloat(w.k) < 120), `le biais suit la pente 6/12 à la taille affichée (${wipe.map((w) => Math.round(parseFloat(w.k))).join(', ')} %)`);
   const once = await p.evaluate(() => ['[data-ruler]', '[data-line]', '[data-call]'].map((x) => document.querySelector(x).classList.contains('is-in')));
+  // le numéro du pied de page est sous le toit : chaque ligne de texte sous les rampants
+  const call = await p.evaluate(() => {
+    const svg = document.querySelector('.call__gable');
+    const inv = svg.getScreenCTM().inverse();
+    const toSvg = (x, y) => new DOMPoint(x, y).matrixTransform(inv);
+    const rake = (x) => (x <= 600 ? 320 - (x - 60) * 0.5 : 320 - (1140 - x) * 0.5);
+    const lines = [...document.querySelectorAll('.call__text p')].flatMap((el) => {
+      const r = document.createRange();
+      r.selectNodeContents(el);
+      // la hauteur des chiffres et des lettres, pas toute la boîte de la ligne
+      return [...r.getClientRects()].filter((q) => q.width > 4).map((q) => [toSvg(q.left, q.top + q.height * 0.22), toSvg(q.right, q.top + q.height * 0.22)]);
+    });
+    return lines.every(([a, c]) => a.y > rake(a.x) + 2 && c.y > rake(c.x) + 2);
+  });
+  ok(call, 'pied de page : le numéro et ses deux lignes sont sous le toit, sans toucher les rampants');
   ok(once.every(Boolean), 'la règle des garanties, la ligne du temps et le toit du pied de page se sont tracés');
   const bars = await p.$$eval('.ruler__bar', (bs) => bs.map((x) => getComputedStyle(x).transform));
   ok(bars.every((t) => t === 'none'), 'les trois barres des garanties ont atteint leur durée');
@@ -288,6 +303,32 @@ for (const w of [1100, 1180, 1280]) {
     return {lines: tops.size, overlap, h: document.querySelector('[data-top]').offsetHeight};
   });
   ok(h.lines === 1 && !h.overlap && h.h <= 80, `${w} px : l’en-tête tient sur une ligne, rien ne se chevauche`);
+  await ctx.close();
+}
+
+/* ——— de 1000 à 1920 px : le titre et le numéro restent sous leurs toits ——— */
+for (const w of [1000, 1024, 1280, 1680, 1920]) {
+  const ctx = await b.newContext({viewport: {width: w, height: 900}});
+  const p = await open(ctx);
+  await p.waitForTimeout(400);
+  const under = await p.evaluate(() => {
+    const check = (svgSel, textSel, x0, y0, x1, yTop, k) => {
+      const svg = document.querySelector(svgSel);
+      const inv = svg.getScreenCTM().inverse();
+      const toSvg = (x, y) => new DOMPoint(x, y).matrixTransform(inv);
+      const mid = (x0 + x1) / 2;
+      const rake = (x) => (x <= mid ? y0 - (x - x0) * 0.5 : y0 - (x1 - x) * 0.5);
+      const lines = [...document.querySelectorAll(textSel)].flatMap((el) => {
+        const r = document.createRange();
+        r.selectNodeContents(el);
+        return [...r.getClientRects()].filter((q) => q.width > 4).map((q) => [toSvg(q.left, q.top + q.height * k), toSvg(q.right, q.top + q.height * k)]);
+      });
+      return lines.length > 0 && lines.every(([a, c]) => a.y > rake(a.x) + 2 && c.y > rake(c.x) + 2);
+    };
+    const callAbs = getComputedStyle(document.querySelector('.call__text')).position === 'absolute';
+    return {hero: check('.gable__svg', '.gable__h1', 40, 430, 1160, 150, 0), call: !callAbs || check('.call__gable', '.call__text p', 60, 320, 1140, 50, 0.22)};
+  });
+  ok(under.hero && under.call, `${w} px : le titre sous le toit de l'accueil, le numéro sous celui du pied de page`);
   await ctx.close();
 }
 
