@@ -96,8 +96,10 @@ Vérifié image par image : aucun numéro de maison, aucune plaque d'immatricula
   du modèle Squarespace).
 - **Une description vide** pour les moteurs de recherche ; un titre sans métier ni ville (« Florida South
   Construction »).
-- **Les robots des assistants (ChatGPT, Claude, Perplexity…) sont bloqués** par le robots.txt de Squarespace :
-  l'entreprise est invisible pour eux.
+- **Un plan du site (sitemap) à l'envers** : il oublie l'accueil et les pages du menu (About, Contracting, Reviews,
+  Contact), mais liste la page en faux texte, le brouillon « Home 2 » et la copie de l'accueil. (Le robots.txt, lui,
+  laisse passer les moteurs et les robots des assistants sur toutes les pages publiques : vérifié avec deux analyseurs,
+  voir l'audit SEO.)
 - **Une galerie de 2015** où les photos de banque d'images côtoient leurs vrais travaux en vignettes de 200 px.
 - **« Come back soon to see photos! »** pour la menuiserie sur mesure, depuis 2015.
 - **Un bandeau en haut de page** (« Welcome to the new www.FloridaSouthConstruction.com website! ») qui prend un

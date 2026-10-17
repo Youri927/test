@@ -221,7 +221,7 @@ h3 {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--sky-grad);
+  background: var(--sky) var(--sky-grad);
   background-size: var(--sky-size);
   color: var(--white);
 }
@@ -368,7 +368,7 @@ h3 {
   inset: var(--top-h) 0 0;
   overflow: auto;
   padding: 12px var(--gut) 40px;
-  background: var(--sky-grad);
+  background: var(--sky) var(--sky-grad);
   background-size: var(--sky-size);
   overscroll-behavior: contain;
 }
@@ -399,7 +399,7 @@ h3 {
   --fade: 9%;
   position: relative;
   overflow: hidden;
-  background: var(--sky-grad);
+  background: var(--sky) var(--sky-grad);
   background-size: var(--sky-size);
   color: var(--white);
 }
@@ -442,8 +442,9 @@ h3 {
    un peu plus épais pour les grandes lignes ; il suit le texte sur deux lignes s'il le faut */
 .todo span {
   --th: max(1.5px, 0.056em);
+  --dim: rgba(255, 255, 255, 0.8);
   background: linear-gradient(var(--white), var(--white)) no-repeat 0 calc(0.721em - var(--th) / 2) / 100% var(--th);
-  color: rgba(255, 255, 255, 0.64);
+  color: var(--dim);
   -webkit-box-decoration-break: slice;
   box-decoration-break: slice;
 }
@@ -459,12 +460,18 @@ h3 {
 .js .todo li.is-struck span,
 .js .todo.is-done span {
   background-size: 100% var(--th);
-  color: rgba(255, 255, 255, 0.64);
+  color: var(--dim);
 }
 @keyframes strike {
   to {
     background-size: 100% var(--th);
-    color: rgba(255, 255, 255, 0.64);
+    color: var(--dim);
+  }
+}
+/* sur ordinateur, les lignes font toutes plus de 24 px : 3:1 suffit, le texte barré peut s'effacer davantage */
+@media (min-width: 701px) {
+  .todo span {
+    --dim: rgba(255, 255, 255, 0.66);
   }
 }
 .hero__done {
@@ -1038,7 +1045,7 @@ h3 {
 /* ——— la demande : le ciel referme la page ——— */
 .estimate {
   padding: clamp(96px, 11vw, 168px) 0;
-  background: var(--sky-grad);
+  background: var(--sky) var(--sky-grad);
   background-size: var(--sky-size);
   color: var(--white);
 }
@@ -1100,7 +1107,7 @@ h3 {
 }
 .field label span {
   margin-left: 6px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.92);
   font-weight: 400;
 }
 .field input,
@@ -1243,7 +1250,7 @@ h3 {
 .foot__nav {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 2px;
   font-style: normal;
   font-size: 15.5px;
   line-height: 1.45;
@@ -1257,6 +1264,10 @@ h3 {
 }
 .foot__reach a {
   align-self: flex-start;
+}
+.foot__reach > *,
+.foot__nav a {
+  padding: 5px 0;
 }
 .foot__fine {
   grid-column: 1 / -1;
@@ -1383,7 +1394,7 @@ h3 {
   }
   .js .todo span {
     background-size: 100% var(--th);
-    color: rgba(255, 255, 255, 0.64);
+    color: var(--dim);
   }
   .js .hero__done {
     clip-path: none;
@@ -1486,7 +1497,7 @@ h3 {
   <div class="top__bar">
     <a class="brand" href="#top" aria-label="Florida South Construction, back to the top">
       <svg class="emblem" viewBox="0 0 1241.9 1126.4" aria-hidden="true" focusable="false"><use href="#emblem-b"/></svg>
-      <span class="brand__name" aria-hidden="true">Florida South<span>Construction</span></span>
+      <span class="brand__name" aria-hidden="true">Florida South<span> Construction</span></span>
     </a>
     <nav class="nav" aria-label="Main">
       <a href="#work">What we do</a>
@@ -1590,7 +1601,7 @@ h3 {
         <div class="frame">
           <picture>
             <source media="(max-width: 700px)" srcset="assets/img/house-m-800.avif 800w, assets/img/house-m.avif 1200w" sizes="100vw" width="1200" height="901">
-            <img width="2500" height="1250" src="assets/img/house.avif" srcset="assets/img/house-1000.avif 1000w, assets/img/house-1600.avif 1600w, assets/img/house.avif 2500w" sizes="100vw" alt="A new two-story raised house with pale green siding, white trim, a metal roof and garages on the ground floor, with two braced royal palms in front." loading="lazy">
+            <img width="2500" height="1250" src="assets/img/house.avif" srcset="assets/img/house-1000.avif 1000w, assets/img/house-1600.avif 1600w, assets/img/house.avif 2500w" sizes="100vw" alt="A new two-story raised house with pale blue-green siding, white trim, a metal roof and garages on the ground floor, with two braced royal palms in front." loading="lazy">
           </picture>
         </div>
         <figcaption class="wrap">A raised house we built, photographed in 2015.</figcaption>
@@ -1608,13 +1619,13 @@ h3 {
       <div class="house__head">
         <h3 id="house-raised">The raised house</h3>
         <p class="house__when">Photographed in 2015</p>
-        <p>Pale green lap siding, stucco columns, white eaves, Bahama shutters and a metal roof, with the garages on the ground floor.</p>
+        <p>Pale blue-green lap siding, stucco columns, white eaves, Bahama shutters and a metal roof, with the garages on the ground floor.</p>
       </div>
       <ul class="mosaic mosaic--raised" data-gallery="The raised house, 2015">
         <li class="m-eaves" data-lead><button class="ph" type="button" aria-haspopup="dialog"><img width="1800" height="1200" data-full="assets/img/r-eaves.avif" src="assets/img/r-eaves.avif" srcset="assets/img/r-eaves-900.avif 900w, assets/img/r-eaves.avif 1800w" sizes="(max-width: 700px) 100vw, 58vw" alt="White soffits and gutters meeting above a stucco column, against a deep blue sky." loading="lazy"></button><p class="cap">White eaves and gutters over the front porch.</p></li>
         <li class="m-sign"><button class="ph" type="button" aria-haspopup="dialog"><img width="1800" height="1200" data-full="assets/img/r-sign.avif" src="assets/img/r-sign.avif" srcset="assets/img/r-sign-900.avif 900w, assets/img/r-sign.avif 1800w" sizes="(max-width: 700px) 100vw, 40vw" alt="A job-site sign reading Another Quality Home, Florida South Construction Inc., 239-449-4477, in front of the house." loading="lazy"></button><p class="cap">Our job sign: Another Quality Home.</p></li>
         <li class="m-palms" data-lead><button class="ph" type="button" aria-haspopup="dialog"><img width="1800" height="1200" data-full="assets/img/r-palms.avif" src="assets/img/r-palms.avif" srcset="assets/img/r-palms-900.avif 900w, assets/img/r-palms.avif 1800w" sizes="(max-width: 700px) 50vw, 33vw" alt="Two royal palms seen from below against a clear sky." loading="lazy"></button><p class="cap">Royal palms out front.</p></li>
-        <li class="m-siding"><button class="ph" type="button" aria-haspopup="dialog"><img width="1800" height="1200" data-full="assets/img/r-siding.avif" src="assets/img/r-siding.avif" srcset="assets/img/r-siding-900.avif 900w, assets/img/r-siding.avif 1800w" sizes="(max-width: 700px) 50vw, 33vw" alt="Pale green lap siding and a window framed in white, under the edge of the roof." loading="lazy"></button><p class="cap">Lap siding and a window, up under the eaves.</p></li>
+        <li class="m-siding"><button class="ph" type="button" aria-haspopup="dialog"><img width="1800" height="1200" data-full="assets/img/r-siding.avif" src="assets/img/r-siding.avif" srcset="assets/img/r-siding-900.avif 900w, assets/img/r-siding.avif 1800w" sizes="(max-width: 700px) 50vw, 33vw" alt="Pale blue-green lap siding and a window framed in white, under the edge of the roof." loading="lazy"></button><p class="cap">Lap siding and a window, up under the eaves.</p></li>
         <li class="m-porch"><button class="ph" type="button" aria-haspopup="dialog"><img width="1800" height="1200" data-full="assets/img/r-porch.avif" src="assets/img/r-porch.avif" srcset="assets/img/r-porch-900.avif 900w, assets/img/r-porch.avif 1800w" sizes="(max-width: 700px) 100vw, 33vw" alt="The front porch roof on stucco columns, with a scaffold in front of the entrance." loading="lazy"></button><p class="cap">The front porch, with the scaffold still up.</p></li>
         <li class="m-shutter"><button class="ph" type="button" aria-haspopup="dialog"><img width="1800" height="1200" data-full="assets/img/r-shutter.avif" src="assets/img/r-shutter.avif" srcset="assets/img/r-shutter-900.avif 900w, assets/img/r-shutter.avif 1800w" sizes="(max-width: 700px) 50vw, 50vw" alt="A dark louvered shutter hinged at the top and propped open over a window." loading="lazy"></button><p class="cap">A Bahama shutter, propped open.</p></li>
         <li class="m-deck" data-lead><button class="ph" type="button" aria-haspopup="dialog"><img width="1800" height="1200" data-full="assets/img/r-deck.avif" src="assets/img/r-deck.avif" srcset="assets/img/r-deck-900.avif 900w, assets/img/r-deck.avif 1800w" sizes="(max-width: 700px) 50vw, 50vw" alt="A covered porch with white railings and a textured ceiling, above exposed deck joists." loading="lazy"></button><p class="cap">The covered porch, and the deck framing below it.</p></li>
@@ -1712,7 +1723,7 @@ h3 {
     <div class="wrap estimate__grid">
       <div class="estimate__intro">
         <h2 id="estimate-title">Send us your list.</h2>
-        <p>Write it here, or call <a href="tel:+12394494477">(239) 449-4477</a>. We would be glad to accommodate your schedule.</p>
+        <p>For an estimate, write your list here or call <a href="tel:+12394494477">(239) 449-4477</a>. We would be glad to accommodate your schedule.</p>
         <dl class="reach">
           <div><dt>Phone</dt><dd><a href="tel:+12394494477">(239) 449-4477</a></dd></div>
           <div><dt>Fax</dt><dd>(239) 449-4470</dd></div>
@@ -1754,8 +1765,8 @@ h3 {
           <input id="f-who" name="who" type="text">
         </div>
         <div class="form__send">
-          <button class="btn btn--light" type="submit">Send my list</button>
-          <p class="form__how">This opens your email app with your list, addressed to Jwhite@floridasouth.us.</p>
+          <button class="btn btn--light" type="submit">Email my list</button>
+          <p class="form__how">This opens your email app with your list, addressed to Jwhite@floridasouth.us. Nothing is sent from this page.</p>
         </div>
         <div class="ready" data-ready hidden tabindex="-1">
           <p class="ready__title">Your list is ready.</p>
@@ -1838,7 +1849,8 @@ h3 {
     const fonts = document.fonts ? document.fonts.ready : Promise.resolve();
     Promise.race([fonts, new Promise((r) => setTimeout(r, 1200))]).then(() => {
       const items = [...todo.children];
-      const START = 380;
+      // la liste se lit d'abord, entière, puis les traits
+      const START = 620;
       const STEP = 270;
       items.forEach((li, i) => setTimeout(() => li.classList.add('is-struck'), START + i * STEP));
       setTimeout(() => done.classList.add('is-in'), START + (items.length - 1) * STEP + 420);
@@ -1925,46 +1937,51 @@ h3 {
   /* ——— les cadres s'ouvrent en entrant à l'écran, à la mesure du chantier ; les avis se lisent mot à mot ——— */
   const moving = !still.matches;
   const frames = moving ? $$('[data-frame] .frame, .ph img, .judson__portrait img, .judson__team img').map((el) => ({el, last: ''})) : [];
-  const quotes = moving
-    ? $$('[data-read]').map((fig) => {
-        // chaque mot dans son élément, pour qu'il passe du gris à l'encre à son tour (le texte reste le même)
-        const p = $('blockquote p', fig);
-        const parts = p.textContent.split(/(\s+)/);
-        p.textContent = '';
-        let n = 0;
-        for (const part of parts) {
-          if (!part) continue;
-          if (/^\s+$/.test(part)) p.append(part);
-          else {
-            const w = document.createElement('span');
-            w.className = 'w';
-            w.style.setProperty('--i', n++);
-            w.textContent = part;
-            p.append(w);
-          }
+  const quotes = [];
+  // chaque mot d'un avis dans son élément, pour qu'il passe du gris à l'encre à son tour (le texte reste le même) ;
+  // fait quand le navigateur a le temps, pas pendant le chargement
+  const split = () => {
+    for (const fig of $$('[data-read]')) {
+      const p = $('blockquote p', fig);
+      const parts = p.textContent.split(/(\s+)/);
+      const frag = document.createDocumentFragment();
+      let n = 0;
+      for (const part of parts) {
+        if (!part) continue;
+        if (/^\s+$/.test(part)) frag.append(part);
+        else {
+          const w = document.createElement('span');
+          w.className = 'w';
+          w.style.setProperty('--i', n++);
+          w.textContent = part;
+          frag.append(w);
         }
-        return {fig, n, last: ''};
-      })
-    : [];
+      }
+      p.replaceChildren(frag);
+      quotes.push({fig, n, last: ''});
+    }
+    request();
+  };
   const update = () => {
     ticking = false;
     const vh = innerHeight;
-    for (const f of frames) {
-      const r = f.el.getBoundingClientRect();
-      // loin de l'écran : rien à recalculer (déjà ouvert au-dessus, encore fermé en dessous)
-      if ((r.bottom < -200 && f.last === '0.0000') || (r.top > vh + 200 && f.last === '1.0000')) continue;
+    // d'abord toutes les mesures, puis toutes les écritures : une seule mise en page par image
+    const fr = frames.map((f) => f.el.getBoundingClientRect());
+    const qr = quotes.map((q) => q.fig.getBoundingClientRect());
+    frames.forEach((f, i) => {
+      const r = fr[i];
       // fermé quand le haut du cadre entre par le bas de l'écran, ouvert quand il arrive au tiers du haut
       const p = clamp((vh - r.top) / (vh * 0.68), 0, 1);
       const c = (1 - p * p * (3 - 2 * p)).toFixed(4);
       if (c !== f.last) (f.el.style.setProperty('--c', c), (f.last = c));
-    }
-    for (const q of quotes) {
-      const r = q.fig.getBoundingClientRect();
+    });
+    quotes.forEach((q, i) => {
+      const r = qr[i];
       // le premier mot quand la citation entre à 90 % de l'écran, le dernier quand son bas arrive aux trois quarts
       const p = clamp((vh * 0.9 - r.top) / (vh * 0.16 + r.height), 0, 1);
       const lit = (p * (q.n + 1.5) - 1).toFixed(2);
       if (lit !== q.last) (q.fig.style.setProperty('--lit', lit), (q.last = lit));
-    }
+    });
   };
   let ticking = false;
   const request = () => {
@@ -1973,7 +1990,8 @@ h3 {
   if (moving) {
     addEventListener('scroll', request, {passive: true});
     addEventListener('resize', request);
-    update();
+    request();
+    (window.requestIdleCallback || ((f) => setTimeout(f, 300)))(split, {timeout: 1500});
   }
 
   /* ——— la visionneuse : la photo grandit depuis sa vignette, et y retourne ——— */
@@ -2086,7 +2104,9 @@ h3 {
   $('[data-vnext]', viewer).addEventListener('click', () => show(index + 1, 1));
   $('[data-vclose]', viewer).addEventListener('click', close);
   viewer.addEventListener('cancel', (e) => (e.preventDefault(), close()));
-  viewer.addEventListener('keydown', (e) => {
+  // les flèches, où que soit le focus (un clic sur la photo le rend à la page)
+  document.addEventListener('keydown', (e) => {
+    if (!viewer.open || busy) return;
     if (e.key === 'ArrowLeft') show(index - 1, -1);
     if (e.key === 'ArrowRight') show(index + 1, 1);
   });

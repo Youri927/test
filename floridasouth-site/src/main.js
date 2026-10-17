@@ -23,7 +23,8 @@
     const fonts = document.fonts ? document.fonts.ready : Promise.resolve();
     Promise.race([fonts, new Promise((r) => setTimeout(r, 1200))]).then(() => {
       const items = [...todo.children];
-      const START = 380;
+      // la liste se lit d'abord, entière, puis les traits
+      const START = 620;
       const STEP = 270;
       items.forEach((li, i) => setTimeout(() => li.classList.add('is-struck'), START + i * STEP));
       setTimeout(() => done.classList.add('is-in'), START + (items.length - 1) * STEP + 420);
@@ -110,46 +111,51 @@
   /* ——— les cadres s'ouvrent en entrant à l'écran, à la mesure du chantier ; les avis se lisent mot à mot ——— */
   const moving = !still.matches;
   const frames = moving ? $$('[data-frame] .frame, .ph img, .judson__portrait img, .judson__team img').map((el) => ({el, last: ''})) : [];
-  const quotes = moving
-    ? $$('[data-read]').map((fig) => {
-        // chaque mot dans son élément, pour qu'il passe du gris à l'encre à son tour (le texte reste le même)
-        const p = $('blockquote p', fig);
-        const parts = p.textContent.split(/(\s+)/);
-        p.textContent = '';
-        let n = 0;
-        for (const part of parts) {
-          if (!part) continue;
-          if (/^\s+$/.test(part)) p.append(part);
-          else {
-            const w = document.createElement('span');
-            w.className = 'w';
-            w.style.setProperty('--i', n++);
-            w.textContent = part;
-            p.append(w);
-          }
+  const quotes = [];
+  // chaque mot d'un avis dans son élément, pour qu'il passe du gris à l'encre à son tour (le texte reste le même) ;
+  // fait quand le navigateur a le temps, pas pendant le chargement
+  const split = () => {
+    for (const fig of $$('[data-read]')) {
+      const p = $('blockquote p', fig);
+      const parts = p.textContent.split(/(\s+)/);
+      const frag = document.createDocumentFragment();
+      let n = 0;
+      for (const part of parts) {
+        if (!part) continue;
+        if (/^\s+$/.test(part)) frag.append(part);
+        else {
+          const w = document.createElement('span');
+          w.className = 'w';
+          w.style.setProperty('--i', n++);
+          w.textContent = part;
+          frag.append(w);
         }
-        return {fig, n, last: ''};
-      })
-    : [];
+      }
+      p.replaceChildren(frag);
+      quotes.push({fig, n, last: ''});
+    }
+    request();
+  };
   const update = () => {
     ticking = false;
     const vh = innerHeight;
-    for (const f of frames) {
-      const r = f.el.getBoundingClientRect();
-      // loin de l'écran : rien à recalculer (déjà ouvert au-dessus, encore fermé en dessous)
-      if ((r.bottom < -200 && f.last === '0.0000') || (r.top > vh + 200 && f.last === '1.0000')) continue;
+    // d'abord toutes les mesures, puis toutes les écritures : une seule mise en page par image
+    const fr = frames.map((f) => f.el.getBoundingClientRect());
+    const qr = quotes.map((q) => q.fig.getBoundingClientRect());
+    frames.forEach((f, i) => {
+      const r = fr[i];
       // fermé quand le haut du cadre entre par le bas de l'écran, ouvert quand il arrive au tiers du haut
       const p = clamp((vh - r.top) / (vh * 0.68), 0, 1);
       const c = (1 - p * p * (3 - 2 * p)).toFixed(4);
       if (c !== f.last) (f.el.style.setProperty('--c', c), (f.last = c));
-    }
-    for (const q of quotes) {
-      const r = q.fig.getBoundingClientRect();
+    });
+    quotes.forEach((q, i) => {
+      const r = qr[i];
       // le premier mot quand la citation entre à 90 % de l'écran, le dernier quand son bas arrive aux trois quarts
       const p = clamp((vh * 0.9 - r.top) / (vh * 0.16 + r.height), 0, 1);
       const lit = (p * (q.n + 1.5) - 1).toFixed(2);
       if (lit !== q.last) (q.fig.style.setProperty('--lit', lit), (q.last = lit));
-    }
+    });
   };
   let ticking = false;
   const request = () => {
@@ -158,7 +164,8 @@
   if (moving) {
     addEventListener('scroll', request, {passive: true});
     addEventListener('resize', request);
-    update();
+    request();
+    (window.requestIdleCallback || ((f) => setTimeout(f, 300)))(split, {timeout: 1500});
   }
 
   /* ——— la visionneuse : la photo grandit depuis sa vignette, et y retourne ——— */
@@ -271,7 +278,9 @@
   $('[data-vnext]', viewer).addEventListener('click', () => show(index + 1, 1));
   $('[data-vclose]', viewer).addEventListener('click', close);
   viewer.addEventListener('cancel', (e) => (e.preventDefault(), close()));
-  viewer.addEventListener('keydown', (e) => {
+  // les flèches, où que soit le focus (un clic sur la photo le rend à la page)
+  document.addEventListener('keydown', (e) => {
+    if (!viewer.open || busy) return;
     if (e.key === 'ArrowLeft') show(index - 1, -1);
     if (e.key === 'ArrowRight') show(index + 1, 1);
   });

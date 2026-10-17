@@ -1,0 +1,129 @@
+{
+  "redirects": [
+    {
+      "source": "/welcome-pacific",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/welcome-pacific/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/home-1",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/home-1/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/contracting",
+      "destination": "/#work",
+      "permanent": true
+    },
+    {
+      "source": "/contracting/",
+      "destination": "/#work",
+      "permanent": true
+    },
+    {
+      "source": "/contractor-services",
+      "destination": "/#work",
+      "permanent": true
+    },
+    {
+      "source": "/contractor-services/",
+      "destination": "/#work",
+      "permanent": true
+    },
+    {
+      "source": "/ideas",
+      "destination": "/#work",
+      "permanent": true
+    },
+    {
+      "source": "/ideas/",
+      "destination": "/#work",
+      "permanent": true
+    },
+    {
+      "source": "/gallery",
+      "destination": "/#houses",
+      "permanent": true
+    },
+    {
+      "source": "/gallery/",
+      "destination": "/#houses",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio",
+      "destination": "/#houses",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio/",
+      "destination": "/#houses",
+      "permanent": true
+    },
+    {
+      "source": "/gallery/:path*",
+      "destination": "/#houses",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/#judson",
+      "permanent": true
+    },
+    {
+      "source": "/about/",
+      "destination": "/#judson",
+      "permanent": true
+    },
+    {
+      "source": "/reviews",
+      "destination": "/#reviews",
+      "permanent": true
+    },
+    {
+      "source": "/reviews/",
+      "destination": "/#reviews",
+      "permanent": true
+    },
+    {
+      "source": "/contact",
+      "destination": "/#estimate",
+      "permanent": true
+    },
+    {
+      "source": "/contact/",
+      "destination": "/#estimate",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
+        }
+      ]
+    }
+  ]
+}

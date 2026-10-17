@@ -1,0 +1,7 @@
+# Netlify : la maquette ne doit pas être indexée par les moteurs de recherche (à retirer au lancement)
+/*
+  X-Robots-Tag: noindex, nofollow
+
+# polices et photos : une semaine en cache (les noms de fichiers ne changent pas d'une version à l'autre)
+/assets/*
+  Cache-Control: public, max-age=604800

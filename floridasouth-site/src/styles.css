@@ -196,7 +196,7 @@ h3 {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: var(--sky-grad);
+  background: var(--sky) var(--sky-grad);
   background-size: var(--sky-size);
   color: var(--white);
 }
@@ -343,7 +343,7 @@ h3 {
   inset: var(--top-h) 0 0;
   overflow: auto;
   padding: 12px var(--gut) 40px;
-  background: var(--sky-grad);
+  background: var(--sky) var(--sky-grad);
   background-size: var(--sky-size);
   overscroll-behavior: contain;
 }
@@ -374,7 +374,7 @@ h3 {
   --fade: 9%;
   position: relative;
   overflow: hidden;
-  background: var(--sky-grad);
+  background: var(--sky) var(--sky-grad);
   background-size: var(--sky-size);
   color: var(--white);
 }
@@ -417,8 +417,9 @@ h3 {
    un peu plus épais pour les grandes lignes ; il suit le texte sur deux lignes s'il le faut */
 .todo span {
   --th: max(1.5px, 0.056em);
+  --dim: rgba(255, 255, 255, 0.8);
   background: linear-gradient(var(--white), var(--white)) no-repeat 0 calc(0.721em - var(--th) / 2) / 100% var(--th);
-  color: rgba(255, 255, 255, 0.64);
+  color: var(--dim);
   -webkit-box-decoration-break: slice;
   box-decoration-break: slice;
 }
@@ -434,12 +435,18 @@ h3 {
 .js .todo li.is-struck span,
 .js .todo.is-done span {
   background-size: 100% var(--th);
-  color: rgba(255, 255, 255, 0.64);
+  color: var(--dim);
 }
 @keyframes strike {
   to {
     background-size: 100% var(--th);
-    color: rgba(255, 255, 255, 0.64);
+    color: var(--dim);
+  }
+}
+/* sur ordinateur, les lignes font toutes plus de 24 px : 3:1 suffit, le texte barré peut s'effacer davantage */
+@media (min-width: 701px) {
+  .todo span {
+    --dim: rgba(255, 255, 255, 0.66);
   }
 }
 .hero__done {
@@ -1013,7 +1020,7 @@ h3 {
 /* ——— la demande : le ciel referme la page ——— */
 .estimate {
   padding: clamp(96px, 11vw, 168px) 0;
-  background: var(--sky-grad);
+  background: var(--sky) var(--sky-grad);
   background-size: var(--sky-size);
   color: var(--white);
 }
@@ -1075,7 +1082,7 @@ h3 {
 }
 .field label span {
   margin-left: 6px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.92);
   font-weight: 400;
 }
 .field input,
@@ -1218,7 +1225,7 @@ h3 {
 .foot__nav {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 2px;
   font-style: normal;
   font-size: 15.5px;
   line-height: 1.45;
@@ -1232,6 +1239,10 @@ h3 {
 }
 .foot__reach a {
   align-self: flex-start;
+}
+.foot__reach > *,
+.foot__nav a {
+  padding: 5px 0;
 }
 .foot__fine {
   grid-column: 1 / -1;
@@ -1358,7 +1369,7 @@ h3 {
   }
   .js .todo span {
     background-size: 100% var(--th);
-    color: rgba(255, 255, 255, 0.64);
+    color: var(--dim);
   }
   .js .hero__done {
     clip-path: none;
