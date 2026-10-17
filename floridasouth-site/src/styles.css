@@ -1,0 +1,1372 @@
+/* Florida South Construction : le ciel de leurs photos, la liste qui se barre, des cadres qui s'ouvrent à la mesure du
+   chantier. Couleurs prises sur leurs photos (converties en sRGB) ; voir DIRECTION.md. */
+
+:root {
+  /* le ciel de la photo de l'accueil, relevé sur sa première rangée de pixels, de gauche à droite */
+  --sky: #2e5ab2;
+  --sky-deep: #254ea8;
+  --sky-grad: linear-gradient(90deg, #254ea8 0%, #2550aa 10%, #2652ac 20%, #2853ad 30%, #2b56af 40%, #2d5ab0 50%, #305cb2 60%, #345fb3 70%, #3962b5 80%, #3e65b6 90%, #4268b7 100%);
+  /* au téléphone, la photo est recadrée sur ses trois cinquièmes de gauche : le dégradé aussi */
+  --sky-size: 100% 100%;
+  --white: #fff;
+  --stucco: #dde4e2;
+  --ink: #18213a;
+  --slate: #4e5a6c;
+  --line: rgba(24, 33, 58, 0.16);
+  --on-sky: rgba(255, 255, 255, 0.86);
+  --alert: #9b1c2c;
+  --serif: "Gloock", "Gloock Fallback", "Times New Roman", serif;
+  --sans: "Albert Sans", "Albert Fallback", Arial, sans-serif;
+  --gut: clamp(20px, 4.4vw, 64px);
+  --max: 1320px;
+  --col-gap: clamp(16px, 1.8vw, 24px);
+  --top-h: 76px;
+  --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+}
+@media (max-width: 700px) {
+  :root {
+    --sky-size: 166.67% 100%;
+    --top-h: 62px;
+  }
+}
+
+/* ——— base ——— */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--top-h) + 12px);
+}
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+body {
+  margin: 0;
+  background: var(--white);
+  color: var(--ink);
+  font: 400 17px/1.6 var(--sans);
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+@media (min-width: 1100px) {
+  body {
+    font-size: 18px;
+  }
+}
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+h1,
+h2,
+h3,
+p,
+ul,
+dl,
+dd,
+figure,
+blockquote,
+address {
+  margin: 0;
+}
+ul {
+  padding: 0;
+  list-style: none;
+}
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+[hidden] {
+  display: none !important;
+}
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+.wrap {
+  width: 100%;
+  max-width: calc(var(--max) + 2 * var(--gut));
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -80px;
+  z-index: 100;
+  padding: 12px 18px;
+  background: var(--white);
+  color: var(--ink);
+  font-weight: 600;
+  border-radius: 2px;
+}
+.skip:focus {
+  top: 12px;
+}
+
+/* ——— les titres ——— */
+h2 {
+  font: 400 clamp(40px, 5vw, 72px) / 1.02 var(--serif);
+  letter-spacing: -0.012em;
+}
+h3 {
+  font: 400 clamp(26px, 2.3vw, 34px) / 1.12 var(--serif);
+}
+.lead {
+  max-width: 34em;
+  color: var(--slate);
+  font-size: clamp(19px, 1.45vw, 22px);
+  line-height: 1.5;
+}
+
+/* ——— les boutons : des angles nets, comme les débords ——— */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 2px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.25s var(--ease),
+    color 0.25s var(--ease);
+}
+.btn--light {
+  background: var(--white);
+  color: var(--sky-deep);
+}
+.btn--light:hover {
+  background: var(--ink);
+  color: var(--white);
+}
+.btn--line {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.btn--line:hover {
+  background: var(--ink);
+  color: var(--white);
+}
+
+/* un trait qui s'allonge de gauche à droite, comme ceux de la liste : les liens de l'en-tête et du pied de page */
+.nav a,
+.foot a {
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 1px;
+  text-decoration: none;
+  transition: background-size 0.35s var(--ease);
+}
+.nav a:hover,
+.nav a[aria-current],
+.foot a:hover {
+  background-size: 100% 1px;
+}
+
+/* ——— l'en-tête : le ciel, toujours ——— */
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--sky-grad);
+  background-size: var(--sky-size);
+  color: var(--white);
+}
+.top__bar {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  height: var(--top-h);
+  max-width: calc(var(--max) + 2 * var(--gut));
+  margin: 0 auto;
+  padding: 0 var(--gut);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: auto;
+  color: inherit;
+  text-decoration: none;
+}
+.brand svg {
+  flex: none;
+  width: 54px;
+  height: auto;
+}
+.brand__name {
+  display: flex;
+  flex-direction: column;
+  font: 400 22px/1 var(--serif);
+  white-space: nowrap;
+}
+.brand__name span {
+  margin-top: 5px;
+  font: 500 12.5px/1 var(--sans);
+  letter-spacing: 0.04em;
+  opacity: 0.86;
+}
+.nav {
+  display: flex;
+  gap: 28px;
+}
+.nav a {
+  padding: 6px 0;
+  font-weight: 500;
+  font-size: 15.5px;
+  line-height: 1.2;
+}
+.top__tel {
+  font-weight: 500;
+  font-size: 15.5px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.top__cta {
+  min-height: 44px;
+  padding: 0 18px;
+  font-size: 15px;
+}
+.top__call,
+.top__menu {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 2px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.top__call {
+  background: var(--white);
+  color: var(--sky-deep);
+}
+.top__menu {
+  border: 0;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+@media (max-width: 1099px) {
+  .nav {
+    display: none;
+  }
+  .top__menu {
+    display: inline-flex;
+  }
+  .top__bar {
+    gap: 18px;
+  }
+}
+@media (max-width: 700px) {
+  .top__tel,
+  .top__cta {
+    display: none;
+  }
+  .top__call {
+    display: inline-flex;
+  }
+  .top__bar {
+    gap: 10px;
+  }
+  .brand {
+    gap: 10px;
+  }
+  .brand svg {
+    width: 42px;
+  }
+  .brand__name {
+    font-size: 19px;
+  }
+  .brand__name span {
+    font-size: 11.5px;
+    margin-top: 4px;
+  }
+}
+/* les petits téléphones (320 px) : tout tient sur la ligne */
+@media (max-width: 359px) {
+  :root {
+    --gut: 16px;
+  }
+  .top__bar,
+  .brand {
+    gap: 8px;
+  }
+  .brand svg {
+    width: 36px;
+  }
+  .brand__name {
+    font-size: 17px;
+  }
+  .brand__name span {
+    display: none;
+  }
+  .top__call,
+  .top__menu {
+    padding: 0 12px;
+  }
+}
+
+/* le menu du téléphone : le même ciel, les liens en grand */
+.menu {
+  position: fixed;
+  inset: var(--top-h) 0 0;
+  overflow: auto;
+  padding: 12px var(--gut) 40px;
+  background: var(--sky-grad);
+  background-size: var(--sky-size);
+  overscroll-behavior: contain;
+}
+.menu nav {
+  display: flex;
+  flex-direction: column;
+}
+.menu nav a {
+  padding: 12px 0 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  font: 400 clamp(32px, 8.4vw, 46px) / 1.1 var(--serif);
+  text-decoration: none;
+}
+.menu__reach {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+  font-weight: 500;
+}
+.menu__reach a {
+  padding: 4px 0;
+}
+
+/* ——— l'accueil : la liste, sur le ciel de la photo ——— */
+.hero {
+  --lap: 9vw;
+  --fade: 9%;
+  position: relative;
+  overflow: hidden;
+  background: var(--sky-grad);
+  background-size: var(--sky-size);
+  color: var(--white);
+}
+.hero__words {
+  /* une unité qui tient compte de la hauteur de l'écran : la liste, la phrase et le bas de la photo dans le premier écran */
+  --u: min(1vw, 1.6vh);
+  position: relative;
+  z-index: 1;
+  padding-top: clamp(26px, 5.5vh, 64px);
+}
+.hero__ask {
+  margin-bottom: clamp(8px, 1.4vh, 16px);
+  color: var(--on-sky);
+  font-weight: 600;
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.2;
+}
+.todo {
+  --b: clamp(18px, calc(1.75 * var(--u) + 2px), 30px);
+  font-family: var(--serif);
+  line-height: 1.12;
+}
+/* la taille suit celle du chantier, du trou rebouché à la maison */
+.todo li {
+  font-size: calc(var(--b) * var(--k, 1));
+}
+.todo li:nth-child(2) {
+  --k: 1.2;
+}
+.todo li:nth-child(3) {
+  --k: 1.44;
+}
+.todo li:nth-child(4) {
+  --k: 1.73;
+}
+.todo li:nth-child(5) {
+  --k: 2.07;
+}
+/* le trait : un fond qui s'allonge, posé au milieu des minuscules de Gloock (hauteur d'x 0,508 em, hampe 0,975 em),
+   un peu plus épais pour les grandes lignes ; il suit le texte sur deux lignes s'il le faut */
+.todo span {
+  --th: max(1.5px, 0.056em);
+  background: linear-gradient(var(--white), var(--white)) no-repeat 0 calc(0.721em - var(--th) / 2) / 100% var(--th);
+  color: rgba(255, 255, 255, 0.64);
+  -webkit-box-decoration-break: slice;
+  box-decoration-break: slice;
+}
+.js .todo span {
+  background-size: 0 var(--th);
+  color: var(--white);
+  transition:
+    background-size 0.5s var(--ease-io),
+    color 0.45s var(--ease) 0.3s;
+  /* filet de sécurité : si le script ne tourne pas, tout est barré au bout de 4 s */
+  animation: strike 0s 4s forwards;
+}
+.js .todo li.is-struck span,
+.js .todo.is-done span {
+  background-size: 100% var(--th);
+  color: rgba(255, 255, 255, 0.64);
+}
+@keyframes strike {
+  to {
+    background-size: 100% var(--th);
+    color: rgba(255, 255, 255, 0.64);
+  }
+}
+.hero__done {
+  margin-top: clamp(10px, 1.8vh, 22px);
+  font: 400 clamp(52px, calc(8.6 * var(--u)), 140px) / 0.98 var(--serif);
+  letter-spacing: -0.02em;
+}
+/* la phrase s'écrit dans le sens des traits */
+.js .hero__done {
+  clip-path: inset(-0.2em 100% -0.3em 0);
+  transition: clip-path 0.85s var(--ease-io);
+  animation: write 0s 4.3s forwards;
+}
+.js .hero__done.is-in {
+  clip-path: inset(-0.2em -0.1em -0.3em 0);
+}
+@keyframes write {
+  to {
+    clip-path: inset(-0.2em -0.1em -0.3em 0);
+  }
+}
+.hero__foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px 56px;
+  margin-top: clamp(20px, 3.6vh, 44px);
+}
+.hero__say {
+  max-width: 44em;
+}
+.hero h1 {
+  max-width: 28em;
+  font: 500 clamp(18px, 1.42vw, 22px) / 1.36 var(--sans);
+}
+.hero__say p {
+  max-width: 38em;
+  margin-top: 8px;
+  color: var(--on-sky);
+  font-size: clamp(15px, 1.08vw, 17px);
+  line-height: 1.5;
+}
+.hero__cta {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 24px;
+}
+.hero__tel {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 500;
+  white-space: nowrap;
+  background: none;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.6);
+  text-underline-offset: 0.3em;
+  transition: text-decoration-color 0.25s var(--ease);
+}
+.hero__tel:hover {
+  text-decoration-color: transparent;
+}
+/* la photo monte du bas : son ciel, raccordé au fond, passe sous le texte */
+.hero__photo img {
+  width: 100%;
+  aspect-ratio: 2500 / 1667;
+  margin-top: calc(var(--lap) * -1);
+  object-fit: cover;
+  object-position: 50% 0;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--fade));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--fade));
+}
+@media (min-width: 1500px) {
+  .hero__photo img {
+    aspect-ratio: 2 / 1;
+  }
+}
+@media (max-width: 860px) {
+  .hero__foot {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 700px) {
+  .hero {
+    --lap: 56px;
+    --fade: 12%;
+  }
+  .hero__photo img {
+    aspect-ratio: 1200 / 1334;
+  }
+  .hero__cta {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    width: 100%;
+  }
+  .hero__tel {
+    align-self: flex-start;
+  }
+}
+
+/* ——— ce qu'on fait : trois rangées dont la photo grandit avec le chantier ——— */
+.work {
+  padding-top: clamp(80px, 11vw, 168px);
+}
+.work__head {
+  margin-bottom: clamp(56px, 7vw, 104px);
+}
+.work__head .lead {
+  margin-top: 22px;
+}
+.scale {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+  align-items: end;
+  margin-bottom: clamp(72px, 9vw, 136px);
+}
+.scale__text h3 {
+  margin-bottom: 14px;
+}
+.scale__text p {
+  max-width: 32em;
+}
+.scale__text p + p {
+  margin-top: 16px;
+}
+.scale--s .scale__text {
+  grid-column: 1 / span 6;
+}
+.scale--s .scale__fig {
+  grid-column: 8 / span 3;
+}
+.scale--m .scale__text {
+  grid-column: 1 / span 5;
+  align-self: center;
+}
+.scale--m .scale__fig {
+  grid-column: 7 / span 6;
+}
+.scale--l {
+  display: block;
+  margin-bottom: 0;
+}
+.scale--l .scale__text p {
+  max-width: 30em;
+}
+.jobs {
+  columns: 2;
+  column-gap: 28px;
+  margin: 22px 0 6px;
+  font: 400 clamp(19px, 1.45vw, 22px) / 1.25 var(--serif);
+}
+.jobs li {
+  padding: 9px 0 8px;
+  border-top: 1px solid var(--line);
+  break-inside: avoid;
+}
+.scale__fig figcaption,
+.cap,
+.judson__team figcaption {
+  margin-top: 10px;
+  color: var(--slate);
+  font-size: 14.5px;
+  line-height: 1.4;
+}
+/* le cadre s'ouvre en entrant à l'écran (--c va de 1 à 0, réglé par le script) ; la photo, elle, ne bouge pas */
+.frame {
+  --ix: 10%;
+  --iy: 10%;
+  overflow: hidden;
+  clip-path: inset(calc(var(--c, 0) * var(--iy)) calc(var(--c, 0) * var(--ix)));
+}
+.scale--m .frame {
+  --ix: 8%;
+  --iy: 8%;
+}
+.scale__fig--bleed {
+  margin-top: clamp(32px, 4vw, 56px);
+}
+.scale__fig--bleed .frame {
+  /* fermé, le cadre a la largeur du texte ; ouvert, celle de l'écran */
+  --ix: max(var(--gut), calc((100% - var(--max)) / 2));
+  --iy: 4%;
+}
+.scale__fig--bleed img {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+}
+@media (max-width: 860px) {
+  .scale {
+    row-gap: 28px;
+  }
+  .scale--s .scale__text,
+  .scale--m .scale__text {
+    grid-column: 1 / -1;
+  }
+  .scale--s .scale__fig {
+    grid-column: 6 / -1;
+  }
+  .scale--m .scale__fig {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 700px) {
+  .scale--s .scale__fig {
+    grid-column: 5 / -1;
+  }
+  .scale__fig--bleed img {
+    aspect-ratio: 1200 / 901;
+  }
+  .jobs {
+    columns: 1;
+  }
+}
+
+/* ——— deux maisons : des mosaïques écrites pour ces photos ——— */
+.houses {
+  padding: clamp(104px, 12vw, 184px) 0 clamp(88px, 10vw, 152px);
+}
+.houses__head {
+  margin-bottom: clamp(48px, 6vw, 88px);
+}
+.houses__head .lead {
+  margin-top: 18px;
+}
+.house + .house {
+  margin-top: clamp(80px, 9vw, 136px);
+}
+.house__head {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 6px var(--col-gap);
+  margin-bottom: clamp(24px, 3vw, 36px);
+}
+.house__head h3 {
+  grid-column: 1 / span 6;
+}
+.house__when {
+  grid-column: 1 / span 6;
+  color: var(--slate);
+  font-size: 15px;
+}
+.house__head > p:last-child {
+  grid-column: 7 / span 6;
+  grid-row: 1 / span 2;
+  align-self: end;
+  max-width: 34em;
+  color: var(--slate);
+}
+.mosaic {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(24px, 2.6vw, 36px) var(--col-gap);
+}
+.mosaic li {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ph {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  cursor: zoom-in;
+}
+.ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--stucco);
+}
+/* chaque photo arrive cadre un peu fermé, et s'ouvre en entrant à l'écran (--c, réglé par le script) */
+.ph img,
+.judson__portrait img,
+.judson__team img {
+  --ix: 5%;
+  --iy: 5%;
+  clip-path: inset(calc(var(--c, 0) * var(--iy)) calc(var(--c, 0) * var(--ix)));
+}
+.ph:focus-visible {
+  outline-offset: 4px;
+}
+.mosaic li:hover .cap {
+  color: var(--ink);
+}
+.cap {
+  min-height: 2.8em;
+  transition: color 0.25s var(--ease);
+}
+/* sur ordinateur, dans chaque rangée, une photo donne la hauteur (data-lead) ; les autres la prennent et se recadrent
+   au centre. Sur téléphone et tablette : deux colonnes, des photos hautes et quelques-unes en pleine largeur. */
+.mosaic li {
+  --ar-m: 4 / 5;
+}
+@media (min-width: 1000px) {
+  .mosaic [data-lead] .ph {
+    aspect-ratio: var(--ar);
+  }
+  .mosaic li:not([data-lead]) .ph {
+    flex: 1 1 auto;
+    min-height: 160px;
+  }
+  .mosaic li:not([data-lead]) .ph img {
+    position: absolute;
+    inset: 0;
+  }
+  .m-eaves {
+    grid-column: 1 / span 7;
+    --ar: 3 / 2;
+  }
+  .m-sign {
+    grid-column: 8 / span 5;
+  }
+  .m-palms {
+    grid-column: 1 / span 4;
+    --ar: 4 / 5;
+  }
+  .m-siding {
+    grid-column: 5 / span 4;
+  }
+  .m-porch {
+    grid-column: 9 / span 4;
+  }
+  .m-shutter {
+    grid-column: 1 / span 5;
+  }
+  .m-deck {
+    grid-column: 6 / span 7;
+    --ar: 16 / 9;
+  }
+  .m-pines {
+    grid-column: 1 / span 8;
+    --ar: 3 / 2;
+  }
+  .m-window {
+    grid-column: 9 / span 4;
+  }
+  .m-columns {
+    grid-column: 1 / span 4;
+    --ar: 5 / 4;
+  }
+  .m-through {
+    grid-column: 5 / span 4;
+  }
+  .m-trusses {
+    grid-column: 9 / span 4;
+  }
+  .m-ducts {
+    grid-column: 1 / span 6;
+    --ar: 3 / 2;
+  }
+  .m-walls {
+    grid-column: 7 / span 3;
+  }
+  .m-room {
+    grid-column: 10 / span 3;
+  }
+}
+@media (max-width: 999px) {
+  .mosaic {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mosaic li .ph {
+    aspect-ratio: var(--ar-m);
+  }
+  .mosaic .m-eaves,
+  .mosaic .m-sign,
+  .mosaic .m-pines,
+  .mosaic .m-deck,
+  .mosaic .m-ducts {
+    grid-column: 1 / -1;
+    --ar-m: 3 / 2;
+  }
+  .house__head h3,
+  .house__when,
+  .house__head > p:last-child {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+  .house__head > p:last-child {
+    margin-top: 10px;
+  }
+}
+
+/* ——— Judson ——— */
+.judson {
+  padding: clamp(96px, 11vw, 168px) 0;
+  background: var(--stucco);
+}
+.judson__top,
+.judson__how {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 32px var(--col-gap);
+}
+.judson__top {
+  align-items: center;
+}
+.judson__portrait {
+  grid-column: 1 / span 4;
+}
+.judson__portrait img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.judson__text {
+  grid-column: 6 / span 7;
+}
+.judson__text .lead {
+  margin-top: 20px;
+}
+.judson__quote {
+  margin-top: clamp(28px, 3.4vw, 44px);
+}
+.judson__quote p {
+  font: 400 clamp(23px, 2.15vw, 32px) / 1.28 var(--serif);
+  text-indent: -0.42em;
+}
+.judson__quote footer {
+  margin-top: 14px;
+  font-weight: 600;
+  font-size: 15.5px;
+}
+.judson__how {
+  align-items: start;
+  margin-top: clamp(72px, 8vw, 120px);
+}
+.judson__team {
+  grid-column: 1 / span 6;
+}
+.promises {
+  grid-column: 8 / span 5;
+}
+.promises li {
+  padding: 22px 0 24px;
+  border-top: 1px solid var(--line);
+}
+.promises li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.promises h3 {
+  margin-bottom: 8px;
+  font-size: clamp(24px, 2vw, 30px);
+}
+.promises p {
+  max-width: 30em;
+  color: var(--slate);
+}
+.license {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(24px, 3.4vw, 48px);
+  align-items: start;
+  max-width: 920px;
+  margin-top: clamp(72px, 8vw, 120px);
+  padding: clamp(26px, 3.6vw, 48px);
+  background: var(--white);
+  border-radius: 2px;
+}
+.license__mark {
+  color: var(--sky);
+}
+.license__mark svg {
+  width: clamp(72px, 9vw, 124px);
+  height: auto;
+}
+.license h3 {
+  font: 600 15.5px/1.35 var(--sans);
+}
+.license__num {
+  margin: 8px 0 22px;
+  font: 400 clamp(44px, 5.4vw, 72px) / 1 var(--serif);
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+}
+.license__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, auto));
+  gap: 14px 32px;
+}
+.license__facts dt {
+  color: var(--slate);
+  font-size: 13.5px;
+}
+.license__facts dd {
+  font-weight: 500;
+  font-size: 15.5px;
+  line-height: 1.4;
+}
+.license__check {
+  display: inline-block;
+  margin-top: 24px;
+  color: var(--sky);
+  font-weight: 600;
+}
+@media (max-width: 860px) {
+  .judson__portrait {
+    grid-column: 1 / span 9;
+    max-width: 440px;
+  }
+  .judson__text,
+  .judson__team,
+  .promises {
+    grid-column: 1 / -1;
+  }
+  .license__facts {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .license {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ——— les avis : les mots passent du gris à l'encre au fil de la lecture ——— */
+.reviews {
+  padding: clamp(104px, 12vw, 184px) 0;
+}
+.quote {
+  max-width: 1000px;
+  margin-top: clamp(44px, 6vw, 80px);
+}
+.quote--b {
+  max-width: 860px;
+  margin-left: auto;
+}
+.quote blockquote p {
+  font: 400 clamp(24px, 2.75vw, 42px) / 1.24 var(--serif);
+  letter-spacing: -0.005em;
+}
+.quote blockquote p::before {
+  content: "\201C";
+  margin-left: -0.5em;
+  padding-right: 0.08em;
+  color: var(--sky);
+}
+.quote figcaption {
+  margin-top: 18px;
+  font-weight: 600;
+  font-size: 16px;
+}
+/* --lit est réglé par le script ; sans lui, tout est à l'encre */
+.quote .w {
+  --t: clamp(0, calc(var(--lit, 9999) - var(--i, 0)), 1);
+  color: color-mix(in srgb, var(--ink) calc(var(--t) * 100%), #7d8696);
+}
+.reviews__more {
+  margin-top: clamp(48px, 6vw, 80px);
+  color: var(--slate);
+}
+.reviews__more a {
+  color: var(--sky);
+  font-weight: 600;
+}
+@media (max-width: 700px) {
+  .quote blockquote p::before {
+    margin-left: 0;
+  }
+}
+
+/* ——— la demande : le ciel referme la page ——— */
+.estimate {
+  padding: clamp(96px, 11vw, 168px) 0;
+  background: var(--sky-grad);
+  background-size: var(--sky-size);
+  color: var(--white);
+}
+.estimate__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 40px var(--col-gap);
+}
+.estimate__intro {
+  grid-column: 1 / span 5;
+}
+.estimate__intro h2 {
+  font-size: clamp(46px, 5.8vw, 88px);
+}
+.estimate__intro > p {
+  max-width: 26em;
+  margin-top: 20px;
+  color: var(--on-sky);
+}
+.estimate__intro > p a {
+  color: var(--white);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.reach {
+  display: grid;
+  gap: 16px;
+  margin-top: 44px;
+}
+.reach dt {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 13.5px;
+}
+.reach dd {
+  font-weight: 500;
+}
+.reach a {
+  text-decoration: none;
+}
+.reach a:hover {
+  text-decoration: underline;
+}
+.form {
+  display: grid;
+  grid-column: 7 / span 6;
+  gap: 22px;
+  align-content: start;
+}
+.form__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 20px;
+}
+.field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 15px;
+}
+.field label span {
+  margin-left: 6px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+}
+.field input,
+.field textarea {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  padding: 13px 14px;
+  border: 0;
+  border-radius: 2px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.4;
+}
+/* la liste s'écrit sur des lignes, comme une feuille ; les lignes défilent avec le texte */
+.field textarea {
+  --lh: 30px;
+  min-height: calc(6 * var(--lh) + 20px);
+  padding: 10px 14px;
+  line-height: var(--lh);
+  background: var(--white) linear-gradient(transparent calc(var(--lh) - 1px), #d8e0f0 calc(var(--lh) - 1px)) 0 10px / 100% var(--lh) local;
+  resize: vertical;
+}
+.field textarea::placeholder,
+.field input::placeholder {
+  color: #6b7686;
+}
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 3px solid var(--white);
+  outline-offset: 2px;
+}
+.field [aria-invalid="true"] {
+  box-shadow: inset 0 0 0 2px var(--alert);
+}
+.err {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: 2px;
+  background: var(--white);
+  color: var(--alert);
+  font-weight: 600;
+  font-size: 14.5px;
+}
+.err--wide {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: -10px;
+}
+.form__send {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
+  margin-top: 4px;
+}
+.form__how {
+  max-width: 24em;
+  color: var(--on-sky);
+  font-size: 14.5px;
+  line-height: 1.45;
+}
+.ready {
+  padding: clamp(20px, 2.6vw, 30px);
+  border-radius: 2px;
+  background: var(--white);
+  color: var(--ink);
+}
+.ready:focus {
+  outline: none;
+}
+.ready__title {
+  margin-bottom: 8px;
+  font: 400 30px/1.1 var(--serif);
+}
+.ready__text {
+  max-height: 280px;
+  margin: 16px 0;
+  padding: 14px 16px;
+  overflow: auto;
+  border-radius: 2px;
+  background: #eef1f6;
+  font: 400 15px/1.5 var(--sans);
+  white-space: pre-wrap;
+}
+.ready__copied {
+  margin-top: 10px;
+  color: var(--slate);
+  font-size: 14.5px;
+}
+@media (max-width: 960px) {
+  .estimate__intro,
+  .form {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 560px) {
+  .form__row {
+    grid-template-columns: 1fr;
+  }
+  .err--wide {
+    margin-top: -12px;
+  }
+  .form__send .btn {
+    width: 100%;
+  }
+}
+
+/* ——— le pied de page : l'encre ——— */
+.foot {
+  padding: clamp(64px, 8vw, 112px) 0 40px;
+  background: var(--ink);
+  color: var(--white);
+}
+.foot__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 36px var(--col-gap);
+}
+.foot__brand {
+  grid-column: 1 / span 5;
+}
+.foot__brand svg {
+  width: 104px;
+  height: auto;
+  margin-bottom: 20px;
+}
+.foot__name {
+  margin-bottom: 10px;
+  font: 400 26px/1.15 var(--serif);
+}
+.foot__brand p:not(.foot__name) {
+  max-width: 26em;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 15.5px;
+}
+.foot__reach,
+.foot__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-style: normal;
+  font-size: 15.5px;
+  line-height: 1.45;
+}
+.foot__reach {
+  grid-column: 7 / span 3;
+}
+.foot__nav {
+  grid-column: 10 / span 3;
+  align-items: flex-start;
+}
+.foot__reach a {
+  align-self: flex-start;
+}
+.foot__fine {
+  grid-column: 1 / -1;
+  margin-top: 12px;
+  padding-top: 26px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 14px;
+}
+@media (max-width: 860px) {
+  .foot__brand {
+    grid-column: 1 / -1;
+  }
+  .foot__reach {
+    grid-column: 1 / span 6;
+  }
+  .foot__nav {
+    grid-column: 7 / span 6;
+  }
+}
+@media (max-width: 520px) {
+  .foot__reach,
+  .foot__nav {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ——— la visionneuse ——— */
+.viewer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(13, 18, 33, 0.96);
+  color: var(--white);
+  overflow: hidden;
+}
+.viewer[open] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+.viewer::backdrop {
+  background: transparent;
+}
+.viewer__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: clamp(12px, 3vw, 32px) clamp(12px, 3vw, 32px) 0;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+.viewer__img {
+  /* largeur et hauteur calculées par le script (main.js, fit) */
+  max-width: none;
+  transform-origin: 0 0;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.viewer__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 24px;
+  padding: 16px clamp(12px, 3vw, 32px) 20px;
+}
+.viewer__cap {
+  flex: 1 1 320px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.viewer__where {
+  color: rgba(255, 255, 255, 0.72);
+}
+.viewer__count {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+.viewer__nav {
+  display: flex;
+  gap: 8px;
+}
+.viewer__btn {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+  cursor: pointer;
+  transition: background-color 0.2s var(--ease);
+}
+.viewer__btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.viewer__btn svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ——— mouvement réduit : tout en place, rien ne s'anime ——— */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+  }
+  .js .todo span {
+    background-size: 100% var(--th);
+    color: rgba(255, 255, 255, 0.64);
+  }
+  .js .hero__done {
+    clip-path: none;
+  }
+  .frame,
+  .ph img,
+  .judson__portrait img,
+  .judson__team img {
+    clip-path: none;
+  }
+}
