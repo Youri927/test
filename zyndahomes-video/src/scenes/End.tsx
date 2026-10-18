@@ -23,7 +23,9 @@ export const End: React.FC = () => {
   const settle = range(f, t + 15, t + 129, 0, 1, E.out);
   const kicker = range(f, t, t + 48, 0, 1, E.out);
   const tail = range(f, t + 75, t + 129, 0, 1, E.out);
-  const inset = ((1 - band) * 50).toFixed(3);
+  // le bandeau s'ouvre depuis sa ligne d'horizon : deux volets du blanc de la page s'écartent vers le haut et le bas,
+  // déplacés au sous-pixel (un calque composité chacun) ; une découpe (clip-path) avancerait au pixel entier
+  const cover = (240 * band + 2).toFixed(3);
   return (
     <AbsoluteFill style={{background: '#000'}}>
       <AbsoluteFill style={{opacity: fade, background: C.paper}}>
@@ -36,11 +38,13 @@ export const End: React.FC = () => {
           </Rise>
         </div>
         {/* le bandeau, un peu plus haut que sur le site (l'image est plus large) : la maison et sa piscine, comme à l'accueil */}
-        <div style={{position: 'absolute', left: 0, top: 286, width: 1920, height: 480, overflow: 'hidden', background: C.stone, clipPath: `inset(${inset}% 0 ${inset}% 0)`}}>
+        <div style={{position: 'absolute', left: 0, top: 286, width: 1920, height: 480, overflow: 'hidden', background: C.stone}}>
           <Img
             src={staticFile('img/hero.jpg')}
-            style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 66%', transform: `scale(${(1.06 - 0.06 * settle).toFixed(5)})`}}
+            style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 66%', transform: `scale(${(1.06 - 0.06 * settle).toFixed(5)})`, willChange: 'transform'}}
           />
+          <div style={{position: 'absolute', left: 0, right: 0, top: 0, height: 242, background: C.paper, transform: `translate3d(0, -${cover}px, 0)`, willChange: 'transform'}} />
+          <div style={{position: 'absolute', left: 0, right: 0, bottom: 0, height: 242, background: C.paper, transform: `translate3d(0, ${cover}px, 0)`, willChange: 'transform'}} />
         </div>
         <div style={{position: 'absolute', right: 96, top: 784}}>
           <Rise p={rise(f, t + 51)} style={LINE}>

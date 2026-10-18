@@ -502,9 +502,16 @@ const mobile = [
         const r = ul.getBoundingClientRect();
         return {stops: [...ul.children].map((li) => li.offsetLeft - ul.firstElementChild.offsetLeft), pad, top: r.top, h: r.height, w: ul.children[0].getBoundingClientRect().width};
       });
-      // chaque glissé : le doigt se pose, tire 110 px vers la gauche en 12 images (la rangée le suit), se lève ; la rangée
-      // file ensuite 22 images jusqu'au gros plan suivant
-      const swipes = EVENTS.mobile.swipe.map((b, k) => ({S: B(b), R: B(b) + 12, E: B(b) + 34, x0: row.stops[k], x1: row.stops[k + 1]}));
+      // chaque glissé : le doigt se pose et tire 110 px vers la gauche en 12 images, en accélérant (la rangée le suit) ; il
+      // se lève en pleine vitesse, et la rangée file sur sa lancée en ralentissant jusqu'au gros plan suivant. La vitesse
+      // au lever est la même des deux côtés (2 × 110 / 12 px par image) : le glissé ne marque aucun temps d'arrêt
+      const DRAG = 110;
+      const swipes = EVENTS.mobile.swipe.map((b, k) => {
+        const x0 = row.stops[k];
+        const x1 = row.stops[k + 1];
+        const M = Math.round((2 * (x1 - x0 - DRAG) * 12) / (2 * DRAG));
+        return {S: B(b), R: B(b) + 12, E: B(b) + 12 + M, M, x0, x1};
+      });
       const fy = row.top + row.w * 0.5;
       // le gros plan touché : le troisième, à sa place après le deuxième glissé
       const tap = {x: row.pad + row.w * 0.5, y: fy};
@@ -518,15 +525,17 @@ const mobile = [
       if (!sw) return info;
       const k = ctx.swipes.indexOf(sw);
       const drag = 110;
-      // la rangée : 1:1 avec le doigt pendant l'appui, puis elle file en ralentissant jusqu'à l'arrêt suivant
+      // la rangée : 1:1 avec le doigt pendant l'appui (qui accélère : u²), puis elle file sur sa lancée et ralentit
+      // jusqu'à l'arrêt suivant (1 − (1 − u)²), à la même vitesse au moment du lever
+      const u = (i - sw.S) / (sw.R - sw.S);
       let x;
-      if (i <= sw.R) x = sw.x0 + drag * easeInOut((i - sw.S) / (sw.R - sw.S));
-      else x = sw.x0 + drag + (sw.x1 - sw.x0 - drag) * easeOut((i - sw.R) / (sw.E - sw.R));
+      if (i <= sw.R) x = sw.x0 + drag * u * u;
+      else x = sw.x0 + drag + (sw.x1 - sw.x0 - drag) * (1 - Math.pow(1 - Math.min(1, (i - sw.R) / sw.M), 2));
       await page.evaluate((x) => (document.querySelector('.swatches').scrollLeft = x), Math.round(x));
       if (i > sw.R) return info;
-      const fx = 300 - drag * easeInOut((i - sw.S) / (sw.R - sw.S));
+      const fx = 300 - drag * u * u;
       const name = k === 0 ? '' : String(k + 1);
-      return {mouse: {x: fx, y: ctx.fy + 4 * ((i - sw.S) / (sw.R - sw.S))}, mark: i === sw.S ? `hold${name}` : i === sw.R ? `release${name}` : undefined};
+      return {mouse: {x: fx, y: ctx.fy + 4 * u}, mark: i === sw.S ? `hold${name}` : i === sw.R ? `release${name}` : undefined};
     },
     watch: async (page) => ({...(await viewerState(page)), x: await page.evaluate(() => document.querySelector('.swatches').scrollLeft)}),
   },
