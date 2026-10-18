@@ -49,10 +49,12 @@ export const Lights: React.FC<{len: number; on?: boolean; off?: boolean; childre
  * Une ligne qui monte de son masque, comme les titres du site : le texte part de 108 % de sa hauteur sous la ligne
  * (`p` de 0 à 1, à mener sur la courbe --ease du site). Le masque déborde un peu en haut et en bas de la ligne, pour ne
  * couper ni les capitales ni les jambages une fois la ligne en place.
+ * La ligne est un calque à part (will-change), déplacé au sous-pixel : sans lui, le texte se recale au pixel entier et,
+ * dans la fin lente de la courbe (moins d'un pixel par image), n'avance plus qu'une image sur deux.
  */
 export const Rise: React.FC<{p: number; style?: React.CSSProperties; children: React.ReactNode}> = ({p, style, children}) => (
   <div style={{overflow: 'hidden', paddingTop: '0.06em', marginTop: '-0.06em', paddingBottom: '0.1em', marginBottom: '-0.1em', ...style}}>
-    <div style={{transform: `translate3d(0, ${((1 - p) * 108).toFixed(3)}%, 0)`}}>{children}</div>
+    <div style={{transform: `translate3d(0, ${((1 - p) * 108).toFixed(3)}%, 0) rotate(0.0001deg)`, willChange: 'transform'}}>{children}</div>
   </div>
 );
 
@@ -92,7 +94,7 @@ export const Caption: React.FC<{
           ))}
         </div>
         <div style={{...BODY, marginTop: 24, fontSize: 24, lineHeight: 1.5, color: C.vein, opacity: textIn}}>{text}</div>
-        <div style={{position: 'absolute', inset: 0, background: C.stage, transformOrigin: '50% 0', transform: `scaleY(${cover.toFixed(4)})`}} />
+        <div style={{position: 'absolute', inset: 0, background: C.stage, transformOrigin: '50% 0', transform: `scaleY(${cover.toFixed(4)})`, willChange: 'transform'}} />
       </div>
     </div>
   );
