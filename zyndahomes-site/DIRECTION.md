@@ -55,7 +55,8 @@ golfe reste dans les photos.
 ## Typographie
 
 - **Montagu Slab** (Florian Karsten, OFL), variable en graisse et en taille optique. Une égyptienne contemporaine,
-  claire et large : elle répond au lettrage à empattements carrés du mot « ZYNDA » de leur logo, sans le copier. Titres,
+  claire et large ; en grande taille optique, ses pleins et déliés sont très contrastés et ses empattements très fins :
+  elle s'accorde au mot « ZYNDA » de leur logo (un didone gras) sans le copier ni lui faire concurrence. Titres,
   phrase d'accueil, dates du cadran, citations des clients, noms des quartiers. Graisse 250 en très grand, 300 à 400
   en moyen ; la taille optique suit la taille (`font-optical-sizing: auto`). Casse de phrase, interlignage serré
   (0,98 à 1,05), approche légèrement resserrée en grand (−0,02 em).
