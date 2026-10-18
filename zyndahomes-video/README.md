@@ -78,6 +78,11 @@ Mêmes règles que pour les vidéos précédentes :
   plan suivant en ralentissant (22 images) ; son aimantation est suspendue pendant le plan, et chaque glissé s'arrête
   exactement là où elle l'aurait arrêté. Le doigt est redessiné par-dessus.
 - **Au téléphone, la page est filmée en 390 × 797** (l'écran moins la barre d'état) : rien n'est coupé en bas.
+- **Les lignes qui montent** (les titres des légendes, la fin) sont chacune un calque déplacé au sous-pixel : une rotation
+  infime (0,0001°) empêche Chrome de les recaler au pixel entier, ce qui, dans la fin lente de la courbe, les faisait
+  avancer une image sur deux.
+- **Le bandeau de la fin** s'ouvre par deux volets du blanc de la page, déplacés au sous-pixel : une découpe (clip-path)
+  avançait au pixel entier.
 
 **Contrôlé sur le rendu** (`tools/motion.py`, `tools/curves.py` et `tools/fades.py`) : voir « Les mesures » plus bas.
 
@@ -138,3 +143,28 @@ noir.
 Projet Remotion 4.0.532 ; `node_modules` est un lien vers celui de `../enhance-video` (mêmes versions).
 
 ## Les mesures
+
+Sur le rendu final (`renders/presentation-zynda-16x9.mp4`), avec `tools/motion.py`, `tools/curves.py`, `tools/fades.py` et
+ffmpeg :
+- **La présentation** : 70,8 s, 4 248 images, 1920 × 1080 à 60 i/s ; 26,1 Mo (la version d'envoi en est une copie, sans
+  réencodage) ; la version muette, 24,4 Mo.
+- **Le son** : −14,0 LUFS, plage de 3,0 LU, crête à −2,7 dBFS.
+- **Les fondus** : la luminosité moyenne change de 30,5 niveaux au plus d'une image à l'autre (sur 255), sans marche ;
+  chaque coupe passe par deux images noires (trois à l'entrée des téléphones).
+- **La mise de côté du navigateur** suit sa courbe à 0,38 px près sur son bord gauche (0,15 px en moyenne) et à
+  0,56 px près sur son bord haut (0,14 px en moyenne), sans arrondi au pixel.
+- **Les trois téléphones** montent sur leur courbe à 0,32 px près (0,05 px en moyenne au plus), puis ne bougent plus
+  (0,15 px d'écart au plus).
+- **L'année** : le site défile par pas entiers, 1 à 5 px puis 6 px par image pendant 531 images (relevés dans la page) ;
+  à l'écran, de 4,96 à 5,01 px par image, mesurés sur le bord du cadran avant qu'il s'épingle ; épinglé, il ne bouge plus
+  (de 363,33 à 363,42 px).
+- **Les gros plans au téléphone** : la rangée accélère jusqu'à 18 px par image au lever du doigt, puis ralentit sur sa
+  lancée (17, 16, 15… 2 px), sans temps d'arrêt. Le premier contrôle avait relevé un arrêt au lever : corrigé.
+- **La ligne qui monte, à la fin** : une fois entière, elle avance à chaque image, de 0,57 px puis de moins en moins ; d'un
+  pas au suivant, l'écart ne dépasse pas 0,07 px. Le premier contrôle l'avait vue avancer d'un pixel une image sur deux :
+  corrigé (voir plus haut).
+- **Aucune image doublée ni sautée pendant un mouvement.** Les seules alertes du contrôle tombent :
+  - sur les coupes, où deux images noires se suivent ;
+  - au début et à la fin d'un fondu (une image immobile à côté d'une image qui bouge) ;
+  - sur les changements instantanés du site : la visionneuse qui s'ouvre et se referme, le menu du téléphone qui s'ouvre
+    et se ferme, la visionneuse du téléphone.
