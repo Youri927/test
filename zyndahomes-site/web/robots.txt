@@ -1,0 +1,5 @@
+# Zynda Custom Homes & Remodeling : tout le site est public, pour les moteurs comme pour les assistants
+User-agent: *
+Allow: /
+
+Sitemap: https://www.zyndahomes.com/sitemap.xml

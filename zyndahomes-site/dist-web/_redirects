@@ -1,0 +1,16 @@
+# Les anciennes pages de zyndahomes.com (Squarespace) vers la bonne partie de la nouvelle page
+
+/home                          /            301
+/naples-remodeling-services    /#services   301
+/whatsetsusapart               /#apart      301
+/ourofficeteam                 /#about      301
+/join-our-team                 /#about      301
+/areas-we-serve                /#areas      301
+/contactus                     /#contact    301
+
+# Le blog (42 articles, 337 pages de mots-clés et de catégories) : si les articles ne sont pas repris, ils mènent à
+# l'année (la plupart parlent des rénovations d'été). Si le blog est gardé ou migré, retirer ces quatre lignes.
+/blog/tag/*                    /#year       301
+/blog/category/*               /#year       301
+/blog/*                        /#year       301
+/blog                          /#year       301

@@ -38,13 +38,8 @@ const symbols =
 const use = (k) => `<svg class="${k}" viewBox="${vb(k)}" aria-hidden="true" focusable="false"><use href="#z-${k}"/></svg>`;
 const logoTop = use('emblem') + use('word');
 const logoFoot = use('emblem') + `<span class="lockup">${use('word')}${use('line')}</span>`;
-// l'onglet : l'emblème blanc sur noir
-const E = logo.emblem;
-const favicon = encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-E.w * 0.12} ${-E.h * 0.12} ${E.w * 1.24} ${E.h * 1.24}">` +
-    `<rect x="${-E.w * 0.12}" y="${-E.h * 0.12}" width="${E.w * 1.24}" height="${E.h * 1.24}" rx="${E.w * 0.2}" fill="#000"/>` +
-    `<path d="${E.d}" fill="#fff" fill-rule="evenodd"/></svg>`,
-);
+// l'onglet : l'emblème blanc sur noir, en PNG de 64 px (tools/icons.mjs), intégré : 3 Ko au lieu du tracé entier
+const favicon = `data:image/png;base64,${b64('./web/favicon.png')}`;
 
 /* ——— le cadran de l'année : 365 jours, le 1er janvier en haut ———
    La saison des condos, du 1er mai au 1er octobre, en arc couleur d'eau ; le reste de l'année en pointillé. Le
@@ -167,7 +162,21 @@ const tag = (mode) => (m) => {
 };
 const photos = (html, mode) => html.replace(/<(img|source)\b[^>]*>/g, tag(mode));
 
-const css = read('./src/styles.css');
+const minCss = (c) =>
+  c
+    .split(/("(?:[^"\\]|\\.)*")/)
+    .map((part, i) =>
+      i % 2
+        ? part
+        : part
+            .replace(/\/\*[\s\S]*?\*\//g, '')
+            .replace(/\s+/g, ' ')
+            .replace(/\s*([{};,>])\s*/g, '$1')
+            .replace(/;}/g, '}'),
+    )
+    .join('')
+    .trim();
+const css = minCss(read('./src/styles.css'));
 const js = [read('./vendor/lenis.min.js'), read('./src/main.js')].join('\n;\n').replace(/<\/script/gi, '<\\/script');
 
 /* ——— le fichier unique ——— */
@@ -187,6 +196,7 @@ for (const f of FONTS) copyFileSync(here(`./vendor/fonts/${f.file}`), web(`asset
 const pageWeb = photos(src, 'web')
   .replace('<!--STYLES-->', () =>
     [
+      `<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">`,
       `<link rel="preload" as="font" type="font/woff2" href="assets/fonts/MontaguSlab.woff2" crossorigin>`,
       `<link rel="preload" as="font" type="font/woff2" href="assets/fonts/RedditSans.woff2" crossorigin>`,
       `<style>\n${fontCss((f) => `assets/fonts/${f}`)}\n${css}\n</style>`,
@@ -198,5 +208,5 @@ for (const n of used) copyFileSync(here(`./src/img/${n}.avif`), web(`assets/img/
 writeFileSync(web('index.html'), pageWeb);
 // robots.txt, sitemap.xml, llms.txt, en-têtes, redirections des anciennes pages, image de partage et logo
 for (const f of ['_headers', '_redirects', 'vercel.json', 'robots.txt', 'sitemap.xml', 'llms.txt']) if (existsSync(here(`./web/${f}`))) copyFileSync(here(`./web/${f}`), web(f));
-for (const f of ['og.jpg', 'logo.png']) if (existsSync(here(`./web/${f}`))) copyFileSync(here(`./web/${f}`), web(`assets/${f}`));
+for (const f of ['og.jpg', 'logo.png', 'apple-touch-icon.png']) if (existsSync(here(`./web/${f}`))) copyFileSync(here(`./web/${f}`), web(`assets/${f}`));
 console.log(`dist-web/index.html : ${(Buffer.byteLength(pageWeb) / 1024).toFixed(0)} Ko, ${used.size} fichiers de photos`);

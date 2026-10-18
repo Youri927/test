@@ -100,10 +100,11 @@
     if (innerWidth >= 1100) closeMenu();
   });
 
-  /* ——— l'ouverture : quand les polices sont là (ou au bout de 1,2 s) ——— */
+  /* ——— l'ouverture : quand les polices sont là (ou au bout de 0,7 s) ——— */
   const hero = $('[data-hero]');
   const fonts = document.fonts ? document.fonts.ready : Promise.resolve();
-  const ready = Promise.race([fonts, new Promise((r) => setTimeout(r, 1200))]);
+  // les polices de secours ont la même chasse : on n'attend pas plus de 0,7 s les vraies
+  const ready = Promise.race([fonts, new Promise((r) => setTimeout(r, 700))]);
   if (still.matches || window.scrollY > innerHeight * 0.6) hero.classList.add('is-in');
   else ready.then(() => requestAnimationFrame(() => hero.classList.add('is-in')));
 
@@ -120,7 +121,8 @@
       if (s.offsetTop !== y) (y = s.offsetTop), lines.push([]);
       lines[lines.length - 1].push(s.textContent);
     }
-    el.innerHTML = lines.map((l, i) => `<span class="mask"><span style="transition-delay:${i * 90}ms">${esc(l.join(' '))}</span></span>`).join('');
+    // une espace entre les lignes : le texte lu reste le même pendant l'animation
+    el.innerHTML = lines.map((l, i) => `<span class="mask"><span style="transition-delay:${i * 90}ms">${esc(l.join(' '))}</span></span>`).join(' ');
   };
   const unsplit = (el) => {
     el.textContent = el.dataset.text;

@@ -1,0 +1,22 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    {"source": "/home", "destination": "/", "permanent": true},
+    {"source": "/naples-remodeling-services", "destination": "/#services", "permanent": true},
+    {"source": "/whatsetsusapart", "destination": "/#apart", "permanent": true},
+    {"source": "/ourofficeteam", "destination": "/#about", "permanent": true},
+    {"source": "/join-our-team", "destination": "/#about", "permanent": true},
+    {"source": "/areas-we-serve", "destination": "/#areas", "permanent": true},
+    {"source": "/contactus", "destination": "/#contact", "permanent": true},
+    {"source": "/blog", "destination": "/#year", "permanent": true},
+    {"source": "/blog/:path*", "destination": "/#year", "permanent": true}
+  ],
+  "headers": [
+    {"source": "/(.*)", "headers": [
+      {"key": "X-Robots-Tag", "value": "noindex, nofollow"},
+      {"key": "X-Content-Type-Options", "value": "nosniff"},
+      {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}
+    ]},
+    {"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=604800"}]}
+  ]
+}

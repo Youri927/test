@@ -30,14 +30,15 @@ def trace(path, box, turd=40):
     # potracer prend l'encre à False : on lui passe le négatif
     curves = potrace.Bitmap(~ink).trace(turdsize=turd * S * S, turnpolicy=potrace.POTRACE_TURNPOLICY_MINORITY,
                                        alphamax=1.1, opticurve=True, opttolerance=0.4)
-    f = lambda p: f'{(p.x - x0) / S:.1f} {(p.y - y0) / S:.1f}'
+    # au pixel du fichier source : l'emblème fait 1240 unités, un pixel d'écran en vaut 10 à 30, l'arrondi ne se voit pas
+    f = lambda p: f'{(p.x - x0) / S:.0f} {(p.y - y0) / S:.0f}'
     d = []
     for c in curves:
         d.append('M' + f(c.start_point))
         for seg in c.segments:
             d.append(f'L{f(seg.c)}L{f(seg.end_point)}' if seg.is_corner else f'C{f(seg.c1)} {f(seg.c2)} {f(seg.end_point)}')
         d.append('Z')
-    d = ''.join(d).replace('.0 ', ' ').replace('.0L', 'L').replace('.0C', 'C').replace('.0Z', 'Z')
+    d = ''.join(d)
     w, h = (x1 - x0) / S, (y1 - y0) / S
     print(f'{Path(path).name[:24]:<24} {w:.0f}×{h:.0f}  {len(curves)} contours  {len(d) // 1024} Ko')
     return {'w': round(w, 1), 'h': round(h, 1), 'd': d}
