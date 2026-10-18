@@ -1,0 +1,234 @@
+// Capture image par image du nouveau site de Florida South Construction, en temps simulé.
+// L'horloge de la page (timers, requestAnimationFrame, Date, performance) est figée par Playwright et avancée
+// d'exactement 1/fps entre deux images ; les animations natives (WAAPI) et CSS sont recalées sur ce même temps.
+// L'ouverture (les lignes de la liste qui se barrent, « Consider it done. » qui s'écrit), les cadres qui s'ouvrent au
+// défilement, les avis qui se lisent mot à mot, la visionneuse qui grandit depuis sa vignette et Lenis tournent donc sur
+// ce temps simulé : des animations fluides et exactes, quelle que soit la durée réelle d'une capture d'écran.
+import {spawn} from 'node:child_process';
+import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'node:fs';
+import {dirname, resolve} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {createRequire} from 'node:module';
+
+const require = createRequire(import.meta.url);
+const {chromium} = require(process.env.PLAYWRIGHT_MODULE || '/opt/node-tools/node_modules/playwright');
+
+const here = dirname(fileURLToPath(import.meta.url));
+export const SITE = resolve(here, '../../floridasouth-site/dist/index.html');
+export const OUT = resolve(here, '../public/site');
+
+// jeudi 15 octobre 2026, 10 h à Naples (heure de l'Est, UTC−4) ; le site n'affiche rien qui dépende de l'heure
+const T0 = Date.parse('2026-10-15T10:00:00-04:00');
+
+// Injecté avant les scripts du site
+const INIT = () => {
+  // Hasard reproductible : même rendu à chaque capture
+  let seed = 0x2008;
+  Math.random = () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  // Animations et transitions : recalées sur le temps simulé. Une animation part de 0 à la première image qui la voit.
+  // Arrivée au bout, elle se termine pour de bon : ce qui attend sa fin (la visionneuse qui se referme quand la photo est
+  // revenue à sa place) suit, comme dans un vrai navigateur.
+  window.__seek = (vt) => {
+    for (const a of document.getAnimations()) {
+      if (a.__t0 === undefined) a.__t0 = vt;
+      a.pause();
+      const t = vt - a.__t0;
+      a.currentTime = t;
+      const end = a.effect ? a.effect.getComputedTiming().endTime : 0;
+      if (!a.__done && Number.isFinite(end) && t >= end) {
+        a.__done = true;
+        a.finish();
+      }
+    }
+  };
+};
+
+/**
+ * requestAnimationFrame à l'image près. L'horloge simulée de Playwright cadence ses rappels sur une grille de 16 ms, qui
+ * glisse d'une image toutes les 24 images à 60 i/s : le défilement amorti de Lenis (vers la demande prête, ou après un
+ * lien du menu) ferait alors un pas double. Une fois la page chargée, ses rappels sont mis en file et joués une fois par
+ * image, avec l'heure exacte de l'image (voir tick).
+ */
+const OWN_RAF = () => {
+  let queue = [];
+  let id = 0;
+  // l'heure de chaque image au millième près (1000/60 ms d'écart), pas arrondie à la milliseconde comme l'horloge :
+  // le défilement amorti avance exactement d'autant à chaque image
+  const base = performance.now();
+  let n = 0;
+  window.requestAnimationFrame = (cb) => (queue.push({cb, id: ++id}), id);
+  window.cancelAnimationFrame = (k) => (queue = queue.filter((q) => q.id !== k));
+  window.__raf = () => {
+    const now = base + (++n * 1000) / 60;
+    const q = queue;
+    queue = [];
+    for (const {cb} of q) cb(now);
+  };
+};
+
+/** Ouvre le site dans un Chromium à l'horloge figée */
+export async function openSite({width, height, dsf = 2, mobile = false, query = ''}) {
+  // Rendu processeur : l'émulateur graphique du conteneur laisse des bandes dupliquées sur les grandes images
+  const browser = await chromium.launch({args: ['--hide-scrollbars', '--force-color-profile=srgb', '--disable-gpu']});
+  const context = await browser.newContext({
+    viewport: {width, height},
+    deviceScaleFactor: dsf,
+    isMobile: mobile,
+    hasTouch: mobile,
+    reducedMotion: 'no-preference',
+    colorScheme: 'light',
+    locale: 'en-US',
+  });
+  await context.addInitScript(INIT);
+  await context.clock.install({time: T0});
+  await context.clock.pauseAt(T0 + 1);
+  const page = await context.newPage();
+  await page.goto('file://' + SITE + query, {waitUntil: 'load'});
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(OWN_RAF);
+  const cdp = await context.newCDPSession(page);
+  return {browser, context, page, cdp, width, height, dsf};
+}
+
+/** Attend (en temps réel, côté Node : l'horloge de la page est figée) qu'une condition soit vraie dans la page */
+export async function until(page, fn, arg, ms = 10000) {
+  for (let k = 0; k < ms / 20; k++) {
+    if (await page.evaluate(fn, arg)) return true;
+    await new Promise((r) => setTimeout(r, 20));
+  }
+  throw new Error('attente trop longue : ' + fn.toString());
+}
+
+/** Position (px document) du haut d'un élément */
+export const top = (page, sel) => page.evaluate((sel) => document.querySelector(sel).getBoundingClientRect().top + window.scrollY, sel);
+
+// Défilement instantané, puis un événement scroll tout de suite : Lenis et les cadres se mettent à jour dans la même
+// image (l'événement natif n'arrive qu'au rendu suivant). Chrome arrondit le défilement au pixel CSS entier : les plans
+// défilent donc à un nombre entier de pixels par image, pour des pas parfaitement réguliers (pas de saccade à l'écran).
+export const scrollTo = (page, y) =>
+  page.evaluate((y) => {
+    if (Math.abs(window.scrollY - y) < 0.5) return;
+    window.scrollTo({top: y, behavior: 'instant'});
+    window.dispatchEvent(new Event('scroll'));
+  }, y);
+
+/** Avance le temps simulé (horloge de la page + animations) */
+export async function tick(page, ms) {
+  if (ms > 0) await page.clock.runFor(ms);
+  await page.evaluate((ms) => {
+    window.__vt = (window.__vt || 0) + ms;
+    if (ms > 0) window.__raf();
+    window.__seek(window.__vt);
+  }, ms);
+}
+
+/** Avance le temps sans filmer (mise en place d'un plan), par pas de 1/60 s */
+export async function settle(page, ms) {
+  let done = 0;
+  for (let i = 1; done < ms; i++) {
+    const t = Math.min(ms, Math.round((i * 1000) / 60));
+    await tick(page, t - done);
+    done = t;
+  }
+}
+
+/**
+ * Filme un plan : à chaque image, `step(i, tMs)` règle défilement / souris / clics,
+ * puis le temps avance d'1/fps et l'image est capturée.
+ * `step` peut renvoyer {mouse, click, mark, caret} : la souris (ou le doigt), un clic, un repère nommé, et le point
+ * d'insertion du texte (dessiné par le montage : celui du navigateur clignote en temps réel, pas en temps simulé).
+ */
+export async function record(site, {name, fps = 60, seconds, step, watch, probe = false, quality = 92}) {
+  const {page} = site;
+  mkdirSync(OUT, {recursive: true});
+  const out = resolve(OUT, `${name}.mp4`);
+  // relevé seul (probe) : mêmes gestes, même temps simulé, sans capture ni encodage ; les repères vont dans le JSON existant
+  if (probe) return survey(site, {name, fps, seconds, step, watch});
+  const ff = spawn('ffmpeg', [
+    '-y', '-loglevel', 'error',
+    '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'mjpeg', '-i', '-',
+    '-c:v', 'libx264', '-preset', 'medium', '-crf', '14', '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+    out,
+  ], {stdio: ['pipe', 'inherit', 'inherit']});
+  const done = new Promise((ok, ko) => ff.on('close', (c) => (c === 0 ? ok() : ko(new Error('ffmpeg ' + c)))));
+  const n = Math.round(seconds * fps);
+  const meta = {name, fps, frames: n, width: site.width, height: site.height, mouse: [], clicks: [], caret: [], marks: {}, values: {}};
+  let last = 0;
+  const t0 = Date.now();
+  for (let i = 0; i < n; i++) {
+    const t = Math.round((i * 1000) / fps);
+    const info = (await step(i, t)) || {};
+    keep(meta, i, info);
+    await tick(page, t - last);
+    last = t;
+    if (watch) note(meta, i, await watch(page));
+    if (info.after) keep(meta, i, (await info.after()) || {});
+    // clip.scale = densité de pixels : sans lui, la capture sort en 1×, quel que soit l'écran émulé.
+    // Le clip est en coordonnées de page : on le cale sur la position de défilement.
+    const {cssLayoutViewport: vp} = await site.cdp.send('Page.getLayoutMetrics');
+    const clip = {x: vp.pageX, y: vp.pageY, width: site.width, height: site.height, scale: site.dsf};
+    const {data} = await site.cdp.send('Page.captureScreenshot', {format: 'jpeg', quality, optimizeForSpeed: true, clip});
+    const buf = Buffer.from(data, 'base64');
+    if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));
+    if (i % 60 === 0) process.stdout.write(`  ${name} ${i}/${n} (${((Date.now() - t0) / 1000).toFixed(0)} s)\n`);
+  }
+  ff.stdin.end();
+  await done;
+  writeFileSync(resolve(OUT, `${name}.json`), JSON.stringify(meta));
+  console.log(`✓ ${name}.mp4  ${n} images, ${((Date.now() - t0) / 1000).toFixed(0)} s  repères ${JSON.stringify(meta.marks)}`);
+  return meta;
+}
+
+/** Ce que le plan dit de l'image i : la souris, un clic, un repère, le point d'insertion */
+function keep(meta, i, info) {
+  if (info.mouse) meta.mouse[i] = info.mouse;
+  if (info.click) meta.clicks.push(i);
+  if (info.mark && meta.marks[info.mark] === undefined) meta.marks[info.mark] = i;
+  if (info.caret) meta.caret[i] = info.caret;
+}
+
+/**
+ * État de la page relevé après chaque image (`watch` renvoie {clé: valeur}) :
+ * un booléen donne un repère à l'image où il devient vrai, un nombre est gardé image par image.
+ */
+function note(meta, i, state) {
+  for (const [k, v] of Object.entries(state || {})) {
+    if (typeof v === 'number') (meta.values[k] ||= [])[i] = Math.round(v * 1000) / 1000;
+    else if (v && meta.marks[k] === undefined) meta.marks[k] = i;
+  }
+}
+
+async function survey(site, {name, fps, seconds, step, watch}) {
+  const {page} = site;
+  const file = resolve(OUT, `${name}.json`);
+  const old = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : null;
+  const meta = {name, fps, frames: Math.round(seconds * fps), width: site.width, height: site.height, mouse: [], clicks: [], caret: [], marks: {}, values: {}};
+  const n = meta.frames;
+  let last = 0;
+  for (let i = 0; i < n; i++) {
+    const t = Math.round((i * 1000) / fps);
+    const info = (await step(i, t)) || {};
+    keep(meta, i, info);
+    await tick(page, t - last);
+    last = t;
+    if (watch) note(meta, i, await watch(page));
+    if (info.after) keep(meta, i, (await info.after()) || {});
+  }
+  // le relevé ne remplace pas un plan déjà filmé avec d'autres gestes : il le signale
+  if (old && old.frames !== meta.frames) console.log(`  ${name} : le plan filmé a ${old.frames} images, le relevé ${meta.frames} — à refilmer`);
+  writeFileSync(file, JSON.stringify(meta));
+  console.log(`✓ ${name}.json  repères ${JSON.stringify(meta.marks)}`);
+  return meta;
+}
+
+// Courbes utiles pour écrire les plans
+export const clamp01 = (v) => Math.max(0, Math.min(1, v));
+export const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+export const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+export const sine = (t) => -(Math.cos(Math.PI * t) - 1) / 2;
