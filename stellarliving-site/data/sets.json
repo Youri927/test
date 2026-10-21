@@ -1,0 +1,696 @@
+{
+ "bw25": [
+  {
+   "name": "bw25-01",
+   "shot": "2025:11:03 10:38:38",
+   "caption": "Kitchen"
+  },
+  {
+   "name": "bw25-02",
+   "shot": "2025:11:03 10:39:09",
+   "caption": "Kitchen"
+  },
+  {
+   "name": "bw25-03",
+   "shot": "2025:11:03 10:39:14",
+   "caption": "Breakfast bay"
+  },
+  {
+   "name": "bw25-04",
+   "shot": "2025:11:03 10:40:53",
+   "caption": "Refrigerator and wall ovens"
+  },
+  {
+   "name": "bw25-05",
+   "shot": "2025:11:03 10:40:59",
+   "caption": "Kitchen, toward the windows"
+  },
+  {
+   "name": "bw25-06",
+   "shot": "2025:11:03 10:41:04",
+   "caption": "Kitchen"
+  },
+  {
+   "name": "bw25-07",
+   "shot": "2025:11:03 10:41:08",
+   "caption": "Tall cabinets"
+  },
+  {
+   "name": "bw25-08",
+   "shot": "2025:11:03 10:41:21",
+   "caption": "Paneled refrigerator"
+  },
+  {
+   "name": "bw25-09",
+   "shot": "2025:11:03 10:41:27",
+   "caption": "Cooktop and hood cabinet"
+  },
+  {
+   "name": "bw25-10",
+   "shot": "2025:11:03 10:41:36",
+   "caption": "Cooktop wall"
+  },
+  {
+   "name": "bw25-11",
+   "shot": "2025:11:03 10:41:53",
+   "caption": "Appliance garage"
+  },
+  {
+   "name": "bw25-12",
+   "shot": "2025:11:03 10:43:02",
+   "caption": "Island sink"
+  },
+  {
+   "name": "bw25-13",
+   "shot": "2025:11:03 10:43:14",
+   "caption": "Peninsula"
+  },
+  {
+   "name": "bw25-14",
+   "shot": "2025:11:03 10:43:16",
+   "caption": "Front door"
+  },
+  {
+   "name": "bw25-15",
+   "shot": "2025:11:03 10:43:50",
+   "caption": "Lanai"
+  },
+  {
+   "name": "bw25-16",
+   "shot": "2025:11:03 10:44:26",
+   "caption": "Bath and closet doors"
+  },
+  {
+   "name": "bw25-17",
+   "shot": "2025:11:03 10:44:34",
+   "caption": "Linen cabinet"
+  },
+  {
+   "name": "bw25-18",
+   "shot": "2025:11:03 10:44:38",
+   "caption": "Vanity"
+  },
+  {
+   "name": "bw25-19",
+   "shot": "2025:11:03 10:44:46",
+   "caption": "Vanity and shower"
+  },
+  {
+   "name": "bw25-20",
+   "shot": "2025:11:03 10:44:52",
+   "caption": "Glass shower between two vanities"
+  },
+  {
+   "name": "bw25-21",
+   "shot": "2025:11:03 10:45:00",
+   "caption": "Shower floor"
+  },
+  {
+   "name": "bw25-22",
+   "shot": "2025:11:03 10:45:05",
+   "caption": "Shower niche and fixtures"
+  },
+  {
+   "name": "bw25-23",
+   "shot": "2025:11:03 10:45:26",
+   "caption": "Shower and vanities"
+  },
+  {
+   "name": "bw25-24",
+   "shot": "2025:11:03 10:45:35",
+   "caption": "Shower and vanities"
+  }
+ ],
+ "bw24": [
+  {
+   "name": "bw24-01",
+   "shot": "2024:11:01 09:02:00",
+   "caption": "Kitchen"
+  },
+  {
+   "name": "bw24-02",
+   "shot": "2024:11:01 09:02:04",
+   "caption": "Kitchen and refrigerator"
+  },
+  {
+   "name": "bw24-03",
+   "shot": "2024:11:01 09:02:16",
+   "caption": "Island"
+  },
+  {
+   "name": "bw24-04",
+   "shot": "2024:11:01 09:02:29",
+   "caption": "Island and wine refrigerator"
+  },
+  {
+   "name": "bw24-05",
+   "shot": "2024:11:01 09:02:47",
+   "caption": "Island seating"
+  },
+  {
+   "name": "bw24-06",
+   "shot": "2024:11:01 09:02:58",
+   "caption": "Kitchen, from the end of the island"
+  },
+  {
+   "name": "bw24-07",
+   "shot": "2024:11:01 09:03:15",
+   "caption": "Dining area"
+  },
+  {
+   "name": "bw24-08",
+   "shot": "2024:11:01 09:03:58",
+   "caption": "Laundry sink"
+  },
+  {
+   "name": "bw24-09",
+   "shot": "2024:11:01 09:04:30",
+   "caption": "Tub and shower"
+  },
+  {
+   "name": "bw24-10",
+   "shot": "2024:11:01 09:04:35",
+   "caption": "Vanity"
+  },
+  {
+   "name": "bw24-11",
+   "shot": "2024:11:01 09:04:41",
+   "caption": "Bath"
+  },
+  {
+   "name": "bw24-12",
+   "shot": "2024:11:01 09:05:58",
+   "caption": "Island and range"
+  },
+  {
+   "name": "bw24-13",
+   "shot": "2024:11:01 09:06:01",
+   "caption": "Island and range"
+  },
+  {
+   "name": "bw24-14",
+   "shot": "2024:11:01 09:06:07",
+   "caption": "Island and range"
+  }
+ ],
+ "bw15": [
+  {
+   "name": "bw15-01",
+   "shot": "2024:11:14 11:08:26",
+   "caption": "Powder room"
+  }
+ ],
+ "bwc": [
+  {
+   "name": "bwc-01",
+   "shot": "2024:12:18 13:28:02",
+   "caption": "Lounge"
+  },
+  {
+   "name": "bwc-02",
+   "shot": "2024:12:18 13:28:04",
+   "caption": "Lounge"
+  },
+  {
+   "name": "bwc-03",
+   "shot": "2024:12:18 13:28:19",
+   "caption": "Kitchen"
+  },
+  {
+   "name": "bwc-04",
+   "shot": "2024:12:18 13:28:26",
+   "caption": "Kitchen"
+  },
+  {
+   "name": "bwc-05",
+   "shot": "2024:12:18 13:28:30",
+   "caption": "Kitchen"
+  },
+  {
+   "name": "bwc-06",
+   "shot": "2024:12:18 13:28:36",
+   "caption": "Lounge, toward the pool"
+  },
+  {
+   "name": "bwc-07",
+   "shot": "2024:12:18 13:28:37",
+   "caption": "Lounge"
+  },
+  {
+   "name": "bwc-08",
+   "shot": "2024:12:18 13:28:40",
+   "caption": "Lounge, toward the pool"
+  },
+  {
+   "name": "bwc-09",
+   "shot": "2024:12:18 13:28:49",
+   "caption": "Lounge"
+  },
+  {
+   "name": "bwc-10",
+   "shot": "2024:12:18 13:28:51",
+   "caption": "Lounge"
+  },
+  {
+   "name": "bwc-11",
+   "shot": "2024:12:18 13:28:59",
+   "caption": "Dining room"
+  },
+  {
+   "name": "bwc-12",
+   "shot": "2024:12:18 13:29:04",
+   "caption": "Dining room"
+  },
+  {
+   "name": "bwc-13",
+   "shot": "2024:12:18 13:29:11",
+   "caption": "Dining room"
+  },
+  {
+   "name": "bwc-14",
+   "shot": "2024:12:18 13:29:18",
+   "caption": "Dining room"
+  },
+  {
+   "name": "bwc-15",
+   "shot": "2024:12:18 13:29:26",
+   "caption": "Dining room"
+  },
+  {
+   "name": "bwc-16",
+   "shot": "2024:12:18 13:29:28",
+   "caption": "Dining room"
+  }
+ ],
+ "bw22": [
+  {
+   "name": "bw22-01",
+   "shot": "2021:12:22 12:55:08",
+   "caption": "Shower and vanity"
+  },
+  {
+   "name": "bw22-02",
+   "shot": "2022:02:16 15:16:50",
+   "caption": "Bath with an angled glass shower"
+  },
+  {
+   "name": "bw22-03",
+   "shot": "2022:02:16 15:17:01",
+   "caption": "Bath"
+  },
+  {
+   "name": "bw22-04",
+   "shot": "2022:02:16 15:17:06",
+   "caption": "Vanity and toilet room"
+  },
+  {
+   "name": "bw22-05",
+   "shot": "2022:08:31 11:18:05",
+   "caption": "Kitchen and dining area"
+  },
+  {
+   "name": "bw22-06",
+   "shot": "2022:08:31 11:18:19",
+   "caption": "Bar under a glass block window"
+  },
+  {
+   "name": "bw22-07",
+   "shot": "2022:08:31 11:18:24",
+   "caption": "Kitchen and living room"
+  },
+  {
+   "name": "bw22-08",
+   "shot": "2022:08:31 11:18:31",
+   "caption": "Kitchen island"
+  },
+  {
+   "name": "bw22-09",
+   "shot": null,
+   "caption": "Kitchen"
+  }
+ ],
+ "bw7": [
+  {
+   "name": "bw7-01",
+   "shot": "2022:06:13 11:08:21",
+   "caption": "Kitchen"
+  },
+  {
+   "name": "bw7-02",
+   "shot": "2022:06:13 11:08:33",
+   "caption": "Kitchen sink under the window"
+  },
+  {
+   "name": "bw7-03",
+   "shot": "2022:06:13 11:09:24",
+   "caption": "Bar with a wine refrigerator"
+  },
+  {
+   "name": "bw7-04",
+   "shot": "2023:11:09 11:40:55",
+   "caption": "Glass shower"
+  },
+  {
+   "name": "bw7-05",
+   "shot": "2023:11:09 11:41:28",
+   "caption": "Vanity with a makeup counter"
+  },
+  {
+   "name": "bw7-06",
+   "shot": "2023:11:09 11:41:42",
+   "caption": "Vanity with a makeup counter"
+  },
+  {
+   "name": "bw7-07",
+   "shot": "2023:11:14 11:50:27",
+   "caption": "Dining room"
+  },
+  {
+   "name": "bw7-08",
+   "shot": "2023:11:14 11:52:08",
+   "caption": "Kitchen"
+  },
+  {
+   "name": "bw7-09",
+   "shot": "2023:11:14 11:52:53",
+   "caption": "Kitchen counter and stools"
+  },
+  {
+   "name": "bw7-10",
+   "shot": "2023:11:14 11:53:40",
+   "caption": "Second bath, vanity"
+  },
+  {
+   "name": "bw7-11",
+   "shot": "2023:11:14 11:54:03",
+   "caption": "Second bath, glass shower"
+  },
+  {
+   "name": "bw7-12",
+   "shot": null,
+   "caption": "Laundry room"
+  }
+ ],
+ "tr": [
+  {
+   "name": "tr-01",
+   "shot": "2022:10:20 13:23:59",
+   "caption": "Shower with a window over Naples"
+  },
+  {
+   "name": "tr-02",
+   "shot": "2022:10:20 13:24:33",
+   "caption": "Double vanity"
+  },
+  {
+   "name": "tr-03",
+   "shot": "2022:10:20 13:24:43",
+   "caption": "Primary bath"
+  },
+  {
+   "name": "tr-04",
+   "shot": "2022:10:20 13:25:00",
+   "caption": "Linen cabinets"
+  },
+  {
+   "name": "tr-05",
+   "shot": "2022:10:20 13:25:13",
+   "caption": "Makeup vanity and toilet room"
+  },
+  {
+   "name": "tr-06",
+   "shot": "2022:10:20 13:25:20",
+   "caption": "Shower window and bench"
+  },
+  {
+   "name": "tr-07",
+   "shot": "2022:10:20 13:26:09",
+   "caption": "Shower bench by the window"
+  },
+  {
+   "name": "tr-08",
+   "shot": "2022:10:20 13:26:23",
+   "caption": "Rain shower head"
+  },
+  {
+   "name": "tr-09",
+   "shot": "2022:10:20 13:26:50",
+   "caption": "Shower, from the entry"
+  }
+ ],
+ "hl": [
+  {
+   "name": "hl-01",
+   "shot": "2021:11:29 15:39:18",
+   "caption": "Kitchen island"
+  },
+  {
+   "name": "hl-02",
+   "shot": "2021:11:29 15:39:39",
+   "caption": "Kitchen and living room"
+  },
+  {
+   "name": "hl-03",
+   "shot": "2021:11:29 15:39:55",
+   "caption": "Kitchen, from the refrigerator"
+  },
+  {
+   "name": "hl-04",
+   "shot": "2021:11:29 15:40:01",
+   "caption": "Laundry"
+  },
+  {
+   "name": "hl-05",
+   "shot": "2021:11:29 15:40:15",
+   "caption": "Pantry cabinets"
+  },
+  {
+   "name": "hl-06",
+   "shot": "2021:11:29 15:40:36",
+   "caption": "Kitchen and living room"
+  },
+  {
+   "name": "hl-07",
+   "shot": "2021:11:29 15:41:11",
+   "caption": "Shower with a glass mosaic stripe"
+  },
+  {
+   "name": "hl-08",
+   "shot": "2021:11:29 15:41:25",
+   "caption": "Bedroom"
+  },
+  {
+   "name": "hl-09",
+   "shot": "2021:11:29 15:41:38",
+   "caption": "Vanity framed in glass mosaic"
+  },
+  {
+   "name": "hl-10",
+   "shot": "2021:11:29 15:41:48",
+   "caption": "Shower with a window"
+  },
+  {
+   "name": "hl-11",
+   "shot": "2021:11:29 15:41:58",
+   "caption": "Walk-in closet"
+  },
+  {
+   "name": "hl-12",
+   "shot": "2021:11:29 15:43:50",
+   "caption": "Island and dishwasher"
+  },
+  {
+   "name": "hl-13",
+   "shot": "2021:12:01 10:48:53",
+   "caption": "Mirror framed in glass mosaic"
+  }
+ ],
+ "gt": [
+  {
+   "name": "gt-01",
+   "shot": "2021:12:29 16:49:57",
+   "caption": "Kitchen island"
+  },
+  {
+   "name": "gt-02",
+   "shot": "2021:12:29 16:50:01",
+   "caption": "Kitchen, from the hall"
+  },
+  {
+   "name": "gt-03",
+   "shot": "2021:12:29 16:50:21",
+   "caption": "Kitchen between two columns"
+  },
+  {
+   "name": "gt-04",
+   "shot": "2021:12:29 16:50:39",
+   "caption": "Bath vanity"
+  },
+  {
+   "name": "gt-05",
+   "shot": "2021:12:29 16:50:45",
+   "caption": "Shower with a pebble floor"
+  },
+  {
+   "name": "gt-06",
+   "shot": "2021:12:29 16:51:05",
+   "caption": "Living room"
+  },
+  {
+   "name": "gt-07",
+   "shot": "2021:12:29 16:51:18",
+   "caption": "Shower and vanity"
+  },
+  {
+   "name": "gt-08",
+   "shot": "2021:12:29 16:52:11",
+   "caption": "Backsplash and cooktop"
+  }
+ ],
+ "im": [
+  {
+   "name": "im-01",
+   "shot": "2023:04:19 13:34:42",
+   "caption": "Walk-in shower"
+  },
+  {
+   "name": "im-02",
+   "shot": "2023:04:19 13:34:47",
+   "caption": "Frosted glass between the shower and the toilet"
+  },
+  {
+   "name": "im-03",
+   "shot": "2023:04:19 13:36:04",
+   "caption": "Shower, toward the door"
+  },
+  {
+   "name": "im-04",
+   "shot": "2023:04:19 13:36:08",
+   "caption": "Frosted glass panel, toward the door"
+  }
+ ],
+ "pi": [
+  {
+   "name": "pi-01",
+   "shot": "2023:03:02 15:15:50",
+   "caption": "Kitchen under the arch"
+  },
+  {
+   "name": "pi-02",
+   "shot": "2023:03:02 15:15:59",
+   "caption": "Kitchen island"
+  },
+  {
+   "name": "pi-03",
+   "shot": "2023:03:02 15:16:28",
+   "caption": "Kitchen"
+  },
+  {
+   "name": "pi-04",
+   "shot": "2023:03:02 15:16:41",
+   "caption": "Island and great room"
+  },
+  {
+   "name": "pi-05",
+   "shot": "2023:03:02 15:16:49",
+   "caption": "Island seating"
+  },
+  {
+   "name": "pi-06",
+   "shot": "2023:03:02 15:16:59",
+   "caption": "Great room"
+  },
+  {
+   "name": "pi-07",
+   "shot": "2023:03:02 15:17:04",
+   "caption": "Bar"
+  },
+  {
+   "name": "pi-08",
+   "shot": "2023:03:02 15:17:23",
+   "caption": "Bar, toward the great room"
+  },
+  {
+   "name": "pi-09",
+   "shot": "2023:03:02 15:17:46",
+   "caption": "Primary bath with a freestanding tub"
+  },
+  {
+   "name": "pi-10",
+   "shot": "2023:03:02 15:18:16",
+   "caption": "Walk-in shower"
+  },
+  {
+   "name": "pi-11",
+   "shot": "2023:03:02 15:18:25",
+   "caption": "Shower fixtures"
+  },
+  {
+   "name": "pi-12",
+   "shot": "2023:03:02 15:18:34",
+   "caption": "Tub and shower"
+  }
+ ],
+ "se": [
+  {
+   "name": "se-01",
+   "shot": "2017:12:19 10:07:28",
+   "caption": "Pool enclosure"
+  },
+  {
+   "name": "se-02",
+   "shot": "2022:04:12 11:04:33",
+   "caption": "Pool cage on the lake"
+  },
+  {
+   "name": "se-03",
+   "shot": "2022:04:12 11:04:58",
+   "caption": "Pool cage on the lake"
+  },
+  {
+   "name": "se-04",
+   "shot": "2024:05:08 08:46:29",
+   "caption": "Pool and spa cage on the lake"
+  },
+  {
+   "name": "se-05",
+   "shot": null,
+   "caption": "Rescreening a pool cage"
+  },
+  {
+   "name": "se-06",
+   "shot": null,
+   "caption": "Screen work on the cage roof"
+  },
+  {
+   "name": "se-07",
+   "shot": null,
+   "caption": "White pool cage"
+  },
+  {
+   "name": "se-08",
+   "shot": null,
+   "caption": "Pool and spa under a white cage"
+  },
+  {
+   "name": "se-09",
+   "shot": null,
+   "caption": "Screened lanai along the arches"
+  },
+  {
+   "name": "se-10",
+   "shot": null,
+   "caption": "Arched screen door"
+  },
+  {
+   "name": "se-11",
+   "shot": null,
+   "caption": "Screened lanais on a condo building"
+  },
+  {
+   "name": "se-12",
+   "shot": null,
+   "caption": "Screened lanais on a condo building"
+  }
+ ]
+}
