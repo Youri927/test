@@ -1,0 +1,26 @@
+# Les anciennes pages de stellarlivinghomes.com (Wix) vers la bonne partie de la nouvelle page
+
+/home                  /             301
+/about                 /#about       301
+/reviews               /#reviews     301
+/copy-of-reviews       /#reviews     301
+/contact-1             /#contact     301
+/screen-enclosures     /#services    301
+/projects              /#work        301
+/projects-1            /#work        301
+/projects-1/*          /#work        301
+/projects-old-hide     /#work        301
+/talis-park            /#work        301
+/talis-park-1          /#work        301
+/talis-park-2          /#work        301
+/talis-park-copy       /#work        301
+/copy-of-pelican-bay   /#work        301
+/instagram             https://www.instagram.com/stellar_living_homes/   301
+
+# Le blog (9 articles de mars 2023, sur les cages de piscine et la rénovation) : s'il n'est pas repris, il mène aux
+# prestations. S'il est gardé ou migré, retirer ces deux lignes.
+/post/*                /#services    301
+/blog                  /#services    301
+
+# Six anciennes pages portent le nom de familles clientes (« /<nom>-residence ») : leurs adresses ne sont pas recopiées
+# ici. Les ajouter sur ce modèle, vers /#work, ou mieux, demander leur retrait des moteurs (voir l'audit SEO).

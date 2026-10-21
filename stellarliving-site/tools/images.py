@@ -1,7 +1,7 @@
 """Export des photos du site en AVIF, jamais agrandies, avec leur date de prise de vue.
 
 Sources : les originaux des photos de leurs pages de projets, téléchargés depuis le CDN de Wix
-(static.wixstatic.com/media/<identifiant>) dans un dossier par page (g-pelican-bay_breakwater_815000202…), plus les
+(static.wixstatic.com/media/<identifiant>) dans un dossier par page (g-<communauté>_<immeuble>_<numéro de la page>), plus les
 couvertures de la liste des projets (cover/). On désigne une photo par le début de son identifiant (« 9035c29a »). Le
 tri (leurs photos, gardées ; les photos d'annonces immobilières à filigrane SWFLAMLS, écartées) est dans ANALYSE.md.
 

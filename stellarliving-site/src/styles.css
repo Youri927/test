@@ -159,7 +159,7 @@ address { font-style: normal; }
   }
   .menu {
     border-top: 1px solid var(--line); background: #fff;
-    padding: 12px var(--side) 28px; max-height: calc(100svh - var(--top-h)); overflow: auto;
+    padding: 12px var(--side) 28px; height: calc(100svh - var(--top-h)); overflow: auto;
   }
   .menu a {
     display: block; padding: 10px 0; text-decoration: none;
@@ -452,8 +452,14 @@ address { font-style: normal; }
 .foot__brand .word { height: 12px; width: auto; margin-top: 18px; }
 .foot__col { grid-column: 1 / -1; }
 .foot__col p + p { margin-top: 6px; }
-.foot a { color: #fff; text-decoration: none; border-bottom: 1px solid #47637c; }
-.foot a:hover { border-bottom-color: #fff; }
+.foot a { color: #fff; text-decoration: underline; text-decoration-color: #47637c; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.foot a:hover { text-decoration-color: #fff; }
+/* au doigt, le téléphone et l'e-mail du pied de page font 44 px de haut, comme les autres liens */
+@media (pointer: coarse) {
+  .foot__col p { padding: 10px 0; }
+  .foot__col p + p { margin-top: 0; }
+  .foot a { display: inline-block; padding: 10px 0; margin: -10px 0; }
+}
 .foot a:focus-visible { outline-color: var(--olive); }
 @media (min-width: 700px) {
   .foot__brand { grid-column: 1 / span 4; }

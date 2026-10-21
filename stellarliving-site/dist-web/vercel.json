@@ -1,0 +1,28 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    {"source": "/home", "destination": "/", "permanent": true},
+    {"source": "/about", "destination": "/#about", "permanent": true},
+    {"source": "/reviews", "destination": "/#reviews", "permanent": true},
+    {"source": "/copy-of-reviews", "destination": "/#reviews", "permanent": true},
+    {"source": "/contact-1", "destination": "/#contact", "permanent": true},
+    {"source": "/screen-enclosures", "destination": "/#services", "permanent": true},
+    {"source": "/projects", "destination": "/#work", "permanent": true},
+    {"source": "/projects-1", "destination": "/#work", "permanent": true},
+    {"source": "/projects-1/:path*", "destination": "/#work", "permanent": true},
+    {"source": "/projects-old-hide", "destination": "/#work", "permanent": true},
+    {"source": "/:page(talis-park|talis-park-1|talis-park-2|talis-park-copy|copy-of-pelican-bay)", "destination": "/#work", "permanent": true},
+    {"source": "/:page([a-z0-9-]+-residence)", "destination": "/#work", "permanent": true},
+    {"source": "/instagram", "destination": "https://www.instagram.com/stellar_living_homes/", "permanent": true},
+    {"source": "/post/:path*", "destination": "/#services", "permanent": true},
+    {"source": "/blog", "destination": "/#services", "permanent": true}
+  ],
+  "headers": [
+    {"source": "/(.*)", "headers": [
+      {"key": "X-Robots-Tag", "value": "noindex, nofollow"},
+      {"key": "X-Content-Type-Options", "value": "nosniff"},
+      {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}
+    ]},
+    {"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=604800"}]}
+  ]
+}

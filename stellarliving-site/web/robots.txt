@@ -1,0 +1,5 @@
+# Stellar Living Homes : tout le site est public, pour les moteurs comme pour les assistants
+User-agent: *
+Allow: /
+
+Sitemap: https://www.stellarlivinghomes.com/sitemap.xml

@@ -42,11 +42,11 @@ pages ; on n'en a lu qu'une toutes les deux à dix minutes, sans jamais contourn
 ### Les projets (16 pages, une par chantier)
 | Lieu (comme ils l'écrivent) | Photos |
 |---|---|
-| Pelican Bay, Breakwater, page « 815000202 » | 25 photos à eux, un condo entier, 3 novembre 2025 (plus une de mars 2026) |
-| Pelican Bay, Breakwater, page « 820000102 » | 14 photos à eux, cuisine, coin repas, salle de bain, 1er novembre 2024 |
-| Pelican Bay, Breakwater, page « 743000202 » | 11 photos, dont 9 à eux datées (Pixel 5) : deux salles de bain puis la cuisine et le bar, décembre 2021 à août 2022 |
-| Pelican Bay, Breakwater, page « 700000203 » | 26 photos, dont 25 à eux datées (Pixel 5 puis Pixel 7) : cuisine, bar, deux salles de bain, buanderie, juin 2022 à novembre 2023 |
-| Pelican Bay, Breakwater, page « 815000101 » | 25 photos d'annonce (SWFLAMLS) et une à eux : les toilettes d'invités, 14 novembre 2024 |
+| Pelican Bay, Breakwater, logement A | 25 photos à eux, un condo entier, 3 novembre 2025 (plus une de mars 2026) |
+| Pelican Bay, Breakwater, logement B | 14 photos à eux, cuisine, coin repas, salle de bain, 1er novembre 2024 |
+| Pelican Bay, Breakwater, logement C | 11 photos, dont 9 à eux datées (Pixel 5) : deux salles de bain puis la cuisine et le bar, décembre 2021 à août 2022 |
+| Pelican Bay, Breakwater, logement D | 26 photos, dont 25 à eux datées (Pixel 5 puis Pixel 7) : cuisine, bar, deux salles de bain, buanderie, juin 2022 à novembre 2023 |
+| Pelican Bay, Breakwater, logement E | 25 photos d'annonce (SWFLAMLS) et une à eux : les toilettes d'invités, 14 novembre 2024 |
 | Pelican Bay, Breakwater Clubhouse | 16 photos à eux, décembre 2024 |
 | Trieste, Bay Colony | 13 photos, dont 10 à eux datées (Pixel 5) : une salle de bain parentale avec vue sur Naples, 20 octobre 2022, de 13 h 23 à 13 h 26 |
 | Park Shore, Hidden Lakes | 17 photos, dont 16 à eux datées (Pixel 5) : un condo entier (cuisine, deux salles de bain, dressing), novembre et décembre 2021 |
@@ -56,7 +56,7 @@ pages ; on n'en a lu qu'une toutes les deux à dix minutes, sans jamais contourn
 | Imperial Golf Club, Prince | 20 photos d'annonce (SWFLAMLS) et quatre à eux : une douche et sa paroi de verre dépoli, avril 2023 |
 | Screen Enclosures | 16 photos, dont trois grandes (2022 et 2024) et des photos de pose |
 
-Les adresses de ces pages portent des numéros qui ressemblent à des numéros de logement (« /breakwater/815000202 ») ; le
+Les adresses de ces pages portent des numéros qui ressemblent à des numéros de logement (« /breakwater/<numéro> ») ; le
 plan du site liste aussi six pages au nom de familles clientes (« …-residence ») et des pages oubliées (« copy-of-reviews »,
 « projects-old-hide », « talis-park-copy »…). Le nouveau site ne reprend ni ces numéros, ni ces noms.
 
@@ -166,8 +166,8 @@ lucarne, deux pans olive, une ferme de charpente), le nom en capitales et « LLC
 - Le menu montre le numéro de licence comme un lien vers un PDF, mais rien ne permet de le vérifier sur le registre.
 
 **Le référencement** (détail dans l'audit SEO + GEO)
-- Pages de projets sans meta description, avec deux h1, des titres en double (« Pelican Bay | Stellar Living Homes »
-  cinq fois).
+- Pages de projets sans meta description ni image de partage, avec un h1 qui ne donne que le quartier (« Pelican Bay »)
+  et des titres en double (« Pelican Bay | Stellar Living Homes » six fois).
 - Le plan du site publie des pages oubliées et six pages au nom de familles clientes.
 - Image de partage : la photo d'annonce à filigrane.
 - Données structurées réduites à un LocalBusiness sans licence, sans avis, sans horaires.
