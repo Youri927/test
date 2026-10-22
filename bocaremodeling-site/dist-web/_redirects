@@ -1,0 +1,5 @@
+# Le site actuel (GoDaddy) n'a qu'une page, l'accueil : il n'y a pas d'anciennes adresses à rediriger.
+# L'adresse avec www mène à celle sans www, l'adresse de référence du site actuel (https://bocaremodelinggroup.com/),
+# en une seule redirection. Le passage de http à https est fait par l'hébergeur.
+https://www.bocaremodelinggroup.com/*  https://bocaremodelinggroup.com/:splat  301!
+http://www.bocaremodelinggroup.com/*   https://bocaremodelinggroup.com/:splat  301!

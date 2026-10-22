@@ -1,0 +1,142 @@
+{
+ "primary": [
+  {
+   "name": "st-3",
+   "caption": "The primary bath, from the door"
+  },
+  {
+   "name": "mb-1",
+   "caption": "The tub under the window, and the glass shower"
+  },
+  {
+   "name": "mb-2",
+   "caption": "The tub, the shower and the door to the toilet room"
+  },
+  {
+   "name": "mb-3",
+   "caption": "The shower bench and its pebble floor"
+  },
+  {
+   "name": "mb-4",
+   "caption": "The glass shower, brass hinges and bench"
+  }
+ ],
+ "kitchen": [
+  {
+   "name": "kd-1",
+   "caption": "The plan, drawn on our office screen"
+  },
+  {
+   "name": "kd-2",
+   "caption": "The same kitchen in 3D, the same afternoon"
+  },
+  {
+   "name": "k-1",
+   "caption": "Polishing the quartzite island on site"
+  },
+  {
+   "name": "k-3",
+   "caption": "Putting in the microwave"
+  },
+  {
+   "name": "k-2",
+   "caption": "The finished kitchen"
+  }
+ ],
+ "step": [
+  {
+   "name": "bd-1",
+   "caption": "The 3D plan, with its measurements"
+  },
+  {
+   "name": "b2-1",
+   "caption": "The shower, with its wood slat floor, and the tub on its step"
+  },
+  {
+   "name": "b2-2",
+   "caption": "The whole room"
+  }
+ ],
+ "stone": [
+  {
+   "name": "sb-1",
+   "caption": "A bath in blue-gray stone, with a freestanding tub and a brass floor faucet"
+  },
+  {
+   "name": "sb-2",
+   "caption": "Inside the shower: the bench, the brass fixtures and a stone mosaic floor"
+  },
+  {
+   "name": "sb-3",
+   "caption": "The bedroom next door: a TV wall with a fireplace"
+  }
+ ],
+ "baths": [
+  {
+   "name": "ba-1",
+   "caption": "A white vanity under a lit mirror"
+  },
+  {
+   "name": "ba-2",
+   "caption": "A black vanity under a lit mirror"
+  },
+  {
+   "name": "ba-3",
+   "caption": "A glass shower with a niche"
+  }
+ ],
+ "living": [
+  {
+   "name": "lv-1",
+   "caption": "A living room with a grand piano"
+  }
+ ],
+ "kitchen2": [
+  {
+   "name": "kp-1",
+   "caption": "A kitchen going in: white cabinets, quartzite counters, a brass faucet"
+  }
+ ],
+ "pool": [
+  {
+   "name": "po-1",
+   "caption": "A pool under its screen cage"
+  },
+  {
+   "name": "po-2",
+   "caption": "The same pool, toward the golf course"
+  }
+ ],
+ "deck": [
+  {
+   "name": "pd-1",
+   "caption": "A pool deck and the back of the house"
+  },
+  {
+   "name": "pd-2",
+   "caption": "The same deck, from the other side of the pool"
+  }
+ ],
+ "roofs": [
+  {
+   "name": "rf-1",
+   "caption": "Taking off the old tiles, the dump truck in the driveway"
+  },
+  {
+   "name": "rf-2",
+   "caption": "New tiles going up by crane"
+  },
+  {
+   "name": "rf-3",
+   "caption": "Our crew on the roof"
+  },
+  {
+   "name": "rf-4",
+   "caption": "Our pickup in the driveway"
+  },
+  {
+   "name": "rf-5",
+   "caption": "A finished roof, on the golf course"
+  }
+ ]
+}
