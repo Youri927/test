@@ -103,14 +103,14 @@ a { color: inherit; }
 }
 .nav__list a:hover, .nav__list a[aria-current] { background-size: 100% 3px; }
 .nav__phones { display: none; }
-.langs { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 3px; overflow: hidden; flex: none; }
+.langs { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 3px; flex: none; }
 .langs__btn {
   min-width: 40px; min-height: 34px; padding: 0 9px; border: 0; background: none; cursor: pointer;
   font: 700 13.5px/1 var(--text); letter-spacing: 0.02em;
 }
 .langs__btn + .langs__btn { border-left: 1.5px solid var(--ink); }
 .langs__btn[aria-pressed="true"] { background: var(--ink); color: var(--quartz); }
-.langs__btn:focus-visible { outline-offset: -5px; outline-color: var(--orange); }
+.langs__btn:focus-visible { position: relative; z-index: 1; outline-offset: 3px; }
 .btn--top { min-height: 42px; padding: 0 18px; font-size: 15px; }
 .menu-btn { display: none; }
 
@@ -143,12 +143,18 @@ a { color: inherit; }
   .nav__phones a { font: 500 17px/1.3 var(--text); letter-spacing: 0; padding: 10px 0; background: none; }
   .nav__phones b { font-weight: 750; font-variant-numeric: tabular-nums; margin-left: 6px; }
 }
+/* les téléphones étroits : le nom sur deux lignes (« Brunet » / « Brothers »), à côté du monogramme */
+@media (max-width: 419px) {
+  .top { gap: 10px; }
+  .brand { gap: 9px; }
+  .brand__name { white-space: normal; font-size: 16px; line-height: 1.02; max-width: 5.6em; }
+}
 @media (max-width: 359px) {
   .top { gap: 8px; }
-  .brand { gap: 8px; }
+  .brand { gap: 7px; }
   .brand .mark { width: 30px; height: 27px; }
-  .brand__name { font-size: 15.5px; }
-  .langs__btn { min-width: 34px; padding: 0 6px; }
+  .brand__name { font-size: 15px; }
+  .langs__btn { padding: 0 6px; }
   .menu-btn { width: 42px; }
 }
 
@@ -173,9 +179,9 @@ a { color: inherit; }
 .phones { display: grid; gap: 10px; }
 .phones a { display: grid; text-decoration: none; padding: 2px 0; }
 .phones__lang { font: 500 13.5px/1.3 var(--text); color: var(--slate); }
-.phones__num { font: 750 21px/1.2 var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; word-spacing: 0.14em; }
+.phones__num { font: 750 21px/1.2 var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; word-spacing: 0.14em; white-space: nowrap; }
 .phones a:hover .phones__num { text-decoration: underline; text-decoration-color: var(--orange); text-decoration-thickness: 2px; text-underline-offset: 4px; }
-.hero .phones { grid-auto-flow: column; gap: 28px; }
+.hero .phones { display: flex; flex-wrap: wrap; gap: 8px 28px; }
 
 @media (max-width: 1023px) {
   .hero { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 36px; }
@@ -185,7 +191,7 @@ a { color: inherit; }
   .hero { padding-top: calc(var(--top-h) + 26px); gap: 30px; }
   .hero__actions { gap: 22px; }
   .hero__actions .btn { width: 100%; }
-  .hero .phones { gap: 18px; }
+  .hero .phones { gap: 8px 22px; }
   .phones__num { font-size: 19px; }
 }
 
@@ -518,9 +524,15 @@ a { color: inherit; }
   .viewer__next { right: calc(50% - 58px); }
 }
 
-/* ——— les cibles au doigt ——— */
+/* ——— les cibles au doigt : 44 px de haut au moins ——— */
 @media (pointer: coarse) {
-  .foot__list a, .foot__list li { display: inline-block; padding: 6px 0; }
+  .foot__list a { display: inline-block; padding: 10px 0; }
+  .foot__list { gap: 0; }
+  .langs__btn, .langs--foot .langs__btn { min-height: 44px; min-width: 44px; }
+  .nav__phones a { min-height: 44px; }
+  .licenses__num { padding: 9px 0; }
+  .estimate__mail a { display: inline-block; padding: 10px 0; }
+  .phones a { min-height: 44px; align-content: center; }
 }
 
 /* ——— les apparitions (avec script, sans mouvement réduit) : les titres de section montent ligne à ligne ——— */

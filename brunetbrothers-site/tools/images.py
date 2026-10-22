@@ -60,20 +60,6 @@ def width(im, w):
     return im if im.width <= w else im.resize((w, round(im.height * w / im.width)), Image.LANCZOS)
 
 
-def ratio(im, r):
-    """Recadre au centre au rapport largeur / hauteur `r` (3/4, 4/3, 3/2)."""
-    w, h = im.size
-    if abs(w / h - r) < 0.004:
-        return im
-    if w / h > r:
-        nw = round(h * r)
-        x = (w - nw) // 2
-        return im.crop((x, 0, x + nw, h))
-    nh = round(w / r)
-    y = (h - nh) // 2
-    return im.crop((0, y, w, y + nh))
-
-
 def export(name, im, widths, q=58, key=None):
     widths = sorted({min(w, im.width) for w in widths}, reverse=True)
     # une largeur à moins de 20 % de la plus grande n'apporte rien : on ne la garde pas
@@ -98,16 +84,14 @@ PORTRAIT = (1200, 720, 480)
 LANDSCAPE = (1600, 1000, 640)
 
 
-def photo(name, key, crop=None, r=None, widths=None, cap=None, q=58):
+def photo(name, key, crop=None, widths=None, cap=None, q=58):
     im = load(key)
     if crop:
         im = im.crop(crop)
-    if r:
-        im = ratio(im, r)
     # les originaux agrandis dans Photoshop : jamais plus de `cap` px de large
     if cap:
         im = width(im, cap)
-    export(name, im, widths or (PORTRAIT if im.height > im.width else LANDSCAPE), q=q, key=f'{key}{crop or ""}{r or ""}{cap or ""}')
+    export(name, im, widths or (PORTRAIT if im.height > im.width else LANDSCAPE), q=q, key=f'{key}{crop or ""}{cap or ""}')
     return name
 
 

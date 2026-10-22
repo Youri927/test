@@ -251,7 +251,7 @@
       const t = clamp((now - t0) / D);
       const X = -30 + (W + 60) * inOut3(t);
       for (const c of cells) c.el.style.setProperty('--x', `${(clamp((X - c.x) / c.w) * 100).toFixed(2)}%`);
-      line.style.transform = `translate3d(${X.toFixed(1)}px, 0, 0)`;
+      line.style.transform = `translate3d(${clamp(X, 0, W - 2).toFixed(1)}px, 0, 0)`;
       line.style.opacity = String(Math.min(clamp(t / 0.06), clamp((1 - t) / 0.1)));
       if (t < 1) return requestAnimationFrame(frame);
       for (const c of cells) c.el.style.removeProperty('--x');
@@ -302,24 +302,43 @@
       el.classList.replace('rv-wait', 'is-in');
       setTimeout(done, 1150 + n * 90);
     };
-    // les photos : dans l'ordre où elles arrivent, au moins 140 ms entre deux
-    let nextAt = 0;
+    // les photos : une file, dans l'ordre où elles arrivent, au moins 140 ms entre deux ; une photo déjà sortie de
+    // l'écran quand vient son tour (on est passé vite, par un lien du menu) apparaît sans attendre, et ne retarde pas
+    // celles qu'on regarde
+    const onScreen = (el) => {
+      const r = el.getBoundingClientRect();
+      return r.bottom > 0 && r.top < innerHeight;
+    };
+    const finish = (ph) => {
+      ph.classList.remove('gw', 'is-in');
+      ph.querySelector('.ph__edge')?.remove();
+    };
+    const queue = [];
+    let busy = false;
+    const pump = () => {
+      if (busy) return;
+      const ph = queue.shift();
+      if (!ph) return;
+      if (!onScreen(ph)) {
+        finish(ph);
+        return pump();
+      }
+      busy = true;
+      ph.classList.add('is-in');
+      setTimeout(() => finish(ph), 1250);
+      setTimeout(() => {
+        busy = false;
+        pump();
+      }, 140);
+    };
     const unveil = (ph) => {
       const img = ph.querySelector('img');
       let started = false;
       const go = () => {
         if (started) return;
         started = true;
-        const now = performance.now();
-        const delay = Math.max(0, nextAt - now);
-        nextAt = now + delay + 140;
-        setTimeout(() => {
-          ph.classList.add('is-in');
-          setTimeout(() => {
-            ph.classList.remove('gw', 'is-in');
-            ph.querySelector('.ph__edge')?.remove();
-          }, 1250);
-        }, delay);
+        queue.push(ph);
+        pump();
       };
       if (img.complete && img.naturalWidth) return go();
       img.loading = 'eager';
@@ -359,6 +378,8 @@
   const vClose = $('.viewer__close');
   let vIndex = 0;
   let vTotal = 0;
+  // pendant un défilement voulu (flèches, Début, Fin), le compteur ne suit pas les photos qu'on traverse
+  let vTarget = null;
   let vSet = null;
   let opener = null;
   const vState = () => {
@@ -369,7 +390,10 @@
   const vShow = (i, smooth = true) => {
     vIndex = clamp(i, 0, vTotal - 1);
     const li = vList.children[vIndex];
-    if (li) vList.scrollTo({left: li.offsetLeft, behavior: smooth && !still.matches ? 'smooth' : 'auto'});
+    if (li) {
+      vTarget = smooth && !still.matches ? li.offsetLeft : null;
+      vList.scrollTo({left: li.offsetLeft, behavior: vTarget === null ? 'auto' : 'smooth'});
+    }
     const near = vList.children[vIndex + 1]?.querySelector('img');
     if (near) near.loading = 'eager';
     vState();
@@ -435,6 +459,8 @@
     () => {
       clearTimeout(settle);
       settle = setTimeout(() => {
+        if (vTarget !== null && Math.abs(vList.scrollLeft - vTarget) > 2) return;
+        vTarget = null;
         const i = Math.round(vList.scrollLeft / Math.max(1, vList.clientWidth));
         if (i !== vIndex) {
           vIndex = clamp(i, 0, vTotal - 1);
@@ -519,7 +545,10 @@
     lines.push(`${msg('lCall')}: ${f.callin.value === 'Spanish' ? msg('es') : msg('en')}`);
     lines.push('', f.details.value.trim() || msg('nodetails'));
     const subject = `${msg('subject')}${what.length ? `: ${what.join(', ')}` : ''}`;
-    location.href = `mailto:brunetbrothersconstruction@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+    const url = `mailto:brunetbrothersconstruction@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+    // l'adresse de l'e-mail écrit reste lisible dans la page (les essais la vérifient)
+    done.dataset.mailto = url;
+    location.href = url;
     done.hidden = false;
     done.setAttribute('tabindex', '-1');
     done.focus();

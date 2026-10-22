@@ -132,14 +132,14 @@ a { color: inherit; }
 }
 .nav__list a:hover, .nav__list a[aria-current] { background-size: 100% 3px; }
 .nav__phones { display: none; }
-.langs { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 3px; overflow: hidden; flex: none; }
+.langs { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 3px; flex: none; }
 .langs__btn {
   min-width: 40px; min-height: 34px; padding: 0 9px; border: 0; background: none; cursor: pointer;
   font: 700 13.5px/1 var(--text); letter-spacing: 0.02em;
 }
 .langs__btn + .langs__btn { border-left: 1.5px solid var(--ink); }
 .langs__btn[aria-pressed="true"] { background: var(--ink); color: var(--quartz); }
-.langs__btn:focus-visible { outline-offset: -5px; outline-color: var(--orange); }
+.langs__btn:focus-visible { position: relative; z-index: 1; outline-offset: 3px; }
 .btn--top { min-height: 42px; padding: 0 18px; font-size: 15px; }
 .menu-btn { display: none; }
 
@@ -172,16 +172,22 @@ a { color: inherit; }
   .nav__phones a { font: 500 17px/1.3 var(--text); letter-spacing: 0; padding: 10px 0; background: none; }
   .nav__phones b { font-weight: 750; font-variant-numeric: tabular-nums; margin-left: 6px; }
 }
+/* les téléphones étroits : le nom sur deux lignes (« Brunet » / « Brothers »), à côté du monogramme */
+@media (max-width: 419px) {
+  .top { gap: 10px; }
+  .brand { gap: 9px; }
+  .brand__name { white-space: normal; font-size: 16px; line-height: 1.02; max-width: 5.6em; }
+}
 @media (max-width: 359px) {
   .top { gap: 8px; }
-  .brand { gap: 8px; }
+  .brand { gap: 7px; }
   .brand .mark { width: 30px; height: 27px; }
-  .brand__name { font-size: 15.5px; }
-  .langs__btn { min-width: 34px; padding: 0 6px; }
+  .brand__name { font-size: 15px; }
+  .langs__btn { padding: 0 6px; }
   .menu-btn { width: 42px; }
 }
 
-/* ——— l'accueil : la devise à gauche,la planche à droite ——— */ .hero{display: grid;grid-template-columns: minmax(0,5fr) minmax(0,7fr);align-items: end;gap: clamp(32px,4vw,72px);padding: calc(var(--top-h) + clamp(28px,4.5vh,56px)) var(--gutter) clamp(8px,2vw,32px)}.hero__title{font: 850 clamp(44px,5.5vw,98px)/0.94 var(--head);letter-spacing: -0.035em;text-wrap: balance}.hero__lede{margin-top: clamp(20px,2.4vw,32px);max-width: 31em;font-size: clamp(17px,1.3vw,20px);line-height: 1.55}.hero__actions{display: flex;flex-wrap: wrap;align-items: center;gap: 22px 32px;margin-top: clamp(26px,3vw,40px)}.hero__plate{min-width: 0;justify-self: end;width: 100%;max-width: calc((100svh - var(--top-h) - 200px) * 1.125 + 2 * var(--gap))}.hero__cap{min-height: 3em;margin-top: 12px;font-size: 14.5px;line-height: 1.45;color: var(--slate)}.hero__cap-text{transition: opacity 0.2s}.phones{display: grid;gap: 10px}.phones a{display: grid;text-decoration: none;padding: 2px 0}.phones__lang{font: 500 13.5px/1.3 var(--text);color: var(--slate)}.phones__num{font: 750 21px/1.2 var(--text);font-variant-numeric: tabular-nums;letter-spacing: -0.01em;word-spacing: 0.14em}.phones a:hover .phones__num{text-decoration: underline;text-decoration-color: var(--orange);text-decoration-thickness: 2px;text-underline-offset: 4px}.hero .phones{grid-auto-flow: column;gap: 28px}@media (max-width: 1023px){.hero{grid-template-columns: minmax(0,1fr);align-items: start;gap: 36px}.hero__plate{justify-self: stretch;max-width: none}}@media (max-width: 599px){.hero{padding-top: calc(var(--top-h) + 26px);gap: 30px}.hero__actions{gap: 22px}.hero__actions .btn{width: 100%}.hero .phones{gap: 18px}.phones__num{font-size: 19px}}.plate{display: grid;gap: var(--gap)}.plate--hero{grid-template-columns: repeat(3,minmax(0,1fr))}.plate--showers,.plate--vanities,.plate--tubs,.plate--rooms{grid-template-columns: repeat(4,minmax(0,1fr));gap: var(--gap) clamp(10px,1.1vw,16px)}.plate--kitchens{grid-template-columns: repeat(3,minmax(0,1fr));gap: clamp(22px,2.2vw,32px) clamp(10px,1.1vw,16px)}.cell{min-width: 0}.cell__cap,.fig__cap{margin-top: 10px;max-width: 34em;font-size: 14.5px;line-height: 1.45;color: var(--slate);transition: color 0.2s}.cell:hover .cell__cap,.cell:focus-within .cell__cap,.fig:hover .fig__cap,.fig:focus-within .fig__cap{color: var(--ink)}/* une photo : l'aperçu flou en fond (le verre dépoli), la photo nette par-dessus ; --x dit jusqu'où la paroi a glissé */ @property --x{syntax: "<percentage>";inherits: true;initial-value: 100%}.ph{position: relative;display: block;width: 100%;padding: 0;margin: 0;border: 0;border-radius: 0;overflow: hidden;isolation: isolate;cursor: zoom-in;background-color: #CBCEC9;background-position: center;background-size: cover;background-repeat: no-repeat}.ph::before{content: "";position: absolute;inset: -14%;z-index: -1;background: inherit;filter: blur(14px) saturate(1.06)}.ph::after{content: "";position: absolute;inset: 0;z-index: 0;pointer-events: none;background: linear-gradient(104deg,rgba(255,255,255,0.44),rgba(255,255,255,0.2) 55%,rgba(255,255,255,0.34))}.ph img{position: relative;z-index: 1;width: 100%;height: 100%;object-fit: cover;clip-path: inset(0 calc(100% - var(--x)) 0 0)}.ph__edge,.sweep{position: absolute;z-index: 2;top: 0;bottom: 0;width: 2px;margin-left: -1px;pointer-events: none;background: var(--white);box-shadow: 0 0 0 0.5px rgba(255,255,255,0.5),0 0 22px 5px rgba(255,255,255,0.55),8px 0 26px rgba(255,255,255,0.35);opacity: 0}.ph__edge{left: var(--x)}.ph:hover{box-shadow: 0 4px 0 -1px var(--orange)}.ph:focus-visible{outline-offset: 4px}/* l'apparition : la paroi glisse de gauche à droite, une fois */
+/* ——— l'accueil : la devise à gauche,la planche à droite ——— */ .hero{display: grid;grid-template-columns: minmax(0,5fr) minmax(0,7fr);align-items: end;gap: clamp(32px,4vw,72px);padding: calc(var(--top-h) + clamp(28px,4.5vh,56px)) var(--gutter) clamp(8px,2vw,32px)}.hero__title{font: 850 clamp(44px,5.5vw,98px)/0.94 var(--head);letter-spacing: -0.035em;text-wrap: balance}.hero__lede{margin-top: clamp(20px,2.4vw,32px);max-width: 31em;font-size: clamp(17px,1.3vw,20px);line-height: 1.55}.hero__actions{display: flex;flex-wrap: wrap;align-items: center;gap: 22px 32px;margin-top: clamp(26px,3vw,40px)}.hero__plate{min-width: 0;justify-self: end;width: 100%;max-width: calc((100svh - var(--top-h) - 200px) * 1.125 + 2 * var(--gap))}.hero__cap{min-height: 3em;margin-top: 12px;font-size: 14.5px;line-height: 1.45;color: var(--slate)}.hero__cap-text{transition: opacity 0.2s}.phones{display: grid;gap: 10px}.phones a{display: grid;text-decoration: none;padding: 2px 0}.phones__lang{font: 500 13.5px/1.3 var(--text);color: var(--slate)}.phones__num{font: 750 21px/1.2 var(--text);font-variant-numeric: tabular-nums;letter-spacing: -0.01em;word-spacing: 0.14em;white-space: nowrap}.phones a:hover .phones__num{text-decoration: underline;text-decoration-color: var(--orange);text-decoration-thickness: 2px;text-underline-offset: 4px}.hero .phones{display: flex;flex-wrap: wrap;gap: 8px 28px}@media (max-width: 1023px){.hero{grid-template-columns: minmax(0,1fr);align-items: start;gap: 36px}.hero__plate{justify-self: stretch;max-width: none}}@media (max-width: 599px){.hero{padding-top: calc(var(--top-h) + 26px);gap: 30px}.hero__actions{gap: 22px}.hero__actions .btn{width: 100%}.hero .phones{gap: 8px 22px}.phones__num{font-size: 19px}}.plate{display: grid;gap: var(--gap)}.plate--hero{grid-template-columns: repeat(3,minmax(0,1fr))}.plate--showers,.plate--vanities,.plate--tubs,.plate--rooms{grid-template-columns: repeat(4,minmax(0,1fr));gap: var(--gap) clamp(10px,1.1vw,16px)}.plate--kitchens{grid-template-columns: repeat(3,minmax(0,1fr));gap: clamp(22px,2.2vw,32px) clamp(10px,1.1vw,16px)}.cell{min-width: 0}.cell__cap,.fig__cap{margin-top: 10px;max-width: 34em;font-size: 14.5px;line-height: 1.45;color: var(--slate);transition: color 0.2s}.cell:hover .cell__cap,.cell:focus-within .cell__cap,.fig:hover .fig__cap,.fig:focus-within .fig__cap{color: var(--ink)}/* une photo : l'aperçu flou en fond (le verre dépoli), la photo nette par-dessus ; --x dit jusqu'où la paroi a glissé */ @property --x{syntax: "<percentage>";inherits: true;initial-value: 100%}.ph{position: relative;display: block;width: 100%;padding: 0;margin: 0;border: 0;border-radius: 0;overflow: hidden;isolation: isolate;cursor: zoom-in;background-color: #CBCEC9;background-position: center;background-size: cover;background-repeat: no-repeat}.ph::before{content: "";position: absolute;inset: -14%;z-index: -1;background: inherit;filter: blur(14px) saturate(1.06)}.ph::after{content: "";position: absolute;inset: 0;z-index: 0;pointer-events: none;background: linear-gradient(104deg,rgba(255,255,255,0.44),rgba(255,255,255,0.2) 55%,rgba(255,255,255,0.34))}.ph img{position: relative;z-index: 1;width: 100%;height: 100%;object-fit: cover;clip-path: inset(0 calc(100% - var(--x)) 0 0)}.ph__edge,.sweep{position: absolute;z-index: 2;top: 0;bottom: 0;width: 2px;margin-left: -1px;pointer-events: none;background: var(--white);box-shadow: 0 0 0 0.5px rgba(255,255,255,0.5),0 0 22px 5px rgba(255,255,255,0.55),8px 0 26px rgba(255,255,255,0.35);opacity: 0}.ph__edge{left: var(--x)}.ph:hover{box-shadow: 0 4px 0 -1px var(--orange)}.ph:focus-visible{outline-offset: 4px}/* l'apparition : la paroi glisse de gauche à droite, une fois */
 .gw { --x: 0%; }
 .gw.is-in { --x: 100%; transition: --x 1.15s var(--ease); }
 .gw.is-in .ph__edge { animation: edge 1.15s var(--ease) both; }
@@ -265,9 +271,15 @@ a { color: inherit; }
   .viewer__next { right: calc(50% - 58px); }
 }
 
-/* ——— les cibles au doigt ——— */
+/* ——— les cibles au doigt : 44 px de haut au moins ——— */
 @media (pointer: coarse) {
-  .foot__list a, .foot__list li { display: inline-block; padding: 6px 0; }
+  .foot__list a { display: inline-block; padding: 10px 0; }
+  .foot__list { gap: 0; }
+  .langs__btn, .langs--foot .langs__btn { min-height: 44px; min-width: 44px; }
+  .nav__phones a { min-height: 44px; }
+  .licenses__num { padding: 9px 0; }
+  .estimate__mail a { display: inline-block; padding: 10px 0; }
+  .phones a { min-height: 44px; align-content: center; }
 }
 
 /* ——— les apparitions (avec script, sans mouvement réduit) : les titres de section montent ligne à ligne ——— */
@@ -830,7 +842,7 @@ main, .foot { transition: opacity 0.26s; }
       const t = clamp((now - t0) / D);
       const X = -30 + (W + 60) * inOut3(t);
       for (const c of cells) c.el.style.setProperty('--x', `${(clamp((X - c.x) / c.w) * 100).toFixed(2)}%`);
-      line.style.transform = `translate3d(${X.toFixed(1)}px, 0, 0)`;
+      line.style.transform = `translate3d(${clamp(X, 0, W - 2).toFixed(1)}px, 0, 0)`;
       line.style.opacity = String(Math.min(clamp(t / 0.06), clamp((1 - t) / 0.1)));
       if (t < 1) return requestAnimationFrame(frame);
       for (const c of cells) c.el.style.removeProperty('--x');
@@ -881,24 +893,43 @@ main, .foot { transition: opacity 0.26s; }
       el.classList.replace('rv-wait', 'is-in');
       setTimeout(done, 1150 + n * 90);
     };
-    // les photos : dans l'ordre où elles arrivent, au moins 140 ms entre deux
-    let nextAt = 0;
+    // les photos : une file, dans l'ordre où elles arrivent, au moins 140 ms entre deux ; une photo déjà sortie de
+    // l'écran quand vient son tour (on est passé vite, par un lien du menu) apparaît sans attendre, et ne retarde pas
+    // celles qu'on regarde
+    const onScreen = (el) => {
+      const r = el.getBoundingClientRect();
+      return r.bottom > 0 && r.top < innerHeight;
+    };
+    const finish = (ph) => {
+      ph.classList.remove('gw', 'is-in');
+      ph.querySelector('.ph__edge')?.remove();
+    };
+    const queue = [];
+    let busy = false;
+    const pump = () => {
+      if (busy) return;
+      const ph = queue.shift();
+      if (!ph) return;
+      if (!onScreen(ph)) {
+        finish(ph);
+        return pump();
+      }
+      busy = true;
+      ph.classList.add('is-in');
+      setTimeout(() => finish(ph), 1250);
+      setTimeout(() => {
+        busy = false;
+        pump();
+      }, 140);
+    };
     const unveil = (ph) => {
       const img = ph.querySelector('img');
       let started = false;
       const go = () => {
         if (started) return;
         started = true;
-        const now = performance.now();
-        const delay = Math.max(0, nextAt - now);
-        nextAt = now + delay + 140;
-        setTimeout(() => {
-          ph.classList.add('is-in');
-          setTimeout(() => {
-            ph.classList.remove('gw', 'is-in');
-            ph.querySelector('.ph__edge')?.remove();
-          }, 1250);
-        }, delay);
+        queue.push(ph);
+        pump();
       };
       if (img.complete && img.naturalWidth) return go();
       img.loading = 'eager';
@@ -938,6 +969,8 @@ main, .foot { transition: opacity 0.26s; }
   const vClose = $('.viewer__close');
   let vIndex = 0;
   let vTotal = 0;
+  // pendant un défilement voulu (flèches, Début, Fin), le compteur ne suit pas les photos qu'on traverse
+  let vTarget = null;
   let vSet = null;
   let opener = null;
   const vState = () => {
@@ -948,7 +981,10 @@ main, .foot { transition: opacity 0.26s; }
   const vShow = (i, smooth = true) => {
     vIndex = clamp(i, 0, vTotal - 1);
     const li = vList.children[vIndex];
-    if (li) vList.scrollTo({left: li.offsetLeft, behavior: smooth && !still.matches ? 'smooth' : 'auto'});
+    if (li) {
+      vTarget = smooth && !still.matches ? li.offsetLeft : null;
+      vList.scrollTo({left: li.offsetLeft, behavior: vTarget === null ? 'auto' : 'smooth'});
+    }
     const near = vList.children[vIndex + 1]?.querySelector('img');
     if (near) near.loading = 'eager';
     vState();
@@ -1014,6 +1050,8 @@ main, .foot { transition: opacity 0.26s; }
     () => {
       clearTimeout(settle);
       settle = setTimeout(() => {
+        if (vTarget !== null && Math.abs(vList.scrollLeft - vTarget) > 2) return;
+        vTarget = null;
         const i = Math.round(vList.scrollLeft / Math.max(1, vList.clientWidth));
         if (i !== vIndex) {
           vIndex = clamp(i, 0, vTotal - 1);
@@ -1098,7 +1136,10 @@ main, .foot { transition: opacity 0.26s; }
     lines.push(`${msg('lCall')}: ${f.callin.value === 'Spanish' ? msg('es') : msg('en')}`);
     lines.push('', f.details.value.trim() || msg('nodetails'));
     const subject = `${msg('subject')}${what.length ? `: ${what.join(', ')}` : ''}`;
-    location.href = `mailto:brunetbrothersconstruction@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+    const url = `mailto:brunetbrothersconstruction@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+    // l'adresse de l'e-mail écrit reste lisible dans la page (les essais la vérifient)
+    done.dataset.mailto = url;
+    location.href = url;
     done.hidden = false;
     done.setAttribute('tabindex', '-1');
     done.focus();

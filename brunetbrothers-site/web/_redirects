@@ -1,0 +1,8 @@
+# L'adresse de référence reste celle du site actuel, avec www : https://www.brunetbrothersconstruction.com/
+# Le domaine sans www y mène en une seule redirection ; le passage de http à https est fait par l'hébergeur.
+https://brunetbrothersconstruction.com/*  https://www.brunetbrothersconstruction.com/:splat  301!
+http://brunetbrothersconstruction.com/*   https://www.brunetbrothersconstruction.com/:splat  301!
+# Les trois autres pages du site Wix deviennent des parties de la page unique
+/projects      /#work      301
+/testimonials  /#clients   301
+/faq           /#process   301
