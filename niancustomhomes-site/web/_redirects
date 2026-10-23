@@ -1,0 +1,12 @@
+# L'adresse de référence reste celle du site actuel, avec www : https://www.niancustomhomes.com/
+# Le domaine sans www y mène en une seule redirection ; le passage de http à https est fait par l'hébergeur.
+https://niancustomhomes.com/*  https://www.niancustomhomes.com/:splat  301!
+http://niancustomhomes.com/*   https://www.niancustomhomes.com/:splat  301!
+# Les pages du site Wix deviennent des parties de la page unique. La page du modèle (home-designs) et la page vide
+# (sales) mènent aux maisons et aux packages.
+/image-gallery  /#homes      301
+/home-designs   /#homes      301
+/services       /#how        301
+/sales          /#packages   301
+/realtors       /#realtors   301
+/about-us       /#about      301

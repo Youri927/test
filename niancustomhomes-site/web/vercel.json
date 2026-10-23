@@ -1,0 +1,20 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    {"source": "/:path*", "has": [{"type": "host", "value": "niancustomhomes.com"}], "destination": "https://www.niancustomhomes.com/:path*", "permanent": true},
+    {"source": "/image-gallery", "destination": "/#homes", "permanent": true},
+    {"source": "/home-designs", "destination": "/#homes", "permanent": true},
+    {"source": "/services", "destination": "/#how", "permanent": true},
+    {"source": "/sales", "destination": "/#packages", "permanent": true},
+    {"source": "/realtors", "destination": "/#realtors", "permanent": true},
+    {"source": "/about-us", "destination": "/#about", "permanent": true}
+  ],
+  "headers": [
+    {"source": "/(.*)", "headers": [
+      {"key": "X-Robots-Tag", "value": "noindex, nofollow"},
+      {"key": "X-Content-Type-Options", "value": "nosniff"},
+      {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}
+    ]},
+    {"source": "/assets/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=604800"}]}
+  ]
+}

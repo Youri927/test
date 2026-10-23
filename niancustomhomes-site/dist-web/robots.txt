@@ -1,0 +1,5 @@
+# NIAN Custom Homes : tout le site est public, pour les moteurs comme pour les assistants
+User-agent: *
+Allow: /
+
+Sitemap: https://www.niancustomhomes.com/sitemap.xml
