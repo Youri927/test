@@ -1,0 +1,5 @@
+# L'adresse de référence reste celle du site actuel, sans www : https://feelydevelopments.com/
+# Le www y mène en une seule redirection ; le passage de http à https est fait par l'hébergeur.
+https://www.feelydevelopments.com/*  https://feelydevelopments.com/:splat  301!
+http://www.feelydevelopments.com/*   https://feelydevelopments.com/:splat  301!
+# Le site GoDaddy n'a qu'une page, l'accueil : il n'y a pas d'autre adresse à reprendre.

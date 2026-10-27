@@ -1,0 +1,5 @@
+# Feely Developments : tout le site est public, pour les moteurs comme pour les assistants
+User-agent: *
+Allow: /
+
+Sitemap: https://feelydevelopments.com/sitemap.xml
