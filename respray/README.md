@@ -9,6 +9,8 @@ annonces avec les photos des vendeurs, et le travail de l'équipe dans une vraie
 - Photos : un dossier en local (`PHOTOS_DOSSIER`) ; un stockage d'objets en ligne (à brancher dans `src/lib/photos.ts`)
 - Le catalogue des maisons et parfums est importé (`src/db/catalogue.json`) ; aucune annonce n'est inventée
 
+Le plan de lancement (réseaux sans visage, communautés, créateurs) est dans `LANCEMENT.md`.
+
 ## Lancer en local
 
 ```bash
@@ -38,4 +40,9 @@ npm run dev
 | `/vendre` | Le formulaire en six blocs, avec l'aperçu de l'annonce ; les photos sont réduites dans le navigateur avant l'envoi |
 | `/compte` | Mes annonces et leur statut (avec l'envoi d'une photo quand l'équipe en demande une), mes favoris |
 | `/inscription`, `/connexion` | Les comptes |
-| `/equipe` | La file de vérification, les annonces en ligne, les maisons et parfums proposés, les membres, le journal (comptes `equipe` seulement) |
+| `/parfum/:lien`, `/maison/:lien` | Une page par parfum et par maison : la fiche, les annonces en ligne, le prix d'occasion au ml comparé au neuf (pour Google) |
+| `/guides` | Reconnaître un faux, trouver le code lot, photographier, fixer son prix, conserver un parfum |
+| `/fondateurs` | La candidature « vendeur fondateur » (badge, 5 mises en avant, vérification prioritaire) |
+| `/r/:code` | Le lien de parrainage : la première annonce publiée de l'invité rapporte une mise en avant à chacun |
+| `/sitemap.xml`, `/robots.txt` | Le plan du site pour les moteurs de recherche |
+| `/equipe` | La file de vérification, les annonces en ligne, les maisons et parfums proposés, les vendeurs fondateurs, les membres, le journal (comptes `equipe` seulement) |
