@@ -1,0 +1,322 @@
+{
+ "parfums": [
+  {
+   "maison": "Maison Francis Kurkdjian",
+   "nom": "Baccarat Rouge 540",
+   "conc": "Eau de parfum",
+   "annee": 2015,
+   "genre": "Mixte",
+   "famille": "Ambrée florale",
+   "notes": "safran, jasmin, ambre gris, cèdre",
+   "formats": [
+    {
+     "ml": 35,
+     "neuf": 215
+    },
+    {
+     "ml": 70,
+     "neuf": 325
+    },
+    {
+     "ml": 200,
+     "neuf": 650
+    }
+   ]
+  },
+  {
+   "maison": "Le Labo",
+   "nom": "Santal 33",
+   "conc": "Eau de parfum",
+   "annee": 2011,
+   "genre": "Mixte",
+   "famille": "Boisée",
+   "notes": "cardamome, iris, santal, cuir",
+   "formats": [
+    {
+     "ml": 50,
+     "neuf": 225
+    },
+    {
+     "ml": 100,
+     "neuf": 320
+    }
+   ]
+  },
+  {
+   "maison": "Parfums de Marly",
+   "nom": "Delina",
+   "conc": "Eau de parfum",
+   "annee": 2017,
+   "genre": "Femme",
+   "famille": "Florale fruitée",
+   "notes": "litchi, rhubarbe, rose turque, vanille",
+   "formats": [
+    {
+     "ml": 30,
+     "neuf": 145
+    },
+    {
+     "ml": 75,
+     "neuf": 305
+    }
+   ]
+  },
+  {
+   "maison": "Xerjoff",
+   "nom": "Naxos",
+   "conc": "Eau de parfum",
+   "annee": 2015,
+   "genre": "Homme",
+   "famille": "Ambrée aromatique",
+   "notes": "lavande, miel, tabac, fève tonka",
+   "formats": [
+    {
+     "ml": 50,
+     "neuf": 195
+    },
+    {
+     "ml": 100,
+     "neuf": 255
+    }
+   ]
+  },
+  {
+   "maison": "Frédéric Malle",
+   "nom": "Portrait of a Lady",
+   "conc": "Eau de parfum",
+   "annee": 2010,
+   "genre": "Femme",
+   "famille": "Ambrée florale",
+   "notes": "rose, framboise, patchouli, encens",
+   "formats": [
+    {
+     "ml": 50,
+     "neuf": 270
+    },
+    {
+     "ml": 100,
+     "neuf": 390
+    }
+   ]
+  },
+  {
+   "maison": "Byredo",
+   "nom": "Gypsy Water",
+   "conc": "Eau de parfum",
+   "annee": 2008,
+   "genre": "Mixte",
+   "famille": "Boisée aromatique",
+   "notes": "bergamote, genièvre, encens, vanille",
+   "formats": [
+    {
+     "ml": 50,
+     "neuf": 190
+    },
+    {
+     "ml": 100,
+     "neuf": 270
+    }
+   ]
+  },
+  {
+   "maison": "Tom Ford",
+   "nom": "Tobacco Vanille",
+   "conc": "Eau de parfum",
+   "annee": 2007,
+   "genre": "Mixte",
+   "famille": "Ambrée épicée",
+   "notes": "tabac, vanille, cacao, fruits secs",
+   "formats": [
+    {
+     "ml": 50,
+     "neuf": 285
+    },
+    {
+     "ml": 100,
+     "neuf": 410
+    }
+   ]
+  },
+  {
+   "maison": "Guerlain",
+   "nom": "Shalimar",
+   "conc": "Eau de parfum",
+   "annee": 1925,
+   "genre": "Femme",
+   "famille": "Ambrée",
+   "notes": "bergamote, iris, vanille, encens",
+   "formats": [
+    {
+     "ml": 50,
+     "neuf": 125
+    },
+    {
+     "ml": 90,
+     "neuf": 165
+    }
+   ]
+  },
+  {
+   "maison": "Chanel",
+   "nom": "Coco Mademoiselle",
+   "conc": "Eau de parfum",
+   "annee": 2001,
+   "genre": "Femme",
+   "famille": "Chyprée florale",
+   "notes": "orange, rose, jasmin, patchouli",
+   "formats": [
+    {
+     "ml": 35,
+     "neuf": 110
+    },
+    {
+     "ml": 50,
+     "neuf": 135
+    },
+    {
+     "ml": 100,
+     "neuf": 185
+    }
+   ]
+  },
+  {
+   "maison": "Mugler",
+   "nom": "Alien",
+   "conc": "Eau de parfum",
+   "annee": 2005,
+   "genre": "Femme",
+   "famille": "Florale boisée",
+   "notes": "jasmin sambac, bois de cachemire, ambre blanc",
+   "formats": [
+    {
+     "ml": 30,
+     "neuf": 95
+    },
+    {
+     "ml": 60,
+     "neuf": 135
+    },
+    {
+     "ml": 90,
+     "neuf": 170
+    }
+   ]
+  },
+  {
+   "maison": "Yves Saint Laurent",
+   "nom": "Libre",
+   "conc": "Eau de parfum",
+   "annee": 2019,
+   "genre": "Femme",
+   "famille": "Florale ambrée",
+   "notes": "lavande, fleur d'oranger, vanille",
+   "formats": [
+    {
+     "ml": 50,
+     "neuf": 125
+    },
+    {
+     "ml": 90,
+     "neuf": 160
+    }
+   ]
+  },
+  {
+   "maison": "Hermès",
+   "nom": "Terre d'Hermès",
+   "conc": "Eau de toilette",
+   "annee": 2006,
+   "genre": "Homme",
+   "famille": "Boisée",
+   "notes": "orange, poivre, vétiver, cèdre",
+   "formats": [
+    {
+     "ml": 50,
+     "neuf": 95
+    },
+    {
+     "ml": 100,
+     "neuf": 130
+    }
+   ]
+  },
+  {
+   "maison": "Dior",
+   "nom": "Sauvage",
+   "conc": "Eau de toilette",
+   "annee": 2015,
+   "genre": "Homme",
+   "famille": "Aromatique fougère",
+   "notes": "bergamote, poivre, lavande, ambroxan",
+   "formats": [
+    {
+     "ml": 60,
+     "neuf": 92
+    },
+    {
+     "ml": 100,
+     "neuf": 125
+    },
+    {
+     "ml": 200,
+     "neuf": 190
+    }
+   ]
+  },
+  {
+   "maison": "Diptyque",
+   "nom": "Philosykos",
+   "conc": "Eau de toilette",
+   "annee": 1996,
+   "genre": "Mixte",
+   "famille": "Boisée verte",
+   "notes": "feuille de figuier, figue, cèdre",
+   "formats": [
+    {
+     "ml": 50,
+     "neuf": 110
+    },
+    {
+     "ml": 100,
+     "neuf": 160
+    }
+   ]
+  },
+  {
+   "maison": "Lattafa",
+   "nom": "Khamrah",
+   "conc": "Eau de parfum",
+   "annee": 2022,
+   "genre": "Mixte",
+   "famille": "Ambrée gourmande",
+   "notes": "cannelle, dattes, praliné, vanille",
+   "formats": [
+    {
+     "ml": 100,
+     "neuf": 39
+    }
+   ]
+  }
+ ],
+ "maisons": [
+  "Acqua di Parma",
+  "Amouage",
+  "Carolina Herrera",
+  "Creed",
+  "Givenchy",
+  "Initio",
+  "Jean Paul Gaultier",
+  "Kilian",
+  "Lancôme",
+  "Maison Margiela",
+  "Memo Paris",
+  "Nishane",
+  "Penhaligon's",
+  "Prada",
+  "Rabanne",
+  "Serge Lutens",
+  "Valentino",
+  "Viktor&Rolf",
+  "Maison Crivelli"
+ ]
+}

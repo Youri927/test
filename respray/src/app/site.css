@@ -1,0 +1,18 @@
+/* Ce que le vrai site ajoute aux styles du prototype (globals.css). */
+.page-etroite { max-width: 520px; }
+.compte-form { margin-top: 20px; }
+.compte-form label:not(.choix) { font-weight: 600; font-size: 15px; }
+.lien-souligne { text-decoration: underline; text-underline-offset: 3px; }
+.lien-bouton { padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
+.lien-bouton:hover { text-decoration: underline; }
+.attente-form { display: flex; flex-wrap: wrap; gap: 8px; max-width: 460px; }
+.attente-form .champ { flex: 1 1 220px; width: auto; }
+.attente-form .erreur { width: 100%; }
+.accueil-tete { display: grid; gap: 16px; padding-block: 72px 24px; max-width: 900px; margin-inline: auto; }
+.accueil-titre { font-weight: 650; font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.04; letter-spacing: -.035em; text-wrap: balance; }
+.accueil-tete .boutons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.bientot { display: grid; gap: 10px; margin-top: 24px; padding: 28px; border-radius: 22px; background: var(--fond-2); }
+.bientot h3 { font-weight: 650; font-size: 20px; letter-spacing: -.02em; }
+.etiq-verif { top: 10px; bottom: auto; color: var(--vert); }
+.etiq-bas { left: auto; right: 10px; }
+.carte-photo .visuel { object-fit: cover; }
