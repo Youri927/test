@@ -439,7 +439,7 @@
             <div><dt>Boîte</dt><dd>${a.boite ? 'Oui' : 'Non'}</dd></div>
             <div><dt>Code lot</dt><dd>${esc(a.lot)}</dd></div>
             <div><dt>Acheté en</dt><dd>${a.achat}</dd></div>
-            <div><dt>Famille</dt><dd>${esc(p.famille)}</dd></div>
+            <div><dt>Famille</dt><dd>${pastillesFamille(p.famille)}</dd></div>
           </dl>
           <fieldset class="livraison"><legend>Livraison</legend>
             <label class="option"><input type="radio" name="mode" value="envoi" checked data-mode> <span>Envoi suivi en point relais<small>2 à 4 jours</small></span><span>${eur2(ENVOI)}</span></label>
@@ -512,6 +512,12 @@
     ['Boisées et sombres', [['Boisée', 'oud, gaïac, vétiver'], ['Cuirée', 'daim, fumée, bouleau'], ['Chyprée', 'mousse, patchouli, agrumes'], ['Fougère', 'herbe coupée, coumarine']]],
   ];
   const FAMILLES = GROUPES_FAMILLES.flatMap((g) => g[1]);
+  const CLASSE_GROUPE = ['fam-fraiche', 'fam-florale', 'fam-chaude', 'fam-boisee'];
+  const groupeDe = (mot) => GROUPES_FAMILLES.findIndex(([, fs]) => fs.some(([f]) => normal(f).slice(0, 5) === normal(mot).slice(0, 5)));
+  const pastillesFamille = (texte) => texte.split(/\s+/).map((m) => {
+    const g = groupeDe(m);
+    return `<span class="fam-pastille ${g >= 0 ? CLASSE_GROUPE[g] : ''}">${esc(m[0].toUpperCase() + m.slice(1))}</span>`;
+  }).join('');
   const FORMATS = [['flacon', 'Flacon'], ['voyage', 'Format voyage'], ['miniature', 'Miniature'], ['echantillon', 'Échantillon acheté'], ['coffret', 'Coffret']];
   const LIEUX = ['Boutique de la maison', 'Parfumerie (Sephora, Nocibé, Marionnaud…)', 'Grand magasin', 'Site officiel ou parfumerie en ligne', 'Reçu en cadeau', 'Acheté d\'occasion'];
   const DEFAUTS = ['Bouchon marqué ou rayé', 'Étiquette usée', 'Flacon rayé', 'Vaporisateur un peu dur'];
@@ -561,6 +567,7 @@
     return `<div class="apercu-carte"><div class="apercu-photo">${image}${pc || ph ? '' : '<span class="apercu-vide">Votre photo de face</span>'}</div>
         <p class="carte-maison">${esc(maisonChoisie() || 'Maison')}</p><p class="carte-nom">${esc(nomParfum() || 'Parfum')}</p>
         <p class="carte-meta">${esc(conc || 'Concentration')}${ml > 0 ? ` · ${ml} ml` : ''}${V.etat === 'blister' ? ' · neuf sous blister' : restant}</p>
+        ${pc || V.familles.length ? `<p class="apercu-fam">${pastillesFamille(pc ? pc.famille : V.familles.join(' '))}</p>` : ''}
         <p class="carte-prix">${nombre(V.prix) >= 3 ? eur(nombre(V.prix)) : '— €'}</p>
         ${V.annee || V.lot ? `<p class="carte-meta">${V.annee ? `Acheté : ${esc(V.annee)}` : ''}${V.annee && V.lot ? ' · ' : ''}${V.lot ? `lot ${esc(V.lot)}` : ''}</p>` : ''}
       </div>
@@ -588,12 +595,12 @@
           <select id="maison" class="champ" data-champ="maison"><option value="">Choisir une maison</option>${maisons().map((x) => `<option ${V.maison === x ? 'selected' : ''}>${esc(x)}</option>`).join('')}<option value="${AUTRE}" ${V.maison === AUTRE ? 'selected' : ''}>Ma maison n'est pas dans la liste</option></select>
           ${V.maison === AUTRE ? `<label for="maison-autre">Nom de la maison</label><input id="maison-autre" class="champ" data-champ="maisonAutre" value="${esc(V.maisonAutre)}" placeholder="ex. Maison Crivelli" autocomplete="off"><p class="aide aide-maison" id="aide-maison" aria-live="polite">${aideMaison()}</p>` : ''}
           ${liste.length ? `<label for="parfum">Parfum</label><select id="parfum" class="champ" data-champ="parfum"><option value="">Choisir un parfum</option>${liste.map((x) => `<option value="${esc(x.id)}" ${V.parfum === x.id ? 'selected' : ''}>${esc(x.nom)}${x.conc ? ` (${esc(x.conc)})` : ''}</option>`).join('')}<option value="${AUTRE}" ${V.parfum === AUTRE ? 'selected' : ''}>Mon parfum n'est pas dans la liste</option></select>` : ''}
-          ${pc ? `<div class="fiche-auto"><p class="surtitre">Rempli d'après le catalogue</p><dl><div><dt>Concentration</dt><dd>${esc(pc.conc)}</dd></div><div><dt>Pour</dt><dd>${esc(pc.genre)}</dd></div><div><dt>Famille</dt><dd>${esc(pc.famille)}</dd></div><div><dt>Notes</dt><dd>${esc(pc.notes)}</dd></div></dl><p class="aide">Une erreur ? Dites-le dans la description : l'équipe corrige la fiche.</p></div>` : ''}
+          ${pc ? `<div class="fiche-auto"><p class="surtitre">Rempli d'après le catalogue</p><dl><div><dt>Concentration</dt><dd>${esc(pc.conc)}</dd></div><div><dt>Pour</dt><dd>${esc(pc.genre)}</dd></div><div><dt>Famille</dt><dd>${pastillesFamille(pc.famille)}</dd></div><div><dt>Notes</dt><dd>${esc(pc.notes)}</dd></div></dl><p class="aide">Une erreur ? Dites-le dans la description : l'équipe corrige la fiche.</p></div>` : ''}
           ${libre ? `<label for="parfum-autre">Nom du parfum</label><input id="parfum-autre" class="champ" data-champ="parfumAutre" value="${esc(V.parfumAutre)}" placeholder="ex. Tobacco Mandarin" autocomplete="off">
             <p class="aide">Il sera ajouté à la liste${m && V.maison !== AUTRE ? ` de ${esc(m)}` : ''} une fois l'orthographe vérifiée par l'équipe.</p>
             <fieldset><legend>Concentration</legend>${segment('conc', V.conc, CONCENTRATIONS.map((c) => [c, c]))}</fieldset>
             <fieldset><legend>Pour</legend>${segment('genre', V.genre, [['Femme', 'Femme'], ['Homme', 'Homme'], ['Mixte', 'Mixte']])}</fieldset>
-            <fieldset><legend>Son caractère <small>une ou deux familles, facultatif</small></legend><div class="groupes-familles">${GROUPES_FAMILLES.map(([g, fs]) => `<div><p class="groupe-titre">${g}</p>${puces('familles', V.familles, fs.map(([f, d]) => [f, f, d]))}</div>`).join('')}</div></fieldset>` : ''}
+            <fieldset><legend>Son caractère <small>une ou deux familles, facultatif</small></legend><div class="groupes-familles">${GROUPES_FAMILLES.map(([g, fs], i) => `<div class="${CLASSE_GROUPE[i]}"><p class="groupe-titre">${g}</p>${puces('familles', V.familles, fs.map(([f, d]) => [f, f, d]))}</div>`).join('')}</div></fieldset>` : ''}
         </section>
 
         ${parfumPret ? `<section class="bloc-form">
@@ -957,6 +964,11 @@
     ['Trait', '#D2D2D7', 'Les bordures et les séparations.'],
     ['Blanc', '#FFFFFF', 'Le fond.'],
     ['Vert vérifié', '#1A7F4B', 'Seulement pour ce qui est vérifié ou validé.'],
+    ['Ambre', '#B05A12', 'L\'accent : sur-titres, étapes, ce qu\'on a choisi.'],
+    ['Frais', '#1F7F95', 'Les parfums frais (agrumes, marins, aromatiques).'],
+    ['Floral', '#B83C6E', 'Les parfums floraux et fruités.'],
+    ['Chaud', '#B86A12', 'Les parfums chauds (gourmands, ambrés, musqués).'],
+    ['Boisé', '#6F5236', 'Les parfums boisés et sombres.'],
   ];
   const NUIT = [
     ['Graphite', '#1B1A18', 'Le fond : chaud, pas noir.'],
@@ -965,6 +977,7 @@
     ['Taupe', '#A7A29A', 'Les textes secondaires.'],
     ['Trait', '#3A3835', 'Les bordures et les séparations.'],
     ['Vert vérifié', '#5FC690', 'Seulement pour ce qui est vérifié ou validé.'],
+    ['Ambre', '#F0A45B', 'L\'accent, éclairci pour la nuit.'],
   ];
   VUES.marque = () => {
     const a = A.a101;
@@ -1008,7 +1021,7 @@
     </section>
 
     <section class="mq-section env">
-      <div class="mq-tete"><h2 class="grand-titre">Les couleurs.</h2><p class="chapo">Le jour, du blanc, des gris et de l'encre. La nuit, un graphite chaud et du crème, jamais du noir pur. Le vert ne sert qu'à dire « c'est vérifié ». Touchez une couleur pour copier son code.</p></div>
+      <div class="mq-tete"><h2 class="grand-titre">Les couleurs.</h2><p class="chapo">Le jour, du blanc, des gris et de l'encre ; la nuit, un graphite chaud et du crème. Un accent ambre pour guider (sur-titres, étapes, choix), une couleur par caractère de parfum, et le vert seulement pour dire « c'est vérifié ». Touchez une couleur pour copier son code.</p></div>
       ${[['Jour', 'par défaut, et quand l\'appareil est en clair', COULEURS], ['Nuit', 'quand l\'appareil est en sombre, ou avec le bouton de l\'en-tête', NUIT]].map(([titre, quand, liste]) => `<div class="mq-palette"><h3>${titre} <small>${quand}</small></h3>
       <div class="mq-couleurs">${liste.map(([n, hex, usage]) => `<button type="button" class="mq-couleur" data-copier="${hex}"><span class="mq-pastille" style="background:${hex}"></span><strong>${n}</strong><span class="mq-hex">${hex}</span><small>${usage}</small></button>`).join('')}</div></div>`).join('')}
     </section>

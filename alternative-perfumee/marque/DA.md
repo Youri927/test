@@ -48,6 +48,11 @@ symbole est posé sur la ligne de base du mot ; l'espace entre le symbole et le 
 | Trait | #D2D2D7 | Bordures, séparations |
 | Blanc | #FFFFFF | Fond |
 | Vert vérifié | #1A7F4B | Seulement pour ce qui est vérifié ou validé |
+| Ambre | #B05A12 (nuit #F0A45B) | L'accent : sur-titres, numéros d'étapes, choix cochés |
+| Frais | #1F7F95 | Le caractère « frais » d'un parfum (agrumes, marins, aromatiques) |
+| Floral | #B83C6E | Le caractère floral et fruité |
+| Chaud | #B86A12 | Le caractère chaud (gourmand, ambré, musqué) |
+| Boisé | #6F5236 | Le caractère boisé et sombre |
 
 ### La nuit
 

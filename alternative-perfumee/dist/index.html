@@ -24,6 +24,8 @@
   --vert: #1a7f4b;
   --vert-fond: #e9f5ee;
   --rouge: #b3261e;
+  --accent: #b05a12; --accent-fond: #fbf0e4;
+  --fam-fraiche: #1f7f95; --fam-florale: #b83c6e; --fam-chaude: #b86a12; --fam-boisee: #6f5236;
   --police: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
   --rayon: 12px;
   --ease: cubic-bezier(.22, .8, .24, 1);
@@ -38,14 +40,14 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="clair"]) {
     --fond: #1b1a18; --fond-2: #252421; --texte: #f2efe9; --texte-2: #a7a29a; --trait: #3a3835;
-    --noir: #f2efe9; --sur-noir: #1b1a18; --vert: #5fc690; --vert-fond: #1d2b22; --rouge: #ff8f80;
+    --noir: #f2efe9; --sur-noir: #1b1a18; --vert: #5fc690; --vert-fond: #1d2b22; --rouge: #ff8f80; --accent: #f0a45b; --accent-fond: #33261a; --fam-fraiche: #5cc3d6; --fam-florale: #f08bb4; --fam-chaude: #f0aa5b; --fam-boisee: #c9a27c;
     --gris-porte: #2b2a27; --jaune-fond: #2e2814; --jaune-texte: #ecd58a; --orange-fond: #33230f; --orange-texte: #f2b46d;
     color-scheme: dark;
   }
 }
 :root[data-theme="sombre"] {
   --fond: #1b1a18; --fond-2: #252421; --texte: #f2efe9; --texte-2: #a7a29a; --trait: #3a3835;
-  --noir: #f2efe9; --sur-noir: #1b1a18; --vert: #5fc690; --vert-fond: #1d2b22; --rouge: #ff8f80;
+  --noir: #f2efe9; --sur-noir: #1b1a18; --vert: #5fc690; --vert-fond: #1d2b22; --rouge: #ff8f80; --accent: #f0a45b; --accent-fond: #33261a; --fam-fraiche: #5cc3d6; --fam-florale: #f08bb4; --fam-chaude: #f0aa5b; --fam-boisee: #c9a27c;
   --gris-porte: #2b2a27; --jaune-fond: #2e2814; --jaune-texte: #ecd58a; --orange-fond: #33230f; --orange-texte: #f2b46d;
   color-scheme: dark;
 }
@@ -221,11 +223,12 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .vendre { max-width: 1120px; }
 .vendre > .chapo { max-width: 62ch; }
 .vendre-grille { display: grid; grid-template-columns: minmax(0, 680px) minmax(0, 300px); gap: 56px; align-items: start; }
-.bloc-n { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-right: 10px; border-radius: 50%; background: var(--fond-2); font-size: 13px; font-weight: 700; vertical-align: 2px; }
+.bloc-n { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-right: 10px; border-radius: 50%; background: var(--accent-fond); color: var(--accent); font-size: 13px; font-weight: 700; vertical-align: 2px; }
 .bloc-form fieldset { display: grid; gap: 8px; margin: 6px 0 0; padding: 0; border: 0; }
 .bloc-form legend { margin-bottom: 8px; padding: 0; font-weight: 600; font-size: 15px; }
 .bloc-form legend small, .facultatif { color: var(--texte-2); font-weight: 400; font-size: 13.5px; }
-.segment .choix:has(input:checked) { background: var(--fond-2); }
+.segment .choix:has(input:checked) { background: var(--accent-fond); color: var(--texte); }
+.segment input, .coche input, .choix input { accent-color: var(--accent); }
 .groupes-familles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; }
 .groupe-titre { margin-bottom: 6px; color: var(--texte-2); font-size: 13px; font-weight: 600; }
 @media (max-width: 640px) { .groupes-familles { grid-template-columns: minmax(0, 1fr); } }
@@ -234,7 +237,15 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .coche input { position: absolute; opacity: 0; }
 .coche > span { display: grid; padding: 8px 14px; border: 1px solid var(--trait); border-radius: 12px; font-size: 14.5px; font-weight: 500; transition: border-color .2s, background .2s; }
 .coche small { color: var(--texte-2); font-size: 12px; font-weight: 400; }
-.coche input:checked + span { border-color: var(--texte); background: var(--fond-2); }
+.coche input:checked + span { border-color: var(--fam, var(--accent)); background: color-mix(in srgb, var(--fam, var(--accent)) 12%, var(--fond)); }
+.fam-pastille { display: inline-flex; align-items: center; gap: 6px; margin: 0 6px 2px 0; padding: 2px 9px; border-radius: 99px; background: color-mix(in srgb, var(--fam, var(--texte-2)) 13%, var(--fond)); color: var(--fam, var(--texte-2)); font-size: 13px; font-weight: 600; }
+.apercu-fam { margin: 4px 0 2px; }
+.groupe-titre { display: flex; align-items: center; gap: 8px; color: var(--fam) !important; }
+.groupe-titre::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--fam); }
+.coche strong, .coches .coche > span { color: var(--texte); }
+.groupes-familles .coche > span { border-color: color-mix(in srgb, var(--fam) 30%, var(--trait)); }
+.groupes-familles .coche:hover > span { border-color: var(--fam); }
+.fam-fraiche { --fam: var(--fam-fraiche); } .fam-florale { --fam: var(--fam-florale); } .fam-chaude { --fam: var(--fam-chaude); } .fam-boisee { --fam: var(--fam-boisee); }
 .coche input:focus-visible + span { outline: 2px solid var(--texte); outline-offset: 2px; }
 .fiche-auto { padding: 14px 16px; border-radius: 14px; background: var(--fond-2); }
 .fiche-auto dl { display: grid; gap: 4px; margin: 6px 0; font-size: 14.5px; }
@@ -271,7 +282,7 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .ligne-champs > div { display: grid; gap: 8px; }
 .segment { display: inline-flex; flex-wrap: wrap; gap: 8px; }
 .segment .choix { padding: 10px 16px; border: 1px solid var(--trait); border-radius: 10px; font-weight: 500; }
-.segment .choix:has(input:checked) { border-color: var(--texte); }
+.segment .choix:has(input:checked) { border-color: var(--accent); }
 .photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .photo { display: flex; align-items: center; gap: 14px; padding: 12px; border: 1px dashed var(--trait); border-radius: var(--rayon); cursor: pointer; }
 .photo:hover { border-color: var(--texte-2); }
@@ -370,7 +381,7 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .message.entre { animation: toast .45s var(--ease) both; }
 [data-revele] { transition: transform .9s var(--ease); }
 .js-anime [data-revele]:not(.vu) { transform: translateY(26px); }
-.surtitre { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--texte-2); margin-bottom: 10px; }
+.surtitre { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
 .grand-titre { font-weight: 650; font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.12; letter-spacing: -.028em; text-wrap: balance; }
 .lien-bouton { padding: 0; border: 0; background: none; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .champ-petit { min-height: 38px; padding: 6px 10px; font-size: 14px; width: auto; max-width: 100%; }
@@ -455,7 +466,7 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .anat-points button { position: relative; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; width: 100%; padding: 16px 18px 20px; border: 0; border-radius: 16px; background: none; text-align: left; cursor: pointer; transition: background .45s var(--ease); }
 .anat-points button:hover { background: color-mix(in srgb, var(--fond-2) 55%, transparent); }
 .anat-points button[aria-selected="true"] { background: var(--fond-2); }
-.anat-n { padding-top: 2px; font-weight: 700; font-size: 14px; color: var(--texte-2); }
+.anat-n { padding-top: 2px; font-weight: 700; font-size: 14px; color: var(--accent); }
 .anat-txt strong { display: block; font-size: 17px; font-weight: 600; }
 .anat-txt small { display: block; max-height: 0; overflow: hidden; opacity: 0; color: var(--texte-2); font-size: 14.5px; transition: max-height .6s var(--ease), opacity .45s, margin .6s var(--ease); }
 [aria-selected="true"] .anat-txt small { max-height: 90px; margin-top: 4px; opacity: 1; }
@@ -3345,7 +3356,7 @@ function creerAdmin(o) {
             <div><dt>Boîte</dt><dd>${a.boite ? 'Oui' : 'Non'}</dd></div>
             <div><dt>Code lot</dt><dd>${esc(a.lot)}</dd></div>
             <div><dt>Acheté en</dt><dd>${a.achat}</dd></div>
-            <div><dt>Famille</dt><dd>${esc(p.famille)}</dd></div>
+            <div><dt>Famille</dt><dd>${pastillesFamille(p.famille)}</dd></div>
           </dl>
           <fieldset class="livraison"><legend>Livraison</legend>
             <label class="option"><input type="radio" name="mode" value="envoi" checked data-mode> <span>Envoi suivi en point relais<small>2 à 4 jours</small></span><span>${eur2(ENVOI)}</span></label>
@@ -3418,6 +3429,12 @@ function creerAdmin(o) {
     ['Boisées et sombres', [['Boisée', 'oud, gaïac, vétiver'], ['Cuirée', 'daim, fumée, bouleau'], ['Chyprée', 'mousse, patchouli, agrumes'], ['Fougère', 'herbe coupée, coumarine']]],
   ];
   const FAMILLES = GROUPES_FAMILLES.flatMap((g) => g[1]);
+  const CLASSE_GROUPE = ['fam-fraiche', 'fam-florale', 'fam-chaude', 'fam-boisee'];
+  const groupeDe = (mot) => GROUPES_FAMILLES.findIndex(([, fs]) => fs.some(([f]) => normal(f).slice(0, 5) === normal(mot).slice(0, 5)));
+  const pastillesFamille = (texte) => texte.split(/\s+/).map((m) => {
+    const g = groupeDe(m);
+    return `<span class="fam-pastille ${g >= 0 ? CLASSE_GROUPE[g] : ''}">${esc(m[0].toUpperCase() + m.slice(1))}</span>`;
+  }).join('');
   const FORMATS = [['flacon', 'Flacon'], ['voyage', 'Format voyage'], ['miniature', 'Miniature'], ['echantillon', 'Échantillon acheté'], ['coffret', 'Coffret']];
   const LIEUX = ['Boutique de la maison', 'Parfumerie (Sephora, Nocibé, Marionnaud…)', 'Grand magasin', 'Site officiel ou parfumerie en ligne', 'Reçu en cadeau', 'Acheté d\'occasion'];
   const DEFAUTS = ['Bouchon marqué ou rayé', 'Étiquette usée', 'Flacon rayé', 'Vaporisateur un peu dur'];
@@ -3467,6 +3484,7 @@ function creerAdmin(o) {
     return `<div class="apercu-carte"><div class="apercu-photo">${image}${pc || ph ? '' : '<span class="apercu-vide">Votre photo de face</span>'}</div>
         <p class="carte-maison">${esc(maisonChoisie() || 'Maison')}</p><p class="carte-nom">${esc(nomParfum() || 'Parfum')}</p>
         <p class="carte-meta">${esc(conc || 'Concentration')}${ml > 0 ? ` · ${ml} ml` : ''}${V.etat === 'blister' ? ' · neuf sous blister' : restant}</p>
+        ${pc || V.familles.length ? `<p class="apercu-fam">${pastillesFamille(pc ? pc.famille : V.familles.join(' '))}</p>` : ''}
         <p class="carte-prix">${nombre(V.prix) >= 3 ? eur(nombre(V.prix)) : '— €'}</p>
         ${V.annee || V.lot ? `<p class="carte-meta">${V.annee ? `Acheté : ${esc(V.annee)}` : ''}${V.annee && V.lot ? ' · ' : ''}${V.lot ? `lot ${esc(V.lot)}` : ''}</p>` : ''}
       </div>
@@ -3494,12 +3512,12 @@ function creerAdmin(o) {
           <select id="maison" class="champ" data-champ="maison"><option value="">Choisir une maison</option>${maisons().map((x) => `<option ${V.maison === x ? 'selected' : ''}>${esc(x)}</option>`).join('')}<option value="${AUTRE}" ${V.maison === AUTRE ? 'selected' : ''}>Ma maison n'est pas dans la liste</option></select>
           ${V.maison === AUTRE ? `<label for="maison-autre">Nom de la maison</label><input id="maison-autre" class="champ" data-champ="maisonAutre" value="${esc(V.maisonAutre)}" placeholder="ex. Maison Crivelli" autocomplete="off"><p class="aide aide-maison" id="aide-maison" aria-live="polite">${aideMaison()}</p>` : ''}
           ${liste.length ? `<label for="parfum">Parfum</label><select id="parfum" class="champ" data-champ="parfum"><option value="">Choisir un parfum</option>${liste.map((x) => `<option value="${esc(x.id)}" ${V.parfum === x.id ? 'selected' : ''}>${esc(x.nom)}${x.conc ? ` (${esc(x.conc)})` : ''}</option>`).join('')}<option value="${AUTRE}" ${V.parfum === AUTRE ? 'selected' : ''}>Mon parfum n'est pas dans la liste</option></select>` : ''}
-          ${pc ? `<div class="fiche-auto"><p class="surtitre">Rempli d'après le catalogue</p><dl><div><dt>Concentration</dt><dd>${esc(pc.conc)}</dd></div><div><dt>Pour</dt><dd>${esc(pc.genre)}</dd></div><div><dt>Famille</dt><dd>${esc(pc.famille)}</dd></div><div><dt>Notes</dt><dd>${esc(pc.notes)}</dd></div></dl><p class="aide">Une erreur ? Dites-le dans la description : l'équipe corrige la fiche.</p></div>` : ''}
+          ${pc ? `<div class="fiche-auto"><p class="surtitre">Rempli d'après le catalogue</p><dl><div><dt>Concentration</dt><dd>${esc(pc.conc)}</dd></div><div><dt>Pour</dt><dd>${esc(pc.genre)}</dd></div><div><dt>Famille</dt><dd>${pastillesFamille(pc.famille)}</dd></div><div><dt>Notes</dt><dd>${esc(pc.notes)}</dd></div></dl><p class="aide">Une erreur ? Dites-le dans la description : l'équipe corrige la fiche.</p></div>` : ''}
           ${libre ? `<label for="parfum-autre">Nom du parfum</label><input id="parfum-autre" class="champ" data-champ="parfumAutre" value="${esc(V.parfumAutre)}" placeholder="ex. Tobacco Mandarin" autocomplete="off">
             <p class="aide">Il sera ajouté à la liste${m && V.maison !== AUTRE ? ` de ${esc(m)}` : ''} une fois l'orthographe vérifiée par l'équipe.</p>
             <fieldset><legend>Concentration</legend>${segment('conc', V.conc, CONCENTRATIONS.map((c) => [c, c]))}</fieldset>
             <fieldset><legend>Pour</legend>${segment('genre', V.genre, [['Femme', 'Femme'], ['Homme', 'Homme'], ['Mixte', 'Mixte']])}</fieldset>
-            <fieldset><legend>Son caractère <small>une ou deux familles, facultatif</small></legend><div class="groupes-familles">${GROUPES_FAMILLES.map(([g, fs]) => `<div><p class="groupe-titre">${g}</p>${puces('familles', V.familles, fs.map(([f, d]) => [f, f, d]))}</div>`).join('')}</div></fieldset>` : ''}
+            <fieldset><legend>Son caractère <small>une ou deux familles, facultatif</small></legend><div class="groupes-familles">${GROUPES_FAMILLES.map(([g, fs], i) => `<div class="${CLASSE_GROUPE[i]}"><p class="groupe-titre">${g}</p>${puces('familles', V.familles, fs.map(([f, d]) => [f, f, d]))}</div>`).join('')}</div></fieldset>` : ''}
         </section>
 
         ${parfumPret ? `<section class="bloc-form">
@@ -3863,6 +3881,11 @@ function creerAdmin(o) {
     ['Trait', '#D2D2D7', 'Les bordures et les séparations.'],
     ['Blanc', '#FFFFFF', 'Le fond.'],
     ['Vert vérifié', '#1A7F4B', 'Seulement pour ce qui est vérifié ou validé.'],
+    ['Ambre', '#B05A12', 'L\'accent : sur-titres, étapes, ce qu\'on a choisi.'],
+    ['Frais', '#1F7F95', 'Les parfums frais (agrumes, marins, aromatiques).'],
+    ['Floral', '#B83C6E', 'Les parfums floraux et fruités.'],
+    ['Chaud', '#B86A12', 'Les parfums chauds (gourmands, ambrés, musqués).'],
+    ['Boisé', '#6F5236', 'Les parfums boisés et sombres.'],
   ];
   const NUIT = [
     ['Graphite', '#1B1A18', 'Le fond : chaud, pas noir.'],
@@ -3871,6 +3894,7 @@ function creerAdmin(o) {
     ['Taupe', '#A7A29A', 'Les textes secondaires.'],
     ['Trait', '#3A3835', 'Les bordures et les séparations.'],
     ['Vert vérifié', '#5FC690', 'Seulement pour ce qui est vérifié ou validé.'],
+    ['Ambre', '#F0A45B', 'L\'accent, éclairci pour la nuit.'],
   ];
   VUES.marque = () => {
     const a = A.a101;
@@ -3914,7 +3938,7 @@ function creerAdmin(o) {
     </section>
 
     <section class="mq-section env">
-      <div class="mq-tete"><h2 class="grand-titre">Les couleurs.</h2><p class="chapo">Le jour, du blanc, des gris et de l'encre. La nuit, un graphite chaud et du crème, jamais du noir pur. Le vert ne sert qu'à dire « c'est vérifié ». Touchez une couleur pour copier son code.</p></div>
+      <div class="mq-tete"><h2 class="grand-titre">Les couleurs.</h2><p class="chapo">Le jour, du blanc, des gris et de l'encre ; la nuit, un graphite chaud et du crème. Un accent ambre pour guider (sur-titres, étapes, choix), une couleur par caractère de parfum, et le vert seulement pour dire « c'est vérifié ». Touchez une couleur pour copier son code.</p></div>
       ${[['Jour', 'par défaut, et quand l\'appareil est en clair', COULEURS], ['Nuit', 'quand l\'appareil est en sombre, ou avec le bouton de l\'en-tête', NUIT]].map(([titre, quand, liste]) => `<div class="mq-palette"><h3>${titre} <small>${quand}</small></h3>
       <div class="mq-couleurs">${liste.map(([n, hex, usage]) => `<button type="button" class="mq-couleur" data-copier="${hex}"><span class="mq-pastille" style="background:${hex}"></span><strong>${n}</strong><span class="mq-hex">${hex}</span><small>${usage}</small></button>`).join('')}</div></div>`).join('')}
     </section>
