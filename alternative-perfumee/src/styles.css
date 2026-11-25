@@ -512,15 +512,17 @@ details[open] .odeur span { animation: fondu .5s var(--ease) both; animation-del
 
 .histoire { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 72px; padding-block: 24px 40px; }
 .histoire-etapes { position: relative; }
-.histoire-etapes::before { content: ""; position: absolute; left: 21px; top: 30vh; bottom: 30vh; width: 1px; background: var(--trait); }
-.h-etape { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 24px; align-content: center; min-height: 62vh; opacity: .32; transition: opacity .6s var(--ease); }
+.histoire-etapes::before { content: ""; position: absolute; left: 21px; top: calc(6vh + 44px); bottom: 40vh; width: 1px; background: var(--trait); }
+/* une étape tous les 80 % d'écran : on a le temps de lire et de voir la scène ; la première commence tout de suite */
+.h-etape { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 24px; align-content: center; min-height: 80vh; opacity: .3; transition: opacity .5s var(--ease); }
+.h-etape:first-child { align-content: start; min-height: 48vh; padding-top: 6vh; }
 .h-etape.actif { opacity: 1; }
 .h-num { position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--fond); border: 1px solid var(--trait); font-weight: 700; font-size: 14px; transition: background .5s var(--ease), color .5s, border-color .5s; }
 .h-etape.actif .h-num { background: var(--noir); border-color: var(--noir); color: var(--sur-noir); }
 .h-texte h3 { font-weight: 650; font-size: clamp(1.4rem, 2.4vw, 1.9rem); letter-spacing: -.025em; line-height: 1.15; margin-bottom: 12px; }
 .h-texte p { font-size: 17px; color: var(--texte-2); max-width: 44ch; }
 .h-scene-mobile { display: none; }
-.histoire-scene { position: sticky; top: calc(50vh - 250px); height: 500px; display: grid; grid-template-rows: 1fr auto; gap: 16px; align-self: start; margin-top: 18vh; }
+.histoire-scene { position: sticky; top: calc(50vh - 250px); height: 500px; display: grid; grid-template-rows: 1fr auto; gap: 16px; align-self: start; margin-top: 0; }
 .scene-cadre { position: relative; }
 .scene-cadre .scene { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; transform: translateY(18px) scale(.98); transition: opacity .6s var(--ease), transform .8s var(--ease); pointer-events: none; }
 .scene-cadre .scene.actif { opacity: 1; transform: none; }
@@ -710,7 +712,7 @@ details[open] .odeur span { animation: fondu .5s var(--ease) both; animation-del
   .histoire { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .histoire-scene { display: none; }
   .histoire-etapes::before { display: none; }
-  .h-etape { min-height: 0; opacity: 1; padding-block: 28px; }
+  .h-etape, .h-etape:first-child { min-height: 0; opacity: 1; padding-block: 28px; align-content: center; }
   .h-scene-mobile { display: grid; place-items: center; grid-column: 1 / -1; }
   .fn-photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sept-cartes, .flux { grid-template-columns: minmax(0, 1fr); }

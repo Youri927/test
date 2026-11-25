@@ -954,6 +954,32 @@
     vue.querySelectorAll('.scene[data-scene]').forEach((el) => (+el.dataset.scene === i ? rejouer(el) : el.classList.remove('actif')));
     vue.querySelectorAll('[data-point]').forEach((el) => el.classList.toggle('actif', +el.dataset.point === i));
   }
+  /* l'étape active est celle dont le texte est le plus près du milieu de l'écran : elle est alors en face de la scène,
+     qui reste collée au milieu. On le calcule au défilement plutôt qu'avec une marge d'IntersectionObserver, qui est
+     ignorée quand la page est affichée dans une autre (une iframe d'une autre origine) : l'étape suivante s'allumait
+     alors dès qu'elle entrait en bas de l'écran. */
+  function suivreHistoire() {
+    const textes = vue.querySelectorAll('.h-etape .h-texte');
+    if (!textes.length) return;
+    const milieu = innerHeight / 2;
+    let proche = 0;
+    let ecart = Infinity;
+    textes.forEach((t, i) => {
+      const r = t.getBoundingClientRect();
+      const d = Math.abs(r.top + r.height / 2 - milieu);
+      if (d < ecart) [ecart, proche] = [d, i];
+    });
+    activerEtape(proche);
+  }
+  let rafHistoire = 0;
+  const auDefilement = () => {
+    if (!rafHistoire) rafHistoire = requestAnimationFrame(() => {
+      rafHistoire = 0;
+      suivreHistoire();
+    });
+  };
+  addEventListener('scroll', auDefilement, {passive: true});
+  addEventListener('resize', auDefilement, {passive: true});
   function compter(el) {
     const cible = +el.dataset.compte;
     if (reduit() || !cible) return;
@@ -996,18 +1022,9 @@
     );
     vue.querySelectorAll('[data-revele], [data-anime]').forEach((el) => vu.observe(el));
     obs.push(vu);
-    const etapes = vue.querySelectorAll('.h-etape');
-    if (!etapes.length) return;
-    const h = new IntersectionObserver(
-      (entrees) => {
-        entrees.forEach((e) => {
-          if (e.isIntersecting) activerEtape(+e.target.dataset.etape);
-        });
-      },
-      {rootMargin: '-45% 0px -45% 0px'},
-    );
-    etapes.forEach((el) => h.observe(el));
-    obs.push(h);
+    if (!vue.querySelector('.h-etape')) return;
+    etapeActive = 0;
+    suivreHistoire();
     const m = new IntersectionObserver(
       (entrees) => {
         entrees.forEach((e) => {
@@ -1364,6 +1381,19 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !modale.hidden) fermer();
   });
+
+  /* typographie française : une espace insécable avant ? ! : ; » et après «, pour qu'un « ? » ne se retrouve jamais
+     seul en début de ligne. Appliquée à tout texte ajouté à la page, quel que soit l'endroit qui l'ajoute. */
+  const insecables = (racine) => {
+    const w = document.createTreeWalker(racine, NodeFilter.SHOW_TEXT);
+    for (let n = w.nextNode(); n; n = w.nextNode()) {
+      if (n.parentNode.closest('script, style, textarea')) continue;
+      const t = n.data.replace(/ ([?!:;»])/g, '\u00a0$1').replace(/« /g, '«\u00a0');
+      if (t !== n.data) n.data = t;
+    }
+  };
+  new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => (n.nodeType === 1 || n.nodeType === 3) && insecables(n.nodeType === 3 ? n.parentNode : n)))).observe(document.body, {childList: true, subtree: true});
+  insecables(document.body);
 
   if ('IntersectionObserver' in window && !reduit()) document.documentElement.classList.add('js-anime');
   rendre();
