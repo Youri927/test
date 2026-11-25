@@ -43,7 +43,8 @@ const Dessins = (() => {
         gouttes.push(`<circle cx="${bx.toFixed(1)}" cy="${by.toFixed(1)}" r="${(6 - rang * 0.7).toFixed(2)}" style="--dx:${dx}px;--dy:${dy.toFixed(1)}px;--d:${(rang * 0.12 + j * 0.05).toFixed(2)}s"/>`);
       }
     }
-    return `<div class="vaporise" aria-hidden="true"><img src="${src('vendre')}" alt="" width="600" height="800" decoding="async"><svg class="brume" viewBox="0 0 600 800">${gouttes.join('')}</svg></div>`;
+    // deux rendus, chacun sur le fond de la porte : en clair, et en sombre
+    return `<div class="vaporise" aria-hidden="true"><img class="v-clair" src="${src('vendre')}" alt="" width="600" height="800" decoding="async"><img class="v-sombre" src="${src('vendre-sombre')}" alt="" width="600" height="800" decoding="async" loading="lazy"><svg class="brume" viewBox="0 0 600 800">${gouttes.join('')}</svg></div>`;
   };
 
   return {photo, vaporise, LEGENDES};

@@ -21,14 +21,30 @@ const PARFUMS = [
   {id: 'khamrah', maison: 'Lattafa', nom: 'Khamrah', conc: 'Eau de parfum', annee: 2022, genre: 'Mixte', famille: 'Ambrée gourmande', notes: 'cannelle, dattes, praliné, vanille', formats: [{ml: 100, neuf: 39}], forme: 'facette', jus: '#BF6524', bouchon: '#B69145'},
 ];
 
+/* conformes : la part des ventes sans non-conformité reconnue par l'équipe ; envoi : le délai moyen d'envoi, en jours ;
+   criteres : la part des acheteurs qui ont répondu oui à « conforme aux photos ? », « bien emballé ? », « envoyé vite ? » */
 const VENDEURS = {
-  v1: {pseudo: 'lea.parfums', ville: 'Paris 17e', note: 4.9, avis: 86, ventes: 112, reponse: 'en moins d\'1 h', depuis: 'mars 2026'},
-  v2: {pseudo: 'yanis_b', ville: 'Lyon 7e', note: 5.0, avis: 31, ventes: 41, reponse: 'en 2 h', depuis: 'avril 2026'},
-  v3: {pseudo: 'ines.m', ville: 'Bordeaux', note: 4.8, avis: 7, ventes: 9, reponse: 'dans la journée', depuis: 'juin 2026'},
-  v4: {pseudo: 'hugo_collection', ville: 'Lille', note: 4.9, avis: 52, ventes: 64, reponse: 'en 1 h', depuis: 'mars 2026'},
-  v5: {pseudo: 'sarah.k', ville: 'Marseille 6e', note: 4.7, avis: 12, ventes: 15, reponse: 'dans la journée', depuis: 'mai 2026'},
-  v6: {pseudo: 'mathis.d', ville: 'Nantes', note: null, avis: 0, ventes: 0, reponse: 'en 3 h', depuis: 'novembre 2026'},
-  v7: {pseudo: 'camille.r', ville: 'Paris 11e', note: 5.0, avis: 19, ventes: 23, reponse: 'en 1 h', depuis: 'avril 2026'},
+  v1: {pseudo: 'lea.parfums', ville: 'Paris 17e', note: 4.9, avis: 86, ventes: 112, reponse: 'en moins d\'1 h', depuis: 'mars 2026', conformes: 100, envoi: 1.2, criteres: [100, 98, 95]},
+  v2: {pseudo: 'yanis_b', ville: 'Lyon 7e', note: 5.0, avis: 31, ventes: 41, reponse: 'en 2 h', depuis: 'avril 2026', conformes: 100, envoi: 1.6, criteres: [100, 100, 94]},
+  v3: {pseudo: 'ines.m', ville: 'Bordeaux', note: 4.8, avis: 7, ventes: 9, reponse: 'dans la journée', depuis: 'juin 2026', conformes: 100, envoi: 2.1, criteres: [100, 86, 86]},
+  v4: {pseudo: 'hugo_collection', ville: 'Lille', note: 4.9, avis: 52, ventes: 64, reponse: 'en 1 h', depuis: 'mars 2026', conformes: 98, envoi: 1.4, criteres: [98, 100, 96]},
+  v5: {pseudo: 'sarah.k', ville: 'Marseille 6e', note: 4.7, avis: 12, ventes: 15, reponse: 'dans la journée', depuis: 'mai 2026', conformes: 100, envoi: 2.4, criteres: [100, 92, 83]},
+  v6: {pseudo: 'mathis.d', ville: 'Nantes', note: null, avis: 0, ventes: 0, reponse: 'en 3 h', depuis: 'novembre 2026', conformes: null, envoi: null, criteres: null},
+  v7: {pseudo: 'camille.r', ville: 'Paris 11e', note: 5.0, avis: 19, ventes: 23, reponse: 'en 1 h', depuis: 'avril 2026', conformes: 100, envoi: 1.1, criteres: [100, 100, 100]},
+};
+
+/* des avis d'acheteurs : seuls ceux d'une vente conclue peuvent en laisser, un par vente */
+const AVIS = {
+  v1: [
+    {note: 5, qui: 'm…e', quand: 'novembre 2026', quoi: 'Baccarat Rouge 540', texte: 'Le niveau est exactement celui de la photo, et le flacon était emballé dans du papier bulle, dans une boîte.', reponse: 'Merci, belle découverte à vous.'},
+    {note: 5, qui: 'k…n', quand: 'octobre 2026', quoi: 'Gypsy Water', texte: 'Envoyé le lendemain. Code lot identique sur la boîte et le flacon.'},
+  ],
+  v2: [{note: 5, qui: 's…a', quand: 'novembre 2026', quoi: 'Delina', texte: 'Conforme en tout point, très bien protégé.'}],
+  v4: [
+    {note: 5, qui: 'a…l', quand: 'novembre 2026', quoi: 'Naxos', texte: 'Vendeur sérieux, flacon comme sur les photos.'},
+    {note: 4, qui: 'j…s', quand: 'septembre 2026', quoi: 'Santal 33', texte: 'Parfait, mais le colis est parti au bout de 3 jours.', reponse: 'Désolé pour le délai : j\'étais en déplacement.'},
+  ],
+  v7: [{note: 5, qui: 'l…o', quand: 'octobre 2026', quoi: 'Libre', texte: 'Rien à redire, merci !'}],
 };
 
 /* etat : 'blister' (neuf, jamais ouvert) ou 'entame' ; niveau : en %, déclaré par le vendeur et contrôlé sur la photo

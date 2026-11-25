@@ -1,7 +1,8 @@
 # Respray : la direction artistique
 
 Une marque calme et précise : du blanc, des gris, de l'encre, une seule police, et des photos de flacons nettes, sur
-fond uni. Ce qui rassure, ce n'est pas le décor, c'est la clarté. Le site est toujours clair : pas de mode sombre.
+fond uni. Ce qui rassure, ce n'est pas le décor, c'est la clarté. Le jour en blanc et gris, la nuit en graphite
+chaud : jamais de noir pur.
 
 ## Le symbole
 
@@ -48,8 +49,20 @@ symbole est posé sur la ligne de base du mot ; l'espace entre le symbole et le 
 | Blanc | #FFFFFF | Fond |
 | Vert vérifié | #1A7F4B | Seulement pour ce qui est vérifié ou validé |
 
-Pas de mode sombre : le site reste clair, même quand l'appareil est en sombre. Le logo blanc ne sert que sur une photo
-ou un support sombre, hors du site.
+### La nuit
+
+Le site suit l'appareil ; un bouton dans l'en-tête force le clair ou le sombre. La nuit n'est pas du noir : c'est un
+graphite chaud, comme une parfumerie le soir. Le texte et les actions passent en crème. Les photos gardent leur fond
+clair, comme celles des vendeurs, à peine atténuées.
+
+| Nom | Code | Usage |
+|---|---|---|
+| Graphite | #1B1A18 | Le fond |
+| Graphite clair | #252421 | Les fonds de section |
+| Crème | #F2EFE9 | Texte, logo, boutons principaux |
+| Taupe | #A7A29A | Textes secondaires |
+| Trait | #3A3835 | Bordures, séparations |
+| Vert vérifié | #5FC690 | Seulement pour ce qui est vérifié ou validé |
 
 ## La typographie
 
@@ -76,6 +89,10 @@ prototype, des rendus 3D (`tools/rendus`) tiennent leur place, et servent d'exem
 - Sous la grande photo d'une annonce, une légende dit ce que la vue prouve.
 - Formes génériques : aucun flacon de marque n'est reproduit.
 - La brume du spray (porte « Vendre ») reprend le cône de points du symbole.
+- Flacon opaque : le niveau se photographie à contre-jour, une lampe de téléphone collée derrière (une image d'exemple
+  le montre dans le formulaire de vente).
+- La vérification, page « Comment ça marche », est une scène 3D en direct, avec le même atelier que les photos : la
+  caméra va d'un point à l'autre en arc, le bouchon se lève, le bouton spray s'enlève ; un repère suit chaque point.
 
 ## Les éléments
 
@@ -88,6 +105,6 @@ Précis, calme, sans promesse qu'on ne tient pas.
 
 | On dit | On ne dit pas |
 |---|---|
-| « Vérifiée en 1 h 12. » | « Qualité premium garantie ! » |
+| « Vérifiée le 24 novembre, 5 contrôles sur 5. » | « Qualité premium garantie ! » |
 | « Il reste environ 85 %. » | « Presque plein ! » |
 | « Vous avez 7 jours pour vérifier. » | « Achetez en toute sérénité ! » |

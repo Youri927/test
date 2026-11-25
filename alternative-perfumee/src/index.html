@@ -18,6 +18,10 @@
       <a href="#fonctionnement" data-nav="fonctionnement">Comment ça marche</a>
       <a class="btn btn-noir btn-petit" href="#vendre" data-nav="vendre">Vendre</a>
     </nav>
+    <button class="theme" type="button" data-action="theme" aria-pressed="false" aria-label="Passer en sombre" title="Passer en sombre">
+      <svg class="ico ico-lune" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+      <svg class="ico ico-soleil" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></svg>
+    </button>
   </div>
 </header>
 
@@ -42,6 +46,12 @@
 <div id="modale" hidden></div>
 <p id="message" class="message" role="status" hidden></p>
 
+<!-- three.js n'est chargé qu'à l'arrivée sur l'animation de la vérification, page « Comment ça marche » -->
+<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+<!--scripts-->
 <script src="data.js"></script>
+<script src="atelier3d.js"></script>
 <script src="visuels.js"></script>
+<script src="verif3d.js"></script>
 <script src="app.js"></script>
+<!--/scripts-->

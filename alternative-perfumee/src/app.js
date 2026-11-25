@@ -137,7 +137,7 @@
   const PHOTOS = [
     {k: 'face', t: 'Le flacon de face', d: 'Bien droit, étiquette lisible.', pourquoi: 'Forme du flacon, du bouchon et de l\'étiquette', obl: true},
     {k: 'dessous', t: 'Le dessous du flacon', d: 'Le code lot gravé ou imprimé doit se lire.', pourquoi: 'Le code lot existe et suit le format de la marque', obl: true},
-    {k: 'niveau', t: 'Le niveau', d: 'À hauteur des yeux, sur un fond clair.', pourquoi: 'Le niveau annoncé est le bon', obl: true},
+    {k: 'niveau', t: 'Le niveau', d: 'À hauteur des yeux, sur un fond clair. Flacon opaque : une lampe de téléphone collée derrière.', pourquoi: 'Le niveau annoncé est le bon', obl: true},
     {k: 'dessus', t: 'Sans le bouchon, vu de dessus', d: 'Le bouton spray en place, la bague bien visible.', pourquoi: 'Le spray et le sertissage d\'origine', obl: true},
     {k: 'tige', t: 'Sans le bouton spray', d: 'Retirez le petit bouton : la tige doit se voir.', pourquoi: 'La tige n\'a pas été forcée ni recollée', obl: true},
     {k: 'preuve', t: 'Votre pseudo et la date', d: 'Le flacon à côté d\'un papier où vous les avez écrits.', pourquoi: 'Le vendeur a le flacon entre les mains', obl: true},
@@ -145,6 +145,10 @@
     {k: 'ticket', t: 'Le ticket ou la facture', d: 'Facultatif, mais rassurant pour l\'acheteur.', pourquoi: 'La provenance', obl: false},
   ];
   const OBLIGATOIRES = PHOTOS.filter((x) => x.obl).length;
+  /* l'astuce du niveau d'un flacon opaque, montrée dans le formulaire et dans « Comment ça marche » */
+  const astuceOpaque = () => `<aside class="astuce"><img class="astuce-img" src="${typeof PHOTOS_EMBARQUEES !== 'undefined' ? PHOTOS_EMBARQUEES.contrejour : '../photos/contrejour.webp'}" alt="Un flacon noir opaque, la lampe d'un téléphone collée derrière : le parfum fait une zone sombre et la limite du niveau se voit." width="600" height="750" loading="lazy">
+      <div><p class="surtitre">Flacon opaque ?</p><p class="astuce-titre">Le niveau se voit à contre-jour.</p><p>Dans une pièce peu éclairée, allumez la lampe d'un téléphone et collez-la contre le dos du flacon. La lumière traverse le verre : le parfum fait une zone plus sombre, et la limite se voit nettement. Prenez la photo de face, à hauteur du niveau.</p></div></aside>`;
+
 
   /* ——— accueil ———
      Quatre temps : deux portes (acheter, vendre), le ruban des annonces, une annonce décortiquée, et la liste de
@@ -237,7 +241,7 @@
       <div class="anat-carte" data-zone="${anat}" aria-hidden="true">
         <div class="z z0"><div class="anat-grande">${photo(a)}</div><div class="anat-minis">${['dessous', 'niveau', 'dessus', 'tige', 'preuve'].map((v) => `<span>${photo(a, v)}</span>`).join('')}</div></div>
         <div class="anat-infos"><p>${esc(P[a.p].maison)}</p><p class="anat-nom">${esc(P[a.p].nom)}</p><p class="anat-prix">${eur(a.prix)} <small>· 70 ml · reste ~85 %</small></p></div>
-        <div class="z z1"><b>${ico('check')}</b><span><strong>Vérifiée par l'équipe</strong><small>il y a 1 h 12 · 5 contrôles sur 5</small></span></div>
+        <div class="z z1"><b>${ico('check')}</b><span><strong>Vérifiée par l'équipe</strong><small>le 24 novembre · 5 contrôles sur 5</small></span></div>
         <div class="z z2"><b>${ico('cadenas')}</b><span><strong>Paiement bloqué, 7 jours pour vérifier</strong><span class="anat-jours">${Array.from({length: 7}, (_, i) => `<i style="--i:${i}"></i>`).join('')}</span></span></div>
         <div class="z z3"><b>${ico('euro')}</b><span><strong>Le vendeur reçoit ${eur2(a.prix)}</strong><small>Commission : 0,00 €</small></span></div>
       </div>
@@ -460,10 +464,7 @@
             <h2>${ico('cadenas')}Protection acheteur</h2>
             <p>Votre paiement reste bloqué jusqu'à ce que vous ayez vérifié le parfum. Vous avez <strong>7 jours après la livraison</strong> : s'il n'est pas conforme à l'annonce, vous êtes remboursé.</p>
           </div>
-          <a class="vendeur" href="#recherche">
-            <span class="avatar" aria-hidden="true">${esc(v.pseudo[0].toUpperCase())}</span>
-            <span><strong>${esc(v.pseudo)}</strong><small>${v.note ? `★ ${nb(v.note, 1)} · ${v.avis} avis · ${v.ventes} ventes` : 'Nouveau vendeur'}</small><small>${esc(v.ville)} · répond ${v.reponse}</small></span>
-          </a>
+          ${blocVendeur(v, a)}
         </div>
       </div>
       <div class="annonce-bas">
@@ -475,6 +476,28 @@
       ${autres.length ? `<section class="section"><div class="section-tete"><h2>Autres annonces de ${esc(p.nom)}</h2></div><div class="grille">${autres.map(carte).join('')}</div></section>` : ''}
     </div>`;
   };
+  /* le vendeur : note, ventes conformes, délai d'envoi, et ses avis (seuls les acheteurs d'une vente conclue en laissent) */
+  const etoiles = (n) => `<span class="etoiles" aria-label="${n} sur 5">${'★'.repeat(n)}<span aria-hidden="true">${'★'.repeat(5 - n)}</span></span>`;
+  function blocVendeur(v, a) {
+    const avis = AVIS[a.v] || [];
+    const tete = `<span class="avatar" aria-hidden="true">${esc(v.pseudo[0].toUpperCase())}</span>
+      <span><strong>${esc(v.pseudo)}</strong><small>${v.note ? `★ ${nb(v.note, 1)} · ${v.avis} avis · ${v.ventes} ventes` : 'Nouveau vendeur : pas encore d\'avis'}</small><small>${esc(v.ville)} · répond ${v.reponse} · membre depuis ${v.depuis}</small></span>`;
+    if (!v.note) return `<div class="vendeur-bloc"><div class="vendeur">${tete}</div><p class="vendeur-nouveau">Ses annonces sont vérifiées comme les autres, et votre paiement reste bloqué 7 jours.</p></div>`;
+    const crit = ['Conforme aux photos', 'Bien emballé', 'Envoyé en moins de 3 jours'];
+    return `<div class="vendeur-bloc">
+      <div class="vendeur">${tete}</div>
+      <ul class="vendeur-chiffres">
+        <li><strong>${v.conformes} %</strong><small>de ventes conformes</small></li>
+        <li><strong>${nb(v.envoi, 1)} j</strong><small>pour envoyer, en moyenne</small></li>
+        <li><strong>${v.ventes}</strong><small>ventes conclues</small></li>
+      </ul>
+      <details class="vendeur-avis"><summary>Voir les ${v.avis} avis</summary>
+        <ul class="criteres">${crit.map((c, i) => `<li><span>${c}</span><i style="--p:${v.criteres[i]}%"></i><b>${v.criteres[i]} %</b></li>`).join('')}</ul>
+        ${avis.map((x) => `<article class="avis"><p class="avis-tete">${etoiles(x.note)}<span>${esc(x.qui)} · ${esc(x.quoi)} · ${x.quand}</span></p><p>${esc(x.texte)}</p>${x.reponse ? `<p class="avis-reponse"><strong>Réponse de ${esc(v.pseudo)}</strong> ${esc(x.reponse)}</p>` : ''}</article>`).join('')}
+        <p class="aide">Avis d'acheteurs vérifiés : un seul par vente conclue, laissé après les 7 jours.</p>
+      </details>
+    </div>`;
+  }
   function total(a) {
     const port = achat.mode === 'envoi' ? ENVOI : 0;
     const pr = protection(a.prix);
@@ -542,6 +565,7 @@
               <span class="photo-txt"><strong>${x.t}${x.obl ? '' : ' <em>facultatif</em>'}</strong><small>${x.d}</small></span>
             </label>`).join('')}</div>
           <button class="btn btn-petit" type="button" data-action="photos-exemple">Ajouter des photos d'exemple</button>
+          ${astuceOpaque()}
         </section>
 
         <section class="bloc-form">
@@ -611,7 +635,7 @@
       case 'verif':
         return `<div class="sc-verif"><div class="sc-scan">${photo(a, 'tige')}<span class="sc-ligne"></span></div>
           <ul class="sc-checks">${['Code lot cohérent', 'Spray et bague d\'origine', 'Tige intacte', 'Niveau conforme', 'Pseudo et date'].map((t, i) => `<li style="--i:${i}"><b>${ico('check')}</b>${t}</li>`).join('')}</ul>
-          <p class="sc-chip">${ico('check')}Vérifiée en 1 h 12</p></div>`;
+          <p class="sc-chip">${ico('check')}Vérifiée · en ligne</p></div>`;
       case 'vendu':
       case 'recu':
         return `<div class="sc-colis"><p class="sc-notif">${type === 'vendu' ? `Vendu ! ${esc(p.nom)} · ${eur(a.prix)}` : 'Votre colis est arrivé en point relais'}</p>
@@ -655,6 +679,66 @@
     </div>`;
   }
   let simPrix = 100;
+  /* les quatre points de la vérification, animés en 3D */
+  const VERIF = [
+    {t: 'Le spray et la tige.', d: 'La bague sertie d\'origine, un bouton et une tige qui n\'ont pas été forcés : un flacon ouvert pour être rempli d\'autre chose en garde la trace.', e: 'La tige'},
+    {t: 'Le flacon et l\'étiquette.', d: 'Forme, bouchon, gravures : comparés aux modèles connus de la maison.', e: 'Le flacon'},
+    {t: 'Le niveau.', d: 'Celui de la photo correspond à celui de l\'annonce. Flacon opaque ? Une lampe de téléphone collée derrière, et le niveau apparaît.', e: 'Le niveau'},
+    {t: 'Le code lot.', d: 'Il existe, il suit le format de la marque, il est le même sur la boîte. Il donne souvent l\'année de fabrication.', e: 'Le code lot'},
+  ];
+  let verifI = 0;
+  let verif3d = null;
+  let verifMinuteur = 0;
+  let verifPause = 0;
+  function choisirVerif(i, parVous) {
+    verifI = i;
+    const cadre = vue.querySelector('[data-verif3d]');
+    if (!cadre) return;
+    cadre.dataset.point = i;
+    vue.querySelectorAll('[data-verif]').forEach((b) => {
+      b.setAttribute('aria-pressed', +b.dataset.verif === i);
+      // la barre de progression repart à zéro
+      const barre = b.querySelector('.verif-prog');
+      barre.style.animation = 'none';
+      void barre.offsetWidth;
+      barre.style.animation = '';
+    });
+    vue.querySelector('.verif-liste').classList.toggle('en-pause', !!parVous);
+    if (parVous) verifPause = performance.now() + 14000;
+    if (verif3d) verif3d.aller(i);
+  }
+  /* au premier passage : on charge la 3D, puis les points défilent seuls toutes les 5,5 s tant que la section est à
+     l'écran, sauf si on vient d'en choisir un */
+  function lancerVerif() {
+    const cadre = vue.querySelector('[data-verif3d]');
+    clearInterval(verifMinuteur);
+    if (verif3d) verif3d.detruire();
+    verif3d = null;
+    if (!cadre) return;
+    const a = A.a101;
+    const obs3d = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      obs3d.disconnect();
+      if (typeof Verif3D !== 'undefined') {
+        Verif3D.monter(cadre, {a, p: P[a.p], etiquettes: [...VERIF.map((x) => x.e).slice(0, 3), `Code lot ${a.lot}`]})
+          .then((c) => {
+            if (!c || !cadre.isConnected) return c && c.detruire();
+            verif3d = c;
+            verif3d.aller(verifI);
+          })
+          .catch(() => {});
+      }
+      if (reduit()) return;
+      verifMinuteur = setInterval(() => {
+        if (!cadre.isConnected) return clearInterval(verifMinuteur);
+        const r = cadre.getBoundingClientRect();
+        if (document.hidden || r.bottom < 0 || r.top > innerHeight || performance.now() < verifPause) return;
+        vue.querySelector('.verif-liste').classList.remove('en-pause');
+        choisirVerif((verifI + 1) % VERIF.length);
+      }, 5500);
+    });
+    obs3d.observe(cadre);
+  }
   VUES.fonctionnement = () => {
     const ex = A.a101;
     return `<div class="fonctionnement">
@@ -674,22 +758,18 @@
     <section class="fn-section env" id="photos-obligatoires">
       <div class="fn-tete" data-revele><p class="surtitre">Les photos</p><h2 class="grand-titre">${OBLIGATOIRES} photos obligatoires, toujours les mêmes.</h2><p class="chapo">Elles nous permettent de vérifier le parfum sans l'avoir entre les mains. La boîte et le ticket s'ajoutent si vous les avez.</p></div>
       <div class="fn-photos">${PHOTOS.map((x, i) => `<figure class="fn-photo ${x.obl ? '' : 'facultative'}" data-revele style="--i:${i}">${photo(ex, x.k)}<figcaption><strong>${x.t}</strong><span>${x.pourquoi}</span>${x.obl ? '' : '<em>Facultative</em>'}</figcaption></figure>`).join('')}</div>
+      <div data-revele>${astuceOpaque()}</div>
     </section>
 
     <section class="fn-section env fn-equipe">
-      <div class="fn-equipe-visuel" data-revele data-anime>
+      <div class="fn-equipe-visuel" data-revele data-anime data-verif3d data-point="${verifI}">
         ${photo(ex, 'face')}
         <span class="repere" style="--x:50%;--y:24%;--i:0">1</span><span class="repere" style="--x:70%;--y:56%;--i:1">2</span><span class="repere" style="--x:31%;--y:62%;--i:2">3</span><span class="repere" style="--x:62%;--y:80%;--i:3">4</span>
         <span class="balayage"></span>
       </div>
       <div class="fn-equipe-texte" data-revele>
         <p class="surtitre">La vérification</p><h2 class="grand-titre">Ce que notre équipe regarde, sur chaque annonce.</h2>
-        <ol class="liste-num">
-          <li><strong>Le spray et la tige.</strong> La bague sertie d'origine, un bouton et une tige qui n'ont pas été forcés.</li>
-          <li><strong>Le flacon et l'étiquette.</strong> Comparés aux modèles connus de la maison.</li>
-          <li><strong>Le niveau.</strong> Celui de la photo correspond à celui de l'annonce.</li>
-          <li><strong>Le code lot.</strong> Il existe, il suit le format de la marque, il est le même sur la boîte.</li>
-        </ol>
+        <ol class="verif-liste">${VERIF.map((x, i) => `<li><button type="button" class="verif-item" data-verif="${i}" aria-pressed="${i === verifI}"><span class="verif-n">${i + 1}</span><span><strong>${x.t}</strong> ${x.d}</span><i class="verif-prog" aria-hidden="true"></i></button></li>`).join('')}</ol>
         <p class="aide">Et aussi : la photo avec le pseudo et la date, un prix anormalement bas, des photos déjà vues ailleurs. Une annonce refusée l'est avec une raison claire.</p>
       </div>
     </section>
@@ -714,6 +794,20 @@
         <li style="--i:2"><span>${ico('euro')}</span><strong>Vous êtes remboursé</strong><p>Prix, protection et livraison. Une contrefaçon, c'est le vendeur exclu.</p></li>
       </ol>
       <p class="aide fn-note">Un parfum conforme qui ne vous plaît pas n'est pas remboursé : vous pouvez le remettre en vente sur Respray.</p>
+    </section>
+
+    <section class="fn-section env fn-avis">
+      <div class="fn-tete" data-revele><p class="surtitre">Les avis</p><h2 class="grand-titre">Des avis qu'on ne peut pas inventer.</h2><p class="chapo">Seul l'acheteur d'une vente conclue peut noter le vendeur : une fois, après les 7 jours, quand il a eu le temps de vérifier.</p></div>
+      <div class="avis-grille">
+        <div class="avis-exemple" data-revele data-anime>${blocVendeur(VENDEURS.v1, A.a101).replace('<details class="vendeur-avis">', '<details class="vendeur-avis" open>')}</div>
+        <ul class="avis-regles" data-revele>
+          <li style="--i:0"><strong>Trois questions, pas de roman.</strong> Conforme aux photos ? Bien emballé ? Envoyé vite ? Puis une note, et un mot si on veut.</li>
+          <li style="--i:1"><strong>Le taux de ventes conformes.</strong> Une non-conformité reconnue par l'équipe y reste, affichée sur chaque annonce du vendeur.</li>
+          <li style="--i:2"><strong>Deux non-conformités en six mois :</strong> les annonces du vendeur sont suspendues le temps qu'on regarde.</li>
+          <li style="--i:3"><strong>Une contrefaçon ou un parfum dilué :</strong> le vendeur est exclu pour de bon, et l'acheteur remboursé en entier.</li>
+          <li style="--i:4"><strong>Le vendeur peut répondre,</strong> une fois, sous l'avis. Il ne peut ni le modifier, ni le supprimer.</li>
+        </ul>
+      </div>
     </section>
 
     <section class="fn-section env fn-frais">
@@ -742,11 +836,19 @@
     <section class="fn-section env faq">
       <div class="fn-tete" data-revele><p class="surtitre">Questions</p><h2 class="grand-titre">Ce qu'on nous demande.</h2></div>
       ${[
-        ['Un parfum entamé, c\'est hygiénique ?', 'Oui. Le parfum ne touche jamais la peau dans le flacon : il sort par un vaporisateur serti. Bien rangé, à l\'abri de la lumière et de la chaleur, il se garde des années.'],
+        ['Un parfum entamé, c\'est hygiénique ?', 'Oui. Le parfum ne touche jamais la peau dans le flacon : il sort par un vaporisateur serti, qu\'on ne peut pas ouvrir sans le casser.'],
+        ['Un parfum ancien est-il encore bon ?', 'Un parfum ne se périme pas, il évolue : les notes de tête s\'estompent les premières. Bien rangé, à l\'abri de la lumière et de la chaleur, il se garde des années. Le code lot donne souvent l\'année de fabrication : quand on la connaît, on l\'indique sur l\'annonce.'],
+        ['Et si quelqu\'un a dilué son parfum ?', 'Un flacon serti ne s\'ouvre pas sans laisser de traces : c\'est pour ça qu\'on demande la bague et la tige en photo. À la réception, vous avez 7 jours pour comparer la couleur, l\'odeur et la tenue. Un parfum dilué, c\'est remboursé en entier, et le vendeur exclu pour de bon.'],
+        ['Mon flacon n\'est pas transparent : comment montrer le niveau ?', 'Dans une pièce peu éclairée, collez la lampe allumée d\'un téléphone contre le dos du flacon. La lumière traverse le verre et la limite du parfum se voit nettement. Prenez la photo de face, à hauteur du niveau.'],
         ['Pourquoi enlever le bouton spray pour la photo ?', 'Pour voir la tige. Un flacon qui a été ouvert pour être rempli avec autre chose laisse souvent des traces : tige tordue, colle, bague abîmée.'],
         ['Ma maison n\'est pas dans la liste, je fais comment ?', 'Choisissez « Ma maison n\'est pas dans la liste » et écrivez son nom. On vérifie l\'orthographe et on l\'ajoute à la liste : les vendeurs suivants pourront la choisir.'],
         ['Combien de temps prend la vérification ?', 'En général quelques heures. Si une photo manque ou ne se lit pas, on vous dit laquelle refaire.'],
         ['Et si le colis se perd ?', 'Il est assuré : l\'acheteur est remboursé et le vendeur est payé.'],
+        ['Le vendeur l\'avait déjà vendu ailleurs ?', 'La vente est annulée et vous êtes remboursé tout de suite, sans rien faire. Le vendeur, lui, voit ses annulations comptées sur son profil.'],
+        ['J\'ai confirmé la réception par erreur.', 'Vous avez une heure pour annuler, depuis votre commande. Passé ce délai, le vendeur est payé ; écrivez-nous si quelque chose ne va pas.'],
+        ['Je peux vendre plusieurs parfums ensemble ?', 'Oui, en lot : une seule annonce, un seul colis, et l\'acheteur ne paie qu\'une livraison. Chaque flacon du lot a ses ${OBLIGATOIRES} photos.'],
+        ['Les coffrets et les échantillons ?', 'Un coffret est accepté s\'il est neuf, scellé et sous blister. Un échantillon acheté (coffret découverte, vendu à l\'unité) aussi, avec son volume exact. Un échantillon offert ou marqué « Ne peut être vendu » ne l\'est pas.'],
+        ['Comment sont notés les vendeurs ?', 'Par les acheteurs d\'une vente conclue, un avis par vente : conforme aux photos, bien emballé, envoyé vite, puis une note. Chaque annonce affiche aussi la part de ventes conformes du vendeur et son délai d\'envoi moyen.'],
         ['Quand le vendeur est-il payé ?', 'Dès que l\'acheteur confirme que tout est conforme, ou automatiquement 7 jours après la livraison. Le virement arrive en 1 à 2 jours.'],
       ]
         .map(([q, r]) => `<details><summary>${q}</summary><p>${r}</p></details>`)
@@ -828,6 +930,14 @@
     ['Blanc', '#FFFFFF', 'Le fond.'],
     ['Vert vérifié', '#1A7F4B', 'Seulement pour ce qui est vérifié ou validé.'],
   ];
+  const NUIT = [
+    ['Graphite', '#1B1A18', 'Le fond : chaud, pas noir.'],
+    ['Graphite clair', '#252421', 'Les fonds de section.'],
+    ['Crème', '#F2EFE9', 'Le texte, le logo, les boutons principaux.'],
+    ['Taupe', '#A7A29A', 'Les textes secondaires.'],
+    ['Trait', '#3A3835', 'Les bordures et les séparations.'],
+    ['Vert vérifié', '#5FC690', 'Seulement pour ce qui est vérifié ou validé.'],
+  ];
   VUES.marque = () => {
     const a = A.a101;
     const grille = [];
@@ -870,8 +980,9 @@
     </section>
 
     <section class="mq-section env">
-      <div class="mq-tete"><h2 class="grand-titre">Les couleurs.</h2><p class="chapo">Du noir, du blanc, des gris. Le vert ne sert qu'à dire « c'est vérifié ». Touchez une couleur pour copier son code.</p></div>
-      <div class="mq-couleurs">${COULEURS.map(([n, hex, usage]) => `<button type="button" class="mq-couleur" data-copier="${hex}"><span class="mq-pastille" style="background:${hex}"></span><strong>${n}</strong><span class="mq-hex">${hex}</span><small>${usage}</small></button>`).join('')}</div>
+      <div class="mq-tete"><h2 class="grand-titre">Les couleurs.</h2><p class="chapo">Le jour, du blanc, des gris et de l'encre. La nuit, un graphite chaud et du crème, jamais du noir pur. Le vert ne sert qu'à dire « c'est vérifié ». Touchez une couleur pour copier son code.</p></div>
+      ${[['Jour', 'par défaut, et quand l\'appareil est en clair', COULEURS], ['Nuit', 'quand l\'appareil est en sombre, ou avec le bouton de l\'en-tête', NUIT]].map(([titre, quand, liste]) => `<div class="mq-palette"><h3>${titre} <small>${quand}</small></h3>
+      <div class="mq-couleurs">${liste.map(([n, hex, usage]) => `<button type="button" class="mq-couleur" data-copier="${hex}"><span class="mq-pastille" style="background:${hex}"></span><strong>${n}</strong><span class="mq-hex">${hex}</span><small>${usage}</small></button>`).join('')}</div></div>`).join('')}
     </section>
 
     <section class="mq-section env mq-typo">
@@ -905,7 +1016,7 @@
     <section class="mq-section env">
       <div class="mq-tete"><h2 class="grand-titre">Le ton.</h2><p class="chapo">Précis, calme, sans promesse qu'on ne tient pas.</p></div>
       <div class="mq-ton">
-        <div><p class="mq-oui">On dit</p><p>« Vérifiée en 1 h 12. »</p><p>« Il reste environ 85 %. »</p><p>« Vous avez 7 jours pour vérifier. »</p></div>
+        <div><p class="mq-oui">On dit</p><p>« Vérifiée le 24 novembre, 5 contrôles sur 5. »</p><p>« Il reste environ 85 %. »</p><p>« Vous avez 7 jours pour vérifier. »</p></div>
         <div><p class="mq-non">On ne dit pas</p><p>« Qualité premium garantie ! »</p><p>« Presque plein ! »</p><p>« Achetez en toute sérénité ! »</p></div>
       </div>
     </section>
@@ -1022,6 +1133,7 @@
     );
     vue.querySelectorAll('[data-revele], [data-anime]').forEach((el) => vu.observe(el));
     obs.push(vu);
+    lancerVerif();
     if (!vue.querySelector('.h-etape')) return;
     etapeActive = 0;
     suivreHistoire();
@@ -1264,6 +1376,10 @@
       ouvrir(`<div class="guide-contenu">${g.corps()}</div>`, 'modale-large');
       return;
     }
+    if (t.dataset.verif) {
+      choisirVerif(+t.dataset.verif, true);
+      return;
+    }
     if (t.dataset.parcours) {
       if (parcours === t.dataset.parcours) return;
       parcours = t.dataset.parcours;
@@ -1375,12 +1491,33 @@
         sauver();
         rafraichir(true);
         break;
+      case 'theme':
+        appliquerTheme(themeActuel() === 'sombre' ? 'clair' : 'sombre', true);
+        break;
       default:
     }
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !modale.hidden) fermer();
   });
+
+  /* clair ou sombre : par défaut, comme l'appareil ; le bouton de l'en-tête force l'un ou l'autre */
+  const systemeSombre = matchMedia('(prefers-color-scheme: dark)');
+  const themeActuel = () => document.documentElement.dataset.theme || (systemeSombre.matches ? 'sombre' : 'clair');
+  function appliquerTheme(t, garder) {
+    if (t) document.documentElement.dataset.theme = t;
+    if (garder) memoire.ecrire('theme', t);
+    const b = document.querySelector('[data-action="theme"]');
+    if (b) {
+      const sombre = themeActuel() === 'sombre';
+      b.setAttribute('aria-pressed', sombre);
+      b.setAttribute('aria-label', sombre ? 'Passer en clair' : 'Passer en sombre');
+      b.title = sombre ? 'Passer en clair' : 'Passer en sombre';
+    }
+    if (verif3d) verif3d.fond();
+  }
+  appliquerTheme(memoire.lire('theme', null), false);
+  systemeSombre.addEventListener('change', () => appliquerTheme(null, false));
 
   /* typographie française : une espace insécable avant ? ! : ; » et après «, pour qu'un « ? » ne se retrouve jamais
      seul en début de ligne. Appliquée à tout texte ajouté à la page, quel que soit l'endroit qui l'ajoute. */

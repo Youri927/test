@@ -1,7 +1,8 @@
 // Rend toutes les photos du prototype, en 3D, dans photos/ :
 //   - pour chaque annonce (en ligne et à vérifier) : de face, gros plan sur le niveau (la surface du jus au milieu de
 //     l'image), dessous (code lot), vue de dessus avec le spray, tige, photo preuve (pseudo et date), boîte s'il y en a ;
-//   - un ticket d'achat, et le flacon de la porte « Vendre », sur le gris de cette porte ;
+//   - un ticket d'achat, un flacon opaque éclairé par derrière (l'astuce du niveau), et le flacon de la porte
+//     « Vendre », sur le gris de cette porte ;
 //   - photos/mesures.json : la position de la buse sur la porte « Vendre » (pour y poser la brume).
 //
 //   cd tools/rendus && npm install && node rendre.cjs
@@ -63,9 +64,13 @@ serveur.listen(0, async () => {
     process.stdout.write('.');
   }
   await rendre('ticket', {vue: 'ticket', nom: P['baccarat-rouge-540'].nom});
+  // l'astuce du niveau d'un flacon opaque : la lampe d'un téléphone collée derrière
+  await rendre('contrejour', {vue: 'contrejour', forme: 'carre', jus: '#E4A171', bouchon: '#B79B62', niveau: 58, fond: '#2c2c2f'});
   const libre = P.libre;
   const v = await rendre('vendre', {forme: libre.forme, jus: libre.jus, bouchon: libre.bouchon, niveau: 70, vue: 'vendre', fond: '#e8e8ed', w: 600, h: 800});
   mesures.buse = {x: Math.round(v.buse.x * 1000) / 1000, y: Math.round(v.buse.y * 1000) / 1000};
+  // le même, sur la porte « Vendre » du mode sombre
+  await rendre('vendre-sombre', {forme: libre.forme, jus: libre.jus, bouchon: libre.bouchon, niveau: 70, vue: 'vendre', fond: '#2b2a27', w: 600, h: 800});
   fs.writeFileSync(path.join(SORTIE, 'mesures.json'), JSON.stringify(mesures, null, 1) + '\n');
   const poids = fs.readdirSync(SORTIE).reduce((s, f) => s + fs.statSync(path.join(SORTIE, f)).size, 0);
   console.log(`\n${n} photos, ${Math.round(poids / 1024)} Ko, dans photos/`, erreurs.length ? erreurs : '');

@@ -33,6 +33,8 @@ dites partout.
 | Choix du parfum | Marque et nom tapés à la main (« Parfum », « Guerlain »…) | Choisi dans une liste ; une maison absente peut être proposée, l'équipe corrige l'orthographe et l'ajoute pour tout le monde |
 | Paiement du vendeur | 7 à 10 jours ouvrés après confirmation | 1 à 2 jours après confirmation, ou 7 jours après la livraison |
 | Application | Non | Oui, pour prendre les photos imposées facilement |
+| Avis sur les vendeurs | Un « système de notation », sans détail | Seul l'acheteur d'une vente conclue note, après les 7 jours : 3 questions (conforme aux photos, bien emballé, envoyé vite) et une note. Chaque annonce affiche la part de ventes conformes et le délai d'envoi moyen du vendeur |
+| Confirmation par erreur | Écrire un e-mail au service client | Une heure pour annuler, depuis la commande |
 
 **La phrase pour un créateur de contenu** :
 
@@ -47,7 +49,7 @@ dites partout.
 |---|---|
 | Le flacon de face | La forme du flacon, du bouchon et de l'étiquette, comparés aux modèles connus |
 | Le dessous du flacon | Le code lot : il existe, il suit le format de la marque, il correspond à la boîte |
-| Le niveau, à hauteur des yeux | Que le niveau annoncé est le bon |
+| Le niveau, à hauteur des yeux (flacon opaque : une lampe de téléphone collée derrière) | Que le niveau annoncé est le bon |
 | Sans le bouchon, vu de dessus, le spray en place | Le bouton spray et la bague sertie d'origine |
 | Sans le bouton spray, la tige visible | Que la tige n'a pas été forcée, tordue ou recollée : le signe d'un flacon ouvert puis rempli |
 | Le flacon avec un papier (pseudo + date) | Que le vendeur a le flacon entre les mains, et que les photos ne sont pas reprises d'ailleurs |
@@ -97,6 +99,23 @@ proposés. Le prototype les montre à l'adresse `#panel`.
 - **Conforme mais il ne plaît pas** : pas de remboursement. L'acheteur peut le remettre en vente sur Respray.
 - **Remise en main propre** : l'acheteur paie dans l'appli et valide sur place, après avoir vu et senti le flacon.
   L'argent part à ce moment-là.
+- **Confirmation par erreur** : l'acheteur a une heure pour l'annuler, depuis sa commande.
+- **Déjà vendu ailleurs** : la vente est annulée, l'acheteur remboursé tout de suite ; l'annulation est comptée sur
+  le profil du vendeur.
+
+### Les avis
+
+Perfumee dit avoir « un système de notation » pour juger la fiabilité des vendeurs, sans dire comment il marche.
+Sur Respray, les règles sont écrites.
+
+- Seul l'acheteur d'une vente conclue peut noter le vendeur : un avis par vente, laissé après les 7 jours.
+- Trois questions (conforme aux photos ? bien emballé ? envoyé en moins de 3 jours ?), puis une note sur 5 et un mot
+  si on veut.
+- Chaque annonce affiche la note, la part de ventes conformes (une non-conformité reconnue par l'équipe y reste), le
+  délai d'envoi moyen et le nombre de ventes.
+- Deux non-conformités en six mois : les annonces du vendeur sont suspendues le temps qu'on regarde. Une contrefaçon ou
+  un parfum dilué : exclusion définitive.
+- Le vendeur peut répondre une fois sous l'avis ; il ne peut ni le modifier, ni le supprimer.
 
 ## Les frais
 

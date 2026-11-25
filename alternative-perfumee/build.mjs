@@ -10,6 +10,8 @@ const read = (p) => readFileSync(here(p), 'utf8');
 const b64 = (p) => readFileSync(here(p)).toString('base64');
 
 let css = read('./src/styles.css').replace(/url\(\.\.\/vendor\/fonts\/([\w.-]+\.woff2)\)/g, (_, f) => `url(data:font/woff2;base64,${b64('./vendor/fonts/' + f)})`);
+// les scripts, dans l'ordre où index.html les charge (entre <!--scripts--> et <!--/scripts-->)
+const SCRIPTS = [...read('./src/index.html').split('<!--scripts-->')[1].split('<!--/scripts-->')[0].matchAll(/src="(\w+)\.js"/g)].map((m) => m[1]);
 // les photos (rendus 3D de tools/rendus, dans photos/), intégrées en base64, et leurs mesures
 const photos = Object.fromEntries(
   readdirSync(here('./photos/'))
@@ -18,7 +20,7 @@ const photos = Object.fromEntries(
     .map((f) => [f.slice(0, -5), 'data:image/webp;base64,' + b64('./photos/' + f)]),
 );
 const mesures = JSON.parse(read('./photos/mesures.json'));
-const js = [`const PHOTOS_EMBARQUEES = ${JSON.stringify(photos)};\nconst MESURES = ${JSON.stringify(mesures)};`, ...['data', 'visuels', 'app'].map((f) => read(`./src/${f}.js`))].join('\n');
+const js = [`const PHOTOS_EMBARQUEES = ${JSON.stringify(photos)};\nconst MESURES = ${JSON.stringify(mesures)};`, ...SCRIPTS.map((f) => read(`./src/${f}.js`))].join('\n');
 if (js.includes('</script')) throw new Error('le script contient </script');
 
 // le logo, en ligne (sa couleur suit le texte), et le favicon intégré
@@ -28,7 +30,7 @@ const page = read('./src/index.html')
   .replaceAll('<!--logo-->', () => logo)
   .replace('<link rel="icon" href="../marque/favicon.svg">', () => `<link rel="icon" href="${favicon}">`)
   .replace('<link rel="stylesheet" href="styles.css">', () => `<style>\n${css}</style>`)
-  .replace('<script src="data.js"></script>\n<script src="visuels.js"></script>\n<script src="app.js"></script>', () => `<script>\n${js}</script>`);
+  .replace(/<!--scripts-->[\s\S]*<!--\/scripts-->/, () => `<script>\n${js}</script>`);
 if (page.includes('src="data.js"') || page.includes('href="styles.css"')) throw new Error('remplacement manqué');
 
 // la tête : tout ce qui précède le bandeau ; le corps : le reste
