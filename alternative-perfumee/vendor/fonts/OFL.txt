@@ -1,1 +1,2 @@
 Inter (Rasmus Andersson), licence SIL Open Font License 1.1, police variable (graisse 400 à 700, taille optique 14 à 32), sous-ensemble latin téléchargé depuis Google Fonts.
+Caveat (Impallari Type), licence SIL Open Font License 1.1 : seulement pour l'écriture à la main de la photo preuve, dans les rendus (tools/rendus).

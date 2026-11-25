@@ -16,21 +16,10 @@
   --police: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
   --rayon: 12px;
   --ease: cubic-bezier(.22, .8, .24, 1);
-  --panneau: #1d1d1f;
-  --sur-panneau: #f5f5f7;
+  --gris-porte: #e9e8ee; /* le fond de la porte « Vendre », le même que celui de son rendu */
+  --fond-photo: #f2f2f2; /* le fond de studio des photos */
   interpolate-size: allow-keywords;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --fond: #000000; --fond-2: #1c1c1e; --texte: #f5f5f7; --texte-2: #a1a1a6; --trait: #38383a;
-    --noir: #f5f5f7; --sur-noir: #1d1d1f; --vert: #4cc38a; --vert-fond: #12261b; --rouge: #ff8a80; --panneau: #2c2c2e;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --fond: #000000; --fond-2: #1c1c1e; --texte: #f5f5f7; --texte-2: #a1a1a6; --trait: #38383a;
-  --noir: #f5f5f7; --sur-noir: #1d1d1f; --vert: #4cc38a; --vert-fond: #12261b; --rouge: #ff8a80; --panneau: #2c2c2e;
-  color-scheme: dark;
+  color-scheme: light; /* le site est clair, toujours : pas de mode sombre */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -108,7 +97,12 @@ input[type="radio"], input[type="checkbox"], input[type="range"] { accent-color:
 .carte { position: relative; }
 .carte-lien { display: grid; gap: 2px; text-decoration: none; }
 .carte-photo { position: relative; margin-bottom: 10px; border-radius: var(--rayon); overflow: hidden; }
-.visuel { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; }
+.visuel { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; background: var(--fond-photo); }
+/* la vue « niveau » : un gros plan dont la surface du jus est au milieu ; le trait et le pourcentage s'y posent */
+.visuel-niveau { position: relative; overflow: hidden; container-type: inline-size; }
+.visuel-niveau img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.niveau-trait { position: absolute; left: 7%; right: 7%; top: 50%; border-top: max(1px, .5cqi) dashed #1d1d1f; opacity: .8; }
+.niveau-pastille { position: absolute; right: 9%; top: 50%; translate: 0 calc(-100% - 1.4cqi); padding: .25em .7em; border-radius: 99px; background: #1d1d1f; color: #fff; font-size: clamp(7px, 6.5cqi, 14px); font-weight: 600; line-height: 1.3; }
 .carte-photo .visuel { transition: transform .7s var(--ease), filter .4s; }
 .carte-lien:hover .carte-photo .visuel { transform: scale(1.035); filter: brightness(.98); }
 .etiq { position: absolute; left: 10px; bottom: 10px; padding: 4px 9px; border-radius: 7px; background: rgba(255, 255, 255, .92); color: #161616; font-size: 12.5px; font-weight: 600; }
@@ -118,13 +112,6 @@ input[type="radio"], input[type="checkbox"], input[type="range"] { accent-color:
 .coeur { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .92); color: #161616; cursor: pointer; }
 .coeur svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; }
 .coeur[aria-pressed="true"] svg { fill: #e0245e; stroke: #e0245e; }
-/* les textes dans les dessins */
-.d-code { font: 600 19px var(--police); letter-spacing: .14em; fill: #1d1d1f; }
-.d-petit { font: 500 11px var(--police); letter-spacing: .06em; fill: #6e6e73; }
-.d-mesure { font: 600 10px var(--police); fill: #ffffff; }
-.d-note { font: 500 15px var(--police); fill: #1d1d1f; }
-.trait-clair [stroke] { stroke: var(--sur-panneau); }
-.trait-clair [fill="#ffffff"] { fill: rgba(255, 255, 255, .06); }
 
 /* pages */
 .page { padding-block: 32px 72px; }
@@ -150,6 +137,9 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .annonce { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: start; }
 .galerie { display: grid; gap: 10px; position: sticky; top: 90px; }
 .galerie-grande { border-radius: var(--rayon); overflow: hidden; }
+.galerie-legende { min-height: 3em; color: var(--texte-2); font-size: 14px; line-height: 1.45; text-wrap: pretty; }
+.galerie-legende strong { color: var(--texte); font-weight: 600; }
+.legende-n { display: inline-block; min-width: 2.6em; margin-right: 4px; color: var(--texte-2); font-variant-numeric: tabular-nums; font-weight: 600; }
 .galerie-mini { display: grid; grid-template-columns: repeat(auto-fill, minmax(54px, 1fr)); gap: 8px; }
 .mini { padding: 0; border: 2px solid transparent; border-radius: 9px; overflow: hidden; background: none; cursor: pointer; }
 .mini[aria-pressed="true"] { border-color: var(--texte); }
@@ -316,7 +306,7 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .portes-in { display: flex; gap: 12px; height: clamp(540px, 74vh, 660px); }
 .porte { position: relative; flex: 1.15 1 0; min-width: 0; padding: 40px; border-radius: 28px; overflow: hidden; isolation: isolate; text-decoration: none; transition: flex-grow .9s var(--ease); }
 .porte-acheter { background: var(--fond-2); }
-.porte-vendre { flex-grow: .85; background: var(--panneau); color: var(--sur-panneau); }
+.porte-vendre { flex-grow: .85; background: var(--gris-porte); }
 .portes-in:has(.porte-vendre:hover) .porte-acheter { flex-grow: .85; }
 .portes-in:has(.porte-vendre:hover) .porte-vendre { flex-grow: 1.15; }
 .porte-texte { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; justify-items: start; }
@@ -324,12 +314,11 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .porte-vendre .porte-texte { width: min(360px, 100%); }
 .porte h1 { font-weight: 650; font-size: clamp(2rem, 3.5vw, 3.05rem); line-height: 1.04; letter-spacing: -.035em; text-wrap: balance; }
 .porte h2 { font-weight: 650; font-size: clamp(1.6rem, 2.5vw, 2.1rem); line-height: 1.08; letter-spacing: -.035em; text-wrap: balance; }
-.porte-vendre .surtitre { color: var(--sur-panneau); opacity: .6; }
-.porte-vendre p:not(.surtitre) { opacity: .75; }
+.porte-vendre p:not(.surtitre), .porte-sous { color: var(--texte-2); }
+.porte-sous { max-width: 40ch; font-size: 17px; line-height: 1.45; }
 .porte .cherche-grand { justify-self: stretch; margin-top: 4px; width: 100%; background: var(--fond); border-color: transparent; box-shadow: 0 12px 30px -20px rgba(0, 0, 0, .35); }
 .porte .btn .ico { width: 16px; height: 16px; transition: transform .4s var(--ease); }
 .porte-vendre:hover .btn .ico { transform: translateX(4px); }
-.btn-clair { background: var(--sur-panneau); border-color: var(--sur-panneau); color: #1c1b1a; }
 .direct { display: flex; align-items: center; gap: 10px; min-height: 24px; font-size: 14.5px; color: var(--texte-2); }
 .direct a { text-decoration: none; }
 .direct a:hover { color: var(--texte); }
@@ -343,13 +332,15 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .pile-photo:nth-child(2) { z-index: 1; bottom: 34px; }
 .porte-acheter:hover .pile-photo { transform: translateX(calc(-50% + (var(--i) - 1) * 112px)) rotate(calc((var(--i) - 1) * 12deg)); }
 @keyframes flotte { 50% { translate: 0 -9px; } }
-.vaporise { position: absolute; right: 6%; bottom: -46px; height: 360px; width: auto; transform-origin: 80% 100%; transition: transform .9s var(--ease); }
-.porte-vendre:hover .vaporise { transform: rotate(-4deg) translateY(-6px); }
-.brume circle { fill: var(--sur-panneau); opacity: 0; animation: brume 2.8s cubic-bezier(.2, .7, .3, 1) infinite; animation-delay: var(--d); }
+.vaporise { position: absolute; right: 2%; bottom: -4px; height: min(350px, 56%); aspect-ratio: 3 / 4; transform-origin: 50% 100%; transition: transform .9s var(--ease); }
+.vaporise img, .vaporise svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.porte-vendre:hover .vaporise { transform: rotate(-3deg) translateY(-6px); }
+.brume { overflow: visible; }
+.brume circle { fill: #1d1d1f; opacity: 0; animation: brume 2.8s cubic-bezier(.2, .7, .3, 1) infinite; animation-delay: var(--d); }
 @keyframes brume {
   0% { opacity: 0; transform: translate(0, 0); }
-  12% { opacity: .95; }
-  60% { opacity: .95; transform: translate(var(--dx), var(--dy)); }
+  12% { opacity: .8; }
+  60% { opacity: .8; transform: translate(var(--dx), var(--dy)); }
   100% { opacity: 0; transform: translate(calc(var(--dx) * 1.12), calc(var(--dy) * 1.12)); }
 }
 
@@ -704,10 +695,8 @@ details[open] .odeur span { animation: fondu .5s var(--ease) both; animation-del
 .fonctionnement .faq details { max-width: 860px; }
 .fn-fin .boutons { justify-content: center; }
 .fn-fin .boutons .btn { flex: 0 0 auto; }
-.fn-fin { display: grid; justify-items: center; gap: 22px; margin-block: 96px 72px; padding-block: 64px; border-radius: 28px; background: var(--panneau); color: var(--sur-panneau); text-align: center; }
+.fn-fin { display: grid; justify-items: center; gap: 22px; margin-block: 96px 72px; padding-block: 64px; border-radius: 28px; background: var(--fond-2); text-align: center; }
 .fn-fin h2 { font-weight: 650; font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.035em; }
-.fn-fin .btn:not(.btn-noir) { background: transparent; color: var(--sur-panneau); border-color: rgba(255, 255, 255, .35); }
-.fn-fin .btn-noir { background: var(--sur-panneau); border-color: var(--sur-panneau); color: #1c1b1a; }
 
 /* ——— écrans moyens et petits ——— */
 @media (max-width: 960px) {
@@ -732,7 +721,8 @@ details[open] .odeur span { animation: fondu .5s var(--ease) both; animation-del
   .porte-acheter { padding-bottom: 0; }
   .pile { position: relative; right: auto; bottom: auto; width: 100%; height: 250px; margin: 24px 0 -30px; }
   .pile-photo { width: 140px; }
-  .porte-vendre { min-height: 470px; }
+  .porte-vendre { min-height: 560px; }
+  .vaporise { height: 230px; right: 4%; }
   .ruban { grid-auto-columns: 200px; }
   .ruban-fleches { display: none; }
   .z0 { grid-template-columns: repeat(2, minmax(0, 1fr)); }

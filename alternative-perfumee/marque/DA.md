@@ -1,7 +1,7 @@
 # Respray : la direction artistique
 
-Une marque calme et précise : du noir, du blanc, des gris, une seule police, des dessins comme des schémas
-techniques. Ce qui rassure, ce n'est pas le décor, c'est la clarté.
+Une marque calme et précise : du blanc, des gris, de l'encre, une seule police, et des photos de flacons nettes, sur
+fond uni. Ce qui rassure, ce n'est pas le décor, c'est la clarté. Le site est toujours clair : pas de mode sombre.
 
 ## Le symbole
 
@@ -40,13 +40,16 @@ symbole est posé sur la ligne de base du mot ; l'espace entre le symbole et le 
 | Nom | Code | Usage |
 |---|---|---|
 | Encre | #1D1D1F | Texte, logo, boutons principaux |
-| Gris clair | #F5F5F7 | Fonds de section et des photos |
+| Gris clair | #F5F5F7 | Fonds de section |
+| Gris photo | #F2F2F2 | Fond des photos |
+| Gris porte | #E9E8EE | La porte « Vendre » de l'accueil |
 | Gris | #6E6E73 | Textes secondaires |
 | Trait | #D2D2D7 | Bordures, séparations |
 | Blanc | #FFFFFF | Fond |
 | Vert vérifié | #1A7F4B | Seulement pour ce qui est vérifié ou validé |
 
-En mode sombre : fond #000000, surfaces #1C1C1E, texte #F5F5F7, texte secondaire #A1A1A6, traits #38383A.
+Pas de mode sombre : le site reste clair, même quand l'appareil est en sombre. Le logo blanc ne sert que sur une photo
+ou un support sombre, hors du site.
 
 ## La typographie
 
@@ -60,13 +63,17 @@ boutons. Titres serrés (−3,5 %), texte courant à 16 px.
 | Texte | 16 px | 400 |
 | Légende | 13 px | 500 |
 
-## Les dessins
+## Les photos
 
-Ils tiennent la place des photos des vendeurs dans le prototype, et servent d'exemples dans le formulaire de vente.
+Sur le vrai site, ce sont celles des vendeurs ; le guide de la page Vendre leur dit comment les prendre. Dans le
+prototype, des rendus 3D (`tools/rendus`) tiennent leur place, et servent d'exemples dans le formulaire de vente.
 
-- Comme un schéma technique : un trait de 1,25 px, constant quelle que soit la taille d'affichage.
-- Des aplats : verre blanc, jus en teinte claire, bouchon en ton plein. Aucun dégradé, aucun reflet, aucune ombre floue.
-- Un repère seulement quand il sert à vérifier : le niveau mesuré, le code lot gravé.
+- Le flacon seul, sur un fond clair et uni (#F2F2F2), à la lumière du jour, avec son ombre posée. Aucun décor.
+- Toujours les mêmes vues, dans le même ordre : de face, dessous (code lot), niveau, dessus avec le spray, tige,
+  photo preuve, puis la boîte et le ticket s'il y en a.
+- Aucun filtre, aucune retouche.
+- Un repère seulement quand il sert à vérifier : sur la vue « niveau », un trait et le pourcentage annoncé.
+- Sous la grande photo d'une annonce, une légende dit ce que la vue prouve.
 - Formes génériques : aucun flacon de marque n'est reproduit.
 - La brume du spray (porte « Vendre ») reprend le cône de points du symbole.
 

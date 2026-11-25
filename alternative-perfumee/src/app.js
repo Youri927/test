@@ -194,7 +194,8 @@
         <div class="porte porte-acheter">
           <div class="porte-texte">
             <p class="surtitre">Acheter</p>
-            <h1>Des parfums de seconde main, vérifiés avant d'être en ligne.</h1>
+            <h1>Le parfum de seconde main, sans le doute.</h1>
+            <p class="porte-sous">Chaque annonce est vérifiée par l'équipe avant d'être en ligne. Et vous avez 7 jours, flacon en main, pour vérifier à votre tour.</p>
             <form class="cherche-grand" data-form="recherche" role="search">
               <label class="vh" for="q-hero">Rechercher un parfum ou une maison</label>
               ${ico('loupe')}<input id="q-hero" name="q" type="search" placeholder="Un parfum, une maison…" autocomplete="off">
@@ -209,9 +210,9 @@
             <p class="surtitre">Vendre</p>
             <h2>Il dort dans un placard&nbsp;? Vendez‑le, sans commission.</h2>
             <p>Vous touchez 100&nbsp;% du prix. Six photos, une vérification, et il est en ligne.</p>
-            <span class="btn btn-clair">Vendre un parfum ${ico('fleche')}</span>
+            <span class="btn btn-noir">Vendre un parfum ${ico('fleche')}</span>
           </div>
-          <div class="porte-visuel">${Dessins.vaporise(P.libre)}</div>
+          <div class="porte-visuel">${Dessins.vaporise()}</div>
         </a>
       </div>
     </section>
@@ -401,6 +402,22 @@
   /* ——— annonce ——— */
   let achat = {mode: 'envoi'};
   const vuesAnnonce = (a) => ['face', 'dessous', 'niveau', 'dessus', 'tige', 'preuve', ...(a.boite ? ['boite'] : [])];
+  /* ce que montre chaque photo, et pourquoi on la demande */
+  const legende = (a, vue) => {
+    const vues = vuesAnnonce(a);
+    const n = `<span class="legende-n">${vues.indexOf(vue) + 1}/${vues.length}</span>`;
+    const pseudo = esc(VENDEURS[a.v] ? VENDEURS[a.v].pseudo : 'vous');
+    const textes = {
+      face: '<strong>De face, bouchon en place.</strong> Le flacon tel qu\'il est, sous une lumière du jour.',
+      dessous: `<strong>Le dessous du flacon.</strong> Le code lot gravé (${esc(a.lot)}), comparé à celui de la boîte et aux lots connus de la maison.`,
+      niveau: `<strong>Le niveau.</strong> Flacon posé bien droit : la surface du jus doit tomber vers ${a.niveau}&nbsp;%, comme annoncé.`,
+      dessus: '<strong>Sans le bouchon, vu de dessus.</strong> La bague sertie et le bouton spray d\'origine.',
+      tige: '<strong>Le bouton spray retiré.</strong> La tige du diffuseur : sa forme et son diamètre trahissent souvent une copie.',
+      preuve: `<strong>La photo preuve.</strong> Le vendeur a écrit son pseudo (@${pseudo}) et la date sur un papier, à côté du flacon : il prouve qu'il l'a bien en main, et que les photos ne sont pas reprises d'une autre annonce.`,
+      boite: `<strong>La boîte.</strong> Son code lot doit être le même que sous le flacon (${esc(a.lot)}).`,
+    };
+    return `${n} ${textes[vue] || ''}`;
+  };
   VUES.annonce = (id) => {
     const a = A[id];
     if (!a) return VUES.introuvable();
@@ -414,6 +431,7 @@
       <div class="annonce">
         <div class="galerie">
           <div class="galerie-grande" id="grande" style="view-transition-name: photo-annonce">${photo(a, 'face')}</div>
+          <p class="galerie-legende" id="legende" aria-live="polite">${legende(a, 'face')}</p>
           <div class="galerie-mini" role="group" aria-label="Photos de l'annonce">${vuesAnnonce(a).map((x, i) => `<button type="button" class="mini" data-vue="${x}" aria-pressed="${i === 0}" aria-label="Voir ${Dessins.LEGENDES[x]}">${photo(a, x)}</button>`).join('')}</div>
         </div>
         <div class="fiche">
@@ -803,7 +821,8 @@
   const logoSvg = () => (document.getElementById('tpl-logo') || {innerHTML: ''}).innerHTML;
   const COULEURS = [
     ['Encre', '#1D1D1F', 'Le texte, le logo, les boutons principaux.'],
-    ['Gris clair', '#F5F5F7', 'Les fonds de section et des photos.'],
+    ['Gris clair', '#F5F5F7', 'Les fonds de section.'],
+    ['Gris photo', '#F2F2F2', 'Le fond uni des photos.'],
     ['Gris', '#6E6E73', 'Les textes secondaires.'],
     ['Trait', '#D2D2D7', 'Les bordures et les séparations.'],
     ['Blanc', '#FFFFFF', 'Le fond.'],
@@ -818,7 +837,7 @@
     <section class="mq-hero env">
       <p class="surtitre">Identité</p>
       <div class="mq-logo" role="img" aria-label="Logo Respray">${logoSvg()}</div>
-      <p class="mq-signature">Le parfum de seconde main, vérifié.</p>
+      <p class="mq-signature">Le parfum de seconde main, sans le doute.</p>
     </section>
 
     <section class="mq-section env mq-symbole" data-revele data-anime>
@@ -869,8 +888,9 @@
     </section>
 
     <section class="mq-section env">
-      <div class="mq-tete"><h2 class="grand-titre">Les dessins.</h2><p class="chapo">Comme un schéma technique : un trait fin et constant, des aplats, aucun reflet, aucune ombre floue. Un repère seulement quand il sert à vérifier.</p></div>
+      <div class="mq-tete"><h2 class="grand-titre">Les photos.</h2><p class="chapo">Le flacon seul, sur un fond clair et uni, à la lumière du jour. Toujours les mêmes vues, dans le même ordre, pour qu'on puisse comparer d'une annonce à l'autre. Aucun filtre, aucune retouche.</p></div>
       <div class="mq-dessins">${['face', 'dessous', 'niveau', 'dessus', 'tige', 'preuve', 'boite', 'ticket'].map((v) => `<figure>${photo(a, v)}<figcaption>${Dessins.LEGENDES[v]}</figcaption></figure>`).join('')}</div>
+      <p class="aide mq-regle">Sur ce prototype, les photos sont des rendus 3D de flacons génériques. Sur le vrai site, ce sont celles des vendeurs, prises en suivant le guide de la page Vendre.</p>
     </section>
 
     <section class="mq-section env">
@@ -1181,6 +1201,7 @@
       const a = A[location.hash.slice(9)];
       transition(() => {
         document.getElementById('grande').innerHTML = photo(a, t.dataset.vue);
+        document.getElementById('legende').innerHTML = legende(a, t.dataset.vue);
         document.querySelectorAll('.mini').forEach((b) => b.setAttribute('aria-pressed', b === t));
       });
       return;
@@ -1337,12 +1358,6 @@
         sauver();
         rafraichir(true);
         break;
-      case 'theme': {
-        const r = document.documentElement;
-        const sombre = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
-        r.dataset.theme = sombre ? 'light' : 'dark';
-        break;
-      }
       default:
     }
   });

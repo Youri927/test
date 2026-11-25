@@ -1,16 +1,24 @@
 // Deux sorties, à partir de src/ :
-//  - dist/index.html : le prototype Respray en un seul fichier (police, styles, données et script intégrés), à ouvrir
+//  - dist/index.html : le prototype Respray en un seul fichier (police, styles, photos, données et script intégrés), à ouvrir
 //    d'un double-clic, sans serveur ni connexion ;
 //  - dist/artifact.html : le même contenu sans l'enveloppe <html>/<head>/<body>, pour la publication en page Claude.
 //   node build.mjs
-import {readFileSync, writeFileSync, mkdirSync} from 'node:fs';
+import {readFileSync, writeFileSync, mkdirSync, readdirSync} from 'node:fs';
 
 const here = (p) => new URL(p, import.meta.url);
 const read = (p) => readFileSync(here(p), 'utf8');
 const b64 = (p) => readFileSync(here(p)).toString('base64');
 
 let css = read('./src/styles.css').replace(/url\(\.\.\/vendor\/fonts\/([\w.-]+\.woff2)\)/g, (_, f) => `url(data:font/woff2;base64,${b64('./vendor/fonts/' + f)})`);
-const js = ['data', 'visuels', 'app'].map((f) => read(`./src/${f}.js`)).join('\n');
+// les photos (rendus 3D de tools/rendus, dans photos/), intégrées en base64, et leurs mesures
+const photos = Object.fromEntries(
+  readdirSync(here('./photos/'))
+    .filter((f) => f.endsWith('.webp'))
+    .sort()
+    .map((f) => [f.slice(0, -5), 'data:image/webp;base64,' + b64('./photos/' + f)]),
+);
+const mesures = JSON.parse(read('./photos/mesures.json'));
+const js = [`const PHOTOS_EMBARQUEES = ${JSON.stringify(photos)};\nconst MESURES = ${JSON.stringify(mesures)};`, ...['data', 'visuels', 'app'].map((f) => read(`./src/${f}.js`))].join('\n');
 if (js.includes('</script')) throw new Error('le script contient </script');
 
 // le logo, en ligne (sa couleur suit le texte), et le favicon intégré

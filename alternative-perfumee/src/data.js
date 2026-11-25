@@ -1,7 +1,7 @@
 /* Données du prototype.
    Le catalogue reprend de vrais parfums (maison, nom, année) pour que le site se lise comme le vrai. Les prix neufs
-   sont indicatifs. Les annonces, les vendeurs et les avis sont inventés. Les visuels sont dessinés : ils tiennent la
-   place des photos que les vendeurs prendront. */
+   sont indicatifs. Les annonces, les vendeurs et les avis sont inventés. Les photos sont des rendus 3D (tools/rendus) :
+   elles tiennent la place de celles que les vendeurs prendront. */
 
 const PARFUMS = [
   {id: 'baccarat-rouge-540', maison: 'Maison Francis Kurkdjian', nom: 'Baccarat Rouge 540', conc: 'Eau de parfum', annee: 2015, genre: 'Mixte', famille: 'Ambrée florale', notes: 'safran, jasmin, ambre gris, cèdre', formats: [{ml: 35, neuf: 215}, {ml: 70, neuf: 325}, {ml: 200, neuf: 650}], forme: 'facette', jus: '#E2A985', bouchon: '#B79B62'},
