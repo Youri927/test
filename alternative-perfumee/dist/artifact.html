@@ -220,6 +220,9 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .bloc-form legend { margin-bottom: 8px; padding: 0; font-weight: 600; font-size: 15px; }
 .bloc-form legend small, .facultatif { color: var(--texte-2); font-weight: 400; font-size: 13.5px; }
 .segment .choix:has(input:checked) { background: var(--fond-2); }
+.groupes-familles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; }
+.groupe-titre { margin-bottom: 6px; color: var(--texte-2); font-size: 13px; font-weight: 600; }
+@media (max-width: 640px) { .groupes-familles { grid-template-columns: minmax(0, 1fr); } }
 .coches { display: flex; flex-wrap: wrap; gap: 8px; }
 .coche { position: relative; cursor: pointer; }
 .coche input { position: absolute; opacity: 0; }
@@ -3400,12 +3403,18 @@ function creerAdmin(o) {
   const V0 = {maison: '', maisonAutre: '', parfum: '', parfumAutre: '', conc: '', genre: '', familles: [], format: 'flacon', ml: '', mlAutre: '', etat: 'entame', niveau: 80, visible: '', defauts: [], annee: '', lieu: '', lumiere: '', chaleur: '', boite: '', lot: '', lotIllisible: false, desc: '', prix: '', mainPropre: false, ville: '', engagement: false, photos: {}, envoye: false, proposes: []};
   /* ce que le vendeur déclare : des listes courtes, des réponses qui ne se contredisent pas */
   const CONCENTRATIONS = ['Extrait de parfum', 'Eau de parfum', 'Eau de toilette', 'Eau de Cologne', 'Parfum pour cheveux', 'Brume parfumée'];
-  const FAMILLES = [['Florale', 'rose, jasmin, tubéreuse'], ['Ambrée', 'vanille, résines, épices chaudes'], ['Boisée', 'santal, cèdre, vétiver'], ['Fruitée', 'pêche, cassis, litchi'], ['Gourmande', 'praliné, caramel, fève tonka'], ['Hespéridée', 'bergamote, citron, mandarine'], ['Aquatique', 'notes marines, ozone'], ['Aromatique', 'lavande, romarin, sauge'], ['Chyprée', 'bergamote, mousse de chêne, patchouli'], ['Fougère', 'lavande, coumarine, mousse'], ['Cuirée', 'cuir, bouleau, tabac'], ['Musquée', 'muscs blancs, iris poudré']];
+  /* les familles, rangées par caractère, du plus frais au plus profond */
+  const GROUPES_FAMILLES = [
+    ['Fraîches', [['Hespéridée', 'citron, pamplemousse, néroli'], ['Aquatique', 'sel, air marin, melon'], ['Aromatique', 'menthe, basilic, sauge']]],
+    ['Florales et fruitées', [['Florale', 'iris, fleur d\'oranger, muguet'], ['Fruitée', 'poire, figue, framboise']]],
+    ['Chaudes', [['Gourmande', 'café, cacao, amande'], ['Ambrée', 'benjoin, labdanum, cannelle'], ['Musquée', 'peau propre, coton, poudre']]],
+    ['Boisées et sombres', [['Boisée', 'oud, gaïac, vétiver'], ['Cuirée', 'daim, fumée, bouleau'], ['Chyprée', 'mousse, patchouli, agrumes'], ['Fougère', 'herbe coupée, coumarine']]],
+  ];
+  const FAMILLES = GROUPES_FAMILLES.flatMap((g) => g[1]);
   const FORMATS = [['flacon', 'Flacon'], ['voyage', 'Format voyage'], ['miniature', 'Miniature'], ['echantillon', 'Échantillon acheté'], ['coffret', 'Coffret']];
   const LIEUX = ['Boutique de la maison', 'Parfumerie (Sephora, Nocibé, Marionnaud…)', 'Grand magasin', 'Site officiel ou parfumerie en ligne', 'Reçu en cadeau', 'Acheté d\'occasion'];
   const DEFAUTS = ['Bouchon marqué ou rayé', 'Étiquette usée', 'Flacon rayé', 'Vaporisateur un peu dur'];
   const BOITES = [['blister', 'Neuve, sous blister'], ['bon', 'En bon état'], ['abimee', 'Abîmée'], ['aucune', 'Pas de boîte']];
-  const famillesDe = (p) => FAMILLES.map(([f]) => f).filter((f) => normal(p.famille).includes(normal(f).slice(0, 5)));
   const anneeAchat = () => {
     const y = new Date().getFullYear();
     return [...Array.from({length: y - 2004}, (_, i) => String(y - i)), 'Avant 2005', 'Je ne sais plus'];
@@ -3483,7 +3492,7 @@ function creerAdmin(o) {
             <p class="aide">Il sera ajouté à la liste${m && V.maison !== AUTRE ? ` de ${esc(m)}` : ''} une fois l'orthographe vérifiée par l'équipe.</p>
             <fieldset><legend>Concentration</legend>${segment('conc', V.conc, CONCENTRATIONS.map((c) => [c, c]))}</fieldset>
             <fieldset><legend>Pour</legend>${segment('genre', V.genre, [['Femme', 'Femme'], ['Homme', 'Homme'], ['Mixte', 'Mixte']])}</fieldset>
-            <fieldset><legend>Famille olfactive <small>une ou deux, facultatif</small></legend>${puces('familles', V.familles, FAMILLES.map(([f, d]) => [f, f, d]))}</fieldset>` : ''}
+            <fieldset><legend>Son caractère <small>une ou deux familles, facultatif</small></legend><div class="groupes-familles">${GROUPES_FAMILLES.map(([g, fs]) => `<div><p class="groupe-titre">${g}</p>${puces('familles', V.familles, fs.map(([f, d]) => [f, f, d]))}</div>`).join('')}</div></fieldset>` : ''}
         </section>
 
         ${parfumPret ? `<section class="bloc-form">

@@ -215,6 +215,9 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .bloc-form legend { margin-bottom: 8px; padding: 0; font-weight: 600; font-size: 15px; }
 .bloc-form legend small, .facultatif { color: var(--texte-2); font-weight: 400; font-size: 13.5px; }
 .segment .choix:has(input:checked) { background: var(--fond-2); }
+.groupes-familles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; }
+.groupe-titre { margin-bottom: 6px; color: var(--texte-2); font-size: 13px; font-weight: 600; }
+@media (max-width: 640px) { .groupes-familles { grid-template-columns: minmax(0, 1fr); } }
 .coches { display: flex; flex-wrap: wrap; gap: 8px; }
 .coche { position: relative; cursor: pointer; }
 .coche input { position: absolute; opacity: 0; }
