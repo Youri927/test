@@ -16,3 +16,24 @@
 .etiq-verif { top: 10px; bottom: auto; color: var(--vert); }
 .etiq-bas { left: auto; right: 10px; }
 .carte-photo .visuel { object-fit: cover; }
+/* l'espace équipe sous l'en-tête du site */
+.bo-reel { min-height: calc(100vh - 69px); background: var(--fond-2); }
+.bo-reel .bo-cote { top: 69px; height: calc(100vh - 69px); }
+.bo-verif-photos a { display: block; border-radius: 9px; overflow: hidden; }
+.bo-verif-photos img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+.bo-verif-photos figure { display: grid; gap: 4px; margin: 0; }
+.bo-verif-photos figcaption { color: var(--texte-2); font-size: 11.5px; line-height: 1.25; }
+.bo-form-ligne { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.bo-form-ligne .champ { width: auto; flex: 1 1 220px; min-height: 40px; }
+details.bo-plus > summary { cursor: pointer; font-weight: 600; font-size: 14.5px; }
+details.bo-plus[open] > summary { margin-bottom: 10px; }
+.galerie-reelle { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-content: start; }
+.galerie-reelle figure { display: grid; gap: 4px; margin: 0; }
+.galerie-reelle .grande { grid-column: 1 / -1; }
+.galerie-reelle img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; background: var(--fond-2); }
+.galerie-reelle .grande img { border-radius: 14px; }
+.galerie-reelle figcaption { color: var(--texte-2); font-size: 12px; }
+.fiche-desc { margin: 12px 0; color: var(--texte-2); }
+.remplacer { margin-top: 8px; }
+.envoye { display: grid; justify-items: start; gap: 14px; padding-block: 40px; }
+.rond-ok { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--vert); color: #fff; font-size: 24px; }

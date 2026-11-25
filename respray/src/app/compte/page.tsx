@@ -2,6 +2,7 @@ import Link from 'next/link';
 import {exigerMembre} from '@/lib/auth';
 import {deVendeur} from '@/lib/annonces';
 import {eur} from '@/lib/regles';
+import {RemplacerPhoto} from '@/components/RemplacerPhoto';
 
 export const metadata = {title: 'Mon compte'};
 export const dynamic = 'force-dynamic';
@@ -31,7 +32,7 @@ export default async function Compte() {
               <tr key={a.id}>
                 <td><Link className="bo-ligne-a" href={a.statut === 'publiee' ? `/annonces/${a.id}` : '#'}><span className="bo-vignette">{a.photos.face ? <img className="visuel" src={`/photos/${a.photos.face}`} alt="" /> : null}</span><span><strong>{a.parfumNom}</strong><small>{a.maisonNom} · {a.ml} ml</small></span></Link></td>
                 <td>{eur(a.prix)}</td>
-                <td><span className={`bo-pill bo-${STATUTS[a.statut][1]}`}>{STATUTS[a.statut][0]}</span>{a.raison ? <small className="bo-sous">{a.raison}</small> : null}</td>
+                <td><span className={`bo-pill bo-${STATUTS[a.statut][1]}`}>{STATUTS[a.statut][0]}</span>{a.raison ? <small className="bo-sous">{a.raison}</small> : null}{a.statut === 'photo' ? <RemplacerPhoto id={a.id} demande={a.raison} /> : null}</td>
               </tr>
             ))}
           </tbody></table></div>
