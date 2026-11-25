@@ -207,7 +207,49 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .verifiee li::before, .liste-check li::before { content: ""; position: absolute; left: 4px; top: .45em; width: 10px; height: 5px; border-left: 2px solid var(--vert); border-bottom: 2px solid var(--vert); transform: rotate(-45deg); }
 
 /* vendre */
-.vendre { max-width: 760px; }
+.vendre { max-width: 1120px; }
+.vendre > .chapo { max-width: 62ch; }
+.vendre-grille { display: grid; grid-template-columns: minmax(0, 680px) minmax(0, 300px); gap: 56px; align-items: start; }
+.bloc-n { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-right: 10px; border-radius: 50%; background: var(--fond-2); font-size: 13px; font-weight: 700; vertical-align: 2px; }
+.bloc-form fieldset { display: grid; gap: 8px; margin: 6px 0 0; padding: 0; border: 0; }
+.bloc-form legend { margin-bottom: 8px; padding: 0; font-weight: 600; font-size: 15px; }
+.bloc-form legend small, .facultatif { color: var(--texte-2); font-weight: 400; font-size: 13.5px; }
+.segment .choix:has(input:checked) { background: var(--fond-2); }
+.coches { display: flex; flex-wrap: wrap; gap: 8px; }
+.coche { position: relative; cursor: pointer; }
+.coche input { position: absolute; opacity: 0; }
+.coche > span { display: grid; padding: 8px 14px; border: 1px solid var(--trait); border-radius: 12px; font-size: 14.5px; font-weight: 500; transition: border-color .2s, background .2s; }
+.coche small { color: var(--texte-2); font-size: 12px; font-weight: 400; }
+.coche input:checked + span { border-color: var(--texte); background: var(--fond-2); }
+.coche input:focus-visible + span { outline: 2px solid var(--texte); outline-offset: 2px; }
+.fiche-auto { padding: 14px 16px; border-radius: 14px; background: var(--fond-2); }
+.fiche-auto dl { display: grid; gap: 4px; margin: 6px 0; font-size: 14.5px; }
+.fiche-auto dl div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 10px; }
+.fiche-auto dt { color: var(--texte-2); }
+.fiche-auto dd { margin: 0; }
+.engagement { align-items: flex-start; gap: 10px; line-height: 1.45; }
+.engagement input { margin-top: 4px; }
+.bloc-form textarea.champ { min-height: 84px; resize: vertical; }
+.apercu { position: sticky; top: 96px; display: grid; gap: 14px; }
+#apercu { display: grid; gap: 16px; }
+.apercu-sans { background: var(--fond-2); }
+.apercu-carte { display: grid; gap: 2px; padding: 14px; border-radius: 20px; background: var(--fond); box-shadow: 0 0 0 1px var(--trait), 0 18px 40px -28px rgba(0, 0, 0, .4); }
+.apercu-photo { position: relative; margin-bottom: 10px; border-radius: 12px; overflow: hidden; }
+.apercu-vide { position: absolute; inset: 0; display: grid; place-items: center; background: color-mix(in srgb, var(--fond-2) 80%, transparent); color: var(--texte-2); font-weight: 600; }
+.apercu-etapes { display: grid; gap: 8px; font-size: 14.5px; color: var(--texte-2); }
+.apercu-etapes li { display: flex; align-items: center; gap: 10px; }
+.apercu-etapes span { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--trait); }
+.apercu-etapes .fait { color: var(--texte); }
+.apercu-etapes .fait span { background: var(--vert); box-shadow: none; color: #fff; }
+.apercu-etapes .ico { width: 13px; height: 13px; stroke-width: 2.6; }
+.bo-declare { margin: 4px 0; font-size: 14px; }
+@media (max-width: 960px) {
+  .vendre-grille { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .apercu { position: static; order: -1; grid-template-columns: 120px minmax(0, 1fr); align-items: start; }
+  .apercu > .surtitre { grid-column: 1 / -1; }
+  .apercu-carte { grid-row: span 2; }
+  .apercu-carte .carte-meta, .apercu-carte .carte-prix { font-size: 12.5px; }
+}
 .formulaire { display: grid; gap: 8px; margin-top: 28px; }
 .bloc-form { display: grid; gap: 10px; padding-block: 24px; border-top: 1px solid var(--trait); }
 .bloc-form label:not(.choix):not(.photo) { font-weight: 600; font-size: 15px; }

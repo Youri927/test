@@ -531,6 +531,7 @@ function creerAdmin(o) {
         <h2 class="bo-h2">${esc(nom)}, ${x.ml} ml ${attente > 2 * 36e5 ? pastille('En attente depuis plus de 2 h', 'attente') : ''}</h2>
         <p>${eur(x.prix)} · ${x.etat === 'blister' ? 'neuf sous blister' : `reste ~${x.niveau} %`} · code lot ${esc(x.lot || '—')}${x.boite ? ' · avec boîte' : ''}</p>
         ${x.alerte ? `<p class="p-alerte">${esc(x.alerte)}</p>` : ''}
+        ${x.details ? `<dl class="bo-dl bo-declare">${[['Concentration', x.details.conc], ['Format', x.details.format], ['Acheté', x.details.achat], ['Rangé', x.details.rangement], ['Boîte', x.details.boite], ['Niveau', x.details.visible], ['Défauts', x.details.defauts], ['Main propre', x.details.ville], ['Description', x.desc]].filter((r) => r[1]).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : ''}
         <fieldset class="p-checks"><legend class="vh">Contrôles</legend>${CHECKS.map((c, i) => `<label class="choix"><input type="checkbox" data-check="${x.id}" id="c-${x.id}-${i}"> ${c}</label>`).join('')}</fieldset>
         <div class="bo-actions">
           <button class="btn btn-noir btn-petit" type="button" data-bo="publier" data-id="${x.id}">Publier</button>

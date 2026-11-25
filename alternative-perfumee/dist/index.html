@@ -218,7 +218,49 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .verifiee li::before, .liste-check li::before { content: ""; position: absolute; left: 4px; top: .45em; width: 10px; height: 5px; border-left: 2px solid var(--vert); border-bottom: 2px solid var(--vert); transform: rotate(-45deg); }
 
 /* vendre */
-.vendre { max-width: 760px; }
+.vendre { max-width: 1120px; }
+.vendre > .chapo { max-width: 62ch; }
+.vendre-grille { display: grid; grid-template-columns: minmax(0, 680px) minmax(0, 300px); gap: 56px; align-items: start; }
+.bloc-n { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-right: 10px; border-radius: 50%; background: var(--fond-2); font-size: 13px; font-weight: 700; vertical-align: 2px; }
+.bloc-form fieldset { display: grid; gap: 8px; margin: 6px 0 0; padding: 0; border: 0; }
+.bloc-form legend { margin-bottom: 8px; padding: 0; font-weight: 600; font-size: 15px; }
+.bloc-form legend small, .facultatif { color: var(--texte-2); font-weight: 400; font-size: 13.5px; }
+.segment .choix:has(input:checked) { background: var(--fond-2); }
+.coches { display: flex; flex-wrap: wrap; gap: 8px; }
+.coche { position: relative; cursor: pointer; }
+.coche input { position: absolute; opacity: 0; }
+.coche > span { display: grid; padding: 8px 14px; border: 1px solid var(--trait); border-radius: 12px; font-size: 14.5px; font-weight: 500; transition: border-color .2s, background .2s; }
+.coche small { color: var(--texte-2); font-size: 12px; font-weight: 400; }
+.coche input:checked + span { border-color: var(--texte); background: var(--fond-2); }
+.coche input:focus-visible + span { outline: 2px solid var(--texte); outline-offset: 2px; }
+.fiche-auto { padding: 14px 16px; border-radius: 14px; background: var(--fond-2); }
+.fiche-auto dl { display: grid; gap: 4px; margin: 6px 0; font-size: 14.5px; }
+.fiche-auto dl div { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 10px; }
+.fiche-auto dt { color: var(--texte-2); }
+.fiche-auto dd { margin: 0; }
+.engagement { align-items: flex-start; gap: 10px; line-height: 1.45; }
+.engagement input { margin-top: 4px; }
+.bloc-form textarea.champ { min-height: 84px; resize: vertical; }
+.apercu { position: sticky; top: 96px; display: grid; gap: 14px; }
+#apercu { display: grid; gap: 16px; }
+.apercu-sans { background: var(--fond-2); }
+.apercu-carte { display: grid; gap: 2px; padding: 14px; border-radius: 20px; background: var(--fond); box-shadow: 0 0 0 1px var(--trait), 0 18px 40px -28px rgba(0, 0, 0, .4); }
+.apercu-photo { position: relative; margin-bottom: 10px; border-radius: 12px; overflow: hidden; }
+.apercu-vide { position: absolute; inset: 0; display: grid; place-items: center; background: color-mix(in srgb, var(--fond-2) 80%, transparent); color: var(--texte-2); font-weight: 600; }
+.apercu-etapes { display: grid; gap: 8px; font-size: 14.5px; color: var(--texte-2); }
+.apercu-etapes li { display: flex; align-items: center; gap: 10px; }
+.apercu-etapes span { display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--trait); }
+.apercu-etapes .fait { color: var(--texte); }
+.apercu-etapes .fait span { background: var(--vert); box-shadow: none; color: #fff; }
+.apercu-etapes .ico { width: 13px; height: 13px; stroke-width: 2.6; }
+.bo-declare { margin: 4px 0; font-size: 14px; }
+@media (max-width: 960px) {
+  .vendre-grille { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .apercu { position: static; order: -1; grid-template-columns: 120px minmax(0, 1fr); align-items: start; }
+  .apercu > .surtitre { grid-column: 1 / -1; }
+  .apercu-carte { grid-row: span 2; }
+  .apercu-carte .carte-meta, .apercu-carte .carte-prix { font-size: 12.5px; }
+}
 .formulaire { display: grid; gap: 8px; margin-top: 28px; }
 .bloc-form { display: grid; gap: 10px; padding-block: 24px; border-top: 1px solid var(--trait); }
 .bloc-form label:not(.choix):not(.photo) { font-weight: 600; font-size: 15px; }
@@ -2393,6 +2435,7 @@ function creerAdmin(o) {
         <h2 class="bo-h2">${esc(nom)}, ${x.ml} ml ${attente > 2 * 36e5 ? pastille('En attente depuis plus de 2 h', 'attente') : ''}</h2>
         <p>${eur(x.prix)} · ${x.etat === 'blister' ? 'neuf sous blister' : `reste ~${x.niveau} %`} · code lot ${esc(x.lot || '—')}${x.boite ? ' · avec boîte' : ''}</p>
         ${x.alerte ? `<p class="p-alerte">${esc(x.alerte)}</p>` : ''}
+        ${x.details ? `<dl class="bo-dl bo-declare">${[['Concentration', x.details.conc], ['Format', x.details.format], ['Acheté', x.details.achat], ['Rangé', x.details.rangement], ['Boîte', x.details.boite], ['Niveau', x.details.visible], ['Défauts', x.details.defauts], ['Main propre', x.details.ville], ['Description', x.desc]].filter((r) => r[1]).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : ''}
         <fieldset class="p-checks"><legend class="vh">Contrôles</legend>${CHECKS.map((c, i) => `<label class="choix"><input type="checkbox" data-check="${x.id}" id="c-${x.id}-${i}"> ${c}</label>`).join('')}</fieldset>
         <div class="bo-actions">
           <button class="btn btn-noir btn-petit" type="button" data-bo="publier" data-id="${x.id}">Publier</button>
@@ -3361,7 +3404,19 @@ function creerAdmin(o) {
 
   /* ——— vendre ——— */
   const AUTRE = '__autre';
-  const V0 = {maison: '', maisonAutre: '', parfum: '', parfumAutre: '', conc: 'Eau de parfum', ml: '', mlAutre: '', etat: 'entame', niveau: 80, boite: 'oui', prix: '', photos: {}, envoye: false, proposes: []};
+  const V0 = {maison: '', maisonAutre: '', parfum: '', parfumAutre: '', conc: '', genre: '', familles: [], format: 'flacon', ml: '', mlAutre: '', etat: 'entame', niveau: 80, visible: '', defauts: [], annee: '', lieu: '', lumiere: '', chaleur: '', boite: '', lot: '', lotIllisible: false, desc: '', prix: '', mainPropre: false, ville: '', engagement: false, photos: {}, envoye: false, proposes: []};
+  /* ce que le vendeur déclare : des listes courtes, des réponses qui ne se contredisent pas */
+  const CONCENTRATIONS = ['Extrait de parfum', 'Eau de parfum', 'Eau de toilette', 'Eau de Cologne', 'Parfum pour cheveux', 'Brume parfumée'];
+  const FAMILLES = [['Florale', 'rose, jasmin, tubéreuse'], ['Ambrée', 'vanille, résines, épices chaudes'], ['Boisée', 'santal, cèdre, vétiver'], ['Fruitée', 'pêche, cassis, litchi'], ['Gourmande', 'praliné, caramel, fève tonka'], ['Hespéridée', 'bergamote, citron, mandarine'], ['Aquatique', 'notes marines, ozone'], ['Aromatique', 'lavande, romarin, sauge'], ['Chyprée', 'bergamote, mousse de chêne, patchouli'], ['Fougère', 'lavande, coumarine, mousse'], ['Cuirée', 'cuir, bouleau, tabac'], ['Musquée', 'muscs blancs, iris poudré']];
+  const FORMATS = [['flacon', 'Flacon'], ['voyage', 'Format voyage'], ['miniature', 'Miniature'], ['echantillon', 'Échantillon acheté'], ['coffret', 'Coffret']];
+  const LIEUX = ['Boutique de la maison', 'Parfumerie (Sephora, Nocibé, Marionnaud…)', 'Grand magasin', 'Site officiel ou parfumerie en ligne', 'Reçu en cadeau', 'Acheté d\'occasion'];
+  const DEFAUTS = ['Bouchon marqué ou rayé', 'Étiquette usée', 'Flacon rayé', 'Vaporisateur un peu dur'];
+  const BOITES = [['blister', 'Neuve, sous blister'], ['bon', 'En bon état'], ['abimee', 'Abîmée'], ['aucune', 'Pas de boîte']];
+  const famillesDe = (p) => FAMILLES.map(([f]) => f).filter((f) => normal(p.famille).includes(normal(f).slice(0, 5)));
+  const anneeAchat = () => {
+    const y = new Date().getFullYear();
+    return [...Array.from({length: y - 2004}, (_, i) => String(y - i)), 'Avant 2005', 'Je ne sais plus'];
+  };
   const V = structuredClone(V0);
   const maisonChoisie = () => (V.maison === AUTRE ? V.maisonAutre.trim() : V.maison);
   const parfumCatalogue = () => (V.maison && V.maison !== AUTRE && P[V.parfum] ? P[V.parfum] : null);
@@ -3374,6 +3429,41 @@ function creerAdmin(o) {
     if (r) return `Vouliez-vous dire <strong>${esc(r.nom)}</strong>&nbsp;? <button type="button" class="lien-bouton" data-choisir-maison="${esc(r.nom)}">Oui, la choisir</button>`;
     return `Elle sera proposée à l'équipe, qui vérifie l'orthographe et l'ajoute à la liste. Votre annonce est vérifiée en même temps.`;
   }
+  /* le formulaire de vente : une seule page, six blocs, et à droite l'annonce telle qu'elle sera, qui se remplit au fil
+     des réponses. Pour un parfum du catalogue, le genre, la famille et la concentration sont déjà remplis. */
+  const segment = (champ, val, choix) => `<div class="segment" role="radiogroup">${choix.map(([v, l]) => `<label class="choix"><input type="radio" name="${champ}" value="${esc(v)}" ${val === v ? 'checked' : ''} data-champ="${champ}"> ${l}</label>`).join('')}</div>`;
+  const puces = (champ, vals, choix) => `<div class="coches">${choix.map(([v, l, d]) => `<label class="coche" ${d ? `title="${esc(d)}"` : ''}><input type="checkbox" value="${esc(v)}" ${vals.includes(v) ? 'checked' : ''} data-multi="${champ}"><span>${l}${d ? `<small>${d}</small>` : ''}</span></label>`).join('')}</div>`;
+  function blocsVente() {
+    const pc = parfumCatalogue();
+    const ml = pc ? +V.ml : nombre(V.mlAutre);
+    const sections = [
+      ['Le parfum', !!(maisonChoisie() && nomParfum() && (pc || (V.conc && V.genre)))],
+      ['Le flacon', ml > 0 && (V.etat === 'blister' || V.visible)],
+      ['Son histoire', !!(V.annee && V.lieu && V.lumiere && V.chaleur && V.boite && (V.lot.trim() || V.lotIllisible))],
+      ['Les photos', PHOTOS.every((x) => !x.obl || V.photos[x.k])],
+      ['Prix et remise', nombre(V.prix) >= 3 && (!V.mainPropre || V.ville.trim())],
+      ['Engagement', V.engagement],
+    ];
+    return sections;
+  }
+  function apercuVente() {
+    const pc = parfumCatalogue();
+    const ml = pc ? +V.ml : nombre(V.mlAutre);
+    const conc = pc ? pc.conc : V.conc;
+    const ph = V.photos.face;
+    const memeParfum = pc && ANNONCES.find((a) => a.p === pc.id);
+    const image = ph && ph !== true ? `<img class="visuel" src="${ph}" alt="">` : pc || ph ? photo(memeParfum || A.a101, 'face') : '<span class="visuel apercu-sans"></span>';
+    const restant = V.etat === 'entame' && ml > 0 ? ` · reste ~${V.niveau} % (≈ ${Math.round((ml * V.niveau) / 100)} ml)` : '';
+    const sections = blocsVente();
+    return `<div class="apercu-carte"><div class="apercu-photo">${image}${pc || ph ? '' : '<span class="apercu-vide">Votre photo de face</span>'}</div>
+        <p class="carte-maison">${esc(maisonChoisie() || 'Maison')}</p><p class="carte-nom">${esc(nomParfum() || 'Parfum')}</p>
+        <p class="carte-meta">${esc(conc || 'Concentration')}${ml > 0 ? ` · ${ml} ml` : ''}${V.etat === 'blister' ? ' · neuf sous blister' : restant}</p>
+        <p class="carte-prix">${nombre(V.prix) >= 3 ? eur(nombre(V.prix)) : '— €'}</p>
+        ${V.annee || V.lot ? `<p class="carte-meta">${V.annee ? `Acheté : ${esc(V.annee)}` : ''}${V.annee && V.lot ? ' · ' : ''}${V.lot ? `lot ${esc(V.lot)}` : ''}</p>` : ''}
+      </div>
+      <ol class="apercu-etapes">${sections.map(([t, ok]) => `<li class="${ok ? 'fait' : ''}"><span>${ok ? ico('check') : ''}</span>${t}</li>`).join('')}</ol>
+      <p class="aide">${sections.filter((x) => x[1]).length} sur ${sections.length} · l'équipe vérifie ensuite, en général en quelques heures.</p>`;
+  }
   VUES.vendre = () => {
     if (V.envoye) return vendreEnvoye();
     const m = maisonChoisie();
@@ -3383,31 +3473,59 @@ function creerAdmin(o) {
     const parfumPret = pc || libre || (V.parfum && V.parfum.startsWith('ajout:'));
     const prixAnnonces = pc ? ANNONCES.filter((a) => a.p === pc.id).map((a) => a.prix) : [];
     const manquantes = PHOTOS.filter((x) => x.obl && !V.photos[x.k]).length;
+    const n = (i) => `<span class="bloc-n">${i}</span>`;
     return `<div class="env page vendre">
       <h1 class="titre-page">Vendre un parfum</h1>
-      <p class="chapo">Gratuit, sans commission. Votre annonce est vérifiée par notre équipe avant d'être publiée, en général en quelques heures.</p>
+      <p class="chapo">Gratuit, sans commission. Plus votre annonce est précise, plus elle se vend vite, et moins l'acheteur a de questions.</p>
+      <div class="vendre-grille">
       <form class="formulaire" data-form="vendre" novalidate>
         <section class="bloc-form">
-          <h2 class="h2">Le parfum</h2>
+          <h2 class="h2">${n(1)}Le parfum</h2>
           <label for="maison">Maison</label>
           <select id="maison" class="champ" data-champ="maison"><option value="">Choisir une maison</option>${maisons().map((x) => `<option ${V.maison === x ? 'selected' : ''}>${esc(x)}</option>`).join('')}<option value="${AUTRE}" ${V.maison === AUTRE ? 'selected' : ''}>Ma maison n'est pas dans la liste</option></select>
           ${V.maison === AUTRE ? `<label for="maison-autre">Nom de la maison</label><input id="maison-autre" class="champ" data-champ="maisonAutre" value="${esc(V.maisonAutre)}" placeholder="ex. Maison Crivelli" autocomplete="off"><p class="aide aide-maison" id="aide-maison" aria-live="polite">${aideMaison()}</p>` : ''}
           ${liste.length ? `<label for="parfum">Parfum</label><select id="parfum" class="champ" data-champ="parfum"><option value="">Choisir un parfum</option>${liste.map((x) => `<option value="${esc(x.id)}" ${V.parfum === x.id ? 'selected' : ''}>${esc(x.nom)}${x.conc ? ` (${esc(x.conc)})` : ''}</option>`).join('')}<option value="${AUTRE}" ${V.parfum === AUTRE ? 'selected' : ''}>Mon parfum n'est pas dans la liste</option></select>` : ''}
-          ${libre ? `<div class="ligne-champs">
-              <div><label for="parfum-autre">Nom du parfum</label><input id="parfum-autre" class="champ" data-champ="parfumAutre" value="${esc(V.parfumAutre)}" placeholder="ex. Tobacco Mandarin" autocomplete="off"></div>
-              <div><label for="conc">Concentration</label><select id="conc" class="champ" data-champ="conc">${['Extrait de parfum', 'Eau de parfum', 'Eau de toilette', 'Eau de cologne', 'Autre'].map((c) => `<option ${V.conc === c ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
-            </div>
-            <p class="aide">Le parfum sera ajouté à la liste${m && V.maison !== AUTRE ? ` de ${esc(m)}` : ''} une fois l'orthographe vérifiée par l'équipe.</p>` : ''}
-          ${parfumPret ? `<div class="ligne-champs">
-            <div><label for="ml">Contenance</label>${pc ? `<select id="ml" class="champ" data-champ="ml"><option value="">Choisir</option>${pc.formats.map((f) => `<option value="${f.ml}" ${+V.ml === f.ml ? 'selected' : ''}>${f.ml} ml</option>`).join('')}</select>` : `<div class="champ-prix"><input id="ml" class="champ" inputmode="numeric" data-champ="mlAutre" value="${esc(V.mlAutre)}" placeholder="100"><span>ml</span></div>`}</div>
-            <div><label for="boite">Boîte d'origine</label><select id="boite" class="champ" data-champ="boite"><option value="oui" ${V.boite === 'oui' ? 'selected' : ''}>Oui</option><option value="non" ${V.boite === 'non' ? 'selected' : ''}>Non</option></select></div>
-          </div>
-          <fieldset><legend>État</legend><div class="segment">${radios('etat', V.etat, [['blister', 'Neuf sous blister'], ['entame', 'Entamé']], 'data-champ="etat"')}</div></fieldset>
-          ${V.etat === 'entame' ? `<label for="niveau">Il reste environ <output id="niveau-out">${V.niveau} %</output></label><input id="niveau" type="range" min="10" max="100" step="5" value="${V.niveau}" data-champ="niveau">` : ''}` : ''}
+          ${pc ? `<div class="fiche-auto"><p class="surtitre">Rempli d'après le catalogue</p><dl><div><dt>Concentration</dt><dd>${esc(pc.conc)}</dd></div><div><dt>Pour</dt><dd>${esc(pc.genre)}</dd></div><div><dt>Famille</dt><dd>${esc(pc.famille)}</dd></div><div><dt>Notes</dt><dd>${esc(pc.notes)}</dd></div></dl><p class="aide">Une erreur ? Dites-le dans la description : l'équipe corrige la fiche.</p></div>` : ''}
+          ${libre ? `<label for="parfum-autre">Nom du parfum</label><input id="parfum-autre" class="champ" data-champ="parfumAutre" value="${esc(V.parfumAutre)}" placeholder="ex. Tobacco Mandarin" autocomplete="off">
+            <p class="aide">Il sera ajouté à la liste${m && V.maison !== AUTRE ? ` de ${esc(m)}` : ''} une fois l'orthographe vérifiée par l'équipe.</p>
+            <fieldset><legend>Concentration</legend>${segment('conc', V.conc, CONCENTRATIONS.map((c) => [c, c]))}</fieldset>
+            <fieldset><legend>Pour</legend>${segment('genre', V.genre, [['Femme', 'Femme'], ['Homme', 'Homme'], ['Mixte', 'Mixte']])}</fieldset>
+            <fieldset><legend>Famille olfactive <small>une ou deux, facultatif</small></legend>${puces('familles', V.familles, FAMILLES.map(([f, d]) => [f, f, d]))}</fieldset>` : ''}
+        </section>
+
+        ${parfumPret ? `<section class="bloc-form">
+          <h2 class="h2">${n(2)}Le flacon</h2>
+          <fieldset><legend>Format</legend>${segment('format', V.format, FORMATS)}</fieldset>
+          ${V.format === 'coffret' ? '<p class="aide">Un coffret est accepté s\'il est neuf, scellé et sous blister.</p>' : V.format === 'echantillon' ? '<p class="aide">Un échantillon acheté, oui ; un échantillon offert ou marqué « Ne peut être vendu », non.</p>' : ''}
+          <label for="ml">Contenance</label>${pc && V.format === 'flacon' ? `<select id="ml" class="champ" data-champ="ml"><option value="">Choisir</option>${pc.formats.map((f) => `<option value="${f.ml}" ${+V.ml === f.ml ? 'selected' : ''}>${f.ml} ml</option>`).join('')}</select>` : `<div class="champ-prix"><input id="ml" class="champ" inputmode="numeric" data-champ="mlAutre" value="${esc(V.mlAutre)}" placeholder="${V.format === 'echantillon' ? '2' : V.format === 'voyage' || V.format === 'miniature' ? '10' : '100'}"><span>ml</span></div>`}
+          <fieldset><legend>État</legend>${segment('etat', V.etat, [['blister', 'Neuf, jamais ouvert'], ['entame', 'Déjà utilisé']])}</fieldset>
+          ${V.etat === 'entame' ? `<label for="niveau">Il reste environ <output id="niveau-out">${V.niveau} %</output></label><input id="niveau" type="range" min="5" max="100" step="5" value="${V.niveau}" data-champ="niveau">
+            <p class="aide">Le niveau exact, pas une tranche : l'équipe le compare à la photo du niveau.</p>
+            <fieldset><legend>Le parfum se voit-il à travers le flacon ?</legend>${segment('visible', V.visible, [['oui', 'Oui'], ['opaque', 'Non, le flacon est opaque']])}</fieldset>
+            ${V.visible === 'opaque' ? astuceOpaque() : ''}
+            <fieldset><legend>Petits défauts <small>facultatif</small></legend>${puces('defauts', V.defauts, DEFAUTS.map((x) => [x, x]))}</fieldset>` : ''}
         </section>
 
         <section class="bloc-form">
-          <h2 class="h2">Les photos</h2>
+          <h2 class="h2">${n(3)}Son histoire</h2>
+          <div class="ligne-champs">
+            <div><label for="annee">Acheté en</label><select id="annee" class="champ" data-champ="annee"><option value="">Choisir</option>${anneeAchat().map((x) => `<option ${V.annee === x ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+            <div><label for="lieu">Où</label><select id="lieu" class="champ" data-champ="lieu"><option value="">Choisir</option>${LIEUX.map((x) => `<option ${V.lieu === x ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select></div>
+          </div>
+          <fieldset><legend>Rangé à l'abri de la lumière ?</legend>${segment('lumiere', V.lumiere, [['abri', 'Oui, dans un placard ou sa boîte'], ['expose', 'Non, à la lumière']])}</fieldset>
+          <fieldset><legend>Et de la chaleur ?</legend>${segment('chaleur', V.chaleur, [['abri', 'Oui'], ['expose', 'Non (salle de bain, près d\'un radiateur…)']])}</fieldset>
+          <p class="aide">La lumière et la chaleur abîment un parfum : l'acheteur le saura avant d'acheter, c'est ce qui le rassure.</p>
+          <fieldset><legend>La boîte</legend>${segment('boite', V.boite, BOITES)}</fieldset>
+          <label for="lot">Code lot</label>
+          <input id="lot" class="champ" data-champ="lot" value="${esc(V.lot)}" placeholder="ex. 3A21" autocomplete="off" ${V.lotIllisible ? 'disabled' : ''}>
+          <p class="aide">Gravé ou imprimé sous le flacon, et sur la boîte (souvent à côté du code-barres). L'équipe vérifie qu'il suit le format de la maison.</p>
+          <label class="choix"><input type="checkbox" data-champ="lotIllisible" ${V.lotIllisible ? 'checked' : ''}> Il est effacé ou illisible</label>
+          <label for="desc">Description <small class="facultatif">facultatif</small></label>
+          <textarea id="desc" class="champ" rows="3" data-champ="desc" placeholder="Pourquoi vous le vendez, combien de fois il a été porté, ce que l'acheteur doit savoir…">${esc(V.desc)}</textarea>
+        </section>
+
+        <section class="bloc-form">
+          <h2 class="h2">${n(4)}Les photos</h2>
           <p class="aide">Elles nous permettent de vérifier votre parfum avant de publier l'annonce. Les ${OBLIGATOIRES} premières sont obligatoires ; chaque case montre l'exemple à suivre.</p>
           <div class="photos">${PHOTOS.map((x) => `<label class="photo ${V.photos[x.k] ? 'faite' : ''}">
               <input class="vh" type="file" accept="image/*" data-photo="${x.k}">
@@ -3415,21 +3533,31 @@ function creerAdmin(o) {
               <span class="photo-txt"><strong>${x.t}${x.obl ? '' : ' <em>facultatif</em>'}</strong><small>${x.d}</small></span>
             </label>`).join('')}</div>
           <button class="btn btn-petit" type="button" data-action="photos-exemple">Ajouter des photos d'exemple</button>
-          ${astuceOpaque()}
-        </section>
+          ${V.visible === 'opaque' ? '' : astuceOpaque()}
+        </section>` : ''}
 
-        <section class="bloc-form">
-          <h2 class="h2">Le prix</h2>
+        ${parfumPret ? `<section class="bloc-form">
+          <h2 class="h2">${n(5)}Prix et remise</h2>
           <label for="prix">Votre prix</label>
           <div class="champ-prix"><input id="prix" class="champ" inputmode="decimal" value="${esc(V.prix)}" placeholder="0" data-champ="prix"><span>€</span></div>
           ${prixAnnonces.length ? `<p class="aide">Annonces actuelles de ce parfum : de ${eur(Math.min(...prixAnnonces))} à ${eur(Math.max(...prixAnnonces))}.</p>` : ''}
           <p class="aide" id="recu">${V.prix ? `Vous recevrez ${eur2(nombre(V.prix) || 0)} : aucune commission.` : 'Vous recevez la totalité du prix : aucune commission.'}</p>
+          <p class="aide">Envoi en point relais, suivi et assuré : vous imprimez l'étiquette, vous avez 5 jours pour déposer le colis.</p>
+          <label class="choix"><input type="checkbox" data-champ="mainPropre" ${V.mainPropre ? 'checked' : ''}> J'accepte aussi la remise en main propre</label>
+          ${V.mainPropre ? `<label for="ville">Ville ou arrondissement</label><input id="ville" class="champ" data-champ="ville" value="${esc(V.ville)}" placeholder="ex. Lyon 3e" autocomplete="off">` : ''}
         </section>
 
+        <section class="bloc-form">
+          <h2 class="h2">${n(6)}Votre engagement</h2>
+          <label class="choix engagement"><input type="checkbox" data-champ="engagement" ${V.engagement ? 'checked' : ''}> <span>Je certifie que ce parfum est authentique, qu'il n'a été ni dilué ni transvasé, et que je l'ai entre les mains. Je sais qu'une contrefaçon entraîne le remboursement de l'acheteur et l'exclusion de Respray.</span></label>
+        </section>` : ''}
+
         <p class="erreur" id="erreur" role="alert" hidden></p>
-        <button class="btn btn-noir btn-large" type="submit">Envoyer à la vérification</button>
-        <p class="aide">${manquantes ? `Il manque ${manquantes} photo${manquantes > 1 ? 's' : ''} obligatoire${manquantes > 1 ? 's' : ''}.` : 'Toutes les photos obligatoires sont là.'}</p>
+        ${parfumPret ? `<button class="btn btn-noir btn-large" type="submit">Envoyer à la vérification</button>
+        <p class="aide">${manquantes ? `Il manque ${manquantes} photo${manquantes > 1 ? 's' : ''} obligatoire${manquantes > 1 ? 's' : ''}.` : 'Toutes les photos obligatoires sont là.'}</p>` : ''}
       </form>
+      <aside class="apercu" aria-label="Aperçu de votre annonce"><p class="surtitre">Votre annonce</p><div id="apercu">${apercuVente()}</div></aside>
+      </div>
     </div>`;
   };
   function nomParfum() {
@@ -3968,6 +4096,10 @@ function creerAdmin(o) {
     animer();
     demarrerAccueil();
   }
+  const majApercu = () => {
+    const a = document.getElementById('apercu');
+    if (a && !V.envoye) a.innerHTML = apercuVente();
+  };
   const majBadge = () => {
     const b = document.getElementById('badge-panel');
     if (b) b.textContent = Admin.nbNotifs();
@@ -4035,9 +4167,18 @@ function creerAdmin(o) {
     let manque = '';
     if (!maisonChoisie()) manque = 'Choisissez ou écrivez la maison.';
     else if (!nom) manque = 'Choisissez ou écrivez le parfum.';
+    else if (!pc && !V.conc) manque = 'Choisissez la concentration.';
+    else if (!pc && !V.genre) manque = 'Dites pour qui est ce parfum : femme, homme ou mixte.';
     else if (!(ml > 0)) manque = 'Indiquez la contenance.';
+    else if (V.etat === 'entame' && !V.visible) manque = 'Dites si le parfum se voit à travers le flacon.';
+    else if (!V.annee || !V.lieu) manque = 'Dites quand et où vous l\'avez acheté.';
+    else if (!V.lumiere || !V.chaleur) manque = 'Dites comment il a été rangé.';
+    else if (!V.boite) manque = 'Dites s\'il a sa boîte.';
+    else if (!V.lot.trim() && !V.lotIllisible) manque = 'Recopiez le code lot, ou cochez « effacé ou illisible ».';
     else if (PHOTOS.some((x) => x.obl && !V.photos[x.k])) manque = `Ajoutez les ${OBLIGATOIRES} photos obligatoires.`;
     else if (!(prix >= 3)) manque = 'Indiquez un prix d\'au moins 3 €.';
+    else if (V.mainPropre && !V.ville.trim()) manque = 'Indiquez la ville de la remise en main propre.';
+    else if (!V.engagement) manque = 'Cochez l\'engagement d\'authenticité.';
     const err = document.getElementById('erreur');
     if (manque) {
       err.textContent = manque;
@@ -4048,10 +4189,11 @@ function creerAdmin(o) {
     V.proposes = [];
     const t = Date.now().toString(36);
     if (V.maison === AUTRE) V.proposes.push({id: 'm' + t, type: 'maison', tape: V.maisonAutre.trim(), par: 'vous', il: 'à l\'instant', annonce: `${nom}, ${ml} ml`});
-    if (parfumLibre()) V.proposes.push({id: 'p' + t, type: 'parfum', tape: nom, maison: maisonChoisie(), par: 'vous', il: 'à l\'instant', annonce: `${ml} ml`, conc: V.conc});
+    if (parfumLibre()) V.proposes.push({id: 'p' + t, type: 'parfum', tape: nom, maison: maisonChoisie(), par: 'vous', il: 'à l\'instant', annonce: `${ml} ml`, conc: V.conc, genre: V.genre, familles: V.familles});
     // l'annonce part dans la file de vérification du back-office, avec les photos d'un flacon du même parfum
     const memeParfum = pc && ANNONCES.find((a) => a.p === pc.id);
-    Admin.proposer(V.proposes, {id: 's' + t, p: pc ? pc.id : null, nomAffiche: `${maisonChoisie()} · ${nom}`, ml, prix, etat: V.etat, niveau: V.etat === 'blister' ? 100 : V.niveau, boite: V.boite === 'oui', lot: '', v: 'v0', mainPropre: true, ph: memeParfum ? memeParfum.id : 'a101', fond: '#ECE7E0'});
+    Admin.proposer(V.proposes, {id: 's' + t, p: pc ? pc.id : null, nomAffiche: `${maisonChoisie()} · ${nom}`, ml, prix, etat: V.etat, niveau: V.etat === 'blister' ? 100 : V.niveau, boite: V.boite !== 'aucune', lot: V.lotIllisible ? 'illisible' : V.lot.trim(), v: 'v0', mainPropre: V.mainPropre, desc: V.desc.trim(),
+      details: {conc: pc ? pc.conc : V.conc, format: FORMATS.find((x) => x[0] === V.format)[1], achat: `${V.annee}, ${V.lieu}`, rangement: `${V.lumiere === 'abri' ? 'à l\'abri de' : 'exposé à'} la lumière, ${V.chaleur === 'abri' ? 'à l\'abri de' : 'exposé à'} la chaleur`, boite: BOITES.find((x) => x[0] === V.boite)[1], visible: V.etat === 'blister' ? '' : V.visible === 'opaque' ? 'flacon opaque (photo à contre-jour)' : 'parfum visible', defauts: V.defauts.join(', '), ville: V.mainPropre ? V.ville.trim() : ''}, ph: memeParfum ? memeParfum.id : 'a101', fond: '#ECE7E0'});
     V.envoye = true;
     transition(() => {
       rendre();
@@ -4091,6 +4233,7 @@ function creerAdmin(o) {
 
   document.addEventListener('input', (e) => {
     const t = e.target;
+    if (t.closest('[data-form="vendre"]')) setTimeout(majApercu);
     if (t.hasAttribute('data-bo-cherche')) Admin.saisie(t);
     else if (t.closest('[data-form="filtres"]')) lireFiltres(t.closest('form'));
     else if (t.dataset.champ === 'niveau') {
@@ -4102,8 +4245,7 @@ function creerAdmin(o) {
     } else if (t.dataset.champ === 'maisonAutre') {
       V.maisonAutre = t.value;
       document.getElementById('aide-maison').innerHTML = aideMaison();
-    } else if (t.dataset.champ === 'parfumAutre') V.parfumAutre = t.value;
-    else if (t.dataset.champ === 'mlAutre') V.mlAutre = t.value;
+    } else if (['parfumAutre', 'mlAutre', 'lot', 'desc', 'ville'].includes(t.dataset.champ)) V[t.dataset.champ] = t.value;
     else if (t.matches('[data-sim]')) {
       const avant = simPrix;
       simPrix = +t.value;
@@ -4121,10 +4263,19 @@ function creerAdmin(o) {
     } else if (t.matches('[data-mode]')) {
       achat.mode = t.value;
       document.getElementById('total').innerHTML = total(A[location.hash.slice(9)]);
-    } else if (['maison', 'parfum', 'ml', 'boite', 'etat', 'conc'].includes(t.dataset.champ)) {
+    } else if (t.matches('[data-multi]')) {
+      const k = t.dataset.multi;
+      V[k] = t.checked ? [...V[k], t.value] : V[k].filter((x) => x !== t.value);
+      majApercu();
+    } else if (['lotIllisible', 'mainPropre', 'engagement'].includes(t.dataset.champ)) {
+      V[t.dataset.champ] = t.checked;
+      rafraichir(false);
+    } else if (['maison', 'parfum', 'ml', 'boite', 'etat', 'conc', 'genre', 'format', 'visible', 'annee', 'lieu', 'lumiere', 'chaleur'].includes(t.dataset.champ)) {
       V[t.dataset.champ] = t.value;
       if (t.dataset.champ === 'maison') Object.assign(V, {parfum: '', ml: ''});
       if (t.dataset.champ === 'parfum') V.ml = '';
+      if (t.dataset.champ === 'format') Object.assign(V, {ml: '', mlAutre: '', etat: t.value === 'coffret' ? 'blister' : V.etat});
+      if (!['maison', 'parfum', 'etat'].includes(t.dataset.champ)) rafraichir(false);
       if (['maison', 'parfum', 'etat'].includes(t.dataset.champ)) {
         rafraichir(true);
         const suivant = {maison: V.maison === AUTRE ? '#maison-autre' : '#parfum', parfum: V.parfum === AUTRE ? '#parfum-autre' : '#ml'}[t.dataset.champ];
