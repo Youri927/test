@@ -20,9 +20,13 @@ export const membres = pgTable(
     role: text('role', {enum: ['membre', 'equipe']}).notNull().default('membre'),
     statut: text('statut', {enum: ['actif', 'suspendu', 'exclu']}).notNull().default('actif'),
     fondateur: boolean('fondateur').notNull().default(false),
+    // le parrainage : son code à partager, qui l'a fait venir, et les mises en avant gagnées
+    code: text('code'),
+    parrainId: integer('parrain_id'),
+    credits: integer('credits').notNull().default(0),
     creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
   },
-  (t) => [uniqueIndex('membres_email').on(t.email), uniqueIndex('membres_pseudo').on(t.pseudo)],
+  (t) => [uniqueIndex('membres_email').on(t.email), uniqueIndex('membres_pseudo').on(t.pseudo), uniqueIndex('membres_code').on(t.code)],
 );
 
 export const sessions = pgTable('sessions', {
@@ -141,3 +145,15 @@ export const favoris = pgTable(
   },
   (t) => [uniqueIndex('favoris_pk').on(t.membreId, t.annonceId)],
 );
+
+/* les candidatures « vendeur fondateur » : les premiers vendeurs, accompagnés par l'équipe */
+export const candidatures = pgTable('candidatures', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  prenom: text('prenom').notNull().default(''),
+  flacons: text('flacons').notNull().default(''),
+  maisons: text('maisons').notNull().default(''),
+  ou: text('ou').notNull().default(''),
+  statut: text('statut', {enum: ['nouvelle', 'acceptee', 'refusee']}).notNull().default('nouvelle'),
+  creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
+});

@@ -33,7 +33,7 @@ const Segment = ({nom, val, choix, set}: {nom: string; val: string; choix: reado
   </div>
 );
 
-export function FormVendre({maisons, pseudo, prix}: {maisons: Maison[]; pseudo: string; prix: Record<number, number[]>}) {
+export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maison[]; pseudo: string; prix: Record<number, number[]>; credits?: number}) {
   const [etat, agir, enCours] = useActionState<EtatVente, FormData>(envoyerVente, {});
   const [v, setV] = useState({
     maisonId: '', maisonAutre: '', parfumId: '', parfumAutre: '', conc: '', genre: '', format: 'flacon', ml: '', etat: 'entame', niveau: 80, visible: '',
@@ -228,7 +228,8 @@ export function FormVendre({maisons, pseudo, prix}: {maisons: Maison[]; pseudo: 
               {fourchette ? <p className="aide">Annonces actuelles de ce parfum : de {eur(fourchette[0])} à {eur(fourchette[1])}.</p> : null}
               <p className="aide">{prixN >= 3 ? `Vous recevrez ${eur2(prixN)} : aucune commission.` : 'Vous recevez la totalité du prix : aucune commission.'}</p>
               <p className="aide">Envoi en point relais, suivi : vous imprimez l'étiquette, vous avez 5 jours pour déposer le colis.</p>
-              <fieldset><legend>Mettre l'annonce en avant <small>facultatif, payé seulement si elle est publiée</small></legend><Segment nom="miseEnAvant" val={v.miseEnAvant} choix={MISES_EN_AVANT.map((x) => [x.k, x.prix ? `${x.t} · ${eur2(x.prix)}` : x.t])} set={set('miseEnAvant')} /></fieldset>
+              <fieldset><legend>Mettre l'annonce en avant <small>facultatif, payé seulement si elle est publiée</small></legend><Segment nom="miseEnAvant" val={v.miseEnAvant} choix={MISES_EN_AVANT.map((x) => [x.k, x.prix ? `${x.t} · ${credits ? 'offerte' : eur2(x.prix)}` : x.t])} set={set('miseEnAvant')} /></fieldset>
+              {credits ? <p className="aide">Il vous reste {credits} mise{credits > 1 ? 's' : ''} en avant offerte{credits > 1 ? 's' : ''} (parrainage ou vendeur fondateur).</p> : null}
               <label className="choix"><input type="checkbox" name="mainPropre" checked={v.mainPropre} onChange={(e) => set('mainPropre')(e.target.checked)} /> J'accepte aussi la remise en main propre</label>
               {v.mainPropre ? (<><label htmlFor="ville">Ville ou arrondissement</label><input id="ville" name="ville" className="champ" value={v.ville} onChange={(e) => set('ville')(e.target.value)} placeholder="ex. Lyon 3e" /></>) : null}
             </section>

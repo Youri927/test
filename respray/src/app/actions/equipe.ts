@@ -3,7 +3,7 @@
    une maison ou un parfum proposé. Chaque décision laisse une ligne au journal. */
 import {revalidatePath} from 'next/cache';
 import {redirect} from 'next/navigation';
-import {eq, and} from 'drizzle-orm';
+import {eq, and, sql} from 'drizzle-orm';
 import {db, schema} from '@/db';
 import {exigerEquipe} from '@/lib/auth';
 import {noter} from '@/lib/journal';
@@ -20,8 +20,15 @@ async function annonce(n: number) {
 export async function publier(f: FormData) {
   const e = await exigerEquipe();
   const a = await annonce(id(f));
+  const premiere = !(await db.query.annonces.findFirst({where: and(eq(schema.annonces.vendeurId, a.vendeurId), eq(schema.annonces.statut, 'publiee'))}));
   await db.update(schema.annonces).set({statut: 'publiee', raison: '', publieeLe: new Date()}).where(eq(schema.annonces.id, a.id));
   await noter(e.id, 'annonce_publiee', `annonce:${a.id}`, `a publié l'annonce ${a.parfumNom} (${a.maisonNom})`);
+  const v = await db.query.membres.findFirst({where: eq(schema.membres.id, a.vendeurId)});
+  if (premiere && v?.parrainId) {
+    await db.update(schema.membres).set({credits: sql`${schema.membres.credits} + 1`}).where(eq(schema.membres.id, v.parrainId));
+    await db.update(schema.membres).set({credits: sql`${schema.membres.credits} + 1`}).where(eq(schema.membres.id, v.id));
+  }
+  if (a.miseEnAvant && v && v.credits > 0) await db.update(schema.membres).set({credits: sql`${schema.membres.credits} - 1`}).where(eq(schema.membres.id, v.id));
   revalidatePath('/');
   redirect('/equipe');
 }
@@ -86,4 +93,16 @@ export async function traiterProposition(f: FormData) {
     await noter(e.id, 'parfum_ajoute', `proposition:${p.id}`, `a ajouté le parfum « ${nom} » (${ma.nom})`);
   }
   redirect('/equipe/maisons');
+}
+
+/* une candidature « vendeur fondateur » : acceptée, le compte (s'il existe) reçoit le badge et 5 mises en avant */
+export async function traiterCandidature(f: FormData) {
+  const e = await exigerEquipe();
+  const c = await db.query.candidatures.findFirst({where: eq(schema.candidatures.id, id(f))});
+  if (!c) redirect('/equipe/fondateurs');
+  const ok = f.get('choix') === 'accepter';
+  await db.update(schema.candidatures).set({statut: ok ? 'acceptee' : 'refusee'}).where(eq(schema.candidatures.id, c.id));
+  if (ok) await db.update(schema.membres).set({fondateur: true, credits: sql`${schema.membres.credits} + 5`}).where(eq(schema.membres.email, c.email));
+  await noter(e.id, ok ? 'fondateur_accepte' : 'fondateur_refuse', `candidature:${c.id}`, `a ${ok ? 'accepté' : 'refusé'} la candidature de vendeur fondateur de ${c.email}`);
+  redirect('/equipe/fondateurs');
 }

@@ -22,6 +22,7 @@ const STATUTS: Record<string, [string, string]> = {
 export default async function Compte() {
   const m = await exigerMembre('/compte');
   const annonces = await deVendeur(m.id);
+  const filleuls = await db.$count(schema.membres, eq(schema.membres.parrainId, m.id));
   const idsFav = (await db.select().from(schema.favoris).where(eq(schema.favoris.membreId, m.id))).map((x) => x.annonceId);
   const favoris = idsFav.length ? await completer(await db.select().from(schema.annonces).where(and(inArray(schema.annonces.id, idsFav), eq(schema.annonces.statut, 'publiee')))) : [];
   return (
@@ -29,6 +30,12 @@ export default async function Compte() {
       <p className="surtitre">Mon compte</p>
       <h1 className="titre-page">Bonjour {m.prenom}</h1>
       <p className="chapo">@{m.pseudo} · {m.email}</p>
+      <section className="section parrainage">
+        <div><p className="surtitre">Parrainage</p><h2 className="h2">Invitez un vendeur, gagnez une mise en avant</h2>
+          <p className="aide">Quand la première annonce de la personne invitée est publiée, vous gagnez chacun une mise en avant offerte.{m.fondateur ? ' Vous êtes vendeur fondateur.' : ''}</p></div>
+        <p className="lien-parrain"><span className="bo-mono">{(process.env.SITE_URL || 'https://respray.fr') + '/r/' + m.code}</span></p>
+        <p className="aide">{filleuls} personne{filleuls > 1 ? 's' : ''} invitée{filleuls > 1 ? 's' : ''} · {m.credits} mise{m.credits > 1 ? 's' : ''} en avant offerte{m.credits > 1 ? 's' : ''} à utiliser</p>
+      </section>
       <section className="section">
         <div className="section-tete"><h2>Mes annonces</h2><Link className="btn btn-noir btn-petit" href="/vendre">Vendre un parfum</Link></div>
         {annonces.length ? (

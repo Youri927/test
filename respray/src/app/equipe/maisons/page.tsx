@@ -26,9 +26,10 @@ export default async function Maisons({searchParams}: {searchParams: Promise<{at
               <input type="hidden" name="id" value={p.id} />
               <label className="vh" htmlFor={`n-${p.id}`}>Nom correct</label>
               <input id={`n-${p.id}`} name="nom" className="champ" defaultValue={r ? r.nom : proprement(p.tape)} />
-              <button className="btn btn-noir btn-petit" type="submit" name="choix" value="ajouter">{r ? 'Rattacher à ce nom' : 'Ajouter à la liste'}</button>
-              <button className="btn btn-petit" type="submit" name="choix" value="refuser">Refuser</button>
+              <input type="hidden" name="choix" value="ajouter" />
+              <button className="btn btn-noir btn-petit" type="submit">{r ? 'Rattacher à ce nom' : 'Ajouter à la liste'}</button>
             </form>
+            <form action={traiterProposition}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="choix" value="refuser" /><button className="btn btn-petit" type="submit">Refuser</button></form>
           </article>
         );
       }) : <div className="bo-vide"><p>Aucune proposition en attente.</p></div>}

@@ -43,3 +43,28 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .resultats { margin-top: 20px; }
 .coeur-form { position: absolute; top: 10px; right: 10px; }
 .coeur-form .coeur { position: static; }
+.fondateurs .accueil-titre { max-width: 22ch; margin-bottom: 6px; }
+.fondateurs-grille { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; margin-top: 36px; align-items: start; }
+.fondateurs-avantages { display: grid; gap: 18px; }
+.fondateurs-avantages li { display: grid; gap: 2px; padding-left: 16px; border-left: 3px solid var(--accent); }
+.fondateurs-avantages span { color: var(--texte-2); }
+.fondateurs-form { padding: 24px; border-radius: 22px; background: var(--fond-2); }
+.badge-fondateur { justify-self: start; margin-top: 4px; padding: 2px 8px; border-radius: 99px; background: var(--accent-fond); color: var(--accent); font-size: 12px; font-weight: 600; }
+.parrainage { display: grid; gap: 10px; padding: 24px; border-radius: 22px; background: var(--fond-2); margin-top: 24px; }
+.lien-parrain { padding: 10px 14px; border-radius: 12px; background: var(--fond); overflow-wrap: anywhere; }
+@media (max-width: 760px) { .fondateurs-grille { grid-template-columns: minmax(0, 1fr); } }
+.guides-liste { display: grid; gap: 10px; margin-top: 24px; max-width: 760px; }
+.guides-liste a { display: grid; gap: 4px; padding: 18px 20px; border-radius: 18px; background: var(--fond-2); text-decoration: none; }
+.guides-liste a:hover strong { text-decoration: underline; }
+.guides-liste span { color: var(--texte-2); font-size: 15px; }
+.guide { max-width: 760px; display: grid; gap: 18px; }
+.guide section { display: grid; gap: 8px; }
+.guide p { line-height: 1.6; }
+.guide details { padding: 12px 0; border-top: 1px solid var(--trait); }
+.guide summary { cursor: pointer; font-weight: 600; }
+.guide > .btn { justify-self: start; }
+.parfum-chiffres { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+.parfum-chiffres div { display: grid; padding: 14px 18px; border-radius: 16px; background: var(--fond-2); }
+.parfum-chiffres strong { font-size: 22px; font-weight: 650; letter-spacing: -.02em; }
+.parfum-chiffres span { color: var(--texte-2); font-size: 13.5px; }
+.parfums-maison { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {annonce} from '@/lib/annonces';
 import {moi} from '@/lib/auth';
-import {PHOTOS, protection, ENVOI, eur, eur2} from '@/lib/regles';
+import {PHOTOS, protection, ENVOI, eur, eur2, lien} from '@/lib/regles';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +31,7 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
   ];
   return (
     <div className="env page">
-      <nav className="fil" aria-label="Fil d'Ariane"><Link href="/parfums">Parfums</Link><span aria-hidden="true">›</span><Link href={`/parfums?q=${encodeURIComponent(a.maisonNom)}`}>{a.maisonNom}</Link><span aria-hidden="true">›</span><span>{a.parfumNom}</span></nav>
+      <nav className="fil" aria-label="Fil d'Ariane"><Link href="/parfums">Parfums</Link><span aria-hidden="true">›</span><Link href={`/maison/${lien(a.maisonNom)}`}>{a.maisonNom}</Link><span aria-hidden="true">›</span>{a.parfumId ? <Link href={`/parfum/${lien(a.maisonNom, a.parfumNom)}`}>{a.parfumNom}</Link> : <span>{a.parfumNom}</span>}</nav>
       {a.statut !== 'publiee' ? <p className="p-alerte">Aperçu : cette annonce n'est pas en ligne ({a.statut}).</p> : null}
       <div className="annonce">
         <div className="galerie galerie-reelle">
@@ -57,7 +57,7 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
           </dl>
           <button className="btn btn-noir btn-large" type="button" disabled>Acheter · bientôt</button>
           <div className="protection"><h2>Protection acheteur</h2><p>Votre paiement reste bloqué jusqu'à ce que vous ayez vérifié le parfum. Vous avez <strong>7 jours après la livraison</strong> : s'il n'est pas conforme à l'annonce, vous êtes remboursé.</p></div>
-          <p className="aide">Vendu par @{a.vendeur.pseudo}{a.mainPropre ? ` · remise en main propre possible à ${a.ville}` : ''}</p>
+          <p className="aide">Vendu par @{a.vendeur.pseudo}{a.vendeur.fondateur ? ' · vendeur fondateur' : ''}{a.mainPropre ? ` · remise en main propre possible à ${a.ville}` : ''}</p>
         </div>
       </div>
     </div>

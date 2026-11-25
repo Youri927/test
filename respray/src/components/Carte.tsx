@@ -23,6 +23,7 @@ export function Carte({a, favori = false, connecte = false}: {a: AnnonceAvecPhot
         <span className="carte-nom">{a.parfumNom}</span>
         <span className="carte-maison">{a.maisonNom}</span>
         <span className="carte-meta">{a.ml} ml · {a.etat === 'neuf' ? 'neuf' : `reste ~${a.niveau} %`}</span>
+        {a.vendeur.fondateur ? <span className="badge-fondateur">Vendeur fondateur</span> : null}
       </Link>
       {connecte ? (
         <form action={basculerFavori} className="coeur-form">

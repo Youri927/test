@@ -4,7 +4,11 @@ import {redirect} from 'next/navigation';
 import {eq, or} from 'drizzle-orm';
 import {z} from 'zod';
 import {db, schema} from '@/db';
+import {randomBytes} from 'crypto';
 import {hacher, verifier, ouvrirSession, fermerSession} from '@/lib/auth';
+
+/* un code de parrainage court, sans lettres ambiguës (0/O, 1/I) */
+const nouveauCode = () => [...randomBytes(6)].map((b) => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 32]).join('');
 
 /* valeurs : ce qui a été tapé, pour le remettre dans le formulaire après une erreur (React vide les champs) */
 export type Etat = {erreur?: string; ok?: string; valeurs?: Record<string, string>};
@@ -30,7 +34,9 @@ export async function inscription(_: Etat, f: FormData): Promise<Etat> {
   const d = r.data;
   const deja = await db.query.membres.findFirst({where: or(eq(schema.membres.email, d.email), eq(schema.membres.pseudo, d.pseudo))});
   if (deja) return {erreur: deja.email === d.email ? 'Un compte existe déjà avec cette adresse : connectez-vous.' : 'Ce pseudo est déjà pris.', valeurs: garder(f)};
-  const [m] = await db.insert(schema.membres).values({email: d.email, pseudo: d.pseudo, prenom: d.prenom, nom: d.nom, motDePasse: await hacher(d.motDePasse)}).returning();
+  const codeParrain = String(f.get('parrain') || '').trim().toUpperCase();
+  const parrain = codeParrain ? await db.query.membres.findFirst({where: eq(schema.membres.code, codeParrain)}) : null;
+  const [m] = await db.insert(schema.membres).values({email: d.email, pseudo: d.pseudo, prenom: d.prenom, nom: d.nom, motDePasse: await hacher(d.motDePasse), code: nouveauCode(), parrainId: parrain?.id ?? null}).returning();
   await ouvrirSession(m.id);
   redirect(retourSur(f.get('retour')));
 }
@@ -57,4 +63,13 @@ export async function rejoindreAttente(_: Etat, f: FormData): Promise<Etat> {
   const envie = f.get('envie') === 'vendre' ? 'vendre' : 'acheter';
   await db.insert(schema.attente).values({email: r.data, envie}).onConflictDoNothing();
   return {ok: 'C\'est noté : on vous écrit dès que les premières annonces sont en ligne.'};
+}
+
+/* la candidature « vendeur fondateur » */
+export async function candidater(_: Etat, f: FormData): Promise<Etat> {
+  const r = z.string().trim().toLowerCase().email().safeParse(f.get('email'));
+  if (!r.success) return {erreur: 'Cette adresse e-mail ne semble pas valide.', valeurs: garder(f)};
+  const champ = (k: string) => String(f.get(k) || '').trim().slice(0, 300);
+  await db.insert(schema.candidatures).values({email: r.data, prenom: champ('prenom'), flacons: champ('flacons'), maisons: champ('maisons'), ou: champ('ou')}).onConflictDoNothing();
+  return {ok: 'Merci ! L\'équipe vous écrit sous 48 h pour vous ouvrir l\'accès vendeur fondateur.'};
 }

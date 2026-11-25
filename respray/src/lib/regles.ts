@@ -56,3 +56,6 @@ export function proprement(s: string) {
     .map((m, i) => (i > 0 && petits.has(m) ? m : m.startsWith("d'") ? "d'" + m.slice(2, 3).toUpperCase() + m.slice(3) : m.charAt(0).toUpperCase() + m.slice(1)))
     .join(' ');
 }
+
+/* « Maison Francis Kurkdjian », « Baccarat Rouge 540 » → « maison-francis-kurkdjian-baccarat-rouge-540 » */
+export const lien = (...mots: string[]) => normal(mots.join(' ')).replace(/&/g, ' et ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

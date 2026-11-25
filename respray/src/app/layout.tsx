@@ -45,6 +45,8 @@ export default async function Racine({children}: {children: React.ReactNode}) {
             <nav aria-label="Respray">
               <Link href="/parfums">Parfums</Link>
               <Link href="/vendre">Vendre</Link>
+              <Link href="/guides">Guides</Link>
+              <Link href="/fondateurs">Vendeur fondateur</Link>
               {m ? (
                 <form action={deconnexion}><button className="lien-bouton" type="submit">Se déconnecter</button></form>
               ) : (

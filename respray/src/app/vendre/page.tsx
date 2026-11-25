@@ -18,7 +18,7 @@ export default async function Vendre() {
     <div className="env page vendre">
       <h1 className="titre-page">Vendre un parfum</h1>
       <p className="chapo">Gratuit, sans commission. Plus votre annonce est précise, plus elle se vend vite, et moins l'acheteur a de questions.</p>
-      <FormVendre maisons={maisons} pseudo={m.pseudo} prix={prix} />
+      <FormVendre maisons={maisons} pseudo={m.pseudo} prix={prix} credits={m.credits} />
     </div>
   );
 }
