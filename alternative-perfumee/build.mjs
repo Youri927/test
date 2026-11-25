@@ -1,6 +1,6 @@
 // Deux sorties, à partir de src/ :
-//  - dist/index.html : le prototype en un seul fichier (polices, styles, données et script intégrés), à ouvrir d'un
-//    double-clic, sans serveur ni connexion ;
+//  - dist/index.html : le prototype Respray en un seul fichier (police, styles, données et script intégrés), à ouvrir
+//    d'un double-clic, sans serveur ni connexion ;
 //  - dist/artifact.html : le même contenu sans l'enveloppe <html>/<head>/<body>, pour la publication en page Claude.
 //   node build.mjs
 import {readFileSync, writeFileSync, mkdirSync} from 'node:fs';
@@ -19,7 +19,7 @@ const page = read('./src/index.html')
 if (page.includes('src="data.js"') || page.includes('href="styles.css"')) throw new Error('remplacement manqué');
 
 // la tête : tout ce qui précède le bandeau ; le corps : le reste
-const coupe = page.indexOf('<p class="bandeau-proto"');
+const coupe = page.indexOf('<p class="proto"');
 const tete = page.slice(0, coupe).trim();
 const corps = page.slice(coupe).trim();
 

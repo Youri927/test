@@ -196,8 +196,9 @@ valeur et 5 % en volume selon Premium Beauty News). La seconde main pèse 14 Md�
 82 000 faux parfums saisis en une semaine lors de l'opération « Fragrance » des douanes (novembre 2025), et une usine
 démantelée en Catalogne en février 2026.
 
-**L'espace libre** : personne, en Europe, ne prouve l'authenticité et le niveau d'un parfum entamé, ne donne sa cote,
-et ne l'expédie dans les règles. C'est là que se place l'alternative (voir `STRATEGIE.md`).
+**L'espace libre** : Vinted refuse les parfums entamés, et Perfumee, le seul acteur installé, ne garantit rien, laisse
+48 heures à l'acheteur et prend 15 %. Une plateforme simple mais rigoureuse a sa place : photos imposées et vérifiées,
+7 jours pour vérifier, garantie portée par la plateforme, 0 % pour le vendeur (voir `STRATEGIE.md`).
 
 ## Sources
 

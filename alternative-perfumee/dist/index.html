@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Respray</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Respray, prototype : achetez et revendez vos parfums entre particuliers. Annonces vérifiées, paiement sécurisé, 7 jours pour vérifier.">
+<style>
+/* Respray. Un site de petites annonces, clair : fond blanc, une seule police, les photos des annonces au centre,
+   le noir pour les actions, le vert pour ce qui est vérifié. */
+@font-face{font-family:"Figtree";src:url(data:font/woff2;base64,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) format("woff2");font-weight:400 700;font-style:normal;font-display:swap}
+
+:root {
+  --fond: #ffffff;
+  --fond-2: #f5f4f2;
+  --texte: #161616;
+  --texte-2: #666462;
+  --trait: #e8e6e3;
+  --noir: #161616;
+  --sur-noir: #ffffff;
+  --vert: #0b7a4b;
+  --vert-fond: #e8f4ee;
+  --rouge: #b3261e;
+  --police: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --rayon: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fond: #121212; --fond-2: #1d1d1c; --texte: #f1f1f0; --texte-2: #a7a5a2; --trait: #2d2c2b;
+    --noir: #f1f1f0; --sur-noir: #121212; --vert: #4fc28c; --vert-fond: #15271e; --rouge: #f2857e;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fond: #121212; --fond-2: #1d1d1c; --texte: #f1f1f0; --texte-2: #a7a5a2; --trait: #2d2c2b;
+  --noir: #f1f1f0; --sur-noir: #121212; --vert: #4fc28c; --vert-fond: #15271e; --rouge: #f2857e;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 80px; }
+body { margin: 0; background: var(--fond); color: var(--texte); font: 400 16px/1.5 var(--police); -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--fond); }
+h1, h2, h3, p, ul, ol, dl, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--texte); outline-offset: 2px; border-radius: 4px; }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.env { width: 100%; max-width: 1200px; margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.ico { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 20px; border: 1px solid var(--trait); border-radius: 10px; background: var(--fond); color: var(--texte); font-weight: 600; font-size: 15px; text-decoration: none; cursor: pointer; }
+.btn:hover { border-color: var(--texte-2); }
+.btn-noir { background: var(--noir); border-color: var(--noir); color: var(--sur-noir); }
+.btn-noir:hover { opacity: .88; border-color: var(--noir); }
+.btn-petit { min-height: 38px; padding: 7px 16px; font-size: 14px; }
+.btn-large { min-height: 50px; font-size: 16px; }
+.lien { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 15px; text-decoration: none; }
+.lien .ico { width: 16px; height: 16px; }
+.lien:hover { text-decoration: underline; }
+.champ { width: 100%; min-height: 46px; padding: 10px 14px; border: 1px solid var(--trait); border-radius: 10px; background: var(--fond); }
+select.champ { padding-right: 10px; }
+.aide { color: var(--texte-2); font-size: 14px; }
+input[type="radio"], input[type="checkbox"], input[type="range"] { accent-color: var(--noir); }
+
+/* en-tête */
+.proto { padding: 6px max(16px, env(safe-area-inset-right, 0px)) 6px max(16px, env(safe-area-inset-left, 0px)); background: var(--fond-2); color: var(--texte-2); font-size: 12.5px; text-align: center; }
+.entete { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--fond); border-bottom: 1px solid var(--trait); }
+.entete-in { display: flex; align-items: center; gap: 24px; min-height: 68px; }
+.logo { font-weight: 700; font-size: 25px; letter-spacing: -.045em; text-decoration: none; }
+.cherche { position: relative; flex: 1; max-width: 520px; }
+.cherche .ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--texte-2); width: 18px; height: 18px; }
+.cherche input { width: 100%; height: 44px; padding: 0 14px 0 42px; border: 0; border-radius: 10px; background: var(--fond-2); }
+.nav { display: flex; align-items: center; gap: 22px; margin-left: auto; font-weight: 500; font-size: 15px; white-space: nowrap; }
+.nav a:not(.btn) { text-decoration: none; }
+.nav a:not(.btn):hover, .nav a[aria-current="page"]:not(.btn) { text-decoration: underline; text-underline-offset: 6px; }
+
+/* accueil */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); gap: 56px; align-items: center; padding-block: 56px 24px; }
+.hero h1 { font-weight: 650; font-size: clamp(2.1rem, 4.2vw, 3.1rem); line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; }
+.chapo { margin-top: 16px; font-size: 18px; color: var(--texte-2); max-width: 52ch; }
+.cherche-grand { display: flex; align-items: center; gap: 10px; margin-top: 28px; padding: 6px 6px 6px 16px; border: 1px solid var(--trait); border-radius: 12px; max-width: 540px; }
+.cherche-grand .ico { color: var(--texte-2); }
+.cherche-grand input { flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; outline: none; font-size: 16px; }
+.garanties { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-size: 14.5px; color: var(--texte-2); }
+.garanties li { display: flex; align-items: center; gap: 6px; }
+.garanties .ico { width: 18px; height: 18px; color: var(--vert); stroke-width: 2.2; }
+.hero-photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.hero-photo { position: relative; display: block; border-radius: var(--rayon); overflow: hidden; }
+.hero-photo:nth-child(even) { transform: translateY(24px); }
+.hero-photo span { position: absolute; left: 10px; bottom: 10px; padding: 4px 10px; border-radius: 8px; background: rgba(255, 255, 255, .92); color: #161616; font-weight: 700; font-size: 14px; }
+
+.section { padding-top: 56px; }
+.section-tete { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.section-tete h2, .h2 { font-weight: 650; font-size: 22px; letter-spacing: -.015em; }
+.puces { display: flex; flex-wrap: wrap; gap: 8px; }
+.puce { padding: 9px 16px; border: 1px solid var(--trait); border-radius: 99px; font-size: 14.5px; font-weight: 500; text-decoration: none; }
+.puce:hover { border-color: var(--texte-2); }
+.deux { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.etapes-bloc { padding: 24px; border-radius: var(--rayon); background: var(--fond-2); }
+.etapes-bloc h3 { font-size: 17px; font-weight: 650; margin-bottom: 14px; }
+.etapes { counter-reset: e; display: grid; gap: 14px; }
+.etapes li { counter-increment: e; position: relative; padding-left: 38px; color: var(--texte-2); font-size: 15px; }
+.etapes li::before { content: counter(e); position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--fond); color: var(--texte); font-weight: 700; font-size: 13px; }
+.etapes strong { color: var(--texte); font-weight: 600; }
+.bandeau-vendre { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding: 28px; border: 1px solid var(--trait); border-radius: var(--rayon); margin-bottom: 64px; }
+.bandeau-vendre h2 { font-size: 22px; font-weight: 650; }
+.bandeau-vendre p { color: var(--texte-2); }
+
+/* cartes */
+.grille { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 18px; }
+.grille-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.carte { position: relative; }
+.carte-lien { display: grid; gap: 2px; text-decoration: none; }
+.carte-photo { position: relative; margin-bottom: 10px; border-radius: var(--rayon); overflow: hidden; }
+.visuel { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; }
+.carte-lien:hover .visuel { filter: brightness(.97); }
+.etiq { position: absolute; left: 10px; bottom: 10px; padding: 4px 9px; border-radius: 7px; background: rgba(255, 255, 255, .92); color: #161616; font-size: 12.5px; font-weight: 600; }
+.carte-prix { font-weight: 700; font-size: 16px; }
+.carte-nom { font-weight: 500; font-size: 15px; }
+.carte-maison, .carte-meta { color: var(--texte-2); font-size: 13.5px; }
+.coeur { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .92); color: #161616; cursor: pointer; }
+.coeur svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.coeur[aria-pressed="true"] svg { fill: #e0245e; stroke: #e0245e; }
+.grave { font: 600 17px var(--police); fill: rgba(0, 0, 0, .5); letter-spacing: .08em; }
+.grave-petit { font-size: 12px; font-weight: 500; }
+.main-ecrite { font: italic 500 17px var(--police); fill: #2b3a8f; }
+
+/* pages */
+.page { padding-block: 32px 72px; }
+.titre-page { font-weight: 650; font-size: clamp(1.7rem, 3vw, 2.2rem); letter-spacing: -.025em; line-height: 1.15; text-wrap: balance; }
+.fil { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; font-size: 14px; color: var(--texte-2); }
+.fil a { text-decoration: none; }
+.fil a:hover { text-decoration: underline; }
+
+/* recherche */
+.recherche { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 36px; align-items: start; margin-top: 24px; }
+.filtres summary { font-weight: 650; font-size: 17px; cursor: pointer; list-style: none; margin-bottom: 14px; }
+.filtres summary::-webkit-details-marker { display: none; }
+.filtres form { display: grid; gap: 20px; }
+fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 7px; min-width: 0; }
+legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
+.choix { display: flex; align-items: center; gap: 8px; font-size: 14.5px; cursor: pointer; }
+.resultats-tete { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; color: var(--texte-2); font-size: 15px; }
+.tri { display: flex; align-items: center; gap: 10px; }
+.tri .champ { width: auto; min-height: 40px; }
+.vide { display: grid; justify-items: center; gap: 12px; padding: 48px 20px; border-radius: var(--rayon); background: var(--fond-2); color: var(--texte-2); text-align: center; }
+
+/* annonce */
+.annonce { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: start; }
+.galerie { display: grid; gap: 10px; position: sticky; top: 90px; }
+.galerie-grande { border-radius: var(--rayon); overflow: hidden; }
+.galerie-mini { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.mini { padding: 0; border: 2px solid transparent; border-radius: 9px; overflow: hidden; background: none; cursor: pointer; }
+.mini[aria-pressed="true"] { border-color: var(--texte); }
+.fiche { display: grid; gap: 6px; }
+.fiche-maison { font-size: 15px; color: var(--texte-2); }
+.fiche-maison a { text-decoration: none; }
+.fiche h1 { font-weight: 650; font-size: 30px; letter-spacing: -.025em; line-height: 1.15; }
+.fiche-sous { color: var(--texte-2); }
+.fiche-prix { margin-top: 12px; font-weight: 700; font-size: 30px; letter-spacing: -.02em; }
+.fiche-ml { color: var(--texte-2); font-size: 14.5px; }
+.details { display: grid; margin-top: 18px; border-top: 1px solid var(--trait); }
+.details div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--trait); font-size: 15px; }
+.details dt { color: var(--texte-2); }
+.details dd { margin: 0; text-align: right; font-weight: 500; }
+.livraison { margin-top: 18px; gap: 8px; }
+.option { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--trait); border-radius: 10px; cursor: pointer; font-size: 15px; }
+.option:has(input:checked) { border-color: var(--texte); }
+.option input { margin-top: 4px; }
+.option small { display: block; color: var(--texte-2); font-size: 13.5px; }
+.option > span:last-child { font-weight: 600; }
+.total { display: grid; margin-top: 16px; font-size: 15px; }
+.total div { display: flex; justify-content: space-between; padding: 4px 0; }
+.total dt { color: var(--texte-2); }
+.total dd { margin: 0; }
+.total-ligne { margin-top: 6px; padding-top: 10px !important; border-top: 1px solid var(--trait); font-weight: 700; font-size: 17px; }
+.total-ligne dt { color: var(--texte) !important; }
+.boutons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.boutons .btn { flex: 1 1 180px; }
+.protection { margin-top: 16px; padding: 16px 18px; border-radius: var(--rayon); background: var(--vert-fond); }
+.protection h2 { display: flex; align-items: center; gap: 8px; font-size: 15.5px; font-weight: 650; color: var(--vert); margin-bottom: 4px; }
+.protection p { font-size: 14.5px; }
+.vendeur { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding: 14px 0; border-top: 1px solid var(--trait); text-decoration: none; }
+.vendeur small { display: block; color: var(--texte-2); font-size: 13.5px; }
+.avatar { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--fond-2); font-weight: 700; font-size: 18px; flex: none; }
+.annonce-bas { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; margin-top: 48px; }
+.annonce-bas p { margin-top: 10px; color: var(--texte-2); }
+.verifiee .h2 { display: flex; align-items: center; gap: 8px; }
+.verifiee .h2 .ico { color: var(--vert); stroke-width: 2.4; }
+.verifiee ul, .liste-check { display: grid; gap: 8px; margin-top: 12px; }
+.verifiee li, .liste-check li { position: relative; padding-left: 26px; color: var(--texte-2); font-size: 15px; }
+.verifiee li::before, .liste-check li::before { content: ""; position: absolute; left: 4px; top: .45em; width: 10px; height: 5px; border-left: 2px solid var(--vert); border-bottom: 2px solid var(--vert); transform: rotate(-45deg); }
+
+/* vendre */
+.vendre { max-width: 760px; }
+.formulaire { display: grid; gap: 8px; margin-top: 28px; }
+.bloc-form { display: grid; gap: 10px; padding-block: 24px; border-top: 1px solid var(--trait); }
+.bloc-form label:not(.choix):not(.photo) { font-weight: 600; font-size: 15px; }
+.ligne-champs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.ligne-champs > div { display: grid; gap: 8px; }
+.segment { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+.segment .choix { padding: 10px 16px; border: 1px solid var(--trait); border-radius: 10px; font-weight: 500; }
+.segment .choix:has(input:checked) { border-color: var(--texte); }
+.photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.photo { display: flex; align-items: center; gap: 14px; padding: 12px; border: 1px dashed var(--trait); border-radius: var(--rayon); cursor: pointer; }
+.photo:hover { border-color: var(--texte-2); }
+.photo.faite { border-style: solid; border-color: var(--vert); }
+.photo-cadre { display: grid; place-items: center; width: 56px; height: 56px; flex: none; border-radius: 9px; background: var(--fond-2); color: var(--texte-2); overflow: hidden; }
+.photo.faite .photo-cadre { background: var(--vert-fond); color: var(--vert); }
+.photo-cadre img { width: 100%; height: 100%; object-fit: cover; }
+.photo-txt strong { display: block; font-size: 15px; font-weight: 600; }
+.photo-txt em { font-style: normal; font-weight: 400; color: var(--texte-2); }
+.photo-txt small { display: block; color: var(--texte-2); font-size: 13.5px; }
+.champ-prix { display: flex; align-items: center; gap: 10px; max-width: 220px; }
+.champ-prix .champ { font-size: 18px; font-weight: 600; }
+.champ-prix span { font-weight: 600; color: var(--texte-2); }
+.erreur { color: var(--rouge); font-weight: 600; }
+.formulaire > .btn { margin-top: 8px; justify-self: start; }
+.envoye { display: grid; justify-items: start; gap: 14px; padding-top: 24px; }
+.rond-ok { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--vert-fond); color: var(--vert); }
+.rond-ok .ico { width: 28px; height: 28px; stroke-width: 2.4; }
+
+/* comment ça marche */
+.lecture { max-width: 820px; }
+.lecture .section { padding-top: 40px; }
+.lecture .section > p { margin-top: 10px; color: var(--texte-2); }
+.exemples { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+.exemples figure { display: grid; gap: 6px; }
+.exemples .visuel { border-radius: 10px; }
+.exemples figcaption { font-size: 13px; color: var(--texte-2); line-height: 1.35; }
+.frise { counter-reset: f; display: grid; gap: 12px; margin-top: 14px; }
+.frise li { counter-increment: f; position: relative; padding-left: 40px; color: var(--texte-2); }
+.frise li::before { content: counter(f); position: absolute; left: 0; top: -1px; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--fond-2); color: var(--texte); font-weight: 700; font-size: 13px; }
+.frise strong { color: var(--texte); }
+.frais { width: 100%; margin-top: 12px; border-collapse: collapse; font-size: 15px; }
+.frais th, .frais td { padding: 11px 0; border-bottom: 1px solid var(--trait); text-align: left; font-weight: 400; }
+.frais td { text-align: right; font-weight: 600; }
+.faq details { border-bottom: 1px solid var(--trait); }
+.faq .h2 { margin-bottom: 6px; }
+.faq summary { padding: 16px 28px 16px 0; font-weight: 600; cursor: pointer; list-style: none; position: relative; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 2px; top: 13px; font-size: 22px; font-weight: 400; color: var(--texte-2); }
+.faq details[open] summary::after { content: "–"; }
+.faq details p { padding-bottom: 16px; color: var(--texte-2); }
+
+/* fenêtres, messages, pied */
+#modale { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+#modale[hidden] { display: none; }
+.modale-fond { position: absolute; inset: 0; background: rgba(0, 0, 0, .45); }
+.modale-boite { position: relative; display: grid; gap: 12px; width: min(440px, 100%); max-height: 90vh; overflow: auto; padding: 26px; border-radius: 16px; background: var(--fond); }
+.modale-boite form { display: grid; gap: 10px; }
+.modale-boite label { font-weight: 600; }
+.modale-x { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 8px; background: transparent; cursor: pointer; color: var(--texte-2); }
+.modale-x:hover { background: var(--fond-2); }
+.message { position: fixed; z-index: 60; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: max-content; max-width: min(520px, calc(100vw - 32px)); padding: 12px 18px; border-radius: 10px; background: var(--noir); color: var(--sur-noir); font-size: 14.5px; }
+.pied { border-top: 1px solid var(--trait); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.pied-in { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 24px; padding-block: 36px; }
+.pied-in p { margin-top: 6px; color: var(--texte-2); font-size: 14.5px; }
+.pied nav { display: flex; flex-wrap: wrap; gap: 10px 24px; font-size: 15px; }
+.pied nav a { text-decoration: none; color: var(--texte-2); }
+.pied nav a:hover { color: var(--texte); text-decoration: underline; }
+
+@media (max-width: 960px) {
+  .hero, .annonce, .annonce-bas, .recherche { grid-template-columns: minmax(0, 1fr); }
+  .hero { gap: 32px; padding-top: 36px; }
+  .hero-photo:nth-child(even) { transform: none; }
+  .hero-photos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .grille, .grille-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .galerie { position: static; }
+  .annonce { gap: 28px; }
+  .nav a:not(.btn) { display: none; }
+  .filtres { padding: 12px 16px; border: 1px solid var(--trait); border-radius: 10px; }
+  .filtres summary { display: flex; justify-content: space-between; margin: 0; font-size: 16px; }
+  .filtres summary::after { content: "+"; font-weight: 400; color: var(--texte-2); }
+  .filtres[open] summary { margin-bottom: 14px; }
+  .filtres[open] summary::after { content: "–"; }
+}
+@media (max-width: 640px) {
+  .entete-in { flex-wrap: wrap; gap: 10px 16px; padding-block: 10px; }
+  .cherche { order: 3; flex-basis: 100%; max-width: none; }
+  .hero-photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grille, .grille-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; }
+  .deux, .photos, .ligne-champs { grid-template-columns: minmax(0, 1fr); }
+  .exemples { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .chapo { font-size: 16.5px; }
+  .fiche h1, .fiche-prix { font-size: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+<p class="proto" role="note">Prototype · annonces, vendeurs et visuels d'illustration</p>
+<header class="entete">
+  <div class="env entete-in">
+    <a class="logo" href="#accueil" aria-label="Respray, accueil">respray</a>
+    <form class="cherche" data-form="entete" role="search">
+      <label class="vh" for="q-entete">Rechercher un parfum ou une marque</label>
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>
+      <input id="q-entete" name="q" type="search" placeholder="Rechercher un parfum ou une marque" autocomplete="off">
+    </form>
+    <nav class="nav" aria-label="Principale">
+      <a href="#recherche" data-nav="recherche">Parfums</a>
+      <a href="#fonctionnement" data-nav="fonctionnement">Comment ça marche</a>
+      <a class="btn btn-noir btn-petit" href="#vendre" data-nav="vendre">Vendre</a>
+    </nav>
+  </div>
+</header>
+
+<main id="vue"></main>
+
+<footer class="pied">
+  <div class="env pied-in">
+    <div>
+      <a class="logo" href="#accueil" aria-label="Respray, accueil">respray</a>
+      <p>Achetez et revendez vos parfums entre particuliers.</p>
+    </div>
+    <nav aria-label="Respray">
+      <a href="#recherche">Parfums</a>
+      <a href="#vendre">Vendre</a>
+      <a href="#fonctionnement">Comment ça marche</a>
+    </nav>
+    <button class="btn btn-petit" type="button" data-action="theme">Clair / sombre</button>
+  </div>
+</footer>
+
+<div id="modale" hidden></div>
+<p id="message" class="message" role="status" hidden></p>
+
+<script>
+/* Données du prototype.
+   Le catalogue reprend de vrais parfums (maison, nom, année) pour que le site se lise comme le vrai. Les prix neufs
+   sont indicatifs. Les annonces, les vendeurs et les avis sont inventés. Les visuels sont dessinés : ils tiennent la
+   place des photos que les vendeurs prendront. */
+
+const PARFUMS = [
+  {id: 'baccarat-rouge-540', maison: 'Maison Francis Kurkdjian', nom: 'Baccarat Rouge 540', conc: 'Eau de parfum', annee: 2015, genre: 'Mixte', famille: 'Ambrée florale', notes: 'safran, jasmin, ambre gris, cèdre', formats: [{ml: 35, neuf: 215}, {ml: 70, neuf: 325}, {ml: 200, neuf: 650}], forme: 'facette', jus: '#E2A985', bouchon: '#B79B62'},
+  {id: 'santal-33', maison: 'Le Labo', nom: 'Santal 33', conc: 'Eau de parfum', annee: 2011, genre: 'Mixte', famille: 'Boisée', notes: 'cardamome, iris, santal, cuir', formats: [{ml: 50, neuf: 225}, {ml: 100, neuf: 320}], forme: 'apothicaire', jus: '#E6DCC2', bouchon: '#1E1E21'},
+  {id: 'delina', maison: 'Parfums de Marly', nom: 'Delina', conc: 'Eau de parfum', annee: 2017, genre: 'Femme', famille: 'Florale fruitée', notes: 'litchi, rhubarbe, rose turque, vanille', formats: [{ml: 30, neuf: 145}, {ml: 75, neuf: 305}], forme: 'galet', jus: '#F0B1C2', bouchon: '#CFC6B6'},
+  {id: 'naxos', maison: 'Xerjoff', nom: 'Naxos', conc: 'Eau de parfum', annee: 2015, genre: 'Homme', famille: 'Ambrée aromatique', notes: 'lavande, miel, tabac, fève tonka', formats: [{ml: 50, neuf: 195}, {ml: 100, neuf: 255}], forme: 'carre', jus: '#D4842A', bouchon: '#BFA05C'},
+  {id: 'portrait-of-a-lady', maison: 'Frédéric Malle', nom: 'Portrait of a Lady', conc: 'Eau de parfum', annee: 2010, genre: 'Femme', famille: 'Ambrée florale', notes: 'rose, framboise, patchouli, encens', formats: [{ml: 50, neuf: 270}, {ml: 100, neuf: 390}], forme: 'tour', jus: '#E4A171', bouchon: '#232326'},
+  {id: 'gypsy-water', maison: 'Byredo', nom: 'Gypsy Water', conc: 'Eau de parfum', annee: 2008, genre: 'Mixte', famille: 'Boisée aromatique', notes: 'bergamote, genièvre, encens, vanille', formats: [{ml: 50, neuf: 190}, {ml: 100, neuf: 270}], forme: 'cylindre', jus: '#EBE2CA', bouchon: '#2A2A2D'},
+  {id: 'tobacco-vanille', maison: 'Tom Ford', nom: 'Tobacco Vanille', conc: 'Eau de parfum', annee: 2007, genre: 'Mixte', famille: 'Ambrée épicée', notes: 'tabac, vanille, cacao, fruits secs', formats: [{ml: 50, neuf: 285}, {ml: 100, neuf: 410}], forme: 'carre', jus: '#A35A25', bouchon: '#3A2A20'},
+  {id: 'shalimar', maison: 'Guerlain', nom: 'Shalimar', conc: 'Eau de parfum', annee: 1925, genre: 'Femme', famille: 'Ambrée', notes: 'bergamote, iris, vanille, encens', formats: [{ml: 50, neuf: 125}, {ml: 90, neuf: 165}], forme: 'galet', jus: '#C78632', bouchon: '#2C3E6B'},
+  {id: 'coco-mademoiselle', maison: 'Chanel', nom: 'Coco Mademoiselle', conc: 'Eau de parfum', annee: 2001, genre: 'Femme', famille: 'Chyprée florale', notes: 'orange, rose, jasmin, patchouli', formats: [{ml: 35, neuf: 110}, {ml: 50, neuf: 135}, {ml: 100, neuf: 185}], forme: 'carre', jus: '#EFBDA2', bouchon: '#D9D5CD'},
+  {id: 'alien', maison: 'Mugler', nom: 'Alien', conc: 'Eau de parfum', annee: 2005, genre: 'Femme', famille: 'Florale boisée', notes: 'jasmin sambac, bois de cachemire, ambre blanc', formats: [{ml: 30, neuf: 95}, {ml: 60, neuf: 135}, {ml: 90, neuf: 170}], forme: 'facette', jus: '#7B51C0', bouchon: '#BCBFC8'},
+  {id: 'libre', maison: 'Yves Saint Laurent', nom: 'Libre', conc: 'Eau de parfum', annee: 2019, genre: 'Femme', famille: 'Florale ambrée', notes: 'lavande, fleur d\'oranger, vanille', formats: [{ml: 50, neuf: 125}, {ml: 90, neuf: 160}], forme: 'tour', jus: '#EEC384', bouchon: '#C9A85B'},
+  {id: 'terre-d-hermes', maison: 'Hermès', nom: "Terre d'Hermès", conc: 'Eau de toilette', annee: 2006, genre: 'Homme', famille: 'Boisée', notes: 'orange, poivre, vétiver, cèdre', formats: [{ml: 50, neuf: 95}, {ml: 100, neuf: 130}], forme: 'carre', jus: '#DA984F', bouchon: '#C47A3A'},
+  {id: 'sauvage', maison: 'Dior', nom: 'Sauvage', conc: 'Eau de toilette', annee: 2015, genre: 'Homme', famille: 'Aromatique fougère', notes: 'bergamote, poivre, lavande, ambroxan', formats: [{ml: 60, neuf: 92}, {ml: 100, neuf: 125}, {ml: 200, neuf: 190}], forme: 'tour', jus: '#B4C6DC', bouchon: '#2A2C33'},
+  {id: 'philosykos', maison: 'Diptyque', nom: 'Philosykos', conc: 'Eau de toilette', annee: 1996, genre: 'Mixte', famille: 'Boisée verte', notes: 'feuille de figuier, figue, cèdre', formats: [{ml: 50, neuf: 110}, {ml: 100, neuf: 160}], forme: 'galet', jus: '#D9DFBF', bouchon: '#1F1F22'},
+  {id: 'khamrah', maison: 'Lattafa', nom: 'Khamrah', conc: 'Eau de parfum', annee: 2022, genre: 'Mixte', famille: 'Ambrée gourmande', notes: 'cannelle, dattes, praliné, vanille', formats: [{ml: 100, neuf: 39}], forme: 'facette', jus: '#BF6524', bouchon: '#B69145'},
+];
+
+const VENDEURS = {
+  v1: {pseudo: 'lea.parfums', ville: 'Paris 17e', note: 4.9, avis: 86, ventes: 112, reponse: 'en moins d\'1 h', depuis: 'mars 2026'},
+  v2: {pseudo: 'yanis_b', ville: 'Lyon 7e', note: 5.0, avis: 31, ventes: 41, reponse: 'en 2 h', depuis: 'avril 2026'},
+  v3: {pseudo: 'ines.m', ville: 'Bordeaux', note: 4.8, avis: 7, ventes: 9, reponse: 'dans la journée', depuis: 'juin 2026'},
+  v4: {pseudo: 'hugo_collection', ville: 'Lille', note: 4.9, avis: 52, ventes: 64, reponse: 'en 1 h', depuis: 'mars 2026'},
+  v5: {pseudo: 'sarah.k', ville: 'Marseille 6e', note: 4.7, avis: 12, ventes: 15, reponse: 'dans la journée', depuis: 'mai 2026'},
+  v6: {pseudo: 'mathis.d', ville: 'Nantes', note: null, avis: 0, ventes: 0, reponse: 'en 3 h', depuis: 'novembre 2026'},
+  v7: {pseudo: 'camille.r', ville: 'Paris 11e', note: 5.0, avis: 19, ventes: 23, reponse: 'en 1 h', depuis: 'avril 2026'},
+};
+
+/* etat : 'blister' (neuf, jamais ouvert) ou 'entame' ; niveau : en %, déclaré par le vendeur et contrôlé sur la photo
+   du niveau ; fond : la couleur de la surface sur la « photo » ; jours : depuis la publication */
+const ANNONCES = [
+  {id: 'a101', p: 'baccarat-rouge-540', ml: 70, etat: 'entame', niveau: 85, boite: true, lot: '3A21', achat: '2023', prix: 189, v: 'v1', mainPropre: true, jours: 0, fond: '#EDE7E1', desc: 'Acheté aux Galeries Lafayette en 2023, porté une dizaine de fois. Toujours rangé dans sa boîte, à l\'abri de la lumière. Je le vends parce que je préfère la version Extrait.'},
+  {id: 'a102', p: 'baccarat-rouge-540', ml: 35, etat: 'entame', niveau: 60, boite: false, lot: '2F14', achat: '2022', prix: 79, v: 'v5', mainPropre: true, jours: 3, fond: '#E6EAEE', desc: 'Flacon de voyage, sans la boîte. Il reste un peu plus de la moitié.'},
+  {id: 'a103', p: 'baccarat-rouge-540', ml: 70, etat: 'blister', niveau: 100, boite: true, lot: '4K08', achat: '2024', prix: 245, v: 'v4', mainPropre: false, jours: 1, fond: '#F0ECE6', desc: 'Reçu en cadeau, jamais ouvert, blister intact. Ticket de caisse disponible.'},
+  {id: 'a104', p: 'santal-33', ml: 100, etat: 'entame', niveau: 80, boite: false, lot: '28/06/24', achat: '2024', prix: 172, v: 'v2', mainPropre: true, jours: 0, fond: '#E9E5DF', desc: 'Acheté en boutique à Paris, étiquette datée. Vendu car j\'en ai reçu un autre.'},
+  {id: 'a105', p: 'santal-33', ml: 50, etat: 'entame', niveau: 60, boite: false, lot: '11/02/24', achat: '2024', prix: 74, v: 'v7', mainPropre: true, jours: 2, fond: '#ECEDEA', desc: 'Flacon de 50 ml, un peu plus de la moitié.'},
+  {id: 'a106', p: 'delina', ml: 75, etat: 'entame', niveau: 70, boite: true, lot: '23B117', achat: '2023', prix: 129, v: 'v3', mainPropre: false, jours: 1, fond: '#F1E8E8', desc: 'Très bon état, avec sa boîte. Je n\'en porte plus assez.'},
+  {id: 'a107', p: 'delina', ml: 30, etat: 'blister', niveau: 100, boite: true, lot: '25A042', achat: '2025', prix: 99, v: 'v5', mainPropre: true, jours: 4, fond: '#EDE7E1', desc: 'Neuf sous blister.'},
+  {id: 'a108', p: 'naxos', ml: 100, etat: 'entame', niveau: 80, boite: true, lot: 'XJ2309', achat: '2023', prix: 139, v: 'v4', mainPropre: false, jours: 1, fond: '#E8E4DD', desc: 'Utilisé l\'hiver dernier, rangé depuis. Boîte en bon état.'},
+  {id: 'a109', p: 'portrait-of-a-lady', ml: 100, etat: 'entame', niveau: 70, boite: true, lot: '2207', achat: '2022', prix: 169, v: 'v1', mainPropre: true, jours: 0, fond: '#EFE9E4', desc: 'Il reste environ 70 ml. Flacon et boîte en très bon état.'},
+  {id: 'a110', p: 'gypsy-water', ml: 100, etat: 'entame', niveau: 65, boite: false, lot: '23062', achat: '2023', prix: 109, v: 'v2', mainPropre: true, jours: 2, fond: '#E6EAEE', desc: 'Sans la boîte. Le bouchon a une petite marque, visible sur les photos.'},
+  {id: 'a111', p: 'tobacco-vanille', ml: 50, etat: 'entame', niveau: 75, boite: true, lot: 'A73', achat: '2023', prix: 119, v: 'v7', mainPropre: true, jours: 1, fond: '#EAE4DC', desc: 'Parfait pour l\'hiver, mais trop fort pour moi au quotidien.'},
+  {id: 'a112', p: 'shalimar', ml: 90, etat: 'entame', niveau: 80, boite: true, lot: '3B01', achat: '2023', prix: 85, v: 'v5', mainPropre: true, jours: 0, fond: '#ECE6E0', desc: 'Shalimar actuel (pas vintage), acheté chez Sephora.'},
+  {id: 'a113', p: 'coco-mademoiselle', ml: 100, etat: 'entame', niveau: 60, boite: false, lot: '3902', achat: '2023', prix: 69, v: 'v6', mainPropre: true, jours: 2, fond: '#EDEBE8', desc: 'Première vente sur le site : la vérification de l\'équipe est passée.'},
+  {id: 'a114', p: 'coco-mademoiselle', ml: 50, etat: 'blister', niveau: 100, boite: true, lot: '5101', achat: '2025', prix: 79, v: 'v3', mainPropre: false, jours: 5, fond: '#F0ECE6', desc: 'Neuf, jamais ouvert.'},
+  {id: 'a115', p: 'alien', ml: 60, etat: 'entame', niveau: 70, boite: true, lot: '23Z41', achat: '2023', prix: 59, v: 'v7', mainPropre: true, jours: 1, fond: '#E9E6EE', desc: 'Flacon rechargeable, jamais rechargé.'},
+  {id: 'a116', p: 'libre', ml: 90, etat: 'entame', niveau: 70, boite: false, lot: '42YS07', achat: '2024', prix: 64, v: 'v6', mainPropre: true, jours: 1, fond: '#EFE9E2', desc: 'Il en reste les trois quarts environ.'},
+  {id: 'a117', p: 'terre-d-hermes', ml: 100, etat: 'entame', niveau: 90, boite: true, lot: '23M04', achat: '2023', prix: 79, v: 'v4', mainPropre: false, jours: 3, fond: '#E8E4DD', desc: 'Presque plein, porté quelques fois.'},
+  {id: 'a118', p: 'sauvage', ml: 100, etat: 'entame', niveau: 70, boite: false, lot: '3N01', achat: '2023', prix: 52, v: 'v2', mainPropre: true, jours: 2, fond: '#E4E8EC', desc: 'Sans boîte, flacon en bon état.'},
+  {id: 'a119', p: 'sauvage', ml: 200, etat: 'blister', niveau: 100, boite: true, lot: '5A02', achat: '2025', prix: 155, v: 'v1', mainPropre: true, jours: 6, fond: '#EDE7E1', desc: 'Grand format, neuf sous blister.'},
+  {id: 'a120', p: 'philosykos', ml: 100, etat: 'entame', niveau: 55, boite: true, lot: '24E11', achat: '2024', prix: 59, v: 'v3', mainPropre: true, jours: 0, fond: '#EAEDE6', desc: 'Un peu plus de la moitié.'},
+  {id: 'a121', p: 'khamrah', ml: 100, etat: 'entame', niveau: 95, boite: true, lot: 'L230914', achat: '2023', prix: 27, v: 'v6', mainPropre: true, jours: 3, fond: '#EDE6DF', desc: 'Testé deux fois, pas pour moi.'},
+];
+
+/* Respray : le prototype. Une page, cinq vues appelées par l'adresse : #accueil, #recherche, #annonce-a101, #vendre,
+   #fonctionnement. Rien n'est envoyé nulle part. */
+(() => {
+  'use strict';
+
+  const P = Object.fromEntries(PARFUMS.map((p) => [p.id, p]));
+  const A = Object.fromEntries(ANNONCES.map((a) => [a.id, a]));
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const nb = (n, d = 0) => n.toLocaleString('fr-FR', {minimumFractionDigits: d, maximumFractionDigits: d});
+  const eur = (n) => (Number.isInteger(n) ? nb(n) : nb(n, 2)) + ' €';
+  const eur2 = (n) => nb(n, 2) + ' €';
+  const mlRestants = (a) => Math.round((a.ml * a.niveau) / 100);
+  const prixMl = (a) => a.prix / mlRestants(a);
+  const protection = (prix) => Math.round((prix * 0.05 + 0.7) * 100) / 100;
+  const ENVOI = 4.9;
+  const normal = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const memoire = {
+    lire(k, d) {
+      try {
+        return JSON.parse(localStorage.getItem('respray:' + k)) ?? d;
+      } catch (e) {
+        return d;
+      }
+    },
+    ecrire(k, v) {
+      try {
+        localStorage.setItem('respray:' + k, JSON.stringify(v));
+      } catch (e) {
+        /* stockage indisponible : les favoris restent en mémoire */
+      }
+    },
+  };
+  const favoris = new Set(memoire.lire('favoris', []));
+
+  /* ——— les visuels : ils tiennent la place des photos du vendeur ——— */
+  let uid = 0;
+  const teinte = (hex, k) => {
+    const n = parseInt(hex.slice(1), 16);
+    const c = [n >> 16, (n >> 8) & 255, n & 255].map((v) => Math.round(k > 0 ? v + (255 - v) * k : v * (1 + k)));
+    return '#' + c.map((v) => v.toString(16).padStart(2, '0')).join('');
+  };
+  const FORMES = {
+    tour: {corps: [31, 66, 58, 124, 7], col: [50, 54, 20, 14], bouchon: [41, 14, 38, 42, 4]},
+    carre: {corps: [15, 90, 90, 100, 12], col: [47, 78, 26, 14], bouchon: [35, 38, 50, 42, 4]},
+    galet: {corps: [15, 82, 90, 108, 44], col: [50, 68, 20, 16], bouchon: [38, 30, 44, 40, 20]},
+    cylindre: {corps: [32, 60, 56, 130, 14], col: [52, 50, 16, 12], bouchon: [43, 12, 34, 40, 8]},
+    apothicaire: {corps: [24, 76, 72, 114, 5], col: [46, 60, 28, 18], bouchon: [44, 26, 32, 36, 2], etiquette: true},
+    facette: {chemin: 'M24 86 H96 L106 126 L98 190 H22 L14 126 Z', corps: [14, 86, 92, 104], col: [49, 72, 22, 16], bouchon: [38, 30, 44, 44, 3]},
+  };
+  function flacon(p, niveau, id) {
+    const f = FORMES[p.forme];
+    const [x, y, w, h, r] = f.corps;
+    const forme = f.chemin ? `<path d="${f.chemin}"/>` : `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}"/>`;
+    const haut = y + 8;
+    const bas = y + h - 7;
+    const surface = bas - (niveau / 100) * (bas - haut);
+    const [bx, by, bw, bh, br] = f.bouchon;
+    const [cx, cy, cw, ch] = f.col;
+    return `<defs>
+        <clipPath id="c${id}">${forme}</clipPath>
+        <linearGradient id="v${id}" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".45" stop-color="#fff" stop-opacity=".22"/><stop offset="1" stop-color="#fff" stop-opacity=".5"/></linearGradient>
+        <linearGradient id="j${id}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${teinte(p.jus, 0.18)}"/><stop offset="1" stop-color="${teinte(p.jus, -0.12)}"/></linearGradient>
+        <linearGradient id="b${id}" x1="0" x2="1"><stop offset="0" stop-color="${teinte(p.bouchon, 0.28)}"/><stop offset=".5" stop-color="${p.bouchon}"/><stop offset="1" stop-color="${teinte(p.bouchon, -0.22)}"/></linearGradient>
+      </defs>
+      <rect x="${cx}" y="${cy}" width="${cw}" height="${ch}" rx="2" fill="url(#v${id})" stroke="rgba(0,0,0,.16)" stroke-width=".8"/>
+      <rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="${br}" fill="url(#b${id})"/>
+      <g clip-path="url(#c${id})">
+        <rect x="0" y="0" width="120" height="200" fill="url(#v${id})"/>
+        <rect x="0" y="${surface}" width="120" height="${200 - surface}" fill="url(#j${id})"/>
+        <rect x="0" y="${surface}" width="120" height="1.4" fill="#fff" opacity=".55"/>
+        <rect x="${x + 7}" y="${y + 10}" width="5" height="${h - 30}" rx="2.5" fill="#fff" opacity=".5"/>
+        <rect x="${x + w - 9}" y="${y + 6}" width="9" height="${h}" fill="#000" opacity=".05"/>
+      </g>
+      <g fill="none" stroke="rgba(0,0,0,.2)" stroke-width=".9">${forme}</g>
+      ${f.etiquette ? `<rect x="${x + 12}" y="${y + 36}" width="${w - 24}" height="44" rx="1" fill="#faf8f4" stroke="rgba(0,0,0,.12)" stroke-width=".6"/><rect x="${x + 18}" y="${y + 47}" width="${w - 36}" height="3" fill="#555" opacity=".5"/><rect x="${x + 18}" y="${y + 56}" width="${w - 48}" height="2" fill="#555" opacity=".4"/>` : ''}`;
+  }
+  /* vue : 'face', 'niveau' (gros plan), 'dessous', 'boite', 'preuve' */
+  function visuel(a, vue = 'face', classe = '') {
+    const p = P[a.p];
+    const id = ++uid;
+    const v = VENDEURS[a.v];
+    const sol = `<defs><radialGradient id="l${id}" cx=".5" cy=".38" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+      <linearGradient id="t${id}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".07"/></linearGradient>
+      <filter id="o${id}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter></defs>
+      <rect width="300" height="375" fill="${a.fond}"/><rect y="250" width="300" height="125" fill="url(#t${id})"/><rect width="300" height="375" fill="url(#l${id})"/>`;
+    let scene;
+    let vb = '0 0 300 375';
+    if (vue === 'dessous') {
+      scene = `<ellipse cx="150" cy="188" rx="104" ry="104" fill="#fff" opacity=".55" stroke="rgba(0,0,0,.14)"/><ellipse cx="150" cy="188" rx="84" ry="84" fill="${teinte(p.jus, 0.35)}" opacity=".7"/>
+        <text x="150" y="182" text-anchor="middle" class="grave">${esc(a.lot)}</text><text x="150" y="206" text-anchor="middle" class="grave grave-petit">${a.ml} ml e</text>`;
+    } else if (vue === 'boite') {
+      scene = `<ellipse cx="150" cy="332" rx="92" ry="9" fill="#000" opacity=".16" filter="url(#o${id})"/>
+        <path d="M78 86 L110 66 H232 L200 86 Z" fill="#f4f1ec" stroke="rgba(0,0,0,.12)"/><path d="M200 86 L232 66 V312 L200 332 Z" fill="#e4e0da" stroke="rgba(0,0,0,.12)"/>
+        <rect x="78" y="86" width="122" height="246" fill="#faf8f5" stroke="rgba(0,0,0,.12)"/>
+        <rect x="100" y="150" width="78" height="3" fill="#444" opacity=".55"/><rect x="110" y="162" width="58" height="2" fill="#444" opacity=".4"/>
+        <g fill="#333" opacity=".7">${[0, 3, 5, 9, 11, 14, 17, 19, 22, 25, 27, 30].map((k) => `<rect x="${130 + k * 1.6}" y="292" width="${k % 3 ? 0.9 : 1.6}" height="22"/>`).join('')}</g>`;
+    } else {
+      const s = 1.25;
+      const ox = (300 - 120 * s) / 2;
+      const oy = 72;
+      scene = `<ellipse cx="150" cy="${oy + 190 * s + 4}" rx="66" ry="8" fill="#000" opacity=".2" filter="url(#o${id})"/>
+        <g transform="translate(${ox} ${oy}) scale(${s})">${flacon(p, a.niveau, id)}</g>`;
+      if (vue === 'niveau') vb = '70 150 160 200';
+      if (vue === 'preuve') {
+        scene = `<g transform="translate(-48 18) scale(.9)">${scene}</g>
+          <g transform="rotate(-6 214 270)"><rect x="160" y="230" width="112" height="82" rx="2" fill="#fffef9" stroke="rgba(0,0,0,.1)"/>
+          <text x="172" y="262" class="main-ecrite">@${esc(v.pseudo)}</text><text x="172" y="290" class="main-ecrite">24/11/2026</text></g>`;
+      }
+    }
+    return `<svg class="visuel ${classe}" viewBox="${vb}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${esc(`${p.nom}, ${VUES_PHOTO[vue]}`)}">${sol}${scene}</svg>`;
+  }
+  const VUES_PHOTO = {face: 'le flacon de face', dessous: 'le dessous du flacon et le code lot', niveau: 'le niveau', boite: 'la boîte', preuve: 'le flacon avec le pseudo du vendeur et la date'};
+
+  /* ——— éléments communs ——— */
+  const coeur = (id) => `<button class="coeur" type="button" data-fav="${id}" aria-pressed="${favoris.has(id)}" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 7.6a4 4 0 0 1 7 2.8C19 15.6 12 20 12 20z"/></svg></button>`;
+  const etatTexte = (a) => (a.etat === 'blister' ? 'Neuf sous blister' : `Reste environ ${a.niveau} %`);
+  function carte(a) {
+    const p = P[a.p];
+    return `<article class="carte">
+      <a class="carte-lien" href="#annonce-${a.id}">
+        <div class="carte-photo">${visuel(a)}${a.etat === 'blister' ? '<span class="etiq">Neuf sous blister</span>' : ''}</div>
+        <p class="carte-prix">${eur(a.prix)}</p>
+        <h3 class="carte-nom">${esc(p.nom)}</h3>
+        <p class="carte-maison">${esc(p.maison)}</p>
+        <p class="carte-meta">${a.ml} ml · ${a.etat === 'blister' ? 'neuf' : `reste ~${a.niveau} %`}</p>
+      </a>${coeur(a.id)}
+    </article>`;
+  }
+  const ICO = {
+    photo: '<path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+    oeil: '<path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+    cadenas: '<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
+    calendrier: '<rect x="4" y="5.5" width="16" height="15" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',
+    loupe: '<circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    croix: '<path d="M6 6l12 12M18 6L6 18"/>',
+    fleche: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  };
+  const ico = (n) => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${ICO[n]}</svg>`;
+
+  /* ——— accueil ——— */
+  const VUES = {};
+  VUES.accueil = () => {
+    const recentes = [...ANNONCES].sort((x, y) => x.jours - y.jours);
+    const marques = [...new Set(PARFUMS.map((p) => p.maison))];
+    return `
+    <section class="hero env">
+      <div class="hero-texte">
+        <h1>Achetez et revendez vos parfums entre particuliers.</h1>
+        <p class="chapo">Chaque annonce est vérifiée par notre équipe avant d'être publiée. À la réception, vous avez 7 jours pour vérifier votre parfum.</p>
+        <form class="cherche-grand" data-form="recherche" role="search">
+          <label class="vh" for="q-hero">Rechercher un parfum ou une marque</label>
+          ${ico('loupe')}<input id="q-hero" name="q" type="search" placeholder="Rechercher un parfum ou une marque" autocomplete="off">
+          <button class="btn btn-noir" type="submit">Rechercher</button>
+        </form>
+        <ul class="garanties">
+          <li>${ico('check')}Annonces vérifiées</li><li>${ico('check')}Paiement sécurisé</li><li>${ico('check')}7 jours pour vérifier</li>
+        </ul>
+      </div>
+      <div class="hero-photos">${recentes
+        .filter((a) => a.etat === 'entame')
+        .slice(0, 4)
+        .map((a) => `<a href="#annonce-${a.id}" class="hero-photo">${visuel(a)}<span>${eur(a.prix)}</span></a>`)
+        .join('')}</div>
+    </section>
+
+    <section class="section env">
+      <div class="section-tete"><h2>Dernières annonces</h2><a class="lien" href="#recherche">Tout voir ${ico('fleche')}</a></div>
+      <div class="grille">${recentes.slice(0, 8).map(carte).join('')}</div>
+    </section>
+
+    <section class="section env">
+      <div class="section-tete"><h2>Marques</h2></div>
+      <div class="puces">${marques.map((m) => `<a class="puce" href="#recherche" data-marque="${esc(m)}">${esc(m)}</a>`).join('')}</div>
+    </section>
+
+    <section class="section env">
+      <div class="section-tete"><h2>Comment ça marche</h2><a class="lien" href="#fonctionnement">En savoir plus ${ico('fleche')}</a></div>
+      <div class="deux">
+        <div class="etapes-bloc"><h3>Vous vendez</h3><ol class="etapes">
+          <li><strong>Prenez les photos demandées.</strong> Le flacon de face, le dessous avec le code lot, le niveau, et une photo avec votre pseudo et la date.</li>
+          <li><strong>Notre équipe vérifie l'annonce.</strong> En quelques heures, puis elle est en ligne.</li>
+          <li><strong>Envoyez et soyez payé.</strong> Dès que l'acheteur confirme, ou 7 jours après la livraison.</li>
+        </ol></div>
+        <div class="etapes-bloc"><h3>Vous achetez</h3><ol class="etapes">
+          <li><strong>Trouvez votre parfum</strong> par marque, contenance ou prix.</li>
+          <li><strong>Payez en toute sécurité.</strong> L'argent reste bloqué jusqu'à la fin de votre vérification.</li>
+          <li><strong>Vérifiez-le pendant 7 jours.</strong> S'il n'est pas conforme à l'annonce, vous êtes remboursé.</li>
+        </ol></div>
+      </div>
+    </section>
+
+    <section class="section env">
+      <div class="bandeau-vendre">
+        <div><h2>Vendre est gratuit.</h2><p>Aucune commission pour le vendeur : vous touchez le prix affiché.</p></div>
+        <a class="btn btn-noir" href="#vendre">Vendre un parfum</a>
+      </div>
+    </section>`;
+  };
+
+  /* ——— recherche ——— */
+  const R = {q: '', marques: new Set(), genre: 'tous', etat: 'tous', taille: 'tous', prixMax: 300, mainPropre: false, tri: 'recent'};
+  function filtrer() {
+    const q = normal(R.q.trim());
+    return ANNONCES.filter((a) => {
+      const p = P[a.p];
+      if (q && !normal(`${p.maison} ${p.nom} ${p.famille} ${p.notes}`).includes(q)) return false;
+      if (R.marques.size && !R.marques.has(p.maison)) return false;
+      if (R.genre !== 'tous' && p.genre !== R.genre) return false;
+      if (R.etat !== 'tous' && a.etat !== R.etat) return false;
+      if (R.taille === 'petit' && a.ml > 50) return false;
+      if (R.taille === 'moyen' && (a.ml <= 50 || a.ml > 100)) return false;
+      if (R.taille === 'grand' && a.ml <= 100) return false;
+      if (a.prix > R.prixMax) return false;
+      if (R.mainPropre && !a.mainPropre) return false;
+      return true;
+    }).sort({recent: (x, y) => x.jours - y.jours, asc: (x, y) => x.prix - y.prix, desc: (x, y) => y.prix - x.prix, ml: (x, y) => prixMl(x) - prixMl(y)}[R.tri]);
+  }
+  const radios = (nom, val, choix) => choix.map(([v, l]) => `<label class="choix"><input type="radio" name="${nom}" value="${v}" ${val === v ? 'checked' : ''}> ${l}</label>`).join('');
+  VUES.recherche = () => {
+    const marques = [...new Set(PARFUMS.map((p) => p.maison))].sort((x, y) => x.localeCompare(y, 'fr'));
+    return `<div class="env page">
+      <h1 class="titre-page">${R.q ? `Résultats pour « ${esc(R.q)} »` : 'Tous les parfums'}</h1>
+      <div class="recherche">
+        <details class="filtres" ${matchMedia('(min-width: 961px)').matches ? 'open' : ''}>
+          <summary>Filtres</summary>
+          <form data-form="filtres">
+            <label class="vh" for="q-filtre">Parfum ou marque</label>
+            <input id="q-filtre" class="champ" name="q" type="search" value="${esc(R.q)}" placeholder="Parfum ou marque" autocomplete="off">
+            <fieldset><legend>Pour</legend>${radios('genre', R.genre, [['tous', 'Tous'], ['Femme', 'Femme'], ['Homme', 'Homme'], ['Mixte', 'Mixte']])}</fieldset>
+            <fieldset><legend>État</legend>${radios('etat', R.etat, [['tous', 'Tous'], ['blister', 'Neuf sous blister'], ['entame', 'Entamé']])}</fieldset>
+            <fieldset><legend>Contenance</legend>${radios('taille', R.taille, [['tous', 'Toutes'], ['petit', '50 ml ou moins'], ['moyen', '51 à 100 ml'], ['grand', 'Plus de 100 ml']])}</fieldset>
+            <fieldset><legend>Prix maximum : <output id="prix-max-out">${eur(R.prixMax)}</output></legend><input id="prix-max" name="prixMax" type="range" min="20" max="300" step="10" value="${R.prixMax}" aria-label="Prix maximum"></fieldset>
+            <fieldset><legend>Marque</legend>${marques.map((m, i) => `<label class="choix"><input type="checkbox" name="marque" value="${esc(m)}" id="m-${i}" ${R.marques.has(m) ? 'checked' : ''}> ${esc(m)}</label>`).join('')}</fieldset>
+            <label class="choix"><input type="checkbox" name="mainPropre" ${R.mainPropre ? 'checked' : ''}> Remise en main propre possible</label>
+            <button class="btn btn-petit" type="button" data-action="effacer">Effacer les filtres</button>
+          </form>
+        </details>
+        <div id="resultats">${resultats()}</div>
+      </div>
+    </div>`;
+  };
+  function resultats() {
+    const l = filtrer();
+    return `<div class="resultats-tete"><p>${l.length} annonce${l.length > 1 ? 's' : ''}</p>
+      <label class="tri">Trier par <select id="tri" class="champ" data-tri>${[['recent', 'Plus récentes'], ['asc', 'Prix croissant'], ['desc', 'Prix décroissant'], ['ml', 'Prix au ml']].map(([v, t]) => `<option value="${v}" ${R.tri === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label></div>
+      ${l.length ? `<div class="grille grille-3">${l.map(carte).join('')}</div>` : '<div class="vide"><p>Aucune annonce ne correspond à ces filtres.</p><button class="btn btn-petit" type="button" data-action="effacer">Effacer les filtres</button></div>'}`;
+  }
+
+  /* ——— annonce ——— */
+  let achat = {mode: 'envoi'};
+  VUES.annonce = (id) => {
+    const a = A[id];
+    if (!a) return VUES.introuvable();
+    const p = P[a.p];
+    const v = VENDEURS[a.v];
+    achat = {mode: 'envoi'};
+    const vues = ['face', 'dessous', 'niveau', ...(a.boite ? ['boite'] : []), 'preuve'];
+    const autres = ANNONCES.filter((x) => x.p === a.p && x.id !== a.id);
+    const fmt = p.formats.find((f) => f.ml === a.ml);
+    return `<div class="env page">
+      <nav class="fil" aria-label="Fil d'Ariane"><a href="#recherche">Parfums</a><span aria-hidden="true">›</span><a href="#recherche" data-marque="${esc(p.maison)}">${esc(p.maison)}</a><span aria-hidden="true">›</span><span>${esc(p.nom)}</span></nav>
+      <div class="annonce">
+        <div class="galerie">
+          <div class="galerie-grande" id="grande">${visuel(a, 'face')}</div>
+          <div class="galerie-mini" role="group" aria-label="Photos de l'annonce">${vues.map((x, i) => `<button type="button" class="mini" data-vue="${x}" aria-pressed="${i === 0}" aria-label="Voir ${VUES_PHOTO[x]}">${visuel(a, x)}</button>`).join('')}</div>
+        </div>
+        <div class="fiche">
+          <p class="fiche-maison"><a href="#recherche" data-marque="${esc(p.maison)}">${esc(p.maison)}</a></p>
+          <h1>${esc(p.nom)}</h1>
+          <p class="fiche-sous">${esc(p.conc)} · ${a.ml} ml</p>
+          <p class="fiche-prix">${eur(a.prix)}</p>
+          <p class="fiche-ml">${a.etat === 'blister' ? 'Neuf' : `Environ ${mlRestants(a)} ml restants`} · ${nb(prixMl(a), 2)} €/ml${fmt ? ` · neuf : ${eur(fmt.neuf)}` : ''}</p>
+          <dl class="details">
+            <div><dt>État</dt><dd>${etatTexte(a)}</dd></div>
+            <div><dt>Boîte</dt><dd>${a.boite ? 'Oui' : 'Non'}</dd></div>
+            <div><dt>Code lot</dt><dd>${esc(a.lot)}</dd></div>
+            <div><dt>Acheté en</dt><dd>${a.achat}</dd></div>
+            <div><dt>Famille</dt><dd>${esc(p.famille)}</dd></div>
+          </dl>
+          <fieldset class="livraison"><legend>Livraison</legend>
+            <label class="option"><input type="radio" name="mode" value="envoi" checked data-mode> <span>Envoi suivi en point relais<small>2 à 4 jours</small></span><span>${eur2(ENVOI)}</span></label>
+            ${a.mainPropre ? `<label class="option"><input type="radio" name="mode" value="main" data-mode> <span>Remise en main propre<small>${esc(v.ville)} · vous payez en ligne, l'argent est versé quand vous validez sur place</small></span><span>Gratuit</span></label>` : ''}
+          </fieldset>
+          <div id="total">${total(a)}</div>
+          <div class="boutons">
+            <button class="btn btn-noir btn-large" type="button" data-action="acheter" data-a="${a.id}">Acheter</button>
+            <button class="btn btn-large" type="button" data-action="offre" data-a="${a.id}">Faire une offre</button>
+          </div>
+          <div class="protection">
+            <h2>${ico('cadenas')}Protection acheteur</h2>
+            <p>Votre paiement reste bloqué jusqu'à ce que vous ayez vérifié le parfum. Vous avez <strong>7 jours après la livraison</strong> : s'il n'est pas conforme à l'annonce, vous êtes remboursé.</p>
+          </div>
+          <a class="vendeur" href="#recherche">
+            <span class="avatar" aria-hidden="true">${esc(v.pseudo[0].toUpperCase())}</span>
+            <span><strong>${esc(v.pseudo)}</strong><small>${v.note ? `★ ${nb(v.note, 1)} · ${v.avis} avis · ${v.ventes} ventes` : 'Nouveau vendeur'}</small><small>${esc(v.ville)} · répond ${v.reponse}</small></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="annonce-bas">
+        <section><h2 class="h2">Description</h2><p>${esc(a.desc)}</p></section>
+        <section class="verifiee"><h2 class="h2">${ico('check')}Annonce vérifiée par l'équipe</h2>
+          <ul><li>Les photos demandées sont présentes et nettes</li><li>Le code lot correspond au format de la marque</li><li>Le flacon et le bouchon correspondent aux modèles connus</li><li>Le niveau visible correspond à l'annonce</li><li>La photo avec le pseudo et la date prouve que le vendeur a le flacon</li></ul>
+        </section>
+      </div>
+      ${autres.length ? `<section class="section"><div class="section-tete"><h2>Autres annonces de ${esc(p.nom)}</h2></div><div class="grille">${autres.map(carte).join('')}</div></section>` : ''}
+    </div>`;
+  };
+  function total(a) {
+    const port = achat.mode === 'envoi' ? ENVOI : 0;
+    const pr = protection(a.prix);
+    return `<dl class="total">
+      <div><dt>Parfum</dt><dd>${eur2(a.prix)}</dd></div>
+      <div><dt>Protection acheteur</dt><dd>${eur2(pr)}</dd></div>
+      <div><dt>Livraison</dt><dd>${port ? eur2(port) : 'Gratuit'}</dd></div>
+      <div class="total-ligne"><dt>Total</dt><dd>${eur2(a.prix + pr + port)}</dd></div>
+    </dl>`;
+  }
+
+  /* ——— vendre ——— */
+  const PHOTOS = [
+    {k: 'face', t: 'Le flacon de face', d: 'Bien droit, étiquette lisible.', obl: true},
+    {k: 'dessous', t: 'Le dessous du flacon', d: 'Le code lot gravé ou imprimé doit se lire.', obl: true},
+    {k: 'niveau', t: 'Le niveau', d: 'À hauteur des yeux, sur un fond clair.', obl: true},
+    {k: 'preuve', t: 'Votre pseudo et la date', d: 'Le flacon à côté d\'un papier où vous les avez écrits.', obl: true},
+    {k: 'boite', t: 'La boîte', d: 'Avec le code lot et le code-barres, si vous l\'avez.', obl: false},
+    {k: 'ticket', t: 'Le ticket ou la facture', d: 'Facultatif, mais rassurant pour l\'acheteur.', obl: false},
+  ];
+  const V = {p: '', ml: '', etat: 'entame', niveau: 80, boite: 'oui', prix: '', photos: {}, envoye: false};
+  VUES.vendre = () => {
+    if (V.envoye) return vendreEnvoye();
+    const p = P[V.p];
+    const prixAnnonces = p ? ANNONCES.filter((a) => a.p === p.id).map((a) => a.prix) : [];
+    const manquantes = PHOTOS.filter((x) => x.obl && !V.photos[x.k]).length;
+    return `<div class="env page vendre">
+      <h1 class="titre-page">Vendre un parfum</h1>
+      <p class="chapo">Gratuit, sans commission. Votre annonce est vérifiée par notre équipe avant d'être publiée, en général en quelques heures.</p>
+      <form class="formulaire" data-form="vendre" novalidate>
+        <section class="bloc-form">
+          <h2 class="h2">Le parfum</h2>
+          <label for="parfum">Quel parfum vendez-vous ?</label>
+          <select id="parfum" name="p" class="champ" data-champ="p"><option value="">Choisir dans la liste</option>${PARFUMS.map((x) => `<option value="${x.id}" ${V.p === x.id ? 'selected' : ''}>${esc(x.maison)} · ${esc(x.nom)} (${esc(x.conc)})</option>`).join('')}</select>
+          <p class="aide">Le parfum n'est pas dans la liste ? Écrivez-nous, on l'ajoute dans la journée.</p>
+          ${p ? `<div class="ligne-champs">
+            <div><label for="ml">Contenance</label><select id="ml" name="ml" class="champ" data-champ="ml"><option value="">Choisir</option>${p.formats.map((f) => `<option value="${f.ml}" ${+V.ml === f.ml ? 'selected' : ''}>${f.ml} ml</option>`).join('')}</select></div>
+            <div><label for="boite">Boîte d'origine</label><select id="boite" name="boite" class="champ" data-champ="boite"><option value="oui" ${V.boite === 'oui' ? 'selected' : ''}>Oui</option><option value="non" ${V.boite === 'non' ? 'selected' : ''}>Non</option></select></div>
+          </div>
+          <fieldset><legend>État</legend><div class="segment">${radios('etat', V.etat, [['blister', 'Neuf sous blister'], ['entame', 'Entamé']]).replace(/name="etat"/g, 'name="etat" data-champ="etat"')}</div></fieldset>
+          ${V.etat === 'entame' ? `<label for="niveau">Il reste environ <output id="niveau-out">${V.niveau} %</output></label><input id="niveau" name="niveau" type="range" min="10" max="100" step="5" value="${V.niveau}" data-champ="niveau">` : ''}` : ''}
+        </section>
+
+        <section class="bloc-form">
+          <h2 class="h2">Les photos</h2>
+          <p class="aide">Ces photos nous permettent de vérifier votre parfum avant de publier l'annonce. Les quatre premières sont obligatoires.</p>
+          <div class="photos">${PHOTOS.map((x) => `<label class="photo ${V.photos[x.k] ? 'faite' : ''}">
+              <input class="vh" type="file" accept="image/*" data-photo="${x.k}">
+              <span class="photo-cadre">${V.photos[x.k] ? (V.photos[x.k] === true ? ico('check') : `<img src="${V.photos[x.k]}" alt="">`) : ico('photo')}</span>
+              <span class="photo-txt"><strong>${x.t}${x.obl ? '' : ' <em>facultatif</em>'}</strong><small>${x.d}</small></span>
+            </label>`).join('')}</div>
+          <button class="btn btn-petit" type="button" data-action="photos-exemple">Ajouter des photos d'exemple</button>
+        </section>
+
+        <section class="bloc-form">
+          <h2 class="h2">Le prix</h2>
+          <label for="prix">Votre prix</label>
+          <div class="champ-prix"><input id="prix" name="prix" class="champ" inputmode="decimal" value="${esc(V.prix)}" placeholder="0" data-champ="prix"><span>€</span></div>
+          ${prixAnnonces.length ? `<p class="aide">Annonces actuelles de ce parfum : de ${eur(Math.min(...prixAnnonces))} à ${eur(Math.max(...prixAnnonces))}.</p>` : ''}
+          <p class="aide" id="recu">${V.prix ? `Vous recevrez ${eur2(parseFloat(String(V.prix).replace(',', '.')) || 0)} : aucune commission.` : 'Vous recevez la totalité du prix : aucune commission.'}</p>
+        </section>
+
+        <p class="erreur" id="erreur" role="alert" hidden></p>
+        <button class="btn btn-noir btn-large" type="submit">Envoyer à la vérification</button>
+        <p class="aide">${manquantes ? `Il manque ${manquantes} photo${manquantes > 1 ? 's' : ''} obligatoire${manquantes > 1 ? 's' : ''}.` : 'Toutes les photos obligatoires sont là.'}</p>
+      </form>
+    </div>`;
+  };
+  function vendreEnvoye() {
+    const p = P[V.p];
+    return `<div class="env page vendre">
+      <div class="envoye">
+        <span class="rond-ok">${ico('check')}</span>
+        <h1 class="titre-page">Annonce envoyée à la vérification</h1>
+        <p class="chapo">${esc(p.nom)}, ${V.ml} ml, ${eur(parseFloat(String(V.prix).replace(',', '.')))}. Notre équipe vérifie vos photos, en général en quelques heures. Vous recevez une notification dès qu'elle est en ligne.</p>
+        <p class="aide">Si une photo ne permet pas de vérifier le parfum, on vous dit laquelle refaire.</p>
+        <div class="boutons"><a class="btn btn-noir" href="#accueil">Retour à l'accueil</a><button class="btn" type="button" data-action="nouvelle">Vendre un autre parfum</button></div>
+      </div>
+    </div>`;
+  }
+
+  /* ——— comment ça marche ——— */
+  VUES.fonctionnement = () => {
+    const ex = A.a101;
+    return `<div class="env page lecture">
+    <h1 class="titre-page">Comment ça marche</h1>
+    <p class="chapo">Respray met en relation des particuliers qui vendent et achètent des parfums. On vérifie chaque annonce avant de la publier, et on garde l'argent de l'acheteur jusqu'à ce qu'il ait vérifié le parfum.</p>
+
+    <section class="section">
+      <h2 class="h2">Les photos obligatoires</h2>
+      <p>Chaque annonce doit comporter ces photos. Elles nous permettent de vérifier le parfum sans l'avoir entre les mains.</p>
+      <div class="exemples">${['face', 'dessous', 'niveau', 'preuve', 'boite'].map((x) => `<figure>${visuel(ex, x)}<figcaption>${PHOTOS.find((y) => y.k === x).t}${x === 'boite' ? ' (si vous l\'avez)' : ''}</figcaption></figure>`).join('')}</div>
+    </section>
+
+    <section class="section">
+      <h2 class="h2">Ce que notre équipe vérifie</h2>
+      <ul class="liste-check">
+        <li>Les photos demandées sont présentes, nettes et prises par le vendeur (le papier avec le pseudo et la date le prouve).</li>
+        <li>Le code lot existe et correspond au format utilisé par la marque.</li>
+        <li>Le flacon, le bouchon, l'étiquette et la boîte correspondent aux modèles connus.</li>
+        <li>Le niveau visible correspond à ce qui est annoncé.</li>
+        <li>Le prix n'est pas anormalement bas pour ce parfum.</li>
+      </ul>
+      <p>Une annonce qui ne passe pas est refusée, et on explique au vendeur ce qu'il faut corriger.</p>
+    </section>
+
+    <section class="section">
+      <h2 class="h2">Après l'achat</h2>
+      <ol class="frise">
+        <li><strong>L'acheteur paie.</strong> L'argent est bloqué par Respray, le vendeur ne le reçoit pas encore.</li>
+        <li><strong>Le vendeur envoie sous 5 jours</strong> avec l'étiquette fournie. Le colis est suivi et assuré.</li>
+        <li><strong>L'acheteur reçoit le parfum</strong> et a 7 jours pour le vérifier : flacon, niveau, code lot, odeur.</li>
+        <li><strong>Tout est conforme :</strong> l'acheteur confirme, ou rien ne se passe pendant 7 jours. Le vendeur est payé.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2 class="h2">Si le parfum n'est pas conforme</h2>
+      <p>Contrefaçon, niveau plus bas qu'annoncé, flacon abîmé, mauvais parfum : l'acheteur ouvre un signalement depuis sa commande, avec des photos, dans les 7 jours. L'argent reste bloqué. Si le signalement est fondé, l'acheteur renvoie le parfum avec l'étiquette fournie et il est remboursé en entier, livraison comprise. Un vendeur qui vend une contrefaçon est exclu.</p>
+      <p>Un parfum qui ne plaît pas mais qui est conforme n'est pas remboursé : il peut être remis en vente sur Respray.</p>
+    </section>
+
+    <section class="section">
+      <h2 class="h2">Les frais</h2>
+      <table class="frais"><tbody>
+        <tr><th scope="row">Vendre</th><td>Gratuit, sans commission</td></tr>
+        <tr><th scope="row">Protection acheteur</th><td>5 % du prix + 0,70 €</td></tr>
+        <tr><th scope="row">Envoi suivi en point relais</th><td>À partir de 4,90 €</td></tr>
+        <tr><th scope="row">Remise en main propre</th><td>Gratuit</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="section">
+      <h2 class="h2">Ce qui est interdit</h2>
+      <p>Les contrefaçons et les « dupes », les testeurs, les échantillons offerts, les parfums transvasés dans un autre flacon (décants), et les flacons dont le vaporisateur a été ouvert.</p>
+    </section>
+
+    <section class="section faq">
+      <h2 class="h2">Questions fréquentes</h2>
+      ${[
+        ['Un parfum entamé, c\'est hygiénique ?', 'Oui. Le parfum ne touche jamais la peau dans le flacon : il sort par un vaporisateur serti. Bien rangé, à l\'abri de la lumière et de la chaleur, il se garde des années.'],
+        ['Combien de temps prend la vérification ?', 'En général quelques heures. Si une photo manque ou ne se lit pas, on vous le dit tout de suite.'],
+        ['Et si le colis se perd ?', 'Il est assuré : l\'acheteur est remboursé et le vendeur est payé.'],
+        ['Quand le vendeur est-il payé ?', 'Dès que l\'acheteur confirme que tout est conforme, ou automatiquement 7 jours après la livraison. Le virement arrive en 1 à 2 jours.'],
+      ]
+        .map(([q, r]) => `<details><summary>${q}</summary><p>${r}</p></details>`)
+        .join('')}
+    </section>
+  </div>`;
+  };
+
+  VUES.introuvable = () => `<div class="env page"><h1 class="titre-page">Cette page n'existe pas</h1><p><a class="lien" href="#accueil">Retour à l'accueil</a></p></div>`;
+
+  /* ——— fenêtres, messages ——— */
+  const modale = document.getElementById('modale');
+  const ouvrir = (html) => {
+    modale.innerHTML = `<div class="modale-fond" data-action="fermer"></div><div class="modale-boite" role="dialog" aria-modal="true">${html}<button class="modale-x" type="button" data-action="fermer" aria-label="Fermer"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true">${ICO.croix}</svg></button></div>`;
+    modale.hidden = false;
+    const f = modale.querySelector('input, .btn');
+    if (f) f.focus();
+  };
+  const fermer = () => {
+    modale.hidden = true;
+    modale.innerHTML = '';
+  };
+  let minuteur;
+  const message = (t) => {
+    const m = document.getElementById('message');
+    m.textContent = t;
+    m.hidden = false;
+    clearTimeout(minuteur);
+    minuteur = setTimeout(() => (m.hidden = true), 4000);
+  };
+
+  /* ——— rendu ——— */
+  const vue = document.getElementById('vue');
+  function rendre() {
+    const h = decodeURIComponent(location.hash.slice(1)) || 'accueil';
+    const html = h.startsWith('annonce-') ? VUES.annonce(h.slice(8)) : VUES[h] ? VUES[h]() : VUES.introuvable();
+    vue.innerHTML = html;
+    const rub = h.startsWith('annonce-') ? 'recherche' : h;
+    document.querySelectorAll('[data-nav]').forEach((a) => a.setAttribute('aria-current', a.dataset.nav === rub ? 'page' : 'false'));
+    const h1 = vue.querySelector('h1');
+    document.title = h === 'accueil' ? 'Respray' : `${h1 ? h1.textContent.trim() : 'Respray'} · Respray`;
+  }
+  const aller = (h) => (location.hash.slice(1) === h ? rendre() : (location.hash = h));
+  window.addEventListener('hashchange', () => {
+    fermer();
+    rendre();
+    window.scrollTo(0, 0);
+  });
+  const majResultats = () => {
+    const r = document.getElementById('resultats');
+    if (r) r.innerHTML = resultats();
+  };
+  const lireFiltres = (f) => {
+    const d = new FormData(f);
+    Object.assign(R, {q: String(d.get('q') || ''), genre: d.get('genre'), etat: d.get('etat'), taille: d.get('taille'), prixMax: +d.get('prixMax'), marques: new Set(d.getAll('marque')), mainPropre: d.get('mainPropre') != null});
+    const o = document.getElementById('prix-max-out');
+    if (o) o.textContent = eur(R.prixMax);
+    majResultats();
+  };
+
+  document.addEventListener('submit', (e) => {
+    const f = e.target.closest('[data-form]');
+    if (!f) return;
+    e.preventDefault();
+    const type = f.dataset.form;
+    if (type === 'recherche' || type === 'entete') {
+      Object.assign(R, {q: String(new FormData(f).get('q') || ''), marques: new Set()});
+      aller('recherche');
+    } else if (type === 'filtres') lireFiltres(f);
+    else if (type === 'vendre') {
+      const prix = parseFloat(String(V.prix).replace(',', '.'));
+      const manque = !V.p ? 'Choisissez le parfum.' : !V.ml ? 'Choisissez la contenance.' : PHOTOS.some((x) => x.obl && !V.photos[x.k]) ? 'Ajoutez les quatre photos obligatoires.' : !(prix >= 3) ? 'Indiquez un prix d\'au moins 3 €.' : '';
+      const err = document.getElementById('erreur');
+      if (manque) {
+        err.textContent = manque;
+        err.hidden = false;
+        err.scrollIntoView({block: 'center'});
+        return;
+      }
+      V.envoye = true;
+      rendre();
+      window.scrollTo(0, 0);
+    } else if (type === 'offre') {
+      const a = A[f.dataset.a];
+      const m = parseFloat(String(new FormData(f).get('montant')).replace(',', '.'));
+      const min = Math.ceil(a.prix * 0.7);
+      if (!(m >= min)) {
+        f.querySelector('#offre-aide').textContent = `L'offre minimale pour cette annonce est de ${eur(min)}.`;
+        return;
+      }
+      fermer();
+      message(`Offre de ${eur(m)} envoyée à ${VENDEURS[a.v].pseudo}. Réponse sous 24 h.`);
+    }
+  });
+
+  document.addEventListener('input', (e) => {
+    const t = e.target;
+    if (t.closest('[data-form="filtres"]')) lireFiltres(t.closest('form'));
+    else if (t.dataset.champ === 'niveau') {
+      V.niveau = +t.value;
+      document.getElementById('niveau-out').textContent = V.niveau + ' %';
+    } else if (t.dataset.champ === 'prix') {
+      V.prix = t.value;
+      const n = parseFloat(t.value.replace(',', '.')) || 0;
+      document.getElementById('recu').textContent = `Vous recevrez ${eur2(n)} : aucune commission.`;
+    }
+  });
+
+  document.addEventListener('change', (e) => {
+    const t = e.target;
+    if (t.matches('[data-tri]')) {
+      R.tri = t.value;
+      majResultats();
+    } else if (t.matches('[data-mode]')) {
+      achat.mode = t.value;
+      document.getElementById('total').innerHTML = total(A[location.hash.slice(9)]);
+    } else if (['p', 'ml', 'boite', 'etat'].includes(t.dataset.champ)) {
+      V[t.dataset.champ] = t.value;
+      if (t.dataset.champ === 'p') V.ml = '';
+      rendre();
+    } else if (t.matches('[data-photo]') && t.files && t.files[0]) {
+      const lecteur = new FileReader();
+      lecteur.onload = () => {
+        V.photos[t.dataset.photo] = lecteur.result;
+        rendre();
+      };
+      lecteur.readAsDataURL(t.files[0]);
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('button, a');
+    if (!t) return;
+    if (t.dataset.marque) Object.assign(R, {q: '', marques: new Set([t.dataset.marque])});
+    if (t.dataset.fav) {
+      const id = t.dataset.fav;
+      favoris.has(id) ? favoris.delete(id) : favoris.add(id);
+      memoire.ecrire('favoris', [...favoris]);
+      t.setAttribute('aria-pressed', favoris.has(id));
+      message(favoris.has(id) ? 'Ajouté à vos favoris. On vous prévient si le prix baisse.' : 'Retiré de vos favoris.');
+      return;
+    }
+    if (t.dataset.vue) {
+      const a = A[location.hash.slice(9)];
+      document.getElementById('grande').innerHTML = visuel(a, t.dataset.vue);
+      document.querySelectorAll('.mini').forEach((b) => b.setAttribute('aria-pressed', b === t));
+      return;
+    }
+    const a = t.dataset.a && A[t.dataset.a];
+    switch (t.dataset.action) {
+      case 'fermer':
+        fermer();
+        break;
+      case 'effacer':
+        Object.assign(R, {q: '', marques: new Set(), genre: 'tous', etat: 'tous', taille: 'tous', prixMax: 300, mainPropre: false});
+        rendre();
+        break;
+      case 'acheter': {
+        const port = achat.mode === 'envoi' ? ENVOI : 0;
+        ouvrir(`<h2 class="h2">Paiement</h2><p class="aide">${esc(P[a.p].nom)}, ${a.ml} ml</p>${total(a)}
+          <p class="aide">L'argent reste bloqué jusqu'à votre confirmation, ou 7 jours après la livraison.</p>
+          <button class="btn btn-noir btn-large" type="button" data-action="payer">Payer ${eur2(a.prix + protection(a.prix) + port)}</button>`);
+        break;
+      }
+      case 'offre':
+        ouvrir(`<form data-form="offre" data-a="${a.id}"><h2 class="h2">Faire une offre</h2><p class="aide">${esc(P[a.p].nom)} · prix affiché ${eur(a.prix)}</p>
+          <label for="montant">Votre offre</label><div class="champ-prix"><input id="montant" name="montant" class="champ" inputmode="decimal" value="${Math.round(a.prix * 0.9)}"><span>€</span></div>
+          <p class="aide" id="offre-aide">Le vendeur a 24 h pour répondre. Rien n'est débité avant son accord.</p>
+          <button class="btn btn-noir btn-large" type="submit">Envoyer l'offre</button></form>`);
+        break;
+      case 'payer':
+        fermer();
+        message('Prototype : aucun paiement n\'a été fait.');
+        break;
+      case 'photos-exemple':
+        PHOTOS.slice(0, 5).forEach((x) => (V.photos[x.k] = V.photos[x.k] || true));
+        rendre();
+        break;
+      case 'nouvelle':
+        Object.assign(V, {p: '', ml: '', etat: 'entame', niveau: 80, boite: 'oui', prix: '', photos: {}, envoye: false});
+        rendre();
+        break;
+      case 'theme': {
+        const r = document.documentElement;
+        const sombre = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+        r.dataset.theme = sombre ? 'light' : 'dark';
+        break;
+      }
+      default:
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !modale.hidden) fermer();
+  });
+
+  rendre();
+})();
+</script>
+</body>
+</html>

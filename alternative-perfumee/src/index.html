@@ -1,0 +1,44 @@
+<title>Respray</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Respray, prototype : achetez et revendez vos parfums entre particuliers. Annonces vérifiées, paiement sécurisé, 7 jours pour vérifier.">
+<link rel="stylesheet" href="styles.css">
+
+<p class="proto" role="note">Prototype · annonces, vendeurs et visuels d'illustration</p>
+<header class="entete">
+  <div class="env entete-in">
+    <a class="logo" href="#accueil" aria-label="Respray, accueil">respray</a>
+    <form class="cherche" data-form="entete" role="search">
+      <label class="vh" for="q-entete">Rechercher un parfum ou une marque</label>
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>
+      <input id="q-entete" name="q" type="search" placeholder="Rechercher un parfum ou une marque" autocomplete="off">
+    </form>
+    <nav class="nav" aria-label="Principale">
+      <a href="#recherche" data-nav="recherche">Parfums</a>
+      <a href="#fonctionnement" data-nav="fonctionnement">Comment ça marche</a>
+      <a class="btn btn-noir btn-petit" href="#vendre" data-nav="vendre">Vendre</a>
+    </nav>
+  </div>
+</header>
+
+<main id="vue"></main>
+
+<footer class="pied">
+  <div class="env pied-in">
+    <div>
+      <a class="logo" href="#accueil" aria-label="Respray, accueil">respray</a>
+      <p>Achetez et revendez vos parfums entre particuliers.</p>
+    </div>
+    <nav aria-label="Respray">
+      <a href="#recherche">Parfums</a>
+      <a href="#vendre">Vendre</a>
+      <a href="#fonctionnement">Comment ça marche</a>
+    </nav>
+    <button class="btn btn-petit" type="button" data-action="theme">Clair / sombre</button>
+  </div>
+</footer>
+
+<div id="modale" hidden></div>
+<p id="message" class="message" role="status" hidden></p>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
