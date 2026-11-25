@@ -1,7 +1,7 @@
 // Rend toutes les photos du prototype, en 3D, dans photos/ :
 //   - pour chaque annonce (en ligne et à vérifier) : de face, gros plan sur le niveau (la surface du jus au milieu de
 //     l'image), dessous (code lot), vue de dessus avec le spray, tige, photo preuve (pseudo et date), boîte s'il y en a ;
-//   - un ticket d'achat, un flacon opaque éclairé par derrière (l'astuce du niveau), et le flacon de la porte
+//   - les photos des réclamations (back-office), un ticket d'achat, un flacon opaque éclairé par derrière (l'astuce du niveau), et le flacon de la porte
 //     « Vendre », sur le gris de cette porte ;
 //   - photos/mesures.json : la position de la buse sur la porte « Vendre » (pour y poser la brume).
 //
@@ -20,8 +20,8 @@ fs.mkdirSync(SORTIE, {recursive: true});
 // les données du site, telles quelles
 const ctx = {};
 vm.createContext(ctx);
-vm.runInContext(fs.readFileSync(path.join(PROJET, 'src/data.js'), 'utf8') + '\nthis.D = {PARFUMS, ANNONCES, VENDEURS, A_VERIFIER};', ctx);
-const {PARFUMS, ANNONCES, VENDEURS, A_VERIFIER} = ctx.D;
+vm.runInContext(fs.readFileSync(path.join(PROJET, 'src/data.js'), 'utf8') + '\nthis.D = {PARFUMS, ANNONCES, VENDEURS, A_VERIFIER, COMMANDES, LITIGES};', ctx);
+const {PARFUMS, ANNONCES, VENDEURS, A_VERIFIER, COMMANDES, LITIGES} = ctx.D;
 const P = Object.fromEntries(PARFUMS.map((p) => [p.id, p]));
 
 const TYPES = {'.html': 'text/html', '.js': 'text/javascript', '.woff2': 'font/woff2'};
@@ -62,6 +62,12 @@ serveur.listen(0, async () => {
     await rendre(`${a.id}-preuve`, {...base, vue: 'preuve', pseudo: VENDEURS[a.v].pseudo});
     if (a.boite) await rendre(`${a.id}-boite`, {vue: 'boite', lot: a.lot});
     process.stdout.write('.');
+  }
+  // les photos envoyées par les acheteurs dans leurs réclamations (back-office)
+  for (const l of LITIGES) {
+    const c = COMMANDES.find((x) => x.id === l.c);
+    const p = P[c.p];
+    for (const r of l.rendus || []) await rendre(r.cle, {forme: p.forme, jus: p.jus, bouchon: p.bouchon, niveau: r.niveau, vue: r.vue, lot: r.lot, ml: c.ml});
   }
   await rendre('ticket', {vue: 'ticket', nom: P['baccarat-rouge-540'].nom});
   // l'astuce du niveau d'un flacon opaque : la lampe d'un téléphone collée derrière

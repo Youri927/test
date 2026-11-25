@@ -12,8 +12,9 @@ l'argent reste bloqué.
 | `src/` | Le prototype (HTML, CSS et JavaScript, sans dépendance) |
 | `src/atelier3d.js` | L'atelier 3D : les flacons, leurs matières et la lumière, partagés par l'outil de rendu et l'animation de la vérification |
 | `src/verif3d.js` | La vérification en 3D (page « Comment ça marche ») : le flacon en direct, la caméra qui va d'un point de contrôle à l'autre |
+| `src/admin.js` | Le back-office de l'équipe : ses écrans, ses actions, et l'état rejoué depuis le journal des actions |
 | `src/visuels.js` | L'affichage des photos des annonces (de face, dessous, niveau, vue de dessus avec le spray, tige, preuve, boîte, ticket) et du flacon qui vaporise |
-| `photos/` | Les photos du prototype : 157 rendus 3D de flacons génériques (une image par annonce et par vue, le flacon opaque à contre-jour, la porte « Vendre » en clair et en sombre), et `mesures.json` |
+| `photos/` | Les photos du prototype : 166 rendus 3D (dont les photos jointes aux réclamations) de flacons génériques (une image par annonce et par vue, le flacon opaque à contre-jour, la porte « Vendre » en clair et en sombre), et `mesures.json` |
 | `tools/rendus/` | Le programme qui produit ces rendus (three.js dans Chromium, sans carte graphique) |
 | `dist/index.html` | Le prototype en un seul fichier (1,3 Mo, police, logo et photos compris), à ouvrir d'un double-clic |
 | `dist/artifact.html` | Le même, sans l'enveloppe HTML, pour la publication en page Claude |
@@ -31,7 +32,7 @@ l'argent reste bloqué.
 | `#vendre` | Le formulaire de vente : maison et parfum choisis dans la liste ou proposés (avec « Vouliez-vous dire… ? »), l'état, les 6 photos obligatoires avec leur exemple, le prix |
 | `#fonctionnement` | Le parcours vendeur et acheteur en défilement, avec une scène animée par étape ; les photos obligatoires et l'astuce du flacon opaque ; la vérification en 3D (le bouchon se lève, le spray s'enlève, le niveau, le code lot) ; les 7 jours, les signalements, les avis, un calculateur des frais, les interdits, la FAQ |
 | `#marque` | L'identité : le symbole et sa construction, les versions du logo, l'icône, les couleurs (code copiable), la typographie, les photos, les éléments, le ton |
-| `#panel` | Le panel équipe : les annonces à vérifier (contrôles, publier, refuser avec une raison) et les maisons ou parfums proposés (correction des majuscules, détection des doublons, ajout à la liste) |
+| `#panel` | Le back-office de l'équipe : aujourd'hui (ce qu'il faut faire), annonces (file de vérification, en ligne), commandes, envois, litiges (photos comparées, décision), membres (identité, suspension, messages, notes), maisons et parfums, paiements, journal ; recherche partout. Par exemple `#panel/litiges/l502`, `#panel/commandes/c3012`, `#panel/membres/v6` |
 
 Le catalogue reprend de vrais parfums (maison, nom, année) ; les prix neufs sont indicatifs. Les annonces, les
 vendeurs et les avis sont inventés. Les photos sont des rendus 3D de flacons génériques : elles tiennent la place des
@@ -41,6 +42,11 @@ Le site suit l'appareil, en clair ou en sombre (un graphite chaud, pas du noir) 
 l'autre, et le choix est gardé. Il marche sur téléphone comme sur ordinateur. Les changements de page sont fondus
 (View Transitions), et toutes les animations s'arrêtent si l'appareil demande moins de mouvement. Ce que fait
 l'équipe dans le panel est gardé dans le navigateur : « Remettre l'exemple à zéro » repart de l'état initial.
+
+Le back-office garde chaque action de l'équipe dans un journal. Sur la page publiée, ce journal est partagé (la base
+de données de la page) : toute l'équipe voit les mêmes décisions, signées. Ouvert seul, le fichier le garde dans le
+navigateur. « Remettre l'exemple à zéro » efface le journal. Une annonce envoyée depuis le formulaire Vendre arrive
+dans la file de vérification.
 
 La vérification en 3D charge three.js (0.169.0) depuis cdn.jsdelivr.net quand on arrive dessus. Sans connexion, ou
 sans WebGL, la photo et ses repères fixes restent à la place, et les points se choisissent de la même façon.

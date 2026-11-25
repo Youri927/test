@@ -36,20 +36,10 @@
     },
   };
   const favoris = new Set(memoire.lire('favoris', []));
-  const etat = {
-    maisonsAjoutees: memoire.lire('maisons', []),
-    parfumsAjoutes: memoire.lire('parfums', []),
-    propositions: memoire.lire('propositions', structuredClone(PROPOSITIONS_INITIALES)),
-    aVerifier: memoire.lire('aVerifier', A_VERIFIER.map((a) => a.id)),
-  };
-  const sauver = () => {
-    memoire.ecrire('maisons', etat.maisonsAjoutees);
-    memoire.ecrire('parfums', etat.parfumsAjoutes);
-    memoire.ecrire('propositions', etat.propositions);
-    memoire.ecrire('aVerifier', etat.aVerifier);
-  };
-  const maisons = () => [...new Set([...PARFUMS.map((p) => p.maison), ...MAISONS_EN_PLUS, ...etat.maisonsAjoutees])].sort((x, y) => x.localeCompare(y, 'fr'));
-  const parfumsDe = (m) => [...PARFUMS.filter((p) => p.maison === m).map((p) => ({id: p.id, nom: p.nom, conc: p.conc})), ...etat.parfumsAjoutes.filter((x) => x.maison === m).map((x) => ({id: 'ajout:' + x.nom, nom: x.nom, conc: x.conc || ''}))];
+  /* les maisons et parfums de la liste : le catalogue, plus ce que l'équipe a ajouté depuis le back-office */
+  const maisonsCatalogue = () => [...new Set([...PARFUMS.map((p) => p.maison), ...MAISONS_EN_PLUS])];
+  const maisons = () => [...new Set([...maisonsCatalogue(), ...Admin.maisonsAjoutees()])].sort((x, y) => x.localeCompare(y, 'fr'));
+  const parfumsDe = (m) => [...PARFUMS.filter((p) => p.maison === m).map((p) => ({id: p.id, nom: p.nom, conc: p.conc})), ...Admin.parfumsAjoutes().filter((x) => x.maison === m).map((x) => ({id: 'ajout:' + x.nom, nom: x.nom, conc: x.conc || ''}))];
 
   /* orthographe : distance entre deux noms, et écriture propre (majuscules, particules) */
   function distance(a, b) {
@@ -597,7 +587,8 @@
         <span class="rond-ok">${ico('check')}</span>
         <h1 class="titre-page">Annonce envoyée à la vérification</h1>
         <p class="chapo">${esc(maisonChoisie())}, ${esc(nomParfum())}, ${esc(ml)} ml, ${eur(nombre(V.prix))}. Notre équipe vérifie vos photos, en général en quelques heures. Vous recevez une notification dès que l'annonce est en ligne.</p>
-        ${n ? `<p class="note-ajout">${ico('cloche')}<span>Vous avez proposé ${quoi}. L'équipe en est prévenue dans son panel : elle vérifie l'orthographe et ${n > 1 ? 'les ajoute' : 'l\'ajoute'} à la liste pour les prochains vendeurs. <a href="#panel">Voir le panel équipe</a></span></p>` : ''}
+        ${n ? `<p class="note-ajout">${ico('cloche')}<span>Vous avez proposé ${quoi}. L'équipe en est prévenue dans son back-office : elle vérifie l'orthographe et ${n > 1 ? 'les ajoute' : 'l\'ajoute'} à la liste pour les prochains vendeurs.</span></p>` : ''}
+        <p class="note-ajout">${ico('cloche')}<span>Prototype : votre annonce est dans la file de vérification du back-office. <a href="#panel/annonces">La vérifier comme l'équipe</a></span></p>
         <p class="aide">Si une photo ne permet pas de vérifier le parfum, on vous dit laquelle refaire.</p>
         <div class="boutons"><a class="btn btn-noir" href="#accueil">Retour à l'accueil</a><button class="btn" type="button" data-action="nouvelle">Vendre un autre parfum</button></div>
       </div>
@@ -862,60 +853,6 @@
   </div>`;
   };
 
-  /* ——— panel équipe ——— */
-  let onglet = 'annonces';
-  const RAISONS = ['La photo du dessous ne permet pas de lire le code lot', 'Il manque la photo de la tige sans le bouton spray', 'Il manque la photo avec le pseudo et la date', 'Le code lot ne correspond pas au format de la marque', 'Le prix est anormalement bas : merci de vérifier', 'Contrefaçon probable'];
-  VUES.panel = () => {
-    const attente = A_VERIFIER.filter((a) => etat.aVerifier.includes(a.id));
-    const props = etat.propositions;
-    return `<div class="env page panel">
-      <div class="panel-tete"><div><p class="surtitre">Prototype · ce que voit votre équipe</p><h1 class="titre-page">Panel équipe</h1></div>
-        <button class="btn btn-petit" type="button" data-action="reinit-panel">Remettre l'exemple à zéro</button></div>
-      <div class="onglets" role="tablist" aria-label="Files d'attente">
-        <button type="button" role="tab" aria-selected="${onglet === 'annonces'}" data-onglet="annonces">Annonces à vérifier <span class="compte">${attente.length}</span></button>
-        <button type="button" role="tab" aria-selected="${onglet === 'noms'}" data-onglet="noms">Maisons et parfums proposés <span class="compte">${props.length}</span></button>
-      </div>
-      ${onglet === 'annonces' ? (attente.length ? attente.map(carteVerif).join('') : '<div class="vide"><p>Aucune annonce en attente. Tout est vérifié.</p></div>') : props.length ? props.map(carteProposition).join('') : '<div class="vide"><p>Aucune proposition en attente.</p></div>'}
-    </div>`;
-  };
-  function carteVerif(a) {
-    const p = P[a.p];
-    const v = VENDEURS[a.v];
-    const checks = ['Les 6 photos sont là et nettes', 'Code lot lisible et au format de la marque', 'Spray, bague et tige d\'origine', 'Flacon conforme aux modèles connus', 'Niveau conforme à l\'annonce', 'Papier avec le bon pseudo et une date récente'];
-    return `<article class="p-carte" data-verif="${a.id}">
-      <div class="p-photos">${vuesAnnonce(a).map((x) => `<span title="${esc(Dessins.LEGENDES[x])}">${photo(a, x)}</span>`).join('')}</div>
-      <div class="p-infos">
-        <p class="aide">${a.il} · @${esc(v.pseudo)}${v.ventes ? ` · ${v.ventes} ventes` : ' · nouveau vendeur'}</p>
-        <h2 class="h2">${esc(p.maison)} · ${esc(p.nom)}, ${a.ml} ml</h2>
-        <p>${eur(a.prix)} · reste ~${a.niveau} % · code lot ${esc(a.lot)}${a.boite ? ' · avec boîte' : ''}</p>
-        ${a.alerte ? `<p class="p-alerte">${esc(a.alerte)}</p>` : ''}
-        <fieldset class="p-checks"><legend class="vh">Contrôles</legend>${checks.map((c, i) => `<label class="choix"><input type="checkbox" data-check="${a.id}" id="c-${a.id}-${i}"> ${c}</label>`).join('')}</fieldset>
-        <div class="p-actions">
-          <button class="btn btn-noir btn-petit" type="button" data-publier="${a.id}">Publier l'annonce</button>
-          <label class="vh" for="r-${a.id}">Raison du refus</label>
-          <select id="r-${a.id}" class="champ champ-petit">${RAISONS.map((r) => `<option>${r}</option>`).join('')}</select>
-          <button class="btn btn-petit" type="button" data-refuser="${a.id}">Refuser</button>
-        </div>
-      </div>
-    </article>`;
-  }
-  function carteProposition(x) {
-    const liste = x.type === 'maison' ? maisons() : parfumsDe(x.maison).map((y) => y.nom);
-    const r = ressemble(x.tape, liste);
-    return `<article class="p-carte p-prop" data-prop="${x.id}">
-      <div class="p-prop-tete"><span class="pastille">${x.type === 'maison' ? 'Maison' : 'Parfum'}</span><p class="aide">Proposé${x.type === 'maison' ? 'e' : ''} par @${esc(x.par)} · ${esc(x.il)} · annonce « ${esc(x.annonce)} »${x.maison ? ` · maison ${esc(x.maison)}` : ''}</p></div>
-      <p class="p-tape">Tapé : <q>${esc(x.tape)}</q></p>
-      ${r ? `<p class="p-ressemble">${ico('loupe')}<span>${r.exact ? 'Existe déjà' : 'Ressemble à'} <strong>${esc(r.nom)}</strong>, déjà dans la liste.</span> <button class="btn btn-petit" type="button" data-fusion="${x.id}" data-vers="${esc(r.nom)}">C'est la même : corriger l'annonce</button></p>` : ''}
-      <div class="p-actions">
-        <label for="n-${x.id}">Nom à ajouter</label>
-        <input id="n-${x.id}" class="champ" value="${esc(proprement(x.tape))}">
-        <button class="btn btn-noir btn-petit" type="button" data-ajouter="${x.id}">Ajouter à la liste</button>
-        <button class="btn btn-petit" type="button" data-rejeter="${x.id}">Refuser</button>
-      </div>
-    </article>`;
-  }
-  const nbNotifs = () => etat.propositions.length + A_VERIFIER.filter((a) => etat.aVerifier.includes(a.id)).length;
-
   /* ——— identité : la direction artistique, pour la montrer ———
      Le symbole reprend la géométrie de tools/logo.py (grille de 110 × 100). */
   const SYMBOLE = '<path d="M30 86V58c0-14 10-22 24-22" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/><g fill="currentColor"><circle class="p1" cx="71" cy="36" r="5.5"/><circle class="p2" cx="84" cy="26" r="4"/><circle class="p2" cx="85" cy="44" r="4"/><circle class="p3" cx="96" cy="18" r="2.8"/><circle class="p3" cx="97" cy="35" r="2.8"/><circle class="p3" cx="96" cy="52" r="2.8"/></g>';
@@ -1149,21 +1086,52 @@
     obs.push(m);
   }
 
+  /* ——— le back-office de l'équipe (admin.js) ——— */
+  const Admin = creerAdmin({esc, eur, eur2, nb, ico, photo, P, A, protection, ENVOI, ressemble, proprement, cle, message, ouvrir, fermer, memoire, PHOTOS, maisonsCatalogue, logo: logoSvg});
+
   /* ——— rendu et navigation ——— */
   function rendre() {
     arreterAccueil();
     const h = decodeURIComponent(location.hash.slice(1)) || 'accueil';
-    vue.innerHTML = h.startsWith('annonce-') ? VUES.annonce(h.slice(8)) : VUES[h] ? VUES[h]() : VUES.introuvable();
+    const bo = h === 'panel' || h.startsWith('panel/');
+    document.body.classList.toggle('bo-actif', bo);
+    vue.innerHTML = bo ? Admin.vue(h) : h.startsWith('annonce-') ? VUES.annonce(h.slice(8)) : VUES[h] ? VUES[h]() : VUES.introuvable();
+    // sur téléphone, la navigation du back-office défile jusqu'à la rubrique ouverte
+    const rubrique = bo && vue.querySelector('.bo-nav [aria-current="page"]');
+    if (rubrique) rubrique.parentNode.scrollLeft = rubrique.offsetLeft - 70;
     const rub = h.startsWith('annonce-') ? 'recherche' : h;
     document.querySelectorAll('[data-nav]').forEach((a) => a.setAttribute('aria-current', a.dataset.nav === rub ? 'page' : 'false'));
     const h1 = vue.querySelector('h1');
-    document.title = h === 'accueil' ? 'Respray' : `${h1 ? h1.textContent.trim() : 'Respray'} · Respray`;
-    const b = document.getElementById('badge-panel');
-    if (b) b.textContent = nbNotifs();
+    document.title = h === 'accueil' ? 'Respray' : bo ? `${h1 ? h1.textContent.trim() : 'Équipe'} · Respray Équipe` : `${h1 ? h1.textContent.trim() : 'Respray'} · Respray`;
+    majBadge();
     etapeActive = 0;
     animer();
     demarrerAccueil();
   }
+  const majBadge = () => {
+    const b = document.getElementById('badge-panel');
+    if (b) b.textContent = Admin.nbNotifs();
+  };
+  /* une action de l'équipe (la vôtre, ou celle d'un collègue sur la page partagée) : le site et le back-office suivent.
+     On ne redessine pas sous les doigts de quelqu'un qui écrit. */
+  let enAttente = false;
+  Admin.abonner(() => {
+    Admin.synchroniser();
+    majBadge();
+    if (!document.body.classList.contains('bo-actif')) return;
+    const f = document.activeElement;
+    if (f && /^(TEXTAREA|INPUT|SELECT)$/.test(f.tagName) && f.value && !f.closest('.modale-boite')) {
+      if (!enAttente) {
+        enAttente = true;
+        f.addEventListener('blur', () => {
+          enAttente = false;
+          rafraichir(false);
+        }, {once: true});
+      }
+      return;
+    }
+    rafraichir(false);
+  });
   const transition = (faire) => {
     if (!document.startViewTransition || reduit()) return faire();
     const vt = document.startViewTransition(faire);
@@ -1221,8 +1189,9 @@
     const t = Date.now().toString(36);
     if (V.maison === AUTRE) V.proposes.push({id: 'm' + t, type: 'maison', tape: V.maisonAutre.trim(), par: 'vous', il: 'à l\'instant', annonce: `${nom}, ${ml} ml`});
     if (parfumLibre()) V.proposes.push({id: 'p' + t, type: 'parfum', tape: nom, maison: maisonChoisie(), par: 'vous', il: 'à l\'instant', annonce: `${ml} ml`, conc: V.conc});
-    etat.propositions = [...V.proposes, ...etat.propositions];
-    sauver();
+    // l'annonce part dans la file de vérification du back-office, avec les photos d'un flacon du même parfum
+    const memeParfum = pc && ANNONCES.find((a) => a.p === pc.id);
+    Admin.proposer(V.proposes, {id: 's' + t, p: pc ? pc.id : null, nomAffiche: `${maisonChoisie()} · ${nom}`, ml, prix, etat: V.etat, niveau: V.etat === 'blister' ? 100 : V.niveau, boite: V.boite === 'oui', lot: '', v: 'v0', mainPropre: true, ph: memeParfum ? memeParfum.id : 'a101', fond: '#ECE7E0'});
     V.envoye = true;
     transition(() => {
       rendre();
@@ -1235,6 +1204,13 @@
     if (!f) return;
     e.preventDefault();
     const type = f.dataset.form;
+    if (type.startsWith('bo-')) {
+      if (type === 'bo-cherche') {
+        const premier = document.querySelector('#bo-resultats a');
+        if (premier) location.hash = premier.getAttribute('href');
+      } else Admin.soumettre(f);
+      return;
+    }
     if (type === 'recherche' || type === 'entete') {
       Object.assign(R, {q: String(new FormData(f).get('q') || ''), marques: new Set()});
       aller('recherche');
@@ -1255,7 +1231,8 @@
 
   document.addEventListener('input', (e) => {
     const t = e.target;
-    if (t.closest('[data-form="filtres"]')) lireFiltres(t.closest('form'));
+    if (t.hasAttribute('data-bo-cherche')) Admin.saisie(t);
+    else if (t.closest('[data-form="filtres"]')) lireFiltres(t.closest('form'));
     else if (t.dataset.champ === 'niveau') {
       V.niveau = +t.value;
       document.getElementById('niveau-out').textContent = V.niveau + ' %';
@@ -1376,6 +1353,10 @@
       ouvrir(`<div class="guide-contenu">${g.corps()}</div>`, 'modale-large');
       return;
     }
+    if (t.dataset.bo) {
+      Admin.clic(t);
+      return;
+    }
     if (t.dataset.verif) {
       choisirVerif(+t.dataset.verif, true);
       return;
@@ -1392,47 +1373,10 @@
       });
       return;
     }
-    if (t.dataset.onglet) {
-      onglet = t.dataset.onglet;
-      rafraichir(true);
-      return;
-    }
     if (t.dataset.choisirMaison) {
       V.maison = t.dataset.choisirMaison;
       V.maisonAutre = '';
       rafraichir(true);
-      return;
-    }
-    if (t.dataset.publier || t.dataset.refuser) {
-      const id = t.dataset.publier || t.dataset.refuser;
-      const a = A_VERIFIER.find((x) => x.id === id);
-      const raison = t.dataset.refuser ? document.getElementById('r-' + id).value : '';
-      etat.aVerifier = etat.aVerifier.filter((x) => x !== id);
-      sauver();
-      rafraichir(true);
-      message(t.dataset.publier ? `${P[a.p].nom} publié. Le vendeur est prévenu.` : `Annonce refusée. Le vendeur reçoit : « ${raison} ».`);
-      return;
-    }
-    if (t.dataset.ajouter || t.dataset.rejeter || t.dataset.fusion) {
-      const id = t.dataset.ajouter || t.dataset.rejeter || t.dataset.fusion;
-      const x = etat.propositions.find((y) => y.id === id);
-      let texte;
-      if (t.dataset.ajouter) {
-        const nom = document.getElementById('n-' + id).value.trim();
-        if (!nom) return;
-        if (x.type === 'maison') {
-          if (!maisons().includes(nom)) etat.maisonsAjoutees.push(nom);
-          etat.propositions.forEach((y) => {
-            if (y.type === 'parfum' && y.maison && cle(y.maison) === cle(x.tape)) y.maison = nom;
-          });
-        } else etat.parfumsAjoutes.push({maison: x.maison, nom, conc: x.conc || ''});
-        texte = `${nom} ajouté${x.type === 'maison' ? 'e' : ''} à la liste. Les prochains vendeurs pourront ${x.type === 'maison' ? 'la' : 'le'} choisir.`;
-      } else if (t.dataset.fusion) texte = `Annonce corrigée : « ${x.tape} » devient ${t.dataset.vers}.`;
-      else texte = `Proposition « ${x.tape} » refusée.`;
-      etat.propositions = etat.propositions.filter((y) => y.id !== id);
-      sauver();
-      rafraichir(true);
-      message(texte);
       return;
     }
     if (t.dataset.copier) {
@@ -1486,11 +1430,6 @@
         Object.assign(V, structuredClone(V0));
         rendre();
         break;
-      case 'reinit-panel':
-        Object.assign(etat, {maisonsAjoutees: [], parfumsAjoutes: [], propositions: structuredClone(PROPOSITIONS_INITIALES), aVerifier: A_VERIFIER.map((x) => x.id)});
-        sauver();
-        rafraichir(true);
-        break;
       case 'theme':
         appliquerTheme(themeActuel() === 'sombre' ? 'clair' : 'sombre', true);
         break;
@@ -1529,9 +1468,18 @@
       if (t !== n.data) n.data = t;
     }
   };
-  new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => (n.nodeType === 1 || n.nodeType === 3) && insecables(n.nodeType === 3 ? n.parentNode : n)))).observe(document.body, {childList: true, subtree: true});
+  new MutationObserver((ms) =>
+    ms.forEach((m) =>
+      m.addedNodes.forEach((n) => {
+        const r = n.nodeType === 3 ? n.parentNode : n.nodeType === 1 ? n : null;
+        if (r && r.isConnected) insecables(r);
+      }),
+    ),
+  ).observe(document.body, {childList: true, subtree: true});
   insecables(document.body);
 
   if ('IntersectionObserver' in window && !reduit()) document.documentElement.classList.add('js-anime');
+  Admin.synchroniser();
   rendre();
+  Admin.brancher();
 })();

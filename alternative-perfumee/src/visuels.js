@@ -19,14 +19,14 @@ const Dessins = (() => {
     ticket: 'le ticket d\'achat',
   };
 
-  /* une photo d'annonce : a (l'annonce), p (le parfum), vue. La vue « niveau » est un gros plan sur la surface du jus,
+  /* une photo d'annonce : a (l'annonce ; a.ph, si elle montre les photos d'une autre), p (le parfum), vue. La vue « niveau » est un gros plan sur la surface du jus,
      qui tombe au milieu de l'image : on y pose un trait et le pourcentage annoncé. */
   function photo(a, p, vue = 'face', pseudo = '', classe = '') {
     const alt = esc(`${p.nom}, ${LEGENDES[vue]}`);
     if (vue === 'niveau') {
-      return `<span class="visuel visuel-niveau ${classe}" role="img" aria-label="${alt} : environ ${a.niveau} %"><img src="${src(`${a.id}-niveau`)}" alt="" width="600" height="750" decoding="async"><i class="niveau-trait"></i><b class="niveau-pastille">${a.niveau} %</b></span>`;
+      return `<span class="visuel visuel-niveau ${classe}" role="img" aria-label="${alt} : environ ${a.niveau} %"><img src="${src(`${a.ph || a.id}-niveau`)}" alt="" width="600" height="750" decoding="async"><i class="niveau-trait"></i><b class="niveau-pastille">${a.niveau} %</b></span>`;
     }
-    const cle = vue === 'ticket' ? 'ticket' : `${a.id}-${vue}`;
+    const cle = vue === 'ticket' ? 'ticket' : `${a.ph || a.id}-${vue}`;
     return `<img class="visuel ${classe}" src="${src(cle)}" alt="${alt}" width="600" height="750" decoding="async">`;
   }
 
@@ -47,5 +47,5 @@ const Dessins = (() => {
     return `<div class="vaporise" aria-hidden="true"><img class="v-clair" src="${src('vendre')}" alt="" width="600" height="800" decoding="async"><img class="v-sombre" src="${src('vendre-sombre')}" alt="" width="600" height="800" decoding="async" loading="lazy"><svg class="brume" viewBox="0 0 600 800">${gouttes.join('')}</svg></div>`;
   };
 
-  return {photo, vaporise, LEGENDES};
+  return {photo, vaporise, LEGENDES, src};
 })();

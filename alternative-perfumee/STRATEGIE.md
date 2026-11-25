@@ -71,11 +71,29 @@ calcule les millilitres restants.
   maison est proposée aux vendeurs suivants.
 - La même chose vaut pour les parfums d'une maison.
 
-## Le panel équipe
+## Le back-office de l'équipe
 
-Deux files d'attente : les annonces à vérifier (les photos, une liste de contrôles à cocher, « Publier » ou
-« Refuser » avec une raison toute prête, et les alertes comme un prix anormalement bas), et les maisons et parfums
-proposés. Le prototype les montre à l'adresse `#panel`.
+Tout ce que l'équipe voit et fait, à un seul endroit (`#panel` dans le prototype) :
+
+| Rubrique | Ce qu'on y voit | Ce qu'on y fait |
+|---|---|---|
+| Aujourd'hui | Les compteurs (annonces à vérifier, litiges, envois en retard, propositions), l'argent bloqué et à verser, les recettes du mois | Une liste « à faire », du plus urgent au moins urgent, chaque ligne mène au bon écran |
+| Annonces | La file de vérification (6 photos agrandissables, contrôles à cocher, alertes : prix bas, photo reprise d'une autre annonce, nouveau vendeur, attente de plus de 2 h) ; les annonces en ligne ; les décisions passées | Publier, demander une photo précise avec un message, refuser avec une raison ; retirer une annonce en ligne et la remettre |
+| Commandes | Toutes les commandes, filtrées par état ; pour chacune : ce qui s'est passé (paiement, envoi, étapes du transporteur, livraison, réclamation, actions de l'équipe), les personnes, l'argent | Relancer le vendeur, annuler et rembourser, déclarer un colis perdu, prolonger les 7 jours, verser au vendeur ; notes internes |
+| Envois | À envoyer (5 jours, retards en rouge), en route (colis immobile depuis plus de 6 jours), livrés en cours de vérification | Relancer, annuler, déclarer perdu, prolonger |
+| Litiges | Les réclamations des acheteurs : les photos de l'annonce à côté de celles reçues, le code lot comparé, les échanges, le délai de 48 h du vendeur | Trancher : non conforme avec retour, non conforme sans retour, conforme, problème de transport, ou demander une précision ; exclure le vendeur pour une contrefaçon ; message aux deux parties |
+| Membres | Vendeurs et acheteurs : identité, e-mail, téléphone, ville, compte de versement et vérification d'identité, chiffres, annonces, ventes, achats, litiges, non-conformités | Écrire au membre, suspendre (ses annonces sont masquées), exclure, réactiver ; notes internes |
+| Maisons et parfums | Les propositions des vendeurs (ce qu'ils ont tapé, la version corrigée, les doublons probables) et toute la liste, avec l'origine de chaque ajout | Ajouter avec la bonne orthographe, corriger vers un nom existant, refuser ; ajouter une maison ou un parfum directement ; corriger un nom |
+| Paiements | L'argent bloqué, à verser, versé, remboursé, et les recettes de la protection acheteur | Verser une vente, ou toutes |
+| Journal | Chaque action, signée et datée | — |
+
+Une recherche, en haut de chaque écran, trouve une commande, un membre (pseudo, nom, e-mail), une annonce, un code lot
+ou un numéro de suivi.
+
+Chaque action est une ligne du journal ; l'état se recalcule en le rejouant. On sait donc toujours qui a fait quoi,
+et rien n'est modifié sans trace. Sur la page publiée, le journal est partagé : toute l'équipe voit les mêmes
+décisions. Le site suit : une annonce publiée apparaît sur le site, une annonce retirée ou un vendeur suspendu en
+disparaît, une maison ajoutée est proposée aux vendeurs suivants.
 
 ## La vérification de l'équipe
 
