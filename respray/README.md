@@ -21,7 +21,21 @@ npm run dev
 
 ## Où en est-on
 
-1. Fondations : comptes, catalogue, accueil branché sur les vraies annonces, liste d'attente : fait
-2. Vendre (formulaire, vraies photos) et vérification par l'équipe : en cours
-3. Recherche, page annonce, favoris
-4. Paiement bloqué (Stripe Connect), envois, litiges, versements, e-mails
+1. Fondations : comptes, catalogue, accueil branché sur les vraies annonces, liste d'attente : **fait**
+2. Vendre (formulaire, vraies photos) et vérification par l'équipe (publier, demander une photo, refuser, retirer ;
+   maisons et parfums proposés ; membres ; journal) : **fait**
+3. Recherche et filtres, page annonce, favoris : **fait**
+4. Paiement bloqué (Stripe Connect), envois (Mondial Relay), 7 jours, litiges, versements, e-mails : à faire ; il
+   faut les comptes Stripe et Mondial Relay de la société
+
+## Les pages
+
+| Adresse | Ce qu'on y fait |
+|---|---|
+| `/` | Les dernières annonces publiées ; tant qu'il y en a peu, « les premières annonces arrivent » et la liste d'attente |
+| `/parfums` | Toutes les annonces en ligne : recherche, maison, genre, état, prix maximum, tri (récentes, prix, prix au ml) ; les mises en avant passent devant |
+| `/annonces/:id` | Les photos du vendeur, ce qu'il a déclaré, le prix et la protection acheteur |
+| `/vendre` | Le formulaire en six blocs, avec l'aperçu de l'annonce ; les photos sont réduites dans le navigateur avant l'envoi |
+| `/compte` | Mes annonces et leur statut (avec l'envoi d'une photo quand l'équipe en demande une), mes favoris |
+| `/inscription`, `/connexion` | Les comptes |
+| `/equipe` | La file de vérification, les annonces en ligne, les maisons et parfums proposés, les membres, le journal (comptes `equipe` seulement) |

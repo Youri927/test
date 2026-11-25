@@ -37,3 +37,9 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .remplacer { margin-top: 8px; }
 .envoye { display: grid; justify-items: start; gap: 14px; padding-block: 40px; }
 .rond-ok { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: var(--vert); color: #fff; font-size: 24px; }
+.recherche-filtres { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 8px; }
+.recherche-filtres .champ { width: auto; flex: 1 1 150px; min-height: 44px; }
+.recherche-filtres input[type="search"] { flex: 2 1 240px; }
+.resultats { margin-top: 20px; }
+.coeur-form { position: absolute; top: 10px; right: 10px; }
+.coeur-form .coeur { position: static; }
