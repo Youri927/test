@@ -5,8 +5,9 @@
 Respray est une plateforme de revente de parfums entre particuliers. Respray est l'intermédiaire : elle ne stocke
 rien et ne touche jamais les flacons.
 
-1. **Le vendeur publie avec des photos imposées**, dont une photo du flacon à côté d'un papier portant son pseudo et
-   la date.
+1. **Le vendeur publie avec 6 photos imposées** : de face, le dessous avec le code lot, le niveau, le flacon sans
+   bouchon vu de dessus avec le spray, la même vue sans le bouton spray pour voir la tige, et le flacon à côté d'un
+   papier portant son pseudo et la date.
 2. **L'équipe vérifie chaque annonce sur ces photos** avant de la publier, en quelques heures.
 3. **L'acheteur paie, et l'argent reste bloqué** par Respray (Stripe Connect).
 4. **Le vendeur envoie sous 5 jours**, avec un colis suivi et assuré.
@@ -20,7 +21,8 @@ dites partout.
 
 | | Perfumee | Respray |
 |---|---|---|
-| Photos | Au moins 3, dont le dessous du flacon | Imposées et précises : face, dessous avec le code lot, niveau, photo avec pseudo et date ; boîte et ticket si disponibles |
+| Photos | Au moins 3, dont le dessous du flacon | 6 imposées : face, dessous avec le code lot, niveau, vue de dessus avec le spray, tige sans le spray, photo avec pseudo et date ; boîte et ticket si disponibles |
+| Spray et tige | Pas regardés | Photographiés : un flacon ouvert pour être rempli avec autre chose laisse des traces (tige tordue, colle, bague abîmée) |
 | Preuve que le vendeur a le flacon | Aucune | Le papier avec le pseudo et la date, comme dans les groupes d'échange entre passionnés |
 | Délai de vérification de l'annonce | « Un petit peu de temps », jusqu'à une semaine selon des avis | Quelques heures, avec un refus motivé (on dit quelle photo refaire) |
 | Délai pour vérifier le parfum reçu | 48 h | **7 jours** |
@@ -28,14 +30,14 @@ dites partout.
 | Colis perdu | L'acheteur est remboursé, le vendeur n'est pas payé | Colis assuré : l'acheteur est remboursé et le vendeur est payé |
 | Commission vendeur | 10 % | **0 %** |
 | Frais acheteur | 5 % | 5 % + 0,70 € |
-| Choix du parfum | Marque et nom tapés à la main (« Parfum », « Guerlain »…) | Choisi dans une liste : titres propres, filtre par marque, prix au ml |
+| Choix du parfum | Marque et nom tapés à la main (« Parfum », « Guerlain »…) | Choisi dans une liste ; une maison absente peut être proposée, l'équipe corrige l'orthographe et l'ajoute pour tout le monde |
 | Paiement du vendeur | 7 à 10 jours ouvrés après confirmation | 1 à 2 jours après confirmation, ou 7 jours après la livraison |
 | Application | Non | Oui, pour prendre les photos imposées facilement |
 
 **La phrase pour un créateur de contenu** :
 
-> « Sur Respray, chaque annonce a les mêmes photos obligatoires, dont une avec le pseudo du vendeur et la date : on
-> sait que la personne a vraiment le flacon. L'équipe vérifie avant publication. Tu as 7 jours pour vérifier le
+> « Sur Respray, chaque annonce a les mêmes 6 photos obligatoires : on voit même la tige du spray, et il y a une
+> photo avec le pseudo du vendeur et la date, donc on sait que la personne a vraiment le flacon. L'équipe vérifie avant publication. Tu as 7 jours pour vérifier le
 > parfum, pas 48 heures, et c'est Respray qui rembourse s'il n'est pas conforme. Et le vendeur ne paie aucune
 > commission. »
 
@@ -46,6 +48,8 @@ dites partout.
 | Le flacon de face | La forme du flacon, du bouchon et de l'étiquette, comparés aux modèles connus |
 | Le dessous du flacon | Le code lot : il existe, il suit le format de la marque, il correspond à la boîte |
 | Le niveau, à hauteur des yeux | Que le niveau annoncé est le bon |
+| Sans le bouchon, vu de dessus, le spray en place | Le bouton spray et la bague sertie d'origine |
+| Sans le bouton spray, la tige visible | Que la tige n'a pas été forcée, tordue ou recollée : le signe d'un flacon ouvert puis rempli |
 | Le flacon avec un papier (pseudo + date) | Que le vendeur a le flacon entre les mains, et que les photos ne sont pas reprises d'ailleurs |
 | La boîte (si disponible) | Code lot et code-barres cohérents avec le flacon |
 | Le ticket ou la facture (facultatif) | La provenance |
@@ -53,10 +57,29 @@ dites partout.
 En option, plus tard : une photo du flacon posé sur une balance de cuisine. Avec le poids à vide du flacon, on
 calcule les millilitres restants.
 
+## Les maisons et parfums absents de la liste
+
+- Dans le formulaire de vente, le vendeur choisit sa maison dans la liste. Si elle n'y est pas, il choisit « Ma maison
+  n'est pas dans la liste » et l'écrit.
+- Pendant qu'il tape, le site compare avec la liste : « xerjof » propose « Vouliez-vous dire Xerjoff ? » ; un nom
+  déjà présent est proposé directement. Cela évite les doublons dès la saisie.
+- Sinon, la maison (et le parfum) partent à l'équipe. Dans le panel, une notification montre ce qui a été tapé, une
+  version corrigée (majuscules, « de », « d' »), et une alerte si le nom ressemble à une maison existante.
+- L'équipe ajoute le nom à la liste, corrige l'annonce vers une maison existante, ou refuse. Une fois ajoutée, la
+  maison est proposée aux vendeurs suivants.
+- La même chose vaut pour les parfums d'une maison.
+
+## Le panel équipe
+
+Deux files d'attente : les annonces à vérifier (les photos, une liste de contrôles à cocher, « Publier » ou
+« Refuser » avec une raison toute prête, et les alertes comme un prix anormalement bas), et les maisons et parfums
+proposés. Le prototype les montre à l'adresse `#panel`.
+
 ## La vérification de l'équipe
 
 - Elle contrôle que les photos sont présentes, nettes et prises par le vendeur, que le code lot est cohérent, que le
-  flacon correspond aux modèles connus, que le niveau correspond à l'annonce et que le prix n'est pas anormalement bas.
+  flacon, le spray et la tige correspondent aux modèles connus et n'ont pas été forcés, que le niveau correspond à
+  l'annonce et que le prix n'est pas anormalement bas.
 - Les signaux d'alerte, vérifiés de plus près : prix très bas, nouveau compte qui vend un parfum cher, photos déjà
   publiées ailleurs, code lot incohérent, même flacon déjà vendu.
 - Objectif : moins de 2 heures en journée, 24 heures au maximum.

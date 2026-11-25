@@ -10,12 +10,12 @@ const read = (p) => readFileSync(here(p), 'utf8');
 const b64 = (p) => readFileSync(here(p)).toString('base64');
 
 let css = read('./src/styles.css').replace(/url\(\.\.\/vendor\/fonts\/([\w.-]+\.woff2)\)/g, (_, f) => `url(data:font/woff2;base64,${b64('./vendor/fonts/' + f)})`);
-const js = read('./src/data.js') + '\n' + read('./src/app.js');
+const js = ['data', 'visuels', 'app'].map((f) => read(`./src/${f}.js`)).join('\n');
 if (js.includes('</script')) throw new Error('le script contient </script');
 
 const page = read('./src/index.html')
   .replace('<link rel="stylesheet" href="styles.css">', () => `<style>\n${css}</style>`)
-  .replace('<script src="data.js"></script>\n<script src="app.js"></script>', () => `<script>\n${js}</script>`);
+  .replace('<script src="data.js"></script>\n<script src="visuels.js"></script>\n<script src="app.js"></script>', () => `<script>\n${js}</script>`);
 if (page.includes('src="data.js"') || page.includes('href="styles.css"')) throw new Error('remplacement manqué');
 
 // la tête : tout ce qui précède le bandeau ; le corps : le reste

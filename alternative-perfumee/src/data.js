@@ -56,3 +56,18 @@ const ANNONCES = [
   {id: 'a120', p: 'philosykos', ml: 100, etat: 'entame', niveau: 55, boite: true, lot: '24E11', achat: '2024', prix: 59, v: 'v3', mainPropre: true, jours: 0, fond: '#EAEDE6', desc: 'Un peu plus de la moitié.'},
   {id: 'a121', p: 'khamrah', ml: 100, etat: 'entame', niveau: 95, boite: true, lot: 'L230914', achat: '2023', prix: 27, v: 'v6', mainPropre: true, jours: 3, fond: '#EDE6DF', desc: 'Testé deux fois, pas pour moi.'},
 ];
+
+/* Les maisons de la liste : celles du catalogue, plus d'autres maisons connues. Une maison proposée par un vendeur
+   s'y ajoute quand l'équipe la valide depuis le panel. */
+const MAISONS_EN_PLUS = ['Acqua di Parma', 'Amouage', 'Carolina Herrera', 'Creed', 'Givenchy', 'Initio', 'Jean Paul Gaultier', 'Kilian', 'Lancôme', 'Maison Margiela', 'Memo Paris', 'Nishane', 'Penhaligon\'s', 'Prada', 'Rabanne', 'Serge Lutens', 'Valentino', 'Viktor&Rolf'];
+
+/* Ce qui attend l'équipe dans le panel au chargement du prototype */
+const PROPOSITIONS_INITIALES = [
+  {id: 'pr1', type: 'maison', tape: 'parfum de marly', par: 'nina.parfums', il: 'il y a 25 min', annonce: 'Delina Exclusif, 75 ml'},
+  {id: 'pr2', type: 'maison', tape: 'ORTO PARISI', par: 'theo_m', il: 'il y a 1 h', annonce: 'Megamare, 50 ml'},
+  {id: 'pr3', type: 'parfum', tape: 'santal 33 parfum d\'interieur', maison: 'Le Labo', par: 'julie.b', il: 'il y a 3 h', annonce: '100 ml'},
+];
+const A_VERIFIER = [
+  {id: 'v201', p: 'naxos', ml: 100, etat: 'entame', niveau: 75, boite: true, lot: 'XJ2402', achat: '2024', prix: 135, v: 'v6', mainPropre: true, jours: 0, fond: '#ECE7E0', il: 'il y a 8 min'},
+  {id: 'v202', p: 'alien', ml: 60, etat: 'entame', niveau: 40, boite: false, lot: '24P11', achat: '2024', prix: 21, v: 'v3', mainPropre: false, jours: 0, fond: '#E8E6ED', il: 'il y a 34 min', alerte: 'Prix très bas pour ce parfum (cote habituelle : 45 à 60 € pour ce niveau)'},
+];
