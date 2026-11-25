@@ -111,11 +111,11 @@
   };
   const ico = (n, c = '') => `<svg class="ico ${c}" viewBox="0 0 24 24" aria-hidden="true">${ICO[n]}</svg>`;
   const coeur = (id) => `<button class="coeur" type="button" data-fav="${id}" aria-pressed="${favoris.has(id)}" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 7.6a4 4 0 0 1 7 2.8C19 15.6 12 20 12 20z"/></svg></button>`;
-  function carte(a) {
+  function carte(a, extra = '') {
     const p = P[a.p];
     return `<article class="carte" data-revele>
       <a class="carte-lien" href="#annonce-${a.id}">
-        <div class="carte-photo">${photo(a)}${a.etat === 'blister' ? '<span class="etiq">Neuf sous blister</span>' : ''}</div>
+        <div class="carte-photo">${photo(a)}${a.etat === 'blister' ? '<span class="etiq">Neuf sous blister</span>' : ''}${extra}</div>
         <p class="carte-prix">${eur(a.prix)}</p>
         <h3 class="carte-nom">${esc(p.nom)}</h3>
         <p class="carte-maison">${esc(p.maison)}</p>
@@ -145,108 +145,128 @@
   ];
   const OBLIGATOIRES = PHOTOS.filter((x) => x.obl).length;
 
-  /* ——— accueil ——— */
+  /* ——— accueil ———
+     Quatre temps : deux portes (acheter, vendre), le ruban des annonces, une annonce décortiquée, et la liste de
+     vérification à la réception. */
   const VUES = {};
+  const quand = (j) => (j === 0 ? 'aujourd\'hui' : j === 1 ? 'hier' : `il y a ${j} j`);
+  const DIRECT = [
+    ['a104', 'il y a 4 min'],
+    ['a101', 'il y a 12 min'],
+    ['a120', 'il y a 26 min'],
+    ['a109', 'il y a 41 min'],
+    ['a112', 'il y a 1 h'],
+  ];
+  const direct = (k) => {
+    const [id, il] = DIRECT[k % DIRECT.length];
+    const a = A[id];
+    return `<a href="#annonce-${id}">Vérifiée ${il} · <strong>${esc(P[a.p].nom)}</strong> · ${eur(a.prix)}</a>`;
+  };
+  let railMaison = 'tout';
+  const annoncesRail = () => [...ANNONCES].filter((a) => railMaison === 'tout' || P[a.p].maison === railMaison).sort((x, y) => x.jours - y.jours);
+  const rail = () =>
+    annoncesRail()
+      .map((a) => carte(a, `<span class="etiq etiq-verif">${ico('check')}Vérifiée ${quand(a.jours)}</span>`))
+      .join('');
+  const ANATOMIE = [
+    {t: `${OBLIGATOIRES} photos imposées`, d: 'Toujours les mêmes, jusqu\'à la tige du spray et une photo avec le pseudo du vendeur.'},
+    {t: 'Vérifiée par l\'équipe', d: 'Avant d\'être en ligne, en quelques heures. Code lot, spray, tige, niveau, prix.'},
+    {t: '7 jours pour vérifier', d: 'L\'argent reste bloqué jusqu\'à votre accord. Non conforme : remboursé.'},
+    {t: '0 % pour le vendeur', d: 'Il touche le prix affiché. L\'acheteur paie une protection de 5 % + 0,70 €.'},
+  ];
+  let anat = 0;
+  const RECEPTION = [
+    {t: 'Le code lot', d: 'Le même sous le flacon et sur la boîte. Effacé ou gratté : signalez-le.', vues: ['dessous', 'boite']},
+    {t: 'Le spray et la tige', d: 'Retirez le bouton : la tige doit être propre, droite, sans trace de colle.', vues: ['dessus', 'tige']},
+    {t: 'Le niveau', d: 'Il correspond à la photo de l\'annonce.', vues: ['niveau']},
+    {t: 'Le jus', d: 'Couleur et limpidité comparables aux photos, sans dépôt ni trouble.', vues: ['face']},
+    {t: 'L\'odeur', d: 'Vaporisez sur la peau et laissez le temps faire : le fond compte autant que le départ.', odeur: true},
+  ];
+  const coches = new Set();
   VUES.accueil = () => {
-    const recentes = [...ANNONCES].sort((x, y) => x.jours - y.jours);
-    const eventail = [A.a109, A.a104, A.a106];
+    const a = A.a101;
+    const pile = [A.a109, A.a104, A.a106];
+    const ms = [...new Set(ANNONCES.map((x) => P[x.p].maison))].sort((x, y) => x.localeCompare(y, 'fr'));
     return `
-    <section class="hero env">
-      <div class="hero-texte">
-        <h1>Achetez et revendez vos parfums entre particuliers.</h1>
-        <p class="chapo">Chaque annonce est vérifiée par notre équipe avant d'être publiée. À la réception, vous avez 7 jours pour vérifier votre parfum.</p>
-        <form class="cherche-grand" data-form="recherche" role="search">
-          <label class="vh" for="q-hero">Rechercher un parfum ou une marque</label>
-          ${ico('loupe')}<input id="q-hero" name="q" type="search" placeholder="Rechercher un parfum ou une marque" autocomplete="off">
-          <button class="btn btn-noir" type="submit">Rechercher</button>
-        </form>
-        <ul class="garanties"><li>${ico('check')}Annonces vérifiées</li><li>${ico('check')}Paiement sécurisé</li><li>${ico('check')}7 jours pour vérifier</li></ul>
-      </div>
-      <div class="hero-photos">${recentes
-        .filter((a) => a.etat === 'entame')
-        .slice(0, 4)
-        .map((a) => `<a href="#annonce-${a.id}" class="hero-photo">${photo(a)}<span>${eur(a.prix)}</span></a>`)
-        .join('')}</div>
-    </section>
-
-    <section class="section env">
-      <div class="section-tete"><h2>Dernières annonces</h2><a class="lien" href="#recherche">Tout voir ${ico('fleche')}</a></div>
-      <div class="grille">${recentes.slice(0, 8).map(carte).join('')}</div>
-    </section>
-
-    <section class="section env">
-      <div class="duo">
-        <a class="duo-carte duo-vendre" href="#vendre" data-revele>
-          <div class="duo-texte">
+    <section class="portes env">
+      <div class="portes-in">
+        <div class="porte porte-acheter">
+          <div class="porte-texte">
+            <p class="surtitre">Acheter</p>
+            <h1>Des parfums de seconde main, vérifiés avant d'être en ligne.</h1>
+            <form class="cherche-grand" data-form="recherche" role="search">
+              <label class="vh" for="q-hero">Rechercher un parfum ou une maison</label>
+              ${ico('loupe')}<input id="q-hero" name="q" type="search" placeholder="Un parfum, une maison…" autocomplete="off">
+              <button class="btn btn-noir" type="submit">Rechercher</button>
+            </form>
+            <p class="direct" aria-live="polite"><span class="point-vert" aria-hidden="true"></span><span id="direct">${direct(0)}</span></p>
+          </div>
+          <div class="pile" aria-hidden="true">${pile.map((x, i) => `<span class="pile-photo" style="--i:${i}">${photo(x)}</span>`).join('')}</div>
+        </div>
+        <a class="porte porte-vendre" href="#vendre">
+          <div class="porte-texte">
             <p class="surtitre">Vendre</p>
-            <h2>Il dort dans un placard&nbsp;? Il fera le bonheur de quelqu'un.</h2>
-            <p>Publiez en quelques minutes avec les photos demandées. On vérifie, vous expédiez, vous êtes payé. Sans commission.</p>
+            <h2>Il dort dans un placard&nbsp;? Vendez‑le, sans commission.</h2>
+            <p>Vous touchez 100&nbsp;% du prix. Six photos, une vérification, et il est en ligne.</p>
             <span class="btn btn-clair">Vendre un parfum ${ico('fleche')}</span>
           </div>
-          <div class="duo-visuel">${Dessins.vaporise(P.libre)}</div>
-        </a>
-        <a class="duo-carte duo-acheter" href="#recherche" data-revele>
-          <div class="duo-texte">
-            <p class="surtitre">Acheter</p>
-            <h2>Les parfums que vous aimez, ${remiseMoyenne}&nbsp;% moins cher en moyenne.</h2>
-            <p>Des annonces vérifiées une par une, et 7 jours pour tout contrôler à la réception.</p>
-            <span class="btn btn-noir">Voir les parfums ${ico('fleche')}</span>
-          </div>
-          <div class="duo-visuel eventail">${eventail.map((a, i) => `<span class="mini-carte" style="--i:${i}">${photo(a)}<span>${eur(a.prix)}</span></span>`).join('')}</div>
+          <div class="porte-visuel">${Dessins.vaporise(P.libre)}</div>
         </a>
       </div>
     </section>
 
-    <section class="section env">
-      <div class="section-tete"><div><p class="surtitre">Pourquoi Respray</p><h2 class="grand-titre">Des règles simples, tenues pour de vrai.</h2></div></div>
-      <div class="chiffres">
-        <article class="chiffre" data-revele data-anime>
-          <p class="chiffre-n"><span data-compte="0">0</span>&nbsp;%</p><h3>de commission pour le vendeur</h3>
-          <div class="mv mv-barres" aria-hidden="true"><span><i style="--w:100%"></i><b>Prix affiché</b></span><span><i style="--w:100%"></i><b>Vous recevez</b></span></div>
-          <p>Le prix que vous fixez est celui que vous touchez.</p>
-        </article>
-        <article class="chiffre" data-revele data-anime>
-          <p class="chiffre-n"><span data-compte="7">7</span>&nbsp;jours</p><h3>pour vérifier à la réception</h3>
-          <div class="mv mv-jours" aria-hidden="true">${Array.from({length: 7}, (_, i) => `<i style="--i:${i}"></i>`).join('')}</div>
-          <p>L'argent reste bloqué pendant ce temps. Ailleurs, c'est souvent 48 heures.</p>
-        </article>
-        <article class="chiffre" data-revele data-anime>
-          <p class="chiffre-n"><span data-compte="${OBLIGATOIRES}">${OBLIGATOIRES}</span>&nbsp;photos</p><h3>obligatoires sur chaque annonce</h3>
-          <div class="mv mv-photos" aria-hidden="true">${Array.from({length: OBLIGATOIRES}, (_, i) => `<i style="--i:${i}"></i>`).join('')}</div>
-          <p>Dont la tige du spray et une photo avec le pseudo du vendeur et la date.</p>
-        </article>
-        <article class="chiffre" data-revele data-anime>
-          <p class="chiffre-n">−<span data-compte="${remiseMoyenne}">${remiseMoyenne}</span>&nbsp;%</p><h3>par rapport au prix neuf</h3>
-          <div class="mv mv-barres" aria-hidden="true"><span><i style="--w:100%"></i><b>Neuf</b></span><span><i style="--w:${100 - remiseMoyenne}%" class="vert"></i><b>Respray</b></span></div>
-          <p>En moyenne, au millilitre, sur les annonces en ligne.</p>
-        </article>
+    <section class="ruban-section">
+      <div class="env ruban-tete">
+        <div><h2 class="grand-titre">En ce moment</h2><p class="aide">En moyenne ${remiseMoyenne}&nbsp;% moins cher que neuf, au millilitre. Chaque annonce a été vérifiée avant d'apparaître ici.</p></div>
+        <div class="ruban-fleches"><button class="rond" type="button" data-ruban="-1" aria-label="Annonces précédentes">${ico('fleche')}</button><button class="rond" type="button" data-ruban="1" aria-label="Annonces suivantes">${ico('fleche')}</button></div>
+      </div>
+      <div class="env"><div class="ruban-filtres" role="group" aria-label="Filtrer par maison">${['tout', ...ms].map((m) => `<button type="button" class="filtre" data-ruban-maison="${esc(m)}" aria-pressed="${railMaison === m}">${m === 'tout' ? 'Toutes les maisons' : esc(m)}</button>`).join('')}</div></div>
+      <div class="ruban" id="ruban" tabindex="0" aria-label="Annonces récentes">${rail()}</div>
+      <div class="env"><a class="lien" href="#recherche">Voir les ${ANNONCES.length} annonces ${ico('fleche')}</a></div>
+    </section>
+
+    <section class="section env anatomie" data-anatomie>
+      <div class="anat-texte">
+        <p class="surtitre">Pourquoi c'est plus sûr</p>
+        <h2 class="grand-titre">Une annonce Respray, point par point.</h2>
+        <ol class="anat-points" role="tablist" aria-label="Ce qui protège une vente">${ANATOMIE.map((x, i) => `<li><button type="button" role="tab" aria-selected="${i === anat}" data-anat="${i}"><span class="anat-n">${String(i + 1).padStart(2, '0')}</span><span class="anat-txt"><strong>${x.t}</strong><small>${x.d}</small></span><i class="anat-prog" aria-hidden="true"></i></button></li>`).join('')}</ol>
+        <a class="lien" href="#fonctionnement">Tout le fonctionnement ${ico('fleche')}</a>
+      </div>
+      <div class="anat-carte" data-zone="${anat}" aria-hidden="true">
+        <div class="z z0"><div class="anat-grande">${photo(a)}</div><div class="anat-minis">${['dessous', 'niveau', 'dessus', 'tige', 'preuve'].map((v) => `<span>${photo(a, v)}</span>`).join('')}</div></div>
+        <div class="anat-infos"><p>${esc(P[a.p].maison)}</p><p class="anat-nom">${esc(P[a.p].nom)}</p><p class="anat-prix">${eur(a.prix)} <small>· 70 ml · reste ~85 %</small></p></div>
+        <div class="z z1"><b>${ico('check')}</b><span><strong>Vérifiée par l'équipe</strong><small>il y a 1 h 12 · 5 contrôles sur 5</small></span></div>
+        <div class="z z2"><b>${ico('cadenas')}</b><span><strong>Paiement bloqué, 7 jours pour vérifier</strong><span class="anat-jours">${Array.from({length: 7}, (_, i) => `<i style="--i:${i}"></i>`).join('')}</span></span></div>
+        <div class="z z3"><b>${ico('euro')}</b><span><strong>Le vendeur reçoit ${eur2(a.prix)}</strong><small>Commission : 0,00 €</small></span></div>
       </div>
     </section>
 
-    <section class="section env">${guide()}</section>
-
-    <section class="section env">
-      <div class="section-tete"><h2>Maisons</h2></div>
-      <div class="puces">${[...new Set(PARFUMS.map((p) => p.maison))].map((m) => `<a class="puce" href="#recherche" data-marque="${esc(m)}">${esc(m)}</a>`).join('')}</div>
-    </section>
-    <div class="espace"></div>`;
+    <section class="reception-section">
+      <div class="env reception">
+        <div class="rec-gauche">
+          <p class="surtitre">Le guide</p>
+          <h2 class="grand-titre">Vous venez de recevoir un parfum&nbsp;? Vérifiez-le en 5 gestes.</h2>
+          <div class="rec-progres"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27"/><circle class="rec-arc" cx="32" cy="32" r="27" style="--k:${coches.size / 5}"/></svg><span><strong id="rec-compte">${coches.size}/5</strong><small id="rec-message">${coches.size === 5 ? 'Tout est conforme : confirmez la réception.' : 'Cochez au fur et à mesure. Vous avez 7 jours.'}</small></span></div>
+          <div class="rec-plus"><p>Aussi dans le guide</p>${GUIDE.map((g) => `<button type="button" class="filtre" data-guide="${g.k}">${g.t}</button>`).join('')}</div>
+        </div>
+        <ol class="rec-liste">${RECEPTION.map(
+          (x, i) => `<li class="rec-item ${coches.has(i) ? 'fait' : ''}">
+            <button type="button" class="rec-case" data-rec="${i}" aria-pressed="${coches.has(i)}" aria-label="${x.t} : vérifié">${ico('check')}</button>
+            <details ${i === 0 ? 'open' : ''}><summary><span class="rec-n">${i + 1}</span><span class="rec-t"><strong>${x.t}</strong><small>${x.d}</small></span></summary>
+              <div class="rec-corps">${
+                x.odeur
+                  ? `<div class="odeur"><span style="--i:0"><b>Départ</b>tout de suite</span><span style="--i:1"><b>Cœur</b>après 20 à 30 min</span><span style="--i:2"><b>Fond</b>après 1 à 2 h</span></div>`
+                  : `<div class="rec-photos">${x.vues.map((v) => `<figure>${photo(a, v)}<figcaption>${Dessins.LEGENDES[v]}</figcaption></figure>`).join('')}</div>`
+              }</div>
+            </details>
+          </li>`,
+        ).join('')}</ol>
+      </div>
+    </section>`;
   };
 
-  /* le guide : quatre sujets, un panneau qui change */
+  /* le reste du guide, ouvert dans un panneau */
   const GUIDE = [
-    {
-      k: 'reception',
-      t: 'Vérifier un parfum à la réception',
-      corps: () => `<h3>Vous avez 7 jours. Voici quoi regarder.</h3>
-        <ol class="guide-liste">
-          <li><strong>Le code lot.</strong> Celui sous le flacon et celui de la boîte doivent être identiques.</li>
-          <li><strong>Le spray et la tige.</strong> Retirez le bouton : la tige doit être propre, droite, sans trace de colle.</li>
-          <li><strong>Le niveau.</strong> Il doit correspondre à la photo de l'annonce.</li>
-          <li><strong>Le jus.</strong> Couleur et limpidité comparables aux photos, sans dépôt.</li>
-          <li><strong>L'odeur.</strong> Vaporisez sur la peau et attendez une à deux heures : le fond compte autant que le départ.</li>
-        </ol>
-        <p class="aide">Un doute ? Signalez-le depuis votre commande, photos à l'appui : l'argent reste bloqué.</p>`,
-    },
     {
       k: 'lot',
       t: 'Lire un code lot',
@@ -280,22 +300,52 @@
           ['Eau de parfum', 15, 20],
           ['Extrait de parfum', 20, 40],
         ]
-          .map(([n, a, b], i) => `<div class="conc" style="--a:${a / 40};--b:${b / 40};--i:${i}"><span class="conc-nom">${n}</span><span class="conc-barre"><i></i></span><span class="conc-val">${a} à ${b}&nbsp;%</span></div>`)
+          .map(([n, x, y], i) => `<div class="conc" style="--a:${x / 40};--b:${y / 40};--i:${i}"><span class="conc-nom">${n}</span><span class="conc-barre"><i></i></span><span class="conc-val">${x} à ${y}&nbsp;%</span></div>`)
           .join('')}</div>
         <p>Ce sont des ordres de grandeur : chaque maison dose à sa façon. En général, plus c'est concentré, plus le parfum tient sur la peau.</p>`,
     },
   ];
-  let sujetGuide = 'reception';
-  function guide() {
-    const s = GUIDE.find((g) => g.k === sujetGuide);
-    return `<div class="guide" data-revele>
-      <div class="guide-gauche">
-        <p class="surtitre">Le guide</p>
-        <h2 class="grand-titre">Tout savoir avant d'acheter un parfum de seconde main.</h2>
-        <div class="guide-sujets" role="tablist" aria-label="Sujets du guide">${GUIDE.map((g) => `<button type="button" role="tab" id="sujet-${g.k}" aria-selected="${g.k === sujetGuide}" aria-controls="guide-panneau" data-sujet="${g.k}"><span>${g.t}</span>${ico('fleche')}</button>`).join('')}</div>
-      </div>
-      <div class="guide-panneau" id="guide-panneau" role="tabpanel" aria-labelledby="sujet-${s.k}"><div class="guide-contenu">${s.corps()}</div></div>
-    </div>`;
+
+  /* ce qui bouge tout seul sur l'accueil : le fil des vérifications et l'annonce décortiquée */
+  let minuteurs = [];
+  function arreterAccueil() {
+    minuteurs.forEach(clearInterval);
+    minuteurs = [];
+  }
+  function montrerAnat(i, auto) {
+    anat = i;
+    const carteA = vue.querySelector('.anat-carte');
+    if (!carteA) return;
+    carteA.dataset.zone = i;
+    vue.querySelectorAll('[data-anat]').forEach((b) => b.setAttribute('aria-selected', +b.dataset.anat === i));
+    vue.querySelector('.anat-points').classList.toggle('auto', !!auto);
+  }
+  function demarrerAccueil() {
+    arreterAccueil();
+    if (!vue.querySelector('.portes') || reduit()) return;
+    let k = 0;
+    minuteurs.push(
+      setInterval(() => {
+        const d = document.getElementById('direct');
+        if (!d) return;
+        k++;
+        d.classList.remove('change');
+        void d.offsetWidth;
+        d.innerHTML = direct(k);
+        d.classList.add('change');
+      }, 3600),
+    );
+    const bloc = vue.querySelector('[data-anatomie]');
+    let visible = false;
+    const o = new IntersectionObserver((e) => (visible = e[0].isIntersecting), {threshold: 0.35});
+    o.observe(bloc);
+    obs.push(o);
+    montrerAnat(anat, true);
+    minuteurs.push(
+      setInterval(() => {
+        if (visible && !bloc.matches(':hover') && !bloc.contains(document.activeElement) && vue.querySelector('.anat-points.auto')) montrerAnat((anat + 1) % ANATOMIE.length, true);
+      }, 4200),
+    );
   }
 
   /* ——— recherche ——— */
@@ -749,8 +799,8 @@
 
   /* ——— fenêtres, messages ——— */
   const modale = document.getElementById('modale');
-  const ouvrir = (html) => {
-    modale.innerHTML = `<div class="modale-fond" data-action="fermer"></div><div class="modale-boite" role="dialog" aria-modal="true">${html}<button class="modale-x" type="button" data-action="fermer" aria-label="Fermer">${ico('croix')}</button></div>`;
+  const ouvrir = (html, classe = '') => {
+    modale.innerHTML = `<div class="modale-fond" data-action="fermer"></div><div class="modale-boite ${classe}" role="dialog" aria-modal="true">${html}<button class="modale-x" type="button" data-action="fermer" aria-label="Fermer">${ico('croix')}</button></div>`;
     modale.hidden = false;
     const f = modale.querySelector('input, .btn');
     if (f) f.focus();
@@ -855,6 +905,7 @@
 
   /* ——— rendu et navigation ——— */
   function rendre() {
+    arreterAccueil();
     const h = decodeURIComponent(location.hash.slice(1)) || 'accueil';
     vue.innerHTML = h.startsWith('annonce-') ? VUES.annonce(h.slice(8)) : VUES[h] ? VUES[h]() : VUES.introuvable();
     const rub = h.startsWith('annonce-') ? 'recherche' : h;
@@ -865,6 +916,7 @@
     if (b) b.textContent = nbNotifs();
     etapeActive = 0;
     animer();
+    demarrerAccueil();
   }
   const transition = (faire) => {
     if (!document.startViewTransition || reduit()) return faire();
@@ -1014,7 +1066,7 @@
     const t = e.target.closest('button, a');
     if (!t) return;
     if (t.dataset.marque) Object.assign(R, {q: '', marques: new Set([t.dataset.marque])});
-    if (t.classList.contains('carte-lien') || t.classList.contains('hero-photo')) {
+    if (t.classList.contains('carte-lien')) {
       const g = document.getElementById('grande');
       if (g) g.style.viewTransitionName = 'none';
       const ph = t.querySelector('.carte-photo') || t;
@@ -1036,13 +1088,45 @@
       });
       return;
     }
-    if (t.dataset.sujet) {
-      sujetGuide = t.dataset.sujet;
-      const s = GUIDE.find((g) => g.k === sujetGuide);
-      document.querySelectorAll('[data-sujet]').forEach((b) => b.setAttribute('aria-selected', b === t));
-      const panneau = document.getElementById('guide-panneau');
-      panneau.setAttribute('aria-labelledby', 'sujet-' + s.k);
-      panneau.innerHTML = `<div class="guide-contenu entre">${s.corps()}</div>`;
+    if (t.dataset.ruban) {
+      const r = document.getElementById('ruban');
+      const c = r.querySelector('.carte');
+      r.scrollBy({left: +t.dataset.ruban * (c ? c.offsetWidth + 16 : 260) * 2, behavior: reduit() ? 'auto' : 'smooth'});
+      return;
+    }
+    if (t.dataset.rubanMaison) {
+      railMaison = t.dataset.rubanMaison;
+      document.querySelectorAll('[data-ruban-maison]').forEach((b) => b.setAttribute('aria-pressed', b === t));
+      transition(() => {
+        const r = document.getElementById('ruban');
+        r.innerHTML = rail();
+        r.scrollTo({left: 0});
+      });
+      return;
+    }
+    if (t.dataset.anat) {
+      montrerAnat(+t.dataset.anat, false);
+      return;
+    }
+    if (t.dataset.rec) {
+      const i = +t.dataset.rec;
+      coches.has(i) ? coches.delete(i) : coches.add(i);
+      t.setAttribute('aria-pressed', coches.has(i));
+      t.closest('.rec-item').classList.toggle('fait', coches.has(i));
+      vue.querySelector('.rec-arc').style.setProperty('--k', coches.size / 5);
+      document.getElementById('rec-compte').textContent = `${coches.size}/5`;
+      document.getElementById('rec-message').textContent = coches.size === 5 ? 'Tout est conforme : confirmez la réception, le vendeur est payé.' : 'Cochez au fur et à mesure. Vous avez 7 jours.';
+      vue.querySelector('.rec-progres').classList.toggle('complet', coches.size === 5);
+      if (coches.has(i)) {
+        const suivant = t.closest('.rec-item').nextElementSibling;
+        t.closest('.rec-item').querySelector('details').open = false;
+        if (suivant && !coches.has(i + 1)) suivant.querySelector('details').open = true;
+      }
+      return;
+    }
+    if (t.dataset.guide) {
+      const g = GUIDE.find((x) => x.k === t.dataset.guide);
+      ouvrir(`<div class="guide-contenu">${g.corps()}</div>`, 'modale-large');
       return;
     }
     if (t.dataset.parcours) {

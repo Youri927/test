@@ -19,7 +19,7 @@ l'argent reste bloqué.
 
 | Adresse | Ce qu'on y voit |
 |---|---|
-| `#accueil` | La promesse, la recherche, les dernières annonces, le module vendre / acheter (brume du spray, éventail d'annonces), les chiffres, le guide (vérifier à la réception, code lot, conservation, concentrations), les maisons |
+| `#accueil` | Deux portes côte à côte, Acheter (recherche, fil des dernières vérifications) et Vendre (le flacon qui vaporise) : celle qu'on survole s'agrandit. Puis le ruban des annonces, filtrable par maison ; une annonce décortiquée qui montre, point par point, ce qui protège la vente ; et la liste « vérifiez-le en 5 gestes » à cocher, avec le reste du guide en panneau |
 | `#recherche` | Les annonces, avec des filtres (genre, état, contenance, prix, marque, main propre) et un tri |
 | `#annonce-a101` | Une annonce : les photos obligatoires (vue de dessus et tige comprises), le prix au ml, les détails, la livraison, le total, l'achat, l'offre, la protection acheteur, le vendeur, ce que l'équipe a vérifié |
 | `#vendre` | Le formulaire de vente : maison et parfum choisis dans la liste ou proposés (avec « Vouliez-vous dire… ? »), l'état, les 6 photos obligatoires avec leur exemple, le prix |

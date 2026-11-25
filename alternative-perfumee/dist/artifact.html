@@ -82,19 +82,10 @@ input[type="radio"], input[type="checkbox"], input[type="range"] { accent-color:
 .nav a:not(.btn):hover, .nav a[aria-current="page"]:not(.btn) { text-decoration: underline; text-underline-offset: 6px; }
 
 /* accueil */
-.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); gap: 56px; align-items: center; padding-block: 56px 24px; }
-.hero h1 { font-weight: 650; font-size: clamp(2.1rem, 4.2vw, 3.1rem); line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; }
 .chapo { margin-top: 16px; font-size: 18px; color: var(--texte-2); max-width: 52ch; }
 .cherche-grand { display: flex; align-items: center; gap: 10px; margin-top: 28px; padding: 6px 6px 6px 16px; border: 1px solid var(--trait); border-radius: 12px; max-width: 540px; }
 .cherche-grand .ico { color: var(--texte-2); }
 .cherche-grand input { flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; outline: none; font-size: 16px; }
-.garanties { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; font-size: 14.5px; color: var(--texte-2); }
-.garanties li { display: flex; align-items: center; gap: 6px; }
-.garanties .ico { width: 18px; height: 18px; color: var(--vert); stroke-width: 2.2; }
-.hero-photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.hero-photo { position: relative; display: block; border-radius: var(--rayon); overflow: hidden; }
-.hero-photo:nth-child(even) { transform: translateY(24px); }
-.hero-photo span { position: absolute; left: 10px; bottom: 10px; padding: 4px 10px; border-radius: 8px; background: rgba(255, 255, 255, .92); color: #161616; font-weight: 700; font-size: 14px; }
 
 .section { padding-top: 56px; }
 .section-tete { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
@@ -275,10 +266,7 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .pied nav a:hover { color: var(--texte); text-decoration: underline; }
 
 @media (max-width: 960px) {
-  .hero, .annonce, .annonce-bas, .recherche { grid-template-columns: minmax(0, 1fr); }
-  .hero { gap: 32px; padding-top: 36px; }
-  .hero-photo:nth-child(even) { transform: none; }
-  .hero-photos { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .annonce, .annonce-bas, .recherche { grid-template-columns: minmax(0, 1fr); }
   .grille, .grille-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .galerie { position: static; }
   .annonce { gap: 28px; }
@@ -292,7 +280,6 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 @media (max-width: 640px) {
   .entete-in { flex-wrap: wrap; gap: 10px 16px; padding-block: 10px; }
   .cherche { order: 3; flex-basis: 100%; max-width: none; }
-  .hero-photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .grille, .grille-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 12px; }
   .deux, .photos, .ligne-champs { grid-template-columns: minmax(0, 1fr); }
   .exemples { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -312,7 +299,6 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .js-anime [data-revele]:not(.vu) { transform: translateY(26px); }
 .surtitre { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--texte-2); margin-bottom: 10px; }
 .grand-titre { font-weight: 650; font-size: clamp(1.6rem, 3vw, 2.3rem); line-height: 1.12; letter-spacing: -.028em; text-wrap: balance; }
-.espace { height: 64px; }
 .lien-bouton { padding: 0; border: 0; background: none; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .champ-petit { min-height: 38px; padding: 6px 10px; font-size: 14px; width: auto; max-width: 100%; }
 ::view-transition-old(root) { animation: vt-sortie .2s ease both; }
@@ -322,23 +308,41 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 @keyframes vt-entree { from { opacity: 0; transform: translateY(12px); } }
 .entete { view-transition-name: entete; }
 
-/* ——— accueil : vendre / acheter ——— */
-.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.duo-carte { position: relative; display: grid; grid-template-rows: auto 1fr; min-height: 470px; padding: 36px 36px 0; border-radius: 22px; text-decoration: none; overflow: hidden; isolation: isolate; }
-.duo-texte { position: relative; z-index: 1; display: grid; gap: 12px; justify-items: start; max-width: 30rem; }
-.duo-texte h2 { font-weight: 650; font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.12; letter-spacing: -.025em; text-wrap: balance; }
-.duo-texte p:not(.surtitre) { font-size: 16px; opacity: .78; max-width: 32ch; }
-.duo-texte .btn { margin-top: 8px; }
-.duo-texte .btn .ico { width: 16px; height: 16px; transition: transform .4s var(--ease); }
-.duo-carte:hover .duo-texte .btn .ico { transform: translateX(4px); }
-.duo-vendre { background: var(--panneau); color: var(--sur-panneau); }
-.duo-vendre .surtitre { color: var(--sur-panneau); opacity: .6; }
+/* ——— accueil : les deux portes ———
+   Acheter et vendre côte à côte ; celle qu'on survole prend la place de l'autre. */
+.portes { padding-block: 20px 0; }
+.portes-in { display: flex; gap: 12px; height: clamp(540px, 74vh, 660px); }
+.porte { position: relative; flex: 1.15 1 0; min-width: 0; padding: 40px; border-radius: 28px; overflow: hidden; isolation: isolate; text-decoration: none; transition: flex-grow .9s var(--ease); }
+.porte-acheter { background: var(--fond-2); }
+.porte-vendre { flex-grow: .85; background: var(--panneau); color: var(--sur-panneau); }
+.portes-in:has(.porte-vendre:hover) .porte-acheter { flex-grow: .85; }
+.portes-in:has(.porte-vendre:hover) .porte-vendre { flex-grow: 1.15; }
+.porte-texte { position: relative; z-index: 2; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; justify-items: start; }
+.porte-acheter .porte-texte { width: min(430px, 100%); }
+.porte-vendre .porte-texte { width: min(360px, 100%); }
+.porte h1 { font-weight: 650; font-size: clamp(2rem, 3.5vw, 3.05rem); line-height: 1.04; letter-spacing: -.035em; text-wrap: balance; }
+.porte h2 { font-weight: 650; font-size: clamp(1.6rem, 2.5vw, 2.1rem); line-height: 1.08; letter-spacing: -.03em; text-wrap: balance; }
+.porte-vendre .surtitre { color: var(--sur-panneau); opacity: .6; }
+.porte-vendre p:not(.surtitre) { opacity: .75; }
+.porte .cherche-grand { justify-self: stretch; margin-top: 4px; width: 100%; background: var(--fond); border-color: transparent; box-shadow: 0 12px 30px -20px rgba(0, 0, 0, .35); }
+.porte .btn .ico { width: 16px; height: 16px; transition: transform .4s var(--ease); }
+.porte-vendre:hover .btn .ico { transform: translateX(4px); }
 .btn-clair { background: var(--sur-panneau); border-color: var(--sur-panneau); color: #1c1b1a; }
-.duo-acheter { background: var(--fond-2); }
-.duo-visuel { position: relative; align-self: end; height: 270px; }
-.section-tete .grand-titre { font-size: clamp(1.6rem, 3vw, 2.3rem); }
-.vaporise { position: absolute; right: 6%; bottom: -46px; height: 360px; width: auto; transform-origin: 80% 100%; transition: transform .8s var(--ease); }
-.duo-vendre:hover .vaporise { transform: rotate(-4deg) translateY(-6px); }
+.direct { display: flex; align-items: center; gap: 10px; min-height: 24px; font-size: 14.5px; color: var(--texte-2); }
+.direct a { text-decoration: none; }
+.direct a:hover { color: var(--texte); }
+.direct strong { color: var(--texte); font-weight: 600; }
+#direct { display: inline-block; }
+#direct.change { animation: fondu .5s var(--ease) both; }
+.point-vert { width: 8px; height: 8px; flex: none; border-radius: 50%; background: var(--vert); animation: pouls 2s ease-out infinite; }
+@keyframes pouls { 0% { box-shadow: 0 0 0 0 rgba(11, 122, 75, .45); } 70%, 100% { box-shadow: 0 0 0 9px rgba(11, 122, 75, 0); } }
+.pile { position: absolute; right: 30px; bottom: -36px; width: 320px; height: 330px; }
+.pile-photo { position: absolute; bottom: 0; left: 50%; width: 168px; border-radius: 16px; overflow: hidden; box-shadow: 0 26px 50px -26px rgba(0, 0, 0, .45); transform: translateX(calc(-50% + (var(--i) - 1) * 78px)) rotate(calc((var(--i) - 1) * 8deg)); transform-origin: 50% 110%; transition: transform 1s var(--ease); animation: flotte 7s ease-in-out infinite; animation-delay: calc(var(--i) * -2.3s); }
+.pile-photo:nth-child(2) { z-index: 1; bottom: 34px; }
+.porte-acheter:hover .pile-photo { transform: translateX(calc(-50% + (var(--i) - 1) * 112px)) rotate(calc((var(--i) - 1) * 12deg)); }
+@keyframes flotte { 50% { translate: 0 -9px; } }
+.vaporise { position: absolute; right: 6%; bottom: -46px; height: 360px; width: auto; transform-origin: 80% 100%; transition: transform .9s var(--ease); }
+.porte-vendre:hover .vaporise { transform: rotate(-4deg) translateY(-6px); }
 .brume { filter: blur(1.6px); }
 .brume circle { fill: var(--sur-panneau); opacity: 0; transform-box: fill-box; transform-origin: center; animation: brume 3.4s cubic-bezier(.15, .7, .3, 1) infinite; animation-delay: var(--d); }
 @keyframes brume {
@@ -346,52 +350,117 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
   10% { opacity: .55; }
   100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(3.2); }
 }
-.eventail { display: grid; place-items: end center; }
-.mini-carte { position: absolute; bottom: -34px; left: 50%; width: 176px; border-radius: 14px; overflow: hidden; box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .35); transform: translateX(calc(-50% + (var(--i) - 1) * 84px)) rotate(calc((var(--i) - 1) * 7deg)); transform-origin: 50% 120%; transition: transform .8s var(--ease); }
-.mini-carte:nth-child(2) { z-index: 1; bottom: -8px; }
-.duo-acheter:hover .mini-carte { transform: translateX(calc(-50% + (var(--i) - 1) * 128px)) rotate(calc((var(--i) - 1) * 11deg)) translateY(-10px); }
-.mini-carte > span { position: absolute; left: 8px; top: 8px; padding: 3px 8px; border-radius: 7px; background: rgba(255, 255, 255, .92); color: #161616; font-weight: 700; font-size: 13px; }
 
-/* ——— accueil : les chiffres ——— */
-.chiffres { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
-.chiffre { display: grid; align-content: start; gap: 10px; padding: 26px 22px; border-radius: 18px; background: var(--fond-2); }
-.chiffre-n { font-weight: 650; font-size: clamp(2.4rem, 4vw, 3.3rem); line-height: 1; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
-.chiffre h3 { font-size: 16px; font-weight: 600; }
-.chiffre > p:last-child { color: var(--texte-2); font-size: 14.5px; }
-.mv { height: 58px; display: grid; align-content: center; gap: 8px; }
-.mv-barres span { display: grid; grid-template-columns: 1fr; gap: 3px; }
-.mv-barres i { display: block; height: 8px; width: var(--w); border-radius: 4px; background: var(--texte); transform-origin: left; }
-.mv-barres i.vert { background: var(--vert); }
-.mv-barres b { font-weight: 500; font-size: 12px; color: var(--texte-2); }
-.vu .mv-barres i { animation: barre 1.1s var(--ease) both; }
-.vu .mv-barres span + span i { animation-delay: .25s; }
-@keyframes barre { from { transform: scaleX(0); } }
-.mv-jours { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
-.mv-jours i { height: 30px; border-radius: 6px; background: var(--vert); }
-.vu .mv-jours i { animation: jour .5s var(--ease) both; animation-delay: calc(var(--i) * 110ms + 150ms); }
-@keyframes jour { from { background: var(--trait); transform: scaleY(.5); } }
-.mv-photos { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 5px; }
-.mv-photos i { aspect-ratio: 4 / 5; border-radius: 5px; background: var(--texte); opacity: .85; }
-.vu .mv-photos i { animation: pop .5s var(--ease) both; animation-delay: calc(var(--i) * 90ms + 150ms); }
+/* ——— accueil : le ruban des annonces ——— */
+.ruban-section { display: grid; gap: 18px; padding-top: 80px; }
+.ruban-tete { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.ruban-tete .aide { margin-top: 8px; max-width: 52ch; }
+.ruban-fleches { display: flex; gap: 8px; }
+.rond { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid var(--trait); border-radius: 50%; background: var(--fond); color: var(--texte); cursor: pointer; transition: border-color .2s, transform .2s var(--ease); }
+.rond:hover { border-color: var(--texte-2); }
+.rond:active { transform: scale(.92); }
+.rond:first-child .ico { transform: rotate(180deg); }
+.ruban-filtres { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.ruban-filtres::-webkit-scrollbar { display: none; }
+.filtre { flex: none; padding: 8px 15px; border: 1px solid var(--trait); border-radius: 99px; background: var(--fond); font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer; transition: background .3s var(--ease), color .3s, border-color .3s; }
+.filtre:hover { border-color: var(--texte-2); }
+.filtre[aria-pressed="true"] { background: var(--texte); border-color: var(--texte); color: var(--fond); }
+.ruban { display: grid; grid-auto-flow: column; grid-auto-columns: 236px; gap: 16px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; padding-inline: max(16px, calc((100% - 1200px) / 2 + 16px)); scroll-padding-inline: max(16px, calc((100% - 1200px) / 2 + 16px)); padding-block: 4px 10px; scrollbar-width: none; }
+.ruban::-webkit-scrollbar { display: none; }
+.ruban .carte { scroll-snap-align: start; }
+.etiq-verif { left: 10px; right: auto; top: 10px; bottom: auto; display: flex; align-items: center; gap: 4px; color: var(--vert); }
+.etiq-verif .ico { width: 13px; height: 13px; stroke-width: 2.6; }
 
-/* ——— accueil : le guide ——— */
-.guide { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 14px; padding: 14px; border-radius: 24px; background: var(--fond-2); }
-.guide-gauche { padding: 26px 22px 18px; }
-.guide-sujets { display: grid; margin-top: 26px; border-top: 1px solid var(--texte); }
-.guide-sujets button { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 17px 2px; border: 0; border-bottom: 1px solid var(--trait); background: none; text-align: left; font-size: 16px; color: var(--texte-2); cursor: pointer; transition: color .3s, padding .4s var(--ease); }
-.guide-sujets button .ico { width: 18px; height: 18px; transition: transform .4s var(--ease); }
-.guide-sujets button:hover, .guide-sujets button[aria-selected="true"] { color: var(--texte); }
-.guide-sujets button[aria-selected="true"] { font-weight: 600; padding-left: 10px; }
-.guide-sujets button[aria-selected="true"] .ico, .guide-sujets button:hover .ico { transform: translateX(4px); }
-.guide-panneau { padding: 30px; border-radius: 18px; background: var(--fond); min-height: 440px; }
+/* ——— accueil : l'annonce décortiquée ——— */
+.anatomie { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 64px; align-items: center; padding-top: 104px; }
+.anat-points { display: grid; gap: 4px; margin: 26px 0 22px; }
+.anat-points button { position: relative; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; width: 100%; padding: 16px 18px 20px; border: 0; border-radius: 16px; background: none; text-align: left; cursor: pointer; transition: background .45s var(--ease); }
+.anat-points button:hover { background: color-mix(in srgb, var(--fond-2) 55%, transparent); }
+.anat-points button[aria-selected="true"] { background: var(--fond-2); }
+.anat-n { padding-top: 2px; font-weight: 700; font-size: 14px; color: var(--texte-2); }
+.anat-txt strong { display: block; font-size: 17px; font-weight: 600; }
+.anat-txt small { display: block; max-height: 0; overflow: hidden; opacity: 0; color: var(--texte-2); font-size: 14.5px; transition: max-height .6s var(--ease), opacity .45s, margin .6s var(--ease); }
+[aria-selected="true"] .anat-txt small { max-height: 90px; margin-top: 4px; opacity: 1; }
+.anat-prog { position: absolute; left: 18px; right: 18px; bottom: 9px; height: 2px; border-radius: 1px; background: var(--trait); overflow: hidden; opacity: 0; transition: opacity .3s; }
+.anat-prog::after { content: ""; position: absolute; inset: 0; background: var(--texte); transform: scaleX(0); transform-origin: left; }
+.auto [aria-selected="true"] .anat-prog { opacity: 1; }
+.auto [aria-selected="true"] .anat-prog::after { animation: progression 4.2s linear both; }
+@keyframes progression { to { transform: scaleX(1); } }
+.anat-carte { display: grid; gap: 10px; padding: 16px; border-radius: 28px; background: var(--fond); box-shadow: 0 0 0 1px var(--trait), 0 40px 80px -50px rgba(0, 0, 0, .4); }
+.anat-carte .z, .anat-infos { border-radius: 14px; transition: opacity .6s var(--ease), transform .8s var(--ease), box-shadow .6s var(--ease); }
+.anat-carte .z { opacity: .3; }
+.anat-infos { padding: 2px 8px; opacity: .55; }
+.anat-carte[data-zone="0"] .z0, .anat-carte[data-zone="1"] .z1, .anat-carte[data-zone="2"] .z2, .anat-carte[data-zone="3"] .z3 { opacity: 1; transform: scale(1.018); box-shadow: 0 0 0 2px var(--texte), 0 18px 40px -24px rgba(0, 0, 0, .35); }
+.z0 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding: 6px; }
+.anat-grande { grid-column: span 2; grid-row: span 2; border-radius: 12px; overflow: hidden; }
+.anat-minis { display: contents; }
+.anat-minis span { border-radius: 9px; overflow: hidden; }
+.anat-minis span:first-child { display: none; }
+.anat-carte .visuel { aspect-ratio: 1; }
+.anat-infos p { font-size: 14px; color: var(--texte-2); }
+.anat-infos .anat-nom { font-size: 19px; font-weight: 650; color: var(--texte); }
+.anat-prix { font-size: 18px; font-weight: 700; color: var(--texte) !important; }
+.anat-prix small { font-size: 14px; font-weight: 400; color: var(--texte-2); }
+.z1, .z2, .z3 { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--fond-2); }
+.z1 b, .z2 b, .z3 b { display: grid; place-items: center; width: 36px; height: 36px; flex: none; border-radius: 50%; background: var(--noir); color: var(--sur-noir); }
+.z1 b { background: var(--vert); color: #fff; }
+.z1 b .ico, .z2 b .ico, .z3 b .ico { width: 18px; height: 18px; }
+.z1 span, .z2 span, .z3 span { display: grid; gap: 2px; }
+.z1 strong, .z2 strong, .z3 strong { font-size: 15px; }
+.z1 small, .z3 small { color: var(--texte-2); font-size: 13.5px; }
+.anat-jours { display: flex !important; gap: 4px; margin-top: 4px; }
+.anat-jours i { width: 22px; height: 6px; border-radius: 3px; background: var(--vert); }
+.anat-carte[data-zone="2"] .anat-jours i { animation: jour .45s var(--ease) both; animation-delay: calc(var(--i) * 110ms + 200ms); }
+
+/* ——— accueil : vérifier à la réception ——— */
+.reception-section { margin-top: 104px; padding-block: 80px; background: var(--fond-2); }
+.reception { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; align-items: start; }
+.rec-gauche { position: sticky; top: 100px; display: grid; gap: 20px; }
+.rec-progres { display: flex; align-items: center; gap: 14px; }
+.rec-progres svg { width: 64px; height: 64px; flex: none; transform: rotate(-90deg); }
+.rec-progres circle { fill: none; stroke: var(--trait); stroke-width: 6; }
+.rec-progres .rec-arc { stroke: var(--vert); stroke-linecap: round; stroke-dasharray: 169.65; stroke-dashoffset: calc(169.65 * (1 - var(--k))); transition: stroke-dashoffset .8s var(--ease); }
+.rec-progres strong { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+.rec-progres small { color: var(--texte-2); font-size: 14.5px; }
+.rec-progres.complet strong { color: var(--vert); }
+.rec-plus { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.rec-plus p { width: 100%; font-weight: 600; font-size: 14px; }
+.rec-liste { display: grid; gap: 10px; }
+.rec-item { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 14px; align-items: start; padding: 16px; border-radius: 20px; background: var(--fond); transition: box-shadow .5s var(--ease); }
+.rec-item:has(details[open]) { box-shadow: 0 20px 44px -30px rgba(0, 0, 0, .35); }
+.rec-case { display: grid; place-items: center; width: 46px; height: 46px; border: 1.5px solid var(--trait); border-radius: 13px; background: var(--fond); color: transparent; cursor: pointer; transition: background .4s var(--ease), border-color .4s, color .3s, transform .2s var(--ease); }
+.rec-case:hover { border-color: var(--vert); }
+.rec-case:active { transform: scale(.9); }
+.rec-case .ico { stroke-width: 3; }
+.rec-case[aria-pressed="true"] { background: var(--vert); border-color: var(--vert); color: #fff; }
+.rec-case[aria-pressed="true"] .ico { animation: pop .4s var(--ease) both; }
+.rec-item summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: start; padding-top: 2px; list-style: none; cursor: pointer; }
+.rec-item summary::-webkit-details-marker { display: none; }
+.rec-item summary::after { content: "+"; padding-top: 2px; font-size: 22px; line-height: 1; color: var(--texte-2); transition: transform .45s var(--ease); }
+.rec-item details[open] summary::after { transform: rotate(45deg); }
+.rec-n { display: none; }
+.rec-t strong { display: block; font-size: 17px; font-weight: 600; text-decoration: line-through; text-decoration-color: transparent; transition: text-decoration-color .4s; }
+.rec-item.fait .rec-t strong { text-decoration-color: var(--vert); }
+.rec-t small { display: block; color: var(--texte-2); font-size: 14.5px; }
+.rec-item details::details-content { block-size: 0; overflow: clip; transition: block-size .5s var(--ease), content-visibility .5s allow-discrete; }
+.rec-item details[open]::details-content { block-size: auto; }
+.rec-corps { padding-top: 16px; }
+.rec-photos { display: grid; grid-template-columns: repeat(2, minmax(0, 170px)); gap: 10px; }
+.rec-photos figure { display: grid; gap: 6px; }
+.rec-photos .visuel { aspect-ratio: 1; border-radius: 12px; }
+.rec-photos figcaption { font-size: 13px; color: var(--texte-2); line-height: 1.35; }
+.odeur { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 22px; }
+.odeur::before { content: ""; position: absolute; left: 6px; right: 6px; top: 5px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--vert), color-mix(in srgb, var(--vert) 30%, var(--fond-2))); }
+.odeur span { position: relative; display: grid; gap: 2px; font-size: 13.5px; color: var(--texte-2); }
+.odeur span::before { content: ""; position: absolute; left: 0; top: -22px; width: 13px; height: 13px; border-radius: 50%; background: var(--vert); box-shadow: 0 0 0 4px var(--fond); }
+.odeur b { font-size: 15px; color: var(--texte); }
+details[open] .odeur span { animation: fondu .5s var(--ease) both; animation-delay: calc(var(--i) * 140ms + 150ms); }
+.modale-large { width: min(640px, 100%); }
+
+/* ——— le guide, ouvert en panneau ——— */
 .guide-contenu { display: grid; gap: 16px; }
-.guide-contenu.entre { animation: fondu .5s var(--ease) both; }
-.guide-contenu h3 { font-size: 21px; font-weight: 650; letter-spacing: -.015em; }
+.guide-contenu h3 { padding-right: 36px; font-size: 21px; font-weight: 650; letter-spacing: -.015em; }
 .guide-contenu > p { color: var(--texte-2); }
-.guide-liste { counter-reset: g; display: grid; gap: 12px; }
-.guide-liste li { counter-increment: g; position: relative; padding-left: 38px; color: var(--texte-2); }
-.guide-liste li::before { content: counter(g); position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--fond-2); color: var(--texte); font-weight: 700; font-size: 13px; }
-.guide-liste strong { color: var(--texte); }
 .guide-lot { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 14px; }
 .guide-lot figure { display: grid; gap: 6px; }
 .guide-lot .visuel { border-radius: 12px; aspect-ratio: 1; }
@@ -404,7 +473,9 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .concentrations { display: grid; gap: 14px; padding: 6px 0; }
 .conc { display: grid; grid-template-columns: 140px minmax(0, 1fr) 82px; align-items: center; gap: 14px; font-size: 14.5px; }
 .conc-barre { position: relative; height: 12px; border-radius: 6px; background: var(--fond-2); overflow: hidden; }
-.conc-barre i { position: absolute; top: 0; bottom: 0; left: calc(var(--a) * 100%); width: calc((var(--b) - var(--a)) * 100%); border-radius: 6px; background: var(--texte); transform-origin: left; animation: barre .9s var(--ease) both; animation-delay: calc(var(--i) * 120ms); }
+.conc-barre i { position: absolute; top: 0; bottom: 0; left: calc(var(--a) * 100%); width: calc((var(--b) - var(--a)) * 100%); border-radius: 6px; background: var(--texte); transform-origin: left; animation: barre .9s var(--ease) both; animation-delay: calc(var(--i) * 120ms + 150ms); }
+@keyframes barre { from { transform: scaleX(0); } }
+@keyframes jour { from { background: var(--trait); transform: scaleY(.5); } }
 .conc-val { text-align: right; color: var(--texte-2); font-variant-numeric: tabular-nums; }
 
 /* ——— vendre : maison proposée ——— */
@@ -638,8 +709,12 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 
 /* ——— écrans moyens et petits ——— */
 @media (max-width: 960px) {
-  .duo, .guide, .fn-equipe, .fn-frais { grid-template-columns: minmax(0, 1fr); }
-  .chiffres { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fn-equipe, .fn-frais, .anatomie, .reception { grid-template-columns: minmax(0, 1fr); }
+  .anatomie { gap: 32px; }
+  .rec-gauche { position: static; }
+  .portes-in { flex-direction: column; height: auto; }
+  .porte, .porte-vendre { flex: none; min-height: 500px; }
+  .porte-acheter .porte-texte, .porte-vendre .porte-texte { width: 100%; }
   .p-carte { grid-template-columns: minmax(0, 1fr); }
   .histoire { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .histoire-scene { display: none; }
@@ -649,13 +724,21 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
   .fn-photos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sept-cartes, .flux { grid-template-columns: minmax(0, 1fr); }
   .flux li:not(:last-child)::after { content: "↓"; right: auto; left: 34px; top: auto; bottom: -14px; }
-  .guide-panneau { min-height: 0; }
 }
 @media (max-width: 640px) {
-  .duo-carte { min-height: 420px; padding: 26px 22px 0; }
-  .chiffres { grid-template-columns: minmax(0, 1fr); }
+  .porte { padding: 26px 22px; min-height: 0; }
+  .porte-acheter { padding-bottom: 0; }
+  .pile { position: relative; right: auto; bottom: auto; width: 100%; height: 250px; margin: 24px 0 -30px; }
+  .pile-photo { width: 140px; }
+  .porte-vendre { min-height: 470px; }
+  .ruban { grid-auto-columns: 200px; }
+  .ruban-fleches { display: none; }
+  .z0 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .anat-grande { grid-row: auto; }
+  .anat-minis span:nth-child(n + 4) { display: none; }
+  .rec-item { grid-template-columns: 40px minmax(0, 1fr); padding: 14px; }
+  .rec-case { width: 40px; height: 40px; }
   .conc { grid-template-columns: 110px minmax(0, 1fr) 70px; gap: 10px; font-size: 13.5px; }
-  .guide-panneau, .guide-gauche { padding: 18px; }
   .p-checks { grid-template-columns: minmax(0, 1fr); }
   .sc-verif { grid-template-columns: minmax(0, 1fr); }
   .scene > div { padding: 22px; min-height: 0; }
@@ -663,6 +746,7 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
   .fn-section { padding-top: 64px; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .pile-photo { animation: none; }
   .brume circle { animation: none; opacity: .2; transform: translate(calc(var(--dx) * .5), calc(var(--dy) * .5)) scale(1.8); }
   .scene-cadre .scene { transition: none; }
 }
@@ -1049,11 +1133,11 @@ const Dessins = (() => {
   };
   const ico = (n, c = '') => `<svg class="ico ${c}" viewBox="0 0 24 24" aria-hidden="true">${ICO[n]}</svg>`;
   const coeur = (id) => `<button class="coeur" type="button" data-fav="${id}" aria-pressed="${favoris.has(id)}" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 7.6a4 4 0 0 1 7 2.8C19 15.6 12 20 12 20z"/></svg></button>`;
-  function carte(a) {
+  function carte(a, extra = '') {
     const p = P[a.p];
     return `<article class="carte" data-revele>
       <a class="carte-lien" href="#annonce-${a.id}">
-        <div class="carte-photo">${photo(a)}${a.etat === 'blister' ? '<span class="etiq">Neuf sous blister</span>' : ''}</div>
+        <div class="carte-photo">${photo(a)}${a.etat === 'blister' ? '<span class="etiq">Neuf sous blister</span>' : ''}${extra}</div>
         <p class="carte-prix">${eur(a.prix)}</p>
         <h3 class="carte-nom">${esc(p.nom)}</h3>
         <p class="carte-maison">${esc(p.maison)}</p>
@@ -1083,108 +1167,128 @@ const Dessins = (() => {
   ];
   const OBLIGATOIRES = PHOTOS.filter((x) => x.obl).length;
 
-  /* ——— accueil ——— */
+  /* ——— accueil ———
+     Quatre temps : deux portes (acheter, vendre), le ruban des annonces, une annonce décortiquée, et la liste de
+     vérification à la réception. */
   const VUES = {};
+  const quand = (j) => (j === 0 ? 'aujourd\'hui' : j === 1 ? 'hier' : `il y a ${j} j`);
+  const DIRECT = [
+    ['a104', 'il y a 4 min'],
+    ['a101', 'il y a 12 min'],
+    ['a120', 'il y a 26 min'],
+    ['a109', 'il y a 41 min'],
+    ['a112', 'il y a 1 h'],
+  ];
+  const direct = (k) => {
+    const [id, il] = DIRECT[k % DIRECT.length];
+    const a = A[id];
+    return `<a href="#annonce-${id}">Vérifiée ${il} · <strong>${esc(P[a.p].nom)}</strong> · ${eur(a.prix)}</a>`;
+  };
+  let railMaison = 'tout';
+  const annoncesRail = () => [...ANNONCES].filter((a) => railMaison === 'tout' || P[a.p].maison === railMaison).sort((x, y) => x.jours - y.jours);
+  const rail = () =>
+    annoncesRail()
+      .map((a) => carte(a, `<span class="etiq etiq-verif">${ico('check')}Vérifiée ${quand(a.jours)}</span>`))
+      .join('');
+  const ANATOMIE = [
+    {t: `${OBLIGATOIRES} photos imposées`, d: 'Toujours les mêmes, jusqu\'à la tige du spray et une photo avec le pseudo du vendeur.'},
+    {t: 'Vérifiée par l\'équipe', d: 'Avant d\'être en ligne, en quelques heures. Code lot, spray, tige, niveau, prix.'},
+    {t: '7 jours pour vérifier', d: 'L\'argent reste bloqué jusqu\'à votre accord. Non conforme : remboursé.'},
+    {t: '0 % pour le vendeur', d: 'Il touche le prix affiché. L\'acheteur paie une protection de 5 % + 0,70 €.'},
+  ];
+  let anat = 0;
+  const RECEPTION = [
+    {t: 'Le code lot', d: 'Le même sous le flacon et sur la boîte. Effacé ou gratté : signalez-le.', vues: ['dessous', 'boite']},
+    {t: 'Le spray et la tige', d: 'Retirez le bouton : la tige doit être propre, droite, sans trace de colle.', vues: ['dessus', 'tige']},
+    {t: 'Le niveau', d: 'Il correspond à la photo de l\'annonce.', vues: ['niveau']},
+    {t: 'Le jus', d: 'Couleur et limpidité comparables aux photos, sans dépôt ni trouble.', vues: ['face']},
+    {t: 'L\'odeur', d: 'Vaporisez sur la peau et laissez le temps faire : le fond compte autant que le départ.', odeur: true},
+  ];
+  const coches = new Set();
   VUES.accueil = () => {
-    const recentes = [...ANNONCES].sort((x, y) => x.jours - y.jours);
-    const eventail = [A.a109, A.a104, A.a106];
+    const a = A.a101;
+    const pile = [A.a109, A.a104, A.a106];
+    const ms = [...new Set(ANNONCES.map((x) => P[x.p].maison))].sort((x, y) => x.localeCompare(y, 'fr'));
     return `
-    <section class="hero env">
-      <div class="hero-texte">
-        <h1>Achetez et revendez vos parfums entre particuliers.</h1>
-        <p class="chapo">Chaque annonce est vérifiée par notre équipe avant d'être publiée. À la réception, vous avez 7 jours pour vérifier votre parfum.</p>
-        <form class="cherche-grand" data-form="recherche" role="search">
-          <label class="vh" for="q-hero">Rechercher un parfum ou une marque</label>
-          ${ico('loupe')}<input id="q-hero" name="q" type="search" placeholder="Rechercher un parfum ou une marque" autocomplete="off">
-          <button class="btn btn-noir" type="submit">Rechercher</button>
-        </form>
-        <ul class="garanties"><li>${ico('check')}Annonces vérifiées</li><li>${ico('check')}Paiement sécurisé</li><li>${ico('check')}7 jours pour vérifier</li></ul>
-      </div>
-      <div class="hero-photos">${recentes
-        .filter((a) => a.etat === 'entame')
-        .slice(0, 4)
-        .map((a) => `<a href="#annonce-${a.id}" class="hero-photo">${photo(a)}<span>${eur(a.prix)}</span></a>`)
-        .join('')}</div>
-    </section>
-
-    <section class="section env">
-      <div class="section-tete"><h2>Dernières annonces</h2><a class="lien" href="#recherche">Tout voir ${ico('fleche')}</a></div>
-      <div class="grille">${recentes.slice(0, 8).map(carte).join('')}</div>
-    </section>
-
-    <section class="section env">
-      <div class="duo">
-        <a class="duo-carte duo-vendre" href="#vendre" data-revele>
-          <div class="duo-texte">
+    <section class="portes env">
+      <div class="portes-in">
+        <div class="porte porte-acheter">
+          <div class="porte-texte">
+            <p class="surtitre">Acheter</p>
+            <h1>Des parfums de seconde main, vérifiés avant d'être en ligne.</h1>
+            <form class="cherche-grand" data-form="recherche" role="search">
+              <label class="vh" for="q-hero">Rechercher un parfum ou une maison</label>
+              ${ico('loupe')}<input id="q-hero" name="q" type="search" placeholder="Un parfum, une maison…" autocomplete="off">
+              <button class="btn btn-noir" type="submit">Rechercher</button>
+            </form>
+            <p class="direct" aria-live="polite"><span class="point-vert" aria-hidden="true"></span><span id="direct">${direct(0)}</span></p>
+          </div>
+          <div class="pile" aria-hidden="true">${pile.map((x, i) => `<span class="pile-photo" style="--i:${i}">${photo(x)}</span>`).join('')}</div>
+        </div>
+        <a class="porte porte-vendre" href="#vendre">
+          <div class="porte-texte">
             <p class="surtitre">Vendre</p>
-            <h2>Il dort dans un placard&nbsp;? Il fera le bonheur de quelqu'un.</h2>
-            <p>Publiez en quelques minutes avec les photos demandées. On vérifie, vous expédiez, vous êtes payé. Sans commission.</p>
+            <h2>Il dort dans un placard&nbsp;? Vendez‑le, sans commission.</h2>
+            <p>Vous touchez 100&nbsp;% du prix. Six photos, une vérification, et il est en ligne.</p>
             <span class="btn btn-clair">Vendre un parfum ${ico('fleche')}</span>
           </div>
-          <div class="duo-visuel">${Dessins.vaporise(P.libre)}</div>
-        </a>
-        <a class="duo-carte duo-acheter" href="#recherche" data-revele>
-          <div class="duo-texte">
-            <p class="surtitre">Acheter</p>
-            <h2>Les parfums que vous aimez, ${remiseMoyenne}&nbsp;% moins cher en moyenne.</h2>
-            <p>Des annonces vérifiées une par une, et 7 jours pour tout contrôler à la réception.</p>
-            <span class="btn btn-noir">Voir les parfums ${ico('fleche')}</span>
-          </div>
-          <div class="duo-visuel eventail">${eventail.map((a, i) => `<span class="mini-carte" style="--i:${i}">${photo(a)}<span>${eur(a.prix)}</span></span>`).join('')}</div>
+          <div class="porte-visuel">${Dessins.vaporise(P.libre)}</div>
         </a>
       </div>
     </section>
 
-    <section class="section env">
-      <div class="section-tete"><div><p class="surtitre">Pourquoi Respray</p><h2 class="grand-titre">Des règles simples, tenues pour de vrai.</h2></div></div>
-      <div class="chiffres">
-        <article class="chiffre" data-revele data-anime>
-          <p class="chiffre-n"><span data-compte="0">0</span>&nbsp;%</p><h3>de commission pour le vendeur</h3>
-          <div class="mv mv-barres" aria-hidden="true"><span><i style="--w:100%"></i><b>Prix affiché</b></span><span><i style="--w:100%"></i><b>Vous recevez</b></span></div>
-          <p>Le prix que vous fixez est celui que vous touchez.</p>
-        </article>
-        <article class="chiffre" data-revele data-anime>
-          <p class="chiffre-n"><span data-compte="7">7</span>&nbsp;jours</p><h3>pour vérifier à la réception</h3>
-          <div class="mv mv-jours" aria-hidden="true">${Array.from({length: 7}, (_, i) => `<i style="--i:${i}"></i>`).join('')}</div>
-          <p>L'argent reste bloqué pendant ce temps. Ailleurs, c'est souvent 48 heures.</p>
-        </article>
-        <article class="chiffre" data-revele data-anime>
-          <p class="chiffre-n"><span data-compte="${OBLIGATOIRES}">${OBLIGATOIRES}</span>&nbsp;photos</p><h3>obligatoires sur chaque annonce</h3>
-          <div class="mv mv-photos" aria-hidden="true">${Array.from({length: OBLIGATOIRES}, (_, i) => `<i style="--i:${i}"></i>`).join('')}</div>
-          <p>Dont la tige du spray et une photo avec le pseudo du vendeur et la date.</p>
-        </article>
-        <article class="chiffre" data-revele data-anime>
-          <p class="chiffre-n">−<span data-compte="${remiseMoyenne}">${remiseMoyenne}</span>&nbsp;%</p><h3>par rapport au prix neuf</h3>
-          <div class="mv mv-barres" aria-hidden="true"><span><i style="--w:100%"></i><b>Neuf</b></span><span><i style="--w:${100 - remiseMoyenne}%" class="vert"></i><b>Respray</b></span></div>
-          <p>En moyenne, au millilitre, sur les annonces en ligne.</p>
-        </article>
+    <section class="ruban-section">
+      <div class="env ruban-tete">
+        <div><h2 class="grand-titre">En ce moment</h2><p class="aide">En moyenne ${remiseMoyenne}&nbsp;% moins cher que neuf, au millilitre. Chaque annonce a été vérifiée avant d'apparaître ici.</p></div>
+        <div class="ruban-fleches"><button class="rond" type="button" data-ruban="-1" aria-label="Annonces précédentes">${ico('fleche')}</button><button class="rond" type="button" data-ruban="1" aria-label="Annonces suivantes">${ico('fleche')}</button></div>
+      </div>
+      <div class="env"><div class="ruban-filtres" role="group" aria-label="Filtrer par maison">${['tout', ...ms].map((m) => `<button type="button" class="filtre" data-ruban-maison="${esc(m)}" aria-pressed="${railMaison === m}">${m === 'tout' ? 'Toutes les maisons' : esc(m)}</button>`).join('')}</div></div>
+      <div class="ruban" id="ruban" tabindex="0" aria-label="Annonces récentes">${rail()}</div>
+      <div class="env"><a class="lien" href="#recherche">Voir les ${ANNONCES.length} annonces ${ico('fleche')}</a></div>
+    </section>
+
+    <section class="section env anatomie" data-anatomie>
+      <div class="anat-texte">
+        <p class="surtitre">Pourquoi c'est plus sûr</p>
+        <h2 class="grand-titre">Une annonce Respray, point par point.</h2>
+        <ol class="anat-points" role="tablist" aria-label="Ce qui protège une vente">${ANATOMIE.map((x, i) => `<li><button type="button" role="tab" aria-selected="${i === anat}" data-anat="${i}"><span class="anat-n">${String(i + 1).padStart(2, '0')}</span><span class="anat-txt"><strong>${x.t}</strong><small>${x.d}</small></span><i class="anat-prog" aria-hidden="true"></i></button></li>`).join('')}</ol>
+        <a class="lien" href="#fonctionnement">Tout le fonctionnement ${ico('fleche')}</a>
+      </div>
+      <div class="anat-carte" data-zone="${anat}" aria-hidden="true">
+        <div class="z z0"><div class="anat-grande">${photo(a)}</div><div class="anat-minis">${['dessous', 'niveau', 'dessus', 'tige', 'preuve'].map((v) => `<span>${photo(a, v)}</span>`).join('')}</div></div>
+        <div class="anat-infos"><p>${esc(P[a.p].maison)}</p><p class="anat-nom">${esc(P[a.p].nom)}</p><p class="anat-prix">${eur(a.prix)} <small>· 70 ml · reste ~85 %</small></p></div>
+        <div class="z z1"><b>${ico('check')}</b><span><strong>Vérifiée par l'équipe</strong><small>il y a 1 h 12 · 5 contrôles sur 5</small></span></div>
+        <div class="z z2"><b>${ico('cadenas')}</b><span><strong>Paiement bloqué, 7 jours pour vérifier</strong><span class="anat-jours">${Array.from({length: 7}, (_, i) => `<i style="--i:${i}"></i>`).join('')}</span></span></div>
+        <div class="z z3"><b>${ico('euro')}</b><span><strong>Le vendeur reçoit ${eur2(a.prix)}</strong><small>Commission : 0,00 €</small></span></div>
       </div>
     </section>
 
-    <section class="section env">${guide()}</section>
-
-    <section class="section env">
-      <div class="section-tete"><h2>Maisons</h2></div>
-      <div class="puces">${[...new Set(PARFUMS.map((p) => p.maison))].map((m) => `<a class="puce" href="#recherche" data-marque="${esc(m)}">${esc(m)}</a>`).join('')}</div>
-    </section>
-    <div class="espace"></div>`;
+    <section class="reception-section">
+      <div class="env reception">
+        <div class="rec-gauche">
+          <p class="surtitre">Le guide</p>
+          <h2 class="grand-titre">Vous venez de recevoir un parfum&nbsp;? Vérifiez-le en 5 gestes.</h2>
+          <div class="rec-progres"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27"/><circle class="rec-arc" cx="32" cy="32" r="27" style="--k:${coches.size / 5}"/></svg><span><strong id="rec-compte">${coches.size}/5</strong><small id="rec-message">${coches.size === 5 ? 'Tout est conforme : confirmez la réception.' : 'Cochez au fur et à mesure. Vous avez 7 jours.'}</small></span></div>
+          <div class="rec-plus"><p>Aussi dans le guide</p>${GUIDE.map((g) => `<button type="button" class="filtre" data-guide="${g.k}">${g.t}</button>`).join('')}</div>
+        </div>
+        <ol class="rec-liste">${RECEPTION.map(
+          (x, i) => `<li class="rec-item ${coches.has(i) ? 'fait' : ''}">
+            <button type="button" class="rec-case" data-rec="${i}" aria-pressed="${coches.has(i)}" aria-label="${x.t} : vérifié">${ico('check')}</button>
+            <details ${i === 0 ? 'open' : ''}><summary><span class="rec-n">${i + 1}</span><span class="rec-t"><strong>${x.t}</strong><small>${x.d}</small></span></summary>
+              <div class="rec-corps">${
+                x.odeur
+                  ? `<div class="odeur"><span style="--i:0"><b>Départ</b>tout de suite</span><span style="--i:1"><b>Cœur</b>après 20 à 30 min</span><span style="--i:2"><b>Fond</b>après 1 à 2 h</span></div>`
+                  : `<div class="rec-photos">${x.vues.map((v) => `<figure>${photo(a, v)}<figcaption>${Dessins.LEGENDES[v]}</figcaption></figure>`).join('')}</div>`
+              }</div>
+            </details>
+          </li>`,
+        ).join('')}</ol>
+      </div>
+    </section>`;
   };
 
-  /* le guide : quatre sujets, un panneau qui change */
+  /* le reste du guide, ouvert dans un panneau */
   const GUIDE = [
-    {
-      k: 'reception',
-      t: 'Vérifier un parfum à la réception',
-      corps: () => `<h3>Vous avez 7 jours. Voici quoi regarder.</h3>
-        <ol class="guide-liste">
-          <li><strong>Le code lot.</strong> Celui sous le flacon et celui de la boîte doivent être identiques.</li>
-          <li><strong>Le spray et la tige.</strong> Retirez le bouton : la tige doit être propre, droite, sans trace de colle.</li>
-          <li><strong>Le niveau.</strong> Il doit correspondre à la photo de l'annonce.</li>
-          <li><strong>Le jus.</strong> Couleur et limpidité comparables aux photos, sans dépôt.</li>
-          <li><strong>L'odeur.</strong> Vaporisez sur la peau et attendez une à deux heures : le fond compte autant que le départ.</li>
-        </ol>
-        <p class="aide">Un doute ? Signalez-le depuis votre commande, photos à l'appui : l'argent reste bloqué.</p>`,
-    },
     {
       k: 'lot',
       t: 'Lire un code lot',
@@ -1218,22 +1322,52 @@ const Dessins = (() => {
           ['Eau de parfum', 15, 20],
           ['Extrait de parfum', 20, 40],
         ]
-          .map(([n, a, b], i) => `<div class="conc" style="--a:${a / 40};--b:${b / 40};--i:${i}"><span class="conc-nom">${n}</span><span class="conc-barre"><i></i></span><span class="conc-val">${a} à ${b}&nbsp;%</span></div>`)
+          .map(([n, x, y], i) => `<div class="conc" style="--a:${x / 40};--b:${y / 40};--i:${i}"><span class="conc-nom">${n}</span><span class="conc-barre"><i></i></span><span class="conc-val">${x} à ${y}&nbsp;%</span></div>`)
           .join('')}</div>
         <p>Ce sont des ordres de grandeur : chaque maison dose à sa façon. En général, plus c'est concentré, plus le parfum tient sur la peau.</p>`,
     },
   ];
-  let sujetGuide = 'reception';
-  function guide() {
-    const s = GUIDE.find((g) => g.k === sujetGuide);
-    return `<div class="guide" data-revele>
-      <div class="guide-gauche">
-        <p class="surtitre">Le guide</p>
-        <h2 class="grand-titre">Tout savoir avant d'acheter un parfum de seconde main.</h2>
-        <div class="guide-sujets" role="tablist" aria-label="Sujets du guide">${GUIDE.map((g) => `<button type="button" role="tab" id="sujet-${g.k}" aria-selected="${g.k === sujetGuide}" aria-controls="guide-panneau" data-sujet="${g.k}"><span>${g.t}</span>${ico('fleche')}</button>`).join('')}</div>
-      </div>
-      <div class="guide-panneau" id="guide-panneau" role="tabpanel" aria-labelledby="sujet-${s.k}"><div class="guide-contenu">${s.corps()}</div></div>
-    </div>`;
+
+  /* ce qui bouge tout seul sur l'accueil : le fil des vérifications et l'annonce décortiquée */
+  let minuteurs = [];
+  function arreterAccueil() {
+    minuteurs.forEach(clearInterval);
+    minuteurs = [];
+  }
+  function montrerAnat(i, auto) {
+    anat = i;
+    const carteA = vue.querySelector('.anat-carte');
+    if (!carteA) return;
+    carteA.dataset.zone = i;
+    vue.querySelectorAll('[data-anat]').forEach((b) => b.setAttribute('aria-selected', +b.dataset.anat === i));
+    vue.querySelector('.anat-points').classList.toggle('auto', !!auto);
+  }
+  function demarrerAccueil() {
+    arreterAccueil();
+    if (!vue.querySelector('.portes') || reduit()) return;
+    let k = 0;
+    minuteurs.push(
+      setInterval(() => {
+        const d = document.getElementById('direct');
+        if (!d) return;
+        k++;
+        d.classList.remove('change');
+        void d.offsetWidth;
+        d.innerHTML = direct(k);
+        d.classList.add('change');
+      }, 3600),
+    );
+    const bloc = vue.querySelector('[data-anatomie]');
+    let visible = false;
+    const o = new IntersectionObserver((e) => (visible = e[0].isIntersecting), {threshold: 0.35});
+    o.observe(bloc);
+    obs.push(o);
+    montrerAnat(anat, true);
+    minuteurs.push(
+      setInterval(() => {
+        if (visible && !bloc.matches(':hover') && !bloc.contains(document.activeElement) && vue.querySelector('.anat-points.auto')) montrerAnat((anat + 1) % ANATOMIE.length, true);
+      }, 4200),
+    );
   }
 
   /* ——— recherche ——— */
@@ -1687,8 +1821,8 @@ const Dessins = (() => {
 
   /* ——— fenêtres, messages ——— */
   const modale = document.getElementById('modale');
-  const ouvrir = (html) => {
-    modale.innerHTML = `<div class="modale-fond" data-action="fermer"></div><div class="modale-boite" role="dialog" aria-modal="true">${html}<button class="modale-x" type="button" data-action="fermer" aria-label="Fermer">${ico('croix')}</button></div>`;
+  const ouvrir = (html, classe = '') => {
+    modale.innerHTML = `<div class="modale-fond" data-action="fermer"></div><div class="modale-boite ${classe}" role="dialog" aria-modal="true">${html}<button class="modale-x" type="button" data-action="fermer" aria-label="Fermer">${ico('croix')}</button></div>`;
     modale.hidden = false;
     const f = modale.querySelector('input, .btn');
     if (f) f.focus();
@@ -1793,6 +1927,7 @@ const Dessins = (() => {
 
   /* ——— rendu et navigation ——— */
   function rendre() {
+    arreterAccueil();
     const h = decodeURIComponent(location.hash.slice(1)) || 'accueil';
     vue.innerHTML = h.startsWith('annonce-') ? VUES.annonce(h.slice(8)) : VUES[h] ? VUES[h]() : VUES.introuvable();
     const rub = h.startsWith('annonce-') ? 'recherche' : h;
@@ -1803,6 +1938,7 @@ const Dessins = (() => {
     if (b) b.textContent = nbNotifs();
     etapeActive = 0;
     animer();
+    demarrerAccueil();
   }
   const transition = (faire) => {
     if (!document.startViewTransition || reduit()) return faire();
@@ -1952,7 +2088,7 @@ const Dessins = (() => {
     const t = e.target.closest('button, a');
     if (!t) return;
     if (t.dataset.marque) Object.assign(R, {q: '', marques: new Set([t.dataset.marque])});
-    if (t.classList.contains('carte-lien') || t.classList.contains('hero-photo')) {
+    if (t.classList.contains('carte-lien')) {
       const g = document.getElementById('grande');
       if (g) g.style.viewTransitionName = 'none';
       const ph = t.querySelector('.carte-photo') || t;
@@ -1974,13 +2110,45 @@ const Dessins = (() => {
       });
       return;
     }
-    if (t.dataset.sujet) {
-      sujetGuide = t.dataset.sujet;
-      const s = GUIDE.find((g) => g.k === sujetGuide);
-      document.querySelectorAll('[data-sujet]').forEach((b) => b.setAttribute('aria-selected', b === t));
-      const panneau = document.getElementById('guide-panneau');
-      panneau.setAttribute('aria-labelledby', 'sujet-' + s.k);
-      panneau.innerHTML = `<div class="guide-contenu entre">${s.corps()}</div>`;
+    if (t.dataset.ruban) {
+      const r = document.getElementById('ruban');
+      const c = r.querySelector('.carte');
+      r.scrollBy({left: +t.dataset.ruban * (c ? c.offsetWidth + 16 : 260) * 2, behavior: reduit() ? 'auto' : 'smooth'});
+      return;
+    }
+    if (t.dataset.rubanMaison) {
+      railMaison = t.dataset.rubanMaison;
+      document.querySelectorAll('[data-ruban-maison]').forEach((b) => b.setAttribute('aria-pressed', b === t));
+      transition(() => {
+        const r = document.getElementById('ruban');
+        r.innerHTML = rail();
+        r.scrollTo({left: 0});
+      });
+      return;
+    }
+    if (t.dataset.anat) {
+      montrerAnat(+t.dataset.anat, false);
+      return;
+    }
+    if (t.dataset.rec) {
+      const i = +t.dataset.rec;
+      coches.has(i) ? coches.delete(i) : coches.add(i);
+      t.setAttribute('aria-pressed', coches.has(i));
+      t.closest('.rec-item').classList.toggle('fait', coches.has(i));
+      vue.querySelector('.rec-arc').style.setProperty('--k', coches.size / 5);
+      document.getElementById('rec-compte').textContent = `${coches.size}/5`;
+      document.getElementById('rec-message').textContent = coches.size === 5 ? 'Tout est conforme : confirmez la réception, le vendeur est payé.' : 'Cochez au fur et à mesure. Vous avez 7 jours.';
+      vue.querySelector('.rec-progres').classList.toggle('complet', coches.size === 5);
+      if (coches.has(i)) {
+        const suivant = t.closest('.rec-item').nextElementSibling;
+        t.closest('.rec-item').querySelector('details').open = false;
+        if (suivant && !coches.has(i + 1)) suivant.querySelector('details').open = true;
+      }
+      return;
+    }
+    if (t.dataset.guide) {
+      const g = GUIDE.find((x) => x.k === t.dataset.guide);
+      ouvrir(`<div class="guide-contenu">${g.corps()}</div>`, 'modale-large');
       return;
     }
     if (t.dataset.parcours) {
