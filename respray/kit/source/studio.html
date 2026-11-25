@@ -1,0 +1,329 @@
+<title>Studio Respray</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  /* Le studio : les réglages à gauche, l'image à droite, à sa vraie proportion. */
+  :root {
+    --fond: #fbfaf8; --fond-2: #f1efeb; --texte: #1d1d1f; --texte-2: #6e6e73; --trait: #dedbd5; --accent: #b05a12; --accent-fond: #fbf0e4;
+    --police: "Inter", -apple-system, system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --fond: #1b1a18; --fond-2: #252421; --texte: #f2efe9; --texte-2: #a7a29a; --trait: #3a3835; --accent: #f0a45b; --accent-fond: #33261a; color-scheme: dark; } }
+  :root[data-theme="dark"] { --fond: #1b1a18; --fond-2: #252421; --texte: #f2efe9; --texte-2: #a7a29a; --trait: #3a3835; --accent: #f0a45b; --accent-fond: #33261a; color-scheme: dark; }
+  body { background: var(--fond); color: var(--texte); font: 400 15px/1.5 var(--police); -webkit-font-smoothing: antialiased; }
+  .studio { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 32px; max-width: 1200px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  h1 { font-size: 26px; font-weight: 650; letter-spacing: -.03em; }
+  .chapo { color: var(--texte-2); margin: 4px 0 18px; }
+  .reglages { display: grid; gap: 18px; align-content: start; }
+  fieldset { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; }
+  legend, label.titre { margin-bottom: 6px; padding: 0; font-weight: 600; font-size: 14px; }
+  .modeles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+  .modele { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid var(--trait); border-radius: 12px; background: none; color: var(--texte); font: 500 14px var(--police); text-align: left; cursor: pointer; }
+  .modele i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; }
+  .modele[aria-pressed="true"] { border-color: var(--texte); background: var(--fond-2); }
+  .segment { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+  .segment button { padding: 7px 14px; border: 1px solid var(--trait); border-radius: 99px; background: none; color: var(--texte); font: 500 13.5px var(--police); cursor: pointer; }
+  .segment button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-fond); }
+  .champ { width: 100%; min-height: 42px; padding: 9px 12px; border: 1px solid var(--trait); border-radius: 10px; background: var(--fond); color: var(--texte); font: 15px var(--police); }
+  textarea.champ { min-height: 72px; resize: vertical; }
+  .champs { display: grid; gap: 10px; }
+  .champs label { display: grid; gap: 4px; font-size: 13.5px; color: var(--texte-2); }
+  .deux { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .photo-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px dashed var(--trait); border-radius: 12px; cursor: pointer; color: var(--texte-2); font-size: 14px; }
+  .photo-btn input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .photo-btn:focus-within { outline: 2px solid var(--texte); outline-offset: 2px; }
+  .apercu { display: grid; gap: 14px; justify-items: center; align-content: start; position: sticky; top: 16px; }
+  .apercu canvas, .apercu img.rendu { max-width: 100%; max-height: 78vh; width: auto; height: auto; border-radius: 14px; box-shadow: 0 20px 60px -30px rgba(0, 0, 0, .45), 0 0 0 1px var(--trait); background: var(--fond-2); }
+  .boutons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .btn { min-height: 44px; padding: 10px 22px; border: 0; border-radius: 99px; background: var(--texte); color: var(--fond); font: 600 15px var(--police); cursor: pointer; }
+  .btn:disabled { opacity: .5; }
+  .note { max-width: 46ch; color: var(--texte-2); font-size: 13.5px; text-align: center; }
+  .exemple { padding: 8px 12px; border-radius: 10px; background: var(--accent-fond); color: var(--texte); font-size: 13px; }
+  @media (max-width: 820px) { .studio { grid-template-columns: minmax(0, 1fr); } .apercu { position: static; order: -1; } }
+</style>
+
+<div class="studio">
+  <div class="reglages">
+    <div><h1>Studio Respray</h1><p class="chapo">Les visuels de la marque, prêts à publier : choisissez un modèle, remplissez, téléchargez.</p></div>
+    <p class="exemple">Les photos et les textes de départ sont des exemples : remplacez-les par les vôtres.</p>
+    <fieldset><legend>Le modèle</legend><div class="modeles" id="modeles"></div></fieldset>
+    <fieldset><legend>Le format</legend><div class="segment" id="formats"></div></fieldset>
+    <fieldset><legend>Le fond</legend><div class="segment" id="fonds"></div></fieldset>
+    <fieldset><legend>Les textes et les photos</legend><div class="champs" id="champs"></div></fieldset>
+  </div>
+  <div class="apercu">
+    <canvas id="toile" aria-label="Aperçu du visuel"></canvas>
+    <div class="boutons"><button class="btn" id="telecharger" type="button">Télécharger l'image</button></div>
+    <p class="note" id="note">PNG en pleine définition, prêt pour TikTok, Instagram ou une story.</p>
+  </div>
+</div>
+
+<script>
+/* ——— la marque ——— */
+const ENCRE = '#1d1d1f', CREME = '#f4f2ee', VERT = '#1a7f4b', ROUGE = '#b3261e';
+const MODELES = [
+  {k: 'verifie', t: 'On a vérifié', c: '#1a7f4b'},
+  {k: 'vraifaux', t: 'Vrai ou faux ?', c: '#b83c6e'},
+  {k: 'combien', t: 'Combien ça vaut ?', c: '#b05a12'},
+  {k: 'placard', t: 'Vide ton placard', c: '#1f7f95'},
+  {k: 'astuce', t: 'Astuce parfum', c: '#6f5236'},
+];
+const FORMATS = [['story', 'Story, TikTok (9:16)', 1080, 1920], ['post', 'Publication (4:5)', 1080, 1350], ['carre', 'Carré (1:1)', 1080, 1080]];
+const FONDS = [['clair', 'Clair'], ['encre', 'Encre']];
+const MOT = '__MOT__';
+const EXEMPLES = {face: '__FACE__', dessous: '__DESSOUS__', faux: '__FAUX__'};
+
+/* l'état : modèle, format, fond, textes, photos */
+const E = {
+  modele: 'verifie', format: 'story', fond: 'clair',
+  verdict: 'publiee', parfum: 'Sauvage · Dior · 100 ml', raison: 'Code lot cohérent avec la boîte, tige et bague d\'origine, niveau conforme à l\'annonce.',
+  question: 'Lequel est faux ?', reponse: 'B : le code lot ne correspond pas à celui de la boîte.',
+  neuf: '125', ml: '100', reste: '70', occasion: '55', nomCombien: 'Sauvage, Dior',
+  titre: 'Il dort dans un placard ? Vends-le sans commission.', sous: 'Tu touches 100 % du prix. Chaque annonce est vérifiée avant d\'être en ligne.', lien: 'respray.fr/fondateurs',
+  numero: '3', titreAstuce: 'Où trouver le code lot', lignes: 'Retourne le flacon : il est gravé ou imprimé dessous.\nSur la boîte : souvent à côté du code-barres.\nLes deux doivent être identiques.',
+  photos: {},
+};
+const images = {};
+function charger(cle, src) {
+  return new Promise((ok) => {
+    const i = new Image();
+    i.onload = () => { images[cle] = i; ok(); };
+    i.onerror = () => ok();
+    i.src = src;
+  });
+}
+const photo = (k, defaut) => images['u:' + k] || images[defaut];
+
+/* ——— le dessin ——— */
+const toile = document.getElementById('toile');
+const g = toile.getContext('2d');
+const SYMBOLE_R = new Path2D('M30 86V58c0-14 10-22 24-22');
+const JET = [[71, 36, 5.5], [84, 26, 4], [85, 44, 4], [96, 18, 2.8], [97, 35, 2.8], [96, 52, 2.8]];
+const motPath = new Path2D(MOT);
+function symbole(x, y, h, couleur) {
+  const k = h / 77.3;
+  g.save(); g.translate(x - 23.5 * k, y - 15.2 * k); g.scale(k, k);
+  g.strokeStyle = couleur; g.lineWidth = 13; g.lineCap = 'round'; g.stroke(SYMBOLE_R);
+  g.fillStyle = couleur; JET.forEach(([cx, cy, r]) => { g.beginPath(); g.arc(cx, cy, r, 0, Math.PI * 2); g.fill(); });
+  g.restore();
+}
+/* le logo complet, centré sur cx, haut y, hauteur h */
+function logo(cx, y, h, couleur) {
+  const k = h / 2478;
+  const w = 9023 * k;
+  g.save(); g.translate(cx - w / 2, y + 1977 * k); g.scale(k, k);
+  g.save(); g.translate(-597.93, -2353.54); g.scale(25.4437, 25.4437);
+  g.strokeStyle = couleur; g.lineWidth = 13; g.lineCap = 'round'; g.stroke(SYMBOLE_R);
+  g.fillStyle = couleur; JET.forEach(([cx2, cy, r]) => { g.beginPath(); g.arc(cx2, cy, r, 0, Math.PI * 2); g.fill(); });
+  g.restore();
+  g.translate(2473.8, 0); g.fillStyle = couleur; g.fill(motPath);
+  g.restore();
+}
+/* les trois rangs du jet, en petit, devant un sur-titre */
+function points(x, y, h, couleur) {
+  const k = h / 24;
+  g.fillStyle = couleur;
+  [[5, 12, 3.4], [14, 6.5, 2.6], [14, 17.5, 2.6], [23.5, 2.6, 1.9], [23.5, 12, 1.9], [23.5, 21.4, 1.9]].forEach(([a, b, r]) => { g.beginPath(); g.arc(x + a * k, y + b * k, r * k, 0, Math.PI * 2); g.fill(); });
+  return 30 * k;
+}
+/* le bouclier « Vérifié par Respray » */
+function sceau(cx, cy, d) {
+  const k = d / 120;
+  g.save(); g.translate(cx - 60 * k, cy - 60 * k); g.scale(k, k);
+  g.beginPath();
+  for (let i = 0; i <= 144; i++) { const a = (i / 144) * Math.PI * 2, r = 57 - 2.6 * (0.5 - 0.5 * Math.cos(a * 18)); g.lineTo(60 + r * Math.cos(a), 60 + r * Math.sin(a)); }
+  const gr = g.createLinearGradient(0, 0, 120, 120); gr.addColorStop(0, '#3cc483'); gr.addColorStop(.55, '#1a8a52'); gr.addColorStop(1, '#0c5c35');
+  g.fillStyle = gr; g.shadowColor = 'rgba(12,92,53,.35)'; g.shadowBlur = 14; g.shadowOffsetY = 6; g.fill(); g.shadowColor = 'transparent';
+  g.strokeStyle = 'rgba(246,241,231,.35)'; g.lineWidth = .8; g.beginPath(); g.arc(60, 60, 51.5, 0, Math.PI * 2); g.stroke();
+  g.fillStyle = 'rgba(12,92,53,.25)'; g.strokeStyle = 'rgba(246,241,231,.55)'; g.lineWidth = 1; g.beginPath(); g.arc(60, 60, 38, 0, Math.PI * 2); g.fill(); g.stroke();
+  const texte = 'VÉRIFIÉ PAR RESPRAY · 6 CONTRÔLES · ';
+  g.fillStyle = '#f6f1e7'; g.font = '700 7.4px Inter'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  [...texte].forEach((ch, i) => { const a = -Math.PI / 2 + (i / texte.length) * Math.PI * 2; g.save(); g.translate(60 + 45 * Math.cos(a), 60 + 45 * Math.sin(a)); g.rotate(a + Math.PI / 2); g.fillText(ch, 0, 0); g.restore(); });
+  g.strokeStyle = '#f6f1e7'; g.lineWidth = 7; g.lineCap = 'round'; g.lineJoin = 'round';
+  g.beginPath(); g.moveTo(35, 61); g.lineTo(47, 73); g.lineTo(66, 50); g.stroke();
+  g.fillStyle = '#f6f1e7'; [[73.5, 44, 3.4], [80.5, 37, 2.5], [82.5, 47.5, 2.5], [86.5, 30.5, 1.8], [89.5, 40, 1.8], [89, 50, 1.8]].forEach(([a, b, r]) => { g.beginPath(); g.arc(a, b, r, 0, Math.PI * 2); g.fill(); });
+  g.restore();
+}
+/* une photo dans un cadre arrondi, en « cover » */
+function cadre(img, x, y, w, h, r) {
+  g.save(); g.beginPath(); g.roundRect(x, y, w, h, r); g.clip();
+  if (img) {
+    const k = Math.max(w / img.width, h / img.height);
+    g.drawImage(img, x + (w - img.width * k) / 2, y + (h - img.height * k) / 2, img.width * k, img.height * k);
+  } else { g.fillStyle = 'rgba(128,128,128,.15)'; g.fillRect(x, y, w, h); }
+  g.restore();
+}
+/* du texte qui revient à la ligne ; renvoie le bas du bloc */
+function texte(t, x, y, maxW, taille, poids, couleur, align = 'left', interligne = 1.12) {
+  g.font = `${poids} ${taille}px Inter`; g.fillStyle = couleur; g.textAlign = align; g.textBaseline = 'top';
+  const lignes = [];
+  String(t).split('\n').forEach((para) => {
+    let l = '';
+    para.split(' ').forEach((m) => { const essai = l ? l + ' ' + m : m; if (g.measureText(essai).width > maxW && l) { lignes.push(l); l = m; } else l = essai; });
+    lignes.push(l);
+  });
+  lignes.forEach((l, i) => g.fillText(l, x, y + i * taille * interligne));
+  return y + lignes.length * taille * interligne;
+}
+function surtitre(t, x, y, couleur, centre = false) {
+  g.font = '700 34px Inter';
+  const largeur = 30 * 1.6 + 14 + g.measureText(t.toUpperCase()).width + t.length * 3;
+  const x0 = centre ? x - largeur / 2 : x;
+  const w = points(x0, y + 4, 38, couleur);
+  g.save(); g.fillStyle = couleur; g.textBaseline = 'top'; g.textAlign = 'left';
+  if ('letterSpacing' in g) g.letterSpacing = '3px';
+  g.fillText(t.toUpperCase(), x0 + w + 14, y + 6); g.restore();
+}
+const nombre = (s) => parseFloat(String(s).replace(',', '.')) || 0;
+const eur = (n) => n.toLocaleString('fr-FR', {style: 'currency', currency: 'EUR', maximumFractionDigits: n < 10 ? 2 : 0});
+
+function dessiner() {
+  const [, , W, H] = FORMATS.find((f) => f[0] === E.format);
+  toile.width = W; toile.height = H;
+  const sombre = E.fond === 'encre';
+  const fond = sombre ? ENCRE : CREME, ink = sombre ? CREME : ENCRE, gris = sombre ? 'rgba(244,242,238,.62)' : '#6e6e73';
+  const m = MODELES.find((x) => x.k === E.modele);
+  const c = sombre ? ({verifie: '#5fc690', vraifaux: '#f08bb4', combien: '#f0a45b', placard: '#5cc3d6', astuce: '#c9a27c'})[m.k] : m.c;
+  g.fillStyle = fond; g.fillRect(0, 0, W, H);
+  const M = 84, haut = H > 1500 ? 150 : 90, bas = H - (H > 1500 ? 170 : 110);
+  surtitre(m.t, M, haut, c);
+  /* le contenu ; hors « On a vérifié » (dont la photo remplit la hauteur), il est centré dans la place libre */
+  const corps = () => {
+  if (m.k === 'verifie') {
+    const ph = H - haut - 520 - (H > 1500 ? 280 : 120);
+    const y0 = haut + 90;
+    cadre(photo('face', 'ex:face'), M, y0, W - 2 * M, ph, 36);
+    if (E.verdict === 'publiee') sceau(W - M - 90, y0 + ph - 70, 250);
+    else {
+      g.save(); g.translate(W - M - 170, y0 + ph - 110); g.rotate(-.18);
+      g.strokeStyle = ROUGE; g.lineWidth = 10; g.beginPath(); g.roundRect(-150, -55, 300, 110, 22); g.stroke();
+      g.fillStyle = ROUGE; g.font = '800 64px Inter'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('REFUSÉE', 0, 4); g.restore();
+    }
+    let y = y0 + ph + 60;
+    y = texte(E.verdict === 'publiee' ? 'Publiée.' : 'Refusée.', M, y, W - 2 * M, 110, 700, E.verdict === 'publiee' ? c : (sombre ? '#ff8f80' : ROUGE));
+    y = texte(E.parfum, M, y + 18, W - 2 * M, 46, 600, ink);
+    return texte(E.raison, M, y + 16, W - 2 * M, 38, 400, gris, 'left', 1.3);
+  } else if (m.k === 'vraifaux') {
+    let y = texte('Vrai ou faux ?', M, haut + 90, W - 2 * M, 130, 700, ink, 'left', 1);
+    const w = (W - 2 * M - 30) / 2, h = Math.min(w * 1.3, bas - y - 420);
+    const yP = y + 50;
+    [['A', 'dessous', 'ex:dessous'], ['B', 'faux', 'ex:faux']].forEach(([l, k, d], i) => {
+      const x = M + i * (w + 30);
+      cadre(photo(k, d), x, yP, w, h, 30);
+      g.fillStyle = c; g.beginPath(); g.arc(x + 60, yP + 60, 40, 0, Math.PI * 2); g.fill();
+      g.fillStyle = '#fff'; g.font = '800 46px Inter'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(l, x + 60, yP + 62);
+    });
+    y = texte(E.question, M, yP + h + 50, W - 2 * M, 60, 650, ink);
+    return E.reponse ? texte('Réponse : ' + E.reponse, M, y + 14, W - 2 * M, 36, 400, gris, 'left', 1.3) : y;
+  } else if (m.k === 'combien') {
+    const neuf = nombre(E.neuf), ml = nombre(E.ml), reste = nombre(E.reste), occ = nombre(E.occasion);
+    const mlR = (ml * reste) / 100, pNeuf = ml ? neuf / ml : 0, pOcc = mlR ? occ / mlR : 0, remise = pNeuf ? Math.round((1 - pOcc / pNeuf) * 100) : 0;
+    let y = texte(E.nomCombien, M, haut + 90, W - 2 * M, 96, 700, ink, 'left', 1.02);
+    y = texte(`${ml} ml, il reste ${reste} % (≈ ${Math.round(mlR)} ml)`, M, y + 20, W - 2 * M, 38, 500, gris);
+    const bloc = (titre, prix, parMl, x, yy, w, accent) => {
+      g.fillStyle = accent ? c : (sombre ? 'rgba(244,242,238,.08)' : 'rgba(29,29,31,.05)');
+      g.beginPath(); g.roundRect(x, yy, w, 300, 36); g.fill();
+      const t1 = accent ? '#fff' : ink, t2 = accent ? 'rgba(255,255,255,.8)' : gris;
+      texte(titre, x + 40, yy + 36, w - 80, 34, 600, t2);
+      texte(eur(prix), x + 40, yy + 86, w - 80, 92, 700, t1, 'left', 1);
+      texte(`${parMl.toFixed(2).replace('.', ',')} €/ml`, x + 40, yy + 196, w - 80, 40, 600, t1);
+    };
+    const w = (W - 2 * M - 24) / 2;
+    const yB = y + 70;
+    bloc('Neuf', neuf, pNeuf, M, yB, w, false);
+    bloc('Sur Respray', occ, pOcc, M + w + 24, yB, w, true);
+    y = texte(remise > 0 ? `${remise} % moins cher au millilitre.` : 'Au juste prix.', M, yB + 360, W - 2 * M, 84, 700, ink, 'left', 1.04);
+    return texte('Et le vendeur touche 100 % du prix : aucune commission.', M, y + 24, W - 2 * M, 38, 400, gris, 'left', 1.3);
+  } else if (m.k === 'placard') {
+    const img = images['u:face'];
+    let y = haut + 100;
+    if (img) { const h = Math.min(620, H * 0.33); cadre(img, M, y, W - 2 * M, h, 36); y += h + 60; }
+    y = texte(E.titre, M, y, W - 2 * M, img ? 92 : 120, 700, ink, 'left', 1.02);
+    y = texte(E.sous, M, y + 30, W - 2 * M, 42, 400, gris, 'left', 1.3);
+    g.font = '700 50px Inter';
+    const lw = g.measureText(E.lien).width + 110;
+    g.fillStyle = c; g.beginPath(); g.roundRect(M, y + 60, lw, 112, 56); g.fill();
+    g.fillStyle = '#fff'; g.textAlign = 'left'; g.textBaseline = 'middle'; g.fillText(E.lien, M + 55, y + 118);
+    return y + 172;
+  } else {
+    let y = haut + 110;
+    g.fillStyle = c; g.font = '800 260px Inter'; g.textAlign = 'left'; g.textBaseline = 'top'; g.fillText('#' + E.numero, M - 10, y - 30);
+    y = texte(E.titreAstuce, M, y + 270, W - 2 * M, 104, 700, ink, 'left', 1.02);
+    y += 40;
+    E.lignes.split('\n').filter(Boolean).forEach((l) => {
+      g.fillStyle = c; g.beginPath(); g.arc(M + 14, y + 26, 11, 0, Math.PI * 2); g.fill();
+      y = texte(l, M + 54, y, W - 2 * M - 54, 44, 500, ink, 'left', 1.25) + 26;
+    });
+    return y;
+  }
+  };
+  const fin = corps();
+  const libre = bas - 90 - fin;
+  if (m.k !== 'verifie' && libre > 40) {
+    g.fillStyle = fond; g.fillRect(0, haut + 70, W, H);
+    g.save(); g.translate(0, libre / 2); corps(); g.restore();
+  }
+  logo(W / 2, bas, H > 1500 ? 74 : 60, ink);
+  if (H > 1500) { g.font = '500 30px Inter'; g.fillStyle = gris; g.textAlign = 'center'; g.textBaseline = 'top'; g.fillText('Vérifié avant d\'être en ligne · 0 % de commission vendeur', W / 2, bas + 100); }
+}
+
+/* ——— les réglages ——— */
+const champ = (k, label, type = 'text') => `<label>${label}${type === 'area' ? `<textarea class="champ" data-k="${k}" id="c-${k}">${E[k]}</textarea>` : `<input class="champ" data-k="${k}" id="c-${k}" value="${String(E[k]).replace(/"/g, '&quot;')}" ${type === 'num' ? 'inputmode="decimal"' : ''}>`}</label>`;
+const photoBtn = (k, label) => `<label class="photo-btn"><input type="file" accept="image/*" data-photo="${k}" id="p-${k}"><span>＋</span><span>${label}${images['u:' + k] ? ' · changée' : ''}</span></label>`;
+function reglages() {
+  document.getElementById('modeles').innerHTML = MODELES.map((m) => `<button class="modele" type="button" data-modele="${m.k}" style="--c:${m.c}" aria-pressed="${E.modele === m.k}"><i></i>${m.t}</button>`).join('');
+  document.getElementById('formats').innerHTML = FORMATS.map(([k, t]) => `<button type="button" data-format="${k}" aria-pressed="${E.format === k}">${t}</button>`).join('');
+  document.getElementById('fonds').innerHTML = FONDS.map(([k, t]) => `<button type="button" data-fond="${k}" aria-pressed="${E.fond === k}">${t}</button>`).join('');
+  const c = {
+    verifie: `<div class="segment"><button type="button" data-verdict="publiee" aria-pressed="${E.verdict === 'publiee'}">Publiée</button><button type="button" data-verdict="refusee" aria-pressed="${E.verdict === 'refusee'}">Refusée</button></div>${champ('parfum', 'Le parfum')}${champ('raison', 'Ce qu\'on a vu', 'area')}${photoBtn('face', 'La photo de l\'annonce')}`,
+    vraifaux: `${photoBtn('dessous', 'Photo A')}${photoBtn('faux', 'Photo B')}${champ('question', 'La question')}${champ('reponse', 'La réponse (vide : on la garde pour la vidéo suivante)')}`,
+    combien: `${champ('nomCombien', 'Le parfum')}<div class="deux">${champ('neuf', 'Prix neuf (€)', 'num')}${champ('ml', 'Contenance (ml)', 'num')}</div><div class="deux">${champ('reste', 'Il reste (%)', 'num')}${champ('occasion', 'Prix sur Respray (€)', 'num')}</div>`,
+    placard: `${champ('titre', 'Le titre', 'area')}${champ('sous', 'La phrase', 'area')}${champ('lien', 'Le lien')}${photoBtn('face', 'Une photo (facultatif)')}`,
+    astuce: `<div class="deux">${champ('numero', 'Numéro', 'num')}<span></span></div>${champ('titreAstuce', 'Le titre')}${champ('lignes', 'Les points (un par ligne)', 'area')}`,
+  }[E.modele];
+  document.getElementById('champs').innerHTML = c;
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  if (b.dataset.modele) E.modele = b.dataset.modele;
+  else if (b.dataset.format) E.format = b.dataset.format;
+  else if (b.dataset.fond) E.fond = b.dataset.fond;
+  else if (b.dataset.verdict) E.verdict = b.dataset.verdict;
+  else return;
+  reglages(); dessiner();
+});
+document.addEventListener('input', (e) => { const k = e.target.dataset.k; if (k) { E[k] = e.target.value; dessiner(); } });
+document.addEventListener('change', async (e) => {
+  const k = e.target.dataset.photo, f = e.target.files && e.target.files[0];
+  if (!k || !f) return;
+  await charger('u:' + k, URL.createObjectURL(f));
+  reglages(); dessiner();
+});
+
+/* ——— le téléchargement : la capacité « downloads » de la page ; sinon l'image, à enregistrer d'un appui long ——— */
+let dl = null;
+const bouton = document.getElementById('telecharger'), note = document.getElementById('note');
+bouton.addEventListener('click', () => {
+  const nom = `respray-${E.modele}-${E.format}.png`;
+  toile.toBlob(async (blob) => {
+    if (dl) {
+      try { await dl.save({filename: nom, data: blob}); note.textContent = 'Image enregistrée.'; }
+      catch (err) { note.textContent = err && err.code === 'declined' ? 'Enregistrement annulé.' : 'L\'enregistrement n\'a pas marché ici : faites un appui long (ou un clic droit) sur l\'image pour l\'enregistrer.'; montrerImage(blob); }
+    } else { montrerImage(blob); note.textContent = 'Faites un appui long (ou un clic droit) sur l\'image, puis « Enregistrer l\'image ».'; }
+  }, 'image/png');
+});
+function montrerImage(blob) {
+  let img = document.querySelector('img.rendu');
+  if (!img) { img = document.createElement('img'); img.className = 'rendu'; img.alt = 'Le visuel, à enregistrer'; toile.after(img); }
+  img.src = URL.createObjectURL(blob);
+}
+
+(async () => {
+  reglages();
+  await Promise.all([charger('ex:face', EXEMPLES.face), charger('ex:dessous', EXEMPLES.dessous), charger('ex:faux', EXEMPLES.faux)]);
+  try { await document.fonts.load('700 40px Inter'); await document.fonts.load('400 40px Inter'); await document.fonts.load('800 40px Inter'); } catch (e) {}
+  dessiner();
+  try { dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null; } catch (e) { dl = null; }
+})();
+</script>

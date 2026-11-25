@@ -1,0 +1,66 @@
+<!doctype html>
+<meta charset="utf-8">
+<!-- Les séquences vidéo de Respray (1080 × 1920, 30 images/s), rendues image par image par rendre-videos.cjs.
+     ?scene=intro | outro | serie&titre=…&couleur=…&numero=… -->
+<style>
+  @font-face { font-family: Inter; src: url(../../public/fonts/inter-400-700.woff2) format("woff2"); font-weight: 400 700; }
+  :root { --fond: #f4f2ee; --encre: #1d1d1f; --gris: #6e6e73; --accent: #b05a12; --vert: #1a7f4b; --ease: cubic-bezier(.22, .8, .24, 1); }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--fond); color: var(--encre); font-family: Inter, sans-serif; }
+  .scene { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 70px; text-align: center; }
+  .jet circle { transform-box: fill-box; transform-origin: center; }
+  @keyframes trace { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @keyframes bouffee { 0% { opacity: 0; transform: translateX(-60%) scale(.2); } 60% { opacity: 1; transform: translateX(10%) scale(1.15); } 100% { opacity: 1; transform: none; } }
+  @keyframes monte { from { opacity: 0; transform: translateY(80px); } to { opacity: 1; transform: none; } }
+  @keyframes apparait { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sceau { from { opacity: 0; transform: scale(.4) rotate(-40deg); } to { opacity: 1; transform: none; } }
+  @keyframes brume { 0% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateX(220%) scale(1.6); } }
+  /* le symbole qui se trace puis vaporise */
+  .symbole { width: 420px; height: 420px; color: var(--encre); overflow: visible; }
+  .symbole path { stroke-dasharray: 1; animation: trace .7s var(--ease) both; }
+  .symbole .j1 { animation: bouffee .45s var(--ease) .6s both; }
+  .symbole .j2 { animation: bouffee .45s var(--ease) .72s both; }
+  .symbole .j3 { animation: bouffee .45s var(--ease) .84s both; }
+  .mot { width: 640px; height: auto; color: var(--encre); animation: monte .6s var(--ease) 1s both; }
+  .petit { font-size: 44px; font-weight: 600; letter-spacing: -.02em; color: var(--gris); animation: monte .6s var(--ease) 1.25s both; }
+  /* la fin */
+  .outro .logo { width: 760px; height: auto; animation: monte .6s var(--ease) both; }
+  .outro .logo .jet circle { animation: bouffee .45s var(--ease) .35s both; }
+  .outro .titre { font-size: 92px; font-weight: 650; letter-spacing: -.04em; line-height: 1.02; padding: 0 90px; animation: monte .6s var(--ease) .5s both; }
+  .outro .lien { display: inline-block; padding: 26px 50px; border-radius: 999px; background: var(--encre); color: var(--fond); font-size: 52px; font-weight: 650; letter-spacing: -.02em; animation: monte .6s var(--ease) .8s both; }
+  .outro .ligne { font-size: 36px; color: var(--gris); font-weight: 500; animation: apparait .6s var(--ease) 1.1s both; }
+  .outro .sceau { animation: sceau .7s var(--ease) 1.2s both; }
+  /* l'ouverture d'une série */
+  .serie .numero { font-size: 40px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--c); display: flex; align-items: center; gap: 22px; animation: apparait .5s var(--ease) both; }
+  .serie .numero svg { width: 64px; height: 52px; fill: currentColor; }
+  .serie .numero svg circle { transform-box: fill-box; transform-origin: center; }
+  .serie .numero .j1 { animation: bouffee .4s var(--ease) .15s both; }
+  .serie .numero .j2 { animation: bouffee .4s var(--ease) .25s both; }
+  .serie .numero .j3 { animation: bouffee .4s var(--ease) .35s both; }
+  .serie .titre { font-size: 150px; font-weight: 700; letter-spacing: -.055em; line-height: .95; padding: 0 70px; }
+  .serie .titre span { display: inline-block; animation: monte .6s var(--ease) both; }
+  .serie .barre { width: 220px; height: 14px; border-radius: 7px; background: var(--c); animation: apparait .5s var(--ease) .7s both; }
+  .serie .signature { position: absolute; bottom: 140px; left: 0; right: 0; display: flex; justify-content: center; }
+  .serie .signature svg { width: 300px; height: auto; color: var(--encre); opacity: .9; animation: apparait .5s var(--ease) .9s both; }
+</style>
+<body>
+<script>
+  const q = new URLSearchParams(location.search);
+  const SYMBOLE = `<path d="M30 86V58c0-14 10-22 24-22" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round" pathLength="1"/><g fill="currentColor" class="jet"><circle class="j1" cx="71" cy="36" r="5.5"/><circle class="j2" cx="84" cy="26" r="4"/><circle class="j2" cx="85" cy="44" r="4"/><circle class="j3" cx="96" cy="18" r="2.8"/><circle class="j3" cx="97" cy="35" r="2.8"/><circle class="j3" cx="96" cy="52" r="2.8"/></g>`;
+  const MOT = window.MOT || '';
+  const logo = (cl) => `<svg class="${cl}" viewBox="0 -1977 9023 2478"><g transform="translate(-597.93 -2353.54) scale(25.4437)">${SYMBOLE.replace(' pathLength="1"', '')}</g><g transform="translate(2473.8 0)"><path fill="currentColor" d="${MOT}"/></g></svg>`;
+  const mot = (cl) => `<svg class="${cl}" viewBox="2473.8 -1977 6549 2478"><g transform="translate(2473.8 0)"><path fill="currentColor" d="${MOT}"/></g></svg>`;
+  const POINTS = `<svg viewBox="0 0 30 24"><circle class="j1" cx="5" cy="12" r="3.4"/><circle class="j2" cx="14" cy="6.5" r="2.6"/><circle class="j2" cx="14" cy="17.5" r="2.6"/><circle class="j3" cx="23.5" cy="2.6" r="1.9"/><circle class="j3" cx="23.5" cy="12" r="1.9"/><circle class="j3" cx="23.5" cy="21.4" r="1.9"/></svg>`;
+  const SCEAU = window.SCEAU || '';
+  const s = q.get('scene') || 'intro';
+  let html = '';
+  if (s === 'intro') html = `<div class="scene"><svg class="symbole" viewBox="23.5 15.2 76.3 77.3">${SYMBOLE}</svg>${mot('mot')}<p class="petit">Le parfum de seconde main, sans le doute.</p></div>`;
+  else if (s === 'outro') html = `<div class="scene outro">${logo('logo')}<p class="titre">${q.get('titre') || 'Vends tes parfums sans commission.'}</p><span class="lien">${q.get('lien') || 'respray.fr/fondateurs'}</span><div class="sceau">${SCEAU}</div><p class="ligne">Vérifié avant d'être en ligne · 7 jours pour vérifier</p></div>`;
+  else {
+    const mots = (q.get('titre') || 'On a vérifié').split(' ');
+    html = `<div class="scene serie" style="--c:${q.get('couleur') || '#b05a12'}"><p class="numero">${POINTS}${q.get('numero') || 'Série'}</p><h1 class="titre">${mots.map((m, i) => `<span style="animation-delay:${0.2 + i * 0.09}s">${m}</span>`).join(' ')}</h1><div class="barre"></div><div class="signature">${logo('')}</div></div>`;
+  }
+  document.body.innerHTML = html;
+  window.pret = true;
+</script>
+</body>
