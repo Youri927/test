@@ -29,7 +29,7 @@ dites partout.
 | Qui garantit | « Nous ne garantissons ni leur authenticité ni leur conformité » (FAQ) | Respray rembourse si le parfum n'est pas conforme à l'annonce |
 | Colis perdu | L'acheteur est remboursé, le vendeur n'est pas payé | Colis assuré : l'acheteur est remboursé et le vendeur est payé |
 | Commission vendeur | 10 % | **0 %** |
-| Frais acheteur | 5 % | 5 % + 0,70 € |
+| Frais acheteur | 5 % | 8 % + 0,90 € |
 | Choix du parfum | Marque et nom tapés à la main (« Parfum », « Guerlain »…) | Choisi dans une liste ; une maison absente peut être proposée, l'équipe corrige l'orthographe et l'ajoute pour tout le monde |
 | Paiement du vendeur | 7 à 10 jours ouvrés après confirmation | 1 à 2 jours après confirmation, ou 7 jours après la livraison |
 | Application | Non | Oui, pour prendre les photos imposées facilement |
@@ -137,19 +137,39 @@ Sur Respray, les règles sont écrites.
 
 ## Les frais
 
+Le principe : le vendeur ne paie rien, c'est l'argument qu'on répète partout. L'acheteur paie une protection qui
+finance ce qui rend la vente sûre. Les options n'impliquent jamais que Respray touche un colis.
+
 | | |
 |---|---|
 | Vendre | Gratuit, 0 % de commission |
-| Protection acheteur | 5 % du prix + 0,70 € |
+| Protection acheteur | 8 % du prix + 0,90 € |
 | Envoi suivi en point relais | À partir de 4,90 € |
 | Remise en main propre | Gratuit |
-| Plus tard, en option | Mise en avant d'une annonce (environ 1,50 €) |
+| Envoi assuré à la valeur réelle (acheteur, en option au-dessus de 150 €) | 2,90 € |
+| Mise en avant d'une annonce (vendeur, en option) | 1,99 € pour 3 jours, 4,99 € pour 7 jours avec l'accueil |
 
-Sur un flacon à 100 €, l'acheteur paie 105,70 € (Perfumee : 105 €) ; le vendeur touche 100 € (Perfumee : 90 €).
+Sur un flacon à 100 € :
 
-Sur une commande moyenne de 85 €, la protection rapporte 4,95 €. Une fois le paiement (≈ 1,55 €) et le service
-client payés, il reste de l'ordre de 2 à 3 € par commande : c'est un modèle de volume, comme Vinted. Si la marge doit
-monter, 6 % + 0,70 € reste moins cher que Perfumee pour l'acheteur et le vendeur réunis.
+| | Perfumee | Respray |
+|---|---|---|
+| Le vendeur reçoit | 90 € | **100 €** |
+| L'acheteur paie (hors livraison) | 105 € | 108,90 € |
+| La plateforme gagne | 15 € | 8,90 €, plus les options |
+
+Le vendeur ne perdant rien, il peut afficher un prix plus bas : au total, l'écart vendeur-acheteur (8,90 €) reste
+bien en dessous de celui de Perfumee (15 €).
+
+**Ce que coûte une vente à 100 € (estimations à confirmer avec de vrais devis)** : paiement et virement au vendeur
+(Stripe Connect) ≈ 1,90 € ; vérification humaine de l'annonce ≈ 1,50 à 2 € (toutes les annonces ne se vendent pas) ;
+service client, litiges et remboursements non récupérés ≈ 0,50 à 1 €. Soit 4 à 5 €. Il reste 4 à 5 € par vente, plus
+la mise en avant (≈ 0,50 € en moyenne par vente si un vendeur sur trois à cinq la prend) et la marge sur l'envoi
+assuré (≈ 1 à 2 € quand il est pris). Les 0,90 € fixes couvrent les coûts qui ne dépendent pas du prix : sur un
+flacon à 30 €, la protection rapporte 3,30 €.
+
+Écartés : la commission vendeur (on perdrait l'argument principal), une « protection renforcée » (Respray ne voit
+pas les flacons, il ne peut pas garantir plus que la conformité aux photos), une vérification express payante (peu
+utile), une marge sur l'étiquette d'envoi.
 
 ## Ce qu'il faut régler avant de lancer
 

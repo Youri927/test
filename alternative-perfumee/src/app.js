@@ -14,7 +14,13 @@
   const nombre = (s) => parseFloat(String(s).replace(',', '.').replace(/\s/g, ''));
   const mlRestants = (a) => Math.round((a.ml * a.niveau) / 100);
   const prixMl = (a) => a.prix / mlRestants(a);
-  const protection = (prix) => Math.round((prix * 0.05 + 0.7) * 100) / 100;
+  /* les frais : le vendeur ne paie rien ; l'acheteur paie 8 % + 0,90 € (les 0,90 € couvrent ce qui ne dépend pas du
+     prix : la vérification de l'annonce et le paiement) ; en option, l'envoi assuré à la valeur réelle, au-dessus de
+     150 €, et la mise en avant d'une annonce, payée par le vendeur s'il le veut */
+  const protection = (prix) => Math.round((prix * 0.08 + 0.9) * 100) / 100;
+  const ASSURANCE = 2.9;
+  const SEUIL_ASSURANCE = 150;
+  const MISES_EN_AVANT = [['', 'Non merci', 0], ['3j', '3 jours en tête des résultats', 1.99], ['7j', '7 jours, et sur l\'accueil', 4.99]];
   const ENVOI = 4.9;
   const normal = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
   const cle = (s) => normal(s).replace(/[^a-z0-9]+/g, ' ').trim();
@@ -167,7 +173,7 @@
     {t: `${OBLIGATOIRES} photos imposées`, d: 'Toujours les mêmes, jusqu\'à la tige du spray et une photo avec le pseudo du vendeur.'},
     {t: 'Vérifiée par l\'équipe', d: 'Avant d\'être en ligne, en quelques heures. Code lot, spray, tige, niveau, prix.'},
     {t: '7 jours pour vérifier', d: 'L\'argent reste bloqué jusqu\'à votre accord. Non conforme : remboursé.'},
-    {t: '0 % pour le vendeur', d: 'Il touche le prix affiché. L\'acheteur paie une protection de 5 % + 0,70 €.'},
+    {t: '0 % pour le vendeur', d: 'Il touche le prix affiché. L\'acheteur paie une protection de 8 % + 0,90 €.'},
   ];
   let anat = 0;
   const RECEPTION = [
@@ -445,6 +451,7 @@
             <label class="option"><input type="radio" name="mode" value="envoi" checked data-mode> <span>Envoi suivi en point relais<small>2 à 4 jours</small></span><span>${eur2(ENVOI)}</span></label>
             ${a.mainPropre ? `<label class="option"><input type="radio" name="mode" value="main" data-mode> <span>Remise en main propre<small>${esc(v.ville)} · vous payez en ligne, l'argent est versé quand vous validez sur place</small></span><span>Gratuit</span></label>` : ''}
           </fieldset>
+          ${a.prix >= SEUIL_ASSURANCE ? `<label class="choix option-assure"><input type="checkbox" data-assure ${achat.assure ? 'checked' : ''}> <span>Envoi assuré à la valeur réelle (${eur(a.prix)}) : ${eur2(ASSURANCE)}<small>L'assurance de base du point relais ne couvre pas un flacon de ce prix. Avec elle, la perte ou la casse est remboursée en entier par le transporteur.</small></span></label>` : ''}
           <div id="total">${total(a)}</div>
           <div class="boutons">
             <button class="btn btn-noir btn-large" type="button" data-action="acheter" data-a="${a.id}">Acheter</button>
@@ -488,20 +495,23 @@
       </details>
     </div>`;
   }
+  const assure = (a) => achat.mode === 'envoi' && achat.assure && a.prix >= SEUIL_ASSURANCE;
   function total(a) {
     const port = achat.mode === 'envoi' ? ENVOI : 0;
     const pr = protection(a.prix);
+    const ass = assure(a) ? ASSURANCE : 0;
     return `<dl class="total">
       <div><dt>Parfum</dt><dd>${eur2(a.prix)}</dd></div>
       <div><dt>Protection acheteur</dt><dd>${eur2(pr)}</dd></div>
       <div><dt>Livraison</dt><dd>${port ? eur2(port) : 'Gratuit'}</dd></div>
-      <div class="total-ligne"><dt>Total</dt><dd>${eur2(a.prix + pr + port)}</dd></div>
+      ${ass ? `<div><dt>Envoi assuré à ${eur(a.prix)}</dt><dd>${eur2(ass)}</dd></div>` : ''}
+      <div class="total-ligne"><dt>Total</dt><dd>${eur2(a.prix + pr + port + ass)}</dd></div>
     </dl>`;
   }
 
   /* ——— vendre ——— */
   const AUTRE = '__autre';
-  const V0 = {maison: '', maisonAutre: '', parfum: '', parfumAutre: '', conc: '', genre: '', familles: [], format: 'flacon', ml: '', mlAutre: '', etat: 'entame', niveau: 80, visible: '', defauts: [], annee: '', lieu: '', lumiere: '', chaleur: '', boite: '', lot: '', lotIllisible: false, desc: '', prix: '', mainPropre: false, ville: '', engagement: false, photos: {}, envoye: false, proposes: []};
+  const V0 = {maison: '', maisonAutre: '', parfum: '', parfumAutre: '', conc: '', genre: '', familles: [], format: 'flacon', ml: '', mlAutre: '', etat: 'entame', niveau: 80, visible: '', defauts: [], annee: '', lieu: '', lumiere: '', chaleur: '', boite: '', lot: '', lotIllisible: false, desc: '', prix: '', boost: '', mainPropre: false, ville: '', engagement: false, photos: {}, envoye: false, proposes: []};
   /* ce que le vendeur déclare : des listes courtes, des réponses qui ne se contredisent pas */
   const CONCENTRATIONS = ['Extrait de parfum', 'Eau de parfum', 'Eau de toilette', 'Eau de Cologne', 'Parfum pour cheveux', 'Brume parfumée'];
   /* les familles, rangées par caractère, du plus frais au plus profond */
@@ -652,7 +662,8 @@
           <div class="champ-prix"><input id="prix" class="champ" inputmode="decimal" value="${esc(V.prix)}" placeholder="0" data-champ="prix"><span>€</span></div>
           ${prixAnnonces.length ? `<p class="aide">Annonces actuelles de ce parfum : de ${eur(Math.min(...prixAnnonces))} à ${eur(Math.max(...prixAnnonces))}.</p>` : ''}
           <p class="aide" id="recu">${V.prix ? `Vous recevrez ${eur2(nombre(V.prix) || 0)} : aucune commission.` : 'Vous recevez la totalité du prix : aucune commission.'}</p>
-          <p class="aide">Envoi en point relais, suivi et assuré : vous imprimez l'étiquette, vous avez 5 jours pour déposer le colis.</p>
+          <p class="aide">Envoi en point relais, suivi : vous imprimez l'étiquette, vous avez 5 jours pour déposer le colis.</p>
+          <fieldset><legend>Mettre l'annonce en avant <small>facultatif, payé seulement si elle est publiée</small></legend>${segment('boost', V.boost, MISES_EN_AVANT.map(([k, l, pr]) => [k, pr ? `${l} · ${eur2(pr)}` : l]))}</fieldset>
           <label class="choix"><input type="checkbox" data-champ="mainPropre" ${V.mainPropre ? 'checked' : ''}> J'accepte aussi la remise en main propre</label>
           ${V.mainPropre ? `<label for="ville">Ville ou arrondissement</label><input id="ville" class="champ" data-champ="ville" value="${esc(V.ville)}" placeholder="ex. Lyon 3e" autocomplete="off">` : ''}
         </section>
@@ -900,12 +911,14 @@
     </section>
 
     <section class="fn-section env fn-frais">
-      <div data-revele><p class="surtitre">Les frais</p><h2 class="grand-titre">Le vendeur ne paie rien.</h2>
+      <div data-revele><p class="surtitre">Les frais</p><h2 class="grand-titre">Le vendeur ne paie rien.</h2><p class="chapo">La protection payée par l'acheteur finance ce qui rend la vente sûre : la vérification de chaque annonce par une personne, le paiement bloqué, le service client et les remboursements.</p>
         <table class="frais"><tbody>
           <tr><th scope="row">Vendre</th><td>Gratuit, sans commission</td></tr>
-          <tr><th scope="row">Protection acheteur</th><td>5 % du prix + 0,70 €</td></tr>
+          <tr><th scope="row">Protection acheteur</th><td>8 % du prix + 0,90 €</td></tr>
           <tr><th scope="row">Envoi suivi en point relais</th><td>À partir de 4,90 €</td></tr>
           <tr><th scope="row">Remise en main propre</th><td>Gratuit</td></tr>
+          <tr><th scope="row">Envoi assuré à la valeur réelle</th><td>2,90 €, en option au-dessus de 150 €</td></tr>
+          <tr><th scope="row">Mettre une annonce en avant</th><td>1,99 € (3 jours) ou 4,99 € (7 jours), si le vendeur le veut</td></tr>
         </tbody></table></div>
       <div class="calcul" data-revele>
         <label for="sim">Prix du parfum : <output id="sim-out">${eur(simPrix)}</output></label>
@@ -1308,7 +1321,7 @@
     if (parfumLibre()) V.proposes.push({id: 'p' + t, type: 'parfum', tape: nom, maison: maisonChoisie(), par: 'vous', il: 'à l\'instant', annonce: `${ml} ml`, conc: V.conc, genre: V.genre, familles: V.familles});
     // l'annonce part dans la file de vérification du back-office, avec les photos d'un flacon du même parfum
     const memeParfum = pc && ANNONCES.find((a) => a.p === pc.id);
-    Admin.proposer(V.proposes, {id: 's' + t, p: pc ? pc.id : null, nomAffiche: `${maisonChoisie()} · ${nom}`, ml, prix, etat: V.etat, niveau: V.etat === 'blister' ? 100 : V.niveau, boite: V.boite !== 'aucune', lot: V.lotIllisible ? 'illisible' : V.lot.trim(), v: 'v0', mainPropre: V.mainPropre, desc: V.desc.trim(),
+    Admin.proposer(V.proposes, {id: 's' + t, p: pc ? pc.id : null, nomAffiche: `${maisonChoisie()} · ${nom}`, ml, prix, etat: V.etat, niveau: V.etat === 'blister' ? 100 : V.niveau, boite: V.boite !== 'aucune', lot: V.lotIllisible ? 'illisible' : V.lot.trim(), v: 'v0', mainPropre: V.mainPropre, desc: V.desc.trim(), boost: V.boost,
       details: {conc: pc ? pc.conc : V.conc, format: FORMATS.find((x) => x[0] === V.format)[1], achat: `${V.annee}, ${V.lieu}`, rangement: `${V.lumiere === 'abri' ? 'à l\'abri de' : 'exposé à'} la lumière, ${V.chaleur === 'abri' ? 'à l\'abri de' : 'exposé à'} la chaleur`, boite: BOITES.find((x) => x[0] === V.boite)[1], visible: V.etat === 'blister' ? '' : V.visible === 'opaque' ? 'flacon opaque (photo à contre-jour)' : 'parfum visible', defauts: V.defauts.join(', '), ville: V.mainPropre ? V.ville.trim() : ''}, ph: memeParfum ? memeParfum.id : 'a101', fond: '#ECE7E0'});
     V.envoye = true;
     transition(() => {
@@ -1376,6 +1389,9 @@
     if (t.matches('[data-tri]')) {
       R.tri = t.value;
       majResultats();
+    } else if (t.matches('[data-assure]')) {
+      achat.assure = t.checked;
+      document.getElementById('total').innerHTML = total(A[location.hash.slice(9)]);
     } else if (t.matches('[data-mode]')) {
       achat.mode = t.value;
       document.getElementById('total').innerHTML = total(A[location.hash.slice(9)]);
@@ -1386,7 +1402,7 @@
     } else if (['lotIllisible', 'mainPropre', 'engagement'].includes(t.dataset.champ)) {
       V[t.dataset.champ] = t.checked;
       rafraichir(false);
-    } else if (['maison', 'parfum', 'ml', 'boite', 'etat', 'conc', 'genre', 'format', 'visible', 'annee', 'lieu', 'lumiere', 'chaleur'].includes(t.dataset.champ)) {
+    } else if (['maison', 'parfum', 'ml', 'boite', 'etat', 'conc', 'genre', 'format', 'visible', 'annee', 'lieu', 'lumiere', 'chaleur', 'boost'].includes(t.dataset.champ)) {
       V[t.dataset.champ] = t.value;
       if (t.dataset.champ === 'maison') Object.assign(V, {parfum: '', ml: ''});
       if (t.dataset.champ === 'parfum') V.ml = '';
@@ -1533,7 +1549,7 @@
         rafraichir(false);
         break;
       case 'acheter': {
-        const port = achat.mode === 'envoi' ? ENVOI : 0;
+        const port = (achat.mode === 'envoi' ? ENVOI : 0) + (assure(a) ? ASSURANCE : 0);
         ouvrir(`<h2 class="h2">Paiement</h2><p class="aide">${esc(P[a.p].nom)}, ${a.ml} ml</p>${total(a)}
           <p class="aide">L'argent reste bloqué jusqu'à votre confirmation, ou 7 jours après la livraison.</p>
           <button class="btn btn-noir btn-large" type="button" data-action="payer">Payer ${eur2(a.prix + protection(a.prix) + port)}</button>`);

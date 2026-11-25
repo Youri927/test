@@ -181,6 +181,8 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .details dt { color: var(--texte-2); }
 .details dd { margin: 0; text-align: right; font-weight: 500; }
 .livraison { margin-top: 18px; gap: 8px; }
+.option-assure { align-items: flex-start; gap: 10px; margin-top: 10px; padding: 12px 14px; border: 1px solid var(--trait); border-radius: 10px; font-size: 15px; }
+.option-assure small { display: block; color: var(--texte-2); font-size: 13px; }
 .option { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--trait); border-radius: 10px; cursor: pointer; font-size: 15px; }
 .option:has(input:checked) { border-color: var(--texte); }
 .option input { margin-top: 4px; }

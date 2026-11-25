@@ -515,6 +515,7 @@ function creerAdmin(o) {
   }
 
   /* Annonces : la file de vérification, et celles en ligne */
+  const MISES_EN_AVANT_BO = {'3j': '3 jours, 1,99 € à la publication', '7j': '7 jours, 4,99 € à la publication'};
   const RAISONS = ['La photo du dessous ne permet pas de lire le code lot', 'Il manque la photo de la tige sans le bouton spray', 'Il manque la photo avec le pseudo et la date', 'Le code lot ne correspond pas au format de la marque', 'Le prix est anormalement bas : merci de vérifier', 'Les photos ont déjà été vues sur une autre annonce', 'Contrefaçon probable'];
   const RAISONS_RETRAIT = ['Signalée par un acheteur : à vérifier', 'Le vendeur a vendu le flacon ailleurs', 'Photos reprises d\'une autre annonce', 'Contrefaçon probable', 'Demande du vendeur'];
   const CHECKS = ['Les 6 photos sont là et nettes', 'Code lot lisible et au format de la marque', 'Spray, bague et tige d\'origine', 'Flacon conforme aux modèles connus', 'Niveau conforme à l\'annonce', 'Papier avec le bon pseudo et une date récente'];
@@ -531,7 +532,7 @@ function creerAdmin(o) {
         <h2 class="bo-h2">${esc(nom)}, ${x.ml} ml ${attente > 2 * 36e5 ? pastille('En attente depuis plus de 2 h', 'attente') : ''}</h2>
         <p>${eur(x.prix)} · ${x.etat === 'blister' ? 'neuf sous blister' : `reste ~${x.niveau} %`} · code lot ${esc(x.lot || '—')}${x.boite ? ' · avec boîte' : ''}</p>
         ${x.alerte ? `<p class="p-alerte">${esc(x.alerte)}</p>` : ''}
-        ${x.details ? `<dl class="bo-dl bo-declare">${[['Concentration', x.details.conc], ['Format', x.details.format], ['Acheté', x.details.achat], ['Rangé', x.details.rangement], ['Boîte', x.details.boite], ['Niveau', x.details.visible], ['Défauts', x.details.defauts], ['Main propre', x.details.ville], ['Description', x.desc]].filter((r) => r[1]).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : ''}
+        ${x.details ? `<dl class="bo-dl bo-declare">${[['Concentration', x.details.conc], ['Format', x.details.format], ['Acheté', x.details.achat], ['Rangé', x.details.rangement], ['Boîte', x.details.boite], ['Niveau', x.details.visible], ['Défauts', x.details.defauts], ['Main propre', x.details.ville], ['Mise en avant', (MISES_EN_AVANT_BO[x.boost] || '')], ['Description', x.desc]].filter((r) => r[1]).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : ''}
         <fieldset class="p-checks"><legend class="vh">Contrôles</legend>${CHECKS.map((c, i) => `<label class="choix"><input type="checkbox" data-check="${x.id}" id="c-${x.id}-${i}"> ${c}</label>`).join('')}</fieldset>
         <div class="bo-actions">
           <button class="btn btn-noir btn-petit" type="button" data-bo="publier" data-id="${x.id}">Publier</button>
@@ -799,7 +800,7 @@ function creerAdmin(o) {
         <div class="bo-tuile"><strong>${eur2(somme(bloque, total))}</strong><span>bloqués (${bloque.length} commandes)</span></div>
         <div class="bo-tuile ${aVerser.length ? 'bo-t-attente' : ''}"><strong>${eur2(somme(aVerser, (c) => c.prix))}</strong><span>à verser aux vendeurs</span></div>
         <div class="bo-tuile"><strong>${eur2(somme(verses, (c) => c.prix))}</strong><span>versés</span></div>
-        <div class="bo-tuile"><strong>${eur2(somme(cs.filter((c) => !['annulee', 'remboursee'].includes(c.statut)), (c) => protection(c.prix)))}</strong><span>de protection acheteur (recettes)</span></div>
+        <div class="bo-tuile"><strong>${eur2(somme(cs.filter((c) => !['annulee', 'remboursee'].includes(c.statut)), (c) => protection(c.prix)))}</strong><span>de protection acheteur (8 % + 0,90 €)</span></div>
       </div>
       <section class="bo-bloc"><div class="bo-bloc-tete"><h2 class="bo-h2">À verser</h2>${aVerser.length > 1 ? `<button class="btn btn-noir btn-petit" type="button" data-bo="tout-verser">Tout verser (${eur2(somme(aVerser, (c) => c.prix))})</button>` : ''}</div>
         ${aVerser.length ? `<div class="bo-table-cadre"><table class="bo-table"><tbody>${aVerser.map((c) => ligne(c, c.prix, `conclue ${ilya(c.conclue)}`, `<button class="btn btn-petit" type="button" data-bo="verser" data-c="${c.id}">Verser</button>`)).join('')}</tbody></table></div>` : vide('Rien à verser.')}</section>

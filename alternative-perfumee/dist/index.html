@@ -192,6 +192,8 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .details dt { color: var(--texte-2); }
 .details dd { margin: 0; text-align: right; font-weight: 500; }
 .livraison { margin-top: 18px; gap: 8px; }
+.option-assure { align-items: flex-start; gap: 10px; margin-top: 10px; padding: 12px 14px; border: 1px solid var(--trait); border-radius: 10px; font-size: 15px; }
+.option-assure small { display: block; color: var(--texte-2); font-size: 13px; }
 .option { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--trait); border-radius: 10px; cursor: pointer; font-size: 15px; }
 .option:has(input:checked) { border-color: var(--texte); }
 .option input { margin-top: 4px; }
@@ -2433,6 +2435,7 @@ function creerAdmin(o) {
   }
 
   /* Annonces : la file de vérification, et celles en ligne */
+  const MISES_EN_AVANT_BO = {'3j': '3 jours, 1,99 € à la publication', '7j': '7 jours, 4,99 € à la publication'};
   const RAISONS = ['La photo du dessous ne permet pas de lire le code lot', 'Il manque la photo de la tige sans le bouton spray', 'Il manque la photo avec le pseudo et la date', 'Le code lot ne correspond pas au format de la marque', 'Le prix est anormalement bas : merci de vérifier', 'Les photos ont déjà été vues sur une autre annonce', 'Contrefaçon probable'];
   const RAISONS_RETRAIT = ['Signalée par un acheteur : à vérifier', 'Le vendeur a vendu le flacon ailleurs', 'Photos reprises d\'une autre annonce', 'Contrefaçon probable', 'Demande du vendeur'];
   const CHECKS = ['Les 6 photos sont là et nettes', 'Code lot lisible et au format de la marque', 'Spray, bague et tige d\'origine', 'Flacon conforme aux modèles connus', 'Niveau conforme à l\'annonce', 'Papier avec le bon pseudo et une date récente'];
@@ -2449,7 +2452,7 @@ function creerAdmin(o) {
         <h2 class="bo-h2">${esc(nom)}, ${x.ml} ml ${attente > 2 * 36e5 ? pastille('En attente depuis plus de 2 h', 'attente') : ''}</h2>
         <p>${eur(x.prix)} · ${x.etat === 'blister' ? 'neuf sous blister' : `reste ~${x.niveau} %`} · code lot ${esc(x.lot || '—')}${x.boite ? ' · avec boîte' : ''}</p>
         ${x.alerte ? `<p class="p-alerte">${esc(x.alerte)}</p>` : ''}
-        ${x.details ? `<dl class="bo-dl bo-declare">${[['Concentration', x.details.conc], ['Format', x.details.format], ['Acheté', x.details.achat], ['Rangé', x.details.rangement], ['Boîte', x.details.boite], ['Niveau', x.details.visible], ['Défauts', x.details.defauts], ['Main propre', x.details.ville], ['Description', x.desc]].filter((r) => r[1]).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : ''}
+        ${x.details ? `<dl class="bo-dl bo-declare">${[['Concentration', x.details.conc], ['Format', x.details.format], ['Acheté', x.details.achat], ['Rangé', x.details.rangement], ['Boîte', x.details.boite], ['Niveau', x.details.visible], ['Défauts', x.details.defauts], ['Main propre', x.details.ville], ['Mise en avant', (MISES_EN_AVANT_BO[x.boost] || '')], ['Description', x.desc]].filter((r) => r[1]).map(([k, v]) => `<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>` : ''}
         <fieldset class="p-checks"><legend class="vh">Contrôles</legend>${CHECKS.map((c, i) => `<label class="choix"><input type="checkbox" data-check="${x.id}" id="c-${x.id}-${i}"> ${c}</label>`).join('')}</fieldset>
         <div class="bo-actions">
           <button class="btn btn-noir btn-petit" type="button" data-bo="publier" data-id="${x.id}">Publier</button>
@@ -2717,7 +2720,7 @@ function creerAdmin(o) {
         <div class="bo-tuile"><strong>${eur2(somme(bloque, total))}</strong><span>bloqués (${bloque.length} commandes)</span></div>
         <div class="bo-tuile ${aVerser.length ? 'bo-t-attente' : ''}"><strong>${eur2(somme(aVerser, (c) => c.prix))}</strong><span>à verser aux vendeurs</span></div>
         <div class="bo-tuile"><strong>${eur2(somme(verses, (c) => c.prix))}</strong><span>versés</span></div>
-        <div class="bo-tuile"><strong>${eur2(somme(cs.filter((c) => !['annulee', 'remboursee'].includes(c.statut)), (c) => protection(c.prix)))}</strong><span>de protection acheteur (recettes)</span></div>
+        <div class="bo-tuile"><strong>${eur2(somme(cs.filter((c) => !['annulee', 'remboursee'].includes(c.statut)), (c) => protection(c.prix)))}</strong><span>de protection acheteur (8 % + 0,90 €)</span></div>
       </div>
       <section class="bo-bloc"><div class="bo-bloc-tete"><h2 class="bo-h2">À verser</h2>${aVerser.length > 1 ? `<button class="btn btn-noir btn-petit" type="button" data-bo="tout-verser">Tout verser (${eur2(somme(aVerser, (c) => c.prix))})</button>` : ''}</div>
         ${aVerser.length ? `<div class="bo-table-cadre"><table class="bo-table"><tbody>${aVerser.map((c) => ligne(c, c.prix, `conclue ${ilya(c.conclue)}`, `<button class="btn btn-petit" type="button" data-bo="verser" data-c="${c.id}">Verser</button>`)).join('')}</tbody></table></div>` : vide('Rien à verser.')}</section>
@@ -2931,7 +2934,13 @@ function creerAdmin(o) {
   const nombre = (s) => parseFloat(String(s).replace(',', '.').replace(/\s/g, ''));
   const mlRestants = (a) => Math.round((a.ml * a.niveau) / 100);
   const prixMl = (a) => a.prix / mlRestants(a);
-  const protection = (prix) => Math.round((prix * 0.05 + 0.7) * 100) / 100;
+  /* les frais : le vendeur ne paie rien ; l'acheteur paie 8 % + 0,90 € (les 0,90 € couvrent ce qui ne dépend pas du
+     prix : la vérification de l'annonce et le paiement) ; en option, l'envoi assuré à la valeur réelle, au-dessus de
+     150 €, et la mise en avant d'une annonce, payée par le vendeur s'il le veut */
+  const protection = (prix) => Math.round((prix * 0.08 + 0.9) * 100) / 100;
+  const ASSURANCE = 2.9;
+  const SEUIL_ASSURANCE = 150;
+  const MISES_EN_AVANT = [['', 'Non merci', 0], ['3j', '3 jours en tête des résultats', 1.99], ['7j', '7 jours, et sur l\'accueil', 4.99]];
   const ENVOI = 4.9;
   const normal = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
   const cle = (s) => normal(s).replace(/[^a-z0-9]+/g, ' ').trim();
@@ -3084,7 +3093,7 @@ function creerAdmin(o) {
     {t: `${OBLIGATOIRES} photos imposées`, d: 'Toujours les mêmes, jusqu\'à la tige du spray et une photo avec le pseudo du vendeur.'},
     {t: 'Vérifiée par l\'équipe', d: 'Avant d\'être en ligne, en quelques heures. Code lot, spray, tige, niveau, prix.'},
     {t: '7 jours pour vérifier', d: 'L\'argent reste bloqué jusqu\'à votre accord. Non conforme : remboursé.'},
-    {t: '0 % pour le vendeur', d: 'Il touche le prix affiché. L\'acheteur paie une protection de 5 % + 0,70 €.'},
+    {t: '0 % pour le vendeur', d: 'Il touche le prix affiché. L\'acheteur paie une protection de 8 % + 0,90 €.'},
   ];
   let anat = 0;
   const RECEPTION = [
@@ -3362,6 +3371,7 @@ function creerAdmin(o) {
             <label class="option"><input type="radio" name="mode" value="envoi" checked data-mode> <span>Envoi suivi en point relais<small>2 à 4 jours</small></span><span>${eur2(ENVOI)}</span></label>
             ${a.mainPropre ? `<label class="option"><input type="radio" name="mode" value="main" data-mode> <span>Remise en main propre<small>${esc(v.ville)} · vous payez en ligne, l'argent est versé quand vous validez sur place</small></span><span>Gratuit</span></label>` : ''}
           </fieldset>
+          ${a.prix >= SEUIL_ASSURANCE ? `<label class="choix option-assure"><input type="checkbox" data-assure ${achat.assure ? 'checked' : ''}> <span>Envoi assuré à la valeur réelle (${eur(a.prix)}) : ${eur2(ASSURANCE)}<small>L'assurance de base du point relais ne couvre pas un flacon de ce prix. Avec elle, la perte ou la casse est remboursée en entier par le transporteur.</small></span></label>` : ''}
           <div id="total">${total(a)}</div>
           <div class="boutons">
             <button class="btn btn-noir btn-large" type="button" data-action="acheter" data-a="${a.id}">Acheter</button>
@@ -3405,20 +3415,23 @@ function creerAdmin(o) {
       </details>
     </div>`;
   }
+  const assure = (a) => achat.mode === 'envoi' && achat.assure && a.prix >= SEUIL_ASSURANCE;
   function total(a) {
     const port = achat.mode === 'envoi' ? ENVOI : 0;
     const pr = protection(a.prix);
+    const ass = assure(a) ? ASSURANCE : 0;
     return `<dl class="total">
       <div><dt>Parfum</dt><dd>${eur2(a.prix)}</dd></div>
       <div><dt>Protection acheteur</dt><dd>${eur2(pr)}</dd></div>
       <div><dt>Livraison</dt><dd>${port ? eur2(port) : 'Gratuit'}</dd></div>
-      <div class="total-ligne"><dt>Total</dt><dd>${eur2(a.prix + pr + port)}</dd></div>
+      ${ass ? `<div><dt>Envoi assuré à ${eur(a.prix)}</dt><dd>${eur2(ass)}</dd></div>` : ''}
+      <div class="total-ligne"><dt>Total</dt><dd>${eur2(a.prix + pr + port + ass)}</dd></div>
     </dl>`;
   }
 
   /* ——— vendre ——— */
   const AUTRE = '__autre';
-  const V0 = {maison: '', maisonAutre: '', parfum: '', parfumAutre: '', conc: '', genre: '', familles: [], format: 'flacon', ml: '', mlAutre: '', etat: 'entame', niveau: 80, visible: '', defauts: [], annee: '', lieu: '', lumiere: '', chaleur: '', boite: '', lot: '', lotIllisible: false, desc: '', prix: '', mainPropre: false, ville: '', engagement: false, photos: {}, envoye: false, proposes: []};
+  const V0 = {maison: '', maisonAutre: '', parfum: '', parfumAutre: '', conc: '', genre: '', familles: [], format: 'flacon', ml: '', mlAutre: '', etat: 'entame', niveau: 80, visible: '', defauts: [], annee: '', lieu: '', lumiere: '', chaleur: '', boite: '', lot: '', lotIllisible: false, desc: '', prix: '', boost: '', mainPropre: false, ville: '', engagement: false, photos: {}, envoye: false, proposes: []};
   /* ce que le vendeur déclare : des listes courtes, des réponses qui ne se contredisent pas */
   const CONCENTRATIONS = ['Extrait de parfum', 'Eau de parfum', 'Eau de toilette', 'Eau de Cologne', 'Parfum pour cheveux', 'Brume parfumée'];
   /* les familles, rangées par caractère, du plus frais au plus profond */
@@ -3569,7 +3582,8 @@ function creerAdmin(o) {
           <div class="champ-prix"><input id="prix" class="champ" inputmode="decimal" value="${esc(V.prix)}" placeholder="0" data-champ="prix"><span>€</span></div>
           ${prixAnnonces.length ? `<p class="aide">Annonces actuelles de ce parfum : de ${eur(Math.min(...prixAnnonces))} à ${eur(Math.max(...prixAnnonces))}.</p>` : ''}
           <p class="aide" id="recu">${V.prix ? `Vous recevrez ${eur2(nombre(V.prix) || 0)} : aucune commission.` : 'Vous recevez la totalité du prix : aucune commission.'}</p>
-          <p class="aide">Envoi en point relais, suivi et assuré : vous imprimez l'étiquette, vous avez 5 jours pour déposer le colis.</p>
+          <p class="aide">Envoi en point relais, suivi : vous imprimez l'étiquette, vous avez 5 jours pour déposer le colis.</p>
+          <fieldset><legend>Mettre l'annonce en avant <small>facultatif, payé seulement si elle est publiée</small></legend>${segment('boost', V.boost, MISES_EN_AVANT.map(([k, l, pr]) => [k, pr ? `${l} · ${eur2(pr)}` : l]))}</fieldset>
           <label class="choix"><input type="checkbox" data-champ="mainPropre" ${V.mainPropre ? 'checked' : ''}> J'accepte aussi la remise en main propre</label>
           ${V.mainPropre ? `<label for="ville">Ville ou arrondissement</label><input id="ville" class="champ" data-champ="ville" value="${esc(V.ville)}" placeholder="ex. Lyon 3e" autocomplete="off">` : ''}
         </section>
@@ -3817,12 +3831,14 @@ function creerAdmin(o) {
     </section>
 
     <section class="fn-section env fn-frais">
-      <div data-revele><p class="surtitre">Les frais</p><h2 class="grand-titre">Le vendeur ne paie rien.</h2>
+      <div data-revele><p class="surtitre">Les frais</p><h2 class="grand-titre">Le vendeur ne paie rien.</h2><p class="chapo">La protection payée par l'acheteur finance ce qui rend la vente sûre : la vérification de chaque annonce par une personne, le paiement bloqué, le service client et les remboursements.</p>
         <table class="frais"><tbody>
           <tr><th scope="row">Vendre</th><td>Gratuit, sans commission</td></tr>
-          <tr><th scope="row">Protection acheteur</th><td>5 % du prix + 0,70 €</td></tr>
+          <tr><th scope="row">Protection acheteur</th><td>8 % du prix + 0,90 €</td></tr>
           <tr><th scope="row">Envoi suivi en point relais</th><td>À partir de 4,90 €</td></tr>
           <tr><th scope="row">Remise en main propre</th><td>Gratuit</td></tr>
+          <tr><th scope="row">Envoi assuré à la valeur réelle</th><td>2,90 €, en option au-dessus de 150 €</td></tr>
+          <tr><th scope="row">Mettre une annonce en avant</th><td>1,99 € (3 jours) ou 4,99 € (7 jours), si le vendeur le veut</td></tr>
         </tbody></table></div>
       <div class="calcul" data-revele>
         <label for="sim">Prix du parfum : <output id="sim-out">${eur(simPrix)}</output></label>
@@ -4225,7 +4241,7 @@ function creerAdmin(o) {
     if (parfumLibre()) V.proposes.push({id: 'p' + t, type: 'parfum', tape: nom, maison: maisonChoisie(), par: 'vous', il: 'à l\'instant', annonce: `${ml} ml`, conc: V.conc, genre: V.genre, familles: V.familles});
     // l'annonce part dans la file de vérification du back-office, avec les photos d'un flacon du même parfum
     const memeParfum = pc && ANNONCES.find((a) => a.p === pc.id);
-    Admin.proposer(V.proposes, {id: 's' + t, p: pc ? pc.id : null, nomAffiche: `${maisonChoisie()} · ${nom}`, ml, prix, etat: V.etat, niveau: V.etat === 'blister' ? 100 : V.niveau, boite: V.boite !== 'aucune', lot: V.lotIllisible ? 'illisible' : V.lot.trim(), v: 'v0', mainPropre: V.mainPropre, desc: V.desc.trim(),
+    Admin.proposer(V.proposes, {id: 's' + t, p: pc ? pc.id : null, nomAffiche: `${maisonChoisie()} · ${nom}`, ml, prix, etat: V.etat, niveau: V.etat === 'blister' ? 100 : V.niveau, boite: V.boite !== 'aucune', lot: V.lotIllisible ? 'illisible' : V.lot.trim(), v: 'v0', mainPropre: V.mainPropre, desc: V.desc.trim(), boost: V.boost,
       details: {conc: pc ? pc.conc : V.conc, format: FORMATS.find((x) => x[0] === V.format)[1], achat: `${V.annee}, ${V.lieu}`, rangement: `${V.lumiere === 'abri' ? 'à l\'abri de' : 'exposé à'} la lumière, ${V.chaleur === 'abri' ? 'à l\'abri de' : 'exposé à'} la chaleur`, boite: BOITES.find((x) => x[0] === V.boite)[1], visible: V.etat === 'blister' ? '' : V.visible === 'opaque' ? 'flacon opaque (photo à contre-jour)' : 'parfum visible', defauts: V.defauts.join(', '), ville: V.mainPropre ? V.ville.trim() : ''}, ph: memeParfum ? memeParfum.id : 'a101', fond: '#ECE7E0'});
     V.envoye = true;
     transition(() => {
@@ -4293,6 +4309,9 @@ function creerAdmin(o) {
     if (t.matches('[data-tri]')) {
       R.tri = t.value;
       majResultats();
+    } else if (t.matches('[data-assure]')) {
+      achat.assure = t.checked;
+      document.getElementById('total').innerHTML = total(A[location.hash.slice(9)]);
     } else if (t.matches('[data-mode]')) {
       achat.mode = t.value;
       document.getElementById('total').innerHTML = total(A[location.hash.slice(9)]);
@@ -4303,7 +4322,7 @@ function creerAdmin(o) {
     } else if (['lotIllisible', 'mainPropre', 'engagement'].includes(t.dataset.champ)) {
       V[t.dataset.champ] = t.checked;
       rafraichir(false);
-    } else if (['maison', 'parfum', 'ml', 'boite', 'etat', 'conc', 'genre', 'format', 'visible', 'annee', 'lieu', 'lumiere', 'chaleur'].includes(t.dataset.champ)) {
+    } else if (['maison', 'parfum', 'ml', 'boite', 'etat', 'conc', 'genre', 'format', 'visible', 'annee', 'lieu', 'lumiere', 'chaleur', 'boost'].includes(t.dataset.champ)) {
       V[t.dataset.champ] = t.value;
       if (t.dataset.champ === 'maison') Object.assign(V, {parfum: '', ml: ''});
       if (t.dataset.champ === 'parfum') V.ml = '';
@@ -4450,7 +4469,7 @@ function creerAdmin(o) {
         rafraichir(false);
         break;
       case 'acheter': {
-        const port = achat.mode === 'envoi' ? ENVOI : 0;
+        const port = (achat.mode === 'envoi' ? ENVOI : 0) + (assure(a) ? ASSURANCE : 0);
         ouvrir(`<h2 class="h2">Paiement</h2><p class="aide">${esc(P[a.p].nom)}, ${a.ml} ml</p>${total(a)}
           <p class="aide">L'argent reste bloqué jusqu'à votre confirmation, ou 7 jours après la livraison.</p>
           <button class="btn btn-noir btn-large" type="button" data-action="payer">Payer ${eur2(a.prix + protection(a.prix) + port)}</button>`);
