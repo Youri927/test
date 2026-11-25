@@ -4,6 +4,7 @@
    en 4G. */
 import {useActionState, useMemo, useState, startTransition} from 'react';
 import {envoyerVente, type EtatVente} from '@/app/actions/vendre';
+import {Vaporise} from '@/components/Logo';
 import {PHOTOS, CONCENTRATIONS, GROUPES_FAMILLES, FORMATS, LIEUX, DEFAUTS, BOITES, MISES_EN_AVANT, annees, eur, eur2, normal} from '@/lib/regles';
 
 type Parfum = {id: number; nom: string; conc: string; genre: string; famille: string; notes: string; formats: {ml: number}[]};
@@ -239,7 +240,7 @@ export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maiso
               <label className="choix engagement"><input type="checkbox" name="engagement" checked={v.engagement} onChange={(e) => set('engagement')(e.target.checked)} /> <span>Je certifie que ce parfum est authentique, qu'il n'a été ni dilué ni transvasé, et que je l'ai entre les mains. Je sais qu'une contrefaçon entraîne le remboursement de l'acheteur et l'exclusion de Respray.</span></label>
             </section>
             {etat.erreur ? <p className="erreur" role="alert">{etat.erreur}</p> : null}
-            <button className="btn btn-noir btn-large" type="submit" disabled={enCours}>{enCours ? 'Envoi des photos…' : 'Envoyer à la vérification'}</button>
+            <button className="btn btn-noir btn-large" type="submit" disabled={enCours}>{enCours ? <Vaporise texte="Envoi des photos…" /> : 'Envoyer à la vérification'}</button>
           </>
         ) : null}
       </form>

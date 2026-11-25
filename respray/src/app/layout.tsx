@@ -2,7 +2,7 @@ import type {Metadata, Viewport} from 'next';
 import Link from 'next/link';
 import './globals.css';
 import './site.css';
-import {Logo} from '@/components/Logo';
+import {Logo, Symbole} from '@/components/Logo';
 import {moi} from '@/lib/auth';
 import {deconnexion} from './actions/compte';
 
@@ -36,24 +36,37 @@ export default async function Racine({children}: {children: React.ReactNode}) {
           </div>
         </header>
         <main id="vue">{children}</main>
-        <footer className="pied">
+        <footer className="pied pied-signature">
           <div className="env pied-in">
-            <div>
-              <Link className="logo" href="/" aria-label="Respray, accueil"><Logo /></Link>
-              <p>Achetez et revendez vos parfums entre particuliers.</p>
+            <div className="pied-cols">
+              <div>
+                <p className="pied-titre">Acheter</p>
+                <Link href="/parfums">Tous les parfums</Link>
+                <Link href="/guides/reconnaitre-un-faux-parfum">Reconnaître un faux</Link>
+                <Link href="/guides/conserver-un-parfum">Conserver un parfum</Link>
+              </div>
+              <div>
+                <p className="pied-titre">Vendre</p>
+                <Link href="/vendre">Vendre un parfum</Link>
+                <Link href="/fondateurs">Vendeur fondateur</Link>
+                <Link href="/guides/combien-vendre-son-parfum">À combien le vendre</Link>
+                <Link href="/guides/photographier-un-parfum-pour-le-vendre">Les 6 photos</Link>
+              </div>
+              <div>
+                <p className="pied-titre">Respray</p>
+                <Link href="/guides">Guides</Link>
+                {m ? (
+                  <form action={deconnexion}><button className="lien-bouton" type="submit">Se déconnecter</button></form>
+                ) : (
+                  <Link href="/inscription">Créer un compte</Link>
+                )}
+              </div>
             </div>
-            <nav aria-label="Respray">
-              <Link href="/parfums">Parfums</Link>
-              <Link href="/vendre">Vendre</Link>
-              <Link href="/guides">Guides</Link>
-              <Link href="/fondateurs">Vendeur fondateur</Link>
-              {m ? (
-                <form action={deconnexion}><button className="lien-bouton" type="submit">Se déconnecter</button></form>
-              ) : (
-                <Link href="/inscription">Créer un compte</Link>
-              )}
-            </nav>
+            <p className="pied-phrase">Le parfum de seconde main, sans le doute.</p>
           </div>
+          {/* la signature : le logo en très grand, qui vaporise doucement */}
+          <div className="env pied-geant" aria-hidden="true"><Logo className="logo-geant" /></div>
+          <div className="env pied-bas"><Symbole className="symbole-mini" /><span>Vérifié avant d'être en ligne · 0 % de commission vendeur · 7 jours pour vérifier</span></div>
         </footer>
       </body>
     </html>
