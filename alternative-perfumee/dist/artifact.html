@@ -3431,9 +3431,9 @@ function creerAdmin(o) {
     const ml = pc ? +V.ml : nombre(V.mlAutre);
     const sections = [
       ['Le parfum', !!(maisonChoisie() && nomParfum() && (pc || (V.conc && V.genre)))],
-      ['Le flacon', ml > 0 && (V.etat === 'blister' || V.visible)],
-      ['Son histoire', !!(V.annee && V.lieu && V.lumiere && V.chaleur && V.boite && (V.lot.trim() || V.lotIllisible))],
-      ['Les photos', PHOTOS.every((x) => !x.obl || V.photos[x.k])],
+      ['Le flacon', ml > 0 && (V.etat === 'blister' || V.visible) && !!V.boite],
+      ['Son histoire', !!(V.annee && V.lieu && V.lumiere && V.chaleur)],
+      ['Photos et code lot', PHOTOS.every((x) => !x.obl || V.photos[x.k]) && !!(V.lot.trim() || V.lotIllisible)],
       ['Prix et remise', nombre(V.prix) >= 3 && (!V.mainPropre || V.ville.trim())],
       ['Engagement', V.engagement],
     ];
@@ -3497,6 +3497,7 @@ function creerAdmin(o) {
             <fieldset><legend>Le parfum se voit-il à travers le flacon ?</legend>${segment('visible', V.visible, [['oui', 'Oui'], ['opaque', 'Non, le flacon est opaque']])}</fieldset>
             ${V.visible === 'opaque' ? astuceOpaque() : ''}
             <fieldset><legend>Petits défauts <small>facultatif</small></legend>${puces('defauts', V.defauts, DEFAUTS.map((x) => [x, x]))}</fieldset>` : ''}
+          <fieldset><legend>Et sa boîte ?</legend>${segment('boite', V.boite, BOITES)}</fieldset>
         </section>
 
         <section class="bloc-form">
@@ -3508,17 +3509,12 @@ function creerAdmin(o) {
           <fieldset><legend>Rangé à l'abri de la lumière ?</legend>${segment('lumiere', V.lumiere, [['abri', 'Oui, dans un placard ou sa boîte'], ['expose', 'Non, à la lumière']])}</fieldset>
           <fieldset><legend>Et de la chaleur ?</legend>${segment('chaleur', V.chaleur, [['abri', 'Oui'], ['expose', 'Non (salle de bain, près d\'un radiateur…)']])}</fieldset>
           <p class="aide">La lumière et la chaleur abîment un parfum : l'acheteur le saura avant d'acheter, c'est ce qui le rassure.</p>
-          <fieldset><legend>La boîte</legend>${segment('boite', V.boite, BOITES)}</fieldset>
-          <label for="lot">Code lot</label>
-          <input id="lot" class="champ" data-champ="lot" value="${esc(V.lot)}" placeholder="ex. 3A21" autocomplete="off" ${V.lotIllisible ? 'disabled' : ''}>
-          <p class="aide">Gravé ou imprimé sous le flacon, et sur la boîte (souvent à côté du code-barres). L'équipe vérifie qu'il suit le format de la maison.</p>
-          <label class="choix"><input type="checkbox" data-champ="lotIllisible" ${V.lotIllisible ? 'checked' : ''}> Il est effacé ou illisible</label>
           <label for="desc">Description <small class="facultatif">facultatif</small></label>
           <textarea id="desc" class="champ" rows="3" data-champ="desc" placeholder="Pourquoi vous le vendez, combien de fois il a été porté, ce que l'acheteur doit savoir…">${esc(V.desc)}</textarea>
         </section>
 
         <section class="bloc-form">
-          <h2 class="h2">${n(4)}Les photos</h2>
+          <h2 class="h2">${n(4)}Photos et code lot</h2>
           <p class="aide">Elles nous permettent de vérifier votre parfum avant de publier l'annonce. Les ${OBLIGATOIRES} premières sont obligatoires ; chaque case montre l'exemple à suivre.</p>
           <div class="photos">${PHOTOS.map((x) => `<label class="photo ${V.photos[x.k] ? 'faite' : ''}">
               <input class="vh" type="file" accept="image/*" data-photo="${x.k}">
@@ -3526,6 +3522,10 @@ function creerAdmin(o) {
               <span class="photo-txt"><strong>${x.t}${x.obl ? '' : ' <em>facultatif</em>'}</strong><small>${x.d}</small></span>
             </label>`).join('')}</div>
           <button class="btn btn-petit" type="button" data-action="photos-exemple">Ajouter des photos d'exemple</button>
+          <label for="lot">Le code lot, tel qu'on le lit sur la photo du dessous</label>
+          <input id="lot" class="champ" data-champ="lot" value="${esc(V.lot)}" placeholder="ex. 3A21" autocomplete="off" ${V.lotIllisible ? 'disabled' : ''}>
+          <p class="aide">Gravé ou imprimé sous le flacon, et sur la boîte (souvent à côté du code-barres). L'équipe vérifie qu'il suit le format de la maison.</p>
+          <label class="choix"><input type="checkbox" data-champ="lotIllisible" ${V.lotIllisible ? 'checked' : ''}> Il est effacé ou illisible</label>
           ${V.visible === 'opaque' ? '' : astuceOpaque()}
         </section>` : ''}
 
@@ -4164,11 +4164,11 @@ function creerAdmin(o) {
     else if (!pc && !V.genre) manque = 'Dites pour qui est ce parfum : femme, homme ou mixte.';
     else if (!(ml > 0)) manque = 'Indiquez la contenance.';
     else if (V.etat === 'entame' && !V.visible) manque = 'Dites si le parfum se voit à travers le flacon.';
+    else if (!V.boite) manque = 'Dites s\'il a sa boîte.';
     else if (!V.annee || !V.lieu) manque = 'Dites quand et où vous l\'avez acheté.';
     else if (!V.lumiere || !V.chaleur) manque = 'Dites comment il a été rangé.';
-    else if (!V.boite) manque = 'Dites s\'il a sa boîte.';
-    else if (!V.lot.trim() && !V.lotIllisible) manque = 'Recopiez le code lot, ou cochez « effacé ou illisible ».';
     else if (PHOTOS.some((x) => x.obl && !V.photos[x.k])) manque = `Ajoutez les ${OBLIGATOIRES} photos obligatoires.`;
+    else if (!V.lot.trim() && !V.lotIllisible) manque = 'Recopiez le code lot, ou cochez « effacé ou illisible ».';
     else if (!(prix >= 3)) manque = 'Indiquez un prix d\'au moins 3 €.';
     else if (V.mainPropre && !V.ville.trim()) manque = 'Indiquez la ville de la remise en main propre.';
     else if (!V.engagement) manque = 'Cochez l\'engagement d\'authenticité.';
