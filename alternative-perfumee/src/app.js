@@ -111,8 +111,9 @@
   };
   const ico = (n, c = '') => `<svg class="ico ${c}" viewBox="0 0 24 24" aria-hidden="true">${ICO[n]}</svg>`;
   const coeur = (id) => `<button class="coeur" type="button" data-fav="${id}" aria-pressed="${favoris.has(id)}" aria-label="Ajouter aux favoris"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-9.6A4 4 0 0 1 12 7.6a4 4 0 0 1 7 2.8C19 15.6 12 20 12 20z"/></svg></button>`;
-  function carte(a, extra = '') {
+  function carte(a, extra) {
     const p = P[a.p];
+    if (typeof extra !== 'string') extra = ''; // appelée aussi par .map(), qui passe l'index
     return `<article class="carte" data-revele>
       <a class="carte-lien" href="#annonce-${a.id}">
         <div class="carte-photo">${photo(a)}${a.etat === 'blister' ? '<span class="etiq">Neuf sous blister</span>' : ''}${extra}</div>
@@ -795,6 +796,102 @@
   }
   const nbNotifs = () => etat.propositions.length + A_VERIFIER.filter((a) => etat.aVerifier.includes(a.id)).length;
 
+  /* ——— identité : la direction artistique, pour la montrer ———
+     Le symbole reprend la géométrie de tools/logo.py (grille de 110 × 100). */
+  const SYMBOLE = '<path d="M30 86V58c0-14 10-22 24-22" fill="none" stroke="currentColor" stroke-width="13" stroke-linecap="round"/><g fill="currentColor"><circle class="p1" cx="71" cy="36" r="5.5"/><circle class="p2" cx="84" cy="26" r="4"/><circle class="p2" cx="85" cy="44" r="4"/><circle class="p3" cx="96" cy="18" r="2.8"/><circle class="p3" cx="97" cy="35" r="2.8"/><circle class="p3" cx="96" cy="52" r="2.8"/></g>';
+  const symbole = (classe = '') => `<svg class="${classe}" viewBox="23.5 15.2 76.3 77.3" aria-hidden="true">${SYMBOLE}</svg>`;
+  const logoSvg = () => (document.getElementById('tpl-logo') || {innerHTML: ''}).innerHTML;
+  const COULEURS = [
+    ['Encre', '#1D1D1F', 'Le texte, le logo, les boutons principaux.'],
+    ['Gris clair', '#F5F5F7', 'Les fonds de section et des photos.'],
+    ['Gris', '#6E6E73', 'Les textes secondaires.'],
+    ['Trait', '#D2D2D7', 'Les bordures et les séparations.'],
+    ['Blanc', '#FFFFFF', 'Le fond.'],
+    ['Vert vérifié', '#1A7F4B', 'Seulement pour ce qui est vérifié ou validé.'],
+  ];
+  VUES.marque = () => {
+    const a = A.a101;
+    const grille = [];
+    for (let x = 30; x <= 100; x += 10) grille.push(`<line x1="${x}" x2="${x}" y1="10" y2="96"/>`);
+    for (let y = 20; y <= 90; y += 10) grille.push(`<line x1="18" x2="104" y1="${y}" y2="${y}"/>`);
+    return `<div class="marque-page">
+    <section class="mq-hero env">
+      <p class="surtitre">Identité</p>
+      <div class="mq-logo" role="img" aria-label="Logo Respray">${logoSvg()}</div>
+      <p class="mq-signature">Le parfum de seconde main, vérifié.</p>
+    </section>
+
+    <section class="mq-section env mq-symbole" data-revele data-anime>
+      <div class="mq-construction">
+        <svg viewBox="18 10 86 86" aria-hidden="true"><g class="mq-grille">${grille.join('')}</g>
+          <circle class="mq-guide" cx="54" cy="58" r="24"/><line class="mq-guide" x1="71" y1="36" x2="96" y2="18"/><line class="mq-guide" x1="71" y1="36" x2="96" y2="52"/>
+          <g class="mq-trace">${SYMBOLE}</g></svg>
+      </div>
+      <div class="mq-texte">
+        <h2 class="grand-titre">Un r qui vaporise.</h2>
+        <p>Le symbole est un « r » dont l'épaule devient un jet de spray : un point, puis deux, puis trois. Re-spray : le parfum qui repart pour quelqu'un d'autre.</p>
+        <dl class="mq-mesures">
+          <div><dt>Trait</dt><dd>13 unités, bouts arrondis</dd></div>
+          <div><dt>Points</dt><dd>5,5 · 4 · 2,8 de rayon</dd></div>
+          <div><dt>Jet</dt><dd>un cône de 1, 2 et 3 points</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="mq-section env">
+      <div class="mq-tete"><h2 class="grand-titre">Les versions.</h2><p class="chapo">Le logo complet quand il y a la place, le symbole seul quand il n'y en a pas.</p></div>
+      <div class="mq-versions">
+        <figure class="mq-v mq-v-large"><div class="mq-v-fond">${logoSvg()}</div><figcaption>Logo, sur fond clair</figcaption></figure>
+        <figure class="mq-v mq-v-large"><div class="mq-v-fond mq-sombre">${logoSvg()}</div><figcaption>Logo, sur fond sombre</figcaption></figure>
+        <figure class="mq-v"><div class="mq-v-fond mq-gris">${symbole('mq-sym')}</div><figcaption>Symbole seul</figcaption></figure>
+        <figure class="mq-v"><div class="mq-v-fond mq-gris"><span class="mq-icone">${symbole()}</span></div><figcaption>Icône d'application</figcaption></figure>
+        <figure class="mq-v"><div class="mq-v-fond mq-gris mq-tailles">${[64, 32, 16].map((t) => `<span class="mq-icone" style="--t:${t}px">${symbole()}</span>`).join('')}</div><figcaption>Favicon : 64, 32 et 16 px</figcaption></figure>
+      </div>
+      <p class="aide mq-regle">Autour du logo, gardez au moins la moitié de la hauteur du symbole. En dessous de 80 px de large, utilisez le symbole seul. Le logo est toujours en encre ou en blanc, jamais en couleur, jamais déformé, jamais sur une photo chargée.</p>
+    </section>
+
+    <section class="mq-section env">
+      <div class="mq-tete"><h2 class="grand-titre">Les couleurs.</h2><p class="chapo">Du noir, du blanc, des gris. Le vert ne sert qu'à dire « c'est vérifié ». Touchez une couleur pour copier son code.</p></div>
+      <div class="mq-couleurs">${COULEURS.map(([n, hex, usage]) => `<button type="button" class="mq-couleur" data-copier="${hex}"><span class="mq-pastille" style="background:${hex}"></span><strong>${n}</strong><span class="mq-hex">${hex}</span><small>${usage}</small></button>`).join('')}</div>
+    </section>
+
+    <section class="mq-section env mq-typo">
+      <div class="mq-tete"><h2 class="grand-titre">La typographie.</h2><p class="chapo">Inter, une seule famille, deux graisses. Les titres sont serrés, le texte respire.</p></div>
+      <div class="mq-typo-in">
+        <div class="mq-aa">Aa</div>
+        <div class="mq-echelle">
+          <p class="mq-e1">Titre · 48, semi-gras</p>
+          <p class="mq-e2">Sous-titre · 22, semi-gras</p>
+          <p class="mq-e3">Texte courant · 16, normal. Les annonces se lisent comme on parle, sans superlatifs.</p>
+          <p class="mq-e4">Légende · 13, moyen</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mq-section env">
+      <div class="mq-tete"><h2 class="grand-titre">Les dessins.</h2><p class="chapo">Comme un schéma technique : un trait fin et constant, des aplats, aucun reflet, aucune ombre floue. Un repère seulement quand il sert à vérifier.</p></div>
+      <div class="mq-dessins">${['face', 'dessous', 'niveau', 'dessus', 'tige', 'preuve', 'boite', 'ticket'].map((v) => `<figure>${photo(a, v)}<figcaption>${Dessins.LEGENDES[v]}</figcaption></figure>`).join('')}</div>
+    </section>
+
+    <section class="mq-section env">
+      <div class="mq-tete"><h2 class="grand-titre">Les éléments.</h2></div>
+      <div class="mq-elements">
+        <div><a class="btn btn-noir" href="#vendre">Vendre un parfum</a><span class="btn">Faire une offre</span></div>
+        <div><span class="filtre" aria-pressed="true">Toutes les maisons</span><span class="filtre">Le Labo</span><span class="filtre">Xerjoff</span></div>
+        <div><span class="mq-verif">${ico('check')}Vérifiée aujourd'hui</span><span class="mq-pilule-sombre">Neuf sous blister</span></div>
+      </div>
+    </section>
+
+    <section class="mq-section env">
+      <div class="mq-tete"><h2 class="grand-titre">Le ton.</h2><p class="chapo">Précis, calme, sans promesse qu'on ne tient pas.</p></div>
+      <div class="mq-ton">
+        <div><p class="mq-oui">On dit</p><p>« Vérifiée en 1 h 12. »</p><p>« Il reste environ 85 %. »</p><p>« Vous avez 7 jours pour vérifier. »</p></div>
+        <div><p class="mq-non">On ne dit pas</p><p>« Qualité premium garantie ! »</p><p>« Presque plein ! »</p><p>« Achetez en toute sérénité ! »</p></div>
+      </div>
+    </section>
+  </div>`;
+  };
+
   VUES.introuvable = () => `<div class="env page"><h1 class="titre-page">Cette page n'existe pas</h1><p><a class="lien" href="#accueil">Retour à l'accueil</a></p></div>`;
 
   /* ——— fenêtres, messages ——— */
@@ -1182,6 +1279,23 @@
       sauver();
       rafraichir(true);
       message(texte);
+      return;
+    }
+    if (t.dataset.copier) {
+      const hex = t.dataset.copier;
+      const ok = () => message(`${hex} copié.`);
+      const repli = () => {
+        const r = document.createRange();
+        r.selectNodeContents(t.querySelector('.mq-hex'));
+        getSelection().removeAllRanges();
+        getSelection().addRange(r);
+        message(`${hex} : sélectionné, copiez-le avec Ctrl+C ou ⌘C.`);
+      };
+      try {
+        navigator.clipboard.writeText(hex).then(ok, repli);
+      } catch (err) {
+        repli();
+      }
       return;
     }
     const a = t.dataset.a && A[t.dataset.a];

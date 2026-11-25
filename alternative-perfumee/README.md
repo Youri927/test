@@ -11,9 +11,11 @@ l'argent reste bloqué.
 | `STRATEGIE.md` | Le principe de Respray, ce qui change par rapport à Perfumee, les photos obligatoires, la vérification, l'après-achat, les frais, ce qu'il faut régler avant de lancer |
 | `src/` | Le prototype (HTML, CSS et JavaScript, sans dépendance) |
 | `src/visuels.js` | Les dessins qui tiennent la place des photos : de face, dessous, niveau, vue de dessus avec le spray, tige, preuve, boîte, ticket |
-| `dist/index.html` | Le prototype en un seul fichier (176 Ko, police comprise), à ouvrir d'un double-clic |
+| `dist/index.html` | Le prototype en un seul fichier (305 Ko, police et logo compris), à ouvrir d'un double-clic |
 | `dist/artifact.html` | Le même, sans l'enveloppe HTML, pour la publication en page Claude |
-| `vendor/fonts/` | Figtree (licence OFL) |
+| `marque/` | Le logo (symbole, mot, logo complet clair et sombre, icône d'application, favicon) et `DA.md`, la direction artistique |
+| `tools/logo.py` | Le programme qui dessine le logo et toutes ses déclinaisons |
+| `vendor/fonts/` | Inter (licence OFL) |
 
 ## Le prototype
 
@@ -24,6 +26,7 @@ l'argent reste bloqué.
 | `#annonce-a101` | Une annonce : les photos obligatoires (vue de dessus et tige comprises), le prix au ml, les détails, la livraison, le total, l'achat, l'offre, la protection acheteur, le vendeur, ce que l'équipe a vérifié |
 | `#vendre` | Le formulaire de vente : maison et parfum choisis dans la liste ou proposés (avec « Vouliez-vous dire… ? »), l'état, les 6 photos obligatoires avec leur exemple, le prix |
 | `#fonctionnement` | Le parcours vendeur et acheteur en défilement, avec une scène animée par étape ; les photos obligatoires, la vérification, les 7 jours, les signalements, un calculateur des frais, les interdits, la FAQ |
+| `#marque` | L'identité : le symbole et sa construction, les versions du logo, l'icône, les couleurs (code copiable), la typographie, les dessins, les éléments, le ton |
 | `#panel` | Le panel équipe : les annonces à vérifier (contrôles, publier, refuser avec une raison) et les maisons ou parfums proposés (correction des majuscules, détection des doublons, ajout à la liste) |
 
 Le catalogue reprend de vrais parfums (maison, nom, année) ; les prix neufs sont indicatifs. Les annonces, les
@@ -39,3 +42,5 @@ l'équipe dans le panel est gardé dans le navigateur : « Remettre l'exemple à
 ```bash
 node build.mjs
 ```
+
+Le logo se redessine avec `python3 tools/logo.py` (il faut `pip install fonttools brotli`).

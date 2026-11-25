@@ -13,7 +13,12 @@ let css = read('./src/styles.css').replace(/url\(\.\.\/vendor\/fonts\/([\w.-]+\.
 const js = ['data', 'visuels', 'app'].map((f) => read(`./src/${f}.js`)).join('\n');
 if (js.includes('</script')) throw new Error('le script contient </script');
 
+// le logo, en ligne (sa couleur suit le texte), et le favicon intégré
+const logo = read('./marque/logo-site.svg').trim().replace('<svg ', '<svg class="logo-svg" aria-hidden="true" focusable="false" ').replace(/<title>.*?<\/title>/, '').replace(/ role="img" aria-label="Respray"/, '');
+const favicon = 'data:image/svg+xml;base64,' + b64('./marque/favicon.svg');
 const page = read('./src/index.html')
+  .replaceAll('<!--logo-->', () => logo)
+  .replace('<link rel="icon" href="../marque/favicon.svg">', () => `<link rel="icon" href="${favicon}">`)
   .replace('<link rel="stylesheet" href="styles.css">', () => `<style>\n${css}</style>`)
   .replace('<script src="data.js"></script>\n<script src="visuels.js"></script>\n<script src="app.js"></script>', () => `<script>\n${js}</script>`);
 if (page.includes('src="data.js"') || page.includes('href="styles.css"')) throw new Error('remplacement manqué');
