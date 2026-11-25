@@ -1,0 +1,47 @@
+<title>Mouillette</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Mouillette, prototype : la marketplace du parfum de seconde main où chaque flacon est pesé, son code lot décodé, sa cote affichée, et son authenticité garantie.">
+<link rel="stylesheet" href="styles.css">
+
+<p class="bandeau-proto" role="note">Prototype · annonces, prix et vendeurs fictifs<span class="bp-long"> · les parfums cités appartiennent à leurs maisons</span></p>
+<header class="entete">
+  <div class="env entete-in">
+    <a class="logo" href="#accueil" aria-label="Mouillette, accueil">mou<span class="ll" aria-hidden="true"><i></i><i></i></span>ette</a>
+    <form class="entete-recherche" data-form="entete" role="search">
+      <label class="vh" for="q-entete">Chercher un parfum</label>
+      <svg class="ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l5 5"/></svg>
+      <input id="q-entete" name="q" type="search" placeholder="Parfum, maison, note…" autocomplete="off">
+    </form>
+    <nav class="nav" aria-label="Principale">
+      <a href="#recherche" data-nav="recherche">Acheter</a>
+      <a href="#vendre" data-nav="vendre">Vendre</a>
+      <a href="#confiance" data-nav="confiance">Confiance</a>
+      <a href="#tarifs" data-nav="tarifs">Tarifs</a>
+      <a href="#etagere" data-nav="etagere">Mon étagère</a>
+    </nav>
+  </div>
+</header>
+
+<main id="vue"></main>
+
+<footer class="pied">
+  <div class="env pied-in">
+    <div class="pied-marque">
+      <a class="logo" href="#accueil" aria-label="Mouillette, accueil">mou<span class="ll" aria-hidden="true"><i></i><i></i></span>ette</a>
+      <p>Le parfum de seconde main, vérifié jusqu'à la dernière goutte.</p>
+    </div>
+    <nav aria-label="Acheter"><p class="sur">Acheter</p><a href="#recherche">Tous les flacons</a><a href="#parfum-baccarat-rouge-540">La cote d'un parfum</a><a href="#passeport-MO-004127">Un passeport</a></nav>
+    <nav aria-label="Vendre"><p class="sur">Vendre</p><a href="#vendre">Mettre en vente</a><a href="#confiance">La Conciergerie</a><a href="#tarifs">Tarifs</a></nav>
+    <nav aria-label="Confiance"><p class="sur">Confiance</p><a href="#confiance">L'Atelier</a><a href="#confiance">La garantie</a><a href="#etagere">Mon étagère</a></nav>
+  </div>
+  <div class="env pied-bas">
+    <p>Prototype de démonstration. Aucune transaction n'est possible.</p>
+    <button class="btn btn-petit" type="button" data-action="theme">Clair / sombre</button>
+  </div>
+</footer>
+
+<div id="modale" hidden></div>
+<p id="message" class="message" role="status" hidden></p>
+
+<script src="data.js"></script>
+<script src="app.js"></script>

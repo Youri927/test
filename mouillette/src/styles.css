@@ -1,0 +1,586 @@
+/* Mouillette.
+   Mise en page : le carnet d'évaluation. Le flacon gradué d'un côté, les mesures de l'autre ; des chiffres partout,
+   en caractères de machine ; une seule couleur, le violet iris, pour ce qui est vérifié et mesuré. */
+@font-face{font-family:"Bodoni Moda";src:url(../vendor/fonts/bodoni-normal-400-700.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap}
+@font-face{font-family:"Bodoni Moda";src:url(../vendor/fonts/bodoni-italic-400-700.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap}
+@font-face{font-family:"Instrument Sans";src:url(../vendor/fonts/instrument-normal-400-700.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:swap}
+@font-face{font-family:"Martian Mono";src:url(../vendor/fonts/martian-normal-400-500.woff2) format("woff2");font-weight:400 500;font-style:normal;font-display:swap}
+
+:root {
+  --papier: #f6f6f3;      /* le fond : papier buvard, neutre */
+  --carte: #ffffff;
+  --plaque: #ecece7;      /* le plateau sous les flacons */
+  --encre: #17181c;
+  --encre-2: #4b4d56;
+  --gris: #73767f;
+  --trait: #e2e2de;
+  --trait-fort: #c9cac4;
+  --iris: #4b3bd6;        /* la seule couleur : ce qui est vérifié, mesuré */
+  --iris-doux: #ecebfc;
+  --iris-encre: #2e2299;
+  --sur-iris: #ffffff;
+  --ok: #16724d;
+  --ok-doux: #e1f2e9;
+  --alerte: #8f5b07;
+  --alerte-doux: #fbefd9;
+  --non: #b3261e;
+  --verre: rgba(255, 255, 255, .6);
+  --verre-trait: rgba(23, 24, 28, .5);
+  --reflet: rgba(255, 255, 255, .55);
+
+  --f-titre: "Bodoni Moda", "Bodoni 72", Didot, "Times New Roman", serif;
+  --f-texte: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --f-data: "Martian Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --r: 10px;
+  --max: 1240px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --papier: #111215; --carte: #191a1e; --plaque: #202126; --encre: #ededef; --encre-2: #bebfc7; --gris: #8d8f9a;
+    --trait: #2a2b31; --trait-fort: #3c3e45; --iris: #a89eff; --iris-doux: #25213f; --iris-encre: #d2ccff; --sur-iris: #15122b;
+    --ok: #5ccb9c; --ok-doux: #13291f; --alerte: #e6ae52; --alerte-doux: #2d2414; --non: #f3877f;
+    --verre: rgba(255, 255, 255, .07); --verre-trait: rgba(237, 237, 239, .5); --reflet: rgba(255, 255, 255, .16);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --papier: #111215; --carte: #191a1e; --plaque: #202126; --encre: #ededef; --encre-2: #bebfc7; --gris: #8d8f9a;
+  --trait: #2a2b31; --trait-fort: #3c3e45; --iris: #a89eff; --iris-doux: #25213f; --iris-encre: #d2ccff; --sur-iris: #15122b;
+  --ok: #5ccb9c; --ok-doux: #13291f; --alerte: #e6ae52; --alerte-doux: #2d2414; --non: #f3877f;
+  --verre: rgba(255, 255, 255, .07); --verre-trait: rgba(237, 237, 239, .5); --reflet: rgba(255, 255, 255, .16);
+  color-scheme: dark;
+}
+
+/* ——— base ——— */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 90px; }
+body {
+  margin: 0; background: var(--papier); color: var(--encre);
+  font: 400 16px/1.55 var(--f-texte); font-feature-settings: "ss01";
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--papier); }
+h1, h2, h3, p, ul, ol, dl, figure { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; text-underline-offset: .18em; text-decoration-thickness: 1px; }
+button, input, select { font: inherit; color: inherit; }
+img { max-width: 100%; }
+:focus-visible { outline: 2px solid var(--iris); outline-offset: 2px; border-radius: 3px; }
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.env { width: 100%; max-width: var(--max); margin-inline: auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.mono { font-family: var(--f-data); font-size: .8em; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.sur { font: 500 10.5px/1.4 var(--f-data); text-transform: uppercase; letter-spacing: .09em; color: var(--gris); }
+.petit { font-size: 13.5px; color: var(--encre-2); }
+.titre { font: 500 clamp(1.5rem, 2.6vw, 2.15rem)/1.12 var(--f-titre); letter-spacing: -.012em; text-wrap: balance; }
+.titre-page { font: 500 clamp(2rem, 4.2vw, 3.1rem)/1.05 var(--f-titre); letter-spacing: -.015em; text-wrap: balance; }
+.chapo { font-size: clamp(1.05rem, 1.6vw, 1.2rem); color: var(--encre-2); max-width: 58ch; }
+em { font-family: var(--f-titre); font-style: italic; font-weight: 500; }
+.hausse { color: var(--ok); }
+.baisse { color: var(--non); }
+.ok { color: var(--ok); font-weight: 600; }
+
+/* ——— icônes, boutons, étiquettes ——— */
+.ico { width: 1.05em; height: 1.05em; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; vertical-align: -.16em; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5em; min-height: 42px; padding: 9px 18px;
+  border: 1px solid var(--encre); border-radius: 6px; background: transparent; color: var(--encre);
+  font-weight: 600; font-size: 15px; text-decoration: none; cursor: pointer; transition: background .15s, color .15s, border-color .15s;
+}
+.btn:hover { background: var(--carte); }
+.btn-plein { background: var(--encre); color: var(--papier); }
+.btn-plein:hover { background: var(--iris); border-color: var(--iris); color: var(--sur-iris); }
+.btn-petit { min-height: 34px; padding: 6px 12px; font-size: 13.5px; }
+.btn-large { min-height: 50px; padding-inline: 26px; font-size: 16px; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.lien-fort { display: inline-flex; align-items: center; gap: .45em; font-weight: 600; color: var(--iris); text-decoration: none; }
+.lien-fort:hover { text-decoration: underline; }
+.badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 8px 4px 6px; border-radius: 4px; font: 500 10px/1.2 var(--f-data); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; border: 1px solid var(--trait-fort); background: var(--carte); color: var(--encre-2); }
+.badge .ico { width: 13px; height: 13px; stroke-width: 2; }
+.badge-atelier { background: var(--iris-doux); border-color: transparent; color: var(--iris-encre); }
+.badge-passeport { background: var(--iris); border-color: var(--iris); color: var(--sur-iris); }
+.tag { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12.5px; font-weight: 600; white-space: nowrap; text-decoration: none; }
+.tag-bon { background: var(--ok-doux); color: var(--ok); }
+.tag-cote { background: transparent; color: var(--encre-2); box-shadow: inset 0 0 0 1px var(--trait-fort); }
+.tag-haut { background: var(--alerte-doux); color: var(--alerte); }
+.pastille { display: inline-block; padding: 2px 7px; border-radius: 99px; background: var(--encre); color: var(--papier); font: 500 10px/1.5 var(--f-data); text-transform: uppercase; letter-spacing: .06em; vertical-align: middle; }
+
+/* ——— le logo : les deux « l » sont deux mouillettes, l'une trempée dans le jus ——— */
+.logo { display: inline-flex; align-items: baseline; font: 500 27px/1 var(--f-titre); letter-spacing: -.015em; color: var(--encre); text-decoration: none; }
+.ll { display: inline-flex; align-items: flex-end; gap: .075em; margin-inline: .045em .03em; height: .74em; }
+.ll i { display: block; width: .095em; height: 100%; background: var(--encre); border-radius: .015em .015em .05em .05em; }
+.ll i:last-child { background: linear-gradient(to top, var(--iris) 0 40%, var(--encre) 40%); }
+
+/* ——— en-tête ——— */
+.bandeau-proto { padding-block: 7px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); background: var(--encre); color: var(--papier); font: 500 10.5px/1.4 var(--f-data); text-align: center; letter-spacing: .04em; }
+.entete { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--papier) 92%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--trait); }
+.entete-in { display: flex; align-items: center; gap: 20px; min-height: 66px; flex-wrap: wrap; padding-block: 10px; }
+.entete-recherche { position: relative; flex: 1 1 260px; max-width: 420px; }
+.entete-recherche .ico { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gris); }
+.entete-recherche input { width: 100%; height: 40px; padding: 0 12px 0 36px; border: 1px solid var(--trait-fort); border-radius: 6px; background: var(--carte); }
+.nav { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-left: auto; font-size: 14.5px; font-weight: 500; }
+.nav a { text-decoration: none; padding: 6px 0; border-bottom: 1.5px solid transparent; }
+.nav a:hover { border-color: var(--trait-fort); }
+.nav a[aria-current="page"] { border-color: var(--iris); color: var(--iris); }
+
+/* ——— accueil : la fiche d'évaluation ——— */
+.hero { padding-block: clamp(36px, 6vw, 80px) clamp(28px, 4vw, 48px); }
+.hero-grille { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+.hero h1 { font: 500 clamp(2.4rem, 5.4vw, 4.4rem)/1.0 var(--f-titre); letter-spacing: -.022em; text-wrap: balance; margin-block: 14px 20px; }
+.hero .chapo { margin-bottom: 26px; }
+.recherche-hero { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 14px; border: 1px solid var(--encre); border-radius: 8px; background: var(--carte); max-width: 560px; }
+.recherche-hero .ico { color: var(--gris); }
+.recherche-hero input { flex: 1; min-width: 0; height: 44px; border: 0; background: transparent; outline: none; font-size: 16px; }
+.suggestions { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 14px; font-size: 14px; color: var(--encre-2); }
+.suggestions a { text-decoration-color: var(--trait-fort); }
+.hero-vendre { margin-top: 26px; }
+
+.fiche-eval { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 10px 22px; padding: 28px 26px 22px; border: 1px solid var(--trait); border-radius: var(--r); background: var(--carte); }
+.fiche-flacon { display: block; padding: 10px 0; border-radius: 8px; background: var(--plaque); }
+.flacon-hero { height: clamp(240px, 30vw, 330px); width: auto; margin-inline: auto; }
+.annot { display: grid; gap: 18px; }
+.annot li { display: grid; gap: 3px; padding-left: 14px; border-left: 1px solid var(--trait-fort); animation: annot .6s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(var(--i) * 110ms + 150ms); }
+.annot-k { font: 500 10.5px/1.3 var(--f-data); text-transform: uppercase; letter-spacing: .08em; color: var(--gris); }
+.annot-v { font-size: 13.5px; color: var(--encre); }
+.annot li:nth-child(4) .annot-v { color: var(--iris); }
+@keyframes annot { from { opacity: .3; transform: translateX(8px); } to { opacity: 1; transform: none; } }
+.fiche-eval figcaption { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 14px; border-top: 1px solid var(--trait); }
+.fiche-eval figcaption a { text-decoration: none; font-size: 17px; }
+.fiche-eval figcaption em { font-size: 20px; }
+
+.preuves { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-block: 1px solid var(--trait); padding-block: 0; }
+.preuves > div { padding: 22px 22px 24px 0; }
+.preuves > div + div { padding-left: 22px; border-left: 1px solid var(--trait); }
+.preuves h2 { display: flex; align-items: center; gap: 8px; font: 600 16px/1.3 var(--f-texte); margin-bottom: 6px; }
+.preuves h2 .ico { color: var(--iris); }
+.preuves p { font-size: 14.5px; color: var(--encre-2); }
+
+/* ——— blocs ——— */
+.bloc { padding-block: clamp(40px, 6vw, 76px) 0; }
+.bloc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 28px; margin-bottom: 22px; }
+.bloc-tete .sur { margin-bottom: 8px; }
+.bloc-note { max-width: 40ch; font-size: 13.5px; color: var(--gris); }
+.bande { margin-top: clamp(40px, 6vw, 76px); padding-block: clamp(40px, 6vw, 72px); background: var(--carte); border-block: 1px solid var(--trait); }
+.table-defile { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* la cote */
+table { border-collapse: collapse; width: 100%; }
+.cote th, .cote td { padding: 13px 14px; border-bottom: 1px solid var(--trait); text-align: left; vertical-align: middle; }
+.cote thead th { font: 500 10.5px/1.3 var(--f-data); text-transform: uppercase; letter-spacing: .08em; color: var(--gris); border-bottom-color: var(--trait-fort); padding-block: 8px; }
+.cote th[scope="row"] a { display: grid; gap: 2px; text-decoration: none; }
+.cote th[scope="row"] em { font-size: 19px; }
+.cote tbody tr { cursor: pointer; transition: background .12s; }
+.cote tbody tr:hover { background: var(--carte); }
+.cote .num, .sim .num { text-align: right; }
+.cote td.mono { font-size: 13px; }
+.spark-cell { display: inline-flex; align-items: center; gap: 10px; }
+.spark path { fill: none; stroke: var(--iris); stroke-width: 1.6; stroke-linejoin: round; }
+.spark circle { fill: var(--iris); }
+
+/* cartes */
+.grille-cartes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 236px), 1fr)); gap: 16px; }
+.carte { display: flex; flex-direction: column; border: 1px solid var(--trait); border-radius: var(--r); background: var(--carte); text-decoration: none; overflow: hidden; transition: border-color .15s; }
+.carte:hover { border-color: var(--trait-fort); }
+.carte:hover .flacon { transform: translateY(-4px); }
+.carte-visuel { position: relative; display: grid; place-items: center; height: 214px; background: var(--plaque); }
+.carte-visuel .flacon { height: 170px; width: auto; transition: transform .25s cubic-bezier(.2, .7, .2, 1); }
+.carte-visuel .badge { position: absolute; top: 10px; left: 10px; }
+.carte-visuel .pastille { position: absolute; top: 10px; right: 10px; }
+.carte-corps { display: grid; gap: 4px; padding: 14px 14px 16px; align-content: start; flex: 1; }
+.carte-nom { font: italic 500 20px/1.15 var(--f-titre); letter-spacing: -.01em; }
+.carte-conc { font-size: 13px; color: var(--gris); }
+.carte-prix { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 6px; }
+.carte-prix strong { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.carte-prix .mono { color: var(--encre-2); }
+.carte-corps .tag { justify-self: start; margin-top: 4px; }
+.mini-dl { display: grid; gap: 4px; margin-top: 8px; font-size: 13px; }
+.mini-dl div { display: flex; justify-content: space-between; gap: 8px; }
+.mini-dl dt { color: var(--gris); }
+.mini-dl dd { margin: 0; }
+.remp { display: flex; align-items: center; gap: 8px; margin-top: 6px; color: var(--encre-2); }
+.remp-barre { position: relative; width: 64px; height: 6px; border-radius: 3px; background: var(--trait); overflow: hidden; flex: none; }
+.remp-barre i { position: absolute; inset: 0 auto 0 0; background: var(--encre-2); border-radius: 3px; }
+.remp-l { margin-top: 18px; }
+.remp-l .remp-barre { width: 160px; height: 8px; }
+.remp-l .mono { font-size: 13px; }
+
+/* les flacons dessinés */
+.flacon { display: block; overflow: visible; }
+.v-verre path, .v-verre rect { fill: var(--verre); stroke: var(--verre-trait); stroke-width: 1.2; }
+.v-col { fill: var(--verre); stroke: var(--verre-trait); stroke-width: 1; }
+.v-bouchon { stroke: rgba(0, 0, 0, .22); stroke-width: .8; }
+.v-lueur { fill: rgba(255, 255, 255, .32); }
+.v-jus { opacity: .9; }
+.v-menisque { fill: rgba(255, 255, 255, .6); }
+.v-fond { fill: var(--verre-trait); opacity: .14; }
+.v-reflet { fill: var(--reflet); }
+.v-etiquette { fill: var(--carte); stroke: var(--verre-trait); stroke-width: .6; }
+.v-etiquette-l { fill: var(--encre-2); opacity: .55; }
+.v-grad line { stroke: var(--gris); stroke-width: .8; }
+.v-grad-txt { font: 400 7.5px var(--f-data); fill: var(--gris); }
+.v-niveau { stroke: var(--iris); stroke-width: 1.3; stroke-dasharray: 3 2.4; }
+.v-niveau-txt { font: 500 8.5px var(--f-data); fill: var(--iris); }
+
+/* niveaux de vérification */
+.niveaux { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.niveaux article { display: grid; align-content: start; gap: 12px; padding: 22px; border: 1px solid var(--trait); border-radius: var(--r); background: var(--carte); }
+.niveaux article:last-child { border-color: var(--iris); }
+.niveaux h3 { font: 600 17px/1.3 var(--f-texte); }
+.coches { display: grid; gap: 7px; font-size: 14.5px; }
+.coches li { position: relative; padding-left: 22px; }
+.coches li::before { content: ""; position: absolute; left: 2px; top: .5em; width: 10px; height: 5px; border-left: 1.7px solid var(--ok); border-bottom: 1.7px solid var(--ok); transform: rotate(-45deg); }
+
+/* vendre : la balance */
+.vendre-grille { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(28px, 5vw, 64px); align-items: center; }
+.etapes { counter-reset: e; display: grid; gap: 12px; margin-block: 22px 26px; }
+.etapes li { counter-increment: e; position: relative; padding-left: 40px; font-size: 15.5px; color: var(--encre-2); }
+.etapes li::before { content: counter(e, decimal-leading-zero); position: absolute; left: 0; top: .1em; font: 500 12px/1.9 var(--f-data); color: var(--iris); }
+.etapes strong { color: var(--encre); font-weight: 600; }
+.balance-demo { display: grid; justify-items: center; gap: 0; padding: 28px 20px 22px; border-radius: var(--r); background: var(--plaque); }
+.balance-flacon .flacon { height: 190px; width: auto; }
+.balance-plateau { width: 78%; height: 14px; margin-top: -4px; border-radius: 4px 4px 10px 10px; background: var(--encre-2); }
+.balance-ecran { order: 3; margin-top: 12px; padding: 7px 14px; border-radius: 4px; background: #17181c; color: #8cf0b8; font-size: 18px; letter-spacing: .06em; }
+.balance-calc { order: 4; margin-top: 14px; color: var(--encre-2); font-size: 12.5px; text-align: center; }
+.balance-calc strong { color: var(--iris); }
+
+/* refus, comparaison, communauté, FAQ */
+.refus-liste { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 32px; }
+.refus-liste li { padding: 16px 0; border-top: 1px solid var(--trait); color: var(--encre-2); font-size: 15px; }
+.refus-liste strong { color: var(--encre); }
+.comparer { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(24px, 5vw, 64px); align-items: center; }
+.comparer-texte { display: grid; gap: 14px; }
+.comparer-texte p:not(.sur) { color: var(--encre-2); }
+.barres { display: grid; gap: 18px; }
+.barre-ligne { display: grid; grid-template-columns: 110px minmax(0, 1fr); align-items: center; gap: 12px; }
+.barre-nom { font: 500 12px var(--f-data); color: var(--encre-2); }
+.barre { display: flex; height: 46px; border-radius: 6px; overflow: hidden; }
+.barre i { display: flex; align-items: center; padding-inline: 10px; font: 500 12px var(--f-data); font-style: normal; white-space: nowrap; overflow: hidden; }
+.b-vendeur { background: var(--encre-2); color: var(--papier); }
+.b-nous { background: var(--iris); color: var(--sur-iris); }
+.b-plateforme { flex: none; min-width: 58px; background: var(--alerte-doux); color: var(--alerte); justify-content: center; padding-inline: 4px !important; }
+.b-vendeur { flex: 1 1 auto; min-width: 0; }
+.tuiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.tuile { display: grid; align-content: start; gap: 8px; padding: 22px; border: 1px solid var(--trait); border-radius: var(--r); background: var(--carte); text-decoration: none; }
+.tuile:hover { border-color: var(--trait-fort); }
+.tuile h3 { display: flex; align-items: center; gap: 8px; font: 600 17px/1.3 var(--f-texte); }
+.tuile h3 .ico { color: var(--iris); }
+.tuile p { font-size: 14.5px; color: var(--encre-2); }
+.faq { padding-bottom: clamp(40px, 6vw, 76px); }
+.faq details { max-width: 900px; }
+.faq details { border-top: 1px solid var(--trait); }
+.faq details:last-child { border-bottom: 1px solid var(--trait); }
+.faq summary { padding: 18px 30px 18px 0; cursor: pointer; font-weight: 600; font-size: 17px; list-style: none; position: relative; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 4px; top: 14px; font: 400 22px var(--f-data); color: var(--iris); }
+.faq details[open] summary::after { content: "−"; }
+.faq details p { padding-bottom: 20px; color: var(--encre-2); max-width: 68ch; }
+
+/* ——— pages ——— */
+.page { padding-block: clamp(28px, 4vw, 48px) clamp(48px, 7vw, 88px); }
+.page-tete { display: grid; gap: 10px; margin-bottom: 28px; }
+.texte-page { max-width: 980px; }
+.fil { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; font-size: 13.5px; color: var(--gris); }
+.fil a { color: var(--encre-2); }
+
+/* recherche */
+.recherche-grille { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 32px; align-items: start; }
+.filtres { position: sticky; top: 90px; max-height: calc(100vh - 110px); overflow: auto; padding-right: 6px; }
+.filtres form { display: grid; gap: 18px; }
+.filtres input[type="search"], .modale-boite input, .modale-boite select, #q-vente, .pesee-champ input, .verifier input {
+  width: 100%; min-height: 42px; padding: 8px 12px; border: 1px solid var(--trait-fort); border-radius: 6px; background: var(--carte);
+}
+fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
+legend { padding: 0; margin-bottom: 6px; font: 500 10.5px/1.4 var(--f-data); text-transform: uppercase; letter-spacing: .08em; color: var(--gris); }
+.choix { display: flex; align-items: center; gap: 8px; font-size: 14.5px; cursor: pointer; }
+input[type="radio"], input[type="checkbox"], input[type="range"] { accent-color: var(--iris); }
+.maisons { display: grid; gap: 6px; }
+.resultats-barre { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px; }
+.segment { display: inline-flex; padding: 3px; border-radius: 8px; background: var(--plaque); }
+.segment button { display: inline-flex; gap: 8px; align-items: center; min-height: 36px; padding: 6px 14px; border: 0; border-radius: 6px; background: transparent; font-weight: 600; font-size: 14px; cursor: pointer; color: var(--encre-2); }
+.segment button[aria-pressed="true"] { background: var(--carte); color: var(--encre); box-shadow: 0 1px 2px rgba(0, 0, 0, .12); }
+.tri { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--encre-2); }
+.tri select, .modale-boite select { min-height: 38px; padding: 6px 10px; border: 1px solid var(--trait-fort); border-radius: 6px; background: var(--carte); }
+.vide { padding: 40px 24px; border: 1px dashed var(--trait-fort); border-radius: var(--r); text-align: center; color: var(--encre-2); display: grid; gap: 6px; }
+
+/* fiche parfum */
+.parfum-tete { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: clamp(24px, 5vw, 60px); align-items: center; }
+.parfum-visuel { display: grid; place-items: center; padding: 30px 20px; border-radius: var(--r); background: var(--plaque); }
+.flacon-grand { height: clamp(220px, 28vw, 300px); width: auto; }
+.parfum-id { display: grid; gap: 10px; }
+.nom-parfum { font: italic 500 clamp(2.3rem, 5vw, 3.6rem)/1.0 var(--f-titre); letter-spacing: -.02em; text-wrap: balance; }
+.parfum-meta { color: var(--encre-2); font-size: 15px; }
+.chiffres { display: flex; flex-wrap: wrap; margin-block: 14px 6px; border-block: 1px solid var(--trait); }
+.chiffres div { padding: 12px 18px 12px 0; margin-right: 18px; }
+.chiffres div + div { padding-left: 18px; border-left: 1px solid var(--trait); }
+.chiffres dt { font: 500 10px/1.3 var(--f-data); text-transform: uppercase; letter-spacing: .08em; color: var(--gris); margin-bottom: 4px; }
+.chiffres dd { margin: 0; font-size: 18px; }
+.parfum-id .actions { margin-top: 10px; }
+.courbe-cadre { padding: 16px 12px 6px; border: 1px solid var(--trait); border-radius: var(--r); background: var(--carte); }
+.courbe { display: block; width: 100%; height: auto; }
+.c-grille { stroke: var(--trait); stroke-width: 1; }
+.c-txt { font: 400 11px var(--f-data); fill: var(--gris); }
+.c-neuf { stroke: var(--encre-2); stroke-width: 1.2; stroke-dasharray: 5 5; }
+.c-neuf-txt { font: 500 11px var(--f-data); fill: var(--encre-2); }
+.c-aire { fill: var(--iris-doux); }
+.c-ligne { fill: none; stroke: var(--iris); stroke-width: 2.2; stroke-linejoin: round; }
+.c-point { fill: var(--iris); stroke: var(--carte); stroke-width: 2.5; }
+.c-fin { font: 500 12px var(--f-data); fill: var(--iris); }
+.offres { display: grid; border-top: 1px solid var(--trait-fort); }
+.offre { display: grid; grid-template-columns: 44px 120px 150px 120px minmax(0, 1fr) 110px 160px; align-items: center; gap: 14px; padding: 10px 6px; border-bottom: 1px solid var(--trait); text-decoration: none; transition: background .12s; }
+.offre:hover { background: var(--carte); }
+.offre-flacon .flacon { height: 56px; width: auto; }
+.offre-format { font-size: 14.5px; }
+.offre-remp .remp { margin: 0; }
+.offre-vendeur { display: grid; font-size: 14.5px; }
+.offre-vendeur small { color: var(--gris); font-size: 12.5px; }
+.offre-prix { display: grid; justify-items: end; }
+.offre-prix strong { font-size: 17px; }
+.offre-prix .mono { color: var(--encre-2); }
+.offre-tag { justify-self: end; }
+.parfum-infos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.parfum-infos .titre { margin: 8px 0 14px; font-size: 1.5rem; }
+.pyramide { display: grid; }
+.pyramide div { display: grid; grid-template-columns: 76px 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--trait); }
+.pyramide dt { font: 500 10.5px/1.9 var(--f-data); text-transform: uppercase; letter-spacing: .08em; color: var(--gris); }
+.pyramide dd { margin: 0; }
+.jauge { display: inline-flex; gap: 4px; vertical-align: middle; }
+.jauge i { width: 18px; height: 6px; border-radius: 2px; background: var(--trait); }
+.jauge i.on { background: var(--iris); }
+.a-savoir { align-self: start; display: grid; gap: 8px; padding: 20px; border-radius: var(--r); background: var(--iris-doux); color: var(--iris-encre); font-size: 15px; }
+.a-savoir .sur { color: var(--iris-encre); }
+
+/* annonce */
+.annonce-grille { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(24px, 5vw, 60px); align-items: start; }
+.annonce-visuel { display: grid; gap: 12px; position: sticky; top: 90px; }
+.scene { position: relative; display: grid; place-items: center; padding: 40px 20px; border-radius: var(--r); background: var(--plaque); }
+.scene .badge { position: absolute; top: 14px; left: 14px; }
+.flacon-scene { height: clamp(260px, 34vw, 380px); width: auto; }
+.cliches { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.cliche { display: grid; gap: 6px; }
+.cliche > div { display: grid; place-items: center; aspect-ratio: 1; border-radius: 6px; background: var(--plaque); overflow: hidden; padding: 6px; }
+.cliche .flacon { width: 74%; height: auto; max-height: 100%; }
+.cliche figcaption { font-size: 11.5px; color: var(--gris); line-height: 1.3; }
+.cliche-code { font-size: 11px; text-align: center; color: var(--encre-2); padding: 4px; }
+.annonce-achat { display: grid; gap: 6px; }
+.annonce-achat > .sur a { text-decoration: none; }
+.mesure { margin-top: 4px; font-size: 14.5px; color: var(--encre-2); }
+.prix-bloc { display: grid; justify-items: start; gap: 4px; margin-block: 18px 10px; padding-top: 16px; border-top: 1px solid var(--trait); }
+.prix-grand { font: 500 40px/1 var(--f-titre); letter-spacing: -.01em; }
+.prix-bloc .mono { color: var(--encre-2); font-size: 13px; }
+.livraisons { margin-top: 10px; gap: 8px; }
+.livraison, .option-atelier, .mode { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 12px 14px; border: 1px solid var(--trait); border-radius: 8px; background: var(--carte); cursor: pointer; }
+.livraison:has(input:checked), .option-atelier:has(input:checked), .mode:has(input:checked) { border-color: var(--iris); box-shadow: inset 0 0 0 1px var(--iris); }
+.livraison input, .option-atelier input, .mode input { margin-top: 4px; }
+.livraison strong, .option-atelier strong, .mode strong { display: block; font-size: 15px; }
+.livraison small, .option-atelier small, .mode small { display: block; color: var(--gris); font-size: 13px; line-height: 1.4; }
+.option-atelier { margin-top: 8px; }
+.recap { display: grid; margin-top: 14px; font-size: 14.5px; }
+.recap div { display: flex; justify-content: space-between; gap: 16px; padding: 6px 0; }
+.recap dd { margin: 0; }
+.recap-total { border-top: 1px solid var(--trait-fort); margin-top: 4px; padding-top: 10px !important; font-weight: 600; font-size: 16px; }
+.recap-vendeur { color: var(--gris); font-size: 13.5px; }
+.actions-achat { margin-top: 14px; }
+.actions-achat .btn { flex: 1 1 160px; }
+.garantie { margin-top: 18px; padding: 18px 20px; border: 1px solid var(--trait); border-radius: var(--r); background: var(--carte); }
+.garantie h2 { display: flex; align-items: center; gap: 8px; font: 600 16px var(--f-texte); margin-bottom: 8px; }
+.garantie h2 .ico { color: var(--ok); }
+.garantie ul { display: grid; gap: 4px; font-size: 14px; color: var(--encre-2); padding-left: 1.1em; list-style: disc; }
+.annonce-bas { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .6fr); gap: clamp(24px, 5vw, 60px); align-items: start; }
+.controles { display: grid; border-top: 1px solid var(--trait-fort); }
+.controles li { display: grid; grid-template-columns: 22px minmax(0, 200px) minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid var(--trait); }
+.controles .ico { color: var(--ok); stroke-width: 2.2; align-self: center; }
+.c-k { font-weight: 600; font-size: 14.5px; }
+.c-v { color: var(--encre-2); font-size: 12px; overflow-wrap: anywhere; }
+.vendeur-carte .titre { font-size: 1.6rem; margin: 8px 0 12px; }
+.faits { display: grid; }
+.faits div { display: flex; justify-content: space-between; gap: 16px; padding: 9px 0; border-top: 1px solid var(--trait); font-size: 14.5px; }
+.faits dt { color: var(--gris); }
+.faits dd { margin: 0; text-align: right; }
+.vendeur-carte .petit { margin-top: 10px; }
+
+/* vendre */
+.stepper { display: flex; flex-wrap: wrap; gap: 6px 24px; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 1px solid var(--trait); font-size: 14.5px; color: var(--gris); }
+.stepper li { display: flex; align-items: center; gap: 8px; }
+.stepper .mono { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--trait-fort); font-size: 11px; }
+.stepper .actif { color: var(--encre); font-weight: 600; }
+.stepper .actif .mono { background: var(--iris); border-color: var(--iris); color: var(--sur-iris); }
+.stepper .fait .mono { background: var(--encre); border-color: var(--encre); color: var(--papier); }
+.vendre .vendre-grille { align-items: start; grid-template-columns: minmax(0, 1fr) minmax(0, 320px); }
+.vendre-etape { display: grid; gap: 16px; align-content: start; }
+.vendre-etape > p:not(.actions):not(.petit) { color: var(--encre-2); }
+.vendre-apercu { position: sticky; top: 90px; display: grid; gap: 6px; padding: 20px; border: 1px solid var(--trait); border-radius: var(--r); background: var(--carte); }
+.apercu-flacon { display: grid; place-items: center; padding: 14px; margin-block: 6px 8px; border-radius: 8px; background: var(--plaque); }
+.apercu-flacon .flacon { height: 190px; width: auto; }
+.apercu-nom { font: italic 500 24px/1.1 var(--f-titre); }
+.apercu-prix { font-size: 22px; font-weight: 600; }
+.apercu-vide { display: grid; gap: 8px; color: var(--encre-2); }
+.choix-parfums { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.choix-parfum { display: grid; gap: 2px; width: 100%; padding: 12px 14px; text-align: left; border: 1px solid var(--trait); border-radius: 8px; background: var(--carte); cursor: pointer; }
+.choix-parfum:hover, .choix-parfum.actif { border-color: var(--iris); }
+.choix-parfum span:nth-child(2) { font: italic 500 18px/1.2 var(--f-titre); }
+.choix-parfum .mono { color: var(--gris); }
+.formats { display: flex; flex-wrap: wrap; gap: 8px; }
+.formats legend { width: 100%; }
+.pilule { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 1px solid var(--trait-fort); border-radius: 99px; background: var(--carte); cursor: pointer; font-weight: 500; }
+.pilule:has(input:checked) { border-color: var(--iris); box-shadow: inset 0 0 0 1px var(--iris); }
+.pesee { display: grid; gap: 10px; padding: 20px; border-radius: var(--r); background: var(--carte); border: 1px solid var(--trait); }
+.pesee-champ { display: flex; align-items: center; gap: 10px; max-width: 320px; }
+.pesee-champ input { font: 500 20px var(--f-data); }
+.pesee-champ span { font: 500 14px var(--f-data); color: var(--gris); }
+.pesee-calc { color: var(--encre-2); font-size: 13px; }
+.pesee-calc strong { color: var(--iris); }
+.prises { display: grid; gap: 8px; }
+.prise { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 10px 12px; border: 1px solid var(--trait); border-radius: 8px; background: var(--carte); cursor: pointer; }
+.prise.faite { border-color: var(--ok); }
+.prise-cadre { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 6px; border: 1px dashed var(--trait-fort); color: var(--gris); overflow: hidden; }
+.prise.faite .prise-cadre { border-style: solid; border-color: var(--ok); color: var(--ok); }
+.prise-cadre img { width: 100%; height: 100%; object-fit: cover; }
+.prise strong { display: block; font-size: 15px; }
+.prise small { display: block; font-size: 13px; color: var(--gris); }
+.prise-ok { min-height: 32px; padding: 4px 12px; border: 1px solid var(--trait-fort); border-radius: 6px; background: transparent; font-size: 13px; font-weight: 600; cursor: pointer; }
+.prix-reglage { display: grid; gap: 10px; padding: 20px; border: 1px solid var(--trait); border-radius: var(--r); background: var(--carte); }
+.prix-ligne { display: flex; align-items: center; gap: 16px; }
+.prix-ligne input { flex: 1; min-width: 0; }
+.prix-out { min-width: 90px; text-align: right; font-size: 20px !important; }
+.chance { display: block; height: 6px; margin-top: 4px; border-radius: 3px; background: var(--trait); overflow: hidden; }
+.chance i { display: block; height: 100%; background: var(--ok); }
+.modes { display: grid; gap: 8px; }
+.mode.actif { border-color: var(--iris); }
+.publie { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: clamp(24px, 5vw, 56px); align-items: center; }
+.publie-flacon { display: grid; place-items: center; padding: 30px 10px; border-radius: var(--r); background: var(--plaque); }
+.publie-flacon .flacon { height: 260px; width: auto; }
+.publie > div:last-child { display: grid; gap: 16px; }
+.suite { display: grid; gap: 10px; color: var(--encre-2); padding-left: 1.2em; list-style: decimal; }
+.suite strong { color: var(--encre); }
+
+/* passeport */
+.passeport { max-width: 860px; margin-inline: auto; display: grid; gap: 24px; padding: clamp(20px, 4vw, 40px); border: 1px solid var(--trait-fort); border-radius: 14px; background: var(--carte); }
+.passeport-tete { display: grid; gap: 6px; padding-bottom: 18px; border-bottom: 1px solid var(--trait); }
+.passeport-no { font-size: clamp(1.7rem, 4.5vw, 2.6rem) !important; color: var(--iris); letter-spacing: .02em; }
+.passeport-etat { display: flex; align-items: center; gap: 8px; color: var(--ok); font-weight: 600; font-size: 14.5px; }
+.passeport-corps { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 28px; align-items: center; }
+.passeport-flacon { display: grid; place-items: center; padding: 18px; border-radius: var(--r); background: var(--plaque); }
+.passeport-flacon .flacon { height: 220px; width: auto; }
+.frise { display: grid; border-left: 1px solid var(--trait-fort); margin-left: 6px; }
+.frise li { position: relative; display: grid; grid-template-columns: minmax(0, 120px) minmax(0, 1fr); gap: 2px 18px; padding: 10px 0 10px 20px; }
+.frise li::before { content: ""; position: absolute; left: -5px; top: 16px; width: 9px; height: 9px; border-radius: 50%; background: var(--carte); border: 1.5px solid var(--iris); }
+.frise-date { color: var(--gris); font-size: 12px; padding-top: 2px; }
+.frise-t { font-weight: 600; }
+.frise-x { grid-column: 2; color: var(--encre-2); font-size: 14px; }
+.verifier { display: grid; gap: 8px; padding-top: 18px; border-top: 1px solid var(--trait); }
+.verifier label { font-weight: 600; }
+
+/* pages de texte, tarifs */
+.atelier { counter-reset: a; display: grid; gap: 0; }
+.atelier li { counter-increment: a; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; padding: 14px 0; border-top: 1px solid var(--trait); color: var(--encre-2); }
+.atelier li::before { content: counter(a, decimal-leading-zero); font: 500 13px/1.7 var(--f-data); color: var(--iris); }
+.atelier strong { color: var(--encre); }
+.bloc > .titre + .atelier, .bloc > .titre + p { margin-top: 16px; }
+.deux-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 48px); }
+.deux-col .titre { margin-bottom: 14px; font-size: 1.6rem; }
+.deux-col p { color: var(--encre-2); }
+.texte-page .bloc p + .actions { margin-top: 16px; }
+.tarifs th, .tarifs td, .sim th, .sim td { padding: 14px 12px 14px 0; border-bottom: 1px solid var(--trait); text-align: left; font-weight: 400; vertical-align: top; }
+.tarifs td { text-align: right; white-space: nowrap; font-size: 14px; }
+.sim thead th { font: 500 10.5px/1.3 var(--f-data); text-transform: uppercase; letter-spacing: .08em; color: var(--gris); }
+.sim td { text-align: right; }
+.sim tr.fort th, .sim tr.fort td { font-weight: 600; }
+.sim tr.fort td:last-child { color: var(--iris); }
+.simulateur { display: grid; gap: 12px; }
+.simulateur label { font-weight: 600; }
+
+/* étagère */
+.etagere { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); column-gap: 0; row-gap: 32px; }
+.etagere-item { display: grid; justify-items: center; align-content: start; gap: 4px; text-align: center; padding-inline: 8px; }
+.etagere-item > a { display: flex; align-items: flex-end; justify-content: center; justify-self: stretch; height: 178px; margin-inline: -8px; margin-bottom: 18px; border-bottom: 12px solid var(--trait-fort); }
+.etagere-item .flacon { height: 150px; width: auto; }
+.etagere-item .btn { margin-top: 6px; }
+.alertes { display: grid; border-top: 1px solid var(--trait-fort); margin-top: 14px; }
+.alertes li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--trait); }
+.alertes li > a:first-child { text-decoration: none; font-size: 18px; }
+.alertes .mono { grid-column: 1; color: var(--encre-2); }
+.alertes .tag { grid-row: 1 / span 2; grid-column: 2; }
+.echange { display: grid; gap: 14px; align-content: start; }
+.echange-duo { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px; padding: 18px; border-radius: var(--r); background: var(--plaque); }
+.echange-duo figure { display: grid; justify-items: center; gap: 6px; text-align: center; }
+.echange-duo .flacon { height: 120px; width: auto; }
+.echange-duo figcaption { display: grid; font-size: 15px; }
+.echange-signe .ico { width: 28px; height: 28px; color: var(--iris); }
+.echange > p:not(.sur):not(.actions):not(.petit) { color: var(--encre-2); }
+
+/* modale, message, pied */
+#modale { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+#modale[hidden] { display: none; }
+.modale-fond { position: absolute; inset: 0; background: rgba(10, 10, 14, .5); }
+.modale-boite { position: relative; width: min(460px, 100%); max-height: 90vh; overflow: auto; padding: 26px; border-radius: 12px; background: var(--carte); box-shadow: 0 24px 60px rgba(0, 0, 0, .3); }
+.modale-boite form { display: grid; gap: 10px; }
+.modale-boite .titre { margin-bottom: 8px; font-size: 1.6rem; }
+.modale-boite label { font-weight: 600; font-size: 14.5px; margin-top: 6px; }
+.modale-boite .actions { margin-top: 12px; }
+.modale-x { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 6px; background: transparent; cursor: pointer; color: var(--encre-2); }
+.modale-x:hover { background: var(--plaque); }
+.message { position: fixed; z-index: 60; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); width: max-content; max-width: min(560px, calc(100vw - 32px)); padding: 12px 18px; border-radius: 8px; background: var(--encre); color: var(--papier); font-size: 14.5px; box-shadow: 0 12px 30px rgba(0, 0, 0, .25); }
+.pied { margin-top: 0; border-top: 1px solid var(--trait); background: var(--carte); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.pied-in { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)); gap: 28px; padding-block: 44px 28px; }
+.pied-marque { display: grid; gap: 12px; align-content: start; }
+.pied-marque p { color: var(--encre-2); max-width: 32ch; }
+.pied nav { display: grid; gap: 8px; align-content: start; font-size: 14.5px; }
+.pied nav .sur { margin-bottom: 4px; }
+.pied nav a { text-decoration: none; color: var(--encre-2); }
+.pied nav a:hover { color: var(--encre); text-decoration: underline; }
+.pied-bas { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding-block: 16px 24px; border-top: 1px solid var(--trait); font-size: 13px; color: var(--gris); }
+
+/* ——— écrans moyens et petits ——— */
+@media (max-width: 1080px) {
+  .offre { grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1fr) auto; grid-template-areas: "f fo re pr" "f ve vr tg"; row-gap: 4px; }
+  .offre-flacon { grid-area: f; } .offre-format { grid-area: fo; } .offre-remp { grid-area: re; } .offre-prix { grid-area: pr; }
+  .offre-vendeur { grid-area: ve; } .offre-verif { grid-area: vr; } .offre-tag { grid-area: tg; }
+  .tuiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .hero-grille, .vendre-grille, .comparer, .annonce-grille, .annonce-bas, .parfum-tete, .publie { grid-template-columns: minmax(0, 1fr); }
+  .preuves { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .preuves > div:nth-child(3) { padding-left: 0; border-left: 0; }
+  .preuves > div:nth-child(n + 3) { border-top: 1px solid var(--trait); }
+  .niveaux, .parfum-infos { grid-template-columns: minmax(0, 1fr); }
+  .recherche-grille { grid-template-columns: minmax(0, 1fr); }
+  .filtres { position: static; max-height: none; padding: 16px; border: 1px solid var(--trait); border-radius: var(--r); background: var(--carte); }
+  .maisons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .annonce-visuel, .vendre-apercu { position: static; }
+  .vendre .vendre-grille { grid-template-columns: minmax(0, 1fr); }
+  .vendre-apercu { order: -1; }
+  .parfum-visuel { max-width: 420px; }
+  .pied-in { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pied-marque { grid-column: 1 / -1; }
+  .col-neuf, .col-offres { display: none; }
+}
+@media (max-width: 620px) {
+  .bp-long { display: none; }
+  .nav { margin-left: 0; width: 100%; justify-content: space-between; gap: 4px 12px; font-size: 14px; }
+  .entete-recherche { max-width: none; }
+  .entete-in { gap: 10px 16px; }
+  .fiche-eval { grid-template-columns: minmax(0, 1fr); padding: 18px; }
+  .annot { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .preuves { grid-template-columns: minmax(0, 1fr); }
+  .preuves > div, .preuves > div + div { padding: 18px 0; border-left: 0; }
+  .preuves > div + div { border-top: 1px solid var(--trait); }
+  .refus-liste, .deux-col, .tuiles, .choix-parfums { grid-template-columns: minmax(0, 1fr); }
+  .barre-ligne { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .cliches { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .controles li { grid-template-columns: 22px minmax(0, 1fr); }
+  .c-v { grid-column: 2; }
+  .passeport-corps { grid-template-columns: minmax(0, 1fr); }
+  .frise li { grid-template-columns: minmax(0, 1fr); padding-left: 18px; }
+  .frise-x { grid-column: 1; }
+  .echange-duo { grid-template-columns: minmax(0, 1fr); }
+  .echange-signe { justify-self: center; transform: rotate(90deg); }
+  .pied-in { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cote th, .cote td { padding-inline: 8px; }
+  .spark { display: none; }
+  .offre { grid-template-columns: 40px minmax(0, 1fr) auto; grid-template-areas: "f fo pr" "f re pr" "f ve tg" "f vr tg"; }
+  .prix-grand { font-size: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

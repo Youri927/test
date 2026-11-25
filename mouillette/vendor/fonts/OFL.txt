@@ -1,0 +1,5 @@
+Polices sous licence SIL Open Font License 1.1 (https://openfontlicense.org), téléchargées depuis Google Fonts
+(sous-ensemble latin) :
+- Bodoni Moda (Owen Earl / indestructible type*) : bodoni-normal-400-700.woff2, bodoni-italic-400-700.woff2
+- Instrument Sans (Instrument) : instrument-normal-400-700.woff2
+- Martian Mono (Evil Martians) : martian-normal-400-500.woff2
