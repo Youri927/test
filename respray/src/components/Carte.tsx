@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type {AnnonceAvecPhotos} from '@/lib/annonces';
 import {eur} from '@/lib/regles';
 import {basculerFavori} from '@/app/actions/favoris';
+import {Bouclier} from '@/components/Bouclier';
 
 const depuis = (d: Date | null) => {
   if (!d) return '';
@@ -16,7 +17,7 @@ export function Carte({a, favori = false, connecte = false}: {a: AnnonceAvecPhot
       <Link className="carte-lien" href={`/annonces/${a.id}`}>
         <div className="carte-photo">
           {a.photos.face ? <img className="visuel" src={`/photos/${a.photos.face}`} alt={`${a.parfumNom}, de face`} loading="lazy" /> : <span className="visuel" />}
-          <span className="etiq etiq-verif">{depuis(a.publieeLe)}</span>
+          <span className="etiq etiq-verif"><Bouclier taille={20} anime={false} />{depuis(a.publieeLe)}</span>
           {a.etat === 'neuf' ? <span className="etiq etiq-bas">Neuf sous blister</span> : null}
         </div>
         <span className="carte-prix">{eur(a.prix)}</span>

@@ -2,7 +2,8 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import {annonce} from '@/lib/annonces';
 import {moi} from '@/lib/auth';
-import {PHOTOS, protection, ENVOI, eur, eur2, lien} from '@/lib/regles';
+import {PHOTOS, CONTROLES, protection, ENVOI, eur, eur2, lien} from '@/lib/regles';
+import {Bouclier} from '@/components/Bouclier';
 
 export const dynamic = 'force-dynamic';
 
@@ -47,6 +48,13 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
           <h1>{a.parfumNom}</h1>
           <p className="fiche-sous">{a.conc} · {a.ml} ml</p>
           <p className="fiche-prix">{eur(a.prix)}</p>
+          {a.publieeLe ? (
+            <div className="verifie-bloc">
+              <Bouclier taille={84} />
+              <div><strong>Vérifiée par l'équipe Respray</strong><small>le {new Intl.DateTimeFormat('fr-FR', {day: 'numeric', month: 'long'}).format(a.publieeLe)}, avant d'être en ligne. Et vous avez 7 jours, flacon en main, pour vérifier à votre tour.</small></div>
+              <details><summary>Ce qu'on a vérifié</summary><ul className="verifie-liste">{CONTROLES.map((c) => <li key={c}>{c}</li>)}</ul></details>
+            </div>
+          ) : null}
           <dl className="details">{lignes.filter(([, v]) => v).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
           {a.description ? <p className="fiche-desc">{a.description}</p> : null}
           <dl className="total">
