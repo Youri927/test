@@ -17,6 +17,8 @@ export const membres = pgTable(
     nom: text('nom').notNull().default(''),
     ville: text('ville').notNull().default(''),
     motDePasse: text('mot_de_passe').notNull(),
+    // l'identifiant Google (« sub ») quand le membre se connecte avec Google
+    googleId: text('google_id'),
     role: text('role', {enum: ['membre', 'equipe']}).notNull().default('membre'),
     statut: text('statut', {enum: ['actif', 'suspendu', 'exclu']}).notNull().default('actif'),
     fondateur: boolean('fondateur').notNull().default(false),
@@ -31,7 +33,7 @@ export const membres = pgTable(
     emailsActivite: boolean('emails_activite').notNull().default(true),
     creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
   },
-  (t) => [uniqueIndex('membres_email').on(t.email), uniqueIndex('membres_pseudo').on(t.pseudo), uniqueIndex('membres_code').on(t.code)],
+  (t) => [uniqueIndex('membres_email').on(t.email), uniqueIndex('membres_pseudo').on(t.pseudo), uniqueIndex('membres_code').on(t.code), uniqueIndex('membres_google').on(t.googleId)],
 );
 
 export const sessions = pgTable('sessions', {

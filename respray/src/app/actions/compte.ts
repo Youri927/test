@@ -8,6 +8,8 @@ import {randomBytes, createHash} from 'crypto';
 import {hacher, verifier, ouvrirSession, fermerSession, exigerMembre} from '@/lib/auth';
 import {envoyer, modele} from '@/lib/email';
 import {revalidatePath} from 'next/cache';
+import {cookies} from 'next/headers';
+import {COOKIE_IDENTITE, deballer} from '@/lib/google';
 
 /* un code de parrainage court, sans lettres ambiguës (0/O, 1/I) */
 const nouveauCode = () => [...randomBytes(6)].map((b) => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 32]).join('');
@@ -40,6 +42,12 @@ export async function inscription(_: Etat, f: FormData): Promise<Etat> {
   const parrain = codeParrain ? await db.query.membres.findFirst({where: eq(schema.membres.code, codeParrain)}) : null;
   const [m] = await db.insert(schema.membres).values({email: d.email, pseudo: d.pseudo, prenom: d.prenom, nom: d.nom, motDePasse: await hacher(d.motDePasse), code: nouveauCode(), parrainId: parrain?.id ?? null}).returning();
   await ouvrirSession(m.id);
+  bienvenue(m, Boolean(parrain));
+  redirect(retourSur(f.get('retour')));
+}
+
+/* l'e-mail de bienvenue, quel que soit le chemin d'inscription */
+function bienvenue(m: typeof schema.membres.$inferSelect, parrain: boolean) {
   void envoyer({
     a: m.email,
     sujet: 'Bienvenue sur Respray',
@@ -61,7 +69,6 @@ export async function inscription(_: Etat, f: FormData): Promise<Etat> {
       pied: 'Vous recevez cet e-mail parce que vous venez de créer un compte sur Respray.',
     }),
   }).catch(() => null);
-  redirect(retourSur(f.get('retour')));
 }
 
 export async function connexion(_: Etat, f: FormData): Promise<Etat> {
@@ -147,4 +154,25 @@ export async function reglerEmails(f: FormData) {
   await db.update(schema.membres).set({emailsActivite: f.get('emailsActivite') === 'on'}).where(eq(schema.membres.id, m.id));
   revalidatePath('/compte');
   redirect('/compte?emails=ok#notifications');
+}
+
+/* ——— finir une inscription commencée avec Google : le pseudo et les conditions ——— */
+export async function finirGoogle(_: Etat, f: FormData): Promise<Etat> {
+  const jar = await cookies();
+  const i = deballer(jar.get(COOKIE_IDENTITE)?.value);
+  if (!i) return {erreur: 'La connexion Google a expiré : recommencez.'};
+  const r = Inscription.omit({email: true, motDePasse: true}).safeParse(Object.fromEntries(f));
+  if (!r.success) return {erreur: r.error.issues[0].message, valeurs: garder(f)};
+  const d = r.data;
+  const deja = await db.query.membres.findFirst({where: or(eq(schema.membres.email, i.email), eq(schema.membres.pseudo, d.pseudo), eq(schema.membres.googleId, i.sub))});
+  if (deja && deja.pseudo === d.pseudo && deja.email !== i.email) return {erreur: 'Ce pseudo est déjà pris.', valeurs: garder(f)};
+  if (deja) return {erreur: 'Un compte existe déjà avec cette adresse : connectez-vous.'};
+  const codeParrain = String(jar.get('respray_parrain')?.value || '').replace(/[^A-Z0-9]/gi, '').toUpperCase();
+  const parrain = codeParrain ? await db.query.membres.findFirst({where: eq(schema.membres.code, codeParrain)}) : null;
+  // pas de mot de passe : un hachage d'un secret jeté, que personne ne connaît (« mot de passe oublié » permet d'en créer un)
+  const [m] = await db.insert(schema.membres).values({email: i.email, googleId: i.sub, pseudo: d.pseudo, prenom: d.prenom, nom: d.nom, motDePasse: await hacher(randomBytes(32).toString('hex')), code: nouveauCode(), parrainId: parrain?.id ?? null}).returning();
+  jar.delete(COOKIE_IDENTITE);
+  await ouvrirSession(m.id);
+  bienvenue(m, Boolean(parrain));
+  redirect(retourSur(f.get('retour')));
 }

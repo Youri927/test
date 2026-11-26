@@ -435,3 +435,34 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .jauge:active .jauge-bulle { scale: 1.08; }
 .jauge-reperes { display: flex; justify-content: space-between; margin-top: 6px; color: var(--texte-2); font-size: 12px; }
 @media (prefers-reduced-motion: reduce) { .jauge input[type="range"]::-webkit-slider-thumb, .jauge-bulle { transition: none; } }
+
+/* ——— le menu du compte, dans l'en-tête ——— */
+.menu-compte { position: relative; }
+.menu-compte > summary { list-style: none; display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px 4px 4px; border-radius: 980px; cursor: pointer; font-weight: 500; transition: background .2s var(--ease); }
+.menu-compte > summary::-webkit-details-marker { display: none; }
+.menu-compte > summary:hover, .menu-compte[open] > summary { background: var(--fond-2); }
+.menu-compte > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.avatar { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--noir); color: var(--sur-noir); font-size: 14px; font-weight: 700; }
+.menu-compte-fleche { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s var(--ease); }
+.menu-compte[open] .menu-compte-fleche { transform: rotate(180deg); }
+.menu-compte-liste { position: absolute; right: 0; top: calc(100% + 8px); z-index: 50; min-width: 230px; padding: 8px; border-radius: 18px; background: var(--fond); border: 1px solid var(--trait); box-shadow: 0 18px 40px rgba(0, 0, 0, .14); display: flex; flex-direction: column; animation: menu-entre .18s var(--ease); white-space: normal; }
+@keyframes menu-entre { from { opacity: 0; transform: translateY(-4px) scale(.98); } }
+.menu-compte-qui { display: flex; flex-direction: column; padding: 8px 12px 10px; margin: 0 0 4px; border-bottom: 1px solid var(--trait); font-size: 14.5px; }
+.menu-compte-qui span { color: var(--texte-2); font-size: 13px; }
+.menu-compte-liste a, .menu-compte-sortir { display: block; width: 100%; padding: 10px 12px; border-radius: 10px; text-align: left; text-decoration: none !important; font-size: 15px; font-weight: 500; color: var(--texte); }
+.menu-compte-liste a:hover, .menu-compte-sortir:hover { background: var(--fond-2); }
+.menu-compte-liste form { margin: 4px 0 0; padding-top: 4px; border-top: 1px solid var(--trait); }
+.menu-compte-sortir { border: 0; background: none; font: inherit; font-weight: 600; color: var(--rouge); cursor: pointer; }
+@media (max-width: 960px) { .menu-compte-mot { display: none; } .menu-compte > summary { padding-right: 8px; } }
+
+/* le bouton « Se déconnecter » de la page du compte */
+.compte-tete { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.compte-tete form { margin-top: 6px; }
+
+/* ——— « Continuer avec Google » ——— */
+.auth-google { display: flex; flex-direction: column; gap: 4px; margin: 8px 0 4px; }
+.btn-google { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 52px; padding: 12px 20px; border-radius: 980px; border: 1px solid #dadce0; background: #ffffff; color: #1f1f1f; font-weight: 600; font-size: 16px; text-decoration: none; transition: background .2s var(--ease), box-shadow .2s var(--ease); }
+.btn-google:hover { background: #f8f9fa; box-shadow: 0 1px 3px rgba(0, 0, 0, .12); }
+.auth-ou { display: flex; align-items: center; gap: 14px; margin: 14px 0 4px; color: var(--texte-2); font-size: 14px; }
+.auth-ou::before, .auth-ou::after { content: ""; flex: 1; height: 1px; background: var(--trait); }
+.nav .menu-compte-liste a:not(.btn) { display: block; }

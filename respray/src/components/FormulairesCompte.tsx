@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import {useActionState} from 'react';
-import {inscription, connexion, rejoindreAttente, candidater, demanderReinitialisation, changerMotDePasse, type Etat} from '@/app/actions/compte';
+import {inscription, connexion, rejoindreAttente, candidater, demanderReinitialisation, changerMotDePasse, finirGoogle, type Etat} from '@/app/actions/compte';
 
 const Erreur = ({e}: {e?: string}) => (e ? <p className="erreur" role="alert">{e}</p> : null);
 
@@ -107,6 +107,40 @@ export function FormFondateur() {
       <input id="f-ou" name="ou" className="champ" placeholder="ex. nulle part, Vinted, un groupe Facebook" defaultValue={etat.valeurs?.ou} />
       {etat.erreur ? <p className="erreur" role="alert">{etat.erreur}</p> : null}
       <button className="btn btn-noir btn-large" type="submit" disabled={enCours}>Devenir vendeur fondateur</button>
+    </form>
+  );
+}
+
+/* « Continuer avec Google », au format demandé par Google (fond clair, G en couleurs), et un séparateur « ou » */
+export function BoutonGoogle({retour}: {retour: string}) {
+  return (
+    <div className="auth-google">
+      <a className="btn-google" href={`/api/auth/google?retour=${encodeURIComponent(retour)}`}>
+        <svg viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" /><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" /><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" /><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" /></svg>
+        Continuer avec Google
+      </a>
+      <p className="auth-ou"><span>ou</span></p>
+    </div>
+  );
+}
+
+export function FormFinirGoogle({retour, prenom, nom, pseudo}: {retour: string; prenom: string; nom: string; pseudo: string}) {
+  const [etat, agir, enCours] = useActionState<Etat, FormData>(finirGoogle, {});
+  const v = etat.valeurs;
+  return (
+    <form className="formulaire compte-form" action={agir} key={JSON.stringify(v || {})}>
+      <input type="hidden" name="retour" value={retour} />
+      <div className="ligne-champs">
+        <div><label htmlFor="prenom">Prénom</label><input id="prenom" name="prenom" defaultValue={v?.prenom ?? prenom} className="champ" autoComplete="given-name" required /></div>
+        <div><label htmlFor="nom">Nom</label><input id="nom" name="nom" defaultValue={v?.nom ?? nom} className="champ" autoComplete="family-name" required /></div>
+      </div>
+      <p className="aide">Votre nom reste privé : il sert à la vérification d'identité et aux versements.</p>
+      <label htmlFor="pseudo">Pseudo</label>
+      <input id="pseudo" name="pseudo" defaultValue={v?.pseudo ?? pseudo} className="champ" autoComplete="username" required />
+      <p className="aide">C'est lui qu'on voit sur vos annonces, et que vous écrirez sur la photo preuve.</p>
+      <label className="choix"><input type="checkbox" name="cgu" defaultChecked={v?.cgu === 'on'} required /> <span>J'ai 18 ans ou plus, et j'accepte les <a className="lien-souligne" href="/cgu" target="_blank">conditions</a> et la <a className="lien-souligne" href="/confidentialite" target="_blank">politique de confidentialité</a>.</span></label>
+      <Erreur e={etat.erreur} />
+      <button className="btn btn-noir btn-large" type="submit" disabled={enCours}>{enCours ? 'Création…' : 'Créer mon compte'}</button>
     </form>
   );
 }

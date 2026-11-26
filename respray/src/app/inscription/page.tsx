@@ -1,6 +1,7 @@
 import {redirect} from 'next/navigation';
 import {cookies} from 'next/headers';
-import {FormInscription} from '@/components/FormulairesCompte';
+import {FormInscription, BoutonGoogle} from '@/components/FormulairesCompte';
+import {googleActif} from '@/lib/google';
 import {moi} from '@/lib/auth';
 
 export const metadata = {title: 'Créer un compte'};
@@ -14,6 +15,7 @@ export default async function Page({searchParams}: {searchParams: Promise<{retou
       <h1 className="titre-page">Créer un compte</h1>
       <p className="chapo">Pour vendre sans commission, et acheter avec 7 jours pour vérifier.</p>
       {code ? <p className="envie-ok">Vous êtes invité : la protection acheteur est offerte sur votre premier achat.</p> : null}
+      {googleActif() ? <BoutonGoogle retour={retour} /> : null}
       <FormInscription retour={retour} parrain={code} />
     </div>
   );

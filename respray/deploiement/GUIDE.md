@@ -113,6 +113,27 @@ Où le logo s'affiche : Yahoo Mail, AOL, Fastmail et quelques autres, sans rien 
 plus un certificat (VMC, pour une marque déposée, ou CMC), payant, de l'ordre de plusieurs centaines d'euros par an :
 à envisager quand Respray sera une marque déposée.
 
+## 8. « Continuer avec Google »
+
+Le bouton n'apparaît sur le site qu'une fois ces deux clés en place.
+
+1. Va sur https://console.cloud.google.com, connecté avec ton compte Google, et crée un projet « Respray ».
+2. **API et services**, **Écran de consentement OAuth** (ou « Google Auth Platform ») : type **Externe**, nom
+   **Respray**, adresse d'assistance contact@respray.fr, logo `respray-512.png`, domaine autorisé `respray.fr`, liens
+   https://respray.fr/confidentialite et https://respray.fr/cgu. Les accès demandés sont les basiques (`openid`,
+   `email`, `profile`) : pas de validation longue chez Google. Pense à **Publier l'application** (statut « En
+   production »), sinon seuls les comptes de test peuvent se connecter.
+3. **Identifiants**, **Créer des identifiants**, **ID client OAuth**, type **Application Web**. Dans **URI de
+   redirection autorisés**, ajoute exactement : `https://respray.fr/api/auth/google/retour`
+4. Google affiche un **ID client** et un **code secret**. Sur le VPS, colle cette commande (le secret ne s'affiche pas) :
+
+```bash
+read -rp "ID client Google : " I; read -rsp "Code secret Google : " S; echo; F=/srv/respray/.env; for kv in "GOOGLE_CLIENT_ID=$I" "GOOGLE_CLIENT_SECRET=$S"; do k=${kv%%=*}; if grep -q "^$k=" $F; then sed -i "s|^$k=.*|$kv|" $F; else echo "$kv" >> $F; fi; done; systemctl restart respray && echo "Google configuré."
+```
+
+Une personne qui a déjà un compte avec la même adresse e-mail retrouve son compte. Une nouvelle personne choisit son
+pseudo et accepte les conditions, puis c'est prêt.
+
 ## Ensuite
 
 - **Mettre à jour le site** après une modification du code :

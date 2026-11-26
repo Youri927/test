@@ -7,7 +7,7 @@ import {Carte} from '@/components/Carte';
 import {eur} from '@/lib/regles';
 import {RemplacerPhoto} from '@/components/RemplacerPhoto';
 import {proposerAuxFavoris, retirerEnvie} from '@/app/actions/marche';
-import {reglerEmails} from '@/app/actions/compte';
+import {reglerEmails, deconnexion} from '@/app/actions/compte';
 import {payerMiseEnAvant} from '@/app/actions/commandes';
 import {verifierPaiementAvant} from '@/lib/avant';
 import {MISES_EN_AVANT} from '@/lib/regles';
@@ -37,9 +37,14 @@ export default async function Compte({searchParams}: {searchParams: Promise<{pro
   const favoris = idsFav.length ? await completer(await db.select().from(schema.annonces).where(and(inArray(schema.annonces.id, idsFav), eq(schema.annonces.statut, 'publiee')))) : [];
   return (
     <div className="env page">
-      <p className="surtitre">Mon compte</p>
-      <h1 className="titre-page">Bonjour {m.prenom}</h1>
-      <p className="chapo">@{m.pseudo} · {m.email}</p>
+      <div className="compte-tete">
+        <div>
+          <p className="surtitre">Mon compte</p>
+          <h1 className="titre-page">Bonjour {m.prenom}</h1>
+          <p className="chapo">@{m.pseudo} · {m.email}</p>
+        </div>
+        <form action={deconnexion}><button className="btn btn-petit" type="submit">Se déconnecter</button></form>
+      </div>
       <nav className="compte-raccourcis" aria-label="Mon espace">
         <Link href="/activite">Activité</Link><Link href="/commandes">Mes commandes</Link><Link href="/compte/versements">Mes versements</Link><Link href="/messages">Messages</Link><Link href="/placard">Mon placard</Link><Link href="#envies">Mes envies</Link>
       </nav>

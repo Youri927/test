@@ -6,6 +6,7 @@ import {Logo, Symbole} from '@/components/Logo';
 import {moi} from '@/lib/auth';
 import {deconnexion} from './actions/compte';
 import {nonLues} from '@/lib/activite';
+import {MenuCompte} from '@/components/MenuCompte';
 import {Apparitions, BoutonTheme, SCRIPT_THEME} from '@/components/Ambiance';
 
 export const metadata: Metadata = {
@@ -37,9 +38,10 @@ export default async function Racine({children}: {children: React.ReactNode}) {
               <Link href="/comment-ca-marche">Comment ça marche</Link>
               <Link href="/placard">Mon placard</Link>
               {m ? <Link href="/activite" className="nav-activite nav-garde" aria-label={n ? `Activité, ${n} nouveau${n > 1 ? 'x' : ''}` : 'Activité'}>Activité{n ? <b className="pastille-n">{n}</b> : null}</Link> : null}
-              {m ? <Link href="/compte" className="nav-garde">Mon compte</Link> : <Link href="/connexion" className="nav-garde">Se connecter</Link>}
               {m?.role === 'equipe' ? <Link href="/equipe">Équipe</Link> : null}
+              {m ? null : <Link href="/connexion" className="nav-garde">Se connecter</Link>}
               <Link className="btn btn-noir btn-petit" href="/vendre">Vendre</Link>
+              {m ? <MenuCompte prenom={m.prenom} pseudo={m.pseudo} equipe={m.role === 'equipe'} /> : null}
             </nav>
             <BoutonTheme />
           </div>
