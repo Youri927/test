@@ -47,9 +47,17 @@ export async function inscription(_: Etat, f: FormData): Promise<Etat> {
     membreId: m.id,
     contenu: modele({
       titre: `Bienvenue, ${m.prenom}`,
-      texte: `Votre compte Respray est prêt (pseudo : @${m.pseudo}).\n\nPour vendre : 6 photos, l'équipe vérifie l'annonce, vous touchez 100 % du prix.\nPour acheter : chaque annonce est vérifiée, votre paiement reste bloqué, et vous avez 7 jours pour vérifier le parfum.${parrain ? '\n\nVous êtes venu par un parrainage : la protection acheteur est offerte sur votre premier achat.' : ''}`,
+      badge: 'Compte créé',
+      ton: 'ok',
+      texte: `Votre compte Respray est prêt. Votre pseudo : @${m.pseudo}.${parrain ? '\n\nVous êtes venu par un parrainage : la protection acheteur vous est offerte sur votre premier achat.' : ''}`,
+      points: [
+        ['Vendre, sans commission', 'Six photos, l\'équipe vérifie l\'annonce, et vous touchez 100 % du prix.'],
+        ['Acheter, sans le doute', 'Chaque annonce est vérifiée avant d\'être en ligne, et votre paiement reste bloqué.'],
+        ['7 jours pour vérifier', 'Flacon en main : s\'il n\'est pas conforme à l\'annonce, vous êtes remboursé.'],
+      ],
       bouton: 'Estimer mon placard',
       lien: '/placard',
+      note: 'Respray vérifie chaque annonce avant de la publier : c\'est ce qui fait la différence.',
       pied: 'Vous recevez cet e-mail parce que vous venez de créer un compte sur Respray.',
     }),
   }).catch(() => null);
@@ -107,6 +115,8 @@ export async function demanderReinitialisation(_: Etat, f: FormData): Promise<Et
       membreId: m.id,
       contenu: modele({
         titre: 'Un nouveau mot de passe',
+        badge: 'Sécurité',
+        ton: 'info',
         texte: `Bonjour ${m.prenom || m.pseudo},\n\nVous avez demandé à changer le mot de passe de votre compte Respray. Ce lien est valable une heure, une seule fois.`,
         bouton: 'Choisir un nouveau mot de passe',
         lien: `/nouveau-mot-de-passe?jeton=${jeton}`,

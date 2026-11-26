@@ -21,6 +21,7 @@ export default async function Equipe({children}: {children: React.ReactNode}) {
     ['/equipe/fondateurs', 'Vendeurs fondateurs', cands],
     ['/equipe/membres', 'Membres', 0],
     ['/equipe/journal', 'Journal', 0],
+    ['/equipe/emails', 'E-mails', 0],
   ];
   return (
     <div className="bo bo-reel">

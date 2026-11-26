@@ -407,3 +407,8 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .exemple-badge { position: absolute; top: 14px; left: 14px; z-index: 3; padding: 3px 9px; border-radius: 7px; background: var(--fond); box-shadow: 0 0 0 1px var(--trait); color: var(--texte-2); font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
 .carte[hidden] { display: none; }
 .ruban-section > * { min-width: 0; }
+.apercus-mails { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+.apercus-mails figure { display: grid; gap: 8px; margin: 0; }
+.apercus-mails figcaption { display: grid; }
+.apercus-mails small { color: var(--texte-2); }
+.apercus-mails iframe { width: 100%; height: 820px; border: 0; border-radius: 14px; box-shadow: 0 0 0 1px var(--trait); background: #f4f2ee; }

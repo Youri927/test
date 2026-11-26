@@ -96,6 +96,23 @@ read -rp "Identifiant SMTP Brevo : " U; read -rsp "Clé SMTP Brevo : " P; echo; 
 4. Test : sur respray.fr, « Se connecter », « Mot de passe oublié ? », avec ton adresse. L'e-mail doit arriver
    en boîte de réception. En cas de souci : `sudo -u respray psql respray -c "select a, sujet, statut, erreur from emails order by id desc limit 5;"`
 
+## 7. Le logo en photo de profil des e-mails (BIMI)
+
+Le logo carré est déjà en ligne : https://respray.fr/bimi/respray.svg (format SVG Tiny PS exigé par la norme).
+Dans hPanel, Domaines, respray.fr, DNS :
+
+1. Ajoute un enregistrement **TXT**, nom `default._bimi`, valeur :
+   `v=BIMI1; l=https://respray.fr/bimi/respray.svg;`
+2. Modifie l'enregistrement **TXT `_dmarc`** créé pour Brevo : remplace `p=none` par `p=quarantine` (garde le
+   reste, dont `rua=…`). Sans cette politique, aucune messagerie n'affiche le logo.
+
+Attention : avec `p=quarantine`, tout e-mail envoyé au nom de @respray.fr par un service non authentifié finit en
+indésirables. Si tu crées plus tard une boîte contact@respray.fr chez Hostinger, active aussi son DKIM dans hPanel.
+
+Où le logo s'affiche : Yahoo Mail, AOL, Fastmail et quelques autres, sans rien payer. Gmail et Apple Mail exigent en
+plus un certificat (VMC, pour une marque déposée, ou CMC), payant, de l'ordre de plusieurs centaines d'euros par an :
+à envisager quand Respray sera une marque déposée.
+
 ## Ensuite
 
 - **Mettre à jour le site** après une modification du code :
