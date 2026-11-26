@@ -113,7 +113,7 @@ export function modele(m: Mail) {
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#f4f2ee">${e(preheader)}&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f2ee"><tr><td align="center" style="padding:28px 14px 36px">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;font-family:${POLICE};color:#1d1d1f">
-    <tr><td style="padding:4px 8px 22px"><a href="${SITE}" style="text-decoration:none"><img src="${abs('/email/logo.png')}" width="124" height="34" alt="respray" style="display:block;border:0"></a></td></tr>
+    <tr><td style="padding:4px 8px 22px"><a href="${SITE}" style="text-decoration:none"><img src="${abs('/email/logo-pastille.png')}" width="152" height="48" alt="respray" style="display:block;border:0"></a></td></tr>
     <tr><td style="background:#ffffff;border-radius:24px;padding:34px 30px 30px">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
         ${m.badge ? bloc(`<span style="display:inline-block;padding:5px 11px;border-radius:999px;background:${fond};color:${couleur};font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase">${e(m.badge)}</span>`, 16) : ''}
