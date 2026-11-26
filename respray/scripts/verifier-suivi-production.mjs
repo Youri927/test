@@ -15,7 +15,7 @@ async function appel(methode, champs) {
 }
 const r = await appel('WSI4_PointRelais_Recherche', [['Enseigne', ENS], ['Pays', 'FR'], ['NumPointRelais', ''], ['Ville', ''], ['CP', '75011'], ['Latitude', ''], ['Longitude', ''], ['Taille', ''], ['Poids', '1000'], ['Action', '24R'], ['DelaiEnvoi', '0'], ['RayonRecherche', '20'], ['TypeActivite', ''], ['NACE', ''], ['NombreResultats', '1']]);
 const s = await appel('WSI2_TracingColisDetaille', [['Enseigne', ENS], ['Expedition', '12345678'], ['Langue', 'FR']]);
-const sens = {'0': 'OK', '94': 'colis inexistant : le suivi est ACTIF', '24': 'numéro invalide : le suivi est ACTIF', '95': 'compte non activé : le suivi n\'est PAS actif', '97': 'clé privée incorrecte', '1': 'code enseigne incorrect'};
+const sens = {'0': 'OK', '94': 'colis inexistant : le suivi est ACTIF', '24': 'numéro invalide : le suivi est ACTIF', '95': 'compte non activé pour ce service', '97': 'clé privée incorrecte', '1': 'code enseigne incorrect'};
 console.log(`Production ${ENS}`);
 console.log(`Recherche de points relais : code ${r} (${sens[r] ?? 'voir la documentation'})`);
 console.log(`Suivi : code ${s} (${sens[s] ?? 'voir la documentation'})`);
