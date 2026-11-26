@@ -3,48 +3,48 @@
 import {useState} from 'react';
 import {ajouterAuPlacard} from '@/app/actions/marche';
 import {Jauge} from '@/components/Jauge';
+import {ChoixParfum, type Choix} from '@/components/ChoixParfum';
 
-type P = {id: number; nom: string; formats: {ml: number}[]};
-type M = {id: number; nom: string; parfums: P[]};
-
-export function FormPlacard({maisons}: {maisons: M[]}) {
-  const [maisonId, setMaison] = useState('');
-  const [parfumId, setParfum] = useState('');
+export function FormPlacard() {
+  const [choix, setChoix] = useState<Choix | null>(null);
   const [niveau, setNiveau] = useState(100);
-  const maison = maisons.find((m) => String(m.id) === maisonId);
-  const parfum = maison?.parfums.find((p) => String(p.id) === parfumId);
+  const formats = choix?.formats ?? [];
   return (
     <form action={ajouterAuPlacard} className="placard-form">
       <div>
-        <label htmlFor="pl-maison">Maison</label>
-        <select id="pl-maison" className="champ" value={maisonId} onChange={(e) => { setMaison(e.target.value); setParfum(''); }} required>
-          <option value="">Choisir</option>
-          {maisons.filter((m) => m.parfums.length).map((m) => <option key={m.id} value={m.id}>{m.nom}</option>)}
-        </select>
+        <label>Parfum</label>
+        <ChoixParfum valeur={choix} onChoix={setChoix} />
+        {choix?.source === 'catalogue' ? <input type="hidden" name="parfumId" value={choix.id} /> : null}
+        {choix?.source === 'scento' ? <><input type="hidden" name="scentoNom" value={choix.nom} /><input type="hidden" name="scentoMaison" value={choix.maison} /></> : null}
+        {choix?.source === 'libre' ? <input type="hidden" name="libreNom" value={choix.nom} /> : null}
       </div>
-      <div>
-        <label htmlFor="pl-parfum">Parfum</label>
-        <select id="pl-parfum" name="parfumId" className="champ" value={parfumId} onChange={(e) => setParfum(e.target.value)} disabled={!maison} required>
-          <option value="">Choisir</option>
-          {maison?.parfums.map((p) => <option key={p.id} value={p.id}>{p.nom}</option>)}
-        </select>
-      </div>
-      <div>
-        <label htmlFor="pl-ml">Contenance</label>
-        {parfum?.formats.length ? (
-          <select id="pl-ml" name="ml" className="champ" required defaultValue="">
-            <option value="">Choisir</option>
-            {parfum.formats.map((f) => <option key={f.ml} value={f.ml}>{f.ml} ml</option>)}
-          </select>
-        ) : (
-          <div className="champ-prix"><input id="pl-ml" name="ml" className="champ" inputMode="decimal" placeholder="100" required /><span>ml</span></div>
-        )}
-      </div>
-      <div className="placard-niveau">
-        <label htmlFor="pl-niveau">Ce qu&apos;il reste dans le flacon</label>
-        <Jauge id="pl-niveau" name="niveau" min={5} max={100} step={5} value={niveau} onChange={setNiveau} format={(v) => (v >= 100 ? 'Neuf' : `${v} %`)} reperes={['Presque vide', 'À moitié', 'Plein']} />
-      </div>
-      <button className="btn btn-noir" type="submit" disabled={!parfum}>Ajouter au placard</button>
+      {choix?.source === 'libre' ? (
+        <div>
+          <label htmlFor="pl-maison">Maison</label>
+          <input id="pl-maison" name="libreMaison" className="champ" placeholder="Ex. Maison Francis Kurkdjian" required />
+          <p className="aide">L&apos;équipe l&apos;ajoute au catalogue, puis il apparaît dans votre placard avec son estimation.</p>
+        </div>
+      ) : null}
+      {choix && choix.source !== 'libre' ? (
+        <>
+          <div>
+            <label htmlFor="pl-ml">Contenance</label>
+            {formats.length ? (
+              <select id="pl-ml" name="ml" className="champ" required defaultValue="">
+                <option value="">Choisir</option>
+                {formats.map((f) => <option key={f.ml} value={f.ml}>{f.ml} ml</option>)}
+              </select>
+            ) : (
+              <div className="champ-prix"><input id="pl-ml" name="ml" className="champ" inputMode="decimal" placeholder="100" required /><span>ml</span></div>
+            )}
+          </div>
+          <div className="placard-niveau">
+            <label htmlFor="pl-niveau">Ce qu&apos;il reste dans le flacon</label>
+            <Jauge id="pl-niveau" name="niveau" min={5} max={100} step={5} value={niveau} onChange={setNiveau} format={(v) => (v >= 100 ? 'Neuf' : `${v} %`)} reperes={['Presque vide', 'À moitié', 'Plein']} />
+          </div>
+        </>
+      ) : null}
+      <button className="btn btn-noir" type="submit" disabled={!choix}>{choix?.source === 'libre' ? 'Proposer ce parfum' : 'Ajouter au placard'}</button>
     </form>
   );
 }

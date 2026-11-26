@@ -8,6 +8,7 @@ import {Vaporise} from '@/components/Logo';
 import {PHOTOS, CONCENTRATIONS, GROUPES_FAMILLES, FORMATS, LIEUX, DEFAUTS, BOITES, MISES_EN_AVANT, POURQUOI, annees, eur, eur2, normal} from '@/lib/regles';
 import {estimer} from '@/lib/cote';
 import {Jauge} from '@/components/Jauge';
+import {ChoixParfum, type Choix} from '@/components/ChoixParfum';
 
 type Parfum = {id: number; nom: string; conc: string; genre: string; famille: string; notes: string; formats: {ml: number; neuf?: number}[]};
 export type Depart = {maisonId?: string; parfumId?: string; ml?: string; niveau?: number};
@@ -89,6 +90,15 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
   const maison = maisons.find((m) => String(m.id) === v.maisonId);
   const parfum = maison?.parfums.find((p) => String(p.id) === v.parfumId);
   const parfumLibre = autreMaison || (maison && (!maison.parfums.length || v.parfumId === 'autre'));
+  // un parfum trouvé par la recherche : on remplit la maison et le parfum ; s'il n'est pas encore au catalogue, il passe
+  // par « autre » (l'équipe l'ajoute en vérifiant l'annonce)
+  const remplirDepuis = (c: Choix) => {
+    const mc = c.id ? maisons.find((x) => x.parfums.some((p) => p.id === c.id)) : maisons.find((x) => normal(x.nom) === normal(c.maison));
+    const pc = c.id ? mc?.parfums.find((p) => p.id === c.id) : mc?.parfums.find((p) => normal(p.nom) === normal(c.nom));
+    if (mc && pc) setV((o) => ({...o, maisonId: String(mc.id), maisonAutre: '', parfumId: String(pc.id), parfumAutre: '', ml: ''}));
+    else if (mc) setV((o) => ({...o, maisonId: String(mc.id), maisonAutre: '', parfumId: 'autre', parfumAutre: c.nom, ml: ''}));
+    else setV((o) => ({...o, maisonId: 'autre', maisonAutre: c.maison, parfumId: '', parfumAutre: c.nom, ml: ''}));
+  };
   const pret = !!(parfum || parfumLibre);
   const nomMaison = maison?.nom || (autreMaison ? v.maisonAutre : '');
   const nomParfum = parfum?.nom || (parfumLibre ? v.parfumAutre : '');
@@ -144,6 +154,9 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
         ) : null}
         <section className="bloc-form">
           <h2 className="h2"><span className="bloc-n">1</span>Le parfum</h2>
+          <label>Chercher votre parfum</label>
+          <ChoixParfum valeur={null} libre={false} onChoix={(c) => c && remplirDepuis(c)} placeholder="Tapez son nom ou sa maison : Baccarat, Sauvage, Aventus…" />
+          <p className="aide">Ou choisissez dans les listes :</p>
           <label htmlFor="maison">Maison</label>
           <select id="maison" name="maisonId" className="champ" value={v.maisonId} onChange={(e) => setV((o) => ({...o, maisonId: e.target.value, parfumId: '', ml: ''}))} required>
             <option value="">Choisir une maison</option>

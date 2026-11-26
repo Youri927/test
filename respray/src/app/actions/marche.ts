@@ -1,4 +1,5 @@
 'use server';
+import {depuisScento} from '@/lib/recherche-parfums';
 /* Ce qui fait vivre le marché entre deux achats : la liste d'envies, le placard, les offres et les messages.
    Chaque événement prévient la bonne personne (lib/activite). */
 import {revalidatePath} from 'next/cache';
@@ -40,11 +41,18 @@ export async function retirerEnvie(f: FormData) {
 /* ——— le placard ——— */
 export async function ajouterAuPlacard(f: FormData) {
   const m = await exigerMembre('/placard');
-  const parfumId = nombre(f.get('parfumId'));
+  const texte = (k: string) => String(f.get(k) || '').trim().slice(0, 80);
+  // un parfum introuvable : proposé à l'équipe, qui l'ajoute au catalogue
+  if (texte('libreNom')) {
+    await db.insert(schema.propositions).values({type: 'parfum', tape: texte('libreNom'), maisonNom: texte('libreMaison') || null, membreId: m.id});
+    redirect('/placard?propose=1');
+  }
+  // un parfum trouvé chez Scento : ajouté au catalogue (après vérification), puis au placard
+  const parfumId = nombre(f.get('parfumId')) || (texte('scentoNom') ? await depuisScento(texte('scentoNom'), texte('scentoMaison')) : null);
   const ml = nombre(f.get('ml'));
   const niveau = Math.min(100, Math.max(5, Math.round(nombre(f.get('niveau')) || 100)));
   const p = parfumId ? await db.query.parfums.findFirst({where: eq(schema.parfums.id, parfumId)}) : null;
-  if (p && ml > 0 && ml <= 1000) await db.insert(schema.placard).values({membreId: m.id, parfumId, ml, niveau});
+  if (p && ml > 0 && ml <= 1000) await db.insert(schema.placard).values({membreId: m.id, parfumId: p.id, ml, niveau});
   revalidatePath('/placard');
   redirect('/placard');
 }

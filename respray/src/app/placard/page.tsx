@@ -16,7 +16,8 @@ export const dynamic = 'force-dynamic';
 
 /* Le placard : ce qu'on possède, ce que ça vaut. L'argent qui dort devient visible ; chaque flacon se vend ensuite en
    un geste, le formulaire déjà rempli. */
-export default async function Placard() {
+export default async function Placard({searchParams}: {searchParams: Promise<{propose?: string}>}) {
+  const q = await searchParams;
   const m = await moi();
   if (!m) {
     return (
@@ -34,19 +35,28 @@ export default async function Placard() {
   const [occ, dem] = await Promise.all([prixAuMl(ids), demande(ids)]);
   const estimes = items.map((i) => ({...i, cote: estimer({formats: i.p.formats, ml: i.x.ml, niveau: i.x.niveau, etat: i.x.niveau >= 100 ? 'neuf' : 'entame', occMl: occ[i.p.id]})}));
   const total = estimes.reduce((s, i) => s + (i.cote?.milieu ?? 0), 0);
-  const ms = await db.select().from(schema.maisons).orderBy(asc(schema.maisons.nom));
-  const ps = await db.select().from(schema.parfums).orderBy(asc(schema.parfums.nom));
-  const maisons = ms.map((x) => ({id: x.id, nom: x.nom, parfums: ps.filter((p) => p.maisonId === x.id).map((p) => ({id: p.id, nom: p.nom, formats: p.formats}))}));
+  const estimables = estimes.filter((i) => i.cote).length;
+  const sansCote = estimes.length - estimables;
   const site = process.env.SITE_URL || 'https://respray.fr';
   return (
     <div className="env page">
       <p className="surtitre">Mon placard</p>
       {items.length ? (
         <div className="placard-total">
-          <p>Votre placard vaut environ</p>
-          <strong>{eur(total)}</strong>
-          <p className="aide">{items.length} flacon{items.length > 1 ? 's' : ''}, estimé{items.length > 1 ? 's' : ''} d'après la cote Respray. C'est ce que vous toucheriez en {items.length > 1 ? 'les' : 'le'} vendant ici : 0 % de commission.</p>
-          <div className="boutons"><Partager texte={`Mon placard de parfums vaut ${eur(total)} d'occasion. Et le vôtre ?`} url={`${site}/placard`} /></div>
+          {estimables ? (
+            <>
+              <p>Votre placard vaut environ</p>
+              <strong>{eur(total)}</strong>
+              <p className="aide">{estimables} flacon{estimables > 1 ? 's' : ''} estimé{estimables > 1 ? 's' : ''} d'après la cote Respray{sansCote ? `, ${sansCote} pas encore coté${sansCote > 1 ? 's' : ''}` : ''}. C'est ce que vous toucheriez en {estimables > 1 ? 'les' : 'le'} vendant ici : 0 % de commission.</p>
+              <div className="boutons"><Partager texte={`Mon placard de parfums vaut ${eur(total)} d'occasion. Et le vôtre ?`} url={`${site}/placard`} /></div>
+            </>
+          ) : (
+            <>
+              <p>Votre placard</p>
+              <strong>{items.length} flacon{items.length > 1 ? 's' : ''}</strong>
+              <p className="aide">Pas encore de cote pour {items.length > 1 ? 'ces parfums' : 'ce parfum'} : elle arrive dès que l'équipe a son prix neuf, ou dès que trois annonces sont publiées.</p>
+            </>
+          )}
         </div>
       ) : (
         <>
@@ -56,8 +66,8 @@ export default async function Placard() {
       )}
       <section className="section">
         <h2 className="h2">Ajouter un flacon</h2>
-        <FormPlacard key={items.length} maisons={maisons} />
-        <p className="aide">Votre parfum n'est pas dans la liste ? <Link className="lien-souligne" href="/vendre">Vendez-le directement</Link> : l'équipe l'ajoutera au catalogue.</p>
+        {q.propose ? <p className="envie-ok" role="status">✓ Merci : l&apos;équipe ajoute ce parfum au catalogue. Vous pourrez ensuite le mettre dans votre placard.</p> : null}
+        <FormPlacard key={items.length} />
       </section>
       {estimes.length ? (
         <section className="section">
