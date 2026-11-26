@@ -99,14 +99,14 @@ export default async function Accueil() {
       <section className="env section accueil-duo">
         <Link className="tuile tuile-placard" href="/placard" data-revele>
           <p className="surtitre">Le placard</p>
-          <h2 className="h2">Combien valent les parfums qui dorment chez vous ?</h2>
+          <h2 className="h2">Combien valent les parfums qui dorment chez vous&nbsp;?</h2>
           <p className="aide">Ajoutez ceux que vous avez, même entamés : on estime chacun d&apos;après la cote. Vous vendez ensuite ceux que vous voulez, en un geste.</p>
           <span className="lien">Estimer mon placard</span>
         </Link>
         <Link className="tuile tuile-verif" href="/verification" data-revele>
           <Bouclier taille={64} anime={false} />
           <p className="surtitre">Nos chiffres</p>
-          <h2 className="h2">{j.length ? `${pub} annonces publiées, ${ref} refusées ces 30 derniers jours.` : 'Ce qu\'on publie, ce qu\'on refuse, et pourquoi.'}</h2>
+          <h2 className="h2">{j.length ? `${pub} annonce${pub > 1 ? 's' : ''} publiée${pub > 1 ? 's' : ''}, ${ref} refusée${ref > 1 ? 's' : ''} ces 30 derniers jours.` : 'Ce qu\'on publie, ce qu\'on refuse, et pourquoi.'}</h2>
           <p className="aide">Une vérification qui ne refuse rien ne prouve rien. Les nôtres sont publiques, raisons comprises.</p>
           <span className="lien">Voir les chiffres</span>
         </Link>
