@@ -53,7 +53,7 @@ function Scene({s}: {s: string}) {
     case 'paye':
       return <div className="sc-paye"><div className="sc-anneau"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" /><circle className="sc-anneau-plein" cx="60" cy="60" r="52" /></svg><span>J+7</span></div><p className="sc-montant">+{eur2(DEMO.prix)}</p><p className="sc-sous">Versement envoyé · commission 0 €</p></div>;
     case 'trouver':
-      return <div className="sc-trouver"><div className="sc-filtre"><span>Prix au ml</span><span>Entamé</span><span>Maison Francis Kurkdjian</span></div><div className="sc-cartes">{['a101', 'a102', 'a103'].map((id, i) => <span key={id} className="sc-carte" style={st({'--i': i})}><PhotoDemo id={id} /><b>{eur([85, 79, 245][i])}</b></span>)}</div></div>;
+      return <div className="sc-trouver"><div className="sc-filtre"><span>Prix au ml</span><span>Entamé</span><span>Niche</span></div><div className="sc-cartes">{['a101', 'a102', 'a103'].map((id, i) => <span key={id} className="sc-carte" style={st({'--i': i})}><PhotoDemo id={id} /><b>{eur([85, 95, 69][i])}</b></span>)}</div></div>;
     case 'bloque':
       return <div className="sc-bloque"><svg className="sc-cadenas" viewBox="0 0 80 96"><path className="sc-anse" d="M22 44V30a18 18 0 0 1 36 0v14" /><rect x="12" y="44" width="56" height="44" rx="8" /><circle cx="40" cy="64" r="5" /></svg><p className="sc-montant">{eur2(DEMO.prix + protection(DEMO.prix) + ENVOI)}</p><p className="sc-sous">bloqués jusqu&apos;à votre vérification</p></div>;
     case 'verifier':
