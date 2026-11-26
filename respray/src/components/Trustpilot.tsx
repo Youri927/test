@@ -4,11 +4,11 @@
      dont la commande est terminée : Trustpilot demande d'inviter tout le monde, pas seulement les clients contents ;
    - <LienTrustpilot /> : en bas de page, un lien vers la page Trustpilot de Respray ; avec
      NEXT_PUBLIC_TRUSTPILOT_NOTE=1 (à mettre quand il y a assez d'avis), la note en étoiles (TrustBox « Micro TrustScore »).
-   Rien ne s'affiche tant que NEXT_PUBLIC_TRUSTPILOT_ID (l'identifiant de Respray chez Trustpilot) n'est pas renseigné. */
+   L'identifiant de Respray est écrit ici (il est public) ; NEXT_PUBLIC_TRUSTPILOT_ID peut le remplacer. */
 import Script from 'next/script';
 import {useEffect, useRef, useState} from 'react';
 
-const ID = process.env.NEXT_PUBLIC_TRUSTPILOT_ID;
+const ID = process.env.NEXT_PUBLIC_TRUSTPILOT_ID || '6b08a70e29a4f8a2ab467a30'; // l'identifiant public de Respray chez Trustpilot
 const NOTE = process.env.NEXT_PUBLIC_TRUSTPILOT_NOTE === '1';
 const PAGE = 'https://fr.trustpilot.com/review/respray.fr';
 const MODELES = {collecteur: '56278e9abfbbba0bdcd568bc', note: '5419b637fa0340045cd0c936'};
@@ -41,7 +41,7 @@ function TrustBox({modele, hauteur, largeur = '100%'}: {modele: keyof typeof MOD
     <>
       <Script src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" strategy="lazyOnload" onLoad={charger} />
       <div key={sombre ? 's' : 'c'} ref={ref} className="trustpilot-widget" data-locale="fr-FR" data-template-id={MODELES[modele]} data-businessunit-id={ID}
-        data-style-height={hauteur} data-style-width={largeur} data-theme={sombre ? 'dark' : 'light'} data-token="">
+        data-style-height={hauteur} data-style-width={largeur}  data-theme={sombre ? 'dark' : 'light'}>
         <a href={PAGE} target="_blank" rel="noopener">Trustpilot</a>
       </div>
     </>
