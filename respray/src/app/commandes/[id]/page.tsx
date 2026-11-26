@@ -65,11 +65,11 @@ export default async function CommandePage({params, searchParams}: {params: Prom
           <p>Avant le <strong>{jour.format(c.deposerAvant!)}</strong>, sinon la vente est annulée et l'acheteur remboursé.</p>
           <ol className="etapes-simples">
             <li>Emballez le flacon : <Link className="lien-souligne" href="/guides/emballer-un-parfum-pour-l-envoyer">le guide en 5 étapes</Link>.</li>
-            <li><Link className="lien-souligne" href={`/commandes/${c.id}/etiquette`} target="_blank">Imprimez l'étiquette</Link> et collez-la à plat sur le dessus.</li>
+            <li><Link className="lien-souligne" href={`/commandes/${c.id}/etiquette`}>{c.etiquette ? 'Imprimez l\'étiquette' : 'Obtenez l\'étiquette prépayée'}</Link> et collez-la à plat sur le dessus.</li>
             <li>Déposez-le dans n'importe quel point relais Mondial Relay, et gardez le reçu.</li>
           </ol>
           <div className="boutons">
-            <form action={deposer}><input type="hidden" name="id" value={c.id} /><button className="btn btn-noir" type="submit">J'ai déposé le colis</button></form>
+            {c.etiquette ? <form action={deposer}><input type="hidden" name="id" value={c.id} /><button className="btn btn-noir" type="submit">J'ai déposé le colis</button></form> : <Link className="btn btn-noir" href={`/commandes/${c.id}/etiquette`}>Obtenir l'étiquette</Link>}
             <form action={annulerParVendeur}><input type="hidden" name="id" value={c.id} /><button className="btn btn-discret" type="submit">Je ne peux plus le vendre</button></form>
           </div>
         </section>

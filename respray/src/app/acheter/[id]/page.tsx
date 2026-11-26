@@ -24,7 +24,7 @@ export default async function Acheter({params, searchParams}: {params: Promise<{
   const mt = montants(prix, {offerte, assurance: false});
   const mode = q.mode === 'main' && a.mainPropre ? 'main' : 'relais';
   const cp = (q.cp || '').replace(/\D/g, '').slice(0, 5);
-  const relais = relaisPres(cp);
+  const relais = await relaisPres(cp).catch(() => null);
   return (
     <div className="env page page-etroite achat">
       <nav className="fil" aria-label="Fil d'Ariane"><Link href={`/annonces/${a.id}`}>{a.parfumNom}</Link><span aria-hidden="true">›</span><span>Acheter</span></nav>
@@ -56,12 +56,14 @@ export default async function Acheter({params, searchParams}: {params: Promise<{
             <button className="btn" type="submit">Chercher</button>
           </form>
           {simule() && cp ? <p className="aide">Points relais de démonstration, en attendant le contrat Mondial Relay.</p> : null}
+          {cp && relais === null ? <p className="erreur" role="alert">La recherche de points relais ne répond pas pour l&apos;instant. Réessayez dans un instant.</p> : null}
+          {cp && relais?.length === 0 ? <p className="aide">Aucun point relais trouvé pour ce code postal. Vérifiez-le, ou essayez celui d&apos;une commune voisine.</p> : null}
         </section>
       ) : (
         <p className="note-ajout">En main propre : vous payez ici, comme pour un envoi. Au rendez-vous, vous vérifiez le flacon, puis vous donnez au vendeur le code affiché dans votre commande. C'est ce code qui lui verse l'argent : ne le donnez qu'une fois le parfum vérifié.</p>
       )}
 
-      {mode === 'main' || relais.length ? (
+      {mode === 'main' || relais?.length ? (
         <form action={payer} className="achat-form">
           <input type="hidden" name="annonceId" value={a.id} />
           <input type="hidden" name="mode" value={mode} />
@@ -69,7 +71,7 @@ export default async function Acheter({params, searchParams}: {params: Promise<{
           {mode === 'relais' ? (
             <fieldset className="relais-liste">
               <legend className="vh">Point relais</legend>
-              {relais.map((r, i) => (
+              {relais?.map((r, i) => (
                 <label key={r.id} className="relais"><input type="radio" name="relais" value={r.id} defaultChecked={i === 0} /><span><strong>{r.nom}</strong><small>{r.adresse}, {r.cp} {r.ville}</small></span></label>
               ))}
             </fieldset>

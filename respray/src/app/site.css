@@ -474,3 +474,5 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .vendre-etapes span { display: flex; flex-direction: column; gap: 2px; color: var(--texte-2); line-height: 1.5; }
 .vendre-etapes strong { color: var(--texte); }
 .vendre-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 16px; }
+.etapes-envoi { margin: 24px 0 16px; padding-left: 22px; display: grid; gap: 10px; line-height: 1.55; }
+.boutons .btn { white-space: nowrap; }

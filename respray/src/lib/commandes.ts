@@ -9,7 +9,7 @@ import {db, schema} from '@/db';
 import {stripe, centimes, cle} from '@/lib/stripe';
 import {notifier} from '@/lib/activite';
 import {noter} from '@/lib/journal';
-import {creerEtiquette} from '@/lib/envoi';
+import {etiquetteSimulee, simule, suivre} from '@/lib/envoi';
 import {pretPourVersements} from '@/lib/connect';
 import {protection, ENVOI, ASSURANCE, SEUIL_ASSURANCE, eur} from '@/lib/regles';
 
@@ -58,7 +58,8 @@ export async function enregistrerPaiement(c: Commande, paymentIntentId: string |
   if (!maj) return db.query.commandes.findFirst({where: eq(schema.commandes.id, c.id)});
   const pi = paymentIntentId ? await stripe.paymentIntents.retrieve(paymentIntentId) : null;
   const chargeId = pi ? (typeof pi.latest_charge === 'string' ? pi.latest_charge : pi.latest_charge?.id) ?? null : null;
-  const etiquette = c.mode === 'relais' ? await creerEtiquette() : null;
+  // en simulation, l'étiquette factice tout de suite ; sinon le vendeur la crée en donnant son adresse d'expéditeur
+  const etiquette = c.mode === 'relais' && simule() ? etiquetteSimulee() : null;
   const codeRemise = c.mode === 'main' ? String(randomInt(100000, 999999)) : null;
   await db.update(schema.commandes).set({paiementId: pi?.id ?? null, chargeId, etiquette, codeRemise, deposerAvant: new Date(Date.now() + DELAI_DEPOT * JOUR)}).where(eq(schema.commandes.id, c.id));
   await db.update(schema.annonces).set({statut: 'vendue'}).where(eq(schema.annonces.id, c.annonceId));
@@ -183,6 +184,19 @@ export async function taches() {
   for (const c of await db.select().from(schema.commandes).where(and(eq(schema.commandes.statut, 'payee'), eq(schema.commandes.mode, 'relais'), lt(schema.commandes.deposerAvant, maintenant)))) {
     await annuler(c, `le colis n'a pas été déposé sous ${DELAI_DEPOT} jours.`);
     fait.push(`commande ${c.id} annulée (pas déposée)`);
+  }
+  // le suivi Mondial Relay des colis en route
+  if (!simule()) {
+    for (const c of await db.select().from(schema.commandes).where(and(inArray(schema.commandes.statut, ['payee', 'expediee']), eq(schema.commandes.mode, 'relais')))) {
+      if (!c.etiquette) continue;
+      const etat = await suivre(c.etiquette).catch(() => null);
+      if (etat === 'depose' && c.statut === 'payee') { await deposee(c); fait.push(`commande ${c.id} déposée`); }
+      if (etat === 'arrive' || etat === 'retire') { await livree(c); fait.push(`commande ${c.id} arrivée au point relais`); }
+      // une anomalie (colis abîmé, perdu, refusé) : notée une seule fois dans le journal de l'équipe
+      if (etat === 'anomalie' && !(await db.query.journal.findFirst({where: and(eq(schema.journal.action, 'colis_anomalie'), eq(schema.journal.cible, ref(c)))}))) {
+        await noter(null, 'colis_anomalie', ref(c), `commande ${c.id} : anomalie signalée par Mondial Relay sur le colis ${c.etiquette}`);
+      }
+    }
   }
   // 7 jours sans problème signalé : confirmée, et versée
   for (const c of await db.select().from(schema.commandes).where(and(eq(schema.commandes.statut, 'livree'), lt(schema.commandes.finVerif, maintenant)))) {

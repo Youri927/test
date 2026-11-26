@@ -145,6 +145,26 @@ pseudo et accepte les conditions, puis c'est prêt.
 4. Facultatif, 2 minutes : https://www.bing.com/webmasters, **Importer depuis Google Search Console** (Bing alimente
    aussi DuckDuckGo, Ecosia et les réponses de plusieurs assistants IA).
 
+## 10. Mondial Relay (les vrais envois)
+
+Tant que les clés Mondial Relay ne sont pas en place, les envois sont simulés (points relais de démonstration).
+
+1. Contrat pro sur mondialrelay.fr (offre e-commerçant, livraison en Point Relais / Lockers). Une fois le compte ouvert,
+   dans l'espace client (Connect), récupère le **code enseigne** (8 caractères, ex. `CC12AB34`) et la **clé privée**
+   du web service. Si tu ne les trouves pas, demande à ton conseiller « les identifiants Web Service (WSI) ».
+2. Sur le VPS (la clé privée ne s'affiche pas) :
+
+```bash
+read -rp "Code enseigne Mondial Relay : " E; read -rsp "Clé privée Mondial Relay : " K; echo; F=/srv/respray/.env; for kv in "MR_ENSEIGNE=$E" "MR_CLE_PRIVEE=$K" "ENVOIS_SIMULES=0"; do k=${kv%%=*}; if grep -q "^$k=" $F; then sed -i "s|^$k=.*|$kv|" $F; else echo "$kv" >> $F; fi; done; systemctl restart respray && echo "Mondial Relay configuré."
+```
+
+3. Vérifie : une page « Acheter », code postal `75011` : de vrais points relais doivent apparaître.
+
+Comment ça marche ensuite : l'acheteur choisit son point relais ; une fois payé, le vendeur donne (une seule fois) son
+adresse d'expéditeur et télécharge l'étiquette prépayée (facturée au compte Respray par Mondial Relay) ; il dépose le
+colis dans n'importe quel point relais. Toutes les 15 minutes, le site lit le suivi : dépôt, arrivée au point relais
+(l'acheteur a alors 7 jours pour vérifier). Une anomalie signalée par Mondial Relay apparaît dans le journal de l'équipe.
+
 ## Ensuite
 
 - **Mettre à jour le site** après une modification du code :

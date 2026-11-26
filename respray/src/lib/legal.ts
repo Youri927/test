@@ -27,5 +27,7 @@ export const MAJ = '26 novembre 2026';
 export const PRESTATAIRES: [string, string, string][] = [
   ['Stripe Payments Europe, Ltd (Irlande)', 'Paiements, vérification d\'identité et versements aux vendeurs', 'stripe.com/fr/privacy'],
   ['Hostinger International Ltd (Chypre ; serveur à Paris)', 'Hébergement du site, de la base de données et des photos', 'hostinger.fr/politique-de-confidentialite'],
-  ['Mondial Relay (France)', 'Livraison en point relais (nom de l\'acheteur et point relais choisi)', 'mondialrelay.fr'],
+  ['Mondial Relay (France)', 'Livraison en point relais : nom et e-mail de l\'acheteur, point relais choisi ; nom, adresse et téléphone d\'expéditeur du vendeur', 'mondialrelay.fr'],
+  ['Brevo (France)', 'Envoi des e-mails du site (adresse e-mail du destinataire)', 'brevo.com/fr/legal/privacypolicy'],
+  ['Google Ireland Limited', '« Continuer avec Google », si vous le choisissez (nom, prénom, adresse e-mail)', 'policies.google.com/privacy'],
 ];

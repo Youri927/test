@@ -3,11 +3,11 @@
    quoi, et les redirections. */
 import {revalidatePath} from 'next/cache';
 import {redirect} from 'next/navigation';
-import {and, eq} from 'drizzle-orm';
+import {and, eq, isNull} from 'drizzle-orm';
 import {db, schema} from '@/db';
 import {exigerMembre, exigerEquipe, moi} from '@/lib/auth';
 import {stripe, centimes, cle} from '@/lib/stripe';
-import {relaisPres, simule} from '@/lib/envoi';
+import {relaisPres, simule, creerExpedition, expediteurValide, type Expediteur} from '@/lib/envoi';
 import {prixPour, protectionOfferte, montants, synchroniser, annuler, remiseEnMain, confirmer, ouvrirLitige, rembourserLitige, actualiserVersements, taches, deposee as marquerDeposee, livree as marquerLivree, type Commande} from '@/lib/commandes';
 import {MISES_EN_AVANT, SEUIL_ASSURANCE} from '@/lib/regles';
 
@@ -22,7 +22,7 @@ export async function payer(f: FormData) {
   if (!a || a.vendeurId === m.id) redirect(`/annonces/${id}`);
   const mode = f.get('mode') === 'main' && a.mainPropre ? 'main' : 'relais';
   const cp = String(f.get('cp') || '');
-  const relais = mode === 'relais' ? relaisPres(cp).find((r) => r.id === f.get('relais')) : undefined;
+  const relais = mode === 'relais' ? (await relaisPres(cp).catch(() => [])).find((r) => r.id === f.get('relais')) : undefined;
   if (mode === 'relais' && !relais) redirect(`/acheter/${id}?cp=${encodeURIComponent(cp)}&erreur=relais`);
   // réserver l'annonce, d'un coup : si quelqu'un d'autre paie déjà, on s'arrête là
   const [reservee] = await db.update(schema.annonces).set({statut: 'reservee'}).where(and(eq(schema.annonces.id, id), eq(schema.annonces.statut, 'publiee'))).returning();
@@ -88,7 +88,7 @@ const retour = (c: Commande) => {
 
 export async function deposer(f: FormData) {
   const c = await commandeDe(f, 'vendeur');
-  await marquerDeposee(c);
+  if (c.etiquette) await marquerDeposee(c);
   retour(c);
 }
 
@@ -193,3 +193,27 @@ export async function relireVersements() {
   redirect('/compte/versements');
 }
 
+
+/* ——— l'étiquette Mondial Relay : le vendeur donne son adresse d'expéditeur (gardée pour les prochaines fois), Respray
+   crée l'expédition prépayée vers le point relais de l'acheteur ——— */
+export async function obtenirEtiquette(f: FormData) {
+  const id = num(f, 'id');
+  const m = await exigerMembre(`/commandes/${id}/etiquette`);
+  const c = await db.query.commandes.findFirst({where: eq(schema.commandes.id, id)});
+  if (!c || c.vendeurId !== m.id || c.mode !== 'relais' || !c.relais || c.statut !== 'payee' || c.etiquette || simule()) redirect(`/commandes/${id}`);
+  const texte = (k: string) => String(f.get(k) || '').trim().slice(0, 80);
+  const exp: Expediteur = {nom: texte('nom'), rue: texte('rue'), cp: texte('cp').replace(/\D/g, ''), ville: texte('ville'), tel: texte('tel')};
+  if (!expediteurValide(exp)) redirect(`/commandes/${id}/etiquette?erreur=adresse`);
+  await db.update(schema.membres).set({expediteur: exp}).where(eq(schema.membres.id, m.id));
+  const acheteur = await db.query.membres.findFirst({where: eq(schema.membres.id, c.acheteurId)});
+  let ok = false;
+  try {
+    const e = await creerExpedition(c.id, exp, {nom: `${acheteur?.prenom ?? ''} ${acheteur?.nom ?? ''}`.trim() || acheteur?.pseudo || 'Client', email: acheteur?.email ?? '', relais: c.relais}, c.assurance > 0);
+    // seulement si personne ne l'a créée entre-temps (double clic)
+    await db.update(schema.commandes).set({etiquette: e.numero, etiquettePdf: e.pdf}).where(and(eq(schema.commandes.id, c.id), isNull(schema.commandes.etiquette)));
+    ok = true;
+  } catch (err) {
+    console.error('étiquette Mondial Relay', c.id, err);
+  }
+  redirect(`/commandes/${id}/etiquette${ok ? '' : '?erreur=mr'}`);
+}

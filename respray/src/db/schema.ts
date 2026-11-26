@@ -31,6 +31,8 @@ export const membres = pgTable(
     versementsOk: boolean('versements_ok').notNull().default(false),
     // les e-mails facultatifs (envies arrivées, offres, messages) ; les e-mails essentiels partent toujours
     emailsActivite: boolean('emails_activite').notNull().default(true),
+    // l'adresse d'expéditeur du vendeur, imprimée sur l'étiquette Mondial Relay (jamais montrée à l'acheteur)
+    expediteur: jsonb('expediteur').$type<{nom: string; rue: string; cp: string; ville: string; tel: string}>(),
     creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
   },
   (t) => [uniqueIndex('membres_email').on(t.email), uniqueIndex('membres_pseudo').on(t.pseudo), uniqueIndex('membres_code').on(t.code), uniqueIndex('membres_google').on(t.googleId)],
@@ -279,6 +281,7 @@ export const commandes = pgTable(
     transfertId: text('transfert_id'),
     remboursementId: text('remboursement_id'),
     etiquette: text('etiquette'),
+    etiquettePdf: text('etiquette_pdf'), // le PDF de l'étiquette chez Mondial Relay
     codeRemise: text('code_remise'),
     litige: jsonb('litige').$type<Litige>(),
     creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
