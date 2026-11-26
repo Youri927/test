@@ -92,6 +92,13 @@ export async function deposer(f: FormData) {
   retour(c);
 }
 
+/* l'acheteur a récupéré son colis : si le suivi Mondial Relay ne l'a pas encore vu, c'est lui qui lance ses 7 jours */
+export async function recupere(f: FormData) {
+  const c = await commandeDe(f, 'acheteur');
+  if (c.mode === 'relais' && c.etiquette && ['payee', 'expediee'].includes(c.statut)) await marquerLivree(c);
+  retour(c);
+}
+
 /* simulation de Mondial Relay : le colis arrive au point relais (visible seulement avec ENVOIS_SIMULES=1) */
 export async function simulerArrivee(f: FormData) {
   if (!simule()) return;

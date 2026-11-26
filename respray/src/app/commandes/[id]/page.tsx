@@ -6,7 +6,7 @@ import {exigerMembre} from '@/lib/auth';
 import {synchroniser, DELAI_VERIF} from '@/lib/commandes';
 import {simule} from '@/lib/envoi';
 import {eur, eur2} from '@/lib/regles';
-import {deposer, simulerArrivee, annulerParVendeur, confirmerReception, signalerProbleme} from '@/app/actions/commandes';
+import {deposer, simulerArrivee, recupere, annulerParVendeur, confirmerReception, signalerProbleme} from '@/app/actions/commandes';
 import {FormCode} from '@/components/Commande';
 import {Bouclier} from '@/components/Bouclier';
 
@@ -97,6 +97,9 @@ export default async function CommandePage({params, searchParams}: {params: Prom
       ) : null}
       {acheteur && ['payee', 'expediee'].includes(c.statut) && c.mode === 'relais' ? (
         <p className="aide">{c.statut === 'payee' ? `Le vendeur a jusqu'au ${jour.format(c.deposerAvant!)} pour déposer le colis.` : `Colis en route (suivi ${c.etiquette}).`} Livraison chez {c.relais?.nom}, {c.relais?.adresse}, {c.relais?.cp}.</p>
+      ) : null}
+      {acheteur && !simule() && c.etiquette && ['payee', 'expediee'].includes(c.statut) && c.mode === 'relais' ? (
+        <form action={recupere} className="recupere"><input type="hidden" name="id" value={c.id} /><span className="aide">Déjà récupéré au point relais ?</span><button className="btn btn-petit" type="submit">J'ai mon colis</button></form>
       ) : null}
       {acheteur && c.statut === 'livree' ? (
         <section className="action-bloc">
