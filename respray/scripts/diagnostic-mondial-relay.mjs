@@ -46,5 +46,9 @@ for (const mode of ['REL', 'CCC']) {
   const rep = await r.text();
   const num = (rep.match(/ShipmentNumber="([^"]+)"/) || [])[1];
   const st = [...rep.matchAll(/<Status\b[^>]*Code="([^"]*)"[^>]*Message="([^"]*)"/g)].map((m) => `${m[2]} (code ${m[1]})`).join(' ; ');
+  if (num && mode === 'REL') {
+    const t = await appel('WSI2_TracingColisDetaille', [['Enseigne', ENS], ['Expedition', num], ['Langue', 'FR']]);
+    console.log(`Suivi du colis ${num} : code ${champ(t, 'STAT')} (80 = enregistré, 81 = en route, 82 = livré)`);
+  }
   console.log(`API 2, collecte ${mode} : ${num ? `OK, expédition ${num}, étiquette ${(rep.match(/<Output>([^<]+)<\/Output>/) || [])[1] ? 'disponible' : 'absente'}` : st || `HTTP ${r.status}`}`);
 }
