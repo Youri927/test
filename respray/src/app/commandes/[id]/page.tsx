@@ -12,6 +12,7 @@ import {Bouclier} from '@/components/Bouclier';
 import {laisserAvis} from '@/app/actions/avis';
 import {etoiles} from '@/lib/avis';
 import {ChoixNote} from '@/components/ChoixNote';
+import {AvisRespray} from '@/components/Trustpilot';
 
 export const metadata = {title: 'Commande'};
 export const dynamic = 'force-dynamic';
@@ -147,6 +148,7 @@ export default async function CommandePage({params, searchParams}: {params: Prom
               <p className="aide">Votre avis est public, avec votre pseudo et le parfum acheté. Vous ne pourrez plus le modifier.</p>
             </form>
           )}
+          <AvisRespray />
         </section>
       ) : null}
 

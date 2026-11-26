@@ -29,5 +29,6 @@ export const PRESTATAIRES: [string, string, string][] = [
   ['Hostinger International Ltd (Chypre ; serveur à Paris)', 'Hébergement du site, de la base de données et des photos', 'hostinger.fr/politique-de-confidentialite'],
   ['Mondial Relay (France)', 'Livraison en point relais : nom et e-mail de l\'acheteur, point relais choisi ; nom, adresse et téléphone d\'expéditeur du vendeur', 'mondialrelay.fr'],
   ['Brevo (France)', 'Envoi des e-mails du site (adresse e-mail du destinataire)', 'brevo.com/fr/legal/privacypolicy'],
+  ['Trustpilot A/S (Danemark)', 'Avis sur Respray : le module Trustpilot affiché sur le site, et l\'avis que vous choisissez d\'y laisser', 'fr.legal.trustpilot.com/for-reviewers/end-user-privacy-terms'],
   ['Google Ireland Limited', '« Continuer avec Google », si vous le choisissez (nom, prénom, adresse e-mail)', 'policies.google.com/privacy'],
 ];
