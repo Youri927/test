@@ -5,6 +5,9 @@ import {tousLesParfums, lienParfum} from '@/lib/catalogue';
 import {GUIDES} from '@/lib/guides';
 import {lien} from '@/lib/regles';
 
+/* recalculé au plus toutes les heures : les nouvelles annonces y entrent sans attendre une mise à jour du site */
+export const revalidate = 3600;
+
 /* le plan du site pour Google : l'accueil, les guides, chaque maison, chaque parfum, chaque annonce en ligne */
 export default async function plan(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.SITE_URL || 'https://respray.fr';
