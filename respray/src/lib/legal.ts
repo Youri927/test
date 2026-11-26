@@ -2,14 +2,9 @@
    société existe (statuts, Kbis, médiateur). Toutes les pages légales les reprennent d'ici. */
 export const SOCIETE = {
   nom: 'SILENT',
-  forme: '[Forme juridique, ex. SAS]',
-  capital: '[Capital social]',
   siege: '51 avenue des Champs-Élysées, 75008 Paris, France',
-  rcs: '[Ville et numéro RCS]',
-  tva: '[Numéro de TVA intracommunautaire]',
-  directeur: '[Nom du directeur de la publication]',
+  directeur: 'SILENT (identifié ci-dessus)',
   email: 'contact@respray.fr',
-  telephone: '[Numéro de téléphone]',
   site: 'respray.fr',
 };
 
