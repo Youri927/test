@@ -602,3 +602,4 @@ a.pied-trustpilot span { color: #00b67a; }
 .avis-accueil { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 20px; padding-block: 56px 8px; text-align: center; }
 .bloc-trustpilot { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px; }
 .tp-marque { color: var(--texte-2); font-weight: 500; } .tp-marque span { color: #00b67a; }
+.pied-cols .pied-trustpilot { margin-left: 0; font-size: inherit; justify-self: start; }

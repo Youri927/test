@@ -83,6 +83,7 @@ export default async function Racine({children}: {children: React.ReactNode}) {
                 <Link href="/comment-ca-marche">Comment ça marche</Link>
                 <Link href="/verification">Nos chiffres de vérification</Link>
                 <Link href="/regles">Règles des annonces</Link>
+                <LienTrustpilot />
                 <Link href="/guides">Guides</Link>
                 {m ? (
                   <form action={deconnexion}><button className="lien-bouton" type="submit">Se déconnecter</button></form>
@@ -95,7 +96,7 @@ export default async function Racine({children}: {children: React.ReactNode}) {
           </div>
           {/* la signature : le logo en très grand, qui vaporise doucement */}
           <div className="env pied-geant" data-anime aria-hidden="true"><Logo className="logo-geant" /></div>
-          <div className="env pied-bas"><Symbole className="symbole-mini" /><span>Vérifié avant d'être en ligne · 0 % de commission vendeur · 7 jours pour vérifier</span><LienTrustpilot /></div>
+          <div className="env pied-bas"><Symbole className="symbole-mini" /><span>Vérifié avant d'être en ligne · 0 % de commission vendeur · 7 jours pour vérifier</span></div>
           <nav className="env pied-legal" aria-label="Informations légales"><Link href="/cgu">Conditions</Link><Link href="/confidentialite">Confidentialité</Link><Link href="/obligations-fiscales">Obligations fiscales</Link><Link href="/mentions-legales">Mentions légales</Link></nav>
         </footer>
       </body>
