@@ -80,6 +80,7 @@ export default async function Racine({children}: {children: React.ReactNode}) {
                 <p className="pied-titre">Respray</p>
                 <Link href="/comment-ca-marche">Comment ça marche</Link>
                 <Link href="/verification">Nos chiffres de vérification</Link>
+                <Link href="/avis">Avis des acheteurs</Link>
                 <Link href="/regles">Règles des annonces</Link>
                 <Link href="/guides">Guides</Link>
                 {m ? (

@@ -9,6 +9,9 @@ import {FormAttente} from '@/components/FormulairesCompte';
 import {Bouclier} from '@/components/Bouclier';
 import {Vaporise, Ico} from '@/components/Visuels';
 import {Direct, Ruban, Anatomie, Reception} from '@/components/Accueil';
+import {bilanGlobal, derniersAvis} from '@/lib/avis';
+import {CarteAvis, NoteGlobale} from '@/components/AvisAcheteurs';
+import {BlocTrustpilot} from '@/components/Trustpilot';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,6 +41,8 @@ export default async function Accueil() {
   const maisons = [...new Set(annonces.map((a) => a.maisonNom))].sort((x, y) => x.localeCompare(y, 'fr'));
   const remises = annonces.map((a) => (a.parfum ? remise(a.parfum.formats, a)?.pct : undefined)).filter((x): x is number => x !== undefined);
   const moyenne = remises.length >= 3 ? Math.round(remises.reduce((s, x) => s + x, 0) / remises.length) : null;
+  // les avis n'apparaissent sur l'accueil qu'à partir de 3 (avant, une note sur 1 ou 2 avis ne veut rien dire)
+  const [bilan, avis] = await Promise.all([bilanGlobal(), derniersAvis(3, true)]);
   const pile = annonces.filter((a) => a.photos.face).slice(0, 3);
   const pileSrc = pile.length === 3 ? pile.map((a) => `/photos/${a.photos.face}`) : ['/demo/pile-amouage.webp', '/demo/pile-kurkdjian.webp', '/demo/pile-vuitton.webp']; // tant qu'il y a moins de 3 annonces avec photo
 
@@ -95,6 +100,20 @@ export default async function Accueil() {
 
       <Anatomie />
       <Reception />
+
+      {bilan.n >= 3 && avis.length ? (
+        <section className="env section avis-accueil" data-revele>
+          <div className="section-tete">
+            <div>
+              <h2 className="grand-titre">Ce qu&apos;en disent les acheteurs</h2>
+              <NoteGlobale moyenne={bilan.moyenne} n={bilan.n} />
+            </div>
+            <Link className="lien" href="/avis">Tous les avis <Ico n="fleche" /></Link>
+          </div>
+          <div className="avis-grille avis-grille-3">{avis.map((a) => <CarteAvis key={a.id} a={a} court />)}</div>
+          <BlocTrustpilot />
+        </section>
+      ) : null}
 
       <section className="env section accueil-duo">
         <Link className="tuile tuile-placard" href="/placard" data-revele>

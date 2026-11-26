@@ -4,6 +4,7 @@
      dont la commande est terminée : Trustpilot demande d'inviter tout le monde, pas seulement les clients contents ;
    - <LienTrustpilot /> : en bas de page, un lien vers la page Trustpilot de Respray ; avec
      NEXT_PUBLIC_TRUSTPILOT_NOTE=1 (à mettre quand il y a assez d'avis), la note en étoiles (TrustBox « Micro TrustScore »).
+   - <BlocTrustpilot /> : sur /avis et l'accueil, la note (si NOTE) et un bouton vers la page Trustpilot.
    L'identifiant de Respray est écrit ici (il est public) ; NEXT_PUBLIC_TRUSTPILOT_ID peut le remplacer. */
 import Script from 'next/script';
 import {useEffect, useRef, useState} from 'react';
@@ -62,4 +63,15 @@ export function LienTrustpilot() {
   if (!ID) return null;
   if (NOTE) return <span className="pied-trustpilot"><TrustBox modele="note" hauteur="20px" largeur="240px" /></span>;
   return <a className="pied-trustpilot" href={PAGE} target="_blank" rel="noopener"><span aria-hidden="true">★</span> Respray sur Trustpilot</a>;
+}
+
+/* sur la page des avis et l'accueil : la note Trustpilot (quand il y a assez d'avis) ou un bouton vers la page Trustpilot */
+export function BlocTrustpilot() {
+  if (!ID) return null;
+  return (
+    <div className="bloc-trustpilot">
+      {NOTE ? <TrustBox modele="note" hauteur="24px" largeur="260px" /> : null}
+      <a className="btn btn-petit" href={PAGE} target="_blank" rel="noopener"><span aria-hidden="true">★</span> Lire nos avis sur Trustpilot</a>
+    </div>
+  );
 }

@@ -597,3 +597,27 @@ a.pied-trustpilot span { color: #00b67a; }
 .avis-respray p { color: var(--texte-2); font-size: 15px; }
 .avis-respray strong { color: var(--texte); }
 @media (max-width: 640px) { .pied-bas { flex-wrap: wrap; } .pied-trustpilot { margin-left: 0; } }
+
+/* ——— les avis des acheteurs (/avis et accueil) ——— */
+.note-globale { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-top: 6px; color: var(--texte-2); font-size: 15px; }
+.note-globale strong { color: var(--texte); font-size: 22px; font-weight: 650; letter-spacing: -.01em; }
+.avis-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-top: 22px; align-items: start; }
+.avis-grille-3 { grid-template-columns: repeat(3, 1fr); align-items: stretch; }
+.carte-avis { background: var(--fond); display: flex; flex-direction: column; }
+.carte-avis .avis-achat { margin-top: auto; }
+.avis-accueil .bloc-trustpilot { margin-top: 18px; }
+.bloc-trustpilot { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.avis-entete { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items: start; }
+.avis-synthese { display: grid; gap: 14px; padding: 22px; border-radius: 22px; box-shadow: 0 0 0 1px var(--trait); }
+.avis-synthese .note-globale { margin-top: 0; }
+.avis-barres { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 14px; color: var(--texte-2); }
+.avis-barres li { display: grid; grid-template-columns: 34px 1fr 28px; align-items: center; gap: 10px; }
+.avis-barres li > span:last-child { text-align: right; }
+.avis-barre { height: 6px; border-radius: 6px; background: var(--fond-2); overflow: hidden; }
+.avis-barre > span { display: block; height: 100%; border-radius: 6px; background: #c9962b; }
+.avis-tp { display: grid; gap: 10px; padding-top: 14px; border-top: 1px solid var(--trait); }
+.avis-pied { margin-top: 28px; }
+@media (max-width: 860px) {
+  .avis-entete { grid-template-columns: 1fr; gap: 20px; }
+  .avis-grille-3 { grid-template-columns: 1fr; }
+}
