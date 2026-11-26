@@ -34,16 +34,7 @@ const r = await appel('WSI4_PointRelais_Recherche', [['Enseigne', ENS], ['Pays',
 const relais = champ(r, 'Num');
 console.log(`Recherche de points relais : code ${champ(r, 'STAT')}${relais ? `, premier point ${relais}` : ''}`);
 
-const essais = [['REL', 'FR', 'AUTO'], ['REL', 'FR', relais], ['CCC', '', ''], ['DRI', '', '']];
-for (const [mode, pays, rel] of essais) {
-  const champs = [['Enseigne', ENS], ['ModeCol', mode], ['ModeLiv', '24R'], ['NDossier', 'TEST1'], ['NClient', 'TEST'],
-    ['Expe_Langage', 'FR'], ['Expe_Ad1', 'DUPONT LEA'], ['Expe_Ad2', ''], ['Expe_Ad3', '12 RUE DES LILAS'], ['Expe_Ad4', ''], ['Expe_Ville', 'PARIS'], ['Expe_CP', '75011'], ['Expe_Pays', 'FR'], ['Expe_Tel1', '0612345678'], ['Expe_Tel2', ''], ['Expe_Mail', ''],
-    ['Dest_Langage', 'FR'], ['Dest_Ad1', 'PETIT MARC'], ['Dest_Ad2', ''], ['Dest_Ad3', '1 RUE DE LA PAIX'], ['Dest_Ad4', ''], ['Dest_Ville', 'PARIS'], ['Dest_CP', '75011'], ['Dest_Pays', 'FR'], ['Dest_Tel1', ''], ['Dest_Tel2', ''], ['Dest_Mail', ''],
-    ['Poids', '1000'], ['Longueur', ''], ['Taille', ''], ['NbColis', '1'], ['CRT_Valeur', '0'], ['CRT_Devise', 'EUR'], ['Exp_Valeur', ''], ['Exp_Devise', ''],
-    ['COL_Rel_Pays', pays], ['COL_Rel', rel], ['LIV_Rel_Pays', 'FR'], ['LIV_Rel', relais], ['TAvisage', ''], ['TReprise', ''], ['Montage', ''], ['TRDV', ''], ['Assurance', '0'], ['Instructions', '']];
-  const x = await appel('WSI2_CreationEtiquette', champs);
-  console.log(`Étiquette, collecte ${mode}${rel ? ` (${rel})` : ''} : code ${champ(x, 'STAT')}${champ(x, 'ExpeditionNum') ? `, expédition ${champ(x, 'ExpeditionNum')}` : ''}`);
-}
+// (l'ancien service d'étiquettes de l'API 1 répond « compte non activé » pour les comptes récents : on ne l'essaie plus)
 
 /* l'API 2 (Shipment), qui crée les étiquettes des comptes récents */
 if (!LOGIN || !MDP) { console.log('API 2 : MR_API2_LOGIN ou MR_API2_MOT_DE_PASSE manquant.'); process.exit(0); }
@@ -52,8 +43,8 @@ const adr = (p, n, rue, mob, email) => `<Address><Title/><Firstname>${p}</Firstn
 for (const mode of ['REL', 'CCC']) {
   const corps = `<?xml version="1.0" encoding="utf-8"?><ShipmentCreationRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.example.org/Request"><Context><Login>${x(LOGIN)}</Login><Password>${x(MDP)}</Password><CustomerId>${x(ENS)}</CustomerId><Culture>fr-FR</Culture><VersionAPI>1.0</VersionAPI></Context><OutputOptions><OutputFormat>10x15</OutputFormat><OutputType>PdfUrl</OutputType></OutputOptions><ShipmentsList><Shipment><OrderNo>TEST1</OrderNo><CustomerNo>TEST</CustomerNo><ParcelCount>1</ParcelCount><DeliveryMode Mode="24R" Location="FR-${relais}"/><CollectionMode Mode="${mode}" Location=""/><Parcels><Parcel><Content>Parfum</Content><Weight Value="1000" Unit="gr"/></Parcel></Parcels><DeliveryInstruction/><Sender>${adr('', 'Dupont Lea', '12 rue des Lilas', '0612345678', '')}</Sender><Recipient>${adr('Marc', 'Petit', '1 rue de la Paix', '', 'test@exemple.fr')}</Recipient></Shipment></ShipmentsList></ShipmentCreationRequest>`;
   const r = await fetch(url, {method: 'POST', headers: {'Content-Type': 'text/xml', Accept: 'application/xml'}, body: corps});
-  const x = await r.text();
-  const num = (x.match(/ShipmentNumber="([^"]+)"/) || [])[1];
-  const st = [...x.matchAll(/<Status\b[^>]*Code="([^"]*)"[^>]*Message="([^"]*)"/g)].map((m) => `${m[2]} (code ${m[1]})`).join(' ; ');
-  console.log(`API 2, collecte ${mode} : ${num ? `OK, expédition ${num}, étiquette ${(x.match(/<Output>([^<]+)<\/Output>/) || [])[1] ? 'disponible' : 'absente'}` : st || `HTTP ${r.status}`}`);
+  const rep = await r.text();
+  const num = (rep.match(/ShipmentNumber="([^"]+)"/) || [])[1];
+  const st = [...rep.matchAll(/<Status\b[^>]*Code="([^"]*)"[^>]*Message="([^"]*)"/g)].map((m) => `${m[2]} (code ${m[1]})`).join(' ; ');
+  console.log(`API 2, collecte ${mode} : ${num ? `OK, expédition ${num}, étiquette ${(rep.match(/<Output>([^<]+)<\/Output>/) || [])[1] ? 'disponible' : 'absente'}` : st || `HTTP ${r.status}`}`);
 }
