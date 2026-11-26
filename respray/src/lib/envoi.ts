@@ -90,21 +90,41 @@ export const expediteurValide = (e: Partial<Expediteur> | null | undefined): e i
 /* simulée : un numéro factice, sans PDF */
 export const etiquetteSimulee = () => `MR${randomInt(10_000_000, 99_999_999)}-SIMU`;
 
-/* l'expédition chez Mondial Relay : son numéro (le suivi) et l'adresse du PDF à imprimer */
+/* l'expédition chez Mondial Relay, par l'« API 2 » (API Shipment, XML) : c'est elle qui crée les étiquettes pour les
+   comptes récents ; l'ancien web service n'y sert plus qu'à chercher les points relais et à suivre les colis.
+   Identifiants : MR_API2_LOGIN et MR_API2_MOT_DE_PASSE (Connect, Paramétrage des API, bloc API 2). Le code enseigne de
+   test (TTMRSDBX) passe par le bac à sable : rien n'est expédié ni facturé. */
+const urlApi2 = () => (process.env.MR_ENSEIGNE === 'TTMRSDBX' ? 'https://connect-api-sandbox.mondialrelay.com/api/shipment' : 'https://connect-api.mondialrelay.com/api/shipment');
+const sans = (s: string, max: number) => echapper(s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^0-9A-Za-z_\-'., /@]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max));
+const adresse = (a: {prenom?: string; nom: string; rue: string; cp: string; ville: string; tel?: string; email?: string}) =>
+  `<Address><Title/><Firstname>${sans(a.prenom ?? '', 30)}</Firstname><Lastname>${sans(a.nom, 30)}</Lastname><Streetname>${sans(a.rue, 40)}</Streetname><HouseNo/><CountryCode>FR</CountryCode><PostCode>${a.cp}</PostCode><City>${sans(a.ville, 30)}</City><AddressAdd1/><AddressAdd2/><AddressAdd3/><PhoneNo/><MobileNo>${tel(a.tel ?? '')}</MobileNo><Email>${mail(a.email ?? '')}</Email></Address>`;
+
 export async function creerExpedition(commandeId: number, exp: Expediteur, dest: Destinataire, assuree: boolean): Promise<{numero: string; pdf: string}> {
-  const xml = await appel('WSI2_CreationEtiquette', [
-    ['Enseigne', process.env.MR_ENSEIGNE!], ['ModeCol', MODE_COL()], ['ModeLiv', '24R'], ['NDossier', `RESPRAY${commandeId}`], ['NClient', `C${commandeId}`],
-    ['Expe_Langage', 'FR'], ['Expe_Ad1', propre(exp.nom)], ['Expe_Ad2', ''], ['Expe_Ad3', propre(exp.rue)], ['Expe_Ad4', ''], ['Expe_Ville', ville(exp.ville)], ['Expe_CP', exp.cp], ['Expe_Pays', 'FR'], ['Expe_Tel1', tel(exp.tel)], ['Expe_Tel2', ''], ['Expe_Mail', ''],
-    ['Dest_Langage', 'FR'], ['Dest_Ad1', propre(dest.nom)], ['Dest_Ad2', ''], ['Dest_Ad3', propre(dest.relais.adresse)], ['Dest_Ad4', ''], ['Dest_Ville', ville(dest.relais.ville)], ['Dest_CP', dest.relais.cp], ['Dest_Pays', 'FR'], ['Dest_Tel1', ''], ['Dest_Tel2', ''], ['Dest_Mail', mail(dest.email)],
-    ['Poids', String(POIDS())], ['Longueur', ''], ['Taille', ''], ['NbColis', '1'], ['CRT_Valeur', '0'], ['CRT_Devise', 'EUR'], ['Exp_Valeur', ''], ['Exp_Devise', ''],
-    ['COL_Rel_Pays', MODE_COL() === 'REL' ? 'FR' : ''], ['COL_Rel', MODE_COL() === 'REL' ? 'AUTO' : ''], ['LIV_Rel_Pays', 'FR'], ['LIV_Rel', dest.relais.id], ['TAvisage', ''], ['TReprise', ''], ['Montage', ''], ['TRDV', ''],
-    ['Assurance', assuree ? '1' : '0'], ['Instructions', ''],
-  ]);
-  const stat = champ(xml, 'STAT');
-  if (stat !== '0') throw erreur(stat);
-  const url = decoder(champ(xml, 'URL_Etiquette'));
-  // le PDF au format 10 x 15 (une étiquette par page), plus simple à imprimer et à coller que l'A4
-  return {numero: champ(xml, 'ExpeditionNum'), pdf: `https://www.mondialrelay.com${url}`.replace(/format=A4/i, 'format=10x15')};
+  const [prenomDest, ...nomDest] = dest.nom.split(' ');
+  const corps = `<?xml version="1.0" encoding="utf-8"?>
+<ShipmentCreationRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.example.org/Request">
+<Context><Login>${echapper(process.env.MR_API2_LOGIN || '')}</Login><Password>${echapper(process.env.MR_API2_MOT_DE_PASSE || '')}</Password><CustomerId>${echapper(process.env.MR_ENSEIGNE!)}</CustomerId><Culture>fr-FR</Culture><VersionAPI>1.0</VersionAPI></Context>
+<OutputOptions><OutputFormat>10x15</OutputFormat><OutputType>PdfUrl</OutputType></OutputOptions>
+<ShipmentsList><Shipment>
+<OrderNo>RESPRAY${commandeId}</OrderNo><CustomerNo>C${commandeId}</CustomerNo><ParcelCount>1</ParcelCount>
+<DeliveryMode Mode="24R" Location="FR-${dest.relais.id}"/>
+<CollectionMode Mode="${MODE_COL()}" Location=""/>
+<Parcels><Parcel><Content>Parfum</Content><Weight Value="${POIDS()}" Unit="gr"/></Parcel></Parcels>
+<DeliveryInstruction/>
+<Sender>${adresse({nom: exp.nom, rue: exp.rue, cp: exp.cp, ville: exp.ville, tel: exp.tel})}</Sender>
+<Recipient>${adresse({prenom: prenomDest, nom: nomDest.join(' ') || prenomDest, rue: dest.relais.adresse, cp: dest.relais.cp, ville: dest.relais.ville, email: dest.email})}</Recipient>
+</Shipment></ShipmentsList>
+</ShipmentCreationRequest>`;
+  void assuree; // l'assurance Mondial Relay se règle dans le contrat ; Respray rembourse lui-même l'acheteur en cas de perte
+  const r = await fetch(urlApi2(), {method: 'POST', headers: {'Content-Type': 'text/xml', Accept: 'application/xml'}, body: corps, signal: AbortSignal.timeout(20000)});
+  const xml = await r.text();
+  const numero = (xml.match(/ShipmentNumber="([^"]+)"/) || [])[1];
+  const pdf = decoder((xml.match(/<Output>([^<]+)<\/Output>/) || [])[1] ?? '');
+  if (!numero || !pdf) {
+    const st = [...xml.matchAll(/<Status\b[^>]*Code="([^"]*)"[^>]*Message="([^"]*)"/g)].map((m) => `${m[2]} (code ${m[1]})`).join(' ; ');
+    throw new Error(`Mondial Relay : ${st || `réponse inattendue (HTTP ${r.status})`}`);
+  }
+  return {numero, pdf};
 }
 
 /* ——— le suivi ——— */

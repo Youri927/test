@@ -155,14 +155,27 @@ Tant que les clés Mondial Relay ne sont pas en place, les envois sont simulés 
      expédition valide et rien de facturé. À utiliser tant que Stripe est en mode test ;
    - **production** (ton code enseigne, ex. `CC245WM8`) : de vraies étiquettes, payées sur le solde prépayé. À mettre au
      lancement, en même temps que les clés Stripe live. Pense à recharger le solde prépayé avant.
-   La clé privée s'affiche en cliquant sur l'œil. Le bloc « API 2 » ne sert pas.
+   La clé privée s'affiche en cliquant sur l'œil. Il faut **les deux blocs** : l'API 1 (code enseigne et clé privée)
+   cherche les points relais et suit les colis, l'API 2 (« Connexion API » et « Mot de passe API ») crée les
+   étiquettes. En production, l'API 2 demande d'abord de cliquer sur « Générer des identifiants d'API ».
 2. Sur le VPS (la clé privée ne s'affiche pas) :
 
 ```bash
 read -rp "Code enseigne Mondial Relay : " E; read -rsp "Clé privée Mondial Relay : " K; echo; F=/srv/respray/.env; for kv in "MR_ENSEIGNE=$E" "MR_CLE_PRIVEE=$K" "ENVOIS_SIMULES=0"; do k=${kv%%=*}; if grep -q "^$k=" $F; then sed -i "s|^$k=.*|$kv|" $F; else echo "$kv" >> $F; fi; done; systemctl restart respray && echo "Mondial Relay configuré."
 ```
 
-3. Vérifie : une page « Acheter », code postal `75011` : de vrais points relais doivent apparaître.
+   Puis les identifiants de l'API 2 (le mot de passe ne s'affiche pas) :
+
+```bash
+read -rp "Connexion API (API 2) : " L; read -rsp "Mot de passe API (API 2) : " P; echo; F=/srv/respray/.env; for kv in "MR_API2_LOGIN=$L" "MR_API2_MOT_DE_PASSE=$P"; do k=${kv%%=*}; if grep -q "^$k=" $F; then sed -i "s|^$k=.*|$kv|" $F; else echo "$kv" >> $F; fi; done; systemctl restart respray && echo "API 2 configurée."
+```
+
+3. Vérifie : une page « Acheter », code postal `75011` : de vrais points relais doivent apparaître. En cas de doute,
+   le diagnostic affiche la réponse de Mondial Relay pour chaque service :
+
+```bash
+env $(grep -E '^MR_(ENSEIGNE|CLE_PRIVEE|API2_LOGIN|API2_MOT_DE_PASSE)=' /srv/respray/.env | xargs) node /srv/respray/code/respray/scripts/diagnostic-mondial-relay.mjs
+```
 
 Comment ça marche ensuite : l'acheteur choisit son point relais ; une fois payé, le vendeur donne (une seule fois) son
 adresse d'expéditeur et télécharge l'étiquette prépayée (facturée au compte Respray par Mondial Relay) ; il dépose le

@@ -4,7 +4,7 @@
    Lancement : voir deploiement/GUIDE.md (étape 10). */
 import {createHash} from 'node:crypto';
 
-const ENS = process.env.MR_ENSEIGNE, CLE = process.env.MR_CLE_PRIVEE;
+const ENS = process.env.MR_ENSEIGNE, CLE = process.env.MR_CLE_PRIVEE, LOGIN = process.env.MR_API2_LOGIN, MDP = process.env.MR_API2_MOT_DE_PASSE;
 if (!ENS || !CLE) { console.log('MR_ENSEIGNE ou MR_CLE_PRIVEE manquant.'); process.exit(1); }
 
 async function appel(methode, champs) {
@@ -30,4 +30,17 @@ for (const [mode, pays, rel] of essais) {
     ['COL_Rel_Pays', pays], ['COL_Rel', rel], ['LIV_Rel_Pays', 'FR'], ['LIV_Rel', relais], ['TAvisage', ''], ['TReprise', ''], ['Montage', ''], ['TRDV', ''], ['Assurance', '0'], ['Instructions', '']];
   const x = await appel('WSI2_CreationEtiquette', champs);
   console.log(`Étiquette, collecte ${mode}${rel ? ` (${rel})` : ''} : code ${champ(x, 'STAT')}${champ(x, 'ExpeditionNum') ? `, expédition ${champ(x, 'ExpeditionNum')}` : ''}`);
+}
+
+/* l'API 2 (Shipment), qui crée les étiquettes des comptes récents */
+if (!LOGIN || !MDP) { console.log('API 2 : MR_API2_LOGIN ou MR_API2_MOT_DE_PASSE manquant.'); process.exit(0); }
+const url = ENS === 'TTMRSDBX' ? 'https://connect-api-sandbox.mondialrelay.com/api/shipment' : 'https://connect-api.mondialrelay.com/api/shipment';
+const adr = (p, n, rue, mob, email) => `<Address><Title/><Firstname>${p}</Firstname><Lastname>${n}</Lastname><Streetname>${rue}</Streetname><HouseNo/><CountryCode>FR</CountryCode><PostCode>75011</PostCode><City>Paris</City><AddressAdd1/><AddressAdd2/><AddressAdd3/><PhoneNo/><MobileNo>${mob}</MobileNo><Email>${email}</Email></Address>`;
+for (const mode of ['REL', 'CCC']) {
+  const corps = `<?xml version="1.0" encoding="utf-8"?><ShipmentCreationRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.example.org/Request"><Context><Login>${LOGIN}</Login><Password>${MDP}</Password><CustomerId>${ENS}</CustomerId><Culture>fr-FR</Culture><VersionAPI>1.0</VersionAPI></Context><OutputOptions><OutputFormat>10x15</OutputFormat><OutputType>PdfUrl</OutputType></OutputOptions><ShipmentsList><Shipment><OrderNo>TEST1</OrderNo><CustomerNo>TEST</CustomerNo><ParcelCount>1</ParcelCount><DeliveryMode Mode="24R" Location="FR-${relais}"/><CollectionMode Mode="${mode}" Location=""/><Parcels><Parcel><Content>Parfum</Content><Weight Value="1000" Unit="gr"/></Parcel></Parcels><DeliveryInstruction/><Sender>${adr('', 'Dupont Lea', '12 rue des Lilas', '0612345678', '')}</Sender><Recipient>${adr('Marc', 'Petit', '1 rue de la Paix', '', 'test@exemple.fr')}</Recipient></Shipment></ShipmentsList></ShipmentCreationRequest>`;
+  const r = await fetch(url, {method: 'POST', headers: {'Content-Type': 'text/xml', Accept: 'application/xml'}, body: corps});
+  const x = await r.text();
+  const num = (x.match(/ShipmentNumber="([^"]+)"/) || [])[1];
+  const st = [...x.matchAll(/<Status\b[^>]*Code="([^"]*)"[^>]*Message="([^"]*)"/g)].map((m) => `${m[2]} (code ${m[1]})`).join(' ; ');
+  console.log(`API 2, collecte ${mode} : ${num ? `OK, expédition ${num}, étiquette ${(x.match(/<Output>([^<]+)<\/Output>/) || [])[1] ? 'disponible' : 'absente'}` : st || `HTTP ${r.status}`}`);
 }
