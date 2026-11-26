@@ -83,7 +83,7 @@ input[type="radio"], input[type="checkbox"], input[type="range"] { accent-color:
 .theme .ico-soleil, .theme[aria-pressed="true"] .ico-lune { opacity: 0; rotate: -60deg; scale: .6; }
 .theme[aria-pressed="true"] .ico-soleil { opacity: 1; rotate: 0deg; scale: 1; }
 .logo { display: inline-flex; align-items: center; color: var(--texte); text-decoration: none; }
-.logo-svg { display: block; height: 30px; width: auto; }
+.logo-svg { display: block; height: 30px; width: auto; overflow: visible; }
 .pied .logo-svg { height: 26px; }
 .cherche { position: relative; flex: 1; max-width: 520px; }
 .cherche .ico { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--texte-2); width: 18px; height: 18px; }

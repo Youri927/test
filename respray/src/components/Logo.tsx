@@ -2,7 +2,7 @@
 export function Logo({className = ''}: {className?: string}) {
   // le « r » au jet de spray est la première lettre du mot (tools/logo/construire.py)
   return (
-    <svg className={`logo-svg ${className}`} aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="23.5 8.5 270.2 93.9">
+    <svg className={`logo-svg ${className}`} aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="23.5 6.2 270.2 96.2">
       <path d="M30 79.5V58c0-14 10-22 24-22" fill="none" stroke="currentColor" strokeWidth="13" strokeLinecap="round" />
       <g fill="currentColor" className="jet">
         <circle className="j1" cx="70.5" cy="28" r="5.5" /><circle className="j2" cx="83" cy="18.5" r="4" /><circle className="j2" cx="84" cy="32.5" r="4" />

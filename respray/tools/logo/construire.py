@@ -55,7 +55,8 @@ bas_jet = max(cy + r for _, cy, r in JET)
 print(f'haut du « e » : {haut_e:.1f} · bas du jet : {bas_jet:.1f} · écart : {haut_e - bas_jet:.1f}')
 
 g = 23.5
-vb = (g, 8.5, droite + 1 - g, bas + 1 - 8.5)
+haut = min(cy - r for _, cy, r in JET) - 1.5  # le cadre part au-dessus du plus haut point (marge)
+vb = (g, haut, droite + 1 - g, bas + 1 - haut)
 points = ''.join(f'<circle cx="{cx}" cy="{cy}" r="{r}"/>' for cx, cy, r in JET)
 lettres = ''.join(chemins)
 svg = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb[0]:.1f} {vb[1]:.1f} {vb[2]:.1f} {vb[3]:.1f}">'
