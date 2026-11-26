@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import {preload} from 'react-dom';
 import {and, gt, inArray} from 'drizzle-orm';
 import {db, schema} from '@/db';
 import {publiees} from '@/lib/annonces';
@@ -42,6 +43,9 @@ export default async function Accueil() {
   const pile = annonces.filter((a) => a.photos.face).slice(0, 3);
   const pileSrc = pile.length === 3 ? pile.map((a) => `/photos/${a.photos.face}`) : ['/demo/pile-amouage.webp', '/demo/pile-kurkdjian.webp', '/demo/pile-vuitton.webp']; // tant qu'il y a moins de 3 annonces avec photo
 
+  // les images du haut de l'accueil sont demandées en premier, avant le reste de la page
+  for (const src of [...pileSrc, '/demo/vendre.webp', '/demo/vendre-sombre.webp']) preload(src, {as: 'image', fetchPriority: 'high'});
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(LD).replace(/</g, '\\u003c')}} />
@@ -60,7 +64,7 @@ export default async function Accueil() {
               </form>
               <Direct items={annonces.slice(0, 6).map((a) => ({id: a.id, nom: a.parfumNom, prix: a.prix, il: il(a.publieeLe)}))} />
             </div>
-            <div className="pile" aria-hidden="true">{pileSrc.map((s, i) => <span key={i} className="pile-photo" style={{'--i': i} as React.CSSProperties}><img className="visuel" src={s} alt="" width={600} height={750} /></span>)}</div>
+            <div className="pile" aria-hidden="true">{pileSrc.map((s, i) => <span key={i} className="pile-photo" style={{'--i': i} as React.CSSProperties}><img className="visuel" src={s} alt="" width={600} height={750} fetchPriority="high" /></span>)}</div>
           </div>
           <Link className="porte porte-vendre" href="/vendre">
             <div className="porte-texte">
