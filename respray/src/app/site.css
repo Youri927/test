@@ -521,3 +521,27 @@ select:disabled { opacity: .5; cursor: not-allowed; }
   .anat-points-m button { width: 28px; height: 6px; padding: 0; border: 0; border-radius: 3px; background: var(--trait); cursor: pointer; transition: background .3s, width .3s var(--ease); }
   .anat-points-m button.actif { width: 44px; background: var(--texte); }
 }
+
+/* ——— téléphone : l'en-tête sur deux lignes nettes (logo + menu, puis recherche + clair/sombre) ——— */
+@media (max-width: 640px) {
+  .entete-in .cherche { order: 3; flex: 1 1 calc(100% - 60px); max-width: none; }
+  .entete-in .theme { order: 4; margin-left: 0; flex: none; }
+}
+
+/* ——— téléphone : l'aperçu de l'annonce en haut du formulaire, compact ——— */
+@media (max-width: 960px) {
+  .apercu { display: block; margin-top: 10px; }
+  #apercu { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px 14px; align-items: start; margin-top: 10px; }
+  #apercu .apercu-carte { grid-column: 1; grid-row: 1; padding: 8px; border-radius: 14px; }
+  #apercu .apercu-photo { margin-bottom: 6px; border-radius: 9px; }
+  #apercu .apercu-vide { font-size: 11px; text-align: center; padding: 6px; }
+  #apercu .apercu-carte .carte-maison, #apercu .apercu-carte .carte-meta { display: none; }
+  #apercu .apercu-carte .carte-nom { font-size: 13px; line-height: 1.25; }
+  #apercu .touche { grid-column: 2; grid-row: 1; align-self: stretch; align-content: center; padding: 14px 16px; }
+  #apercu .touche strong { font-size: 28px; }
+  #apercu .touche small { font-size: 12.5px; }
+  #apercu .apercu-etapes { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; font-size: 13px; }
+  #apercu .apercu-etapes li { gap: 6px; padding: 5px 10px 5px 6px; border-radius: 980px; background: var(--fond-2); }
+  #apercu .apercu-etapes span { width: 16px; height: 16px; font-size: 10px; }
+  #apercu > .aide { grid-column: 1 / -1; font-size: 13px; margin-top: -4px; }
+}
