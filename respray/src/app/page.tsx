@@ -12,6 +12,13 @@ import {Direct, Ruban, Anatomie, Reception} from '@/components/Accueil';
 
 export const dynamic = 'force-dynamic';
 
+/* pour Google : qui est Respray, et la recherche du site (boîte de recherche dans les résultats) */
+const SITE = process.env.SITE_URL || 'https://respray.fr';
+const LD = [
+  {'@context': 'https://schema.org', '@type': 'Organization', name: 'Respray', url: SITE, logo: `${SITE}/bimi/respray-512.png`, email: 'contact@respray.fr', description: 'Plateforme française de parfum de seconde main entre particuliers : annonces vérifiées avant d\'être en ligne, paiement bloqué, 7 jours pour vérifier.'},
+  {'@context': 'https://schema.org', '@type': 'WebSite', name: 'Respray', url: SITE, inLanguage: 'fr-FR', potentialAction: {'@type': 'SearchAction', target: {'@type': 'EntryPoint', urlTemplate: `${SITE}/parfums?q={q}`}, 'query-input': 'required name=q'}},
+];
+
 const il = (d: Date | null) => {
   if (!d) return '';
   const m = Math.max(1, Math.round((Date.now() - d.getTime()) / 6e4));
@@ -36,6 +43,7 @@ export default async function Accueil() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(LD).replace(/</g, '\\u003c')}} />
       <section className="portes env">
         <div className="portes-in">
           <div className="porte porte-acheter">

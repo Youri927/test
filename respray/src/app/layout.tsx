@@ -9,9 +9,18 @@ import {nonLues} from '@/lib/activite';
 import {MenuCompte} from '@/components/MenuCompte';
 import {Apparitions, BoutonTheme, SCRIPT_THEME} from '@/components/Ambiance';
 
+const SITE = process.env.SITE_URL || 'https://respray.fr';
+const DESCRIPTION = 'Achetez et vendez du parfum de seconde main entre particuliers : chaque annonce est vérifiée par l\'équipe avant d\'être en ligne, votre paiement reste bloqué et vous avez 7 jours pour vérifier. 0 % de commission pour le vendeur.';
+
 export const metadata: Metadata = {
-  title: {default: 'Respray', template: '%s · Respray'},
-  description: 'Le parfum de seconde main, sans le doute : des annonces vérifiées par l\'équipe avant d\'être en ligne, un paiement bloqué, et 7 jours pour vérifier.',
+  metadataBase: new URL(SITE),
+  title: {default: 'Respray · Parfum d\'occasion vérifié, acheter et vendre entre particuliers', template: '%s · Respray'},
+  description: DESCRIPTION,
+  applicationName: 'Respray',
+  // chaque page déclare sa propre adresse comme adresse de référence (sans les paramètres de recherche)
+  alternates: {canonical: './'},
+  openGraph: {type: 'website', locale: 'fr_FR', siteName: 'Respray', url: './'},
+  twitter: {card: 'summary_large_image'},
 };
 export const viewport: Viewport = {width: 'device-width', initialScale: 1, viewportFit: 'cover'};
 

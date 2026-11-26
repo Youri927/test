@@ -4,6 +4,43 @@ export type Guide = {lien: string; titre: string; resume: string; sections: {t: 
 
 export const GUIDES: Guide[] = [
   {
+    lien: 'acheter-un-parfum-d-occasion',
+    titre: 'Acheter un parfum d\'occasion sans se faire avoir',
+    resume: 'Parfum de seconde main : où l\'acheter, comment éviter les contrefaçons, à quel prix, et comment être remboursé s\'il n\'est pas conforme.',
+    sections: [
+      {t: 'Pourquoi acheter son parfum d\'occasion', p: ['Un parfum de niche ou de créateur coûte souvent plus de 150 € neuf. D\'occasion, le même flacon entamé se trouve en général 30 à 50 % moins cher au millilitre, et c\'est parfois le seul moyen de retrouver un parfum qui n\'est plus fabriqué.', 'Un parfum bien conservé, à l\'abri de la lumière et de la chaleur, garde son odeur des années : un flacon déjà ouvert n\'a rien perdu s\'il a été bien rangé.']},
+      {t: 'Le vrai risque : la contrefaçon', p: ['Les faux parfums imitent le flacon, la boîte et parfois le code lot. Les signes qui trompent le moins : un code lot identique sur la boîte et sous le flacon, au format de la maison ; un spray, une bague et une tige d\'origine ; un niveau cohérent avec les photos ; un prix qui n\'est pas trop beau pour être vrai.', 'Sur un site de petites annonces classique, personne ne regarde ces points avant vous. Sur Respray, chaque annonce est vérifiée par l\'équipe avant d\'être en ligne, à partir de 6 photos imposées : face, dessous avec le code lot, niveau, vue de dessus avec le spray et la bague, tige sans le bouton spray, et le flacon à côté d\'un papier avec le pseudo du vendeur et la date.']},
+      {t: 'Payer sans prendre de risque', p: ['Ne payez jamais un inconnu par virement ou par un moyen « entre amis » : vous n\'auriez aucun recours. Sur Respray, votre paiement reste bloqué : le vendeur n\'est payé qu\'une fois que vous avez reçu le parfum et vérifié qu\'il est conforme.', 'Vous avez 7 jours après la livraison pour vérifier. S\'il n\'est pas conforme à l\'annonce (contrefaçon, autre parfum, niveau plus bas, flacon abîmé), vous êtes remboursé en entier, livraison comprise. Cette protection coûte 8 % du prix plus 0,90 €, affichés avant de payer.']},
+      {t: 'Le bon prix', p: ['Comparez au prix neuf au millilitre, en tenant compte de ce qui reste dans le flacon. La cote Respray le fait pour vous : pour chaque parfum, le prix neuf, le prix d\'occasion au millilitre et ce que vaut un flacon entamé.']},
+    ],
+    faq: [
+      ['Est-ce risqué d\'acheter un parfum d\'occasion ?', 'Le risque principal est la contrefaçon. Il disparaît presque si l\'annonce est vérifiée avant d\'être en ligne et si votre paiement reste bloqué jusqu\'à ce que vous ayez vérifié le flacon, comme sur Respray.'],
+      ['Un parfum entamé est-il encore bon ?', 'Oui, s\'il a été conservé à l\'abri de la lumière et de la chaleur. Un parfum tourné sent l\'aigre ou le vernis dès la première vaporisation : sur Respray, vous avez 7 jours pour le vérifier.'],
+      ['Puis-je être remboursé ?', 'Sur Respray, oui, s\'il n\'est pas conforme à l\'annonce : remboursement complet, livraison comprise. Un parfum conforme qui ne vous plaît pas peut être remis en vente.'],
+      ['Combien coûte un parfum d\'occasion ?', 'En général 30 à 50 % de moins que neuf au millilitre, selon le niveau restant, la boîte et la rareté.'],
+    ],
+    action: {texte: 'Voir les parfums vérifiés', href: '/parfums'},
+  },
+  {
+    lien: 'vendre-son-parfum-d-occasion',
+    titre: 'Vendre son parfum d\'occasion : le guide complet',
+    resume: 'Où vendre un parfum entamé ou jamais porté, à quel prix, comment l\'envoyer, et comment être payé sans commission.',
+    sections: [
+      {t: 'Peut-on vendre un parfum entamé ?', p: ['Oui. Entre particuliers, vendre un parfum que vous avez acheté pour vous est permis, même ouvert et entamé, tant que vous le décrivez honnêtement : contenance, niveau restant, état du flacon et de la boîte.', 'Un flacon offert qui ne vous plaît pas, un parfum porté quelques fois, une collection à alléger : c\'est ce qui se vend le mieux.']},
+      {t: 'Où le vendre', p: ['Sur les sites de petites annonces généralistes, l\'acheteur se méfie des contrefaçons et négocie beaucoup. Respray est fait pour le parfum : l\'équipe vérifie chaque annonce avant de la publier, ce qui rassure les acheteurs, et le vendeur ne paie aucune commission : vous touchez 100 % du prix affiché.']},
+      {t: 'Les 6 photos', p: ['Le flacon de face, le dessous avec le code lot lisible, le niveau à hauteur des yeux, la vue de dessus sans le bouchon, la tige sans le bouton spray, et le flacon à côté d\'un papier avec votre pseudo et la date. Ces photos font la vérification, et elles vous protègent : elles prouvent l\'état du flacon avant l\'envoi.']},
+      {t: 'Fixer le prix', p: ['Partez du prix neuf au millilitre, multipliez par ce qui reste, puis retirez 30 à 50 %. Le formulaire de vente propose une fourchette dès que vous avez choisi le parfum : dans cette fourchette, un parfum part vite.']},
+      {t: 'Envoyer et être payé', p: ['Une fois vendu, vous recevez l\'étiquette d\'envoi en point relais : emballez le flacon bien calé, déposez le colis. L\'acheteur a 7 jours après la livraison pour vérifier ; dès qu\'il confirme (ou à la fin du délai), l\'argent est versé sur votre compte bancaire.']},
+    ],
+    faq: [
+      ['Combien coûte la vente sur Respray ?', 'Rien : aucune commission pour le vendeur, et la mise en ligne est gratuite. L\'acheteur paie la protection et la livraison.'],
+      ['Est-ce légal de vendre son parfum ?', 'Oui, entre particuliers, pour des parfums que vous avez achetés ou reçus pour votre usage. Au-delà de 30 ventes ou 2 000 € par an, la plateforme transmet un récapitulatif à l\'administration fiscale, comme toutes les plateformes.'],
+      ['Comment envoyer un parfum par colis ?', 'Bouchon bien serré, flacon emballé dans du papier bulle, calé dans un carton sans espace vide. Le guide « Emballer un parfum » détaille chaque étape.'],
+      ['Quand suis-je payé ?', 'Dès que l\'acheteur confirme que tout est conforme, ou automatiquement 7 jours après la livraison.'],
+    ],
+    action: {texte: 'Vendre un parfum, sans commission', href: '/vendre'},
+  },
+  {
     lien: 'reconnaitre-un-faux-parfum',
     titre: 'Comment reconnaître un faux parfum',
     resume: 'Les points à regarder avant d\'acheter un parfum d\'occasion : le code lot, la tige, la bague, le flacon, le prix.',

@@ -134,6 +134,17 @@ read -rp "ID client Google : " I; read -rsp "Code secret Google : " S; echo; F=/
 Une personne qui a déjà un compte avec la même adresse e-mail retrouve son compte. Une nouvelle personne choisit son
 pseudo et accepte les conditions, puis c'est prêt.
 
+## 9. Être trouvé sur Google (Search Console)
+
+1. Va sur https://search.google.com/search-console avec ton compte Google, **Ajouter une propriété**, type
+   **Domaine**, saisis `respray.fr`.
+2. Google donne un enregistrement **TXT** (`google-site-verification=…`). Ajoute-le dans hPanel, Domaines,
+   respray.fr, DNS (type TXT, nom `@`), puis clique sur **Valider** (quelques minutes à quelques heures).
+3. Dans Search Console, **Sitemaps**, ajoute `sitemap.xml` et envoie. Google découvre alors toutes les pages :
+   parfums, maisons, guides, annonces.
+4. Facultatif, 2 minutes : https://www.bing.com/webmasters, **Importer depuis Google Search Console** (Bing alimente
+   aussi DuckDuckGo, Ecosia et les réponses de plusieurs assistants IA).
+
 ## Ensuite
 
 - **Mettre à jour le site** après une modification du code :

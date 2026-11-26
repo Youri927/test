@@ -20,7 +20,11 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({params}: {params: Promise<{id: string}>}) {
   const a = await annonce(Number((await params).id));
-  return {title: a ? `${a.parfumNom}, ${a.maisonNom}` : 'Annonce'};
+  if (!a || !['publiee', 'vendue', 'reservee'].includes(a.statut)) return {title: 'Annonce', robots: {index: false}};
+  const titre = `${a.parfumNom} ${a.maisonNom} d'occasion, ${a.ml} ml à ${a.prix} €`;
+  const description = `${a.parfumNom} de ${a.maisonNom} (${a.conc}, ${a.ml} ml, reste ~${a.niveau} %) à ${a.prix} € : annonce vérifiée par l'équipe Respray avant d'être en ligne, paiement bloqué, 7 jours pour vérifier.`;
+  const images = a.photos.face ? [`/photos/${a.photos.face}`] : undefined;
+  return {title: titre, description, openGraph: {type: 'website', locale: 'fr_FR', siteName: 'Respray', url: './', title: titre, description, images}};
 }
 
 const jour = new Intl.DateTimeFormat('fr-FR', {day: 'numeric', month: 'long'});
@@ -33,6 +37,18 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
   const m = await moi();
   // visible par tous une fois publiée ; avant, seulement par son vendeur et l'équipe
   if (!a || (!['publiee', 'vendue', 'reservee'].includes(a.statut) && m?.id !== a.vendeurId && m?.role !== 'equipe')) notFound();
+  // pour Google : un produit d'occasion avec son prix et sa disponibilité, et le fil d'Ariane
+  const site = process.env.SITE_URL || 'https://respray.fr';
+  const ld = [
+    {'@context': 'https://schema.org', '@type': 'Product', name: `${a.parfumNom} ${a.conc} ${a.ml} ml`, brand: {'@type': 'Brand', name: a.maisonNom}, category: 'Parfum', image: ['face', 'dessous', 'niveau', 'dessus'].map((k) => a.photos[k]).filter(Boolean).map((f) => `${site}/photos/${f}`),
+      description: `${a.parfumNom} de ${a.maisonNom}, ${a.ml} ml, reste environ ${a.niveau} %. Annonce vérifiée par l'équipe Respray.`,
+      offers: {'@type': 'Offer', url: `${site}/annonces/${a.id}`, price: a.prix, priceCurrency: 'EUR', itemCondition: 'https://schema.org/UsedCondition', availability: a.statut === 'publiee' ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut', seller: {'@type': 'Person', name: a.vendeur.pseudo}}},
+    {'@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Parfums', item: `${site}/parfums`},
+      {'@type': 'ListItem', position: 2, name: a.maisonNom, item: `${site}/maison/${lien(a.maisonNom)}`},
+      {'@type': 'ListItem', position: 3, name: a.parfumNom},
+    ]},
+  ];
   const d = a.details;
   const moiVendeur = m?.id === a.vendeurId;
 
@@ -68,6 +84,7 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
   ];
   return (
     <div className="env page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld).replace(/</g, '\\u003c')}} />
       <nav className="fil" aria-label="Fil d'Ariane"><Link href="/parfums">Parfums</Link><span aria-hidden="true">›</span><Link href={`/maison/${lien(a.maisonNom)}`}>{a.maisonNom}</Link><span aria-hidden="true">›</span>{a.parfumId ? <Link href={`/parfum/${lien(a.maisonNom, a.parfumNom)}`}>{a.parfumNom}</Link> : <span>{a.parfumNom}</span>}</nav>
       {a.statut !== 'publiee' ? <p className="p-alerte">{a.statut === 'vendue' ? 'Ce parfum est vendu.' : `Aperçu : cette annonce n'est pas en ligne (${a.statut}).`}</p> : null}
       <div className="annonce">

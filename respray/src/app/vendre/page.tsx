@@ -1,15 +1,22 @@
 import {asc, eq} from 'drizzle-orm';
 import {db, schema} from '@/db';
-import {exigerMembre} from '@/lib/auth';
+import Link from 'next/link';
+import {moi} from '@/lib/auth';
 import {FormVendre, type Depart} from '@/components/FormVendre';
 import {prixAuMl, demande} from '@/lib/marche';
 
-export const metadata = {title: 'Vendre un parfum'};
+export const metadata = {
+  title: 'Vendre son parfum d\'occasion, sans commission',
+  description: 'Vendez un parfum entamé ou jamais porté : 6 photos, l\'équipe vérifie l\'annonce, et vous touchez 100 % du prix. Envoi en point relais, paiement sécurisé.',
+};
 export const dynamic = 'force-dynamic';
 
 export default async function Vendre({searchParams}: {searchParams: Promise<{parfum?: string; ml?: string; niveau?: string}>}) {
   const q = await searchParams;
-  const m = await exigerMembre('/vendre' + (q.parfum ? `?parfum=${Number(q.parfum)}&ml=${Number(q.ml) || ''}&niveau=${Number(q.niveau) || ''}` : ''));
+  const retour = '/vendre' + (q.parfum ? `?parfum=${Number(q.parfum)}&ml=${Number(q.ml) || ''}&niveau=${Number(q.niveau) || ''}` : '');
+  const m = await moi();
+  // sans compte : la page explique la vente (et Google peut la lire), puis invite à créer un compte
+  if (!m) return <VendrePublic retour={retour} />;
   const ms = await db.select().from(schema.maisons).orderBy(asc(schema.maisons.nom));
   const ps = await db.select().from(schema.parfums).orderBy(asc(schema.parfums.nom));
   const enLigne = await db.select({parfumId: schema.annonces.parfumId, prix: schema.annonces.prix}).from(schema.annonces).where(eq(schema.annonces.statut, 'publiee'));
@@ -25,6 +32,32 @@ export default async function Vendre({searchParams}: {searchParams: Promise<{par
       <h1 className="titre-page">Vendre un parfum</h1>
       <p className="chapo">Gratuit, sans commission. Plus votre annonce est précise, plus elle se vend vite, et moins l'acheteur a de questions.</p>
       <FormVendre maisons={maisons} pseudo={m.pseudo} prix={prix} occ={occ} demande={dem} depart={depart} credits={m.credits} />
+    </div>
+  );
+}
+
+const ETAPES: [string, string][] = [
+  ['6 photos, depuis votre téléphone', 'Face, dessous avec le code lot, niveau, vue de dessus, tige, et votre pseudo sur un papier. Le formulaire vous guide.'],
+  ['L\'équipe vérifie l\'annonce', 'Avant d\'être en ligne. C\'est ce qui rassure les acheteurs, et fait vendre plus vite.'],
+  ['Vendu : envoi en point relais', 'Vous recevez l\'étiquette, vous déposez le colis bien emballé.'],
+  ['Payé, sans commission', 'Vous touchez 100 % du prix affiché, versé sur votre compte bancaire dès que l\'acheteur a vérifié le parfum.'],
+];
+
+function VendrePublic({retour}: {retour: string}) {
+  const r = encodeURIComponent(retour);
+  return (
+    <div className="env page vendre">
+      <p className="surtitre">Vendre</p>
+      <h1 className="titre-page">Vendre son parfum d&apos;occasion, sans commission</h1>
+      <p className="chapo">Un flacon entamé, offert, porté deux fois : vendez-le à quelqu&apos;un qui le cherche. La mise en ligne est gratuite, et vous touchez 100 % du prix.</p>
+      <ol className="vendre-etapes">
+        {ETAPES.map(([t, d], i) => <li key={t}><b>{i + 1}</b><span><strong>{t}</strong>{d}</span></li>)}
+      </ol>
+      <div className="vendre-actions">
+        <Link className="btn btn-noir btn-large" href={`/inscription?retour=${r}`}>Créer un compte pour vendre</Link>
+        <Link className="btn btn-large" href={`/connexion?retour=${r}`}>J&apos;ai déjà un compte</Link>
+      </div>
+      <p className="aide">Combien vaut votre parfum ? <Link className="lien-souligne" href="/cote">La cote</Link> · <Link className="lien-souligne" href="/guides/vendre-son-parfum-d-occasion">Le guide pour bien vendre</Link></p>
     </div>
   );
 }

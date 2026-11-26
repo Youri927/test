@@ -466,3 +466,11 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .auth-ou { display: flex; align-items: center; gap: 14px; margin: 14px 0 4px; color: var(--texte-2); font-size: 14px; }
 .auth-ou::before, .auth-ou::after { content: ""; flex: 1; height: 1px; background: var(--trait); }
 .nav .menu-compte-liste a:not(.btn) { display: block; }
+
+/* ——— « Vendre », sans compte ——— */
+.vendre-etapes { list-style: none; padding: 0; margin: 28px 0; display: grid; gap: 14px; max-width: 640px; }
+.vendre-etapes li { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; border-radius: 18px; background: var(--fond-2); }
+.vendre-etapes b { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--noir); color: var(--sur-noir); font-size: 14px; }
+.vendre-etapes span { display: flex; flex-direction: column; gap: 2px; color: var(--texte-2); line-height: 1.5; }
+.vendre-etapes strong { color: var(--texte); }
+.vendre-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 16px; }

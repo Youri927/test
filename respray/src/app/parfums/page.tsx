@@ -9,7 +9,10 @@ import {tousLesParfums, lienParfum} from '@/lib/catalogue';
 import {demande} from '@/lib/marche';
 import {normal} from '@/lib/regles';
 
-export const metadata = {title: 'Parfums'};
+export const metadata = {
+  title: 'Parfums d\'occasion : toutes les annonces vérifiées',
+  description: 'Acheter un parfum d\'occasion entre particuliers : Baccarat Rouge 540, Dior, Chanel, Tom Ford, parfums de niche… Chaque annonce est vérifiée par l\'équipe avant d\'être en ligne, paiement bloqué, 7 jours pour vérifier.',
+};
 export const dynamic = 'force-dynamic';
 
 type Q = {q?: string; maison?: string; genre?: string; etat?: string; prix?: string; tri?: string; envie?: string};
