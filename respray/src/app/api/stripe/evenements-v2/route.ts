@@ -9,15 +9,19 @@ import {actualiserVersements} from '@/lib/commandes';
 import {notifier} from '@/lib/activite';
 
 export async function POST(req: Request) {
-  const secret = process.env.STRIPE_WEBHOOK_SECRET_V2;
-  if (!secret) return NextResponse.json({erreur: 'secret absent'}, {status: 500});
+  // un ou plusieurs secrets (une destination par origine), séparés par une virgule
+  const secrets = (process.env.STRIPE_WEBHOOK_SECRET_V2 || '').split(',').map((s) => s.trim()).filter(Boolean);
+  if (!secrets.length) return NextResponse.json({erreur: 'secret absent'}, {status: 500});
   const corps = await req.text();
-  let n;
-  try {
-    n = stripe.parseEventNotification(corps, req.headers.get('stripe-signature') || '', secret);
-  } catch {
-    return NextResponse.json({erreur: 'signature'}, {status: 400});
+  const signature = req.headers.get('stripe-signature') || '';
+  let n: ReturnType<typeof stripe.parseEventNotification> | null = null;
+  for (const secret of secrets) {
+    try {
+      n = stripe.parseEventNotification(corps, signature, secret);
+      break;
+    } catch {}
   }
+  if (!n) return NextResponse.json({erreur: 'signature'}, {status: 400});
   const compte = (n as unknown as {related_object?: {id?: string}}).related_object?.id;
   if (compte && n.type.startsWith('v2.core.account')) {
     const m = await db.query.membres.findFirst({where: eq(schema.membres.stripeCompte, compte)});

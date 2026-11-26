@@ -38,17 +38,19 @@ Les clés se tapent dans ce terminal, nulle part ailleurs. À la fin : « Le sit
 
 ## 4. Les webhooks Stripe
 
-Stripe, compte Respray, mode test : **Workbench**, onglet **Webhooks**, puis **Add destination**. Une destination
-écoute soit le compte Respray, soit les comptes connectés : il en faut trois.
+Stripe, compte Respray, mode test : **Workbench**, onglet **Webhooks**, puis **Add destination**. Après
+« Continue », choisir **Webhook endpoint**, puis saisir l'URL. Les comptes vendeurs sont des comptes « v2 » : leurs
+événements arrivent par les destinations **Your account**.
 
 1. **Your account**, style **Snapshot**, URL `https://respray.fr/api/stripe/webhook`, événements :
    `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.expired`,
-   `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`, `charge.dispute.created`.
-2. **Connected accounts**, style **Snapshot**, même URL `https://respray.fr/api/stripe/webhook`, événement :
+   `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`, `charge.dispute.created`,
    `payout.failed`.
-3. **Connected accounts**, style **Thin**, URL `https://respray.fr/api/stripe/evenements-v2`, événements :
+2. **Your account**, style **Thin**, URL `https://respray.fr/api/stripe/evenements-v2`, événements :
    `v2.core.account.updated`, `v2.core.account[requirements].updated`,
    `v2.core.account[configuration.recipient].capability_status_updated`.
+3. (Par sécurité) **Connected accounts**, style **Snapshot**, URL `https://respray.fr/api/stripe/webhook`,
+   événement : `payout.failed`. Un événement reçu deux fois n'est traité qu'une fois.
 
 Chaque destination a un **secret de signature** (`whsec_…`). Sur le VPS :
 
@@ -56,9 +58,9 @@ Chaque destination a un **secret de signature** (`whsec_…`). Sur le VPS :
 nano /srv/respray/.env
 ```
 
-- `STRIPE_WEBHOOK_SECRET=` : les secrets des destinations 1 et 2, séparés par une virgule, sans espace
-  (`whsec_aaa,whsec_bbb`) ;
-- `STRIPE_WEBHOOK_SECRET_V2=` : le secret de la destination 3.
+- `STRIPE_WEBHOOK_SECRET=` : les secrets des destinations 1 et 3, séparés par une virgule, sans espace
+  (`whsec_aaa,whsec_ccc`) ;
+- `STRIPE_WEBHOOK_SECRET_V2=` : le secret de la destination 2.
 
 Enregistre (Ctrl+O, Entrée, Ctrl+X), puis :
 
