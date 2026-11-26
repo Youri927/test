@@ -16,7 +16,8 @@ export default async function Envoyee({searchParams}: {searchParams: Promise<{id
         <span className="rond-ok">✓</span>
         <h1 className="titre-page">Annonce envoyée à la vérification</h1>
         {a ? <p className="chapo">{a.maisonNom}, {a.parfumNom}, {a.ml} ml, {eur(a.prix)}. L'équipe vérifie vos photos, en général en quelques heures. Vous suivez l'avancement dans votre compte.</p> : null}
-        <p className="aide">Si une photo ne permet pas de vérifier le parfum, on vous dit laquelle refaire.</p>
+        <p className="aide">Si une photo ne permet pas de vérifier le parfum, on vous dit laquelle refaire. Vous serez prévenu dans votre activité à chaque étape.</p>
+        <p className="protege-vendeur"><strong>Vos photos vous protègent.</strong> Une fois vérifiées, elles prouvent l'état du flacon avant l'envoi. Le jour de la vente, emballez-le bien : <Link className="lien-souligne" href="/guides/emballer-un-parfum-pour-l-envoyer">le guide en 5 étapes</Link>.</p>
         <div className="boutons"><Link className="btn btn-noir" href="/compte">Voir mes annonces</Link><Link className="btn" href="/vendre">Vendre un autre parfum</Link></div>
       </div>
     </div>

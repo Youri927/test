@@ -20,6 +20,7 @@ export const PHOTOS = [
   {k: 'preuve', t: 'Votre pseudo et la date', d: 'Le flacon à côté d\'un papier où vous les avez écrits.', obl: true},
   {k: 'boite', t: 'La boîte', d: 'Avec le code lot et le code-barres, si vous l\'avez.', obl: false},
   {k: 'ticket', t: 'Le ticket ou la facture', d: 'Facultatif, mais rassurant pour l\'acheteur.', obl: false},
+  {k: 'decant', t: 'Le décant à côté du flacon', d: 'Pour un décant : le petit vaporisateur, rempli, posé contre le flacon d\'origine.', obl: false},
 ] as const;
 
 export const CONCENTRATIONS = ['Extrait de parfum', 'Eau de parfum', 'Eau de toilette', 'Eau de Cologne', 'Parfum pour cheveux', 'Brume parfumée'];
@@ -29,7 +30,9 @@ export const GROUPES_FAMILLES: [string, string, [string, string][]][] = [
   ['Chaudes', 'fam-chaude', [['Gourmande', 'café, cacao, amande'], ['Ambrée', 'benjoin, labdanum, cannelle'], ['Musquée', 'peau propre, coton, poudre']]],
   ['Boisées et sombres', 'fam-boisee', [['Boisée', 'oud, gaïac, vétiver'], ['Cuirée', 'daim, fumée, bouleau'], ['Chyprée', 'mousse, patchouli, agrumes'], ['Fougère', 'herbe coupée, coumarine']]],
 ];
-export const FORMATS = [['flacon', 'Flacon'], ['voyage', 'Format voyage'], ['miniature', 'Miniature'], ['echantillon', 'Échantillon acheté'], ['coffret', 'Coffret']] as const;
+export const FORMATS = [['flacon', 'Flacon'], ['voyage', 'Format voyage'], ['miniature', 'Miniature'], ['echantillon', 'Échantillon acheté'], ['coffret', 'Coffret'], ['decant', 'Décant']] as const;
+/* pourquoi on le vend : la question que l'acheteur se pose sans la poser */
+export const POURQUOI = ['Reçu en cadeau, pas mon style', 'J\'en ai trop, je fais tourner', 'Il ne tient pas sur ma peau', 'Je ne le porte plus', 'Acheté en double', 'Autre raison'];
 export const LIEUX = ['Boutique de la maison', 'Parfumerie (Sephora, Nocibé, Marionnaud…)', 'Grand magasin', 'Site officiel ou parfumerie en ligne', 'Reçu en cadeau', 'Acheté d\'occasion'];
 export const DEFAUTS = ['Bouchon marqué ou rayé', 'Étiquette usée', 'Flacon rayé', 'Vaporisateur un peu dur'];
 export const BOITES = [['blister', 'Neuve, sous blister'], ['bon', 'En bon état'], ['abimee', 'Abîmée'], ['aucune', 'Pas de boîte']] as const;

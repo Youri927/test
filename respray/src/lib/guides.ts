@@ -53,10 +53,10 @@ export const GUIDES: Guide[] = [
     sections: [
       {t: 'Partir du prix au millilitre', p: ['Divisez le prix neuf par la contenance, puis multipliez par ce qu\'il reste. Un flacon de 100 ml à 200 € neuf, rempli à 70 %, vaut 140 € de parfum au prix neuf.']},
       {t: 'Appliquer une remise', p: ['Un parfum entamé se vend en général entre 30 et 50 % moins cher que neuf, au millilitre. Moins de remise s\'il a sa boîte, s\'il est presque plein, ou s\'il n\'est plus fabriqué.']},
-      {t: 'Regarder les annonces', p: ['Sur Respray, le formulaire de vente montre la fourchette des annonces en ligne du même parfum.']},
+      {t: 'Regarder la cote', p: ['Sur Respray, le formulaire de vente propose une fourchette dès que vous avez choisi le parfum, la contenance et le niveau : la cote. Elle suit le prix réel des annonces du même parfum quand il y en a au moins 3, et sinon part du prix neuf. Dans la fourchette, un parfum part vite.', 'La cote de tous les parfums est en accès libre, et votre placard estime d\'un coup tous les flacons que vous avez.']},
     ],
     faq: [['Une commission sera-t-elle prise sur mon prix ?', 'Pas sur Respray : le vendeur touche 100 % du prix affiché.']],
-    action: {texte: 'Estimer et vendre mon parfum', href: '/vendre'},
+    action: {texte: 'Estimer mon placard', href: '/placard'},
   },
   {
     lien: 'conserver-un-parfum',
@@ -69,5 +69,22 @@ export const GUIDES: Guide[] = [
     ],
     faq: [['Faut-il le garder au réfrigérateur ?', 'Non : les écarts de température font plus de mal que de bien. Un placard frais suffit.']],
     action: {texte: 'Voir les parfums', href: '/parfums'},
+  },
+  {
+    lien: 'emballer-un-parfum-pour-l-envoyer',
+    titre: 'Comment emballer un parfum pour l\'envoyer',
+    resume: 'Un flacon en verre voyage très bien s\'il ne peut ni bouger ni fuir : les 5 étapes, et ce qui vous protège si le colis arrive abîmé.',
+    sections: [
+      {t: '1. Empêcher la fuite', p: ['Vissez ou enfoncez bien le bouchon. Pour un flacon entamé, entourez le col et le vaporisateur d\'un film alimentaire ou d\'un petit sachet fermé : en cas de choc, le parfum ne coule pas sur le reste.']},
+      {t: '2. Protéger le verre', p: ['Enroulez le flacon dans deux ou trois couches de papier bulle, scotchées. S\'il a sa boîte, mettez-le dedans ensuite : la boîte seule ne protège pas d\'une chute.']},
+      {t: '3. Le caler', p: ['Choisissez un carton à peine plus grand, et remplissez tous les vides (papier froissé, calage). Secouez le colis : rien ne doit bouger.']},
+      {t: '4. Fermer et étiqueter', p: ['Scotchez toutes les ouvertures, collez l\'étiquette bien à plat sur le dessus. Pas de mention « parfum » ni « fragile » au feutre : elles ne protègent pas et attirent l\'attention.']},
+      {t: '5. Garder une trace', p: ['Prenez une photo du colis fermé et gardez le reçu du point relais. Avec vos 6 photos vérifiées au moment de l\'annonce, elles prouvent que le flacon est parti en bon état.']},
+    ],
+    faq: [
+      ['Et si le flacon arrive cassé ?', 'L\'acheteur le signale dans les 7 jours, photos à l\'appui. Le paiement reste bloqué le temps de regarder. Au-dessus de 150 €, l\'envoi assuré couvre la vraie valeur du parfum.'],
+      ['Puis-je réutiliser un carton ?', 'Oui, s\'il est rigide et sans anciennes étiquettes visibles.'],
+    ],
+    action: {texte: 'Vendre un parfum, sans commission', href: '/vendre'},
   },
 ];

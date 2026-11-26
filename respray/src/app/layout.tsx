@@ -5,6 +5,7 @@ import './site.css';
 import {Logo, Symbole} from '@/components/Logo';
 import {moi} from '@/lib/auth';
 import {deconnexion} from './actions/compte';
+import {nonLues} from '@/lib/activite';
 
 export const metadata: Metadata = {
   title: {default: 'Respray', template: '%s · Respray'},
@@ -14,6 +15,7 @@ export const viewport: Viewport = {width: 'device-width', initialScale: 1, viewp
 
 export default async function Racine({children}: {children: React.ReactNode}) {
   const m = await moi();
+  const n = m ? await nonLues(m.id) : 0;
   return (
     <html lang="fr">
       <body>
@@ -29,7 +31,9 @@ export default async function Racine({children}: {children: React.ReactNode}) {
             </form>
             <nav className="nav" aria-label="Principale">
               <Link href="/parfums">Parfums</Link>
-              {m ? <Link href="/compte">Mon compte</Link> : <Link href="/connexion">Se connecter</Link>}
+              <Link href="/placard">Mon placard</Link>
+              {m ? <Link href="/activite" className="nav-activite nav-garde" aria-label={n ? `Activité, ${n} nouveau${n > 1 ? 'x' : ''}` : 'Activité'}>Activité{n ? <b className="pastille-n">{n}</b> : null}</Link> : null}
+              {m ? <Link href="/compte" className="nav-garde">Mon compte</Link> : <Link href="/connexion" className="nav-garde">Se connecter</Link>}
               {m?.role === 'equipe' ? <Link href="/equipe">Équipe</Link> : null}
               <Link className="btn btn-noir btn-petit" href="/vendre">Vendre</Link>
             </nav>
@@ -44,6 +48,7 @@ export default async function Racine({children}: {children: React.ReactNode}) {
                 <Link href="/parfums">Tous les parfums</Link>
                 <Link href="/guides/reconnaitre-un-faux-parfum">Reconnaître un faux</Link>
                 <Link href="/guides/conserver-un-parfum">Conserver un parfum</Link>
+                <Link href="/cote">La cote des parfums</Link>
               </div>
               <div>
                 <p className="pied-titre">Vendre</p>
@@ -51,9 +56,12 @@ export default async function Racine({children}: {children: React.ReactNode}) {
                 <Link href="/fondateurs">Vendeur fondateur</Link>
                 <Link href="/guides/combien-vendre-son-parfum">À combien le vendre</Link>
                 <Link href="/guides/photographier-un-parfum-pour-le-vendre">Les 6 photos</Link>
+                <Link href="/guides/emballer-un-parfum-pour-l-envoyer">Emballer un flacon</Link>
+                <Link href="/placard">Combien vaut mon placard</Link>
               </div>
               <div>
                 <p className="pied-titre">Respray</p>
+                <Link href="/verification">Nos chiffres de vérification</Link>
                 <Link href="/guides">Guides</Link>
                 {m ? (
                   <form action={deconnexion}><button className="lien-bouton" type="submit">Se déconnecter</button></form>

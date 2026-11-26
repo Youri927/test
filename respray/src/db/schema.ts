@@ -80,6 +80,7 @@ export type Details = {
   boite: string;
   familles: string[];
   genre: string;
+  pourquoi?: string;
 };
 
 export const annonces = pgTable(
@@ -157,3 +158,83 @@ export const candidatures = pgTable('candidatures', {
   statut: text('statut', {enum: ['nouvelle', 'acceptee', 'refusee']}).notNull().default('nouvelle'),
   creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
 });
+
+/* la liste d'envies : un parfum du catalogue (ou un nom écrit, s'il n'y est pas), avec un prix maximum facultatif.
+   Quand une annonce qui correspond est publiée, la personne est prévenue. Le nombre d'envies d'un parfum est aussi
+   montré aux vendeurs : « 9 personnes l'attendent ». */
+export const envies = pgTable(
+  'envies',
+  {
+    id: serial('id').primaryKey(),
+    membreId: integer('membre_id').notNull().references(() => membres.id, {onDelete: 'cascade'}),
+    parfumId: integer('parfum_id').references(() => parfums.id),
+    texte: text('texte').notNull().default(''),
+    prixMax: real('prix_max'),
+    creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
+  },
+  (t) => [index('envies_parfum').on(t.parfumId), index('envies_membre').on(t.membreId)],
+);
+
+/* le placard : les flacons qu'une personne possède, pour voir ce qu'ils valent et les vendre en un geste */
+export const placard = pgTable(
+  'placard',
+  {
+    id: serial('id').primaryKey(),
+    membreId: integer('membre_id').notNull().references(() => membres.id, {onDelete: 'cascade'}),
+    parfumId: integer('parfum_id').notNull().references(() => parfums.id),
+    ml: real('ml').notNull(),
+    niveau: integer('niveau').notNull().default(100),
+    creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
+  },
+  (t) => [index('placard_membre').on(t.membreId)],
+);
+
+/* les offres : un acheteur propose un prix, le vendeur accepte, refuse ou fait une contre-offre ; ou bien le vendeur
+   propose lui-même un prix aux personnes qui ont mis l'annonce en favori (deVendeur). Une offre vaut 48 heures. */
+export const offres = pgTable(
+  'offres',
+  {
+    id: serial('id').primaryKey(),
+    annonceId: integer('annonce_id').notNull().references(() => annonces.id, {onDelete: 'cascade'}),
+    acheteurId: integer('acheteur_id').notNull().references(() => membres.id, {onDelete: 'cascade'}),
+    montant: real('montant').notNull(),
+    contre: real('contre'),
+    deVendeur: boolean('de_vendeur').notNull().default(false),
+    statut: text('statut', {enum: ['attente', 'acceptee', 'refusee', 'contre', 'annulee']}).notNull().default('attente'),
+    creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
+    expire: timestamp('expire', {withTimezone: true}).notNull(),
+  },
+  (t) => [index('offres_annonce').on(t.annonceId), index('offres_acheteur').on(t.acheteurId)],
+);
+
+/* les messages : une conversation par annonce et par acheteur. Les coordonnées et les moyens de paiement hors
+   Respray sont masqués avant l'enregistrement (masque = vrai) : la protection ne marche que si tout passe ici. */
+export const messages = pgTable(
+  'messages',
+  {
+    id: serial('id').primaryKey(),
+    annonceId: integer('annonce_id').notNull().references(() => annonces.id, {onDelete: 'cascade'}),
+    acheteurId: integer('acheteur_id').notNull().references(() => membres.id, {onDelete: 'cascade'}),
+    auteurId: integer('auteur_id').notNull().references(() => membres.id, {onDelete: 'cascade'}),
+    texte: text('texte').notNull(),
+    masque: boolean('masque').notNull().default(false),
+    lu: boolean('lu').notNull().default(false),
+    creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
+  },
+  (t) => [index('messages_conv').on(t.annonceId, t.acheteurId)],
+);
+
+/* l'activité : ce qui arrive à une personne (envie arrivée, favori, offre, message, annonce publiée…) */
+export const notifications = pgTable(
+  'notifications',
+  {
+    id: serial('id').primaryKey(),
+    membreId: integer('membre_id').notNull().references(() => membres.id, {onDelete: 'cascade'}),
+    type: text('type').notNull(),
+    texte: text('texte').notNull(),
+    lien: text('lien').notNull().default(''),
+    lue: boolean('lue').notNull().default(false),
+    creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
+  },
+  (t) => [index('notifications_membre').on(t.membreId, t.lue)],
+);

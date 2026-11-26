@@ -1,13 +1,16 @@
 'use client';
 /* Le formulaire de vente : six blocs, et à droite l'annonce telle qu'elle sera, qui se remplit au fil des réponses.
    Les photos sont réduites dans le navigateur (2 000 px de côté au plus) avant l'envoi : l'envoi reste rapide, même
-   en 4G. */
-import {useActionState, useMemo, useState, startTransition} from 'react';
+   en 4G. Le brouillon (sans les photos) est gardé dans le navigateur : on peut s'arrêter et revenir. */
+import {useActionState, useEffect, useMemo, useRef, useState, startTransition} from 'react';
 import {envoyerVente, type EtatVente} from '@/app/actions/vendre';
 import {Vaporise} from '@/components/Logo';
-import {PHOTOS, CONCENTRATIONS, GROUPES_FAMILLES, FORMATS, LIEUX, DEFAUTS, BOITES, MISES_EN_AVANT, annees, eur, eur2, normal} from '@/lib/regles';
+import {PHOTOS, CONCENTRATIONS, GROUPES_FAMILLES, FORMATS, LIEUX, DEFAUTS, BOITES, MISES_EN_AVANT, POURQUOI, annees, eur, eur2, normal} from '@/lib/regles';
+import {estimer} from '@/lib/cote';
 
-type Parfum = {id: number; nom: string; conc: string; genre: string; famille: string; notes: string; formats: {ml: number}[]};
+type Parfum = {id: number; nom: string; conc: string; genre: string; famille: string; notes: string; formats: {ml: number; neuf?: number}[]};
+export type Depart = {maisonId?: string; parfumId?: string; ml?: string; niveau?: number};
+const BROUILLON = 'respray-brouillon-vente';
 type Maison = {id: number; nom: string; parfums: Parfum[]};
 
 async function reduire(f: File): Promise<File> {
@@ -34,16 +37,52 @@ const Segment = ({nom, val, choix, set}: {nom: string; val: string; choix: reado
   </div>
 );
 
-export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maison[]; pseudo: string; prix: Record<number, number[]>; credits?: number}) {
+const VIDE = {
+  maisonId: '', maisonAutre: '', parfumId: '', parfumAutre: '', conc: '', genre: '', format: 'flacon', ml: '', etat: 'entame', niveau: 80, visible: '',
+  boite: '', annee: '', lieu: '', lumiere: '', chaleur: '', pourquoi: '', lot: '', lotIllisible: false, description: '', prix: '', mainPropre: false, ville: '', miseEnAvant: '', engagement: false,
+};
+
+export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depart, credits = 0}: {maisons: Maison[]; pseudo: string; prix: Record<number, number[]>; occ?: Record<number, number[]>; demande?: Record<number, number>; depart?: Depart; credits?: number}) {
   const [etat, agir, enCours] = useActionState<EtatVente, FormData>(envoyerVente, {});
-  const [v, setV] = useState({
-    maisonId: '', maisonAutre: '', parfumId: '', parfumAutre: '', conc: '', genre: '', format: 'flacon', ml: '', etat: 'entame', niveau: 80, visible: '',
-    boite: '', annee: '', lieu: '', lumiere: '', chaleur: '', lot: '', lotIllisible: false, description: '', prix: '', mainPropre: false, ville: '', miseEnAvant: '', engagement: false,
-  });
+  const [v, setV] = useState({...VIDE, ...(depart ? {maisonId: depart.maisonId || '', parfumId: depart.parfumId || '', ml: depart.ml || '', niveau: depart.niveau ?? 80, etat: (depart.niveau ?? 80) >= 100 ? 'neuf' : 'entame'} : {})});
   const [familles, setFamilles] = useState<string[]>([]);
   const [defauts, setDefauts] = useState<string[]>([]);
   const [apercus, setApercus] = useState<Record<string, string>>({});
+  const [repris, setRepris] = useState(false);
+  const charge = useRef(false);
   const set = (k: keyof typeof v) => (x: string | number | boolean) => setV((o) => ({...o, [k]: x}));
+
+  // le brouillon : repris à l'ouverture (sauf si on arrive du placard avec un parfum choisi), gardé à chaque changement
+  useEffect(() => {
+    if (!depart?.parfumId) {
+      try {
+        const b = JSON.parse(localStorage.getItem(BROUILLON) || 'null');
+        if (b?.v?.maisonId || b?.v?.maisonAutre) {
+          setV({...VIDE, ...b.v});
+          setFamilles(b.familles || []);
+          setDefauts(b.defauts || []);
+          setRepris(true);
+        }
+      } catch {}
+    }
+    charge.current = true;
+  }, [depart?.parfumId]);
+  useEffect(() => {
+    if (!charge.current) return;
+    try {
+      localStorage.setItem(BROUILLON, JSON.stringify({v, familles, defauts}));
+    } catch {}
+  }, [v, familles, defauts, etat]);
+  function recommencer() {
+    try {
+      localStorage.removeItem(BROUILLON);
+    } catch {}
+    setV(VIDE);
+    setFamilles([]);
+    setDefauts([]);
+    setApercus({});
+    setRepris(false);
+  }
 
   const autreMaison = v.maisonId === 'autre';
   const maison = maisons.find((m) => String(m.id) === v.maisonId);
@@ -60,15 +99,18 @@ export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maiso
     if (t.length < 3) return null;
     return maisons.find((m) => normal(m.nom) === t || normal(m.nom).startsWith(t) || (t.length > 4 && normal(m.nom).includes(t)));
   }, [v.maisonAutre, maisons]);
+  const decant = v.format === 'decant';
   const blocs: [string, boolean][] = [
     ['Le parfum', !!(nomMaison && nomParfum && (parfum || (v.conc && v.genre)))],
-    ['Le flacon', ml > 0 && (v.etat === 'neuf' || !!v.visible) && !!v.boite],
-    ['Son histoire', !!(v.annee && v.lieu && v.lumiere && v.chaleur)],
-    ['Photos et code lot', PHOTOS.every((p) => !p.obl || apercus[p.k]) && !!(v.lot.trim() || v.lotIllisible)],
+    ['Le flacon', ml > 0 && (decant || v.etat === 'neuf' || !!v.visible) && (decant || !!v.boite)],
+    ['Son histoire', !!(v.annee && v.lieu && v.lumiere && v.chaleur && v.pourquoi)],
+    ['Photos et code lot', PHOTOS.every((p) => !(p.obl || (p.k === 'decant' && decant)) || apercus[p.k]) && !!(v.lot.trim() || v.lotIllisible)],
     ['Prix et remise', prixN >= 3 && (!v.mainPropre || !!v.ville.trim())],
     ['Engagement', v.engagement],
   ];
   const fourchette = parfum && prix[parfum.id]?.length ? [Math.min(...prix[parfum.id]), Math.max(...prix[parfum.id])] : null;
+  const cote = parfum && ml > 0 ? estimer({formats: parfum.formats, ml, niveau: v.niveau, etat: v.etat === 'neuf' ? 'neuf' : 'entame', decant, occMl: occ[parfum.id]}) : null;
+  const attendent = parfum ? demande[parfum.id] || 0 : 0;
 
   async function choisirPhoto(k: string, input: HTMLInputElement) {
     const f = input.files?.[0];
@@ -91,9 +133,15 @@ export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maiso
         onSubmit={(e) => {
           e.preventDefault();
           const fd = new FormData(e.currentTarget);
+          try {
+            localStorage.removeItem(BROUILLON);
+          } catch {}
           startTransition(() => agir(fd));
         }}
       >
+        {repris ? (
+          <p className="brouillon">Votre brouillon est repris là où vous l'aviez laissé. Les photos, elles, sont à remettre. <button type="button" className="lien-bouton" onClick={recommencer}>Recommencer à zéro</button></p>
+        ) : null}
         <section className="bloc-form">
           <h2 className="h2"><span className="bloc-n">1</span>Le parfum</h2>
           <label htmlFor="maison">Maison</label>
@@ -134,6 +182,9 @@ export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maiso
               </dl>
             </div>
           ) : null}
+          {parfum && attendent ? (
+            <p className="demande"><span className="demande-n">{attendent}</span> {attendent > 1 ? `personnes attendent ce parfum dans leur liste d'envies. Elles seront prévenues` : `personne attend ce parfum dans sa liste d'envies. Elle sera prévenue`} dès que votre annonce sera en ligne.</p>
+          ) : null}
           {parfumLibre ? (
             <>
               <label htmlFor="parfum-autre">Nom du parfum</label>
@@ -161,17 +212,18 @@ export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maiso
           <>
             <section className="bloc-form">
               <h2 className="h2"><span className="bloc-n">2</span>Le flacon</h2>
-              <fieldset><legend>Format</legend><Segment nom="format" val={v.format} choix={FORMATS} set={(x) => setV((o) => ({...o, format: x, ml: '', etat: x === 'coffret' ? 'neuf' : o.etat}))} /></fieldset>
-              {v.format === 'coffret' ? <p className="aide">Un coffret est accepté s'il est neuf, scellé et sous blister.</p> : v.format === 'echantillon' ? <p className="aide">Un échantillon acheté, oui ; un échantillon offert ou marqué « Ne peut être vendu », non.</p> : null}
-              <label htmlFor="ml">Contenance</label>
+              <fieldset><legend>Format</legend><Segment nom="format" val={v.format} choix={FORMATS} set={(x) => setV((o) => ({...o, format: x, ml: '', etat: x === 'coffret' ? 'neuf' : x === 'decant' ? 'entame' : o.etat, boite: x === 'decant' ? 'aucune' : o.boite}))} /></fieldset>
+              {v.format === 'coffret' ? <p className="aide">Un coffret est accepté s'il est neuf, scellé et sous blister.</p> : v.format === 'echantillon' ? <p className="aide">Un échantillon acheté, oui ; un échantillon offert ou marqué « Ne peut être vendu », non.</p> : decant ? <p className="note-ajout">Un décant, ce sont quelques millilitres prélevés de votre flacon dans un petit vaporisateur propre : l'acheteur découvre le parfum sans acheter le flacon entier. Les 6 photos sont celles du flacon d'origine (c'est lui que l'équipe vérifie), plus une photo du décant posé contre lui.</p> : null}
+              <label htmlFor="ml">{decant ? 'Contenance du décant' : 'Contenance'}</label>
               {parfum && v.format === 'flacon' && parfum.formats.length ? (
                 <select id="ml" name="ml" className="champ" value={v.ml} onChange={(e) => set('ml')(e.target.value)}>
                   <option value="">Choisir</option>
                   {parfum.formats.map((f) => <option key={f.ml} value={f.ml}>{f.ml} ml</option>)}
                 </select>
               ) : (
-                <div className="champ-prix"><input id="ml" name="ml" className="champ" inputMode="decimal" value={v.ml} onChange={(e) => set('ml')(e.target.value)} placeholder="100" /><span>ml</span></div>
+                <div className="champ-prix"><input id="ml" name="ml" className="champ" inputMode="decimal" value={v.ml} onChange={(e) => set('ml')(e.target.value)} placeholder={decant ? '10' : '100'} /><span>ml</span></div>
               )}
+              {decant ? <><input type="hidden" name="etat" value="entame" /><input type="hidden" name="niveau" value={100} /><input type="hidden" name="boite" value="aucune" /></> : <>
               <fieldset><legend>État</legend><Segment nom="etat" val={v.etat} choix={[['neuf', 'Neuf, jamais ouvert'], ['entame', 'Déjà utilisé']]} set={set('etat')} /></fieldset>
               {v.etat === 'entame' ? (
                 <>
@@ -189,6 +241,7 @@ export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maiso
                 </>
               ) : <input type="hidden" name="niveau" value={100} />}
               <fieldset><legend>Et sa boîte ?</legend><Segment nom="boite" val={v.boite} choix={BOITES} set={set('boite')} /></fieldset>
+              </>}
             </section>
 
             <section className="bloc-form">
@@ -200,19 +253,22 @@ export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maiso
               <fieldset><legend>Rangé à l'abri de la lumière ?</legend><Segment nom="lumiere" val={v.lumiere} choix={[['abri', 'Oui, dans un placard ou sa boîte'], ['expose', 'Non, à la lumière']]} set={set('lumiere')} /></fieldset>
               <fieldset><legend>Et de la chaleur ?</legend><Segment nom="chaleur" val={v.chaleur} choix={[['abri', 'Oui'], ['expose', 'Non (salle de bain, près d\'un radiateur…)']]} set={set('chaleur')} /></fieldset>
               <p className="aide">La lumière et la chaleur abîment un parfum : l'acheteur le saura avant d'acheter, c'est ce qui le rassure.</p>
+              <fieldset><legend>Pourquoi vous le vendez</legend><Segment nom="pourquoi" val={v.pourquoi} choix={POURQUOI.map((x) => [x, x])} set={set('pourquoi')} /></fieldset>
+              <p className="aide">C'est la question que tout acheteur se pose sans la poser. Y répondre lève le doute.</p>
               <label htmlFor="description">Description <small className="facultatif">facultatif</small></label>
-              <textarea id="description" name="description" className="champ" rows={3} value={v.description} onChange={(e) => set('description')(e.target.value)} placeholder="Pourquoi vous le vendez, combien de fois il a été porté, ce que l'acheteur doit savoir…" />
+              <textarea id="description" name="description" className="champ" rows={3} value={v.description} onChange={(e) => set('description')(e.target.value)} placeholder="Combien de fois il a été porté, comment il tient sur la peau, ce que l'acheteur doit savoir…" />
             </section>
 
             <section className="bloc-form">
               <h2 className="h2"><span className="bloc-n">4</span>Photos et code lot</h2>
               <p className="aide">Elles nous permettent de vérifier votre parfum avant de publier l'annonce. Les 6 premières sont obligatoires. Sur la photo preuve, écrivez <strong>@{pseudo}</strong> et la date du jour.</p>
+              <p className="protege-vendeur"><strong>Elles vous protègent aussi.</strong> Datées et vérifiées par l'équipe, elles prouvent l'état exact du flacon avant l'envoi : si un acheteur prétend avoir reçu autre chose, ce sont elles qui font foi.</p>
               <div className="photos">
-                {PHOTOS.map((p) => (
+                {PHOTOS.filter((p) => p.k !== 'decant' || decant).map((p) => (
                   <label className={`photo ${apercus[p.k] ? 'faite' : ''}`} key={p.k}>
                     <input className="vh" type="file" name={'photo_' + p.k} accept="image/jpeg,image/png,image/webp,image/heic,image/heif" onChange={(e) => choisirPhoto(p.k, e.currentTarget)} />
                     <span className="photo-cadre">{apercus[p.k] ? <img src={apercus[p.k]} alt="" /> : <span className="photo-plus">+</span>}</span>
-                    <span className="photo-txt"><strong>{p.t}{p.obl ? '' : ' '}{p.obl ? null : <em>facultatif</em>}</strong><small>{p.d}</small></span>
+                    <span className="photo-txt"><strong>{p.t}{p.obl || p.k === 'decant' ? null : <> <em>facultatif</em></>}</strong><small>{p.d}</small></span>
                   </label>
                 ))}
               </div>
@@ -224,10 +280,20 @@ export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maiso
 
             <section className="bloc-form">
               <h2 className="h2"><span className="bloc-n">5</span>Prix et remise</h2>
+              {cote ? (
+                <div className="cote-suggestion">
+                  <p className="surtitre">La cote Respray</p>
+                  <p className="cote-fourchette">{eur(cote.bas)} à {eur(cote.haut)}</p>
+                  <p className="aide">{cote.source === 'annonces' ? `D'après les ${cote.n} annonces de ce parfum sur Respray, au millilitre restant.` : decant ? 'D\'après le prix au millilitre du plus petit format neuf.' : 'Estimation d\'après le prix neuf indicatif, l\'état et ce qu\'il reste.'} Dans cette fourchette, un parfum part vite ; au-dessus, il attend.</p>
+                  <button type="button" className="btn btn-petit" onClick={() => set('prix')(String(cote.milieu))}>Mettre {eur(cote.milieu)}</button>
+                </div>
+              ) : null}
               <label htmlFor="prix">Votre prix</label>
               <div className="champ-prix"><input id="prix" name="prix" className="champ" inputMode="decimal" value={v.prix} onChange={(e) => set('prix')(e.target.value)} placeholder="0" /><span>€</span></div>
               {fourchette ? <p className="aide">Annonces actuelles de ce parfum : de {eur(fourchette[0])} à {eur(fourchette[1])}.</p> : null}
               <p className="aide">{prixN >= 3 ? `Vous recevrez ${eur2(prixN)} : aucune commission.` : 'Vous recevez la totalité du prix : aucune commission.'}</p>
+              {cote && prixN > cote.haut * 1.15 ? <p className="aide aide-attention">C'est nettement au-dessus de la cote : l'annonce risque d'attendre. Les acheteurs comparent le prix au millilitre.</p> : null}
+              {cote && prixN >= 3 && prixN < cote.bas * 0.6 ? <p className="aide aide-attention">C'est très en dessous de la cote : vous pourriez en demander plus. Un prix trop bas attire aussi l'attention de l'équipe.</p> : null}
               <p className="aide">Envoi en point relais, suivi : vous imprimez l'étiquette, vous avez 5 jours pour déposer le colis.</p>
               <fieldset><legend>Mettre l'annonce en avant <small>facultatif, payé seulement si elle est publiée</small></legend><Segment nom="miseEnAvant" val={v.miseEnAvant} choix={MISES_EN_AVANT.map((x) => [x.k, x.prix ? `${x.t} · ${credits ? 'offerte' : eur2(x.prix)}` : x.t])} set={set('miseEnAvant')} /></fieldset>
               {credits ? <p className="aide">Il vous reste {credits} mise{credits > 1 ? 's' : ''} en avant offerte{credits > 1 ? 's' : ''} (parrainage ou vendeur fondateur).</p> : null}
@@ -247,15 +313,20 @@ export function FormVendre({maisons, pseudo, prix, credits = 0}: {maisons: Maiso
       <aside className="apercu" aria-label="Aperçu de votre annonce">
         <p className="surtitre">Votre annonce</p>
         <div id="apercu">
+          <div className="touche">
+            <span>Vous touchez</span>
+            <strong>{prixN >= 3 ? eur2(prixN) : '— €'}</strong>
+            <small>100 % du prix · 0 € de commission</small>
+          </div>
           <div className="apercu-carte">
             <div className="apercu-photo">{apercus.face ? <img className="visuel" src={apercus.face} alt="" /> : <span className="visuel apercu-sans" />}{apercus.face ? null : <span className="apercu-vide">Votre photo de face</span>}</div>
             <p className="carte-maison">{nomMaison || 'Maison'}</p>
             <p className="carte-nom">{nomParfum || 'Parfum'}</p>
-            <p className="carte-meta">{conc || 'Concentration'}{ml > 0 ? ` · ${ml} ml` : ''}{v.etat === 'neuf' ? ' · neuf sous blister' : ml > 0 ? ` · reste ~${v.niveau} % (≈ ${Math.round((ml * v.niveau) / 100)} ml)` : ''}</p>
+            <p className="carte-meta">{conc || 'Concentration'}{ml > 0 ? ` · ${ml} ml` : ''}{decant ? ' · décant' : v.etat === 'neuf' ? ' · neuf sous blister' : ml > 0 ? ` · reste ~${v.niveau} % (≈ ${Math.round((ml * v.niveau) / 100)} ml)` : ''}</p>
             <p className="carte-prix">{prixN >= 3 ? eur(prixN) : '— €'}</p>
           </div>
           <ol className="apercu-etapes">{blocs.map(([t, ok]) => <li key={t} className={ok ? 'fait' : ''}><span>{ok ? '✓' : ''}</span>{t}</li>)}</ol>
-          <p className="aide">{blocs.filter((b) => b[1]).length} sur {blocs.length} · l'équipe vérifie ensuite, en général en quelques heures.</p>
+          <p className="aide">{blocs.filter((b) => b[1]).length} sur {blocs.length} · l'équipe vérifie ensuite, en général en quelques heures. Le brouillon est gardé sur cet appareil : vous pouvez vous arrêter et revenir.</p>
         </div>
       </aside>
     </div>

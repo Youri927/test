@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type {AnnonceAvecPhotos} from '@/lib/annonces';
 import {eur} from '@/lib/regles';
+import {remise} from '@/lib/cote';
 import {basculerFavori} from '@/app/actions/favoris';
 import {Bouclier} from '@/components/Bouclier';
 
@@ -12,6 +13,8 @@ const depuis = (d: Date | null) => {
 
 /* une annonce, en carte : la vraie photo de face du vendeur */
 export function Carte({a, favori = false, connecte = false}: {a: AnnonceAvecPhotos; favori?: boolean; connecte?: boolean}) {
+  const decant = a.details.format === 'Décant';
+  const r = a.parfum && !decant ? remise(a.parfum.formats, a) : null;
   return (
     <article className="carte">
       <Link className="carte-lien" href={`/annonces/${a.id}`}>
@@ -20,10 +23,10 @@ export function Carte({a, favori = false, connecte = false}: {a: AnnonceAvecPhot
           <span className="etiq etiq-verif"><Bouclier taille={20} anime={false} />{depuis(a.publieeLe)}</span>
           {a.etat === 'neuf' ? <span className="etiq etiq-bas">Neuf sous blister</span> : null}
         </div>
-        <span className="carte-prix">{eur(a.prix)}</span>
+        <span className="carte-prix">{eur(a.prix)}{r ? <span className="carte-remise" title={`${r.pct} % moins cher au millilitre que le neuf (prix indicatif ${eur(r.neuf)})`}>−{r.pct} % vs neuf</span> : null}</span>
         <span className="carte-nom">{a.parfumNom}</span>
         <span className="carte-maison">{a.maisonNom}</span>
-        <span className="carte-meta">{a.ml} ml · {a.etat === 'neuf' ? 'neuf' : `reste ~${a.niveau} %`}</span>
+        <span className="carte-meta">{decant ? `décant de ${a.ml} ml` : `${a.ml} ml · ${a.etat === 'neuf' ? 'neuf' : `reste ~${a.niveau} %`}`}</span>
         {a.vendeur.fondateur ? <span className="badge-fondateur">Vendeur fondateur</span> : null}
       </Link>
       {connecte ? (

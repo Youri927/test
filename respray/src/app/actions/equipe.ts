@@ -7,6 +7,8 @@ import {eq, and, sql} from 'drizzle-orm';
 import {db, schema} from '@/db';
 import {exigerEquipe} from '@/lib/auth';
 import {noter} from '@/lib/journal';
+import {notifier} from '@/lib/activite';
+import {eur, normal} from '@/lib/regles';
 import {proprement} from '@/lib/regles';
 
 const id = (f: FormData, k = 'id') => Number(f.get(k));
@@ -15,6 +17,14 @@ async function annonce(n: number) {
   const a = await db.query.annonces.findFirst({where: eq(schema.annonces.id, n)});
   if (!a) throw new Error('Annonce introuvable');
   return a;
+}
+
+/* une annonce publiée : chaque personne qui attendait ce parfum (à ce prix, si elle en a fixé un) est prévenue */
+async function prevenirEnvies(a: typeof schema.annonces.$inferSelect) {
+  const envies = await db.select().from(schema.envies);
+  const nom = normal(`${a.maisonNom} ${a.parfumNom}`);
+  const vise = envies.filter((x) => x.membreId !== a.vendeurId && (a.parfumId && x.parfumId === a.parfumId || (!x.parfumId && x.texte && nom.includes(normal(x.texte)))) && (!x.prixMax || a.prix <= x.prixMax));
+  for (const m of new Set(vise.map((x) => x.membreId))) await notifier(m, 'envie', `Il est arrivé : ${a.parfumNom} (${a.maisonNom}), ${a.ml} ml, ${eur(a.prix)}. Vérifié par l'équipe.`, `/annonces/${a.id}`);
 }
 
 export async function publier(f: FormData) {
@@ -29,6 +39,8 @@ export async function publier(f: FormData) {
     await db.update(schema.membres).set({credits: sql`${schema.membres.credits} + 1`}).where(eq(schema.membres.id, v.id));
   }
   if (a.miseEnAvant && v && v.credits > 0) await db.update(schema.membres).set({credits: sql`${schema.membres.credits} - 1`}).where(eq(schema.membres.id, v.id));
+  await notifier(a.vendeurId, 'annonce', `Votre ${a.parfumNom} est vérifié et en ligne.`, `/annonces/${a.id}`);
+  await prevenirEnvies(a);
   revalidatePath('/');
   redirect('/equipe');
 }
@@ -39,6 +51,7 @@ export async function refuser(f: FormData) {
   const raison = String(f.get('raison') || '').slice(0, 300);
   await db.update(schema.annonces).set({statut: 'refusee', raison}).where(eq(schema.annonces.id, a.id));
   await noter(e.id, 'annonce_refusee', `annonce:${a.id}`, `a refusé l'annonce ${a.parfumNom} : « ${raison} »`);
+  await notifier(a.vendeurId, 'annonce', `Votre ${a.parfumNom} n'a pas été publié : ${raison}`, '/compte');
   redirect('/equipe');
 }
 
@@ -49,6 +62,7 @@ export async function demanderPhoto(f: FormData) {
   const message = String(f.get('message') || '').slice(0, 500);
   await db.update(schema.annonces).set({statut: 'photo', raison: `${quelle} : ${message}`}).where(eq(schema.annonces.id, a.id));
   await noter(e.id, 'photo_demandee', `annonce:${a.id}`, `a demandé une photo (${quelle}) pour l'annonce ${a.parfumNom}`);
+  await notifier(a.vendeurId, 'annonce', `Une photo est à refaire pour votre ${a.parfumNom} : ${quelle}.`, '/compte');
   redirect('/equipe');
 }
 
