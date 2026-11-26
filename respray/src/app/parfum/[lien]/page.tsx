@@ -11,6 +11,8 @@ import {moi} from '@/lib/auth';
 import {db, schema} from '@/db';
 import {and, eq} from 'drizzle-orm';
 import {Odeur} from '@/components/Odeur';
+import {senteurDe} from '@/lib/scento';
+import {noteFr} from '@/lib/notes-fr';
 import {FormEnvie} from '@/components/Envie';
 
 export const dynamic = 'force-dynamic';
@@ -36,6 +38,9 @@ export default async function Parfum({params}: {params: Promise<{lien: string}>}
   const catalogue = (await tousLesParfums()).map((x) => ({...x.p, maison: x.maison}));
   const voisins = proches(p, catalogue).map((x) => ({nom: x.nom, maison: x.maison, lien: lienParfum(x.maison, x.nom)}));
   const ici = `/parfum/${lienParfum(maison, p.nom)}`;
+  const senteur = await senteurDe(p);
+  const liens = Object.fromEntries(catalogue.map((x) => [`${x.maison}|${x.nom}`, `/parfum/${lienParfum(x.maison, x.nom)}`]));
+  const vraiesNotes = senteur ? [...(senteur.tete ?? []), ...(senteur.coeur ?? []), ...(senteur.fond ?? []), ...(senteur.notes ?? [])].map(noteFr).join(', ') : '';
   const neufMl = p.formats.filter((f) => f.neuf).map((f) => f.neuf! / f.ml);
   const minNeufMl = neufMl.length ? Math.min(...neufMl) : null;
   const occMl = annonces.map((a) => a.prix / Math.max(1, (a.ml * a.niveau) / 100));
@@ -50,7 +55,7 @@ export default async function Parfum({params}: {params: Promise<{lien: string}>}
       <nav className="fil" aria-label="Fil d'Ariane"><Link href="/parfums">Parfums</Link><span aria-hidden="true">›</span><Link href={`/maison/${lien(maison)}`}>{maison}</Link><span aria-hidden="true">›</span><span>{p.nom}</span></nav>
       <p className="surtitre">{maison}</p>
       <h1 className="titre-page">{p.nom} d'occasion</h1>
-      <p className="chapo">{p.conc}{p.annee ? `, ${p.annee}` : ''}{p.genre ? ` · ${p.genre}` : ''}{p.famille ? ` · ${p.famille}` : ''}{p.notes ? `. Notes : ${p.notes}.` : ''}</p>
+      <p className="chapo">{p.conc}{p.annee ? `, ${p.annee}` : ''}{p.genre ? ` · ${p.genre}` : ''}{p.famille ? ` · ${p.famille}` : ''}{vraiesNotes || p.notes ? `. Notes : ${vraiesNotes || p.notes}.` : ''}</p>
       <div className="parfum-chiffres">
         <div><strong>{annonces.length}</strong><span>annonce{annonces.length > 1 ? 's' : ''} vérifiée{annonces.length > 1 ? 's' : ''} en ligne</span></div>
         {moyOcc ? <div><strong>{eur2(moyOcc)}</strong><span>le millilitre d'occasion, en moyenne</span></div> : null}
@@ -64,7 +69,7 @@ export default async function Parfum({params}: {params: Promise<{lien: string}>}
         <div className="bientot"><h3>Aucune annonce de {p.nom} pour l'instant.</h3><p className="aide">{attendent ? `${attendent} personne${attendent > 1 ? 's l\'attendent' : ' l\'attend'} déjà. ` : ''}Laissez-le dans votre liste d'envies : on vous prévient dès qu'une annonce vérifiée arrive, au prix que vous voulez.</p></div>
       )}
       <div className="envie-bloc"><FormEnvie parfumId={p.id} retour={ici} connecte={!!m} deja={deja} /></div>
-      <Odeur famille={p.famille} notes={p.notes} proches={voisins} />
+      <Odeur senteur={senteur} famille={p.famille} notes={p.notes} proches={voisins} liens={liens} />
       <section className="section">
         <h2 className="h2">Vous en avez un ?</h2>
         <p className="aide">Choisissez {maison}, puis {p.nom} : concentration, genre et famille sont remplis d'office.{p.formats.length ? ` Formats : ${p.formats.map((f) => `${f.ml} ml${f.neuf ? ` (${eur(f.neuf)} neuf)` : ''}`).join(', ')}.` : ''}</p>

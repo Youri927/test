@@ -312,3 +312,13 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .tuile-verif { background: var(--vert-fond); }
 .tuile-verif .surtitre { color: var(--vert); }
 @media (max-width: 760px) { .accueil-duo { grid-template-columns: minmax(0, 1fr); } }
+
+/* la pyramide des notes (Scento) */
+.senteur-famille small { color: var(--texte-2); font-weight: 500; }
+.pyramide { display: grid; gap: 8px; margin: 0; }
+.pyramide div { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 10px; align-items: start; }
+.pyramide dt { padding-top: 5px; color: var(--texte-2); font-size: 13px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.pyramide dd { margin: 0; }
+.senteur-proches ul { display: grid; gap: 4px; margin-top: 6px; }
+.senteur-proches small { color: var(--texte-2); }
+.senteur-source { color: var(--texte-2); font-size: 12.5px; }

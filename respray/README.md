@@ -21,6 +21,13 @@ npm run db:seed             # le catalogue et le premier compte de l'équipe
 npm run dev
 ```
 
+Les vraies notes des parfums (pyramide tête, cœur, fond ; saisons ; parfums proches) viennent de l'API gratuite de
+[Scento](https://www.scento.com/developers/perfume-api) : chaque pyramide y est reprise de la liste publiée par la
+maison. Une requête par parfum du catalogue, gardée 30 jours en base, avec un lien vers la page Scento à côté des notes
+(leurs conditions, § 22 : pas de surcharge, pas de copie de toute leur base). `npm run senteurs` les charge pour tout
+le catalogue d'un coup ; sinon chaque page parfum les demande à sa première visite. Un parfum absent chez Scento garde
+les notes du catalogue. La traduction des notes en français est dans `src/lib/notes-fr.ts`.
+
 ## Où en est-on
 
 1. Fondations : comptes, catalogue, accueil branché sur les vraies annonces, liste d'attente : **fait**

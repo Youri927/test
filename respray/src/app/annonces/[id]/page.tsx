@@ -8,6 +8,7 @@ import {tousLesParfums, lienParfum} from '@/lib/catalogue';
 import {PHOTOS, CONTROLES, protection, ENVOI, eur, eur2, lien} from '@/lib/regles';
 import {remise} from '@/lib/cote';
 import {proches} from '@/lib/odeur';
+import {senteurDe} from '@/lib/scento';
 import {Bouclier} from '@/components/Bouclier';
 import {Odeur} from '@/components/Odeur';
 import {FormOffre} from '@/components/Echanges';
@@ -50,6 +51,8 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
   const ventes = await db.$count(schema.annonces, and(eq(schema.annonces.vendeurId, a.vendeurId), inArray(schema.annonces.statut, ['publiee', 'vendue'])));
   const catalogue = a.parfum ? (await tousLesParfums()).map((x) => ({...x.p, maison: x.maison})) : [];
   const voisins = a.parfum ? proches(a.parfum, catalogue).map((p) => ({nom: p.nom, maison: p.maison, lien: lienParfum(p.maison, p.nom)})) : [];
+  const senteur = a.parfum ? await senteurDe(a.parfum) : null;
+  const liens = Object.fromEntries(catalogue.map((p) => [`${p.maison}|${p.nom}`, `/parfum/${lienParfum(p.maison, p.nom)}`]));
 
   const lignes: [string, string][] = [
     ['Concentration', a.conc],
@@ -135,7 +138,7 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
           ) : null}
           <div className="protection"><h2>Protection acheteur</h2><p>Votre paiement reste bloqué jusqu'à ce que vous ayez vérifié le parfum. Vous avez <strong>7 jours après la livraison</strong> : s'il n'est pas conforme à l'annonce, vous êtes remboursé.</p></div>
           <p className="aide">Vendu par @{a.vendeur.pseudo}{a.vendeur.fondateur ? ' · vendeur fondateur' : ''} · membre depuis {new Intl.DateTimeFormat('fr-FR', {month: 'long', year: 'numeric'}).format(a.vendeur.creeLe)} · {ventes} annonce{ventes > 1 ? 's' : ''} vérifiée{ventes > 1 ? 's' : ''}{a.mainPropre ? ` · remise en main propre possible à ${a.ville}` : ''}</p>
-          {a.parfum ? <Odeur famille={a.parfum.famille} notes={a.parfum.notes} proches={voisins} /> : null}
+          {a.parfum ? <Odeur senteur={senteur} famille={a.parfum.famille} notes={a.parfum.notes} proches={voisins} liens={liens} /> : null}
         </div>
       </div>
     </div>

@@ -7,9 +7,9 @@ type P = {id: number; nom: string; famille: string; notes: string; genre: string
 /* la couleur de la famille, la même que dans le formulaire de vente */
 export function classeFamille(famille: string) {
   const f = normal(famille);
-  if (/hesper|aquat|aromat|frai|agrume|marin|vert/.test(f)) return 'fam-fraiche';
   if (/gourm|ambr|musq|orient|epic|vanill/.test(f)) return 'fam-chaude';
   if (/bois|cuir|chypr|fougere|oud|tabac/.test(f)) return 'fam-boisee';
+  if (/hesper|aquat|aromat|frai|agrume|marin|vert/.test(f)) return 'fam-fraiche';
   if (/flor|fruit/.test(f)) return 'fam-florale';
   return 'fam-boisee';
 }

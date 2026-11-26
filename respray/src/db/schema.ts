@@ -53,6 +53,9 @@ export const parfums = pgTable(
     notes: text('notes').notNull().default(''),
     annee: integer('annee'),
     formats: jsonb('formats').$type<{ml: number; neuf?: number}[]>().notNull().default([]),
+    // les vraies notes (pyramide, famille, saisons, parfums proches), lues chez Scento et gardées 30 jours (lib/scento)
+    senteur: jsonb('senteur'),
+    senteurLe: timestamp('senteur_le', {withTimezone: true}),
   },
   (t) => [index('parfums_maison').on(t.maisonId)],
 );

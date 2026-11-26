@@ -8,7 +8,8 @@
     "start": "next start",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx src/db/seed.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "senteurs": "tsx --conditions=react-server scripts/senteurs.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
