@@ -41,7 +41,7 @@ export function FormInscription({retour, parrain = ''}: {retour: string; parrain
       <label htmlFor="mdp">Mot de passe</label>
       <input id="mdp" name="motDePasse" type="password" className="champ" autoComplete="new-password" minLength={10} required />
       <p className="aide">10 caractères au moins.</p>
-      <label className="choix"><input type="checkbox" name="cgu" defaultChecked={etat.valeurs?.cgu === 'on'} required /> J'accepte les conditions d'utilisation et la politique de confidentialité.</label>
+      <label className="choix"><input type="checkbox" name="cgu" defaultChecked={etat.valeurs?.cgu === 'on'} required /> <span>J'ai 18 ans ou plus, et j'accepte les <a className="lien-souligne" href="/cgu" target="_blank">conditions</a> et la <a className="lien-souligne" href="/confidentialite" target="_blank">politique de confidentialité</a>.</span></label>
       <Erreur e={etat.erreur} />
       <button className="btn btn-noir btn-large" type="submit" disabled={enCours}>{enCours ? 'Création…' : 'Créer mon compte'}</button>
       <p className="aide">Déjà un compte ? <Link className="lien-souligne" href={`/connexion?retour=${encodeURIComponent(retour)}`}>Se connecter</Link></p>

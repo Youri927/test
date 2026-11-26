@@ -155,7 +155,7 @@ export async function verser(c: Commande) {
     {idempotencyKey: cle('versement', c.id, c.creeLe)},
   );
   await db.update(schema.commandes).set({statut: 'versee', transfertId: t.id, verseeLe: new Date()}).where(eq(schema.commandes.id, c.id));
-  await notifier(c.vendeurId, 'vente', `${eur(c.prix)} versés pour la commande ${c.id}. Ils arrivent sur votre compte bancaire sous quelques jours.`, `/commandes/${c.id}`);
+  await notifier(c.vendeurId, 'vente', `${eur(c.prix)} versés pour la commande ${c.id}. Ils arrivent sur votre compte bancaire sous quelques jours. Vos obligations fiscales : respray.fr/obligations-fiscales`, `/commandes/${c.id}`);
   await noter(null, 'commande_versee', ref(c), `commande ${c.id} : ${eur(c.prix)} versés au vendeur`);
   return db.query.commandes.findFirst({where: eq(schema.commandes.id, c.id)});
 }

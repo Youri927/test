@@ -288,7 +288,7 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
               <label htmlFor="prix">Votre prix</label>
               <div className="champ-prix"><input id="prix" name="prix" className="champ" inputMode="decimal" value={v.prix} onChange={(e) => set('prix')(e.target.value)} placeholder="0" /><span>€</span></div>
               {fourchette ? <p className="aide">Annonces actuelles de ce parfum : de {eur(fourchette[0])} à {eur(fourchette[1])}.</p> : null}
-              <p className="aide">{prixN >= 3 ? `Vous recevrez ${eur2(prixN)} : aucune commission.` : 'Vous recevez la totalité du prix : aucune commission.'}</p>
+              <p className="aide">{prixN >= 3 ? `Vous recevrez ${eur2(prixN)} : aucune commission.` : 'Vous recevez la totalité du prix : aucune commission.'} Vendre vos propres parfums de temps en temps n'est en général pas imposable : <a className="lien-souligne" href="/obligations-fiscales" target="_blank">vos obligations fiscales</a>.</p>
               {cote && prixN > cote.haut * 1.15 ? <p className="aide aide-attention">C'est nettement au-dessus de la cote : l'annonce risque d'attendre. Les acheteurs comparent le prix au millilitre.</p> : null}
               {cote && prixN >= 3 && prixN < cote.bas * 0.6 ? <p className="aide aide-attention">C'est très en dessous de la cote : vous pourriez en demander plus. Un prix trop bas attire aussi l'attention de l'équipe.</p> : null}
               <p className="aide">Envoi en point relais, suivi : vous imprimez l'étiquette, vous avez 5 jours pour déposer le colis.</p>

@@ -21,6 +21,7 @@ export function Carte({a, favori = false, connecte = false}: {a: AnnonceAvecPhot
           {a.photos.face ? <img className="visuel" src={`/photos/${a.photos.face}`} alt={`${a.parfumNom}, de face`} loading="lazy" /> : <span className="visuel" />}
           <span className="etiq etiq-verif"><Bouclier taille={20} anime={false} />{depuis(a.publieeLe)}</span>
           {a.etat === 'neuf' ? <span className="etiq etiq-bas">Neuf sous blister</span> : null}
+          {a.avantJusqua && a.avantJusqua > new Date() ? <span className="etiq etiq-avant">Mise en avant</span> : null}
         </div>
         <span className="carte-prix">{eur(a.prix)}{r ? <span className="carte-remise" title={`${r.pct} % moins cher au millilitre que le neuf (prix indicatif ${eur(r.neuf)})`}>−{r.pct} % vs neuf</span> : null}</span>
         <span className="carte-nom">{a.parfumNom}</span>

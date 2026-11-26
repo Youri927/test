@@ -18,6 +18,7 @@ export default async function plan(): Promise<MetadataRoute.Sitemap> {
     {url: `${base}/cote`, changeFrequency: 'weekly'},
     {url: `${base}/placard`},
     {url: `${base}/verification`, changeFrequency: 'daily'},
+    ...['/regles', '/cgu', '/confidentialite', '/obligations-fiscales', '/mentions-legales'].map((p) => ({url: base + p})),
     {url: `${base}/guides`},
     ...GUIDES.map((g) => ({url: `${base}/guides/${g.lien}`})),
     ...ms.map((m) => ({url: `${base}/maison/${lien(m.nom)}`})),
