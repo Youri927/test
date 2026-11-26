@@ -49,7 +49,7 @@ export default async function CommandePage({params, searchParams}: {params: Prom
       {c.statut === 'remboursee' ? <p className="p-alerte">Litige tranché : l'acheteur est remboursé en entier. {c.litige?.decision}</p> : null}
 
       {!fini ? (
-        <ol className="frise">
+        <ol className="suivi">
           {etapes.map(([t, d], i) => {
             const fait = !!d;
             const enCours = !fait && (i === 0 || !!etapes[i - 1][1]);

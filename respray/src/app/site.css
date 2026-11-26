@@ -344,17 +344,17 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .assurance { align-items: flex-start; }
 .achat-garantie { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 16px; background: var(--vert-fond); font-size: 14.5px; }
 .achat-garantie svg { flex: none; }
-.frise { display: grid; gap: 0; margin: 20px 0; padding: 0; list-style: none; }
-.frise li { position: relative; display: flex; gap: 14px; padding-bottom: 18px; color: var(--texte-2); }
-.frise li:not(:last-child)::after { content: ""; position: absolute; left: 14px; top: 30px; bottom: 2px; width: 2px; background: var(--trait); }
-.frise li.fait:not(:last-child)::after { background: var(--vert); }
-.frise li > span { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--fond-2); font-size: 13px; font-weight: 700; z-index: 1; }
-.frise li.fait { color: var(--texte); }
-.frise li.fait > span { background: var(--vert); color: var(--sur-noir); }
-.frise li.en-cours { color: var(--texte); }
-.frise li.en-cours > span { box-shadow: inset 0 0 0 2px var(--accent); color: var(--accent); background: var(--fond); }
-.frise li div { display: grid; padding-top: 4px; }
-.frise small { color: var(--texte-2); font-size: 13px; }
+.suivi { display: grid; gap: 0; margin: 20px 0; padding: 0; list-style: none; }
+.suivi li { position: relative; display: flex; gap: 14px; padding-bottom: 18px; color: var(--texte-2); }
+.suivi li:not(:last-child)::after { content: ""; position: absolute; left: 14px; top: 30px; bottom: 2px; width: 2px; background: var(--trait); }
+.suivi li.fait:not(:last-child)::after { background: var(--vert); }
+.suivi li > span { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--fond-2); font-size: 13px; font-weight: 700; z-index: 1; }
+.suivi li.fait { color: var(--texte); }
+.suivi li.fait > span { background: var(--vert); color: var(--sur-noir); }
+.suivi li.en-cours { color: var(--texte); }
+.suivi li.en-cours > span { box-shadow: inset 0 0 0 2px var(--accent); color: var(--accent); background: var(--fond); }
+.suivi li div { display: grid; padding-top: 4px; }
+.suivi small { color: var(--texte-2); font-size: 13px; }
 .action-bloc { display: grid; gap: 12px; margin: 18px 0; padding: 22px; border-radius: 22px; background: var(--fond-2); }
 .action-bloc .boutons { margin-top: 4px; }
 .action-bloc .boutons form { flex: 1 1 200px; display: flex; }

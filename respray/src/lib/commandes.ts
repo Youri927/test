@@ -103,7 +103,8 @@ export async function deposee(c: Commande) {
 export async function livree(c: Commande) {
   if (!['payee', 'expediee'].includes(c.statut)) return;
   const fin = new Date(Date.now() + DELAI_VERIF * JOUR);
-  await db.update(schema.commandes).set({statut: 'livree', livreeLe: new Date(), finVerif: fin}).where(eq(schema.commandes.id, c.id));
+  // le suivi Mondial Relay peut signaler l'arrivée sans qu'on ait vu le dépôt : le colis a forcément été déposé
+  await db.update(schema.commandes).set({statut: 'livree', expedieeLe: c.expedieeLe ?? new Date(), livreeLe: new Date(), finVerif: fin}).where(eq(schema.commandes.id, c.id));
   await notifier(c.acheteurId, 'achat', `Votre colis est arrivé${c.relais ? ` chez ${c.relais.nom}` : ''}. Vous avez ${DELAI_VERIF} jours pour vérifier le parfum : confirmez, ou signalez un problème.`, `/commandes/${c.id}`);
   await notifier(c.vendeurId, 'vente', `Le colis de la commande ${c.id} est arrivé. L'acheteur a ${DELAI_VERIF} jours pour vérifier ; ensuite, l'argent vous est versé.`, `/commandes/${c.id}`);
 }
