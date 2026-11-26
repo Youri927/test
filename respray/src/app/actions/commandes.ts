@@ -130,35 +130,6 @@ export async function signalerProbleme(f: FormData) {
   retour(c);
 }
 
-/* ——— les versements du vendeur (Stripe Connect) ——— */
-export async function configurerVersements() {
-  const m = await exigerMembre('/compte/versements');
-  let compte = m.stripeCompte;
-  try {
-    if (!compte) {
-      const a = await stripe.v2.core.accounts.create({
-        contact_email: m.email,
-        display_name: `${m.prenom} ${m.nom}`.trim() || m.pseudo,
-        dashboard: 'express',
-        identity: {country: 'fr', entity_type: 'individual'},
-        defaults: {currency: 'eur', locales: ['fr-FR'], responsibilities: {fees_collector: 'application', losses_collector: 'application'}},
-        configuration: {recipient: {capabilities: {stripe_balance: {stripe_transfers: {requested: true}}}}},
-        metadata: {membre: String(m.id)},
-      });
-      compte = a.id;
-      await db.update(schema.membres).set({stripeCompte: compte}).where(eq(schema.membres.id, m.id));
-    }
-  } catch (e) {
-    console.error('Stripe Connect, création du compte :', (e as Error).message);
-    redirect('/compte/versements?erreur=1');
-  }
-  const lien = await stripe.v2.core.accountLinks.create({
-    account: compte!,
-    use_case: {type: 'account_onboarding', account_onboarding: {refresh_url: `${site()}/compte/versements?relance=1`, return_url: `${site()}/compte/versements?retour=1`}},
-  });
-  redirect(lien.url);
-}
-
 /* ——— la mise en avant, payée quand l'annonce est publiée ——— */
 export async function payerMiseEnAvant(f: FormData) {
   const id = num(f, 'annonceId');

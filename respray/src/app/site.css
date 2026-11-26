@@ -380,3 +380,5 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .litige-form { display: grid; gap: 8px; }
 .versements-chiffres { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 @media (max-width: 640px) { .versements-chiffres { grid-template-columns: minmax(0, 1fr); } }
+.stripe-inscription { padding: 20px; border-radius: 18px; background: var(--fond); box-shadow: 0 0 0 1px var(--trait); }
+.stripe-bandeau:empty { display: none; }

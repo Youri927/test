@@ -65,15 +65,29 @@ le premier arrivé fait le travail, une seule fois. Les délais sont appliqués 
 */15 * * * * curl -s -H "Authorization: Bearer $TACHES_SECRET" https://respray.fr/api/taches
 ```
 
-Dans le tableau de bord Stripe :
-- Webhooks : ajouter `https://respray.fr/api/stripe/webhook` avec les événements `checkout.session.completed`,
-  `checkout.session.async_payment_succeeded` et `checkout.session.expired` ; son secret va dans
-  `STRIPE_WEBHOOK_SECRET`.
-- Connect, « Profil de la plateforme » : marketplace, paiements encaissés par la plateforme puis transférés, pertes
-  à la charge de la plateforme.
+Configuration Connect arrêtée avec Stripe (ne pas la changer : les responsabilités d'un compte sont définitives) :
+Accounts v2, tableau de bord Express, frais et pertes à la charge de Respray, configuration « recipient », paiements
+« separate charges and transfers » (pas de `application_fee_amount` : Respray garde sa part en transférant moins),
+inscription intégrée au site (Connect.js : composants `account_onboarding` et `notification_banner`, page
+`/compte/versements`). Un vendeur n'est payé que si sa capacité `stripe_transfers` est `active`. Une contestation
+bancaire bloque le versement, ou reprend l'argent déjà versé (annulation du transfert).
+
+Dans le tableau de bord Stripe (Développeurs, puis Webhooks), deux destinations :
+- `https://respray.fr/api/stripe/webhook`, événements du compte **et des comptes connectés** :
+  `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.expired`,
+  `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`, `charge.dispute.created`,
+  `payout.failed`. Son secret va dans `STRIPE_WEBHOOK_SECRET`.
+- `https://respray.fr/api/stripe/evenements-v2`, événements v2 (« thin ») des comptes : `v2.core.account.updated`,
+  `v2.core.account[requirements].updated`, `v2.core.account[configuration.recipient].capability_status_updated`.
+  Son secret va dans `STRIPE_WEBHOOK_SECRET_V2`.
+
+Les deux refusent tout événement mal signé, et refusent tout si leur secret manque. Un événement renvoyé par Stripe
+n'est traité qu'une fois (table `evenements_stripe`). Version d'API fixée : `2026-11-18.endive` (`src/lib/stripe.ts`) ;
+créer les destinations sur la même version.
 
 En développement, `npx tsx --conditions=react-server scripts/test-paiement.ts <commande>` paie une commande avec la
-carte de test de Stripe (mode test uniquement), pour tester la suite sans remplir la page Checkout.
+carte de test de Stripe (mode test uniquement), pour tester la suite sans remplir la page Checkout ; ajouter
+`contestation` pour la carte qui déclenche une contestation bancaire.
 
 ## Les pages
 

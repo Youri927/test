@@ -10,6 +10,7 @@ import {stripe, centimes} from '@/lib/stripe';
 import {notifier} from '@/lib/activite';
 import {noter} from '@/lib/journal';
 import {creerEtiquette} from '@/lib/envoi';
+import {pretPourVersements} from '@/lib/connect';
 import {protection, ENVOI, ASSURANCE, SEUIL_ASSURANCE, eur} from '@/lib/regles';
 
 export type Commande = typeof schema.commandes.$inferSelect;
@@ -75,7 +76,7 @@ export async function enregistrerPaiement(c: Commande, paymentIntentId: string |
 export async function annuler(c: Commande, raison: string) {
   if (['annulee', 'remboursee', 'versee'].includes(c.statut)) return c;
   if (c.paiementId && c.statut !== 'attente_paiement') {
-    const r = await stripe.refunds.create({payment_intent: c.paiementId, reason: 'requested_by_customer', metadata: {commande: String(c.id)}});
+    const r = await stripe.refunds.create({payment_intent: c.paiementId, reason: 'requested_by_customer', metadata: {commande: String(c.id)}}, {idempotencyKey: `remboursement-${c.id}`});
     await db.update(schema.commandes).set({remboursementId: r.id}).where(eq(schema.commandes.id, c.id));
   } else if (c.checkoutId && c.statut === 'attente_paiement') {
     const s = await stripe.checkout.sessions.retrieve(c.checkoutId);
@@ -134,7 +135,7 @@ export async function ouvrirLitige(c: Commande, raison: string, texte: string) {
 /* l'équipe donne raison à l'acheteur : remboursement intégral, l'annonce est retirée */
 export async function rembourserLitige(c: Commande, decision: string, equipeId: number) {
   if (c.statut !== 'litige' || !c.paiementId) return;
-  const r = await stripe.refunds.create({payment_intent: c.paiementId, metadata: {commande: String(c.id)}});
+  const r = await stripe.refunds.create({payment_intent: c.paiementId, metadata: {commande: String(c.id)}}, {idempotencyKey: `remboursement-${c.id}`});
   await db.update(schema.commandes).set({statut: 'remboursee', remboursementId: r.id, litige: {...c.litige!, decision}}).where(eq(schema.commandes.id, c.id));
   await db.update(schema.annonces).set({statut: 'retiree', raison: `Litige : ${decision}`}).where(eq(schema.annonces.id, c.annonceId));
   await notifier(c.acheteurId, 'achat', `Litige de la commande ${c.id} : vous êtes remboursé en entier. ${decision}`, `/commandes/${c.id}`);
@@ -162,8 +163,7 @@ export async function verser(c: Commande) {
 export async function actualiserVersements(membreId: number) {
   const m = await db.query.membres.findFirst({where: eq(schema.membres.id, membreId)});
   if (!m?.stripeCompte) return false;
-  const a = await stripe.v2.core.accounts.retrieve(m.stripeCompte, {include: ['configuration.recipient']});
-  const ok = a.configuration?.recipient?.capabilities?.stripe_balance?.stripe_transfers?.status === 'active';
+  const {ok} = await pretPourVersements(m.stripeCompte);
   if (ok !== m.versementsOk) await db.update(schema.membres).set({versementsOk: ok}).where(eq(schema.membres.id, m.id));
   if (ok) for (const c of await db.select().from(schema.commandes).where(and(eq(schema.commandes.vendeurId, m.id), eq(schema.commandes.statut, 'confirmee')))) await verser(c);
   return ok;
@@ -202,4 +202,44 @@ export async function deMembre(membreId: number) {
     .where(and(sql`(${schema.commandes.acheteurId} = ${membreId} or ${schema.commandes.vendeurId} = ${membreId})`, isNotNull(schema.commandes.payeeLe)))
     .orderBy(desc(schema.commandes.creeLe));
   return liste;
+}
+
+/* ——— ce que Stripe nous apprend (webhooks) ——— */
+
+const parPaiement = (paiementId: string) => db.query.commandes.findFirst({where: eq(schema.commandes.paiementId, paiementId)});
+
+/* contestation bancaire (chargeback) : l'argent est repris à Respray par la banque de l'acheteur. Si le vendeur n'est
+   pas encore payé, on bloque le versement ; s'il l'est déjà, on récupère sa part (annulation du transfert). L'équipe
+   répond à la contestation depuis le tableau de bord Stripe, avec les photos vérifiées. */
+export async function contestation(paiementId: string, motif: string) {
+  const c = await parPaiement(paiementId);
+  if (!c || c.litige?.raison === 'Contestation bancaire') return;
+  if (c.transfertId) {
+    await stripe.transfers.createReversal(c.transfertId, {amount: centimes(c.prix), metadata: {commande: String(c.id), raison: 'contestation'}}, {idempotencyKey: `reprise-${c.id}`}).catch((e) => console.error('Reprise du transfert :', (e as Error).message));
+  }
+  await db.update(schema.commandes).set({statut: 'litige', litige: {raison: 'Contestation bancaire', texte: `La banque de l'acheteur conteste le paiement (${motif}).`, le: new Date().toISOString()}}).where(eq(schema.commandes.id, c.id));
+  const equipe = await db.select({id: schema.membres.id}).from(schema.membres).where(eq(schema.membres.role, 'equipe'));
+  for (const e of equipe) await notifier(e.id, 'litige', `Contestation bancaire sur la commande ${c.id} (${motif}) : à traiter dans Stripe, avec les photos vérifiées.`, '/equipe/commandes');
+  await notifier(c.vendeurId, 'vente', `La banque de l'acheteur conteste le paiement de la commande ${c.id}. ${c.transfertId ? 'Le versement est repris le temps de l\'examen' : 'Le versement est suspendu'} ; vos photos vérifiées serviront de preuve.`, `/commandes/${c.id}`);
+  await noter(null, 'contestation', ref(c), `contestation bancaire sur la commande ${c.id} : ${motif}`);
+}
+
+/* un remboursement fait ailleurs (tableau de bord Stripe) : la commande suit */
+export async function rembourseeAilleurs(paiementId: string, refundId: string | null) {
+  const c = await parPaiement(paiementId);
+  if (!c || ['remboursee', 'annulee'].includes(c.statut)) return;
+  await db.update(schema.commandes).set({statut: 'remboursee', remboursementId: refundId ?? c.remboursementId}).where(eq(schema.commandes.id, c.id));
+  await noter(null, 'commande_remboursee', ref(c), `commande ${c.id} remboursée (depuis Stripe)`);
+}
+
+/* un paiement par carte refusé : l'acheteur est prévenu, l'annonce revient en ligne à l'expiration de la session */
+export async function paiementEchoue(commandeId: number, message: string) {
+  const c = await db.query.commandes.findFirst({where: eq(schema.commandes.id, commandeId)});
+  if (c && c.statut === 'attente_paiement') await notifier(c.acheteurId, 'achat', `Votre paiement n'est pas passé : ${message} Vous pouvez réessayer avec une autre carte.`, `/annonces/${c.annonceId}`);
+}
+
+/* un virement vers la banque du vendeur a échoué (IBAN fermé, erroné…) */
+export async function virementEchoue(compte: string, message: string) {
+  const m = await db.query.membres.findFirst({where: eq(schema.membres.stripeCompte, compte)});
+  if (m) await notifier(m.id, 'vente', `Le virement vers votre banque a échoué (${message}). Vérifiez votre IBAN dans vos versements.`, '/compte/versements');
 }

@@ -300,3 +300,10 @@ export const paiements = pgTable('paiements', {
   statut: text('statut', {enum: ['attente', 'payee', 'annulee']}).notNull().default('attente'),
   creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
 });
+
+/* les événements Stripe déjà traités : un même événement renvoyé par Stripe ne fait le travail qu'une fois */
+export const evenementsStripe = pgTable('evenements_stripe', {
+  id: text('id').primaryKey(),
+  type: text('type').notNull(),
+  recuLe: timestamp('recu_le', {withTimezone: true}).notNull().defaultNow(),
+});

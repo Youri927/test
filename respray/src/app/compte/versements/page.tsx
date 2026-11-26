@@ -4,7 +4,8 @@ import {db, schema} from '@/db';
 import {exigerMembre} from '@/lib/auth';
 import {actualiserVersements} from '@/lib/commandes';
 import {eur} from '@/lib/regles';
-import {configurerVersements, relireVersements} from '@/app/actions/commandes';
+import {relireVersements} from '@/app/actions/commandes';
+import {InscriptionVersements} from '@/components/InscriptionVersements';
 
 export const metadata = {title: 'Mes versements'};
 export const dynamic = 'force-dynamic';
@@ -32,14 +33,14 @@ export default async function Versements({searchParams}: {searchParams: Promise<
         <section className="action-bloc">
           <h2 className="h2">✓ Vos versements sont prêts</h2>
           <p>Votre identité et votre IBAN sont vérifiés par Stripe. Chaque vente confirmée vous est versée automatiquement, puis arrive sur votre compte bancaire sous quelques jours.</p>
-          <form action={configurerVersements}><button className="btn" type="submit">Modifier mes informations</button></form>
+          <InscriptionVersements deja />
         </section>
       ) : (
         <section className="action-bloc">
           <h2 className="h2">{m.stripeCompte ? 'Terminez votre inscription' : 'Ajoutez votre IBAN pour être payé'}</h2>
           <p>Notre partenaire de paiement, Stripe, vérifie votre identité et enregistre votre IBAN. Respray ne voit ni vos papiers ni vos coordonnées bancaires. Comptez 2 minutes, avec une pièce d'identité.</p>
-          <form action={configurerVersements}><button className="btn btn-noir btn-large" type="submit">{m.stripeCompte ? 'Reprendre l\'inscription' : 'Configurer mes versements'}</button></form>
-          {q.retour && m.stripeCompte ? <form action={relireVersements}><p className="aide">Vous venez de terminer ? La vérification peut prendre un instant. <button className="lien-bouton" type="submit">Actualiser</button></p></form> : null}
+          <InscriptionVersements deja={!!m.stripeCompte} />
+          {m.stripeCompte ? <form action={relireVersements}><p className="aide">Vous venez de terminer ? La vérification par Stripe peut prendre un instant. <button className="lien-bouton" type="submit">Actualiser</button></p></form> : null}
         </section>
       )}
     </div>
