@@ -549,3 +549,42 @@ select:disabled { opacity: .5; cursor: not-allowed; }
 /* l'annonce d'exemple : les photos et les zones restent toujours à pleine opacité ; l'étape en cours est seulement
    entourée (plus de zones estompées) */
 .anat-carte .z, .anat-infos { opacity: 1 !important; }
+
+/* ——— profils et avis ——— */
+.etoiles { color: #c9962b; letter-spacing: 1px; }
+.profil-tete { display: flex; align-items: center; gap: 20px; }
+.profil-avatar { display: grid; place-items: center; flex: none; width: 76px; height: 76px; border-radius: 50%; background: var(--noir); color: var(--sur-noir); font-size: 32px; font-weight: 700; }
+.profil-tete .chapo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 4px; }
+.profil-note { margin-top: 6px; font-size: 16px; }
+.profil-note a { color: inherit; }
+.profil-chiffres { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 28px; }
+.profil-chiffres div { display: grid; gap: 2px; padding: 16px 18px; border-radius: 18px; background: var(--fond-2); }
+.profil-chiffres strong { font-size: 24px; letter-spacing: -.02em; }
+.profil-chiffres span { color: var(--texte-2); font-size: 14px; }
+.avis-liste { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 14px; }
+.avis { padding: 18px 20px; border-radius: 18px; box-shadow: 0 0 0 1px var(--trait); display: grid; gap: 10px; scroll-margin-top: 110px; }
+.avis-tete { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.avis-qui { color: var(--texte-2); font-size: 14px; }
+.avis-achat { display: flex; align-items: center; gap: 10px; color: var(--texte-2); font-size: 14px; }
+.avis-achat img { width: 40px; height: 50px; object-fit: cover; border-radius: 8px; background: var(--fond-photo); }
+.avis-texte { font-size: 16px; line-height: 1.5; }
+.avis-reponse { display: grid; gap: 2px; padding: 12px 14px; border-radius: 12px; background: var(--fond-2); font-size: 15px; }
+.avis-reponse strong { font-size: 13px; color: var(--texte-2); }
+.avis-repondre { display: grid; gap: 8px; }
+.avis-repondre .btn { justify-self: start; }
+.avis-signaler { justify-self: end; font-size: 13px; color: var(--texte-2); }
+.avis-form { display: grid; gap: 10px; }
+.avis-form .btn { justify-self: start; }
+.choix-note { border: 0; padding: 0; margin: 0; }
+.choix-note legend { font-weight: 600; margin-bottom: 6px; }
+.choix-note-etoiles { display: flex; align-items: center; gap: 2px; }
+.choix-note-etoiles label { position: relative; cursor: pointer; font-size: 34px; line-height: 1; color: var(--trait); transition: color .15s, transform .15s var(--ease); }
+.choix-note-etoiles label.pleine { color: #c9962b; }
+.choix-note-etoiles label:hover { transform: scale(1.12); }
+.choix-note-etoiles input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.choix-note-etoiles input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.choix-note-mot { margin-left: 10px; color: var(--texte-2); font-size: 15px; min-width: 6em; }
+.carte-note { font-size: 13px; color: var(--texte); }
+.carte-note > span:first-child { color: #c9962b; }
+.carte-note > span:last-child { color: var(--texte-2); }
+@media (max-width: 640px) { .profil-avatar { width: 60px; height: 60px; font-size: 26px; } }

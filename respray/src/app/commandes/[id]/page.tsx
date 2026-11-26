@@ -9,6 +9,9 @@ import {eur, eur2} from '@/lib/regles';
 import {deposer, simulerArrivee, recupere, annulerParVendeur, confirmerReception, signalerProbleme} from '@/app/actions/commandes';
 import {FormCode} from '@/components/Commande';
 import {Bouclier} from '@/components/Bouclier';
+import {laisserAvis} from '@/app/actions/avis';
+import {etoiles} from '@/lib/avis';
+import {ChoixNote} from '@/components/ChoixNote';
 
 export const metadata = {title: 'Commande'};
 export const dynamic = 'force-dynamic';
@@ -28,6 +31,8 @@ export default async function CommandePage({params, searchParams}: {params: Prom
   const a = (await db.query.annonces.findFirst({where: eq(schema.annonces.id, c.annonceId)}))!;
   const vendeur = c.vendeurId === m.id;
   const acheteur = c.acheteurId === m.id;
+  const avis = await db.query.avis.findFirst({where: eq(schema.avis.commandeId, c.id)});
+  const pseudoVendeur = (await db.query.membres.findFirst({where: eq(schema.membres.id, c.vendeurId)}))?.pseudo;
   const autre = await db.query.membres.findFirst({where: eq(schema.membres.id, vendeur ? c.acheteurId : c.vendeurId)});
   const moiV = vendeur ? await db.query.membres.findFirst({where: eq(schema.membres.id, m.id)}) : null;
 
@@ -122,6 +127,28 @@ export default async function CommandePage({params, searchParams}: {params: Prom
       ) : null}
       {acheteur && c.statut === 'litige' ? <p className="p-alerte">Problème signalé : « {c.litige?.raison} ». L'argent reste bloqué ; l'équipe compare avec les photos vérifiées de l'annonce et vous répond.</p> : null}
       {['confirmee', 'versee'].includes(c.statut) ? <p className="offre-ok">{acheteur ? 'Commande terminée. Bonne découverte !' : c.statut === 'versee' ? `${eur(c.prix)} versés le ${jour.format(c.verseeLe!)}.` : `Commande confirmée : ${eur(c.prix)} vous seront versés dès que votre IBAN est enregistré.`}</p> : null}
+      {/* l'avis : l'acheteur note le vendeur une fois la commande terminée (une fois par commande) */}
+      {acheteur && ['confirmee', 'versee'].includes(c.statut) ? (
+        <section className="action-bloc" id="avis">
+          {avis ? (
+            <>
+              <h2 className="h2">Votre avis</h2>
+              <p><span className="etoiles">{etoiles(avis.note)}</span>{avis.texte ? ` « ${avis.texte} »` : ''}</p>
+              <p className="aide">Il est visible sur <Link className="lien-souligne" href={`/vendeur/${pseudoVendeur}#avis-${avis.id}`}>le profil de @{pseudoVendeur}</Link>.</p>
+            </>
+          ) : (
+            <form action={laisserAvis} className="avis-form">
+              <h2 className="h2">Comment s&apos;est passée la vente avec @{pseudoVendeur} ?</h2>
+              <input type="hidden" name="commandeId" value={c.id} />
+              <ChoixNote />
+              <label htmlFor="avis-texte">Un mot pour les prochains acheteurs (facultatif)</label>
+              <textarea id="avis-texte" name="texte" className="champ" rows={3} maxLength={600} placeholder="Flacon conforme aux photos, bien emballé, envoyé vite…" />
+              <button className="btn btn-noir" type="submit">Publier mon avis</button>
+              <p className="aide">Votre avis est public, avec votre pseudo et le parfum acheté. Vous ne pourrez plus le modifier.</p>
+            </form>
+          )}
+        </section>
+      ) : null}
 
       {simule() && ['payee', 'expediee'].includes(c.statut) && c.mode === 'relais' ? (
         <form action={simulerArrivee} className="simulation"><input type="hidden" name="id" value={c.id} /><span>Simulation (en attendant Mondial Relay)</span><button className="btn btn-petit" type="submit">Le colis arrive au point relais</button></form>

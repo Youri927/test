@@ -1,5 +1,5 @@
 import type {MetadataRoute} from 'next';
-import {eq} from 'drizzle-orm';
+import {eq, inArray} from 'drizzle-orm';
 import {db, schema} from '@/db';
 import {tousLesParfums, lienParfum} from '@/lib/catalogue';
 import {GUIDES} from '@/lib/guides';
@@ -13,7 +13,9 @@ export default async function plan(): Promise<MetadataRoute.Sitemap> {
   const base = process.env.SITE_URL || 'https://respray.fr';
   const ps = await tousLesParfums();
   const ms = await db.select().from(schema.maisons);
-  const as = await db.select({id: schema.annonces.id, le: schema.annonces.publieeLe}).from(schema.annonces).where(eq(schema.annonces.statut, 'publiee'));
+  const as = await db.select({id: schema.annonces.id, le: schema.annonces.publieeLe, v: schema.annonces.vendeurId}).from(schema.annonces).where(eq(schema.annonces.statut, 'publiee'));
+  const ids = [...new Set(as.map((a) => a.v))];
+  const vendeurs = ids.length ? await db.select({pseudo: schema.membres.pseudo}).from(schema.membres).where(inArray(schema.membres.id, ids)) : [];
   return [
     {url: base, changeFrequency: 'daily', priority: 1},
     {url: `${base}/parfums`, changeFrequency: 'daily'},
@@ -28,5 +30,6 @@ export default async function plan(): Promise<MetadataRoute.Sitemap> {
     ...ms.map((m) => ({url: `${base}/maison/${lien(m.nom)}`})),
     ...ps.map((x) => ({url: `${base}/parfum/${lienParfum(x.maison, x.p.nom)}`})),
     ...as.map((a) => ({url: `${base}/annonces/${a.id}`, lastModified: a.le ?? undefined})),
+    ...vendeurs.map((v) => ({url: `${base}/vendeur/${v.pseudo}`})),
   ];
 }

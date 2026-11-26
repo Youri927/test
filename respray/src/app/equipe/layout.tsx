@@ -13,12 +13,14 @@ export default async function Equipe({children}: {children: React.ReactNode}) {
   const enLigne = await db.$count(schema.annonces, inArray(schema.annonces.statut, ['publiee']));
   const cands = await db.$count(schema.candidatures, eq(schema.candidatures.statut, 'nouvelle'));
   const litiges = await db.$count(schema.commandes, eq(schema.commandes.statut, 'litige'));
+  const signales = await db.$count(schema.avis, eq(schema.avis.signale, true));
   const nav: [string, string, number][] = [
     ['/equipe', 'Annonces à vérifier', attente],
     ['/equipe/en-ligne', 'En ligne', enLigne],
     ['/equipe/commandes', 'Commandes et litiges', litiges],
     ['/equipe/maisons', 'Maisons et parfums proposés', props],
     ['/equipe/fondateurs', 'Vendeurs fondateurs', cands],
+    ['/equipe/avis', 'Avis signalés', signales],
     ['/equipe/membres', 'Membres', 0],
     ['/equipe/journal', 'Journal', 0],
     ['/equipe/emails', 'E-mails', 0],

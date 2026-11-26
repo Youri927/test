@@ -157,7 +157,7 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
             </div>
           ) : null}
           <div className="protection"><h2>Protection acheteur</h2><p>Votre paiement reste bloqué jusqu'à ce que vous ayez vérifié le parfum. Vous avez <strong>7 jours après la livraison</strong> : s'il n'est pas conforme à l'annonce, vous êtes remboursé.</p></div>
-          <p className="aide">Vendu par @{a.vendeur.pseudo}{a.vendeur.fondateur ? ' · vendeur fondateur' : ''} · membre depuis {new Intl.DateTimeFormat('fr-FR', {month: 'long', year: 'numeric'}).format(a.vendeur.creeLe)} · {ventes} annonce{ventes > 1 ? 's' : ''} vérifiée{ventes > 1 ? 's' : ''}{a.mainPropre ? ` · remise en main propre possible à ${a.ville}` : ''}</p>
+          <p className="aide">Vendu par <Link className="lien-souligne" href={`/vendeur/${a.vendeur.pseudo}`}>@{a.vendeur.pseudo}</Link>{a.vendeur.note ? <> · <span className="etoiles" aria-hidden="true">★</span> {a.vendeur.note.moyenne.toLocaleString('fr-FR')} ({a.vendeur.note.n} avis)</> : ''}{a.vendeur.fondateur ? ' · vendeur fondateur' : ''} · membre depuis {new Intl.DateTimeFormat('fr-FR', {month: 'long', year: 'numeric'}).format(a.vendeur.creeLe)} · {ventes} annonce{ventes > 1 ? 's' : ''} vérifiée{ventes > 1 ? 's' : ''}{a.mainPropre ? ` · remise en main propre possible à ${a.ville}` : ''}</p>
           {a.parfum ? <Odeur senteur={senteur} famille={a.parfum.famille} notes={a.parfum.notes} proches={voisins} liens={liens} /> : null}
         </div>
       </div>

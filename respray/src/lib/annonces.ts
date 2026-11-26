@@ -1,9 +1,10 @@
 import 'server-only';
 import {eq, and, desc, inArray} from 'drizzle-orm';
 import {db, schema} from '@/db';
+import {notesDe, type Note} from '@/lib/avis';
 
 export type Catalogue = {id: number; nom: string; formats: {ml: number; neuf?: number}[]; famille: string; notes: string; genre: string; senteur: unknown; senteurLe: Date | null};
-export type AnnonceAvecPhotos = typeof schema.annonces.$inferSelect & {photos: Record<string, string>; vendeur: {pseudo: string; ville: string; creeLe: Date; fondateur: boolean}; parfum: Catalogue | null};
+export type AnnonceAvecPhotos = typeof schema.annonces.$inferSelect & {photos: Record<string, string>; vendeur: {pseudo: string; ville: string; creeLe: Date; fondateur: boolean; note: Note | null}; parfum: Catalogue | null};
 
 /* des annonces, avec leurs photos (par vue) et leur vendeur */
 export async function completer(liste: (typeof schema.annonces.$inferSelect)[]): Promise<AnnonceAvecPhotos[]> {
@@ -13,10 +14,11 @@ export async function completer(liste: (typeof schema.annonces.$inferSelect)[]):
   const vend = await db.select({id: schema.membres.id, pseudo: schema.membres.pseudo, ville: schema.membres.ville, creeLe: schema.membres.creeLe, fondateur: schema.membres.fondateur}).from(schema.membres).where(inArray(schema.membres.id, [...new Set(liste.map((a) => a.vendeurId))]));
   const idsP = [...new Set(liste.map((a) => a.parfumId).filter((x): x is number => !!x))];
   const parf = idsP.length ? await db.select({id: schema.parfums.id, nom: schema.parfums.nom, formats: schema.parfums.formats, famille: schema.parfums.famille, notes: schema.parfums.notes, genre: schema.parfums.genre, senteur: schema.parfums.senteur, senteurLe: schema.parfums.senteurLe}).from(schema.parfums).where(inArray(schema.parfums.id, idsP)) : [];
+  const notes = await notesDe(vend.map((v) => v.id));
   return liste.map((a) => ({
     ...a,
     photos: Object.fromEntries(ph.filter((p) => p.annonceId === a.id).map((p) => [p.vue, p.fichier])),
-    vendeur: vend.find((v) => v.id === a.vendeurId)!,
+    vendeur: {...vend.find((v) => v.id === a.vendeurId)!, note: notes[a.vendeurId] ?? null},
     parfum: parf.find((p) => p.id === a.parfumId) ?? null,
   }));
 }

@@ -178,6 +178,8 @@ const TYPES = new Set(['achat', 'vente', 'litige', 'annonce', 'envie', 'offre', 
 
 const REGLES: [RegExp, string, string, Ton][] = [
   // [motif du texte, titre, pastille, ton]
+  [/^Comment s'est passée votre commande/, 'Votre avis compte', 'Avis', 'info'],
+  [/^Nouvel avis/, 'Vous avez un nouvel avis', 'Avis', 'ok'],
   [/^Paiement reçu/, 'Paiement reçu, merci', 'Commande payée', 'ok'],
   [/^Vendu/, 'Vendu ! Il ne reste qu\'à l\'envoyer', 'Vendu', 'ok'],
   [/^Pour recevoir vos/, 'Ajoutez votre IBAN pour être payé', 'À faire', 'action'],

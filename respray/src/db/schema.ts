@@ -338,3 +338,24 @@ export const jetons = pgTable('jetons', {
   expire: timestamp('expire', {withTimezone: true}).notNull(),
   utilise: boolean('utilise').notNull().default(false),
 });
+
+/* les avis : laissés par l'acheteur d'une commande terminée (un par commande), le vendeur peut répondre une fois,
+   n'importe quel membre peut signaler un avis, l'équipe peut le masquer */
+export const avis = pgTable(
+  'avis',
+  {
+    id: serial('id').primaryKey(),
+    commandeId: integer('commande_id').notNull().references(() => commandes.id),
+    annonceId: integer('annonce_id').notNull(),
+    vendeurId: integer('vendeur_id').notNull().references(() => membres.id),
+    acheteurId: integer('acheteur_id').notNull().references(() => membres.id),
+    note: integer('note').notNull(),
+    texte: text('texte').notNull().default(''),
+    reponse: text('reponse'),
+    reponseLe: timestamp('reponse_le', {withTimezone: true}),
+    signale: boolean('signale').notNull().default(false),
+    masque: boolean('masque').notNull().default(false),
+    creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex('avis_commande').on(t.commandeId), index('avis_vendeur').on(t.vendeurId)],
+);

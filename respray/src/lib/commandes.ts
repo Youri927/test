@@ -122,6 +122,8 @@ export async function confirmer(c: Commande, comment: string) {
   if (!['livree', 'litige'].includes(c.statut)) return;
   await db.update(schema.commandes).set({statut: 'confirmee', confirmeeLe: new Date(), litige: c.litige ? {...c.litige, decision: comment} : null}).where(eq(schema.commandes.id, c.id));
   await noter(null, 'commande_confirmee', ref(c), `commande ${c.id} confirmée : ${comment}`);
+  const vend = await db.query.membres.findFirst({where: eq(schema.membres.id, c.vendeurId)});
+  await notifier(c.acheteurId, 'achat', `Comment s'est passée votre commande avec @${vend?.pseudo} ? Un avis (deux clics) aide les prochains acheteurs, et le vendeur.`, `/commandes/${c.id}#avis`);
   await verser((await db.query.commandes.findFirst({where: eq(schema.commandes.id, c.id)}))!);
 }
 
