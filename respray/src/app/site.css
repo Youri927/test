@@ -545,3 +545,7 @@ select:disabled { opacity: .5; cursor: not-allowed; }
   #apercu .apercu-etapes span { width: 16px; height: 16px; font-size: 10px; }
   #apercu > .aide { grid-column: 1 / -1; font-size: 13px; margin-top: -4px; }
 }
+
+/* l'annonce d'exemple : les photos et les zones restent toujours à pleine opacité ; l'étape en cours est seulement
+   entourée (plus de zones estompées) */
+.anat-carte .z, .anat-infos { opacity: 1 !important; }

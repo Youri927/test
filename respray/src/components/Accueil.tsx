@@ -86,10 +86,12 @@ const DUREE_ANAT = 1300;
 const PAUSE_ANAT = 5000;
 
 export function Anatomie() {
-  const carte = useRef<HTMLDivElement>(null);
-  const [i, choisir] = useUnePasse(carte, ANATOMIE.length, DUREE_ANAT, {pause: PAUSE_ANAT});
+  // toute la section compte (au téléphone, la liste 01-04 est au-dessus de la carte) : l'animation se joue dès que l'une
+  // ou l'autre est bien à l'écran
+  const bloc = useRef<HTMLElement>(null);
+  const [i, choisir] = useUnePasse(bloc, ANATOMIE.length, DUREE_ANAT, {pause: PAUSE_ANAT, seuil: 0.4});
   return (
-    <section className="section env anatomie">
+    <section className="section env anatomie" ref={bloc}>
       <div className="anat-texte">
         <p className="surtitre">Pourquoi c&apos;est plus sûr</p>
         <h2 className="grand-titre">Une annonce Respray, point par point.</h2>
@@ -107,7 +109,7 @@ export function Anatomie() {
         <Link className="lien" href="/comment-ca-marche">Tout le fonctionnement <Ico n="fleche" /></Link>
       </div>
       {/* toucher une zone de la carte choisit son étape (au doigt, la liste des étapes est plus haut, hors de l'écran) */}
-      <div className="anat-carte" ref={carte} data-zone={i} aria-hidden="true" onClick={(e) => { const z = (e.target as HTMLElement).closest('[data-z]'); if (z) choisir(Number(z.getAttribute('data-z'))); }}>
+      <div className="anat-carte" data-zone={i} aria-hidden="true" onClick={(e) => { const z = (e.target as HTMLElement).closest('[data-z]'); if (z) choisir(Number(z.getAttribute('data-z'))); }}>
         <span className="exemple-badge">Exemple</span>
         <div className="z z0" data-z="0"><div className="anat-grande"><PhotoDemo /></div><div className="anat-minis">{['dessous', 'niveau', 'dessus', 'tige', 'preuve'].map((v) => <span key={v}><PhotoDemo vue={v} /></span>)}</div></div>
         <div className="anat-infos"><p>{DEMO_PARFUM.maison}</p><p className="anat-nom">{DEMO_PARFUM.nom}</p><p className="anat-prix">{eur(DEMO.prix)} <small>· {DEMO.ml} ml · reste ~{DEMO.niveau} %</small></p></div>
