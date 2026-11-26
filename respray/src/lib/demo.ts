@@ -1,4 +1,4 @@
-/* L'exemple de démonstration (repris du prototype) : un flacon rendu en 3D, sans marque reproduite, qui sert à
+/* L'exemple de démonstration : un flacon inventé (« Ambre 27 », Atelier Séverin), rendu en 3D photoréaliste, qui sert à
    montrer ce qu'on vérifie (« point par point », le guide, « Comment ça marche »). Il est toujours présenté comme un
    exemple : aucune annonce n'est inventée. Images dans public/demo. */
 export const DEMO = {
@@ -12,9 +12,9 @@ export const DEMO = {
   fond: '#EDE7E1',
 };
 export const DEMO_PARFUM = {
-  id: 'baccarat-rouge-540',
-  maison: 'Maison Francis Kurkdjian',
-  nom: 'Baccarat Rouge 540',
+  id: 'ambre-27',
+  maison: 'Atelier Séverin', // maison et parfum inventés, comme le flacon rendu en 3D
+  nom: 'Ambre 27',
   conc: 'Eau de parfum',
   forme: 'facette',
   jus: '#E2A985',

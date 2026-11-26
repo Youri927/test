@@ -16,7 +16,7 @@ export function PhotoDemo({vue = 'face', id = DEMO.id, classe = ''}: {vue?: stri
   return <img className={`visuel ${classe}`} src={demoSrc(vue, id)} alt={alt} width={600} height={750} decoding="async" loading="lazy" />;
 }
 
-const BUSE = {x: 0.46, y: 0.128};
+const BUSE = {x: 0.367, y: 0.223}; // la buse du flacon rendu (tools/rendus-photo, vue « vendre »)
 export function Vaporise() {
   const bx = BUSE.x * 600;
   const by = BUSE.y * 800;

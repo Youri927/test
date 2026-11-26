@@ -275,24 +275,24 @@ export async function emailActivite(membreId: number, type: string, texte: strin
 
 /* ——— les aperçus (page équipe /equipe/emails) : chaque e-mail, avec l'exemple de démonstration ——— */
 export function apercus(): {nom: string; sujet: string; contenu: {html: string; texte: string}}[] {
-  const carte = (prix: string): CarteMail => ({photo: '/demo/a101-face.webp', maison: 'Maison Francis Kurkdjian', nom: 'Baccarat Rouge 540', details: '70 ml · reste ~85 % · commande 12', prix});
+  const carte = (prix: string): CarteMail => ({photo: '/demo/a101-face.webp', maison: 'Atelier Séverin', nom: 'Ambre 27', details: '70 ml · reste ~85 % · commande 12', prix});
   const acheteur: Partial<Mail> = {carte: carte('210,82 €'), lignes: [['Parfum', '189,00 €'], ['Protection acheteur', '16,02 €'], ['Livraison', '4,90 €'], ['Point relais', 'Tabac Presse du Centre, 75011']], total: ['Payé', '210,82 €'], note: 'Votre argent reste bloqué jusqu\'à ce que vous ayez vérifié le parfum : 7 jours après la livraison. S\'il n\'est pas conforme à l\'annonce, vous êtes remboursé.'};
   const vendeur: Partial<Mail> = {carte: carte('189 €'), lignes: [['Commission Respray', '0,00 €'], ['Suivi', 'MR48213977']], total: ['Pour vous', '189,00 €'], note: 'Vos 6 photos, vérifiées par l\'équipe, font foi en cas de désaccord : elles prouvent l\'état du flacon avant l\'envoi.'};
-  const annonce: Partial<Mail> = {carte: {photo: '/demo/a101-face.webp', maison: 'Maison Francis Kurkdjian', nom: 'Baccarat Rouge 540', details: '70 ml · reste ~85 %', prix: '189 €'}};
+  const annonce: Partial<Mail> = {carte: {photo: '/demo/a101-face.webp', maison: 'Atelier Séverin', nom: 'Ambre 27', details: '70 ml · reste ~85 %', prix: '189 €'}};
   const exemples: [string, string, string, Partial<Mail>][] = [
-    ['Achat payé', 'achat', 'Paiement reçu pour Baccarat Rouge 540. L\'argent reste bloqué jusqu\'à ce que vous ayez vérifié le parfum.', {...acheteur, suivi: {etapes: SUIVI_RELAIS, fait: 1}}],
-    ['Vente', 'vente', 'Vendu : Baccarat Rouge 540, 189 € pour vous. Imprimez l\'étiquette et déposez le colis en point relais sous 5 jours.', {...vendeur, suivi: {etapes: SUIVI_RELAIS, fait: 1}}],
+    ['Achat payé', 'achat', 'Paiement reçu pour Ambre 27. L\'argent reste bloqué jusqu\'à ce que vous ayez vérifié le parfum.', {...acheteur, suivi: {etapes: SUIVI_RELAIS, fait: 1}}],
+    ['Vente', 'vente', 'Vendu : Ambre 27, 189 € pour vous. Imprimez l\'étiquette et déposez le colis en point relais sous 5 jours.', {...vendeur, suivi: {etapes: SUIVI_RELAIS, fait: 1}}],
     ['Colis en route', 'achat', 'Votre colis est parti (suivi MR48213977). Vous serez prévenu à son arrivée au point relais.', {...acheteur, suivi: {etapes: SUIVI_RELAIS, fait: 2}}],
     ['Colis arrivé', 'achat', 'Votre colis est arrivé chez Tabac Presse du Centre. Vous avez 7 jours pour vérifier le parfum : confirmez, ou signalez un problème.', {...acheteur, suivi: {etapes: SUIVI_RELAIS, fait: 3}}],
     ['Versement', 'vente', '189 € versés pour la commande 12. Ils arrivent sur votre compte bancaire sous quelques jours.', {...vendeur, suivi: {etapes: SUIVI_RELAIS, fait: 5}, note: undefined}],
     ['Litige ouvert (vendeur)', 'vente', 'L\'acheteur signale un problème sur la commande 12 : Il en reste moins qu\'annoncé. L\'argent reste bloqué ; l\'équipe compare avec vos photos vérifiées et revient vers vous.', {...vendeur, suivi: {etapes: SUIVI_RELAIS, fait: 3}}],
     ['Remboursement', 'achat', 'Litige de la commande 12 : vous êtes remboursé en entier. La photo du niveau reçue montre environ 30 %, contre 85 % sur la photo vérifiée.', {carte: acheteur.carte, lignes: acheteur.lignes, total: ['Remboursé', '210,82 €']}],
-    ['Annonce en ligne', 'annonce', 'Votre Baccarat Rouge 540 est vérifié et en ligne.', annonce],
-    ['Annonce refusée', 'annonce', 'Votre Baccarat Rouge 540 n\'a pas été publié : La photo du dessous ne permet pas de lire le code lot.', annonce],
-    ['Envie arrivée', 'envie', 'Il est arrivé : Baccarat Rouge 540 (Maison Francis Kurkdjian), 70 ml, 189 €. Vérifié par l\'équipe.', {...annonce, note: 'Vérifiée par l\'équipe avant d\'être en ligne. Votre paiement reste bloqué, et vous avez 7 jours pour vérifier.'}],
-    ['Offre reçue', 'offre', '@lina vous propose 170 € pour votre Baccarat Rouge 540 (affiché 189 €). Répondez sous 48 heures.', annonce],
-    ['Contre-offre', 'offre', 'Contre-offre du vendeur : Baccarat Rouge 540 à 180 € (vous proposiez 170 €).', annonce],
-    ['Message', 'message', 'Message de @lina à propos de Baccarat Rouge 540 : « Bonjour, il tient bien sur la peau ? »', annonce],
+    ['Annonce en ligne', 'annonce', 'Votre Ambre 27 est vérifié et en ligne.', annonce],
+    ['Annonce refusée', 'annonce', 'Votre Ambre 27 n\'a pas été publié : La photo du dessous ne permet pas de lire le code lot.', annonce],
+    ['Envie arrivée', 'envie', 'Il est arrivé : Ambre 27 (Atelier Séverin), 70 ml, 189 €. Vérifié par l\'équipe.', {...annonce, note: 'Vérifiée par l\'équipe avant d\'être en ligne. Votre paiement reste bloqué, et vous avez 7 jours pour vérifier.'}],
+    ['Offre reçue', 'offre', '@lina vous propose 170 € pour votre Ambre 27 (affiché 189 €). Répondez sous 48 heures.', annonce],
+    ['Contre-offre', 'offre', 'Contre-offre du vendeur : Ambre 27 à 180 € (vous proposiez 170 €).', annonce],
+    ['Message', 'message', 'Message de @lina à propos de Ambre 27 : « Bonjour, il tient bien sur la peau ? »', annonce],
   ];
   const liste = exemples.map(([nom, type, texte, ctx]) => {
     const r = REGLES.find(([re]) => re.test(texte));

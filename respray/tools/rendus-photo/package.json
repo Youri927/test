@@ -1,0 +1,10 @@
+{
+  "name": "respray-rendus-photo",
+  "private": true,
+  "description": "Rendus 3D photoréalistes (lancer de rayons) des flacons d'exemple de Respray, dans Chromium par Playwright",
+  "dependencies": {
+    "three": "^0.187.0",
+    "three-gpu-pathtracer": "^0.0.28",
+    "three-mesh-bvh": "^0.10.0"
+  }
+}

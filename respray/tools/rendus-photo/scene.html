@@ -1,0 +1,313 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script type="importmap">{"imports":{
+  "three":"/node_modules/three/build/three.module.js",
+  "three/webgpu":"/node_modules/three/build/three.webgpu.js",
+  "three/addons/":"/node_modules/three/examples/jsm/",
+  "three/examples/jsm/":"/node_modules/three/examples/jsm/",
+  "three-mesh-bvh":"/node_modules/three-mesh-bvh/src/index.js",
+  "three-gpu-pathtracer":"/node_modules/three-gpu-pathtracer/build/index.module.js"
+}}</script>
+</head><body>
+<script type="module">
+/* Les rendus photo des flacons d'exemple de Respray : lancer de rayons (three-gpu-pathtracer) dans un studio inventé
+   (fond arrondi, deux boîtes à lumière, un bandeau au-dessus). Flacons, marques et étiquettes sont fictifs. */
+import * as THREE from 'three';
+import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+import {WebGLPathTracer} from 'three-gpu-pathtracer';
+
+const L = 600, H = 750;
+const renderer = new THREE.WebGLRenderer({antialias: false, preserveDrawingBuffer: true});
+renderer.setPixelRatio(1);
+renderer.setSize(L, H);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.transmissionResolutionScale = 1;
+document.body.appendChild(renderer.domElement);
+const pt = new WebGLPathTracer(renderer);
+pt.tiles.set(2, 2);
+pt.minSamples = 1;
+pt.renderDelay = 0;
+pt.fadeDuration = 0;
+pt.filterGlossyFactor = 0.5;
+
+/* ——— le studio : une carte d'environnement dessinée (boîtes à lumière qui se reflètent dans le verre) ——— */
+function studio({fond = [0.93, 0.92, 0.9], sombre = false} = {}) {
+  const w = 1024, h = 512, d = new Float32Array(w * h * 4);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const v = y / h, u = x / w, i = (y * w + x) * 4;
+    // un studio : un remplissage moyen (les arêtes du verre sortent plus sombres que le fond clair), une très grande
+    // boîte à lumière au plafond (elle éclaire le fond et pose une ombre douce), et deux boîtes verticales sur les côtés
+    // (les reflets nets dans le verre et le métal)
+    let k = sombre ? 0.01 : 0.22 + 0.1 * (1 - v);
+    const boite = (cu, lu, cv, lv, f) => {
+      const du = Math.abs(((u - cu + 1.5) % 1) - 0.5) / lu, dv = Math.abs(v - cv) / lv;
+      return f * Math.max(0, 1 - Math.pow(Math.max(du, dv), 10));
+    };
+    if (v < 0.2) k += sombre ? 0.6 : 5 * (1 - v / 0.2);
+    k += boite(0.64, 0.05, 0.42, 0.2, sombre ? 10 : 14) + boite(0.86, 0.03, 0.44, 0.2, sombre ? 4 : 8) + boite(0.715, 0.012, 0.45, 0.22, sombre ? 6 : 16);
+    d[i] = k * fond[0]; d[i + 1] = k * fond[1]; d[i + 2] = k * fond[2]; d[i + 3] = 1;
+  }
+  const t = new THREE.DataTexture(d, w, h, THREE.RGBAFormat, THREE.FloatType);
+  t.mapping = THREE.EquirectangularReflectionMapping;
+  t.needsUpdate = true;
+  return t;
+}
+
+/* le fond arrondi (cyclo) : un sol qui remonte en mur, sans angle */
+function cyclo(couleur) {
+  const s = new THREE.Shape();
+  const pts = [];
+  for (let i = 0; i <= 40; i++) { const a = (i / 40) * Math.PI / 2; pts.push(new THREE.Vector2(-30 + 0 * a, 0)); }
+  const g = new THREE.BufferGeometry();
+  const seg = 60, larg = 40, R = 6, prof = 14, haut = 30;
+  const pos = [], idx = [], uv = [];
+  for (let i = 0; i <= seg; i++) {
+    const t = i / seg; let y, z;
+    const longueurSol = prof, arc = R * Math.PI / 2, total = longueurSol + arc + haut;
+    const s0 = t * total;
+    if (s0 < longueurSol) { z = prof - s0; y = 0; } else if (s0 < longueurSol + arc) { const a = (s0 - longueurSol) / R; z = -R * Math.sin(a); y = R - R * Math.cos(a); } else { z = -R; y = R + (s0 - longueurSol - arc); }
+    pos.push(-larg / 2, y, z, larg / 2, y, z);
+    uv.push(0, t, 1, t);
+    if (i < seg) { const b = i * 2; idx.push(b, b + 2, b + 1, b + 1, b + 2, b + 3); }
+  }
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  g.setIndex(idx);
+  g.computeVertexNormals();
+  return new THREE.Mesh(g, new THREE.MeshStandardMaterial({color: couleur, roughness: 0.95, side: THREE.DoubleSide}));
+}
+
+/* une étiquette : texte dessiné sur un canevas */
+function texte(lignes, {l = 512, h = 256, fond = null, encre = '#1d1d1f'} = {}) {
+  const c = document.createElement('canvas'); c.width = l; c.height = h;
+  const x = c.getContext('2d');
+  if (fond) { x.fillStyle = fond; x.fillRect(0, 0, l, h); }
+  x.fillStyle = encre; x.textAlign = 'center'; x.textBaseline = 'middle';
+  for (const [t, taille, y, poids = 500, espace = 0] of lignes) {
+    x.font = `${poids} ${taille}px Georgia, 'Times New Roman', serif`;
+    if ('letterSpacing' in x) x.letterSpacing = `${espace}px`;
+    x.fillText(t, l / 2, y);
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  return t;
+}
+
+const verre = () => new THREE.MeshPhysicalMaterial({color: 0xffffff, transmission: 1, roughness: 0.015, ior: 1.5, thickness: 1, metalness: 0});
+const jus = (c) => new THREE.MeshPhysicalMaterial({color: new THREE.Color(c).lerp(new THREE.Color(0xffffff), 0.55), transmission: 1, roughness: 0.0, ior: 1.36, thickness: 2, attenuationColor: new THREE.Color(c), attenuationDistance: 2.2});
+const metal = (c, r = 0.18) => new THREE.MeshPhysicalMaterial({color: c, metalness: 1, roughness: r});
+
+/* l'effet de bord (Fresnel) : le verre épais s'assombrit et verdit sur les tranches, le jus se fonce sur les côtés */
+function bords(mat, {alpha = null, teinte = [0.30, 0.35, 0.33], force = 0.55, puissance = 2.6} = {}) {
+  mat.onBeforeCompile = (sh) => {
+    sh.fragmentShader = sh.fragmentShader.replace('#include <dithering_fragment>', `
+      float fr = pow(1.0 - abs(dot(normalize(-vViewPosition), normalize(normal))), ${puissance.toFixed(2)});
+      gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(${teinte.map((x) => x.toFixed(3)).join(',')}), fr * ${force.toFixed(2)});
+      ${alpha ? `gl_FragColor.a = mix(${alpha[0].toFixed(3)}, ${alpha[1].toFixed(3)}, fr);` : ''}
+      #include <dithering_fragment>`);
+  };
+  return mat;
+}
+
+/* retourne une géométrie (normales vers l'intérieur) : la paroi intérieure du verre */
+function retourner(geo) {
+  if (geo.index) geo = geo.toNonIndexed();
+  for (const nom of ['position', 'normal', 'uv']) {
+    const a = geo.attributes[nom], k = a.itemSize, t = a.array;
+    for (let i = 0; i < a.count; i += 3) for (let j = 0; j < k; j++) { const x = t[(i + 1) * k + j]; t[(i + 1) * k + j] = t[(i + 2) * k + j]; t[(i + 2) * k + j] = x; }
+  }
+  const n = geo.attributes.normal.array;
+  for (let i = 0; i < n.length; i++) n[i] = -n[i];
+  return geo;
+}
+
+/* ——— un flacon (fictif) : coque de verre épaisse, jus, col, bouchon ou spray, étiquette, code lot sous le fond ——— */
+const sansIndex = (x) => (x.index ? x.toNonIndexed() : x);
+function flacon(o) {
+  const g = new THREE.Group();
+  const {l = 2.2, h = 2.6, p = 1.3, r = 0.18, niveau = 0.85, couleur = '#E2A985', bouchon = 'laiton', forme = 'bloc',
+    nom = 'AMBRE 27', maison = 'ATELIER SÉVERIN', ml = 70, lot = '3A21', spray = 'bouton', teinte = null, encre = '#2a2a2a'} = o;
+  const fondEp = 0.38, paroi = 0.09; // un fond épais et des parois fines, comme un vrai flacon
+  const hc = h - fondEp - paroi - 0.12; // la cavité, sous l'épaule
+  let ext, int, jusGeo;
+  const hj = Math.max(0.02, hc * niveau - 0.004);
+  if (forme === 'cylindre') {
+    const R = l / 2;
+    ext = new THREE.CylinderGeometry(R, R, h, 96, 1); ext.translate(0, h / 2, 0);
+    int = new THREE.CylinderGeometry(R - paroi, R - paroi, hc, 96, 1); int.translate(0, fondEp + hc / 2, 0);
+    jusGeo = new THREE.CylinderGeometry(R - paroi - 0.006, R - paroi - 0.006, hj, 96, 1);
+  } else {
+    ext = new RoundedBoxGeometry(l, h, p, 6, r); ext.translate(0, h / 2, 0);
+    int = new RoundedBoxGeometry(l - 2 * paroi, hc, p - 2 * paroi, 6, Math.max(0.03, r - paroi)); int.translate(0, fondEp + hc / 2, 0);
+    jusGeo = new RoundedBoxGeometry(l - 2 * paroi - 0.008, hj, p - 2 * paroi - 0.008, 6, Math.max(0.025, r - paroi - 0.004));
+  }
+  // en rendu temps réel, le verre ne réfracte pas (sinon le jus disparaît) : une coque très transparente qui porte les
+  // reflets et les arêtes ; c'est le jus qui réfracte. En lancer de rayons, du vrai verre.
+  const vm = o.trace ? verre() : new THREE.MeshPhysicalMaterial({color: 0xffffff, metalness: 0, roughness: 0.03, transparent: true, opacity: 0.2, envMapIntensity: 2.6, clearcoat: 1, clearcoatRoughness: 0.02, ior: 1.5, specularIntensity: 1, side: THREE.DoubleSide, depthWrite: false});
+  if (teinte) { vm.attenuationColor = new THREE.Color(teinte); vm.attenuationDistance = 0.12; vm.color = new THREE.Color(teinte).lerp(new THREE.Color(0xffffff), 0.6); }
+  g.add(new THREE.Mesh(mergeGeometries([sansIndex(ext), retourner(int)]), vm));
+  const liquide = new THREE.Mesh(jusGeo, jus(couleur));
+  if (!o.trace) { bords(vm, {alpha: [0.07, 0.85], force: 0.6}); }
+  if (!o.trace) { liquide.material.roughness = 0; liquide.material.thickness = 1.6; liquide.material.attenuationDistance = 1.6; liquide.material.color = new THREE.Color(couleur).lerp(new THREE.Color(0xffffff), 0.42); liquide.material.envMapIntensity = 1.8; liquide.material.specularIntensity = 1; const c = new THREE.Color(couleur).multiplyScalar(0.55); bords(liquide.material, {teinte: [c.r, c.g, c.b], force: 0.6, puissance: 2.2}); }
+  liquide.position.y = fondEp + 0.004 + hj / 2;
+  g.add(liquide);
+
+  // le col (la bague), puis le bouchon, ou le spray (bouton) ou la tige seule
+  const dore = bouchon === 'noir' || bouchon === 'argent' ? (bouchon === 'argent' ? 0xd6d6d6 : 0x3a3a3a) : 0xc9a96b;
+  const col = new THREE.Mesh(new THREE.CylinderGeometry(0.21, 0.23, 0.18, 64), metal(dore, 0.22));
+  col.position.y = h + 0.09;
+  g.add(col);
+  g.userData.buse = null;
+  if (bouchon && bouchon !== 'aucun') {
+    let cap;
+    if (bouchon === 'noir') cap = new THREE.Mesh(new RoundedBoxGeometry(1.05, 0.85, 1.05, 6, 0.07), new THREE.MeshPhysicalMaterial({color: 0x121212, roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.06}));
+    else if (bouchon === 'bois') cap = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.8, 96), new THREE.MeshPhysicalMaterial({color: 0x4a2f1d, roughness: 0.7, clearcoat: 0.15, clearcoatRoughness: 0.4, envMapIntensity: 0.6}));
+    else if (bouchon === 'argent') cap = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 1.0, 96), metal(0xdedede, 0.12));
+    else cap = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.95, 96), metal(0xc8a565, 0.16));
+    cap.geometry.computeBoundingBox();
+    const hb = cap.geometry.boundingBox.max.y - cap.geometry.boundingBox.min.y;
+    cap.position.y = h + 0.18 + hb / 2;
+    g.add(cap);
+  } else {
+    // la tige : un fin tube de plastique translucide qui sort de la bague
+    const tige = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.34, 32), new THREE.MeshPhysicalMaterial({color: 0xf4f4f0, transmission: 0.6, roughness: 0.25, ior: 1.45}));
+    tige.position.y = h + 0.18 + 0.12;
+    g.add(tige);
+    if (spray === 'bouton') {
+      const bouton = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.3, 64), metal(dore, 0.2));
+      bouton.position.y = h + 0.18 + 0.2;
+      g.add(bouton);
+      // la buse : un petit trou noir sur le côté gauche du bouton
+      const trou = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.02, 24), new THREE.MeshStandardMaterial({color: 0x050505, roughness: 0.9}));
+      trou.rotation.z = Math.PI / 2;
+      trou.position.set(-0.17, h + 0.18 + 0.24, 0);
+      g.add(trou);
+      g.userData.buse = new THREE.Vector3(-0.18, h + 0.18 + 0.24, 0);
+    }
+  }
+  // l'étiquette, sérigraphiée sur le verre (texte seul)
+  const tex = texte([[maison, 30, 70, 500, 6], [nom, 64, 150, 600, 4], [`EAU DE PARFUM · ${ml} ML`, 22, 215, 400, 4]], {encre});
+  const mat = new THREE.MeshStandardMaterial({map: tex, transparent: true, roughness: 0.55});
+  let etiq;
+  if (forme === 'cylindre') {
+    etiq = new THREE.Mesh(new THREE.CylinderGeometry(l / 2 + 0.004, l / 2 + 0.004, l * 0.45, 64, 1, true, -0.75, 1.5), mat);
+    etiq.position.y = h * 0.52;
+  } else {
+    etiq = new THREE.Mesh(new THREE.PlaneGeometry(l * 0.78, l * 0.39), mat);
+    etiq.position.set(0, h * 0.52, p / 2 + 0.004);
+  }
+  g.add(etiq);
+  // le code lot, gravé sous le fond (vue « dessous »)
+  const lotTex = texte([[lot, 64, 115, 500, 10], [`${ml} ml`, 34, 175, 400, 4]], {encre: 'rgba(50,48,45,.75)'});
+  const plaque = new THREE.Mesh(new THREE.PlaneGeometry(l * 0.6, l * 0.3), new THREE.MeshStandardMaterial({map: lotTex, transparent: true, roughness: 0.8}));
+  plaque.rotation.x = Math.PI / 2;
+  plaque.position.y = -0.003;
+  g.add(plaque);
+  return g;
+}
+
+/* une ombre de contact : un dégradé sombre très doux posé au sol */
+function ombre(l, p, force = 0.55) {
+  const c = document.createElement('canvas'); c.width = c.height = 256;
+  const x = c.getContext('2d');
+  const g = x.createRadialGradient(128, 128, 4, 128, 128, 128);
+  g.addColorStop(0, `rgba(0,0,0,${force})`); g.addColorStop(0.45, `rgba(0,0,0,${force * 0.45})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = g; x.fillRect(0, 0, 256, 256);
+  const t = new THREE.CanvasTexture(c);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(l * 1.5, p * 1.9), new THREE.MeshBasicMaterial({map: t, transparent: true, depthWrite: false}));
+  m.rotation.x = -Math.PI / 2;
+  m.position.y = 0.004;
+  return m;
+}
+
+/* le papier de la photo preuve : pseudo et date écrits à la main */
+function papier(lignes) {
+  const c = document.createElement('canvas'); c.width = 640; c.height = 440;
+  const x = c.getContext('2d');
+  x.fillStyle = '#fbfaf5'; x.fillRect(0, 0, 640, 440);
+  // de légères lignes de carnet
+  x.strokeStyle = 'rgba(120,150,200,.18)'; x.lineWidth = 2;
+  for (let y = 70; y < 440; y += 56) { x.beginPath(); x.moveTo(0, y); x.lineTo(640, y); x.stroke(); }
+  x.fillStyle = '#1f3a8a'; x.textAlign = 'center';
+  lignes.forEach((t, i) => { x.save(); x.translate(320, 165 + i * 120); x.rotate(-0.03 + i * 0.02); x.font = 'italic 600 74px "Comic Sans MS", "Segoe Print", cursive, serif'; x.fillText(t, 0, 0); x.restore(); });
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(1.9, 1.3, 20, 1), new THREE.MeshStandardMaterial({map: t, roughness: 0.9, side: THREE.DoubleSide}));
+  // un papier jamais parfaitement plat
+  const pos = m.geometry.attributes.position;
+  for (let i = 0; i < pos.count; i++) pos.setZ(i, 0.06 * Math.sin((pos.getX(i) / 1.9 + 0.5) * Math.PI));
+  m.geometry.computeVertexNormals();
+  return m;
+}
+
+/* la boîte du parfum : carton mat crème, texte doré */
+function boite(o) {
+  const g = new THREE.Group();
+  const b = new THREE.Mesh(new RoundedBoxGeometry(2.7, 3.6, 1.7, 3, 0.03), new THREE.MeshStandardMaterial({color: 0xf1ebe0, roughness: 0.85}));
+  b.position.y = 1.8;
+  g.add(b);
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1.2), new THREE.MeshStandardMaterial({map: texte([[o.maison ?? 'ATELIER SÉVERIN', 30, 70, 500, 6], [o.nom ?? 'AMBRE 27', 66, 150, 600, 4], ['EAU DE PARFUM', 22, 215, 400, 6]], {encre: '#9b7b3e'}), transparent: true, roughness: 0.5, metalness: 0.4}));
+  face.position.set(0, 2.2, 0.851);
+  g.add(face);
+  return g;
+}
+
+window.rendre = async (o) => {
+  const larg = o.l_img ?? L, haut = o.h_img ?? H;
+  renderer.setSize(larg, haut);
+  const scene = new THREE.Scene();
+  const fond = o.fond ?? '#ece9e4';
+  scene.environment = studio({sombre: o.sombre});
+  scene.environmentIntensity = o.lumiere ?? (o.sombre ? 0.6 : 1);
+  scene.add(cyclo(fond));
+  const f = flacon(o);
+  if (o.rot) f.rotation.set(...o.rot);
+  if (o.pos) f.position.set(...o.pos);
+  scene.add(f);
+  if (!o.trace && !o.rot) { const sh = ombre(o.l ?? 2.2, o.p ?? (o.forme === 'cylindre' ? o.l ?? 2 : 1.3), o.sombre ? 0.8 : 0.5); sh.position.x = f.position.x; sh.position.z = f.position.z; scene.add(sh); }
+  if (!o.trace && o.boite) { const sh = ombre(2.7, 1.7, 0.45); sh.position.set(o.boite.pos[0], 0.003, o.boite.pos[2]); scene.add(sh); }
+  if (o.papier) { const m = papier(o.papier.lignes); m.position.set(...o.papier.pos); m.rotation.set(...(o.papier.rot ?? [0, 0, 0])); scene.add(m); }
+  if (o.boite) { const b = boite(o); b.position.set(...o.boite.pos); b.rotation.y = o.boite.ry ?? 0; scene.add(b); }
+  if (o.contrejour) {
+    // la lampe du téléphone, collée derrière le flacon
+    const lampe = new THREE.Mesh(new THREE.CircleGeometry(0.55, 48), new THREE.MeshStandardMaterial({color: 0x000000, emissive: 0xfff4e0, emissiveIntensity: 40}));
+    lampe.position.set(...o.contrejour);
+    scene.add(lampe);
+  }
+  const cam = new THREE.PerspectiveCamera(o.fov ?? 22, larg / haut, 0.05, 200);
+  cam.position.set(...(o.cam ?? [0.6, 2.2, 13]));
+  cam.lookAt(...(o.vise ?? [0, 1.75, 0]));
+  cam.updateMatrixWorld();
+  if (o.trace) return tracer(scene, cam, o, f);
+  const pm = new THREE.PMREMGenerator(renderer);
+  scene.environment = pm.fromEquirectangular(scene.environment).texture;
+  renderer.toneMappingExposure = o.exposition ?? 1.0;
+  renderer.render(scene, cam);
+  return {image: renderer.domElement.toDataURL('image/png'), buse: projeterBuse(f, cam), echantillons: 1};
+};
+
+function projeterBuse(f, cam) {
+  if (!f.userData.buse) return null;
+  f.updateMatrixWorld();
+  const v = f.userData.buse.clone().applyMatrix4(f.matrixWorld).project(cam);
+  return {x: +((v.x + 1) / 2).toFixed(3), y: +((1 - v.y) / 2).toFixed(3)};
+}
+
+async function tracer(scene, cam, o, f) {
+  pt.setScene(scene, cam);
+  // on attend la vraie image tracée (pendant la compilation, la bibliothèque affiche un aperçu rapide, faux)
+  const n = o.echantillons ?? 120;
+  const debut = performance.now();
+  while (pt.samples < n) {
+    pt.renderSample();
+    if (pt.isCompiling) await new Promise((r) => setTimeout(r, 50));
+    if (performance.now() - debut > 20 * 60 * 1000) break;
+  }
+  return {image: renderer.domElement.toDataURL('image/png'), buse: projeterBuse(f, cam), echantillons: pt.samples};
+}
+window.pret = true;
+</script>
+</body></html>
