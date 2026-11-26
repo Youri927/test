@@ -9,6 +9,7 @@ export const SOCIETE = {
   tva: '[Numéro de TVA intracommunautaire]',
   directeur: '[Nom du directeur de la publication]',
   email: 'contact@respray.fr',
+  telephone: '[Numéro de téléphone]',
   site: 'respray.fr',
 };
 
