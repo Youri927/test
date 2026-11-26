@@ -149,9 +149,13 @@ pseudo et accepte les conditions, puis c'est prêt.
 
 Tant que les clés Mondial Relay ne sont pas en place, les envois sont simulés (points relais de démonstration).
 
-1. Contrat pro sur mondialrelay.fr (offre e-commerçant, livraison en Point Relais / Lockers). Une fois le compte ouvert,
-   dans l'espace client (Connect), récupère le **code enseigne** (8 caractères, ex. `CC12AB34`) et la **clé privée**
-   du web service. Si tu ne les trouves pas, demande à ton conseiller « les identifiants Web Service (WSI) ».
+1. Dans Connect@Mondial Relay : **Administration**, **Paramétrage des API**, bloc **API 1** (le Web Service, celui
+   qu'utilise le site). Deux jeux de paramètres :
+   - **test** (code enseigne `TTMRSDBX`) : de vraies réponses (points relais, étiquettes, suivi) mais aucune
+     expédition valide et rien de facturé. À utiliser tant que Stripe est en mode test ;
+   - **production** (ton code enseigne, ex. `CC245WM8`) : de vraies étiquettes, payées sur le solde prépayé. À mettre au
+     lancement, en même temps que les clés Stripe live. Pense à recharger le solde prépayé avant.
+   La clé privée s'affiche en cliquant sur l'œil. Le bloc « API 2 » ne sert pas.
 2. Sur le VPS (la clé privée ne s'affiche pas) :
 
 ```bash
