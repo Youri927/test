@@ -5,6 +5,7 @@ import {useEffect, useRef, useState} from 'react';
 import {PhotoDemo, Ico} from '@/components/Visuels';
 import {DEMO, DEMO_PARFUM} from '@/lib/demo';
 import {eur, eur2, protection, ENVOI} from '@/lib/regles';
+import {Jauge} from '@/components/Jauge';
 
 const reduit = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -211,8 +212,8 @@ export function Simulateur() {
   const [prix, setPrix] = useState(100);
   return (
     <div className="calcul" data-revele>
-      <label htmlFor="sim">Prix du parfum : <output>{eur(prix)}</output></label>
-      <input id="sim" type="range" min={10} max={400} step={5} value={prix} onChange={(e) => setPrix(+e.target.value)} />
+      <label htmlFor="sim">Prix du parfum</label>
+      <Jauge id="sim" min={10} max={400} step={5} value={prix} onChange={setPrix} format={eur} couleur="var(--noir)" reperes={['10 €', '400 €']} />
       <div className="calcul-res">
         <div><span>L&apos;acheteur paie</span><strong>{eur2(prix + protection(prix))}</strong><small>hors livraison</small></div>
         <div><span>Le vendeur reçoit</span><strong>{eur2(prix)}</strong><small>100 % du prix</small></div>

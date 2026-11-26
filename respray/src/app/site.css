@@ -412,3 +412,26 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .apercus-mails figcaption { display: grid; }
 .apercus-mails small { color: var(--texte-2); }
 .apercus-mails iframe { width: 100%; height: 820px; border: 0; border-radius: 14px; box-shadow: 0 0 0 1px var(--trait); background: #f4f2ee; }
+
+/* ——— la jauge : piste arrondie qui se remplit, bouton rond, bulle qui suit ——— */
+.jauge { --k: .5; --jauge-c: var(--accent); --bouton: 28px; position: relative; padding-top: 40px; margin: 4px 0 2px; }
+.jauge input[type="range"] { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: var(--bouton); margin: 0; background: transparent; cursor: grab; touch-action: pan-y; }
+.jauge input[type="range"]:active { cursor: grabbing; }
+.jauge input[type="range"]:focus { outline: none; }
+/* la piste : remplie jusqu'au bouton */
+.jauge input[type="range"]::-webkit-slider-runnable-track { height: 12px; border-radius: 999px; background: linear-gradient(to right, var(--jauge-c) 0 calc(var(--k) * 100%), var(--fond-2) calc(var(--k) * 100%) 100%); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .08), inset 0 0 0 1px color-mix(in srgb, var(--trait) 70%, transparent); }
+.jauge input[type="range"]::-moz-range-track { height: 12px; border-radius: 999px; background: var(--fond-2); box-shadow: inset 0 1px 2px rgba(0, 0, 0, .08), inset 0 0 0 1px color-mix(in srgb, var(--trait) 70%, transparent); }
+.jauge input[type="range"]::-moz-range-progress { height: 12px; border-radius: 999px; background: var(--jauge-c); }
+/* le bouton */
+.jauge input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: var(--bouton); height: var(--bouton); margin-top: calc((12px - var(--bouton)) / 2); border: 0; border-radius: 50%; background: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, .22), 0 0 0 1px rgba(0, 0, 0, .06), inset 0 0 0 7px #fff, inset 0 0 0 10px var(--jauge-c); transition: transform .22s var(--ease), box-shadow .22s var(--ease); }
+.jauge input[type="range"]::-moz-range-thumb { width: var(--bouton); height: var(--bouton); border: 0; border-radius: 50%; background: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, .22), 0 0 0 1px rgba(0, 0, 0, .06), inset 0 0 0 7px #fff, inset 0 0 0 10px var(--jauge-c); transition: transform .22s var(--ease); }
+.jauge input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.06); }
+.jauge input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.18); box-shadow: 0 4px 16px rgba(0, 0, 0, .25), 0 0 0 6px color-mix(in srgb, var(--jauge-c) 18%, transparent), inset 0 0 0 7px #fff, inset 0 0 0 10px var(--jauge-c); }
+.jauge input[type="range"]:active::-moz-range-thumb { transform: scale(1.18); }
+.jauge input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 2px 10px rgba(0, 0, 0, .22), 0 0 0 4px color-mix(in srgb, var(--jauge-c) 35%, transparent), inset 0 0 0 7px #fff, inset 0 0 0 10px var(--jauge-c); }
+/* la bulle, au-dessus du bouton */
+.jauge-bulle { position: absolute; top: 0; left: calc(var(--bouton) / 2 + var(--k) * (100% - var(--bouton))); translate: -50% 0; padding: 4px 10px; border-radius: 999px; background: var(--noir); color: var(--sur-noir); font-size: 13px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; pointer-events: none; transition: scale .2s var(--ease); }
+.jauge-bulle::after { content: ""; position: absolute; left: 50%; bottom: -4px; width: 8px; height: 8px; translate: -50% 0; rotate: 45deg; border-radius: 2px; background: inherit; }
+.jauge:active .jauge-bulle { scale: 1.08; }
+.jauge-reperes { display: flex; justify-content: space-between; margin-top: 6px; color: var(--texte-2); font-size: 12px; }
+@media (prefers-reduced-motion: reduce) { .jauge input[type="range"]::-webkit-slider-thumb, .jauge-bulle { transition: none; } }

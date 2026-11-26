@@ -2,6 +2,7 @@
 /* Ajouter un flacon à son placard (maison, parfum, contenance, niveau), et partager la valeur de son placard. */
 import {useState} from 'react';
 import {ajouterAuPlacard} from '@/app/actions/marche';
+import {Jauge} from '@/components/Jauge';
 
 type P = {id: number; nom: string; formats: {ml: number}[]};
 type M = {id: number; nom: string; parfums: P[]};
@@ -40,8 +41,8 @@ export function FormPlacard({maisons}: {maisons: M[]}) {
         )}
       </div>
       <div className="placard-niveau">
-        <label htmlFor="pl-niveau">Il reste <output>{niveau >= 100 ? 'tout (neuf)' : `${niveau} %`}</output></label>
-        <input id="pl-niveau" name="niveau" type="range" min={5} max={100} step={5} value={niveau} onChange={(e) => setNiveau(+e.target.value)} />
+        <label htmlFor="pl-niveau">Ce qu&apos;il reste dans le flacon</label>
+        <Jauge id="pl-niveau" name="niveau" min={5} max={100} step={5} value={niveau} onChange={setNiveau} format={(v) => (v >= 100 ? 'Neuf' : `${v} %`)} reperes={['Presque vide', 'À moitié', 'Plein']} />
       </div>
       <button className="btn btn-noir" type="submit" disabled={!parfum}>Ajouter au placard</button>
     </form>

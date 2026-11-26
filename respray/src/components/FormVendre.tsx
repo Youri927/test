@@ -7,6 +7,7 @@ import {envoyerVente, type EtatVente} from '@/app/actions/vendre';
 import {Vaporise} from '@/components/Logo';
 import {PHOTOS, CONCENTRATIONS, GROUPES_FAMILLES, FORMATS, LIEUX, DEFAUTS, BOITES, MISES_EN_AVANT, POURQUOI, annees, eur, eur2, normal} from '@/lib/regles';
 import {estimer} from '@/lib/cote';
+import {Jauge} from '@/components/Jauge';
 
 type Parfum = {id: number; nom: string; conc: string; genre: string; famille: string; notes: string; formats: {ml: number; neuf?: number}[]};
 export type Depart = {maisonId?: string; parfumId?: string; ml?: string; niveau?: number};
@@ -225,8 +226,8 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
               <fieldset><legend>État</legend><Segment nom="etat" val={v.etat} choix={[['neuf', 'Neuf, jamais ouvert'], ['entame', 'Déjà utilisé']]} set={set('etat')} /></fieldset>
               {v.etat === 'entame' ? (
                 <>
-                  <label htmlFor="niveau">Il reste environ <output>{v.niveau} %</output></label>
-                  <input id="niveau" name="niveau" type="range" min={5} max={100} step={5} value={v.niveau} onChange={(e) => set('niveau')(+e.target.value)} />
+                  <label htmlFor="niveau">Ce qu&apos;il reste dans le flacon</label>
+                  <Jauge id="niveau" name="niveau" min={5} max={100} step={5} value={v.niveau} onChange={(x) => set('niveau')(x)} format={(x) => `${x} %`} reperes={['Presque vide', 'À moitié', 'Plein']} />
                   <p className="aide">Le niveau exact, pas une tranche : l'équipe le compare à la photo du niveau.</p>
                   <fieldset><legend>Le parfum se voit-il à travers le flacon ?</legend><Segment nom="visible" val={v.visible} choix={[['oui', 'Oui'], ['opaque', 'Non, le flacon est opaque']]} set={set('visible')} /></fieldset>
                   {v.visible === 'opaque' ? <p className="note-ajout">Flacon opaque : dans une pièce peu éclairée, collez la lampe allumée d'un téléphone contre le dos du flacon. La limite du parfum se voit nettement ; prenez la photo du niveau comme ça.</p> : null}
