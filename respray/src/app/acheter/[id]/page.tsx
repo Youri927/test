@@ -81,7 +81,7 @@ export default async function Acheter({params, searchParams}: {params: Promise<{
             <div><dt>Parfum</dt><dd>{eur2(mt.prix)}</dd></div>
             <div><dt>Protection acheteur</dt><dd>{offerte ? 'offerte' : eur2(mt.protection)}</dd></div>
             <div><dt>Livraison en point relais</dt><dd>{eur2(mt.envoi)}</dd></div>
-            <div className="total-ligne"><dt>Total</dt><dd>{eur2(mt.total)}{mode === 'relais' && prix >= SEUIL_ASSURANCE ? <small> (+{eur2(ASSURANCE)} si assuré)</small> : null}</dd></div>
+            <div className="total-ligne"><dt>Total</dt><dd>{eur2(mt.total)}{mode === 'relais' && prix >= SEUIL_ASSURANCE ? <small> (+{eur2(ASSURANCE)} avec l'envoi assuré)</small> : null}</dd></div>
           </dl>
           <button className="btn btn-noir btn-large" type="submit">Payer {eur2(mt.total)}</button>
           <div className="achat-garantie"><Bouclier taille={44} anime={false} /><p>Votre argent reste bloqué. Le vendeur n'est payé qu'une fois que vous avez reçu et vérifié le parfum : vous avez {DELAI_VERIF} jours après la livraison. S'il n'est pas conforme à l'annonce, vous êtes remboursé.</p></div>

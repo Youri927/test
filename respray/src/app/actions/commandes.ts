@@ -55,7 +55,8 @@ export async function payer(f: FormData) {
     );
     await db.update(schema.commandes).set({checkoutId: s.id}).where(eq(schema.commandes.id, c.id));
     url = s.url;
-  } catch {
+  } catch (e) {
+    console.error(`Stripe Checkout, commande ${c.id} :`, (e as Error).message);
     await db.update(schema.commandes).set({statut: 'annulee'}).where(eq(schema.commandes.id, c.id));
     await db.update(schema.annonces).set({statut: 'publiee'}).where(eq(schema.annonces.id, a.id));
     redirect(`/acheter/${id}?erreur=stripe`);
