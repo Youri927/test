@@ -464,7 +464,7 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .anat-prog { position: absolute; left: 18px; right: 18px; bottom: 9px; height: 2px; border-radius: 1px; background: var(--trait); overflow: hidden; opacity: 0; transition: opacity .3s; }
 .anat-prog::after { content: ""; position: absolute; inset: 0; background: var(--texte); transform: scaleX(0); transform-origin: left; }
 .auto [aria-selected="true"] .anat-prog { opacity: 1; }
-.auto [aria-selected="true"] .anat-prog::after { animation: progression 4.2s linear both; }
+.auto [aria-selected="true"] .anat-prog::after { animation: progression var(--duree, 4.2s) linear both; }
 @keyframes progression { to { transform: scaleX(1); } }
 .anat-carte { display: grid; gap: 10px; padding: 16px; border-radius: 28px; background: var(--fond); box-shadow: 0 0 0 1px var(--trait), 0 40px 80px -50px rgba(0, 0, 0, .4); }
 .anat-carte .z, .anat-infos { border-radius: 14px; transition: opacity .6s var(--ease), transform .8s var(--ease), box-shadow .6s var(--ease); }
