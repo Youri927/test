@@ -1,10 +1,10 @@
 /* Les informations légales de Respray, en un seul endroit. Les mentions entre crochets sont À COMPLÉTER dès que la
    société existe (statuts, Kbis, médiateur). Toutes les pages légales les reprennent d'ici. */
 export const SOCIETE = {
-  nom: '[Raison sociale de la société]',
+  nom: 'SILENT',
   forme: '[Forme juridique, ex. SAS]',
   capital: '[Capital social]',
-  siege: '[Adresse du siège social]',
+  siege: '51 avenue des Champs-Élysées, 75008 Paris, France',
   rcs: '[Ville et numéro RCS]',
   tva: '[Numéro de TVA intracommunautaire]',
   directeur: '[Nom du directeur de la publication]',
