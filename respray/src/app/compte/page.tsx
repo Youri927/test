@@ -7,6 +7,9 @@ import {Carte} from '@/components/Carte';
 import {eur} from '@/lib/regles';
 import {RemplacerPhoto} from '@/components/RemplacerPhoto';
 import {proposerAuxFavoris, retirerEnvie} from '@/app/actions/marche';
+import {payerMiseEnAvant} from '@/app/actions/commandes';
+import {verifierPaiementAvant} from '@/lib/avant';
+import {MISES_EN_AVANT} from '@/lib/regles';
 
 export const metadata = {title: 'Mon compte'};
 export const dynamic = 'force-dynamic';
@@ -14,15 +17,17 @@ export const dynamic = 'force-dynamic';
 const STATUTS: Record<string, [string, string]> = {
   attente: ['En vérification', 'attente'],
   photo: ['Photo à refaire', 'attente'],
+  reservee: ['Paiement en cours', 'attente'],
   publiee: ['En ligne', 'ok'],
   refusee: ['Refusée', 'alerte'],
   retiree: ['Retirée', 'gris'],
   vendue: ['Vendue', 'ok'],
 };
 
-export default async function Compte({searchParams}: {searchParams: Promise<{propose?: string; erreur?: string}>}) {
+export default async function Compte({searchParams}: {searchParams: Promise<{propose?: string; erreur?: string; avant?: string}>}) {
   const q = await searchParams;
   const m = await exigerMembre('/compte');
+  if (q.avant) await verifierPaiementAvant(Number(q.avant), m.id).catch(() => null);
   const annonces = await deVendeur(m.id);
   const filleuls = await db.$count(schema.membres, eq(schema.membres.parrainId, m.id));
   const idsFav = (await db.select().from(schema.favoris).where(eq(schema.favoris.membreId, m.id))).map((x) => x.annonceId);
@@ -35,7 +40,7 @@ export default async function Compte({searchParams}: {searchParams: Promise<{pro
       <h1 className="titre-page">Bonjour {m.prenom}</h1>
       <p className="chapo">@{m.pseudo} · {m.email}</p>
       <nav className="compte-raccourcis" aria-label="Mon espace">
-        <Link href="/activite">Activité</Link><Link href="/messages">Messages</Link><Link href="/placard">Mon placard</Link><Link href="#envies">Mes envies</Link>
+        <Link href="/activite">Activité</Link><Link href="/commandes">Mes commandes</Link><Link href="/compte/versements">Mes versements</Link><Link href="/messages">Messages</Link><Link href="/placard">Mon placard</Link><Link href="#envies">Mes envies</Link>
       </nav>
       {q.propose ? <p className="envie-ok" role="status">✓ Prix proposé à {Number(q.propose) > 1 ? `${q.propose} personnes : elles sont prévenues, et ont` : `${q.propose} personne : elle est prévenue, et a`} 48 heures pour en profiter.</p> : null}
       {q.erreur === 'offre' ? <p className="erreur" role="alert">Le prix proposé doit être inférieur au prix affiché.</p> : null}
@@ -45,7 +50,7 @@ export default async function Compte({searchParams}: {searchParams: Promise<{pro
         <p className="lien-parrain"><span className="bo-mono">{(process.env.SITE_URL || 'https://respray.fr') + '/r/' + m.code}</span></p>
         <p className="aide">{filleuls} personne{filleuls > 1 ? 's' : ''} invitée{filleuls > 1 ? 's' : ''} · {m.credits} mise{m.credits > 1 ? 's' : ''} en avant offerte{m.credits > 1 ? 's' : ''} à utiliser</p>
       </section>
-      <section className="section">
+      <section className="section" id="annonces">
         <div className="section-tete"><h2>Mes annonces</h2><Link className="btn btn-noir btn-petit" href="/vendre">Vendre un parfum</Link></div>
         {annonces.length ? (
           <div className="bo-table-cadre"><table className="bo-table"><thead><tr><th>Annonce</th><th>Prix</th><th>Statut</th></tr></thead><tbody>
@@ -54,6 +59,14 @@ export default async function Compte({searchParams}: {searchParams: Promise<{pro
                 <td><Link className="bo-ligne-a" href={a.statut === 'publiee' ? `/annonces/${a.id}` : '#'}><span className="bo-vignette">{a.photos.face ? <img className="visuel" src={`/photos/${a.photos.face}`} alt="" /> : null}</span><span><strong>{a.parfumNom}</strong><small>{a.maisonNom} · {a.ml} ml</small></span></Link></td>
                 <td>{eur(a.prix)}</td>
                 <td><span className={`bo-pill bo-${STATUTS[a.statut][1]}`}>{STATUTS[a.statut][0]}</span>{a.raison ? <small className="bo-sous">{a.raison}</small> : null}{a.statut === 'photo' ? <RemplacerPhoto id={a.id} demande={a.raison} /> : null}
+                  {a.statut === 'publiee' && a.avantJusqua && a.avantJusqua > new Date() ? <small className="bo-sous">★ Mise en avant jusqu'au {new Intl.DateTimeFormat('fr-FR', {day: 'numeric', month: 'long'}).format(a.avantJusqua)}</small> : null}
+                  {a.statut === 'publiee' && a.miseEnAvant && !(a.avantJusqua && a.avantJusqua > new Date()) ? (
+                    <form action={payerMiseEnAvant} className="proposer-fans">
+                      <input type="hidden" name="annonceId" value={a.id} />
+                      <input type="hidden" name="duree" value={a.miseEnAvant} />
+                      <button className="btn btn-petit" type="submit">Mettre en avant · {MISES_EN_AVANT.find((x) => x.k === a.miseEnAvant)?.t} · {eur(MISES_EN_AVANT.find((x) => x.k === a.miseEnAvant)?.prix ?? 0)}</button>
+                    </form>
+                  ) : null}
                   {a.statut === 'publiee' && fans[a.id] ? (
                     <form action={proposerAuxFavoris} className="proposer-fans">
                       <input type="hidden" name="annonceId" value={a.id} />

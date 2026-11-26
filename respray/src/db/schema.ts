@@ -24,6 +24,9 @@ export const membres = pgTable(
     code: text('code'),
     parrainId: integer('parrain_id'),
     credits: integer('credits').notNull().default(0),
+    // les versements : le compte Stripe Connect du vendeur, et s'il peut recevoir de l'argent
+    stripeCompte: text('stripe_compte'),
+    versementsOk: boolean('versements_ok').notNull().default(false),
     creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
   },
   (t) => [uniqueIndex('membres_email').on(t.email), uniqueIndex('membres_pseudo').on(t.pseudo), uniqueIndex('membres_code').on(t.code)],
@@ -106,7 +109,9 @@ export const annonces = pgTable(
     mainPropre: boolean('main_propre').notNull().default(false),
     ville: text('ville').notNull().default(''),
     miseEnAvant: text('mise_en_avant').notNull().default(''),
-    statut: text('statut', {enum: ['attente', 'photo', 'publiee', 'refusee', 'retiree', 'vendue']}).notNull().default('attente'),
+    statut: text('statut', {enum: ['attente', 'photo', 'publiee', 'refusee', 'retiree', 'reservee', 'vendue']}).notNull().default('attente'),
+    // la mise en avant, une fois payée (ou offerte) : en tête des résultats jusqu'à cette date
+    avantJusqua: timestamp('avant_jusqua', {withTimezone: true}),
     raison: text('raison').notNull().default(''),
     creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
     publieeLe: timestamp('publiee_le', {withTimezone: true}),
@@ -241,3 +246,57 @@ export const notifications = pgTable(
   },
   (t) => [index('notifications_membre').on(t.membreId, t.lue)],
 );
+
+/* Les commandes. Respray ne touche jamais le colis : l'argent est encaissé par Respray (Stripe), gardé pendant
+   l'envoi et les 7 jours de vérification, puis transféré au vendeur (Stripe Connect).
+   attente_paiement → payee → expediee → livree → confirmee → versee, ou bien litige → remboursee / confirmee, ou annulee. */
+export type Relais = {id: string; nom: string; adresse: string; cp: string; ville: string};
+export type Litige = {raison: string; texte: string; le: string; decision?: string};
+export const commandes = pgTable(
+  'commandes',
+  {
+    id: serial('id').primaryKey(),
+    annonceId: integer('annonce_id').notNull().references(() => annonces.id),
+    acheteurId: integer('acheteur_id').notNull().references(() => membres.id),
+    vendeurId: integer('vendeur_id').notNull().references(() => membres.id),
+    offreId: integer('offre_id'),
+    // les montants, en euros : ce que touche le vendeur (prix), et ce que garde Respray (protection, envoi, assurance)
+    prix: real('prix').notNull(),
+    protection: real('protection').notNull(),
+    envoi: real('envoi').notNull(),
+    assurance: real('assurance').notNull().default(0),
+    total: real('total').notNull(),
+    mode: text('mode', {enum: ['relais', 'main']}).notNull().default('relais'),
+    relais: jsonb('relais').$type<Relais>(),
+    statut: text('statut', {enum: ['attente_paiement', 'payee', 'expediee', 'livree', 'litige', 'confirmee', 'versee', 'remboursee', 'annulee']}).notNull().default('attente_paiement'),
+    checkoutId: text('checkout_id'),
+    paiementId: text('paiement_id'),
+    chargeId: text('charge_id'),
+    transfertId: text('transfert_id'),
+    remboursementId: text('remboursement_id'),
+    etiquette: text('etiquette'),
+    codeRemise: text('code_remise'),
+    litige: jsonb('litige').$type<Litige>(),
+    creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
+    payeeLe: timestamp('payee_le', {withTimezone: true}),
+    deposerAvant: timestamp('deposer_avant', {withTimezone: true}),
+    expedieeLe: timestamp('expediee_le', {withTimezone: true}),
+    livreeLe: timestamp('livree_le', {withTimezone: true}),
+    finVerif: timestamp('fin_verif', {withTimezone: true}),
+    confirmeeLe: timestamp('confirmee_le', {withTimezone: true}),
+    verseeLe: timestamp('versee_le', {withTimezone: true}),
+  },
+  (t) => [index('commandes_acheteur').on(t.acheteurId), index('commandes_vendeur').on(t.vendeurId), index('commandes_statut').on(t.statut)],
+);
+
+/* les paiements du vendeur à Respray : la mise en avant */
+export const paiements = pgTable('paiements', {
+  id: serial('id').primaryKey(),
+  membreId: integer('membre_id').notNull().references(() => membres.id),
+  annonceId: integer('annonce_id').notNull().references(() => annonces.id),
+  type: text('type').notNull().default('mise_en_avant'),
+  montant: real('montant').notNull(),
+  checkoutId: text('checkout_id'),
+  statut: text('statut', {enum: ['attente', 'payee', 'annulee']}).notNull().default('attente'),
+  creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
+});

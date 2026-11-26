@@ -8,6 +8,7 @@ import {db, schema} from '@/db';
 import {exigerEquipe} from '@/lib/auth';
 import {noter} from '@/lib/journal';
 import {notifier} from '@/lib/activite';
+import {activer} from '@/lib/avant';
 import {eur, normal} from '@/lib/regles';
 import {proprement} from '@/lib/regles';
 
@@ -38,7 +39,11 @@ export async function publier(f: FormData) {
     await db.update(schema.membres).set({credits: sql`${schema.membres.credits} + 1`}).where(eq(schema.membres.id, v.parrainId));
     await db.update(schema.membres).set({credits: sql`${schema.membres.credits} + 1`}).where(eq(schema.membres.id, v.id));
   }
-  if (a.miseEnAvant && v && v.credits > 0) await db.update(schema.membres).set({credits: sql`${schema.membres.credits} - 1`}).where(eq(schema.membres.id, v.id));
+  // la mise en avant : offerte avec un crédit, sinon le vendeur la paie maintenant que l'annonce est publiée
+  if (a.miseEnAvant && v && v.credits > 0) {
+    await db.update(schema.membres).set({credits: sql`${schema.membres.credits} - 1`}).where(eq(schema.membres.id, v.id));
+    await activer(a.id, a.miseEnAvant);
+  } else if (a.miseEnAvant) await notifier(a.vendeurId, 'annonce', `Votre ${a.parfumNom} est en ligne. Pour le mettre en avant comme demandé, réglez la mise en avant depuis votre compte.`, '/compte#annonces');
   await notifier(a.vendeurId, 'annonce', `Votre ${a.parfumNom} est vérifié et en ligne.`, `/annonces/${a.id}`);
   await prevenirEnvies(a);
   revalidatePath('/');

@@ -14,6 +14,7 @@ import {Odeur} from '@/components/Odeur';
 import {FormOffre} from '@/components/Echanges';
 import {basculerFavori} from '@/app/actions/favoris';
 import {repondreContre} from '@/app/actions/marche';
+import {protectionOfferte} from '@/lib/commandes';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +32,7 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
   const a = await annonce(Number((await params).id));
   const m = await moi();
   // visible par tous une fois publiée ; avant, seulement par son vendeur et l'équipe
-  if (!a || (a.statut !== 'publiee' && a.statut !== 'vendue' && m?.id !== a.vendeurId && m?.role !== 'equipe')) notFound();
+  if (!a || (!['publiee', 'vendue', 'reservee'].includes(a.statut) && m?.id !== a.vendeurId && m?.role !== 'equipe')) notFound();
   const d = a.details;
   const moiVendeur = m?.id === a.vendeurId;
 
@@ -43,7 +44,7 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
   const attente = offres.find((o) => o.statut === 'attente');
   const prix = acceptee ? acceptee.montant : a.prix;
   const pr = protection(prix);
-  const offerte = !!m?.parrainId; // parrainage : la protection est offerte au filleul sur son premier achat
+  const offerte = m ? await protectionOfferte(m) : false; // parrainage : la protection est offerte au filleul sur son premier achat
   const r = a.parfum ? remise(a.parfum.formats, {prix: a.prix, ml: a.ml, niveau: a.niveau}) : null;
 
   const favori = m ? !!(await db.query.favoris.findFirst({where: and(eq(schema.favoris.membreId, m.id), eq(schema.favoris.annonceId, a.id))})) : false;
@@ -115,7 +116,9 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
             <div className="total-ligne"><dt>Total</dt><dd>{eur2(prix + (offerte ? 0 : pr) + ENVOI)}</dd></div>
           </dl>
           {offerte ? <p className="aide">Vous êtes venu par un parrainage : la protection est offerte sur votre premier achat.</p> : null}
-          <button className="btn btn-noir btn-large" type="button" disabled>Acheter · bientôt</button>
+          {a.statut === 'publiee' && !moiVendeur ? (
+            <Link className="btn btn-noir btn-large" href={m ? `/acheter/${a.id}` : `/connexion?retour=/acheter/${a.id}`}>Acheter · {eur2(prix + (offerte ? 0 : pr) + ENVOI)}</Link>
+          ) : a.statut === 'reservee' ? <p className="offre-envoyee">Un acheteur est en train de payer. Si le paiement n'aboutit pas, l'annonce revient dans quelques minutes.</p> : null}
           {moiVendeur ? (
             <p className="aide">C'est votre annonce · {nFavoris} favori{nFavoris > 1 ? 's' : ''}. <Link className="lien-souligne" href="/messages">Vos messages</Link> · <Link className="lien-souligne" href="/compte">proposer un prix aux personnes intéressées</Link></p>
           ) : a.statut === 'publiee' ? (

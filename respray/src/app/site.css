@@ -322,3 +322,61 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .senteur-proches ul { display: grid; gap: 4px; margin-top: 6px; }
 .senteur-proches small { color: var(--texte-2); }
 .senteur-source { color: var(--texte-2); font-size: 12.5px; }
+
+/* acheter, commandes, versements */
+.achat-resume { display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: 18px; background: var(--fond-2); }
+.achat-resume img { width: 72px; height: 90px; object-fit: cover; border-radius: 10px; }
+.achat-resume div { display: grid; }
+.achat-resume small { color: var(--texte-2); }
+.achat-resume span { font-weight: 700; font-size: 18px; }
+.achat-resume s { color: var(--texte-2); font-weight: 500; }
+.choix-lien { padding: 9px 16px; border: 1px solid var(--trait); border-radius: 980px; text-decoration: none; font-weight: 500; font-size: 14.5px; }
+.choix-lien.actif { border-color: var(--accent); background: var(--accent-fond); }
+.cp-form { display: flex; gap: 8px; max-width: 360px; }
+.cp-form .champ { flex: 1; }
+.achat-form { display: grid; gap: 14px; margin-top: 8px; }
+.relais-liste { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; }
+.relais { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border: 1px solid var(--trait); border-radius: 14px; cursor: pointer; }
+.relais:has(input:checked) { border-color: var(--accent); background: var(--accent-fond); }
+.relais input { margin-top: 4px; accent-color: var(--accent); }
+.relais span { display: grid; }
+.relais small { color: var(--texte-2); }
+.assurance { align-items: flex-start; }
+.achat-garantie { display: flex; gap: 12px; align-items: center; padding: 14px 16px; border-radius: 16px; background: var(--vert-fond); font-size: 14.5px; }
+.achat-garantie svg { flex: none; }
+.frise { display: grid; gap: 0; margin: 20px 0; padding: 0; list-style: none; }
+.frise li { position: relative; display: flex; gap: 14px; padding-bottom: 18px; color: var(--texte-2); }
+.frise li:not(:last-child)::after { content: ""; position: absolute; left: 14px; top: 30px; bottom: 2px; width: 2px; background: var(--trait); }
+.frise li.fait:not(:last-child)::after { background: var(--vert); }
+.frise li > span { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--fond-2); font-size: 13px; font-weight: 700; z-index: 1; }
+.frise li.fait { color: var(--texte); }
+.frise li.fait > span { background: var(--vert); color: var(--sur-noir); }
+.frise li.en-cours { color: var(--texte); }
+.frise li.en-cours > span { box-shadow: inset 0 0 0 2px var(--accent); color: var(--accent); background: var(--fond); }
+.frise li div { display: grid; padding-top: 4px; }
+.frise small { color: var(--texte-2); font-size: 13px; }
+.action-bloc { display: grid; gap: 12px; margin: 18px 0; padding: 22px; border-radius: 22px; background: var(--fond-2); }
+.action-bloc .boutons { margin-top: 4px; }
+.action-bloc .boutons form { flex: 1 1 200px; display: flex; }
+.action-bloc .boutons .btn { flex: 1; }
+.etapes-simples { display: grid; gap: 6px; padding-left: 20px; list-style: decimal; }
+.code-remise { font-size: 44px; font-weight: 700; letter-spacing: .18em; font-variant-numeric: tabular-nums; }
+.code-form { display: grid; gap: 8px; }
+.simulation { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 12px 0; padding: 10px 14px; border: 1px dashed var(--trait); border-radius: 12px; color: var(--texte-2); font-size: 13.5px; }
+.etiquette { display: grid; gap: 12px; max-width: 420px; margin: 0 auto 16px; padding: 22px; border: 2px dashed #888; border-radius: 6px; background: #fff; color: #111; }
+.etiquette-simu { padding: 4px 8px; background: #b3261e; color: #fff; font-weight: 700; font-size: 12px; letter-spacing: .08em; text-align: center; }
+.etiquette-marque { font-weight: 700; }
+.etiquette-num { font-family: ui-monospace, monospace; font-size: 22px; letter-spacing: .06em; }
+.etiquette-code { display: flex; gap: 3px; height: 60px; }
+.etiquette-code span { background: #111; }
+.etiquette dl { display: grid; gap: 8px; margin: 0; }
+.etiquette dl div { display: grid; grid-template-columns: 100px 1fr; gap: 8px; }
+.etiquette dt { color: #666; font-size: 13px; }
+.etiquette dd { margin: 0; }
+@media print { .entete, .pied, .aide { display: none !important; } }
+.litige { display: grid; gap: 10px; margin-bottom: 14px; }
+.litige-photos { display: flex; flex-wrap: wrap; gap: 6px; }
+.litige-photos img { width: 84px; height: 105px; object-fit: cover; border-radius: 8px; }
+.litige-form { display: grid; gap: 8px; }
+.versements-chiffres { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 640px) { .versements-chiffres { grid-template-columns: minmax(0, 1fr); } }

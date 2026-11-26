@@ -27,7 +27,7 @@ export default async function Parfums({searchParams}: {searchParams: Promise<Q>}
   if (f.etat === 'neuf' || f.etat === 'entame') conds.push(eq(schema.annonces.etat, f.etat));
   const pmax = Number(f.prix);
   if (pmax > 0) conds.push(lte(schema.annonces.prix, pmax));
-  const enAvant = sql<number>`case when ${schema.annonces.miseEnAvant} = '7j' and ${schema.annonces.publieeLe} > now() - interval '7 days' then 1 when ${schema.annonces.miseEnAvant} = '3j' and ${schema.annonces.publieeLe} > now() - interval '3 days' then 1 else 0 end`;
+  const enAvant = sql<number>`case when ${schema.annonces.avantJusqua} > now() then 1 else 0 end`;
   const ordre = f.tri === 'prix' ? [asc(schema.annonces.prix)] : f.tri === 'ml' ? [asc(sql`${schema.annonces.prix} / greatest(${schema.annonces.ml} * ${schema.annonces.niveau} / 100.0, 1)`)] : [desc(enAvant), desc(schema.annonces.publieeLe)];
   const liste = await completer(await db.select().from(schema.annonces).where(and(...conds)).orderBy(...ordre).limit(120));
   const maisons = await db.selectDistinct({nom: schema.annonces.maisonNom}).from(schema.annonces).where(eq(schema.annonces.statut, 'publiee')).orderBy(asc(schema.annonces.maisonNom));
