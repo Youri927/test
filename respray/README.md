@@ -72,11 +72,11 @@ inscription intégrée au site (Connect.js : composants `account_onboarding` et 
 `/compte/versements`). Un vendeur n'est payé que si sa capacité `stripe_transfers` est `active`. Une contestation
 bancaire bloque le versement, ou reprend l'argent déjà versé (annulation du transfert).
 
-Dans le tableau de bord Stripe (Développeurs, puis Webhooks), deux destinations :
-- `https://respray.fr/api/stripe/webhook`, événements du compte **et des comptes connectés** :
-  `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.expired`,
-  `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`, `charge.dispute.created`,
-  `payout.failed`. Son secret va dans `STRIPE_WEBHOOK_SECRET`.
+Dans le tableau de bord Stripe (Workbench, puis Webhooks), trois destinations (le détail est dans
+`deploiement/GUIDE.md`) :
+- `https://respray.fr/api/stripe/webhook`, deux fois : une destination pour le compte Respray (paiements,
+  remboursements, contestations) et une pour les comptes connectés (`payout.failed`). Leurs deux secrets vont dans
+  `STRIPE_WEBHOOK_SECRET`, séparés par une virgule.
 - `https://respray.fr/api/stripe/evenements-v2`, événements v2 (« thin ») des comptes : `v2.core.account.updated`,
   `v2.core.account[requirements].updated`, `v2.core.account[configuration.recipient].capability_status_updated`.
   Son secret va dans `STRIPE_WEBHOOK_SECRET_V2`.

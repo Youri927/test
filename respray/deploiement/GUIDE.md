@@ -38,13 +38,15 @@ Les clés se tapent dans ce terminal, nulle part ailleurs. À la fin : « Le sit
 
 ## 4. Les webhooks Stripe
 
-Stripe, compte Respray, mode test : **Développeurs**, puis **Webhooks**, puis **Ajouter une destination**.
+Stripe, compte Respray, mode test : **Workbench**, onglet **Webhooks**, puis **Add destination**. Une destination
+écoute soit le compte Respray, soit les comptes connectés : il en faut trois.
 
-1. **Événements du compte et des comptes connectés**, URL `https://respray.fr/api/stripe/webhook`, événements :
+1. **Your account**, style **Snapshot**, URL `https://respray.fr/api/stripe/webhook`, événements :
    `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.expired`,
-   `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`, `charge.dispute.created`,
+   `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`, `charge.dispute.created`.
+2. **Connected accounts**, style **Snapshot**, même URL `https://respray.fr/api/stripe/webhook`, événement :
    `payout.failed`.
-2. **Événements v2 (« thin »)**, URL `https://respray.fr/api/stripe/evenements-v2`, événements :
+3. **Connected accounts**, style **Thin**, URL `https://respray.fr/api/stripe/evenements-v2`, événements :
    `v2.core.account.updated`, `v2.core.account[requirements].updated`,
    `v2.core.account[configuration.recipient].capability_status_updated`.
 
@@ -54,8 +56,11 @@ Chaque destination a un **secret de signature** (`whsec_…`). Sur le VPS :
 nano /srv/respray/.env
 ```
 
-Colle le premier dans `STRIPE_WEBHOOK_SECRET=`, le second dans `STRIPE_WEBHOOK_SECRET_V2=`, enregistre
-(Ctrl+O, Entrée, Ctrl+X), puis :
+- `STRIPE_WEBHOOK_SECRET=` : les secrets des destinations 1 et 2, séparés par une virgule, sans espace
+  (`whsec_aaa,whsec_bbb`) ;
+- `STRIPE_WEBHOOK_SECRET_V2=` : le secret de la destination 3.
+
+Enregistre (Ctrl+O, Entrée, Ctrl+X), puis :
 
 ```bash
 systemctl restart respray

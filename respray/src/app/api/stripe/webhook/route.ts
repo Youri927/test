@@ -13,16 +13,21 @@ import {payeeMiseEnAvant} from '@/lib/avant';
 
 const id = (x: string | {id: string} | null | undefined) => (typeof x === 'string' ? x : x?.id ?? null);
 
+/* Stripe envoie ici depuis deux destinations (le compte Respray, et les comptes connectés), chacune avec son propre
+   secret : STRIPE_WEBHOOK_SECRET les contient tous les deux, séparés par une virgule. */
 export async function POST(req: Request) {
-  const secret = process.env.STRIPE_WEBHOOK_SECRET;
-  if (!secret) return NextResponse.json({erreur: 'secret absent'}, {status: 500});
+  const secrets = (process.env.STRIPE_WEBHOOK_SECRET || '').split(',').map((s) => s.trim()).filter(Boolean);
+  if (!secrets.length) return NextResponse.json({erreur: 'secret absent'}, {status: 500});
   const corps = await req.text();
-  let ev: Stripe.Event;
-  try {
-    ev = stripe.webhooks.constructEvent(corps, req.headers.get('stripe-signature') || '', secret);
-  } catch {
-    return NextResponse.json({erreur: 'signature'}, {status: 400});
+  const signature = req.headers.get('stripe-signature') || '';
+  let ev: Stripe.Event | null = null;
+  for (const secret of secrets) {
+    try {
+      ev = stripe.webhooks.constructEvent(corps, signature, secret);
+      break;
+    } catch {}
   }
+  if (!ev) return NextResponse.json({erreur: 'signature'}, {status: 400});
   if (await db.query.evenementsStripe.findFirst({where: eq(schema.evenementsStripe.id, ev.id)})) return NextResponse.json({recu: true, deja: true});
   try {
     switch (ev.type) {
