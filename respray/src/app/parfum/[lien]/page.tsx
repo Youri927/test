@@ -45,10 +45,27 @@ export default async function Parfum({params}: {params: Promise<{lien: string}>}
   const minNeufMl = neufMl.length ? Math.min(...neufMl) : null;
   const occMl = annonces.map((a) => a.prix / Math.max(1, (a.ml * a.niveau) / 100));
   const moyOcc = occMl.length ? occMl.reduce((x, y) => x + y, 0) / occMl.length : null;
-  const ld = {
+  // les questions que les gens tapent vraiment sur Google, avec des réponses tirées des chiffres de la page
+  const faq: [string, string][] = [
+    [`Combien vaut un ${p.nom} d'occasion ?`, coteNeuf && coteEntame && grand
+      ? `D'après la cote Respray, un ${p.nom} de ${maison} en ${grand.ml} ml vaut ${eur(coteNeuf.bas)} à ${eur(coteNeuf.haut)} jamais ouvert, et ${eur(coteEntame.bas)} à ${eur(coteEntame.haut)} entamé (reste 70 %).${coteNeuf.source === 'annonces' ? ' Ces chiffres suivent le prix réel des annonces.' : ' Ces chiffres partent du prix neuf, avec la décote habituelle de l\'occasion.'}`
+      : `Un parfum entamé se vend en général 30 à 50 % moins cher que neuf au millilitre, selon ce qui reste dans le flacon, la boîte et la rareté.`],
+    [`Comment savoir si un ${p.nom} d'occasion est authentique ?`, `Le code lot doit être lisible sous le flacon et identique sur la boîte ; le spray, la bague et la tige doivent être d'origine ; le niveau doit correspondre aux photos. Sur Respray, chaque annonce de ${p.nom} est vérifiée par l'équipe sur 6 photos imposées avant d'être en ligne.`],
+    [`Où acheter un ${p.nom} d'occasion sans risque ?`, `Sur Respray, le paiement reste bloqué jusqu'à ce que vous ayez reçu et vérifié le flacon : 7 jours après la livraison. S'il n'est pas conforme à l'annonce, vous êtes remboursé en entier, livraison comprise.`],
+    [`Comment vendre mon ${p.nom} ?`, `Sur Respray, la mise en ligne est gratuite et sans commission : 6 photos, l'équipe vérifie l'annonce, puis vous envoyez le colis en point relais avec une étiquette fournie. Le formulaire vous propose un prix d'après la cote.`],
+  ];
+  const ld = [{
     '@context': 'https://schema.org', '@type': 'Product', name: `${p.nom} ${maison}`, brand: {'@type': 'Brand', name: maison}, category: 'Parfum',
     ...(annonces.length ? {offers: {'@type': 'AggregateOffer', priceCurrency: 'EUR', lowPrice: Math.min(...annonces.map((a) => a.prix)), highPrice: Math.max(...annonces.map((a) => a.prix)), offerCount: annonces.length, itemCondition: 'https://schema.org/UsedCondition'}} : {}),
-  };
+  }, {
+    '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, r]) => ({'@type': 'Question', name: q, acceptedAnswer: {'@type': 'Answer', text: r}})),
+  }, {
+    '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      {'@type': 'ListItem', position: 1, name: 'Parfums', item: `${process.env.SITE_URL || 'https://respray.fr'}/parfums`},
+      {'@type': 'ListItem', position: 2, name: maison, item: `${process.env.SITE_URL || 'https://respray.fr'}/maison/${lien(maison)}`},
+      {'@type': 'ListItem', position: 3, name: p.nom},
+    ],
+  }];
   return (
     <div className="env page">
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(ld).replace(/</g, '\\u003c')}} />
@@ -74,6 +91,11 @@ export default async function Parfum({params}: {params: Promise<{lien: string}>}
         <h2 className="h2">Vous en avez un ?</h2>
         <p className="aide">Choisissez {maison}, puis {p.nom} : concentration, genre et famille sont remplis d'office.{p.formats.length ? ` Formats : ${p.formats.map((f) => `${f.ml} ml${f.neuf ? ` (${eur(f.neuf)} neuf)` : ''}`).join(', ')}.` : ''}</p>
         <Link className="btn btn-noir" href="/vendre">Vendre mon {p.nom}</Link>
+      </section>
+      <section className="section faq">
+        <h2 className="h2">Questions fréquentes sur {p.nom} d'occasion</h2>
+        {faq.map(([q, r]) => <details key={q}><summary>{q}</summary><p>{r}</p></details>)}
+        <p className="aide">À lire aussi : <Link className="lien-souligne" href="/guides/reconnaitre-un-faux-parfum">reconnaître un faux parfum</Link> · <Link className="lien-souligne" href="/guides/acheter-un-parfum-d-occasion">acheter d'occasion sans se faire avoir</Link> · <Link className="lien-souligne" href="/cote">la cote des parfums</Link></p>
       </section>
     </div>
   );

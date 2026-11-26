@@ -4,6 +4,55 @@ export type Guide = {lien: string; titre: string; resume: string; sections: {t: 
 
 export const GUIDES: Guide[] = [
   {
+    lien: 'parfum-perime-combien-de-temps',
+    titre: 'Un parfum se périme-t-il ? Combien de temps il se garde',
+    resume: 'Date de péremption, petit pot ouvert « 36M », signes qu\'un parfum a tourné : ce qu\'il faut savoir avant d\'acheter ou de jeter un flacon.',
+    sections: [
+      {t: 'Pas de vraie date de péremption', p: ['Un parfum n\'a pas de date limite comme un aliment. L\'alcool qu\'il contient le protège : bien rangé, il se garde en général plusieurs années, souvent bien plus que ce qu\'on imagine.', 'Le petit pot ouvert dessiné sur la boîte (« 24M », « 36M ») indique la durée d\'utilisation conseillée après ouverture. C\'est une indication prudente, pas une date après laquelle il devient mauvais.']},
+      {t: 'Ce qui le fait tourner', p: ['La lumière, surtout le soleil, la chaleur et les écarts de température : une salle de bain, un rebord de fenêtre, une voiture. Un flacon rangé dans un placard, idéalement dans sa boîte, vieillit très lentement.']},
+      {t: 'Les signes qu\'il a tourné', p: ['Une odeur aigre, métallique ou de vernis dès la première vaporisation, une couleur nettement plus foncée qu\'à l\'origine, un jus trouble. Les notes de tête (agrumes, notes fraîches) s\'estompent les premières : un parfum un peu plus « rond » qu\'au départ n\'est pas forcément abîmé.']},
+      {t: 'Acheter un flacon qui a quelques années', p: ['Le code lot donne souvent la date de fabrication : un flacon de quatre ou cinq ans bien conservé peut être parfait. Sur Respray, le vendeur indique comment il l\'a rangé, et vous avez 7 jours après la livraison pour vérifier qu\'il n\'a pas tourné.']},
+    ],
+    faq: [
+      ['Un parfum de 10 ans est-il encore bon ?', 'Souvent oui, s\'il a été gardé à l\'abri de la lumière et de la chaleur. Vaporisez-le : s\'il ne sent ni l\'aigre ni le vernis, il est bon.'],
+      ['Que veut dire « 36M » sur une boîte de parfum ?', 'C\'est la durée d\'utilisation conseillée après ouverture : 36 mois. Une indication prudente, pas une date de péremption.'],
+      ['Comment savoir l\'âge d\'un parfum ?', 'Avec son code lot, imprimé ou gravé sous le flacon et sur la boîte : chez beaucoup de marques, il permet de retrouver la date de fabrication.'],
+    ],
+    action: {texte: 'Où trouver le code lot', href: '/guides/trouver-le-code-lot-d-un-parfum'},
+  },
+  {
+    lien: 'eau-de-toilette-eau-de-parfum-extrait',
+    titre: 'Eau de toilette, eau de parfum, extrait : quelle différence ?',
+    resume: 'La concentration change la tenue, le sillage et le prix. Ce qu\'il faut savoir pour choisir, et pour comparer les prix d\'occasion.',
+    sections: [
+      {t: 'Une question de concentration', p: ['La différence tient à la part de matières parfumées dans l\'alcool. En général : eau de Cologne, 2 à 5 % ; eau de toilette, 5 à 15 % ; eau de parfum, 15 à 20 % ; extrait (ou parfum), 20 % et plus. Chaque maison a ses propres dosages : ce sont des ordres de grandeur.']},
+      {t: 'Ce que ça change sur la peau', p: ['Plus c\'est concentré, plus ça tient longtemps et plus l\'odeur est riche ; le sillage, lui, dépend surtout de la formule. Une eau de toilette est souvent plus fraîche et plus légère, un extrait plus dense et plus proche de la peau.']},
+      {t: 'Pas toujours le même parfum', p: ['L\'eau de toilette et l\'eau de parfum d\'un même nom sont souvent des formules différentes, pas seulement plus ou moins diluées. Comparez-les avant d\'acheter : la version que vous aimez n\'est pas forcément la plus chère.']},
+      {t: 'Pour comparer les prix', p: ['Comparez au millilitre, à concentration égale : un extrait de 50 ml et une eau de toilette de 100 ml ne se comparent pas. La cote Respray donne le prix neuf et le prix d\'occasion au millilitre de chaque parfum.']},
+    ],
+    faq: [
+      ['Quelle concentration tient le plus longtemps ?', 'L\'extrait, puis l\'eau de parfum, puis l\'eau de toilette. Mais la tenue dépend aussi beaucoup de la formule et de la peau.'],
+      ['Eau de parfum ou eau de toilette, laquelle choisir ?', 'Essayez les deux : ce sont souvent deux formules différentes. L\'eau de toilette est souvent plus fraîche, l\'eau de parfum plus ronde et plus tenace.'],
+    ],
+    action: {texte: 'Voir la cote des parfums', href: '/cote'},
+  },
+  {
+    lien: 'parfum-arrete-ou-le-trouver',
+    titre: 'Parfum arrêté ou reformulé : où le trouver encore',
+    resume: 'Votre parfum n\'est plus vendu, ou il ne sent plus pareil ? La seconde main est souvent le seul moyen de retrouver l\'original. Comment le chercher sans se faire avoir.',
+    sections: [
+      {t: 'Arrêté ou reformulé', p: ['Les maisons arrêtent régulièrement des parfums, ou les reformulent : nouvelles règles sur certains ingrédients, matières premières devenues rares ou trop chères. Le nom reste parfois le même, mais l\'odeur change.']},
+      {t: 'La seconde main, souvent la seule solution', p: ['Des flacons achetés avant l\'arrêt dorment encore dans des placards. Le code lot permet souvent de savoir quand un flacon a été fabriqué, donc s\'il date d\'avant une reformulation.']},
+      {t: 'Attention aux prix et aux faux', p: ['Un parfum introuvable attire les contrefaçons et les prix gonflés. Exigez des photos du code lot, du spray et de la tige, et ne payez jamais un inconnu par virement. Sur Respray, l\'équipe vérifie chaque annonce, et votre paiement reste bloqué jusqu\'à ce que vous ayez vérifié le flacon.']},
+      {t: 'Être prévenu dès qu\'il apparaît', p: ['Sur la page d\'un parfum, ajoutez-le à vos envies : vous êtes prévenu dès qu\'une annonce vérifiée est publiée. Les vendeurs voient aussi combien de personnes l\'attendent.']},
+    ],
+    faq: [
+      ['Comment savoir si mon parfum a été reformulé ?', 'Comparez avec un ancien flacon, et regardez le code lot : il donne souvent la date de fabrication. Les passionnés signalent aussi les reformulations sur les forums.'],
+      ['Où acheter un parfum qui n\'est plus fabriqué ?', 'En seconde main, entre particuliers : sur Respray, chaque annonce est vérifiée avant d\'être en ligne, et vous pouvez être prévenu dès qu\'un flacon apparaît.'],
+    ],
+    action: {texte: 'Chercher un parfum', href: '/parfums'},
+  },
+  {
     lien: 'acheter-un-parfum-d-occasion',
     titre: 'Acheter un parfum d\'occasion sans se faire avoir',
     resume: 'Parfum de seconde main : où l\'acheter, comment éviter les contrefaçons, à quel prix, et comment être remboursé s\'il n\'est pas conforme.',
