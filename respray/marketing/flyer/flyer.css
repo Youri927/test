@@ -1,0 +1,32 @@
+@font-face { font-family: Inter; src: url("../../public/fonts/inter-400-700.woff2") format("woff2"); font-weight: 400 700; }
+:root { --pw: 105mm; --ph: 148mm; --fp: 0mm; --fond: #f6f4ef; --encre: #1d1d1f; --gris: #6e6e73; --accent: #b05a12; --nuit: #1b1a18; --creme: #f2efe9; --gris-nuit: #a7a29a; --orange: #f0a45b; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { font-family: Inter, -apple-system, "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+/* une face : 105 × 148 mm (A6) ; --fp = fond perdu pour l'imprimeur ; le texte reste à 7 mm du bord fini */
+.face { width: var(--pw); height: var(--ph); padding: calc(var(--fp) + 7mm); position: relative; overflow: hidden; break-after: page; display: flex; flex-direction: column; }
+.recto { background: var(--fond); color: var(--encre); }
+.verso { background: var(--nuit); color: var(--creme); }
+.logo { height: 6.2mm; width: auto; color: currentColor; flex: none; align-self: flex-start; }
+.symbole { position: absolute; color: currentColor; opacity: .055; width: 92mm; right: -24mm; top: 24mm; }
+.verso .symbole { opacity: .07; }
+.sur { font-size: 2.35mm; font-weight: 600; letter-spacing: .32mm; text-transform: uppercase; color: var(--accent); margin-top: 12mm; }
+.verso .sur { color: var(--orange); }
+h1 { font-size: 8.2mm; line-height: 1.05; letter-spacing: -.24mm; font-weight: 700; margin-top: 2.6mm; }
+h1 em { font-style: normal; color: var(--accent); }
+.verso h1 em { color: var(--orange); }
+.chapo { font-size: 3.3mm; line-height: 1.42; color: var(--gris); margin-top: 3.4mm; max-width: 78mm; }
+.verso .chapo { color: var(--gris-nuit); }
+ul { list-style: none; margin-top: 5mm; display: grid; gap: 2.3mm; }
+li { display: flex; gap: 2.4mm; font-size: 3mm; line-height: 1.38; }
+li b { flex: none; width: 4.2mm; height: 4.2mm; border-radius: 50%; background: var(--encre); color: var(--fond); display: grid; place-items: center; font-size: 2.3mm; }
+.verso li b { background: var(--creme); color: var(--nuit); }
+li strong { font-weight: 600; }
+.pied { margin-top: auto; display: flex; align-items: flex-end; gap: 4.5mm; }
+.qr { flex: none; width: 25mm; height: 25mm; background: #fff; border-radius: 2.6mm; padding: 2.3mm; box-shadow: 0 0 0 .25mm rgba(0, 0, 0, .08); }
+.qr svg { width: 100%; height: 100%; display: block; }
+.appel { font-size: 3.2mm; line-height: 1.32; font-weight: 600; padding-bottom: 1mm; }
+.appel small { display: block; font-weight: 400; color: var(--gris); margin-top: 1.2mm; font-size: 2.6mm; }
+.verso .appel small { color: var(--gris-nuit); }
+.url { display: block; font-size: 4.2mm; font-weight: 700; letter-spacing: -.08mm; margin-top: 1.8mm; }
+.legal { position: absolute; left: calc(var(--fp) + 7mm); bottom: calc(var(--fp) + 2.6mm); font-size: 1.75mm; color: var(--gris); opacity: .8; }
+.verso .legal { color: var(--gris-nuit); }
