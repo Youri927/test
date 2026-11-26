@@ -32,7 +32,6 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
   // visible par tous une fois publiée ; avant, seulement par son vendeur et l'équipe
   if (!a || (a.statut !== 'publiee' && a.statut !== 'vendue' && m?.id !== a.vendeurId && m?.role !== 'equipe')) notFound();
   const d = a.details;
-  const decant = d.format === 'Décant';
   const moiVendeur = m?.id === a.vendeurId;
 
   // le prix pour cette personne : une offre acceptée (ou proposée par le vendeur) encore valable le remplace
@@ -44,7 +43,7 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
   const prix = acceptee ? acceptee.montant : a.prix;
   const pr = protection(prix);
   const offerte = !!m?.parrainId; // parrainage : la protection est offerte au filleul sur son premier achat
-  const r = a.parfum && !decant ? remise(a.parfum.formats, {prix: a.prix, ml: a.ml, niveau: a.niveau}) : null;
+  const r = a.parfum ? remise(a.parfum.formats, {prix: a.prix, ml: a.ml, niveau: a.niveau}) : null;
 
   const favori = m ? !!(await db.query.favoris.findFirst({where: and(eq(schema.favoris.membreId, m.id), eq(schema.favoris.annonceId, a.id))})) : false;
   const nFavoris = await db.$count(schema.favoris, eq(schema.favoris.annonceId, a.id));
@@ -55,8 +54,8 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
   const lignes: [string, string][] = [
     ['Concentration', a.conc],
     ['Format', `${d.format}, ${a.ml} ml`],
-    ['État', decant ? `Décant de ${a.ml} ml, prélevé d'un flacon vérifié par l'équipe` : a.etat === 'neuf' ? 'Neuf, jamais ouvert' : `Reste environ ${a.niveau} % (≈ ${Math.round((a.ml * a.niveau) / 100)} ml)`],
-    ['Boîte', decant ? '' : d.boite],
+    ['État', a.etat === 'neuf' ? 'Neuf, jamais ouvert' : `Reste environ ${a.niveau} % (≈ ${Math.round((a.ml * a.niveau) / 100)} ml)`],
+    ['Boîte', d.boite],
     ['Code lot', a.lot || 'Illisible'],
     ['Acheté', `${d.annee}, ${d.lieu.charAt(0).toLowerCase() + d.lieu.slice(1)}`],
     ['Conservation', `${d.lumiere === 'abri' ? 'à l\'abri de' : 'exposé à'} la lumière, ${d.chaleur === 'abri' ? 'à l\'abri de' : 'exposé à'} la chaleur`],
@@ -81,7 +80,7 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
             <div>
               <p className="fiche-maison">{a.maisonNom}</p>
               <h1>{a.parfumNom}</h1>
-              <p className="fiche-sous">{a.conc} · {decant ? `décant de ${a.ml} ml` : `${a.ml} ml`}</p>
+              <p className="fiche-sous">{a.conc} · {a.ml} ml</p>
             </div>
             {m && !moiVendeur ? (
               <form action={basculerFavori}>

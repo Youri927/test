@@ -50,8 +50,7 @@ const Vente = z
     if (!d.parfumId && !d.parfumAutre) e('Choisissez ou écrivez le parfum.');
     if (!d.parfumId && !CONCENTRATIONS.includes(d.conc || '')) e('Choisissez la concentration.');
     if (!d.parfumId && !d.genre) e('Dites pour qui est ce parfum : femme, homme ou mixte.');
-    if (d.etat === 'entame' && !d.visible && d.format !== 'decant') e('Dites si le parfum se voit à travers le flacon.');
-    if (d.format === 'decant' && d.ml > 30) e('Un décant fait 30 ml au plus.');
+    if (d.etat === 'entame' && !d.visible) e('Dites si le parfum se voit à travers le flacon.');
     if (!d.lot && !d.lotIllisible) e('Recopiez le code lot, ou cochez « effacé ou illisible ».');
     if (d.mainPropre && !d.ville) e('Indiquez la ville de la remise en main propre.');
   });
@@ -65,7 +64,7 @@ export async function envoyerVente(_: EtatVente, f: FormData): Promise<EtatVente
   if (!r.success) return {erreur: r.error.issues[0].message};
   const d = r.data;
   const fichiers = Object.fromEntries(PHOTOS.map((p) => [p.k, f.get('photo_' + p.k)]).filter(([, v]) => v instanceof File && v.size > 0)) as Record<string, File>;
-  const manque = PHOTOS.filter((p) => (p.obl || (p.k === 'decant' && d.format === 'decant')) && !fichiers[p.k]);
+  const manque = PHOTOS.filter((p) => p.obl && !fichiers[p.k]);
   if (manque.length) return {erreur: `Il manque ${manque.length} photo${manque.length > 1 ? 's' : ''} obligatoire${manque.length > 1 ? 's' : ''} : ${manque.map((p) => p.t.toLowerCase()).join(', ')}.`};
 
   // le parfum : du catalogue, ou proposé (maison et/ou parfum écrits par le vendeur)
@@ -104,8 +103,8 @@ export async function envoyerVente(_: EtatVente, f: FormData): Promise<EtatVente
       parfumNom,
       conc,
       ml: d.ml,
-      etat: d.format === 'decant' ? 'entame' : d.etat,
-      niveau: d.etat === 'neuf' || d.format === 'decant' ? 100 : d.niveau,
+      etat: d.etat,
+      niveau: d.etat === 'neuf' ? 100 : d.niveau,
       lot: d.lotIllisible ? '' : d.lot,
       description: d.description,
       details: {format: etiquette(FORMATS, d.format), visible: d.etat === 'neuf' ? '' : d.visible, defauts: d.defauts, annee: d.annee, lieu: d.lieu, lumiere: d.lumiere, chaleur: d.chaleur, boite: etiquette(BOITES, d.boite), familles: d.familles, genre, pourquoi: d.pourquoi},

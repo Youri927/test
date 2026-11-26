@@ -99,17 +99,16 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
     if (t.length < 3) return null;
     return maisons.find((m) => normal(m.nom) === t || normal(m.nom).startsWith(t) || (t.length > 4 && normal(m.nom).includes(t)));
   }, [v.maisonAutre, maisons]);
-  const decant = v.format === 'decant';
   const blocs: [string, boolean][] = [
     ['Le parfum', !!(nomMaison && nomParfum && (parfum || (v.conc && v.genre)))],
-    ['Le flacon', ml > 0 && (decant || v.etat === 'neuf' || !!v.visible) && (decant || !!v.boite)],
+    ['Le flacon', ml > 0 && (v.etat === 'neuf' || !!v.visible) && !!v.boite],
     ['Son histoire', !!(v.annee && v.lieu && v.lumiere && v.chaleur && v.pourquoi)],
-    ['Photos et code lot', PHOTOS.every((p) => !(p.obl || (p.k === 'decant' && decant)) || apercus[p.k]) && !!(v.lot.trim() || v.lotIllisible)],
+    ['Photos et code lot', PHOTOS.every((p) => !p.obl || apercus[p.k]) && !!(v.lot.trim() || v.lotIllisible)],
     ['Prix et remise', prixN >= 3 && (!v.mainPropre || !!v.ville.trim())],
     ['Engagement', v.engagement],
   ];
   const fourchette = parfum && prix[parfum.id]?.length ? [Math.min(...prix[parfum.id]), Math.max(...prix[parfum.id])] : null;
-  const cote = parfum && ml > 0 ? estimer({formats: parfum.formats, ml, niveau: v.niveau, etat: v.etat === 'neuf' ? 'neuf' : 'entame', decant, occMl: occ[parfum.id]}) : null;
+  const cote = parfum && ml > 0 ? estimer({formats: parfum.formats, ml, niveau: v.niveau, etat: v.etat === 'neuf' ? 'neuf' : 'entame', occMl: occ[parfum.id]}) : null;
   const attendent = parfum ? demande[parfum.id] || 0 : 0;
 
   async function choisirPhoto(k: string, input: HTMLInputElement) {
@@ -212,18 +211,17 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
           <>
             <section className="bloc-form">
               <h2 className="h2"><span className="bloc-n">2</span>Le flacon</h2>
-              <fieldset><legend>Format</legend><Segment nom="format" val={v.format} choix={FORMATS} set={(x) => setV((o) => ({...o, format: x, ml: '', etat: x === 'coffret' ? 'neuf' : x === 'decant' ? 'entame' : o.etat, boite: x === 'decant' ? 'aucune' : o.boite}))} /></fieldset>
-              {v.format === 'coffret' ? <p className="aide">Un coffret est accepté s'il est neuf, scellé et sous blister.</p> : v.format === 'echantillon' ? <p className="aide">Un échantillon acheté, oui ; un échantillon offert ou marqué « Ne peut être vendu », non.</p> : decant ? <p className="note-ajout">Un décant, ce sont quelques millilitres prélevés de votre flacon dans un petit vaporisateur propre : l'acheteur découvre le parfum sans acheter le flacon entier. Les 6 photos sont celles du flacon d'origine (c'est lui que l'équipe vérifie), plus une photo du décant posé contre lui.</p> : null}
-              <label htmlFor="ml">{decant ? 'Contenance du décant' : 'Contenance'}</label>
+              <fieldset><legend>Format</legend><Segment nom="format" val={v.format} choix={FORMATS} set={(x) => setV((o) => ({...o, format: x, ml: '', etat: x === 'coffret' ? 'neuf' : o.etat}))} /></fieldset>
+              {v.format === 'coffret' ? <p className="aide">Un coffret est accepté s'il est neuf, scellé et sous blister.</p> : v.format === 'echantillon' ? <p className="aide">Un échantillon acheté, oui ; un échantillon offert ou marqué « Ne peut être vendu », non.</p> : null}
+              <label htmlFor="ml">Contenance</label>
               {parfum && v.format === 'flacon' && parfum.formats.length ? (
                 <select id="ml" name="ml" className="champ" value={v.ml} onChange={(e) => set('ml')(e.target.value)}>
                   <option value="">Choisir</option>
                   {parfum.formats.map((f) => <option key={f.ml} value={f.ml}>{f.ml} ml</option>)}
                 </select>
               ) : (
-                <div className="champ-prix"><input id="ml" name="ml" className="champ" inputMode="decimal" value={v.ml} onChange={(e) => set('ml')(e.target.value)} placeholder={decant ? '10' : '100'} /><span>ml</span></div>
+                <div className="champ-prix"><input id="ml" name="ml" className="champ" inputMode="decimal" value={v.ml} onChange={(e) => set('ml')(e.target.value)} placeholder="100" /><span>ml</span></div>
               )}
-              {decant ? <><input type="hidden" name="etat" value="entame" /><input type="hidden" name="niveau" value={100} /><input type="hidden" name="boite" value="aucune" /></> : <>
               <fieldset><legend>État</legend><Segment nom="etat" val={v.etat} choix={[['neuf', 'Neuf, jamais ouvert'], ['entame', 'Déjà utilisé']]} set={set('etat')} /></fieldset>
               {v.etat === 'entame' ? (
                 <>
@@ -241,7 +239,6 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
                 </>
               ) : <input type="hidden" name="niveau" value={100} />}
               <fieldset><legend>Et sa boîte ?</legend><Segment nom="boite" val={v.boite} choix={BOITES} set={set('boite')} /></fieldset>
-              </>}
             </section>
 
             <section className="bloc-form">
@@ -264,11 +261,11 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
               <p className="aide">Elles nous permettent de vérifier votre parfum avant de publier l'annonce. Les 6 premières sont obligatoires. Sur la photo preuve, écrivez <strong>@{pseudo}</strong> et la date du jour.</p>
               <p className="protege-vendeur"><strong>Elles vous protègent aussi.</strong> Datées et vérifiées par l'équipe, elles prouvent l'état exact du flacon avant l'envoi : si un acheteur prétend avoir reçu autre chose, ce sont elles qui font foi.</p>
               <div className="photos">
-                {PHOTOS.filter((p) => p.k !== 'decant' || decant).map((p) => (
+                {PHOTOS.map((p) => (
                   <label className={`photo ${apercus[p.k] ? 'faite' : ''}`} key={p.k}>
                     <input className="vh" type="file" name={'photo_' + p.k} accept="image/jpeg,image/png,image/webp,image/heic,image/heif" onChange={(e) => choisirPhoto(p.k, e.currentTarget)} />
                     <span className="photo-cadre">{apercus[p.k] ? <img src={apercus[p.k]} alt="" /> : <span className="photo-plus">+</span>}</span>
-                    <span className="photo-txt"><strong>{p.t}{p.obl || p.k === 'decant' ? null : <> <em>facultatif</em></>}</strong><small>{p.d}</small></span>
+                    <span className="photo-txt"><strong>{p.t}{p.obl ? null : <> <em>facultatif</em></>}</strong><small>{p.d}</small></span>
                   </label>
                 ))}
               </div>
@@ -284,7 +281,7 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
                 <div className="cote-suggestion">
                   <p className="surtitre">La cote Respray</p>
                   <p className="cote-fourchette">{eur(cote.bas)} à {eur(cote.haut)}</p>
-                  <p className="aide">{cote.source === 'annonces' ? `D'après les ${cote.n} annonces de ce parfum sur Respray, au millilitre restant.` : decant ? 'D\'après le prix au millilitre du plus petit format neuf.' : 'Estimation d\'après le prix neuf indicatif, l\'état et ce qu\'il reste.'} Dans cette fourchette, un parfum part vite ; au-dessus, il attend.</p>
+                  <p className="aide">{cote.source === 'annonces' ? `D'après les ${cote.n} annonces de ce parfum sur Respray, au millilitre restant.` : 'Estimation d\'après le prix neuf indicatif, l\'état et ce qu\'il reste.'} Dans cette fourchette, un parfum part vite ; au-dessus, il attend.</p>
                   <button type="button" className="btn btn-petit" onClick={() => set('prix')(String(cote.milieu))}>Mettre {eur(cote.milieu)}</button>
                 </div>
               ) : null}
@@ -322,7 +319,7 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
             <div className="apercu-photo">{apercus.face ? <img className="visuel" src={apercus.face} alt="" /> : <span className="visuel apercu-sans" />}{apercus.face ? null : <span className="apercu-vide">Votre photo de face</span>}</div>
             <p className="carte-maison">{nomMaison || 'Maison'}</p>
             <p className="carte-nom">{nomParfum || 'Parfum'}</p>
-            <p className="carte-meta">{conc || 'Concentration'}{ml > 0 ? ` · ${ml} ml` : ''}{decant ? ' · décant' : v.etat === 'neuf' ? ' · neuf sous blister' : ml > 0 ? ` · reste ~${v.niveau} % (≈ ${Math.round((ml * v.niveau) / 100)} ml)` : ''}</p>
+            <p className="carte-meta">{conc || 'Concentration'}{ml > 0 ? ` · ${ml} ml` : ''}{v.etat === 'neuf' ? ' · neuf sous blister' : ml > 0 ? ` · reste ~${v.niveau} % (≈ ${Math.round((ml * v.niveau) / 100)} ml)` : ''}</p>
             <p className="carte-prix">{prixN >= 3 ? eur(prixN) : '— €'}</p>
           </div>
           <ol className="apercu-etapes">{blocs.map(([t, ok]) => <li key={t} className={ok ? 'fait' : ''}><span>{ok ? '✓' : ''}</span>{t}</li>)}</ol>

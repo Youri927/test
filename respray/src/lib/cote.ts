@@ -24,18 +24,14 @@ const mediane = (l: number[]) => {
 };
 const arrondi = (x: number) => (x >= 100 ? Math.round(x / 5) * 5 : Math.round(x));
 
-export function estimer({formats, ml, niveau, etat, decant = false, occMl = []}: {formats: Formats; ml: number; niveau: number; etat: 'neuf' | 'entame'; decant?: boolean; occMl?: number[]}): Cote | null {
+export function estimer({formats, ml, niveau, etat, occMl = []}: {formats: Formats; ml: number; niveau: number; etat: 'neuf' | 'entame'; occMl?: number[]}): Cote | null {
   if (!ml) return null;
-  const reste = decant ? ml : mlRestants(ml, etat === 'neuf' ? 100 : niveau);
+  const reste = mlRestants(ml, etat === 'neuf' ? 100 : niveau);
   let milieu: number | null = null;
   let source: Cote['source'] = 'neuf';
-  if (!decant && occMl.length >= 3) {
+  if (occMl.length >= 3) {
     milieu = mediane(occMl) * reste;
     source = 'annonces';
-  } else if (decant) {
-    // un décant se vend au prix au ml du plus petit format, un peu moins cher
-    const f = formats.filter((x) => x.neuf);
-    if (f.length) milieu = Math.max(...f.map((x) => x.neuf! / x.ml)) * 0.9 * ml;
   } else {
     const n = prixNeuf(formats, ml);
     if (n) milieu = n * (etat === 'neuf' ? 0.72 : 0.62) * (reste / ml);

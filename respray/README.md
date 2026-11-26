@@ -29,7 +29,7 @@ npm run dev
 3. Recherche et filtres, page annonce, favoris : **fait**
 3 bis. Ce qui fait revenir et aide à décider : liste d'envies et alertes, recherche vide qui compte la demande, placard
    et sa valeur, cote (prix neuf barré, prix au ml, suggestion de prix), offres et contre-offres, prix proposé aux
-   favoris, messages qui masquent les coordonnées, activité, décants, « pourquoi je le vends », chiffres de
+   favoris, messages qui masquent les coordonnées, activité, « pourquoi je le vends », chiffres de
    vérification publics, protection offerte aux invités : **fait**
 4. Paiement bloqué (Stripe Connect), envois (Mondial Relay), 7 jours, litiges, versements, e-mails : à faire ; il
    faut les comptes Stripe et Mondial Relay de la société
