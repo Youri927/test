@@ -6,6 +6,7 @@ import {Logo, Symbole} from '@/components/Logo';
 import {moi} from '@/lib/auth';
 import {deconnexion} from './actions/compte';
 import {nonLues} from '@/lib/activite';
+import {Apparitions, BoutonTheme, SCRIPT_THEME} from '@/components/Ambiance';
 
 export const metadata: Metadata = {
   title: {default: 'Respray', template: '%s · Respray'},
@@ -17,8 +18,10 @@ export default async function Racine({children}: {children: React.ReactNode}) {
   const m = await moi();
   const n = m ? await nonLues(m.id) : 0;
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{__html: SCRIPT_THEME}} /></head>
       <body>
+        <Apparitions />
         <header className="entete">
           <div className="env entete-in">
             <Link className="logo" href="/" aria-label="Respray, accueil">
@@ -31,12 +34,14 @@ export default async function Racine({children}: {children: React.ReactNode}) {
             </form>
             <nav className="nav" aria-label="Principale">
               <Link href="/parfums">Parfums</Link>
+              <Link href="/comment-ca-marche">Comment ça marche</Link>
               <Link href="/placard">Mon placard</Link>
               {m ? <Link href="/activite" className="nav-activite nav-garde" aria-label={n ? `Activité, ${n} nouveau${n > 1 ? 'x' : ''}` : 'Activité'}>Activité{n ? <b className="pastille-n">{n}</b> : null}</Link> : null}
               {m ? <Link href="/compte" className="nav-garde">Mon compte</Link> : <Link href="/connexion" className="nav-garde">Se connecter</Link>}
               {m?.role === 'equipe' ? <Link href="/equipe">Équipe</Link> : null}
               <Link className="btn btn-noir btn-petit" href="/vendre">Vendre</Link>
             </nav>
+            <BoutonTheme />
           </div>
         </header>
         <main id="vue">{children}</main>
@@ -61,6 +66,7 @@ export default async function Racine({children}: {children: React.ReactNode}) {
               </div>
               <div>
                 <p className="pied-titre">Respray</p>
+                <Link href="/comment-ca-marche">Comment ça marche</Link>
                 <Link href="/verification">Nos chiffres de vérification</Link>
                 <Link href="/regles">Règles des annonces</Link>
                 <Link href="/guides">Guides</Link>

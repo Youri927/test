@@ -16,6 +16,7 @@ export default async function plan(): Promise<MetadataRoute.Sitemap> {
     {url: `${base}/parfums`, changeFrequency: 'daily'},
     {url: `${base}/fondateurs`},
     {url: `${base}/cote`, changeFrequency: 'weekly'},
+    {url: `${base}/comment-ca-marche`},
     {url: `${base}/placard`},
     {url: `${base}/verification`, changeFrequency: 'daily'},
     ...['/regles', '/cgu', '/confidentialite', '/obligations-fiscales', '/mentions-legales'].map((p) => ({url: base + p})),

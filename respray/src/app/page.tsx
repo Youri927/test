@@ -1,52 +1,101 @@
 import Link from 'next/link';
+import {and, gt, inArray} from 'drizzle-orm';
+import {db, schema} from '@/db';
 import {publiees} from '@/lib/annonces';
+import {moi} from '@/lib/auth';
+import {remise} from '@/lib/cote';
 import {Carte} from '@/components/Carte';
 import {FormAttente} from '@/components/FormulairesCompte';
 import {Bouclier} from '@/components/Bouclier';
-import {and, gt, inArray} from 'drizzle-orm';
-import {db, schema} from '@/db';
+import {Vaporise, Ico} from '@/components/Visuels';
+import {Direct, Ruban, Anatomie, Reception} from '@/components/Accueil';
 
 export const dynamic = 'force-dynamic';
 
-/* L'accueil montre les vraies annonces publiées, les plus récentes d'abord. Tant qu'il y en a peu, il le dit, et
-   propose d'être prévenu : jamais d'annonce inventée. */
-const PEU = 8;
+const il = (d: Date | null) => {
+  if (!d) return '';
+  const m = Math.max(1, Math.round((Date.now() - d.getTime()) / 6e4));
+  return m < 60 ? `il y a ${m} min` : m < 1440 ? `il y a ${Math.round(m / 60)} h` : `il y a ${Math.round(m / 1440)} j`;
+};
 
+/* L'accueil, repris du prototype : deux portes (acheter, vendre), le ruban des vraies annonces, une annonce
+   décortiquée (un exemple, présenté comme tel), le guide de réception, puis le placard et nos chiffres. Jamais
+   d'annonce inventée : tant qu'il y en a peu, l'accueil le dit et propose d'être prévenu. */
 export default async function Accueil() {
+  const m = await moi();
   const annonces = await publiees(24);
   const j = await db.select({action: schema.journal.action}).from(schema.journal).where(and(gt(schema.journal.creeLe, new Date(Date.now() - 30 * 864e5)), inArray(schema.journal.action, ['annonce_publiee', 'annonce_refusee'])));
   const pub = j.filter((x) => x.action === 'annonce_publiee').length;
   const ref = j.length - pub;
+  const favs = m && annonces.length ? new Set((await db.select().from(schema.favoris).where(inArray(schema.favoris.annonceId, annonces.map((a) => a.id)))).filter((f) => f.membreId === m.id).map((f) => f.annonceId)) : new Set<number>();
+  const maisons = [...new Set(annonces.map((a) => a.maisonNom))].sort((x, y) => x.localeCompare(y, 'fr'));
+  const remises = annonces.map((a) => (a.parfum ? remise(a.parfum.formats, a)?.pct : undefined)).filter((x): x is number => x !== undefined);
+  const moyenne = remises.length >= 3 ? Math.round(remises.reduce((s, x) => s + x, 0) / remises.length) : null;
+  const pile = annonces.filter((a) => a.photos.face).slice(0, 3);
+  const pileSrc = pile.length === 3 ? pile.map((a) => `/photos/${a.photos.face}`) : ['/demo/a109-face.webp', '/demo/a104-face.webp', '/demo/a106-face.webp'];
+
   return (
     <>
-      <section className="env accueil-tete">
-        <p className="surtitre">Parfums de seconde main</p>
-        <h1 className="accueil-titre">Le parfum de seconde main, sans le doute.</h1>
-        <p className="chapo">Chaque annonce est vérifiée par l'équipe avant d'être en ligne. Et vous avez 7 jours, flacon en main, pour vérifier à votre tour.</p>
-        <div className="boutons">
-          <Link className="btn btn-noir btn-large" href="/vendre">Vendre un parfum, sans commission</Link>
-          <Link className="btn btn-large" href="/parfums">Voir les parfums</Link>
+      <section className="portes env">
+        <div className="portes-in">
+          <div className="porte porte-acheter">
+            <div className="porte-texte">
+              <p className="surtitre">Acheter</p>
+              <h1>Le parfum de seconde main, sans le doute.</h1>
+              <p className="porte-sous">Chaque annonce est vérifiée par l&apos;équipe avant d&apos;être en ligne. Et vous avez 7 jours, flacon en main, pour vérifier à votre tour.</p>
+              <form className="cherche-grand" action="/parfums" role="search">
+                <label className="vh" htmlFor="q-hero">Rechercher un parfum ou une maison</label>
+                <Ico n="loupe" />
+                <input id="q-hero" name="q" type="search" placeholder="Un parfum, une maison…" autoComplete="off" />
+                <button className="btn btn-noir" type="submit">Rechercher</button>
+              </form>
+              <Direct items={annonces.slice(0, 6).map((a) => ({id: a.id, nom: a.parfumNom, prix: a.prix, il: il(a.publieeLe)}))} />
+            </div>
+            <div className="pile" aria-hidden="true">{pileSrc.map((s, i) => <span key={i} className="pile-photo" style={{'--i': i} as React.CSSProperties}><img className="visuel" src={s} alt="" width={600} height={750} /></span>)}</div>
+          </div>
+          <Link className="porte porte-vendre" href="/vendre">
+            <div className="porte-texte">
+              <p className="surtitre">Vendre</p>
+              <h2>Il dort dans un placard ? Vendez‑le, sans commission.</h2>
+              <p>Vous touchez 100 % du prix. Six photos, une vérification, et il est en ligne.</p>
+              <span className="btn btn-noir">Vendre un parfum <Ico n="fleche" /></span>
+            </div>
+            <div className="porte-visuel"><Vaporise /></div>
+          </Link>
         </div>
       </section>
-      <section className="env section">
-        <div className="section-tete"><h2>En ce moment</h2>{annonces.length ? <Link className="lien" href="/parfums">Tout voir</Link> : null}</div>
-        {annonces.length ? <div className="grille">{annonces.map((a) => <Carte key={a.id} a={a} />)}</div> : null}
-        {annonces.length < PEU ? (
-          <div className="bientot">
-            <h3>{annonces.length ? 'D\'autres annonces arrivent chaque jour.' : 'Les premières annonces arrivent.'}</h3>
-            <p className="aide">Chacune est vérifiée avant d'apparaître ici. Laissez votre adresse : on vous écrit dès qu'il y a du choix.</p>
-            <FormAttente envie="acheter" />
+
+      <section className="ruban-section">
+        {annonces.length ? (
+          <Ruban maisons={maisons} total={annonces.length} aide={`${moyenne ? `En moyenne ${moyenne} % moins cher que neuf, au millilitre. ` : ''}Chaque annonce a été vérifiée avant d'apparaître ici.`}>
+            {annonces.map((a) => <Carte key={a.id} a={a} favori={favs.has(a.id)} connecte={!!m} />)}
+          </Ruban>
+        ) : (
+          <div className="env">
+            <h2 className="grand-titre">En ce moment</h2>
+            <div className="bientot">
+              <h3>Les premières annonces arrivent.</h3>
+              <p className="aide">Chacune est vérifiée avant d&apos;apparaître ici. Laissez votre adresse : on vous écrit dès qu&apos;il y a du choix.</p>
+              <FormAttente envie="acheter" />
+            </div>
           </div>
+        )}
+        {annonces.length && annonces.length < 8 ? (
+          <div className="env"><p className="aide">D&apos;autres annonces arrivent chaque jour. <Link className="lien-souligne" href="/parfums">Préviens-moi pour un parfum précis</Link></p></div>
         ) : null}
       </section>
+
+      <Anatomie />
+      <Reception />
+
       <section className="env section accueil-duo">
-        <Link className="tuile tuile-placard" href="/placard">
+        <Link className="tuile tuile-placard" href="/placard" data-revele>
           <p className="surtitre">Le placard</p>
           <h2 className="h2">Combien valent les parfums qui dorment chez vous ?</h2>
-          <p className="aide">Ajoutez ceux que vous avez, même entamés : on estime chacun d'après la cote. Vous vendez ensuite ceux que vous voulez, en un geste.</p>
+          <p className="aide">Ajoutez ceux que vous avez, même entamés : on estime chacun d&apos;après la cote. Vous vendez ensuite ceux que vous voulez, en un geste.</p>
           <span className="lien">Estimer mon placard</span>
         </Link>
-        <Link className="tuile tuile-verif" href="/verification">
+        <Link className="tuile tuile-verif" href="/verification" data-revele>
           <Bouclier taille={64} anime={false} />
           <p className="surtitre">Nos chiffres</p>
           <h2 className="h2">{j.length ? `${pub} annonces publiées, ${ref} refusées ces 30 derniers jours.` : 'Ce qu\'on publie, ce qu\'on refuse, et pourquoi.'}</h2>

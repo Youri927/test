@@ -398,3 +398,12 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .pied-legal a:hover { color: var(--texte); text-decoration: underline; }
 .etiq-avant { left: auto; right: 10px; top: 10px; bottom: auto; background: var(--accent); color: #fff; }
 .emails-form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+
+/* repris du prototype : la fiche du guide en grand, et la mention « Exemple » sur l'annonce décortiquée */
+.guide-dialogue { width: min(620px, calc(100vw - 32px)); max-height: 88vh; padding: 28px; border: 0; border-radius: 20px; background: var(--fond); color: var(--texte); box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .5); }
+.guide-dialogue::backdrop { background: rgba(0, 0, 0, .45); }
+.guide-dialogue .modale-x { position: absolute; top: 12px; right: 12px; }
+.anat-carte { position: relative; }
+.exemple-badge { position: absolute; top: 14px; left: 14px; z-index: 3; padding: 3px 9px; border-radius: 7px; background: var(--fond); box-shadow: 0 0 0 1px var(--trait); color: var(--texte-2); font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.carte[hidden] { display: none; }
+.ruban-section > * { min-width: 0; }

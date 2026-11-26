@@ -15,7 +15,7 @@ const depuis = (d: Date | null) => {
 export function Carte({a, favori = false, connecte = false}: {a: AnnonceAvecPhotos; favori?: boolean; connecte?: boolean}) {
   const r = a.parfum ? remise(a.parfum.formats, a) : null;
   return (
-    <article className="carte">
+    <article className="carte" data-revele data-maison={a.maisonNom}>
       <Link className="carte-lien" href={`/annonces/${a.id}`}>
         <div className="carte-photo">
           {a.photos.face ? <img className="visuel" src={`/photos/${a.photos.face}`} alt={`${a.parfumNom}, de face`} loading="lazy" /> : <span className="visuel" />}
