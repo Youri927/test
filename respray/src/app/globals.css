@@ -474,8 +474,8 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 .z0 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding: 6px; }
 .anat-grande { grid-column: span 2; grid-row: span 2; border-radius: 12px; overflow: hidden; }
 .anat-minis { display: contents; }
-.anat-minis span { border-radius: 9px; overflow: hidden; }
-.anat-minis span:first-child { display: none; }
+.anat-minis > span { border-radius: 9px; overflow: hidden; }
+.anat-minis > span:first-child { display: none; }
 .anat-carte .visuel { aspect-ratio: 1; }
 .anat-infos p { font-size: 14px; color: var(--texte-2); }
 .anat-infos .anat-nom { font-size: 19px; font-weight: 650; color: var(--texte); }
@@ -1073,7 +1073,7 @@ a.bo-tuile:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -18px rg
   .ruban-fleches { display: none; }
   .z0 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .anat-grande { grid-row: auto; }
-  .anat-minis span:nth-child(n + 4) { display: none; }
+  .anat-minis > span:nth-child(n + 4) { display: none; }
   .rec-item { grid-template-columns: 40px minmax(0, 1fr); padding: 14px; }
   .rec-case { width: 40px; height: 40px; }
   .conc { grid-template-columns: 110px minmax(0, 1fr) 70px; gap: 10px; font-size: 13.5px; }

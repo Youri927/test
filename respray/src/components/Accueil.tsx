@@ -91,7 +91,9 @@ export function Anatomie() {
     if (bloc.current) o.observe(bloc.current);
     const t = setInterval(() => {
       const b = bloc.current;
-      if (visible && b && !b.matches(':hover') && !b.contains(document.activeElement)) setI((x) => (x + 1) % ANATOMIE.length);
+      // sur téléphone, un toucher laisse la section « survolée » : on n'en tient compte qu'avec une vraie souris
+      const survol = window.matchMedia('(hover: hover)').matches && b?.matches(':hover');
+      if (visible && b && !survol && !b.contains(document.activeElement)) setI((x) => (x + 1) % ANATOMIE.length);
     }, 4200);
     return () => {
       clearInterval(t);
@@ -116,13 +118,19 @@ export function Anatomie() {
         </ol>
         <Link className="lien" href="/comment-ca-marche">Tout le fonctionnement <Ico n="fleche" /></Link>
       </div>
-      <div className="anat-carte" data-zone={i} aria-hidden="true">
+      {/* toucher une zone de la carte choisit son étape (au doigt, la liste des étapes est plus haut, hors de l'écran) */}
+      <div className="anat-carte" data-zone={i} aria-hidden="true" onClick={(e) => { const z = (e.target as HTMLElement).closest('[data-z]'); if (z) { setAuto(false); setI(Number(z.getAttribute('data-z'))); } }}>
         <span className="exemple-badge">Exemple</span>
-        <div className="z z0"><div className="anat-grande"><PhotoDemo /></div><div className="anat-minis">{['dessous', 'niveau', 'dessus', 'tige', 'preuve'].map((v) => <span key={v}><PhotoDemo vue={v} /></span>)}</div></div>
+        <div className="z z0" data-z="0"><div className="anat-grande"><PhotoDemo /></div><div className="anat-minis">{['dessous', 'niveau', 'dessus', 'tige', 'preuve'].map((v) => <span key={v}><PhotoDemo vue={v} /></span>)}</div></div>
         <div className="anat-infos"><p>{DEMO_PARFUM.maison}</p><p className="anat-nom">{DEMO_PARFUM.nom}</p><p className="anat-prix">{eur(DEMO.prix)} <small>· {DEMO.ml} ml · reste ~{DEMO.niveau} %</small></p></div>
-        <div className="z z1"><b><Ico n="check" /></b><span><strong>Vérifiée par l&apos;équipe</strong><small>avant d&apos;être en ligne · 6 contrôles</small></span></div>
-        <div className="z z2"><b><Ico n="cadenas" /></b><span><strong>Paiement bloqué, 7 jours pour vérifier</strong><span className="anat-jours">{Array.from({length: 7}, (_, k) => <i key={k} style={{'--i': k} as React.CSSProperties} />)}</span></span></div>
-        <div className="z z3"><b><Ico n="euro" /></b><span><strong>Le vendeur reçoit {eur2(DEMO.prix)}</strong><small>Commission : 0,00 €</small></span></div>
+        <div className="z z1" data-z="1"><b><Ico n="check" /></b><span><strong>Vérifiée par l&apos;équipe</strong><small>avant d&apos;être en ligne · 6 contrôles</small></span></div>
+        <div className="z z2" data-z="2"><b><Ico n="cadenas" /></b><span><strong>Paiement bloqué, 7 jours pour vérifier</strong><span className="anat-jours">{Array.from({length: 7}, (_, k) => <i key={k} style={{'--i': k} as React.CSSProperties} />)}</span></span></div>
+        <div className="z z3" data-z="3"><b><Ico n="euro" /></b><span><strong>Le vendeur reçoit {eur2(DEMO.prix)}</strong><small>Commission : 0,00 €</small></span></div>
+      </div>
+      {/* au téléphone : l'étape en cours, sous la carte, et des points pour passer de l'une à l'autre */}
+      <div className="anat-legende-m" aria-hidden="true">
+        <p><strong>{String(i + 1).padStart(2, '0')} · {ANATOMIE[i].t}</strong> {ANATOMIE[i].d}</p>
+        <div className="anat-points-m">{ANATOMIE.map((x, k) => <button key={x.t} type="button" tabIndex={-1} className={k === i ? 'actif' : ''} onClick={() => { setAuto(false); setI(k); }} aria-label={x.t} />)}</div>
       </div>
     </section>
   );
