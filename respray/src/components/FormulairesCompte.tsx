@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import {useActionState} from 'react';
-import {inscription, connexion, rejoindreAttente, candidater, type Etat} from '@/app/actions/compte';
+import {inscription, connexion, rejoindreAttente, candidater, demanderReinitialisation, changerMotDePasse, type Etat} from '@/app/actions/compte';
 
 const Erreur = ({e}: {e?: string}) => (e ? <p className="erreur" role="alert">{e}</p> : null);
 
@@ -16,7 +16,34 @@ export function FormConnexion({retour}: {retour: string}) {
       <input id="mdp" name="motDePasse" type="password" className="champ" autoComplete="current-password" required />
       <Erreur e={etat.erreur} />
       <button className="btn btn-noir btn-large" type="submit" disabled={enCours}>{enCours ? 'Connexion…' : 'Se connecter'}</button>
-      <p className="aide">Pas encore de compte ? <Link className="lien-souligne" href={`/inscription?retour=${encodeURIComponent(retour)}`}>Créer un compte</Link></p>
+      <p className="aide"><Link className="lien-souligne" href="/mot-de-passe-oublie">Mot de passe oublié ?</Link> · Pas encore de compte ? <Link className="lien-souligne" href={`/inscription?retour=${encodeURIComponent(retour)}`}>Créer un compte</Link></p>
+    </form>
+  );
+}
+
+export function FormOubli() {
+  const [etat, agir, enCours] = useActionState<Etat, FormData>(demanderReinitialisation, {});
+  if (etat.ok) return <p className="envie-ok" role="status">{etat.ok}</p>;
+  return (
+    <form className="formulaire compte-form" action={agir}>
+      <label htmlFor="email">L'adresse e-mail de votre compte</label>
+      <input id="email" name="email" type="email" className="champ" autoComplete="email" required />
+      <button className="btn btn-noir btn-large" type="submit" disabled={enCours}>{enCours ? 'Envoi…' : 'Recevoir un lien'}</button>
+    </form>
+  );
+}
+
+export function FormNouveauMdp({jeton}: {jeton: string}) {
+  const [etat, agir, enCours] = useActionState<Etat, FormData>(changerMotDePasse, {});
+  return (
+    <form className="formulaire compte-form" action={agir}>
+      <input type="hidden" name="jeton" value={jeton} />
+      <label htmlFor="mdp">Nouveau mot de passe</label>
+      <input id="mdp" name="motDePasse" type="password" className="champ" autoComplete="new-password" minLength={10} required />
+      <p className="aide">10 caractères au moins.</p>
+      <Erreur e={etat.erreur} />
+      <button className="btn btn-noir btn-large" type="submit" disabled={enCours}>{enCours ? 'Enregistrement…' : 'Enregistrer'}</button>
+      {etat.erreur ? <p className="aide"><Link className="lien-souligne" href="/mot-de-passe-oublie">Demander un nouveau lien</Link></p> : null}
     </form>
   );
 }

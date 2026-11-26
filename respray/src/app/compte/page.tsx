@@ -7,6 +7,7 @@ import {Carte} from '@/components/Carte';
 import {eur} from '@/lib/regles';
 import {RemplacerPhoto} from '@/components/RemplacerPhoto';
 import {proposerAuxFavoris, retirerEnvie} from '@/app/actions/marche';
+import {reglerEmails} from '@/app/actions/compte';
 import {payerMiseEnAvant} from '@/app/actions/commandes';
 import {verifierPaiementAvant} from '@/lib/avant';
 import {MISES_EN_AVANT} from '@/lib/regles';
@@ -24,7 +25,7 @@ const STATUTS: Record<string, [string, string]> = {
   vendue: ['Vendue', 'ok'],
 };
 
-export default async function Compte({searchParams}: {searchParams: Promise<{propose?: string; erreur?: string; avant?: string}>}) {
+export default async function Compte({searchParams}: {searchParams: Promise<{propose?: string; erreur?: string; avant?: string; mdp?: string; emails?: string}>}) {
   const q = await searchParams;
   const m = await exigerMembre('/compte');
   if (q.avant) await verifierPaiementAvant(Number(q.avant), m.id).catch(() => null);
@@ -43,6 +44,7 @@ export default async function Compte({searchParams}: {searchParams: Promise<{pro
         <Link href="/activite">Activité</Link><Link href="/commandes">Mes commandes</Link><Link href="/compte/versements">Mes versements</Link><Link href="/messages">Messages</Link><Link href="/placard">Mon placard</Link><Link href="#envies">Mes envies</Link>
       </nav>
       {q.propose ? <p className="envie-ok" role="status">✓ Prix proposé à {Number(q.propose) > 1 ? `${q.propose} personnes : elles sont prévenues, et ont` : `${q.propose} personne : elle est prévenue, et a`} 48 heures pour en profiter.</p> : null}
+      {q.mdp === 'ok' ? <p className="envie-ok" role="status">✓ Mot de passe changé.</p> : null}
       {q.erreur === 'offre' ? <p className="erreur" role="alert">Le prix proposé doit être inférieur au prix affiché.</p> : null}
       <section className="section parrainage">
         <div><p className="surtitre">Parrainage</p><h2 className="h2">Invitez quelqu'un : chacun y gagne</h2>
@@ -92,6 +94,14 @@ export default async function Compte({searchParams}: {searchParams: Promise<{pro
             ))}
           </ul>
         ) : <p className="aide">Sur la page d'un parfum ou après une recherche, « Me prévenir quand il arrive » l'ajoute ici. Vous êtes prévenu dès qu'une annonce vérifiée arrive, à votre prix.</p>}
+      </section>
+      <section className="section" id="notifications">
+        <div className="section-tete"><h2>Mes e-mails</h2></div>
+        <form action={reglerEmails} className="emails-form">
+          <label className="choix"><input type="checkbox" name="emailsActivite" defaultChecked={m.emailsActivite} /> <span>Me prévenir par e-mail quand une envie arrive, quand je reçois une offre ou un message</span></label>
+          <button className="btn btn-petit" type="submit">Enregistrer</button>
+        </form>
+        <p className="aide">{q.emails === 'ok' ? '✓ Enregistré. ' : ''}Les e-mails sur vos commandes et vos annonces (paiement, envoi, versement, litige) partent toujours : ils sont nécessaires à la vente.</p>
       </section>
       {favoris.length ? (
         <section className="section">

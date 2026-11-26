@@ -27,6 +27,8 @@ export const membres = pgTable(
     // les versements : le compte Stripe Connect du vendeur, et s'il peut recevoir de l'argent
     stripeCompte: text('stripe_compte'),
     versementsOk: boolean('versements_ok').notNull().default(false),
+    // les e-mails facultatifs (envies arrivées, offres, messages) ; les e-mails essentiels partent toujours
+    emailsActivite: boolean('emails_activite').notNull().default(true),
     creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
   },
   (t) => [uniqueIndex('membres_email').on(t.email), uniqueIndex('membres_pseudo').on(t.pseudo), uniqueIndex('membres_code').on(t.code)],
@@ -306,4 +308,28 @@ export const evenementsStripe = pgTable('evenements_stripe', {
   id: text('id').primaryKey(),
   type: text('type').notNull(),
   recuLe: timestamp('recu_le', {withTimezone: true}).notNull().defaultNow(),
+});
+
+/* les e-mails envoyés (ou simulés en développement) : l'équipe voit ce qui est parti, et ce qui a échoué */
+export const emails = pgTable(
+  'emails',
+  {
+    id: serial('id').primaryKey(),
+    membreId: integer('membre_id').references(() => membres.id, {onDelete: 'set null'}),
+    a: text('a').notNull(),
+    sujet: text('sujet').notNull(),
+    type: text('type').notNull(),
+    statut: text('statut', {enum: ['envoye', 'simule', 'echec']}).notNull(),
+    erreur: text('erreur'),
+    creeLe: timestamp('cree_le', {withTimezone: true}).notNull().defaultNow(),
+  },
+  (t) => [index('emails_membre').on(t.membreId, t.type)],
+);
+
+/* les liens de réinitialisation du mot de passe : seul le haché du jeton est gardé, valable 1 heure, une seule fois */
+export const jetons = pgTable('jetons', {
+  hache: text('hache').primaryKey(),
+  membreId: integer('membre_id').notNull().references(() => membres.id, {onDelete: 'cascade'}),
+  expire: timestamp('expire', {withTimezone: true}).notNull(),
+  utilise: boolean('utilise').notNull().default(false),
 });

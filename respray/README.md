@@ -44,6 +44,21 @@ les notes du catalogue. La traduction des notes en français est dans `src/lib/n
    les e-mails, et le réglage « Profil de la plateforme » de Connect dans le tableau de bord Stripe (sans lui, Stripe
    refuse de créer les comptes de versement des vendeurs)
 
+## Les e-mails
+
+`src/lib/email.ts` : envoi par SMTP (variables `SMTP_*`), modèle aux couleurs du site, une ligne par e-mail dans la
+table `emails` (envoyé, simulé, échec). Chaque notification de l'activité part aussi par e-mail : les essentielles
+(achat, vente, litige, annonce) toujours ; les autres (envie arrivée, offre, message) selon la préférence du membre,
+et au plus un e-mail de message toutes les 15 minutes. Plus : bienvenue, mot de passe oublié (lien valable une heure,
+une seule fois, déconnexion des autres appareils). Sans `SMTP_HOST`, rien ne part ; avec `SMTP_HOST=json`, les e-mails
+sont construits et écrits dans le journal du serveur (tests).
+
+## Les pages légales
+
+`/cgu`, `/confidentialite`, `/regles`, `/obligations-fiscales`, `/mentions-legales`. Les informations de la société
+(raison sociale, siège, RCS, directeur de la publication, médiateur de la consommation) sont dans `src/lib/legal.ts`,
+entre crochets : à compléter avant l'ouverture, et à faire relire par un juriste.
+
 ## L'argent : comment ça marche
 
 1. L'acheteur paie sur Stripe Checkout (carte, Apple Pay, Google Pay), toujours en euros. L'annonce est réservée

@@ -397,3 +397,4 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .pied-legal a { color: var(--texte-2); text-decoration: none; }
 .pied-legal a:hover { color: var(--texte); text-decoration: underline; }
 .etiq-avant { left: auto; right: 10px; top: 10px; bottom: auto; background: var(--accent); color: #fff; }
+.emails-form { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }

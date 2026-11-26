@@ -77,6 +77,25 @@ systemctl restart respray
   `FR1420041010050500013M02606`).
 - Une annonce, vérifiée par l'équipe, achetée par un autre compte avec la carte `4242 4242 4242 4242`.
 
+## 6. Les e-mails
+
+Le site envoie ses e-mails (bienvenue, mot de passe oublié, paiement, colis, versement, litige, envies, offres,
+messages) par SMTP. Brevo (français, gratuit jusqu'à 300 e-mails par jour) convient très bien.
+
+1. Crée un compte sur brevo.com, puis **Expéditeurs, domaines et IP dédiées**, **Domaines**, ajoute `respray.fr`.
+   Brevo affiche des enregistrements DNS (code Brevo, DKIM, DMARC) : ajoute-les tels quels dans hPanel, Domaines,
+   respray.fr, DNS, puis clique sur « Authentifier » chez Brevo. Sans cette étape, les e-mails finissent en
+   indésirables.
+2. Chez Brevo, **SMTP et API**, onglet **SMTP** : note l'identifiant de connexion et crée une **clé SMTP**.
+3. Sur le VPS, colle cette commande (elle demande l'identifiant et la clé, rien ne s'affiche pour la clé) :
+
+```bash
+read -rp "Identifiant SMTP Brevo : " U; read -rsp "Clé SMTP Brevo : " P; echo; F=/srv/respray/.env; for kv in "SMTP_HOST=smtp-relay.brevo.com" "SMTP_PORT=587" "SMTP_USER=$U" "SMTP_PASS=$P" "EMAIL_EXPEDITEUR=Respray <noreply@respray.fr>" "EMAIL_REPONSE=contact@respray.fr"; do k=${kv%%=*}; if grep -q "^$k=" $F; then sed -i "s|^$k=.*|$kv|" $F; else echo "$kv" >> $F; fi; done; systemctl restart respray && echo "E-mails configurés."
+```
+
+4. Test : sur respray.fr, « Se connecter », « Mot de passe oublié ? », avec ton adresse. L'e-mail doit arriver
+   en boîte de réception. En cas de souci : `sudo -u respray psql respray -c "select a, sujet, statut, erreur from emails order by id desc limit 5;"`
+
 ## Ensuite
 
 - **Mettre à jour le site** après une modification du code :

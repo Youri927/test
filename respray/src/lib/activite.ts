@@ -2,9 +2,12 @@ import 'server-only';
 /* L'activité d'un membre (envie arrivée, favori, offre, message…), et le masquage des coordonnées dans les messages. */
 import {and, eq, sql} from 'drizzle-orm';
 import {db, schema} from '@/db';
+import {emailActivite} from '@/lib/email';
 
 export async function notifier(membreId: number, type: string, texte: string, lien = '') {
   await db.insert(schema.notifications).values({membreId, type, texte, lien});
+  // l'e-mail part sans faire attendre la page ; une erreur d'envoi n'empêche jamais l'action
+  void emailActivite(membreId, type, texte, lien).catch((e) => console.error('E-mail d\'activité :', (e as Error).message));
 }
 
 /* Ce qui ferait sortir la vente de Respray (et de la protection) : adresse email, numéro de téléphone, IBAN, et les
