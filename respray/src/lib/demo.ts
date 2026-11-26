@@ -1,20 +1,20 @@
-/* L'exemple de démonstration : un flacon inventé (« Ambre 27 », Atelier Séverin), rendu en 3D photoréaliste, qui sert à
+/* L'exemple de démonstration : Bois Impérial d'Essential Parfums (photos dans tools/exemple), toujours présenté comme un exemple, qui sert à
    montrer ce qu'on vérifie (« point par point », le guide, « Comment ça marche »). Il est toujours présenté comme un
    exemple : aucune annonce n'est inventée. Images dans public/demo. */
 export const DEMO = {
   id: 'a101',
-  ml: 70,
+  ml: 100,
   etat: 'entame',
   niveau: 85,
   boite: true,
   lot: '3A21',
-  prix: 189,
+  prix: 85,
   fond: '#EDE7E1',
 };
 export const DEMO_PARFUM = {
-  id: 'ambre-27',
-  maison: 'Atelier Séverin', // maison et parfum inventés, comme le flacon rendu en 3D
-  nom: 'Ambre 27',
+  id: 'bois-imperial',
+  maison: 'Essential Parfums', // le flacon des photos d'exemple (tools/exemple)
+  nom: 'Bois Impérial',
   conc: 'Eau de parfum',
   forme: 'facette',
   jus: '#E2A985',
