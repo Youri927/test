@@ -37,7 +37,7 @@ export function Vaporise() {
   );
 }
 
-export const Ico = ({n, c = ''}: {n: keyof typeof ICO; c?: string}) => <svg className={`ico ${c}`} viewBox="0 0 24 24" aria-hidden="true" dangerouslySetInnerHTML={{__html: ICO[n]}} />;
+export const Ico = ({n, c = ''}: {n: keyof typeof ICO; c?: string}) => <svg className={`ico ico-${n} ${c}`} viewBox="0 0 24 24" aria-hidden="true" dangerouslySetInnerHTML={{__html: ICO[n]}} />;
 export const ICO = {
   photo: '<path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
   cadenas: '<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',

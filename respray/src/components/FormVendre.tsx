@@ -9,6 +9,7 @@ import {PHOTOS, CONCENTRATIONS, GROUPES_FAMILLES, FORMATS, LIEUX, DEFAUTS, BOITE
 import {estimer} from '@/lib/cote';
 import {Jauge} from '@/components/Jauge';
 import {ChoixParfum, type Choix} from '@/components/ChoixParfum';
+import {Montant} from '@/components/Mouvement';
 
 type Parfum = {id: number; nom: string; conc: string; genre: string; famille: string; notes: string; formats: {ml: number; neuf?: number}[]};
 export type Depart = {maisonId?: string; parfumId?: string; ml?: string; niveau?: number};
@@ -326,7 +327,7 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
         <div id="apercu">
           <div className="touche">
             <span>Vous touchez</span>
-            <strong>{prixN >= 3 ? eur2(prixN) : '— €'}</strong>
+            <strong>{prixN >= 3 ? <Montant valeur={prixN} format={eur2} /> : '— €'}</strong>
             <small>100 % du prix · 0 € de commission</small>
           </div>
           <div className="apercu-carte">

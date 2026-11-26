@@ -21,6 +21,10 @@ const LD = [
   {'@context': 'https://schema.org', '@type': 'WebSite', name: 'Respray', url: SITE, inLanguage: 'fr-FR', potentialAction: {'@type': 'SearchAction', target: {'@type': 'EntryPoint', urlTemplate: `${SITE}/parfums?q={q}`}, 'query-input': 'required name=q'}},
 ];
 
+/* la première visite de la session (page chargée, pas une navigation) : l'accueil se met en place en ~1 s.
+   Les fois suivantes, il est là tout de suite. Posé avant les portes pour s'appliquer dès la première image. */
+const INTRO = `try{if(!sessionStorage.getItem('r-intro')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){var d=document.documentElement;d.classList.add('intro');sessionStorage.setItem('r-intro','1');setTimeout(function(){d.classList.remove('intro')},2600)}}catch(e){}`;
+
 const il = (d: Date | null) => {
   if (!d) return '';
   const m = Math.max(1, Math.round((Date.now() - d.getTime()) / 6e4));
@@ -49,6 +53,7 @@ export default async function Accueil() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(LD).replace(/</g, '\\u003c')}} />
+      <script dangerouslySetInnerHTML={{__html: INTRO}} />
       <section className="portes env">
         <div className="portes-in">
           <div className="porte porte-acheter">
@@ -116,7 +121,7 @@ export default async function Accueil() {
         <Link className="tuile tuile-verif" href="/verification" data-revele>
           <Bouclier taille={64} anime={false} />
           <p className="surtitre">Nos chiffres</p>
-          <h2 className="h2">{j.length ? `${pub} annonce${pub > 1 ? 's' : ''} publiée${pub > 1 ? 's' : ''}, ${ref} refusée${ref > 1 ? 's' : ''} ces 30 derniers jours.` : 'Ce qu\'on publie, ce qu\'on refuse, et pourquoi.'}</h2>
+          <h2 className="h2">{j.length ? <><span data-compte>{pub}</span> annonce{pub > 1 ? 's' : ''} publiée{pub > 1 ? 's' : ''}, <span data-compte>{ref}</span> refusée{ref > 1 ? 's' : ''} ces 30 derniers jours.</> : 'Ce qu\'on publie, ce qu\'on refuse, et pourquoi.'}</h2>
           <p className="aide">Une vérification qui ne refuse rien ne prouve rien. Les nôtres sont publiques, raisons comprises.</p>
           <span className="lien">Voir les chiffres</span>
         </Link>

@@ -9,6 +9,7 @@ import {nonLues} from '@/lib/activite';
 import {MenuCompte} from '@/components/MenuCompte';
 import {LienTrustpilot} from '@/components/Trustpilot';
 import {Apparitions, BoutonTheme, SCRIPT_THEME} from '@/components/Ambiance';
+import {Mouvement} from '@/components/Mouvement';
 
 const SITE = process.env.SITE_URL || 'https://respray.fr';
 const DESCRIPTION = 'Achetez et vendez du parfum de seconde main entre particuliers : chaque annonce est vérifiée par l\'équipe avant d\'être en ligne, votre paiement reste bloqué et vous avez 7 jours pour vérifier. 0 % de commission pour le vendeur.';
@@ -33,6 +34,7 @@ export default async function Racine({children}: {children: React.ReactNode}) {
       <head><script dangerouslySetInnerHTML={{__html: SCRIPT_THEME}} /></head>
       <body>
         <Apparitions />
+        <Mouvement />
         <header className="entete">
           <div className="env entete-in">
             <Link className="logo" href="/" aria-label="Respray, accueil">

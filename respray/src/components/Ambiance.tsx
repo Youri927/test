@@ -12,17 +12,25 @@ export function Apparitions() {
     document.documentElement.classList.add('js-anime');
     // data-revele : apparaît une fois ; data-anime : son animation se rejoue à chaque retour à l'écran
     const vu = new IntersectionObserver(
-      (es) =>
+      (es) => {
+        // ce qui entre à l'écran en même temps apparaît en cascade (70 ms d'écart, dans l'ordre de lecture)
+        let rang = 0;
         es.forEach((e) => {
           const rejoue = e.target.hasAttribute('data-anime');
           if (e.isIntersecting) {
+            if (!rejoue && !e.target.classList.contains('vu')) {
+              const el = e.target as HTMLElement;
+              el.style.setProperty('--r', String(Math.min(rang++, 7)));
+              setTimeout(() => el.style.removeProperty('--r'), 2500); // le survol ne doit pas garder ce retard
+            }
             e.target.classList.add('vu');
             if (!rejoue) vu.unobserve(e.target);
           } else if (rejoue && e.boundingClientRect.top > 0) {
             // on est remonté au-dessus : l'animation repartira de zéro en redescendant
             e.target.classList.remove('vu');
           }
-        }),
+        });
+      },
       {rootMargin: '0px 0px -8% 0px'},
     );
     const suivis = new WeakSet<Element>();

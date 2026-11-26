@@ -54,8 +54,8 @@ export default async function Vendeur({params, searchParams}: {params: Promise<{
       </header>
 
       <div className="profil-chiffres">
-        <div><strong>{c.ventes}</strong><span>vente{c.ventes > 1 ? 's' : ''} réussie{c.ventes > 1 ? 's' : ''}</span></div>
-        <div><strong>{annonces.length}</strong><span>annonce{annonces.length > 1 ? 's' : ''} en ligne</span></div>
+        <div><strong data-compte>{c.ventes}</strong><span>vente{c.ventes > 1 ? 's' : ''} réussie{c.ventes > 1 ? 's' : ''}</span></div>
+        <div><strong data-compte>{annonces.length}</strong><span>annonce{annonces.length > 1 ? 's' : ''} en ligne</span></div>
         {delai ? <div><strong>{delai}</strong><span>pour envoyer, en moyenne</span></div> : null}
         {c.sansLitige !== null ? <div><strong>{c.sansLitige} %</strong><span>des ventes sans litige</span></div> : null}
       </div>

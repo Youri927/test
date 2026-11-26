@@ -44,12 +44,12 @@ export default async function Verification() {
       </div>
       {decisions ? (
         <div className="verif-chiffres">
-          <div><strong>{decisions}</strong><span>annonces examinées</span></div>
-          <div className="ok"><strong>{publiees}</strong><span>publiées</span></div>
-          <div className="refus"><strong>{refusees}</strong><span>refusées, soit {Math.round((refusees / decisions) * 100)} %</span></div>
-          <div><strong>{photos}</strong><span>photos redemandées avant de décider</span></div>
+          <div><strong data-compte>{decisions}</strong><span>annonces examinées</span></div>
+          <div className="ok"><strong data-compte>{publiees}</strong><span>publiées</span></div>
+          <div className="refus"><strong data-compte>{refusees}</strong><span>refusées, soit {Math.round((refusees / decisions) * 100)} %</span></div>
+          <div><strong data-compte>{photos}</strong><span>photos redemandées avant de décider</span></div>
           {median !== null ? <div><strong>{duree(median)}</strong><span>entre l'envoi d'une annonce et sa publication, en temps médian</span></div> : null}
-          <div><strong>{enLigne}</strong><span>annonces vérifiées en ligne aujourd'hui</span></div>
+          <div><strong data-compte>{enLigne}</strong><span>annonces vérifiées en ligne aujourd'hui</span></div>
         </div>
       ) : (
         <div className="bientot"><h3>Les premiers chiffres arrivent avec les premières annonces.</h3><p className="aide">Dès que l'équipe aura publié ou refusé ses premières annonces, ils s'afficheront ici, sans retouche.</p></div>

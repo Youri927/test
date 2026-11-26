@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import {Galerie} from '@/components/Galerie';
 import {notFound} from 'next/navigation';
 import {and, desc, eq, inArray, gt} from 'drizzle-orm';
 import {db, schema} from '@/db';
@@ -88,14 +89,7 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
       <nav className="fil" aria-label="Fil d'Ariane"><Link href="/parfums">Parfums</Link><span aria-hidden="true">›</span><Link href={`/maison/${lien(a.maisonNom)}`}>{a.maisonNom}</Link><span aria-hidden="true">›</span>{a.parfumId ? <Link href={`/parfum/${lien(a.maisonNom, a.parfumNom)}`}>{a.parfumNom}</Link> : <span>{a.parfumNom}</span>}</nav>
       {a.statut !== 'publiee' ? <p className="p-alerte">{a.statut === 'vendue' ? 'Ce parfum est vendu.' : `Aperçu : cette annonce n'est pas en ligne (${a.statut}).`}</p> : null}
       <div className="annonce">
-        <div className="galerie galerie-reelle">
-          {PHOTOS.filter((p) => a.photos[p.k]).map((p, i) => (
-            <figure key={p.k} className={i === 0 ? 'grande' : ''}>
-              <a href={`/photos/${a.photos[p.k]}`} target="_blank" rel="noopener"><img className="visuel" src={`/photos/${a.photos[p.k]}`} alt={`${a.parfumNom} : ${p.t.toLowerCase()}`} /></a>
-              <figcaption>{p.t}</figcaption>
-            </figure>
-          ))}
-        </div>
+        <Galerie photos={PHOTOS.filter((p) => a.photos[p.k]).map((p) => ({src: `/photos/${a.photos[p.k]}`, alt: `${a.parfumNom} : ${p.t.toLowerCase()}`, legende: p.t}))} />
         <div className="fiche">
           <div className="fiche-tete">
             <div>
