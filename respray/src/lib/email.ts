@@ -82,7 +82,7 @@ export function modele(m: Mail) {
           const encours = i === m.suivi!.fait;
           const rond = fait
             ? `<div style="width:26px;height:26px;line-height:26px;border-radius:13px;background:#1a7f4b;color:#ffffff;font-size:14px;font-weight:700;text-align:center;margin:0 auto">&#10003;</div>`
-            : `<div style="width:22px;height:22px;line-height:22px;border-radius:13px;border:2px solid ${encours ? '#b05a12' : '#dcd9d3'};color:${encours ? '#b05a12' : '#a19d96'};font-size:12px;font-weight:700;text-align:center;margin:0 auto">${i + 1}</div>`;
+            : `<div style="width:22px;height:22px;line-height:22px;border-radius:13px;border:2px solid ${encours ? '#1d5c63' : '#dcd9d3'};color:${encours ? '#1d5c63' : '#a19d96'};font-size:12px;font-weight:700;text-align:center;margin:0 auto">${i + 1}</div>`;
           return `<td width="${Math.floor(100 / m.suivi!.etapes.length)}%" align="center" style="vertical-align:top;padding:0 2px">${rond}<div style="font-size:11.5px;line-height:1.3;color:${fait || encours ? '#1d1d1f' : '#a19d96'};font-weight:${encours ? 700 : 500};padding-top:6px">${e(t)}</div></td>`;
         })
         .join('')}</tr></table>`)
