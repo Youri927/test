@@ -3,8 +3,21 @@
    (TTMRSDBX), rien n'est expédié ni facturé. Lit MR_ENSEIGNE et MR_CLE_PRIVEE dans l'environnement.
    Lancement : voir deploiement/GUIDE.md (étape 10). */
 import {createHash} from 'node:crypto';
+import {readFileSync, existsSync} from 'node:fs';
 
-const ENS = process.env.MR_ENSEIGNE, CLE = process.env.MR_CLE_PRIVEE, LOGIN = process.env.MR_API2_LOGIN, MDP = process.env.MR_API2_MOT_DE_PASSE;
+// les réglages : lus directement dans /srv/respray/.env (sans passer par le shell, qui peut abîmer un caractère spécial)
+const fichier = process.argv[2] || '/srv/respray/.env';
+const lu = existsSync(fichier) ? Object.fromEntries(readFileSync(fichier, 'utf8').split('\n').map((l) => l.match(/^\s*([A-Z0-9_]+)=(.*)$/)).filter(Boolean).map((m) => [m[1], m[2].replace(/^(["'])(.*)\1$/, '$2')])) : {};
+const v = (k) => process.env[k] || lu[k];
+const ENS = v('MR_ENSEIGNE'), CLE = v('MR_CLE_PRIVEE'), LOGIN = v('MR_API2_LOGIN'), MDP = v('MR_API2_MOT_DE_PASSE');
+const x = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// le mot de passe n'est jamais affiché : seulement sa longueur et ce qui pourrait poser problème
+if (MDP) {
+  const pb = [];
+  if (/[^\x20-\x7e]/.test(MDP)) pb.push('contient des caractères spéciaux non clavier (des « • » ? il a peut-être été copié masqué)');
+  if (/^\s|\s$/.test(MDP)) pb.push('commence ou finit par un espace');
+  console.log(`Mot de passe API 2 enregistré : ${MDP.length} caractères${pb.length ? ` ; attention : ${pb.join(', ')}` : ''}`);
+}
 if (!ENS || !CLE) { console.log('MR_ENSEIGNE ou MR_CLE_PRIVEE manquant.'); process.exit(1); }
 
 async function appel(methode, champs) {
@@ -37,7 +50,7 @@ if (!LOGIN || !MDP) { console.log('API 2 : MR_API2_LOGIN ou MR_API2_MOT_DE_PASSE
 const url = ENS === 'TTMRSDBX' ? 'https://connect-api-sandbox.mondialrelay.com/api/shipment' : 'https://connect-api.mondialrelay.com/api/shipment';
 const adr = (p, n, rue, mob, email) => `<Address><Title/><Firstname>${p}</Firstname><Lastname>${n}</Lastname><Streetname>${rue}</Streetname><HouseNo/><CountryCode>FR</CountryCode><PostCode>75011</PostCode><City>Paris</City><AddressAdd1/><AddressAdd2/><AddressAdd3/><PhoneNo/><MobileNo>${mob}</MobileNo><Email>${email}</Email></Address>`;
 for (const mode of ['REL', 'CCC']) {
-  const corps = `<?xml version="1.0" encoding="utf-8"?><ShipmentCreationRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.example.org/Request"><Context><Login>${LOGIN}</Login><Password>${MDP}</Password><CustomerId>${ENS}</CustomerId><Culture>fr-FR</Culture><VersionAPI>1.0</VersionAPI></Context><OutputOptions><OutputFormat>10x15</OutputFormat><OutputType>PdfUrl</OutputType></OutputOptions><ShipmentsList><Shipment><OrderNo>TEST1</OrderNo><CustomerNo>TEST</CustomerNo><ParcelCount>1</ParcelCount><DeliveryMode Mode="24R" Location="FR-${relais}"/><CollectionMode Mode="${mode}" Location=""/><Parcels><Parcel><Content>Parfum</Content><Weight Value="1000" Unit="gr"/></Parcel></Parcels><DeliveryInstruction/><Sender>${adr('', 'Dupont Lea', '12 rue des Lilas', '0612345678', '')}</Sender><Recipient>${adr('Marc', 'Petit', '1 rue de la Paix', '', 'test@exemple.fr')}</Recipient></Shipment></ShipmentsList></ShipmentCreationRequest>`;
+  const corps = `<?xml version="1.0" encoding="utf-8"?><ShipmentCreationRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.example.org/Request"><Context><Login>${x(LOGIN)}</Login><Password>${x(MDP)}</Password><CustomerId>${x(ENS)}</CustomerId><Culture>fr-FR</Culture><VersionAPI>1.0</VersionAPI></Context><OutputOptions><OutputFormat>10x15</OutputFormat><OutputType>PdfUrl</OutputType></OutputOptions><ShipmentsList><Shipment><OrderNo>TEST1</OrderNo><CustomerNo>TEST</CustomerNo><ParcelCount>1</ParcelCount><DeliveryMode Mode="24R" Location="FR-${relais}"/><CollectionMode Mode="${mode}" Location=""/><Parcels><Parcel><Content>Parfum</Content><Weight Value="1000" Unit="gr"/></Parcel></Parcels><DeliveryInstruction/><Sender>${adr('', 'Dupont Lea', '12 rue des Lilas', '0612345678', '')}</Sender><Recipient>${adr('Marc', 'Petit', '1 rue de la Paix', '', 'test@exemple.fr')}</Recipient></Shipment></ShipmentsList></ShipmentCreationRequest>`;
   const r = await fetch(url, {method: 'POST', headers: {'Content-Type': 'text/xml', Accept: 'application/xml'}, body: corps});
   const x = await r.text();
   const num = (x.match(/ShipmentNumber="([^"]+)"/) || [])[1];
