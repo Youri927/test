@@ -39,7 +39,7 @@ export default async function Accueil() {
   const remises = annonces.map((a) => (a.parfum ? remise(a.parfum.formats, a)?.pct : undefined)).filter((x): x is number => x !== undefined);
   const moyenne = remises.length >= 3 ? Math.round(remises.reduce((s, x) => s + x, 0) / remises.length) : null;
   const pile = annonces.filter((a) => a.photos.face).slice(0, 3);
-  const pileSrc = pile.length === 3 ? pile.map((a) => `/photos/${a.photos.face}`) : ['/demo/a109-face.webp', '/demo/a104-face.webp', '/demo/a106-face.webp'];
+  const pileSrc = pile.length === 3 ? pile.map((a) => `/photos/${a.photos.face}`) : ['/demo/pile-amouage.webp', '/demo/pile-kurkdjian.webp', '/demo/pile-vuitton.webp']; // tant qu'il y a moins de 3 annonces avec photo
 
   return (
     <>
