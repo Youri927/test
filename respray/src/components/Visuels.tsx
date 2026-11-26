@@ -16,7 +16,7 @@ export function PhotoDemo({vue = 'face', id = DEMO.id, classe = ''}: {vue?: stri
   return <img className={`visuel ${classe}`} src={demoSrc(vue, id)} alt={alt} width={600} height={750} decoding="async" loading="lazy" />;
 }
 
-const BUSE = {x: 0.48, y: 0.449}; // la buse du flacon de la porte (tools/porte-vendre/construire.py)
+const BUSE = {x: 0.469, y: 0.318}; // la buse du flacon de la porte (tools/porte-vendre/construire.py)
 export function Vaporise() {
   const bx = BUSE.x * 600;
   const by = BUSE.y * 800;

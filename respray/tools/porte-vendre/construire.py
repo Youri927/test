@@ -11,14 +11,20 @@ a = np.asarray(src).astype(int)
 H0, W0 = a.shape[:2]
 
 # 1. le corps seul : sous le bouchon (sa base étroite finit vers 25 % de la hauteur), sans le reflet au sol
-haut, bas = 113, 416
+haut, bas = 115, 412
 corps = src.crop((0, haut, W0, bas))
 c = np.asarray(corps).astype(int)
 # le fond blanc devient transparent (les coins de l'épaule biseautée)
 blanc = np.abs(c - 255).max(axis=2)
 alpha = np.clip((blanc - 6) * 18, 0, 255).astype(np.uint8)
 # les bords à moitié transparents gardent du blanc du fond : on le retire (« démultiplication » par le blanc)
-al = np.asarray(Image.fromarray(alpha).filter(ImageFilter.GaussianBlur(0.6))).astype(float) / 255
+# le flacon touche les bords de la photo : on resserre le masque d'un pixel tout autour (bord mêlé de blanc), puis on
+# l'adoucit
+m = Image.fromarray(alpha)
+cadre = Image.new('L', m.size, 0)
+ImageDraw.Draw(cadre).rectangle([2, 2, m.width - 3, m.height - 3], fill=255)
+m = Image.fromarray(np.minimum(np.asarray(m), np.asarray(cadre))).filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(0.8))
+al = np.asarray(m).astype(float) / 255
 pur = np.where(al[..., None] > 0.02, (c - 255 * (1 - al[..., None])) / np.maximum(al[..., None], 0.02), c)
 corps = Image.fromarray(np.clip(pur, 0, 255).astype(np.uint8)).convert('RGBA')
 corps.putalpha(Image.fromarray((al * 255).astype(np.uint8)))
@@ -49,7 +55,7 @@ bouton_w, bouton_h = 42 * K, 33 * K
 tige_h = 4 * K
 total_h = bouton_h + tige_h + bague_h
 flacon = Image.new('RGBA', (corps.width, corps.height + total_h), (0, 0, 0, 0))
-flacon.alpha_composite(corps, (0, total_h))
+flacon.alpha_composite(corps, (0, total_h - 3 * K))  # la bague mord un peu sur le verre : pas de jour entre les deux
 bague = metal(bague_w, bague_h)
 ImageDraw.Draw(bague).rectangle([0, bague_h - 2 * K, bague_w, bague_h], fill=(110, 80, 30, 255))  # le joint sombre
 flacon.alpha_composite(bague, (cx - bague_w // 2, total_h - bague_h))
@@ -69,10 +75,10 @@ buse_local = (cx - bouton_w // 2 + 2 * K, buse_y)
 
 # 4. la porte : 600 × 800, le flacon posé en bas, une ombre douce
 W, H = 600, 800
-echelle = 1.16 / K
+echelle = 1.5 / K
 fl = flacon.resize((int(flacon.width * echelle), int(flacon.height * echelle)), Image.LANCZOS)
 x0 = (W - fl.width) // 2 + 10
-y0 = H - 46 - fl.height
+y0 = H - 40 - fl.height
 for nom, fond, force in [('vendre', (233, 232, 238), 0.30), ('vendre-sombre', (43, 42, 39), 0.55)]:
     porte = Image.new('RGBA', (W, H), (*fond, 255))
     ombre = Image.new('L', (W, H), 0)
