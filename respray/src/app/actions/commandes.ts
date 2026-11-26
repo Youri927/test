@@ -207,6 +207,7 @@ export async function obtenirEtiquette(f: FormData) {
   await db.update(schema.membres).set({expediteur: exp}).where(eq(schema.membres.id, m.id));
   const acheteur = await db.query.membres.findFirst({where: eq(schema.membres.id, c.acheteurId)});
   let ok = false;
+  let code = '';
   try {
     const e = await creerExpedition(c.id, exp, {nom: `${acheteur?.prenom ?? ''} ${acheteur?.nom ?? ''}`.trim() || acheteur?.pseudo || 'Client', email: acheteur?.email ?? '', relais: c.relais}, c.assurance > 0);
     // seulement si personne ne l'a créée entre-temps (double clic)
@@ -214,6 +215,7 @@ export async function obtenirEtiquette(f: FormData) {
     ok = true;
   } catch (err) {
     console.error('étiquette Mondial Relay', c.id, err);
+    code = ((err as Error).message.match(/code (\d+)/) || [])[1] ?? '';
   }
-  redirect(`/commandes/${id}/etiquette${ok ? '' : '?erreur=mr'}`);
+  redirect(`/commandes/${id}/etiquette${ok ? '' : `?erreur=mr${code ? `&code=${code}` : ''}`}`);
 }

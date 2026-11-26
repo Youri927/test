@@ -34,6 +34,9 @@ const decoder = (s: string) => s.replace(/&amp;/g, '&').replace(/&lt;/g, '<').re
 
 /* les champs d'adresse de Mondial Relay : majuscules sans accents, caractères limités, longueur bornée */
 const propre = (s: string, max = 32) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^0-9A-Z_\-'., /]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, max);
+// les villes : lettres, tiret, apostrophe et espace seulement ; l'e-mail : sans « + » ni caractères spéciaux, sinon rien
+const ville = (s: string) => propre(s, 26).replace(/[^A-Z_\-' ]/g, ' ').replace(/\s+/g, ' ').trim();
+const mail = (s: string) => (/^[\w\-.@]{3,70}$/.test(s) ? s : '');
 const tel = (s: string) => {
   const t = s.replace(/[^\d+]/g, '').replace(/^\+33/, '0').replace(/^0033/, '0');
   return /^0\d{9}$/.test(t) ? t : '';
@@ -88,8 +91,8 @@ export const etiquetteSimulee = () => `MR${randomInt(10_000_000, 99_999_999)}-SI
 export async function creerExpedition(commandeId: number, exp: Expediteur, dest: Destinataire, assuree: boolean): Promise<{numero: string; pdf: string}> {
   const xml = await appel('WSI2_CreationEtiquette', [
     ['Enseigne', process.env.MR_ENSEIGNE!], ['ModeCol', 'CCC'], ['ModeLiv', '24R'], ['NDossier', `RESPRAY${commandeId}`], ['NClient', `C${commandeId}`],
-    ['Expe_Langage', 'FR'], ['Expe_Ad1', propre(exp.nom)], ['Expe_Ad2', ''], ['Expe_Ad3', propre(exp.rue)], ['Expe_Ad4', ''], ['Expe_Ville', propre(exp.ville, 26)], ['Expe_CP', exp.cp], ['Expe_Pays', 'FR'], ['Expe_Tel1', tel(exp.tel)], ['Expe_Tel2', ''], ['Expe_Mail', ''],
-    ['Dest_Langage', 'FR'], ['Dest_Ad1', propre(dest.nom)], ['Dest_Ad2', ''], ['Dest_Ad3', propre(dest.relais.adresse)], ['Dest_Ad4', ''], ['Dest_Ville', propre(dest.relais.ville, 26)], ['Dest_CP', dest.relais.cp], ['Dest_Pays', 'FR'], ['Dest_Tel1', ''], ['Dest_Tel2', ''], ['Dest_Mail', dest.email.slice(0, 70)],
+    ['Expe_Langage', 'FR'], ['Expe_Ad1', propre(exp.nom)], ['Expe_Ad2', ''], ['Expe_Ad3', propre(exp.rue)], ['Expe_Ad4', ''], ['Expe_Ville', ville(exp.ville)], ['Expe_CP', exp.cp], ['Expe_Pays', 'FR'], ['Expe_Tel1', tel(exp.tel)], ['Expe_Tel2', ''], ['Expe_Mail', ''],
+    ['Dest_Langage', 'FR'], ['Dest_Ad1', propre(dest.nom)], ['Dest_Ad2', ''], ['Dest_Ad3', propre(dest.relais.adresse)], ['Dest_Ad4', ''], ['Dest_Ville', ville(dest.relais.ville)], ['Dest_CP', dest.relais.cp], ['Dest_Pays', 'FR'], ['Dest_Tel1', ''], ['Dest_Tel2', ''], ['Dest_Mail', mail(dest.email)],
     ['Poids', String(POIDS())], ['Longueur', ''], ['Taille', ''], ['NbColis', '1'], ['CRT_Valeur', '0'], ['CRT_Devise', 'EUR'], ['Exp_Valeur', ''], ['Exp_Devise', ''],
     ['COL_Rel_Pays', ''], ['COL_Rel', ''], ['LIV_Rel_Pays', 'FR'], ['LIV_Rel', dest.relais.id], ['TAvisage', ''], ['TReprise', ''], ['Montage', ''], ['TRDV', ''],
     ['Assurance', assuree ? '1' : '0'], ['Instructions', ''],

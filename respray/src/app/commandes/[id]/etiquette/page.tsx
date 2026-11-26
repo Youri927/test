@@ -12,9 +12,9 @@ export const dynamic = 'force-dynamic';
 /* L'étiquette à imprimer. Avec Mondial Relay : le vendeur donne une fois son adresse d'expéditeur, puis télécharge le
    PDF prépayé. En simulation : une étiquette factice. L'adresse de l'acheteur n'apparaît jamais : seulement son nom
    et son point relais. */
-export default async function Etiquette({params, searchParams}: {params: Promise<{id: string}>; searchParams: Promise<{erreur?: string}>}) {
+export default async function Etiquette({params, searchParams}: {params: Promise<{id: string}>; searchParams: Promise<{erreur?: string; code?: string}>}) {
   const id = Number((await params).id);
-  const {erreur} = await searchParams;
+  const {erreur, code} = await searchParams;
   const m = await exigerMembre(`/commandes/${id}/etiquette`);
   const c = await db.query.commandes.findFirst({where: eq(schema.commandes.id, id)});
   if (!c || c.vendeurId !== m.id || c.mode !== 'relais' || !c.relais) notFound();
@@ -44,7 +44,7 @@ export default async function Etiquette({params, searchParams}: {params: Promise
         <h1 className="titre-page">Votre étiquette prépayée</h1>
         <p className="chapo">Mondial Relay demande l&apos;adresse de l&apos;expéditeur. Elle est imprimée sur l&apos;étiquette et sert en cas de retour : l&apos;acheteur ne la voit pas sur Respray. Vous ne la donnerez qu&apos;une fois.</p>
         {erreur === 'adresse' ? <p className="erreur" role="alert">Vérifiez l&apos;adresse : rue, code postal à 5 chiffres, ville, et un numéro de téléphone français.</p> : null}
-        {erreur === 'mr' ? <p className="erreur" role="alert">Mondial Relay n&apos;a pas pu créer l&apos;étiquette. Vérifiez l&apos;adresse et réessayez ; si ça recommence, écrivez-nous à contact@respray.fr.</p> : null}
+        {erreur === 'mr' ? <p className="erreur" role="alert">Mondial Relay n&apos;a pas pu créer l&apos;étiquette. Vérifiez l&apos;adresse et réessayez ; si ça recommence, écrivez-nous à contact@respray.fr{code ? ` en indiquant le code ${code.replace(/\D/g, '').slice(0, 3)}` : ''}.</p> : null}
         <form action={obtenirEtiquette} className="formulaire compte-form">
           <input type="hidden" name="id" value={c.id} />
           <label htmlFor="nom">Nom et prénom</label>
