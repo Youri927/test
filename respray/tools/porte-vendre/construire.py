@@ -16,18 +16,17 @@ corps = src.crop((0, haut, W0, bas))
 c = np.asarray(corps).astype(int)
 # le fond blanc devient transparent (les coins de l'épaule biseautée)
 blanc = np.abs(c - 255).max(axis=2)
-alpha = np.clip((blanc - 6) * 18, 0, 255).astype(np.uint8)
-# les bords à moitié transparents gardent du blanc du fond : on le retire (« démultiplication » par le blanc)
-# le flacon touche les bords de la photo : on resserre le masque d'un pixel tout autour (bord mêlé de blanc), puis on
-# l'adoucit
-m = Image.fromarray(alpha)
-cadre = Image.new('L', m.size, 0)
-ImageDraw.Draw(cadre).rectangle([2, 2, m.width - 3, m.height - 3], fill=255)
-m = Image.fromarray(np.minimum(np.asarray(m), np.asarray(cadre))).filter(ImageFilter.MinFilter(3)).filter(ImageFilter.GaussianBlur(0.8))
-al = np.asarray(m).astype(float) / 255
-pur = np.where(al[..., None] > 0.02, (c - 255 * (1 - al[..., None])) / np.maximum(al[..., None], 0.02), c)
+# transparence d'origine : seulement là où le flacon se mêle au fond blanc (les coins biseautés de l'épaule)
+a0 = np.clip((blanc - 6) / 150, 0, 1)
+# on retire ce blanc des pixels mêlés (« démultiplication »), avec CETTE transparence-là seulement
+pur = np.where(a0[..., None] > 0.05, (c - 255 * (1 - a0[..., None])) / np.maximum(a0[..., None], 0.05), c)
+# le flacon touche les bords de la photo : les 2 premières rangées de pixels tout autour sont un liseré (mêlé de blanc,
+# puis une ligne sombre) ; on les écarte du masque, sans toucher aux couleurs, puis on adoucit le bord
+m = np.minimum((a0 * 255).astype(np.uint8), 255)
+cadre = np.zeros_like(m); cadre[3:-3, 3:-3] = 255
+m = Image.fromarray(np.minimum(m, cadre)).filter(ImageFilter.GaussianBlur(0.7))
 corps = Image.fromarray(np.clip(pur, 0, 255).astype(np.uint8)).convert('RGBA')
-corps.putalpha(Image.fromarray((al * 255).astype(np.uint8)))
+corps.putalpha(m)
 
 # 2. on travaille en ×4 pour des bords nets
 K = 4
