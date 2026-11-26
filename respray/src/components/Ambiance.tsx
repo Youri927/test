@@ -10,16 +10,22 @@ export function Apparitions() {
     const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduit || !('IntersectionObserver' in window)) return;
     document.documentElement.classList.add('js-anime');
+    // data-revele : apparaît une fois ; data-anime : son animation se rejoue à chaque retour à l'écran
     const vu = new IntersectionObserver(
       (es) =>
         es.forEach((e) => {
-          if (!e.isIntersecting) return;
-          vu.unobserve(e.target);
-          e.target.classList.add('vu');
+          const rejoue = e.target.hasAttribute('data-anime');
+          if (e.isIntersecting) {
+            e.target.classList.add('vu');
+            if (!rejoue) vu.unobserve(e.target);
+          } else if (rejoue) {
+            e.target.classList.remove('vu');
+          }
         }),
       {rootMargin: '0px 0px -8% 0px'},
     );
-    const observer = (racine: ParentNode) => racine.querySelectorAll('[data-revele]:not(.vu), [data-anime]:not(.vu)').forEach((el) => vu.observe(el));
+    const suivis = new WeakSet<Element>();
+    const observer = (racine: ParentNode) => racine.querySelectorAll('[data-revele]:not(.vu), [data-anime]').forEach((el) => { if (!suivis.has(el)) { suivis.add(el); vu.observe(el); } });
     observer(document);
     // ce qui arrive plus tard (filtre, navigation) est observé aussi
     const m = new MutationObserver(() => observer(document));

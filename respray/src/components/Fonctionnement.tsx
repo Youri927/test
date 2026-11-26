@@ -94,9 +94,16 @@ export function Parcours() {
     addEventListener('scroll', auDefilement, {passive: true});
     addEventListener('resize', auDefilement, {passive: true});
     suivre();
+    // la scène de l'étape en cours se rejoue en boucle tant que le parcours est à l'écran (même à moitié)
+    let visible = false;
+    const o = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
+    if (racine.current) o.observe(racine.current);
+    const boucle = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : window.setInterval(() => { if (visible && !document.hidden) setCle((k) => k + 1); }, 4500);
     return () => {
       removeEventListener('scroll', auDefilement);
       removeEventListener('resize', auDefilement);
+      o.disconnect();
+      clearInterval(boucle);
     };
   }, [qui]);
   const etapes = PARCOURS[qui];
@@ -113,7 +120,7 @@ export function Parcours() {
             <li key={qui + i} className={`h-etape ${i === actif ? 'actif' : ''}`}>
               <span className="h-num">{String(i + 1).padStart(2, '0')}</span>
               <div className="h-texte"><h3>{e.t}</h3><p>{e.d}</p></div>
-              <div className={`h-scene-mobile scene ${i === actif ? 'actif' : ''}`} aria-hidden="true"><Scene s={e.s} /></div>
+              <div key={i === actif ? `m-${cle}` : 'm'} className={`h-scene-mobile scene ${i === actif ? 'actif' : ''}`} aria-hidden="true"><Scene s={e.s} /></div>
             </li>
           ))}
         </ol>
