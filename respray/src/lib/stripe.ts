@@ -19,3 +19,15 @@ export const stripe =
 if (process.env.NODE_ENV !== 'production') g.stripe = stripe;
 
 export const centimes = (euros: number) => Math.round(euros * 100);
+
+/* Les clés d'idempotence : uniques pour ce site et pour cet objet. Plusieurs installations (développement, serveur)
+   peuvent partager le même compte Stripe de test, et leurs commandes portent les mêmes numéros : on préfixe donc par
+   l'adresse du site, et on ajoute la date de création de l'objet. */
+const SITE = (() => {
+  try {
+    return new URL(process.env.SITE_URL || 'http://localhost').host;
+  } catch {
+    return 'respray';
+  }
+})();
+export const cle = (nom: string, id: number, creeLe: Date) => `${SITE}:${nom}-${id}-${creeLe.getTime()}`;

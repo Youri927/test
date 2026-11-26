@@ -6,7 +6,7 @@ import {redirect} from 'next/navigation';
 import {and, eq} from 'drizzle-orm';
 import {db, schema} from '@/db';
 import {exigerMembre, exigerEquipe, moi} from '@/lib/auth';
-import {stripe, centimes} from '@/lib/stripe';
+import {stripe, centimes, cle} from '@/lib/stripe';
 import {relaisPres, simule} from '@/lib/envoi';
 import {prixPour, protectionOfferte, montants, synchroniser, annuler, remiseEnMain, confirmer, ouvrirLitige, rembourserLitige, actualiserVersements, taches, deposee as marquerDeposee, livree as marquerLivree, type Commande} from '@/lib/commandes';
 import {MISES_EN_AVANT, SEUIL_ASSURANCE} from '@/lib/regles';
@@ -51,7 +51,7 @@ export async function payer(f: FormData) {
         success_url: `${site()}/commandes/${c.id}?paye=1`,
         cancel_url: `${site()}/commandes/${c.id}/abandon`,
       },
-      {idempotencyKey: `checkout-commande-${c.id}`},
+      {idempotencyKey: cle('checkout', c.id, c.creeLe)},
     );
     await db.update(schema.commandes).set({checkoutId: s.id}).where(eq(schema.commandes.id, c.id));
     url = s.url;

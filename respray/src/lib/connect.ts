@@ -4,7 +4,7 @@ import 'server-only';
    transferts), inscription intégrée au site (Connect.js). L'identifiant du compte n'est connu que du serveur. */
 import {eq} from 'drizzle-orm';
 import {db, schema} from '@/db';
-import {stripe} from '@/lib/stripe';
+import {stripe, cle} from '@/lib/stripe';
 import type {Membre} from '@/lib/auth';
 
 /* le compte du vendeur : créé une seule fois (même si on clique deux fois), puis réutilisé */
@@ -21,7 +21,7 @@ export async function compteDe(m: Membre) {
       configuration: {recipient: {capabilities: {stripe_balance: {stripe_transfers: {requested: true}}}}},
       metadata: {membre: String(m.id)},
     },
-    {idempotencyKey: `compte-vendeur-${m.id}`},
+    {idempotencyKey: cle('compte-vendeur', m.id, m.creeLe)},
   );
   await db.update(schema.membres).set({stripeCompte: a.id}).where(eq(schema.membres.id, m.id));
   return a.id;

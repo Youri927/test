@@ -6,7 +6,7 @@ import 'server-only';
 import {and, asc, desc, eq, gt, inArray, isNotNull, lt, ne, sql} from 'drizzle-orm';
 import {randomInt} from 'crypto';
 import {db, schema} from '@/db';
-import {stripe, centimes} from '@/lib/stripe';
+import {stripe, centimes, cle} from '@/lib/stripe';
 import {notifier} from '@/lib/activite';
 import {noter} from '@/lib/journal';
 import {creerEtiquette} from '@/lib/envoi';
@@ -76,7 +76,7 @@ export async function enregistrerPaiement(c: Commande, paymentIntentId: string |
 export async function annuler(c: Commande, raison: string) {
   if (['annulee', 'remboursee', 'versee'].includes(c.statut)) return c;
   if (c.paiementId && c.statut !== 'attente_paiement') {
-    const r = await stripe.refunds.create({payment_intent: c.paiementId, reason: 'requested_by_customer', metadata: {commande: String(c.id)}}, {idempotencyKey: `remboursement-${c.id}`});
+    const r = await stripe.refunds.create({payment_intent: c.paiementId, reason: 'requested_by_customer', metadata: {commande: String(c.id)}}, {idempotencyKey: cle('remboursement', c.id, c.creeLe)});
     await db.update(schema.commandes).set({remboursementId: r.id}).where(eq(schema.commandes.id, c.id));
   } else if (c.checkoutId && c.statut === 'attente_paiement') {
     const s = await stripe.checkout.sessions.retrieve(c.checkoutId);
@@ -135,7 +135,7 @@ export async function ouvrirLitige(c: Commande, raison: string, texte: string) {
 /* l'équipe donne raison à l'acheteur : remboursement intégral, l'annonce est retirée */
 export async function rembourserLitige(c: Commande, decision: string, equipeId: number) {
   if (c.statut !== 'litige' || !c.paiementId) return;
-  const r = await stripe.refunds.create({payment_intent: c.paiementId, metadata: {commande: String(c.id)}}, {idempotencyKey: `remboursement-${c.id}`});
+  const r = await stripe.refunds.create({payment_intent: c.paiementId, metadata: {commande: String(c.id)}}, {idempotencyKey: cle('remboursement', c.id, c.creeLe)});
   await db.update(schema.commandes).set({statut: 'remboursee', remboursementId: r.id, litige: {...c.litige!, decision}}).where(eq(schema.commandes.id, c.id));
   await db.update(schema.annonces).set({statut: 'retiree', raison: `Litige : ${decision}`}).where(eq(schema.annonces.id, c.annonceId));
   await notifier(c.acheteurId, 'achat', `Litige de la commande ${c.id} : vous êtes remboursé en entier. ${decision}`, `/commandes/${c.id}`);
@@ -151,7 +151,7 @@ export async function verser(c: Commande) {
   if (!v?.stripeCompte || !v.versementsOk) return c; // en attente de son IBAN : versé dès qu'il l'a ajouté
   const t = await stripe.transfers.create(
     {amount: centimes(c.prix), currency: 'eur', destination: v.stripeCompte, transfer_group: ref(c), ...(c.chargeId ? {source_transaction: c.chargeId} : {}), metadata: {commande: String(c.id)}},
-    {idempotencyKey: `versement-${c.id}`},
+    {idempotencyKey: cle('versement', c.id, c.creeLe)},
   );
   await db.update(schema.commandes).set({statut: 'versee', transfertId: t.id, verseeLe: new Date()}).where(eq(schema.commandes.id, c.id));
   await notifier(c.vendeurId, 'vente', `${eur(c.prix)} versés pour la commande ${c.id}. Ils arrivent sur votre compte bancaire sous quelques jours.`, `/commandes/${c.id}`);
@@ -215,7 +215,7 @@ export async function contestation(paiementId: string, motif: string) {
   const c = await parPaiement(paiementId);
   if (!c || c.litige?.raison === 'Contestation bancaire') return;
   if (c.transfertId) {
-    await stripe.transfers.createReversal(c.transfertId, {amount: centimes(c.prix), metadata: {commande: String(c.id), raison: 'contestation'}}, {idempotencyKey: `reprise-${c.id}`}).catch((e) => console.error('Reprise du transfert :', (e as Error).message));
+    await stripe.transfers.createReversal(c.transfertId, {amount: centimes(c.prix), metadata: {commande: String(c.id), raison: 'contestation'}}, {idempotencyKey: cle('reprise', c.id, c.creeLe)}).catch((e) => console.error('Reprise du transfert :', (e as Error).message));
   }
   await db.update(schema.commandes).set({statut: 'litige', litige: {raison: 'Contestation bancaire', texte: `La banque de l'acheteur conteste le paiement (${motif}).`, le: new Date().toISOString()}}).where(eq(schema.commandes.id, c.id));
   const equipe = await db.select({id: schema.membres.id}).from(schema.membres).where(eq(schema.membres.role, 'equipe'));
