@@ -423,7 +423,9 @@ legend { padding: 0; margin-bottom: 6px; font-weight: 600; font-size: 14.5px; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="clair"]) .v-sombre { display: block; } :root:not([data-theme="clair"]) .v-clair { display: none; } }
 :root[data-theme="sombre"] .v-sombre { display: block; }
 :root[data-theme="sombre"] .v-clair { display: none; }
-.brume circle { fill: var(--texte); opacity: 0; animation: brume 2.8s cubic-bezier(.2, .7, .3, 1) infinite; animation-delay: var(--d); }
+.brume circle { fill: var(--texte); opacity: 0; }
+/* la brume part une fois quand la porte arrive à l'écran (data-anime : elle se rejoue si l'on remonte puis redescend) */
+.vaporise.vu .brume circle, html:not(.js-anime) .brume circle { animation: brume 2.8s cubic-bezier(.2, .7, .3, 1) 1 both; animation-delay: calc(var(--d) + .3s); }
 @keyframes brume {
   0% { opacity: 0; transform: translate(0, 0); }
   12% { opacity: .8; }
@@ -650,7 +652,7 @@ details[open] .odeur span { animation: fondu .5s var(--ease) both; animation-del
 .sc-verif { grid-template-columns: minmax(0, .85fr) minmax(0, 1fr); align-items: center; }
 .sc-scan { position: relative; border-radius: 14px; overflow: hidden; }
 .sc-ligne { position: absolute; left: 0; right: 0; top: 0; height: 30%; background: linear-gradient(180deg, transparent, rgba(11, 122, 75, .25) 80%, rgba(11, 122, 75, .9) 100%); transform: translateY(-100%); }
-.actif .sc-ligne { animation: scan 2.2s cubic-bezier(.45, 0, .55, 1) infinite; }
+.actif .sc-ligne { animation: scan 2.2s cubic-bezier(.45, 0, .55, 1) 1 both; }
 @keyframes scan { to { transform: translateY(340%); } }
 .sc-checks { display: grid; gap: 10px; }
 .sc-checks li { display: flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 500; }

@@ -90,9 +90,9 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .pied-geant { padding-block: 8px 0; color: var(--texte); }
 .pied .logo-svg.logo-geant { width: 100%; height: auto; display: block; margin-bottom: -2.2%; }
 @keyframes brume-logo { 0%, 8% { opacity: 0; transform: translateX(-40%) scale(.4); } 22% { opacity: 1; transform: none; } 70% { opacity: 1; transform: translateX(10%); } 88%, 100% { opacity: 0; transform: translateX(45%) scale(1.25); } }
-.logo-geant .j1 { animation: brume-logo 4.5s var(--ease) infinite; }
-.logo-geant .j2 { animation: brume-logo 4.5s var(--ease) .18s infinite; }
-.logo-geant .j3 { animation: brume-logo 4.5s var(--ease) .36s infinite; }
+.pied-geant.vu .logo-geant .j1 { animation: brume-logo 4.5s var(--ease) 1; }
+.pied-geant.vu .logo-geant .j2 { animation: brume-logo 4.5s var(--ease) .18s 1; }
+.pied-geant.vu .logo-geant .j3 { animation: brume-logo 4.5s var(--ease) .36s 1; }
 .pied-bas { display: flex; align-items: center; gap: 10px; padding-block: 18px 28px; border-top: 1px solid var(--trait); color: var(--texte-2); font-size: 13px; }
 .symbole-mini { width: 16px; height: 16px; color: var(--accent); flex: none; }
 /* les sur-titres portent le jet, en petit */
@@ -112,7 +112,7 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 /* la page introuvable */
 .vide-flacon { display: grid; justify-items: center; gap: 14px; padding-block: 96px; text-align: center; }
 .vide-flacon .symbole { width: 96px; height: 96px; color: var(--texte); }
-.vide-flacon .j1, .vide-flacon .j2, .vide-flacon .j3 { animation: toux 2.6s var(--ease) infinite; }
+.vide-flacon .j1, .vide-flacon .j2, .vide-flacon .j3 { animation: toux 2.6s var(--ease) 1; }
 .vide-flacon .j2 { animation-delay: .12s; }
 .vide-flacon .j3 { animation-delay: .24s; }
 @keyframes toux { 0%, 30% { opacity: 1; transform: none; } 45% { opacity: 0; transform: translateX(30%) scale(.5); } 60% { opacity: 0; transform: translateX(-30%) scale(.3); } 80%, 100% { opacity: 1; transform: none; } }
@@ -124,7 +124,7 @@ details.bo-plus[open] > summary { margin-bottom: 10px; }
 .bouclier { display: block; flex: none; filter: drop-shadow(0 8px 18px rgba(12, 92, 53, .28)); }
 .bouclier-texte { transform-origin: 60px 60px; animation: tourne 40s linear infinite; }
 @keyframes tourne { to { transform: rotate(360deg); } }
-.bouclier-reflet { animation: reflet 5s var(--ease) 1.2s infinite; }
+.bouclier-reflet { animation: reflet 5s var(--ease) 1.2s 1; }
 @keyframes reflet { 0% { transform: translateX(0) rotate(20deg); } 35%, 100% { transform: translateX(200px) rotate(20deg); } }
 .bouclier-jet circle { transform-box: fill-box; transform-origin: center; }
 .bouclier-anime .bouclier-coche { stroke-dasharray: 1; stroke-dashoffset: 1; animation: trace .55s var(--ease) .2s forwards; }

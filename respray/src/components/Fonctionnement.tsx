@@ -94,16 +94,10 @@ export function Parcours() {
     addEventListener('scroll', auDefilement, {passive: true});
     addEventListener('resize', auDefilement, {passive: true});
     suivre();
-    // la scène de l'étape en cours se rejoue en boucle tant que le parcours est à l'écran (même à moitié)
-    let visible = false;
-    const o = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
-    if (racine.current) o.observe(racine.current);
-    const boucle = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : window.setInterval(() => { if (visible && !document.hidden) setCle((k) => k + 1); }, 4500);
+    // la scène de chaque étape se joue une fois, quand l'étape devient active au défilement (pas de boucle)
     return () => {
       removeEventListener('scroll', auDefilement);
       removeEventListener('resize', auDefilement);
-      o.disconnect();
-      clearInterval(boucle);
     };
   }, [qui]);
   const etapes = PARCOURS[qui];
@@ -166,20 +160,27 @@ export function Verification() {
         })
         .catch(() => {});
       if (reduit()) return;
+      // un seul tour des points de contrôle, seulement quand la scène est bien à l'écran ; on repart de zéro si l'on
+      // remonte au-dessus puis qu'on redescend
       minuteur = window.setInterval(() => {
         const r = el.getBoundingClientRect();
-        if (document.hidden || r.bottom < 0 || r.top > innerHeight || performance.now() < pauseJusqua.current) return;
+        const vu = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0);
+        if (document.hidden || vu < Math.min(r.height, innerHeight) * 0.5 || performance.now() < pauseJusqua.current) return;
         setPause(false);
-        setI((x) => (x + 1) % VERIF.length);
+        setI((x) => (x + 1 < VERIF.length ? x + 1 : x));
       }, 5500);
     });
     o.observe(el);
+    // remonté au-dessus de la scène : le tour recommencera au début
+    const retour = new IntersectionObserver(([e]) => { if (!e.isIntersecting && e.boundingClientRect.top > 0) setI(0); });
+    retour.observe(el);
     // le fond de la scène suit le thème
     const t = new MutationObserver(() => v3.current?.fond());
     t.observe(document.documentElement, {attributes: true, attributeFilter: ['data-theme']});
     return () => {
       fini = true;
       o.disconnect();
+      retour.disconnect();
       t.disconnect();
       clearInterval(minuteur);
       v3.current?.detruire();

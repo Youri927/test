@@ -6,6 +6,7 @@ import Link from 'next/link';
 import {PhotoDemo, Ico} from '@/components/Visuels';
 import {DEMO, DEMO_PARFUM} from '@/lib/demo';
 import {eur, eur2} from '@/lib/regles';
+import {useUnePasse} from '@/components/Ambiance';
 
 const reduit = () => typeof window !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -80,33 +81,15 @@ const ANATOMIE = [
   {t: '7 jours pour vérifier', d: 'L\'argent reste bloqué jusqu\'à votre accord. Non conforme : remboursé.'},
   {t: '0 % pour le vendeur', d: 'Il touche le prix affiché. L\'acheteur paie une protection de 8 % + 0,90 €.'},
 ];
-/* le défilement des étapes : une étape toutes les 1,3 s, et une pause de 5 s après un choix à la main */
+/* les étapes défilent une fois (1,3 s chacune) quand la carte est à l'écran ; un choix à la main met en pause 5 s */
 const DUREE_ANAT = 1300;
 const PAUSE_ANAT = 5000;
 
 export function Anatomie() {
-  const [i, setI] = useState(0);
-  const bloc = useRef<HTMLElement>(null);
-  const pause = useRef(0); // après un choix à la main, on laisse lire quelques secondes avant de reprendre
-  const choisir = (k: number) => { pause.current = Date.now() + PAUSE_ANAT; setI(k); };
-  useEffect(() => {
-    if (reduit()) return;
-    let visible = false;
-    const o = new IntersectionObserver((e) => (visible = e[0].isIntersecting), {threshold: 0.2});
-    if (bloc.current) o.observe(bloc.current);
-    const t = setInterval(() => {
-      const b = bloc.current;
-      // avec une souris, le survol met en pause ; au doigt, un toucher laisse la section « survolée » : on l'ignore
-      const survol = window.matchMedia('(hover: hover)').matches && b?.matches(':hover');
-      if (visible && b && !survol && Date.now() > pause.current) setI((x) => (x + 1) % ANATOMIE.length);
-    }, DUREE_ANAT);
-    return () => {
-      clearInterval(t);
-      o.disconnect();
-    };
-  }, []);
+  const carte = useRef<HTMLDivElement>(null);
+  const [i, choisir] = useUnePasse(carte, ANATOMIE.length, DUREE_ANAT, {pause: PAUSE_ANAT});
   return (
-    <section className="section env anatomie" ref={bloc}>
+    <section className="section env anatomie">
       <div className="anat-texte">
         <p className="surtitre">Pourquoi c&apos;est plus sûr</p>
         <h2 className="grand-titre">Une annonce Respray, point par point.</h2>
@@ -124,7 +107,7 @@ export function Anatomie() {
         <Link className="lien" href="/comment-ca-marche">Tout le fonctionnement <Ico n="fleche" /></Link>
       </div>
       {/* toucher une zone de la carte choisit son étape (au doigt, la liste des étapes est plus haut, hors de l'écran) */}
-      <div className="anat-carte" data-zone={i} aria-hidden="true" onClick={(e) => { const z = (e.target as HTMLElement).closest('[data-z]'); if (z) choisir(Number(z.getAttribute('data-z'))); }}>
+      <div className="anat-carte" ref={carte} data-zone={i} aria-hidden="true" onClick={(e) => { const z = (e.target as HTMLElement).closest('[data-z]'); if (z) choisir(Number(z.getAttribute('data-z'))); }}>
         <span className="exemple-badge">Exemple</span>
         <div className="z z0" data-z="0"><div className="anat-grande"><PhotoDemo /></div><div className="anat-minis">{['dessous', 'niveau', 'dessus', 'tige', 'preuve'].map((v) => <span key={v}><PhotoDemo vue={v} /></span>)}</div></div>
         <div className="anat-infos"><p>{DEMO_PARFUM.maison}</p><p className="anat-nom">{DEMO_PARFUM.nom}</p><p className="anat-prix">{eur(DEMO.prix)} <small>· {DEMO.ml} ml · reste ~{DEMO.niveau} %</small></p></div>

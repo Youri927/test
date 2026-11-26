@@ -29,7 +29,7 @@ export function Vaporise() {
     }
   }
   return (
-    <div className="vaporise" aria-hidden="true">
+    <div className="vaporise" data-anime aria-hidden="true">
       <img className="v-clair" src="/demo/vendre.webp" alt="" width={600} height={800} decoding="async" />
       <img className="v-sombre" src="/demo/vendre-sombre.webp" alt="" width={600} height={800} decoding="async" loading="lazy" />
       <svg className="brume" viewBox="0 0 600 800">{gouttes}</svg>

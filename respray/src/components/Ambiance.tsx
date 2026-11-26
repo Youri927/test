@@ -1,7 +1,7 @@
 'use client';
 /* L'ambiance reprise du prototype : les éléments marqués data-revele / data-anime apparaissent quand ils entrent à
    l'écran (classe « vu »), et le bouton clair / sombre de l'en-tête (le choix est gardé dans le navigateur). */
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState, type RefObject} from 'react';
 import {usePathname} from 'next/navigation';
 
 export function Apparitions() {
@@ -18,7 +18,8 @@ export function Apparitions() {
           if (e.isIntersecting) {
             e.target.classList.add('vu');
             if (!rejoue) vu.unobserve(e.target);
-          } else if (rejoue) {
+          } else if (rejoue && e.boundingClientRect.top > 0) {
+            // on est remonté au-dessus : l'animation repartira de zéro en redescendant
             e.target.classList.remove('vu');
           }
         }),
@@ -67,3 +68,27 @@ export function BoutonTheme() {
 
 /* posé dans <head> : applique le thème choisi avant l'affichage, sans clignotement */
 export const SCRIPT_THEME = `try{var t=localStorage.getItem('${CLE}');if(t==='clair'||t==='sombre')document.documentElement.dataset.theme=t}catch(e){}`;
+
+/* Une animation en étapes qui se joue UNE fois : elle avance seulement quand l'élément est bien à l'écran (au moins
+   « seuil » de sa hauteur), s'arrête sur la dernière étape, et ne repart de zéro que si l'on remonte au-dessus de
+   l'élément puis qu'on redescend dessus. Un choix à la main met en pause quelques secondes. */
+export function useUnePasse(ref: RefObject<HTMLElement | null>, n: number, duree: number, {seuil = 0.5, pause = 5000} = {}) {
+  const [i, setI] = useState(0);
+  const enPause = useRef(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let visible = false;
+    const o = new IntersectionObserver(([e]) => {
+      visible = e.intersectionRatio >= seuil || (e.isIntersecting && e.intersectionRect.height >= innerHeight * 0.6);
+      if (!e.isIntersecting && e.boundingClientRect.top > 0) setI(0); // remonté au-dessus : on repartira de zéro
+    }, {threshold: [0, 0.25, seuil, 0.75, 1]});
+    o.observe(el);
+    const t = setInterval(() => {
+      if (visible && !document.hidden && Date.now() > enPause.current) setI((x) => (x + 1 < n ? x + 1 : x));
+    }, duree);
+    return () => { o.disconnect(); clearInterval(t); };
+  }, [ref, n, duree, seuil]);
+  const choisir = useCallback((k: number) => { enPause.current = Date.now() + pause; setI(k); }, [pause]);
+  return [i, choisir] as const;
+}
