@@ -29,7 +29,7 @@ export default async function CommandesEquipe() {
   const litiges = liste.filter((x) => x.c.statut === 'litige');
   const photos = litiges.length ? await db.select().from(schema.photos).where(inArray(schema.photos.annonceId, litiges.map((x) => x.a.id))) : [];
   const payees = liste.filter((x) => !['attente_paiement', 'annulee', 'remboursee'].includes(x.c.statut));
-  const encaisse = payees.reduce((s, x) => s + x.c.protection + x.c.envoi + x.c.assurance, 0);
+  const encaisse = payees.reduce((s, x) => s + x.c.commission + x.c.protection + x.c.envoi + x.c.assurance, 0);
   const volume = payees.reduce((s, x) => s + x.c.total, 0);
   return (
     <>
@@ -37,7 +37,7 @@ export default async function CommandesEquipe() {
       <div className="verif-chiffres">
         <div><strong>{payees.length}</strong><span>commandes payées</span></div>
         <div><strong>{eur(volume)}</strong><span>payés par les acheteurs</span></div>
-        <div className="ok"><strong>{eur2(encaisse)}</strong><span>pour Respray (protection, envois, assurances), avant frais Stripe et étiquettes</span></div>
+        <div className="ok"><strong>{eur2(encaisse)}</strong><span>pour Respray (commissions, protection, envois, assurances), avant frais Stripe et étiquettes</span></div>
       </div>
       {litiges.length ? (
         <section className="section">
@@ -70,7 +70,7 @@ export default async function CommandesEquipe() {
                 <td>{c.id}<small className="bo-sous">{court.format(c.creeLe)}</small></td>
                 <td>{a.parfumNom}<small className="bo-sous">{c.mode === 'main' ? 'main propre' : c.relais?.nom}{c.etiquette ? ` · ${c.etiquette}` : ''}</small></td>
                 <td>@{acheteur}<small className="bo-sous">@{vendeur}</small></td>
-                <td>{eur2(c.total)}<small className="bo-sous">{eur2(c.prix)} au vendeur</small></td>
+                <td>{eur2(c.total)}<small className="bo-sous">{eur2(c.prix - c.commission)} au vendeur</small></td>
                 <td><span className={`bo-pill bo-${c.statut === 'litige' ? 'alerte' : ['versee', 'confirmee'].includes(c.statut) ? 'ok' : ['annulee', 'remboursee', 'attente_paiement'].includes(c.statut) ? 'gris' : 'attente'}`}>{LIBELLES[c.statut]}</span></td>
                 <td>
                   {['payee', 'expediee'].includes(c.statut) ? (
