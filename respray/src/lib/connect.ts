@@ -27,18 +27,39 @@ export async function compteDe(m: Membre) {
   return a.id;
 }
 
-/* la session de l'inscription intégrée : seul son « client secret » part au navigateur */
-export async function sessionInscription(m: Membre) {
-  const compte = await compteDe(m);
-  const s = await stripe.accountSessions.create({
-    account: compte,
-    components: {
-      account_onboarding: {enabled: true, features: {external_account_collection: true}},
-      notification_banner: {enabled: true, features: {external_account_collection: true}},
-    },
-  });
-  return s.client_secret;
+/* un compte que Stripe ne connaît pas avec la clé actuelle : typiquement un compte créé en mode test, après le passage
+   en live (les comptes de test n'existent pas en live) */
+const compteInconnu = (e: unknown) => {
+  const x = e as {code?: string; message?: string; statusCode?: number};
+  return x.code === 'resource_missing' || x.statusCode === 404 || /no such account|test mode|live mode|testmode|livemode/i.test(x.message ?? '');
+};
+
+/* on oublie le compte : un nouveau sera créé (en live) au prochain passage */
+export async function oublierCompte(membreId: number) {
+  await db.update(schema.membres).set({stripeCompte: null, versementsOk: false}).where(eq(schema.membres.id, membreId));
 }
+
+/* la session de l'inscription intégrée : seul son « client secret » part au navigateur */
+export async function sessionInscription(m: Membre): Promise<string> {
+  const compte = await compteDe(m);
+  try {
+    const s = await stripe.accountSessions.create({
+      account: compte,
+      components: {
+        account_onboarding: {enabled: true, features: {external_account_collection: true}},
+        notification_banner: {enabled: true, features: {external_account_collection: true}},
+      },
+    });
+    return s.client_secret;
+  } catch (e) {
+    if (!m.stripeCompte || !compteInconnu(e)) throw e;
+    console.error(`Compte Stripe ${compte} inconnu (créé en mode test ?) : un nouveau compte est créé.`);
+    await oublierCompte(m.id);
+    return sessionInscription({...m, stripeCompte: null});
+  }
+}
+
+export {compteInconnu};
 
 /* prêt à recevoir de l'argent : seulement si la capacité « stripe_transfers » est active (pas sur un simple retour) */
 export async function pretPourVersements(compte: string) {

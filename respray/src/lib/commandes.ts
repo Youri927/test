@@ -10,7 +10,7 @@ import {stripe, centimes, cle} from '@/lib/stripe';
 import {notifier} from '@/lib/activite';
 import {noter} from '@/lib/journal';
 import {etiquetteSimulee, simule, suivre} from '@/lib/envoi';
-import {pretPourVersements} from '@/lib/connect';
+import {pretPourVersements, compteInconnu, oublierCompte} from '@/lib/connect';
 import {protection, ASSURANCE, SEUIL_ASSURANCE, eur, jourDeVersement, dateVersement} from '@/lib/regles';
 
 /* ce que reçoit le vendeur : le prix, moins la commission enregistrée à la commande */
@@ -173,7 +173,13 @@ export async function verser(c: Commande) {
 export async function actualiserVersements(membreId: number) {
   const m = await db.query.membres.findFirst({where: eq(schema.membres.id, membreId)});
   if (!m?.stripeCompte) return false;
-  const {ok} = await pretPourVersements(m.stripeCompte);
+  const lu = await pretPourVersements(m.stripeCompte).catch(async (e) => {
+    // un compte créé en mode test n'existe pas en live : on l'oublie, le vendeur refera son inscription
+    if (compteInconnu(e)) await oublierCompte(m.id);
+    return null;
+  });
+  if (!lu) return false;
+  const {ok} = lu;
   if (ok !== m.versementsOk) await db.update(schema.membres).set({versementsOk: ok}).where(eq(schema.membres.id, m.id));
   // les versements partent le lundi seulement : un seul virement par semaine et par vendeur
   if (ok && jourDeVersement()) for (const c of await db.select().from(schema.commandes).where(and(eq(schema.commandes.vendeurId, m.id), eq(schema.commandes.statut, 'confirmee')))) await verser(c);
