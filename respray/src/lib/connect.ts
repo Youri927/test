@@ -17,7 +17,9 @@ export async function compteDe(m: Membre) {
       display_name: `${m.prenom} ${m.nom}`.trim() || m.pseudo,
       dashboard: 'express',
       identity: {country: 'fr', entity_type: 'individual', individual: {given_name: m.prenom || undefined, surname: m.nom || undefined, email: m.email}},
-      defaults: {currency: 'eur', locales: ['fr-FR'], responsibilities: {fees_collector: 'application', losses_collector: 'application'}, profile: {product_description: 'Vente de parfums de seconde main entre particuliers sur Respray', business_url: site}},
+      defaults: {currency: 'eur', locales: ['fr-FR'], responsibilities: {fees_collector: 'application', losses_collector: 'application'}, // Stripe demande un site et une activité pour chaque compte, particulier compris : on donne la page publique du
+      // vendeur sur Respray (sa « boutique »), pas le site de Respray, et une activité de particulier
+      profile: {product_description: 'Revente de mes parfums personnels d\'occasion, en particulier, sur Respray', business_url: `${site}/vendeur/${encodeURIComponent(m.pseudo)}`}},
       configuration: {recipient: {capabilities: {stripe_balance: {stripe_transfers: {requested: true}}}}},
       metadata: {membre: String(m.id)},
     },
