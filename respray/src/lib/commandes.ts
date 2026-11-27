@@ -1,8 +1,8 @@
 import 'server-only';
 /* Le cycle d'une commande, et l'argent qui va avec.
    Respray encaisse (Stripe Checkout), garde l'argent pendant l'envoi et les 7 jours de vérification, puis transfère
-   100 % du prix au vendeur (Stripe Connect, « separate charges and transfers »). Respray garde la protection, l'envoi
-   et l'assurance. Chaque étape prévient la bonne personne et laisse une ligne au journal. */
+   au vendeur le prix moins sa commission (Stripe Connect, « separate charges and transfers »). Respray garde la
+   commission, la protection, l'envoi et l'assurance. Chaque étape prévient la bonne personne et laisse une ligne au journal. */
 import {and, asc, desc, eq, gt, inArray, isNotNull, lt, ne, sql} from 'drizzle-orm';
 import {randomInt} from 'crypto';
 import {db, schema} from '@/db';
@@ -12,6 +12,9 @@ import {noter} from '@/lib/journal';
 import {etiquetteSimulee, simule, suivre} from '@/lib/envoi';
 import {pretPourVersements} from '@/lib/connect';
 import {protection, ASSURANCE, SEUIL_ASSURANCE, eur, jourDeVersement, dateVersement} from '@/lib/regles';
+
+/* ce que reçoit le vendeur : le prix, moins la commission enregistrée à la commande */
+export const net = (c: {prix: number; commission: number}) => Math.round((c.prix - c.commission) * 100) / 100;
 
 export type Commande = typeof schema.commandes.$inferSelect;
 const JOUR = 864e5;
@@ -67,8 +70,8 @@ export async function enregistrerPaiement(c: Commande, paymentIntentId: string |
   if (c.offreId) await db.update(schema.offres).set({statut: 'annulee'}).where(and(eq(schema.offres.annonceId, c.annonceId), ne(schema.offres.id, c.offreId)));
   const a = await db.query.annonces.findFirst({where: eq(schema.annonces.id, c.annonceId)});
   const v = await db.query.membres.findFirst({where: eq(schema.membres.id, c.vendeurId)});
-  await notifier(c.vendeurId, 'vente', c.mode === 'relais' ? `Vendu : ${a?.parfumNom}, ${eur(c.prix)} pour vous. Imprimez l'étiquette et déposez le colis en point relais sous ${DELAI_DEPOT} jours.` : `Vendu : ${a?.parfumNom}, ${eur(c.prix)} pour vous, remise en main propre. Convenez du rendez-vous par message.`, `/commandes/${c.id}`);
-  if (!v?.versementsOk) await notifier(c.vendeurId, 'vente', `Pour recevoir vos ${eur(c.prix)}, ajoutez votre IBAN (2 minutes, vérifié par Stripe).`, '/compte/versements');
+  await notifier(c.vendeurId, 'vente', c.mode === 'relais' ? `Vendu : ${a?.parfumNom}, ${eur(net(c))} pour vous. Imprimez l'étiquette et déposez le colis en point relais sous ${DELAI_DEPOT} jours.` : `Vendu : ${a?.parfumNom}, ${eur(net(c))} pour vous, remise en main propre. Convenez du rendez-vous par message.`, `/commandes/${c.id}`);
+  if (!v?.versementsOk) await notifier(c.vendeurId, 'vente', `Pour recevoir vos ${eur(net(c))}, ajoutez votre IBAN (2 minutes, vérifié par Stripe).`, '/compte/versements');
   await notifier(c.acheteurId, 'achat', `Paiement reçu pour ${a?.parfumNom}. L'argent reste bloqué jusqu'à ce que vous ayez vérifié le parfum.`, `/commandes/${c.id}`);
   await noter(null, 'commande_payee', ref(c), `commande ${c.id} payée : ${a?.parfumNom}, ${eur(c.total)}`);
   return db.query.commandes.findFirst({where: eq(schema.commandes.id, c.id)});
@@ -126,7 +129,7 @@ export async function confirmer(c: Commande, comment: string) {
   const vend = await db.query.membres.findFirst({where: eq(schema.membres.id, c.vendeurId)});
   await notifier(c.acheteurId, 'achat', `Comment s'est passée votre commande avec @${vend?.pseudo} ? Un avis (deux clics) aide les prochains acheteurs, et le vendeur.`, `/commandes/${c.id}#avis`);
   // le versement part le lundi, avec les autres ventes confirmées du vendeur (tâches automatiques)
-  await notifier(c.vendeurId, 'vente', `Commande ${c.id} confirmée : ${eur(c.prix)} vous seront versés ${dateVersement()}, avec vos autres ventes de la semaine.`, `/commandes/${c.id}`);
+  await notifier(c.vendeurId, 'vente', `Commande ${c.id} confirmée : ${eur(net(c))} vous seront versés ${dateVersement()}, avec vos autres ventes de la semaine.`, `/commandes/${c.id}`);
   if (jourDeVersement()) await actualiserVersements(c.vendeurId).catch(() => null);
 }
 
@@ -157,12 +160,12 @@ export async function verser(c: Commande) {
   const v = await db.query.membres.findFirst({where: eq(schema.membres.id, c.vendeurId)});
   if (!v?.stripeCompte || !v.versementsOk) return c; // en attente de son IBAN : versé dès qu'il l'a ajouté
   const t = await stripe.transfers.create(
-    {amount: centimes(c.prix), currency: 'eur', destination: v.stripeCompte, transfer_group: ref(c), ...(c.chargeId ? {source_transaction: c.chargeId} : {}), metadata: {commande: String(c.id)}},
+    {amount: centimes(net(c)), currency: 'eur', destination: v.stripeCompte, transfer_group: ref(c), ...(c.chargeId ? {source_transaction: c.chargeId} : {}), metadata: {commande: String(c.id)}},
     {idempotencyKey: cle('versement', c.id, c.creeLe)},
   );
   await db.update(schema.commandes).set({statut: 'versee', transfertId: t.id, verseeLe: new Date()}).where(eq(schema.commandes.id, c.id));
-  await notifier(c.vendeurId, 'vente', `${eur(c.prix)} versés pour la commande ${c.id}. Ils arrivent sur votre compte bancaire sous quelques jours. Vos obligations fiscales : respray.fr/obligations-fiscales`, `/commandes/${c.id}`);
-  await noter(null, 'commande_versee', ref(c), `commande ${c.id} : ${eur(c.prix)} versés au vendeur`);
+  await notifier(c.vendeurId, 'vente', `${eur(net(c))} versés pour la commande ${c.id}. Ils arrivent sur votre compte bancaire sous quelques jours. Vos obligations fiscales : respray.fr/obligations-fiscales`, `/commandes/${c.id}`);
+  await noter(null, 'commande_versee', ref(c), `commande ${c.id} : ${eur(net(c))} versés au vendeur (commission ${eur(c.commission)})`);
   return db.query.commandes.findFirst({where: eq(schema.commandes.id, c.id)});
 }
 
@@ -236,7 +239,7 @@ export async function contestation(paiementId: string, motif: string) {
   const c = await parPaiement(paiementId);
   if (!c || c.litige?.raison === 'Contestation bancaire') return;
   if (c.transfertId) {
-    await stripe.transfers.createReversal(c.transfertId, {amount: centimes(c.prix), metadata: {commande: String(c.id), raison: 'contestation'}}, {idempotencyKey: cle('reprise', c.id, c.creeLe)}).catch((e) => console.error('Reprise du transfert :', (e as Error).message));
+    await stripe.transfers.createReversal(c.transfertId, {amount: centimes(net(c)), metadata: {commande: String(c.id), raison: 'contestation'}}, {idempotencyKey: cle('reprise', c.id, c.creeLe)}).catch((e) => console.error('Reprise du transfert :', (e as Error).message));
   }
   await db.update(schema.commandes).set({statut: 'litige', litige: {raison: 'Contestation bancaire', texte: `La banque de l'acheteur conteste le paiement (${motif}).`, le: new Date().toISOString()}}).where(eq(schema.commandes.id, c.id));
   const equipe = await db.select({id: schema.membres.id}).from(schema.membres).where(eq(schema.membres.role, 'equipe'));

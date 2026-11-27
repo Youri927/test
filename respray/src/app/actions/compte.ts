@@ -59,7 +59,7 @@ function bienvenue(m: typeof schema.membres.$inferSelect, parrain: boolean) {
       ton: 'ok',
       texte: `Votre compte Respray est prêt. Votre pseudo : @${m.pseudo}.${parrain ? '\n\nVous êtes venu par un parrainage : la protection acheteur vous est offerte sur votre premier achat.' : ''}`,
       points: [
-        ['Vendre, sans commission', 'Six photos, l\'équipe vérifie l\'annonce, et vous touchez 100 % du prix.'],
+        ['Vendre en six photos', 'L\'équipe vérifie l\'annonce, et vous touchez votre prix moins 5 % de commission.'],
         ['Acheter, sans le doute', 'Chaque annonce est vérifiée avant d\'être en ligne, et votre paiement reste bloqué.'],
         ['7 jours pour vérifier', 'Flacon en main : s\'il n\'est pas conforme à l\'annonce, vous êtes remboursé.'],
       ],

@@ -4,7 +4,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {PhotoDemo, Ico} from '@/components/Visuels';
 import {DEMO, DEMO_PARFUM} from '@/lib/demo';
-import {eur, eur2, protection, ENVOI} from '@/lib/regles';
+import {eur, eur2, protection, netVendeur, ENVOI} from '@/lib/regles';
 import {Jauge} from '@/components/Jauge';
 
 const reduit = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -15,7 +15,7 @@ const PARCOURS = {
     {t: 'Prenez les photos demandées', d: '6 photos obligatoires, toujours les mêmes : de face, le dessous avec le code lot, le niveau, vu de dessus avec le spray, la tige sans le spray, et une photo avec votre pseudo et la date.', s: 'photos'},
     {t: 'L\'équipe vérifie votre annonce', d: 'Code lot, flacon, spray, tige, niveau, prix : tout est contrôlé sur les photos. En quelques heures, l\'annonce est en ligne, ou on vous dit quoi refaire.', s: 'verif'},
     {t: 'Vous vendez, vous expédiez', d: 'Vous êtes prévenu à la vente. Vous avez 5 jours pour déposer le colis en point relais, avec l\'étiquette fournie.', s: 'vendu'},
-    {t: 'Vous êtes payé', d: 'Dès que l\'acheteur confirme, ou automatiquement 7 jours après la livraison. Sans commission : vous touchez votre prix.', s: 'paye'},
+    {t: 'Vous êtes payé', d: 'Dès que l\'acheteur confirme, ou automatiquement 7 jours après la livraison. Vous touchez votre prix moins 5 % de commission (0 % pour les vendeurs fondateurs).', s: 'paye'},
   ],
   acheter: [
     {t: 'Trouvez votre parfum', d: 'Par maison, état, prix ou prix au millilitre. Toutes les annonces en ligne ont été vérifiées par l\'équipe.', s: 'trouver'},
@@ -224,7 +224,7 @@ export function Simulateur() {
       <Jauge id="sim" min={10} max={400} step={5} value={prix} onChange={setPrix} format={eur} couleur="var(--noir)" reperes={['10 €', '400 €']} />
       <div className="calcul-res">
         <div><span>L&apos;acheteur paie</span><strong>{eur2(prix + protection(prix))}</strong><small>hors livraison</small></div>
-        <div><span>Le vendeur reçoit</span><strong>{eur2(prix)}</strong><small>100 % du prix</small></div>
+        <div><span>Le vendeur reçoit</span><strong>{eur2(netVendeur(prix))}</strong><small>le prix, moins 5 % de commission</small></div>
       </div>
     </div>
   );

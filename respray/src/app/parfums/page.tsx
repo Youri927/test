@@ -87,7 +87,7 @@ export default async function Parfums({searchParams}: {searchParams: Promise<Q>}
             <div className="bientot">
               <p className="aide">« {q} » n'est pas encore dans le catalogue. Laissez-le dans votre liste d'envies : on vous prévient dès qu'une annonce qui y correspond est vérifiée.</p>
               <FormEnvie texte={q} retour={retourIci} connecte={!!m} deja={mesEnvies.some((e) => normal(e.texte) === normal(q))} libelle={`Me prévenir pour « ${q} »`} />
-              <p className="aide">Vous l'avez ? <Link className="lien-souligne" href="/vendre">Vendez-le sans commission</Link> : l'équipe l'ajoutera au catalogue.</p>
+              <p className="aide">Vous l'avez ? <Link className="lien-souligne" href="/vendre">Vendez-le en six photos</Link> : l'équipe l'ajoutera au catalogue.</p>
             </div>
           )}
         </div>

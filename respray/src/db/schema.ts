@@ -266,8 +266,10 @@ export const commandes = pgTable(
     acheteurId: integer('acheteur_id').notNull().references(() => membres.id),
     vendeurId: integer('vendeur_id').notNull().references(() => membres.id),
     offreId: integer('offre_id'),
-    // les montants, en euros : ce que touche le vendeur (prix), et ce que garde Respray (protection, envoi, assurance)
+    // les montants, en euros : le prix du parfum, la commission vendeur, et ce que paie l'acheteur en plus (protection, envoi, assurance)
     prix: real('prix').notNull(),
+    // la commission Respray, retenue sur le prix au moment du versement (0 pour un vendeur fondateur)
+    commission: real('commission').notNull().default(0),
     protection: real('protection').notNull(),
     envoi: real('envoi').notNull(),
     assurance: real('assurance').notNull().default(0),

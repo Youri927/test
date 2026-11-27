@@ -38,7 +38,7 @@ def face(cote, sur, titre, chapo, points, qr, appel, detail):
 
 recto = face('recto', 'Vendre', "Le parfum qui dort dans votre placard vaut <em>encore de l'argent.</em>",
              "Entamé, offert, porté deux fois : vendez-le à quelqu'un qui le cherche.",
-             [('0 % de commission.', 'Vous touchez tout le prix.'),
+             [('5 % de commission,', '0 % pour les premiers vendeurs.'),
               ("Vérifié par l'équipe", "avant d'être en ligne."),
               ('Envoi en point relais,', 'étiquette fournie.')],
              qv, 'Combien vaut votre placard ?', "Scannez, ajoutez vos flacons : l'estimation est immédiate.")

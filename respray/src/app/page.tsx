@@ -75,8 +75,8 @@ export default async function Accueil() {
           <Link className="porte porte-vendre" href="/vendre">
             <div className="porte-texte">
               <p className="surtitre">Vendre</p>
-              <h2>Il dort dans un placard ? Vendez‑le, sans commission.</h2>
-              <p>Vous touchez 100 % du prix. Six photos, une vérification, et il est en ligne.</p>
+              <h2>Il dort dans un placard ? Vendez‑le en six photos.</h2>
+              <p>Une vérification, et il est en ligne. 5 % de commission seulement, 0 % pour les vendeurs fondateurs.</p>
               <span className="btn btn-noir">Vendre un parfum <Ico n="fleche" /></span>
             </div>
             <div className="porte-visuel"><Vaporise /></div>

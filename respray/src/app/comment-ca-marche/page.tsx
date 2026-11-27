@@ -94,8 +94,8 @@ export default function CommentCaMarche() {
       <section className="fn-section env fn-frais">
         <div data-revele><p className="surtitre">Les frais</p><h2 className="grand-titre">Le vendeur ne paie rien.</h2><p className="chapo">La protection payée par l&apos;acheteur finance ce qui rend la vente sûre : la vérification de chaque annonce par une personne, le paiement bloqué, le service client et les remboursements.</p>
           <table className="frais"><tbody>
-            <tr><th scope="row">Vendre</th><td>Gratuit, sans commission</td></tr>
-            <tr><th scope="row">Protection acheteur</th><td>8 % du prix + 1,50 €</td></tr>
+            <tr><th scope="row">Mettre en ligne</th><td>Gratuit</td></tr><tr><th scope="row">Commission vendeur</th><td>5 % du prix, retenus au versement · 0 % pour les vendeurs fondateurs</td></tr>
+            <tr><th scope="row">Protection acheteur</th><td>5 % du prix + 0,70 €</td></tr>
             <tr><th scope="row">Envoi suivi en point relais</th><td>{eur2(ENVOI)}<small> · {eur2(ENVOI_GRAND)} au-delà de 125 ml ou pour un coffret</small></td></tr>
             <tr><th scope="row">Remise en main propre</th><td>Gratuite</td></tr>
             <tr><th scope="row">Envoi assuré à la valeur réelle</th><td>{eur2(ASSURANCE)}, en option à partir de {eur2(SEUIL_ASSURANCE)}</td></tr>

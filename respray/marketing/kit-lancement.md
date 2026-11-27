@@ -43,7 +43,7 @@ contre-jour (le niveau) ; une main qui vaporise.
 | 2–6 s | Un flacon à moitié plein, à contre-jour | Même entamé, il vaut encore de l'argent. |
 | 6–12 s | Doigt qui suit le niveau | Prix neuf ÷ contenance × ce qu'il reste. Puis 30 à 50 % de moins. |
 | 12–18 s | Le flacon posé, lumière douce | Exemple : 200 € neuf, 100 ml, rempli à 70 % → entre 70 et 100 €. |
-| 18–24 s | Main qui prend le flacon | Sur Respray : 0 % de commission, tu touches 100 % du prix. |
+| 18–24 s | Main qui prend le flacon | Sur Respray : 5 % de commission seulement, et 0 % pour les premiers vendeurs. |
 | 24–26 s | Logo | respray.fr · estime ton placard |
 
 **Légende :** Combien vaut vraiment ton parfum entamé ? Le calcul en 10 secondes. 💸
@@ -111,7 +111,7 @@ surtout les questions sur les faux : chaque réponse est une occasion de parler 
 >
 > Ce qui nous différencie : chaque annonce est vérifiée par notre équipe avant d'être en ligne (6 photos imposées, code
 > lot, spray, tige, niveau), le paiement de l'acheteur reste bloqué jusqu'à ce qu'il ait vérifié le flacon, et le
-> vendeur ne paie aucune commission.
+> vendeur ne paie que 5 % de commission (0 % pour nos premiers vendeurs).
 >
 > Est-ce que vous accepteriez que je présente Respray une fois dans le groupe ? Je peux aussi, si ça intéresse vos
 > membres, partager nos guides gratuits (reconnaître un faux, trouver le code lot, bien emballer un flacon), sans lien
@@ -129,11 +129,11 @@ surtout les questions sur les faux : chaque réponse est une occasion de parler 
 > Je lance Respray (respray.fr), pour vendre et acheter du parfum de seconde main entre particuliers, sans la peur
 > des faux :
 > ✅ chaque annonce vérifiée par l'équipe avant d'être en ligne
-> ✅ 0 % de commission pour le vendeur
+> ✅ 5 % de commission seulement pour le vendeur (0 % à vie pour les vendeurs fondateurs)
 > ✅ l'argent de l'acheteur bloqué jusqu'à ce qu'il ait vérifié le flacon (7 jours)
 > ✅ envoi en point relais, étiquette fournie
 >
-> On cherche nos premiers vendeurs « fondateurs » (badge fondateur, 5 mises en avant offertes) : respray.fr/fondateurs.
+> On cherche nos premiers vendeurs « fondateurs » (0 % de commission à vie, badge fondateur, 5 mises en avant offertes) : respray.fr/fondateurs.
 > Si vous avez des flacons à faire tourner, je réponds à toutes les questions ici en commentaire 👇
 
 ---
@@ -149,11 +149,11 @@ message court, personnalisé : cite **une vraie vidéo** que tu as vue.
 >
 > Je lance Respray (respray.fr), une plateforme française pour revendre ses parfums entre particuliers. Chaque annonce
 > est vérifiée par notre équipe avant d'être en ligne, l'argent de l'acheteur est bloqué jusqu'à ce qu'il ait vérifié le
-> flacon, et le vendeur ne paie aucune commission.
+> flacon, et le vendeur ne paie que 5 % de commission.
 >
 > Avec une collection comme la tienne, tu as sûrement des flacons que tu portes moins. Ça te dirait d'être parmi nos
 > vendeurs fondateurs ? Concrètement :
-> • 0 % de commission (tu touches 100 % du prix) ;
+> • 0 % de commission à vie (tu touches 100 % du prix, les autres vendeurs paient 5 %) ;
 > • le badge fondateur sur ton profil et tes annonces, pour toujours ;
 > • 5 mises en avant offertes, et tes annonces vérifiées en priorité ;
 > • un lien de parrainage : chaque personne que tu invites a la protection acheteur offerte sur son premier achat, et

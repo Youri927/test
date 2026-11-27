@@ -86,7 +86,7 @@ export default async function Compte({searchParams}: {searchParams: Promise<{pro
             ))}
           </tbody></table></div>
         ) : (
-          <div className="bientot"><h3>Aucune annonce pour l'instant.</h3><p className="aide">Gratuit, sans commission : vous touchez 100 % du prix.</p></div>
+          <div className="bientot"><h3>Aucune annonce pour l'instant.</h3><p className="aide">Mise en ligne gratuite, 5 % de commission seulement quand il se vend.</p></div>
         )}
       </section>
       <section className="section" id="envies">

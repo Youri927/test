@@ -12,7 +12,7 @@ import {Apparitions, BoutonTheme, SCRIPT_THEME} from '@/components/Ambiance';
 import {Mouvement} from '@/components/Mouvement';
 
 const SITE = process.env.SITE_URL || 'https://respray.fr';
-const DESCRIPTION = 'Achetez et vendez du parfum de seconde main entre particuliers : chaque annonce est vérifiée par l\'équipe avant d\'être en ligne, votre paiement reste bloqué et vous avez 7 jours pour vérifier. 0 % de commission pour le vendeur.';
+const DESCRIPTION = 'Achetez et vendez du parfum de seconde main entre particuliers : chaque annonce est vérifiée par l\'équipe avant d\'être en ligne, votre paiement reste bloqué et vous avez 7 jours pour vérifier. Pour le vendeur, 5 % de commission seulement.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
@@ -96,7 +96,7 @@ export default async function Racine({children}: {children: React.ReactNode}) {
           </div>
           {/* la signature : le logo en très grand, qui vaporise doucement */}
           <div className="env pied-geant" data-anime aria-hidden="true"><Logo className="logo-geant" /></div>
-          <div className="env pied-bas"><Symbole className="symbole-mini" /><span>Vérifié avant d'être en ligne · 0 % de commission vendeur · 7 jours pour vérifier</span></div>
+          <div className="env pied-bas"><Symbole className="symbole-mini" /><span>Vérifié avant d'être en ligne · Paiement bloqué · 7 jours pour vérifier</span></div>
           <nav className="env pied-legal" aria-label="Informations légales"><Link href="/cgu">Conditions</Link><Link href="/confidentialite">Confidentialité</Link><Link href="/obligations-fiscales">Obligations fiscales</Link><Link href="/mentions-legales">Mentions légales</Link></nav>
         </footer>
       </body>

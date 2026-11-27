@@ -22,7 +22,7 @@ export default async function Versements({searchParams}: {searchParams: Promise<
     <div className="env page page-etroite">
       <nav className="fil" aria-label="Fil d'Ariane"><Link href="/compte">Mon compte</Link><span aria-hidden="true">›</span><span>Versements</span></nav>
       <h1 className="titre-page">Mes versements</h1>
-      <p className="chapo">Vous touchez 100 % du prix de vos ventes, sans commission. Vos ventes confirmées vous sont versées chaque lundi, en un seul virement.</p>
+      <p className="chapo">Vous touchez le prix de vos ventes, moins 5 % de commission (0 % pour les vendeurs fondateurs). Vos ventes confirmées vous sont versées chaque lundi, en un seul virement.</p>
       <div className="verif-chiffres versements-chiffres">
         <div><strong>{eur(somme(['payee', 'expediee', 'livree', 'litige']))}</strong><span>en cours (colis en route ou en vérification)</span></div>
         <div className="ok"><strong>{eur(somme(['confirmee']))}</strong><span>prêts à être versés{ok ? '' : ', dès que votre IBAN est enregistré'}</span></div>

@@ -5,7 +5,7 @@ import {useEffect, useRef, useState} from 'react';
 import Link from 'next/link';
 import {PhotoDemo, Ico} from '@/components/Visuels';
 import {DEMO, DEMO_PARFUM} from '@/lib/demo';
-import {eur, eur2} from '@/lib/regles';
+import {eur, eur2, commission, netVendeur} from '@/lib/regles';
 import {useUnePasse} from '@/components/Ambiance';
 
 const reduit = () => typeof window !== 'undefined' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -79,7 +79,7 @@ const ANATOMIE = [
   {t: '6 photos imposées', d: 'Toujours les mêmes, jusqu\'à la tige du spray et une photo avec le pseudo du vendeur.'},
   {t: 'Vérifiée par l\'équipe', d: 'Avant d\'être en ligne, en quelques heures. Code lot, spray, tige, niveau, prix.'},
   {t: '7 jours pour vérifier', d: 'L\'argent reste bloqué jusqu\'à votre accord. Non conforme : remboursé.'},
-  {t: '0 % pour le vendeur', d: 'Il touche le prix affiché. L\'acheteur paie une protection de 8 % + 1,50 €.'},
+  {t: 'Des frais partagés et légers', d: 'Le vendeur paie 5 % de commission, l\'acheteur une protection de 5 % + 0,70 €.'},
 ];
 /* les étapes défilent une fois (1,3 s chacune) quand la carte est à l'écran ; un choix à la main met en pause 5 s */
 const DUREE_ANAT = 1300;
@@ -115,7 +115,7 @@ export function Anatomie() {
         <div className="anat-infos"><p>{DEMO_PARFUM.maison}</p><p className="anat-nom">{DEMO_PARFUM.nom}</p><p className="anat-prix">{eur(DEMO.prix)} <small>· {DEMO.ml} ml · reste ~{DEMO.niveau} %</small></p></div>
         <div className="z z1" data-z="1"><b><Ico n="check" /></b><span><strong>Vérifiée par l&apos;équipe</strong><small>avant d&apos;être en ligne · 6 contrôles</small></span></div>
         <div className="z z2" data-z="2"><b><Ico n="cadenas" /></b><span><strong>Paiement bloqué, 7 jours pour vérifier</strong><span className="anat-jours">{Array.from({length: 7}, (_, k) => <i key={k} style={{'--i': k} as React.CSSProperties} />)}</span></span></div>
-        <div className="z z3" data-z="3"><b><Ico n="euro" /></b><span><strong>Le vendeur reçoit {eur2(DEMO.prix)}</strong><small>Commission : 0,00 €</small></span></div>
+        <div className="z z3" data-z="3"><b><Ico n="euro" /></b><span><strong>Le vendeur reçoit {eur2(netVendeur(DEMO.prix))}</strong><small>Commission 5 % : {eur2(commission(DEMO.prix))}</small></span></div>
       </div>
       {/* au téléphone : l'étape en cours, sous la carte, et des points pour passer de l'une à l'autre */}
       <div className="anat-legende-m" aria-hidden="true">

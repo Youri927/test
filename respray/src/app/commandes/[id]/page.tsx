@@ -127,7 +127,7 @@ export default async function CommandePage({params, searchParams}: {params: Prom
         </section>
       ) : null}
       {acheteur && c.statut === 'litige' ? <p className="p-alerte">Problème signalé : « {c.litige?.raison} ». L'argent reste bloqué ; l'équipe compare avec les photos vérifiées de l'annonce et vous répond.</p> : null}
-      {['confirmee', 'versee'].includes(c.statut) ? <p className="offre-ok">{acheteur ? 'Commande terminée. Bonne découverte !' : c.statut === 'versee' ? `${eur(c.prix)} versés le ${jour.format(c.verseeLe!)}.` : `Commande confirmée : ${eur(c.prix)} vous seront versés ${dateVersement()}${m.versementsOk ? '' : ', une fois votre IBAN enregistré'}.`}</p> : null}
+      {['confirmee', 'versee'].includes(c.statut) ? <p className="offre-ok">{acheteur ? 'Commande terminée. Bonne découverte !' : c.statut === 'versee' ? `${eur(c.prix - c.commission)} versés le ${jour.format(c.verseeLe!)}.` : `Commande confirmée : ${eur(c.prix - c.commission)} vous seront versés ${dateVersement()}${m.versementsOk ? '' : ', une fois votre IBAN enregistré'}.`}</p> : null}
       {/* l'avis : l'acheteur note le vendeur une fois la commande terminée (une fois par commande) */}
       {acheteur && ['confirmee', 'versee'].includes(c.statut) ? (
         <section className="action-bloc" id="avis">
@@ -159,7 +159,11 @@ export default async function CommandePage({params, searchParams}: {params: Prom
       <section className="section">
         <h2 className="h2">Le détail</h2>
         <dl className="total">
-          <div><dt>Parfum{vendeur ? ' (pour vous, sans commission)' : ''}</dt><dd>{eur2(c.prix)}</dd></div>
+          <div><dt>Parfum</dt><dd>{eur2(c.prix)}</dd></div>
+          {vendeur ? <>
+            <div><dt>Commission Respray{c.commission ? ' (5 %)' : m.fondateur ? ' (vendeur fondateur)' : ''}</dt><dd>{c.commission ? `− ${eur2(c.commission)}` : '0,00 €'}</dd></div>
+            <div className="total-ligne"><dt>Pour vous</dt><dd>{eur2(c.prix - c.commission)}</dd></div>
+          </> : null}
           {!vendeur ? <>
             <div><dt>Protection acheteur</dt><dd>{c.protection ? eur2(c.protection) : 'offerte'}</dd></div>
             <div><dt>Livraison</dt><dd>{eur2(c.envoi)}</dd></div>

@@ -19,7 +19,7 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata({params}: {params: Promise<{lien: string}>}) {
   const r = await parfumParLien((await params).lien);
   if (!r) return {};
-  return {title: `${r.p.nom} de ${r.maison} d'occasion : prix et annonces vérifiées`, description: `${r.p.nom} (${r.maison}, ${r.p.conc}) de seconde main : annonces vérifiées par l'équipe, prix au millilitre comparé au neuf, 7 jours pour vérifier. Vendez le vôtre sans commission.`};
+  return {title: `${r.p.nom} de ${r.maison} d'occasion : prix et annonces vérifiées`, description: `${r.p.nom} (${r.maison}, ${r.p.conc}) de seconde main : annonces vérifiées par l'équipe, prix au millilitre comparé au neuf, 7 jours pour vérifier. Vendez le vôtre en six photos.`};
 }
 
 /* la page d'un parfum : sa fiche, ses annonces en ligne, son prix d'occasion comparé au neuf */
@@ -52,7 +52,7 @@ export default async function Parfum({params}: {params: Promise<{lien: string}>}
       : `Un parfum entamé se vend en général 30 à 50 % moins cher que neuf au millilitre, selon ce qui reste dans le flacon, la boîte et la rareté.`],
     [`Comment savoir si un ${p.nom} d'occasion est authentique ?`, `Le code lot doit être lisible sous le flacon et identique sur la boîte ; le spray, la bague et la tige doivent être d'origine ; le niveau doit correspondre aux photos. Sur Respray, chaque annonce de ${p.nom} est vérifiée par l'équipe sur 6 photos imposées avant d'être en ligne.`],
     [`Où acheter un ${p.nom} d'occasion sans risque ?`, `Sur Respray, le paiement reste bloqué jusqu'à ce que vous ayez reçu et vérifié le flacon : 7 jours après la livraison. S'il n'est pas conforme à l'annonce, vous êtes remboursé en entier, livraison comprise.`],
-    [`Comment vendre mon ${p.nom} ?`, `Sur Respray, la mise en ligne est gratuite et sans commission : 6 photos, l'équipe vérifie l'annonce, puis vous envoyez le colis en point relais avec une étiquette fournie. Le formulaire vous propose un prix d'après la cote.`],
+    [`Comment vendre mon ${p.nom} ?`, `Sur Respray, la mise en ligne est gratuite et la commission de 5 % seulement : 6 photos, l'équipe vérifie l'annonce, puis vous envoyez le colis en point relais avec une étiquette fournie. Le formulaire vous propose un prix d'après la cote.`],
   ];
   const ld = [{
     '@context': 'https://schema.org', '@type': 'Product', name: `${p.nom} ${maison}`, brand: {'@type': 'Brand', name: maison}, category: 'Parfum',

@@ -5,7 +5,7 @@
 import {useActionState, useEffect, useMemo, useRef, useState, startTransition} from 'react';
 import {envoyerVente, type EtatVente} from '@/app/actions/vendre';
 import {Vaporise} from '@/components/Logo';
-import {PHOTOS, CONCENTRATIONS, GROUPES_FAMILLES, FORMATS, LIEUX, DEFAUTS, BOITES, MISES_EN_AVANT, POURQUOI, annees, eur, eur2, normal} from '@/lib/regles';
+import {PHOTOS, CONCENTRATIONS, GROUPES_FAMILLES, FORMATS, LIEUX, DEFAUTS, BOITES, MISES_EN_AVANT, POURQUOI, annees, eur, eur2, normal, commission, netVendeur} from '@/lib/regles';
 import {estimer} from '@/lib/cote';
 import {Jauge} from '@/components/Jauge';
 import {ChoixParfum, type Choix} from '@/components/ChoixParfum';
@@ -45,7 +45,7 @@ const VIDE = {
   boite: '', annee: '', lieu: '', lumiere: '', chaleur: '', pourquoi: '', lot: '', lotIllisible: false, description: '', prix: '', mainPropre: false, ville: '', miseEnAvant: '', engagement: false,
 };
 
-export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depart, credits = 0}: {maisons: Maison[]; pseudo: string; prix: Record<number, number[]>; occ?: Record<number, number[]>; demande?: Record<number, number>; depart?: Depart; credits?: number}) {
+export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depart, credits = 0, fondateur = false}: {maisons: Maison[]; pseudo: string; prix: Record<number, number[]>; occ?: Record<number, number[]>; demande?: Record<number, number>; depart?: Depart; credits?: number; fondateur?: boolean}) {
   const [etat, agir, enCours] = useActionState<EtatVente, FormData>(envoyerVente, {});
   const [v, setV] = useState({...VIDE, ...(depart ? {maisonId: depart.maisonId || '', parfumId: depart.parfumId || '', ml: depart.ml || '', niveau: depart.niveau ?? 80, etat: (depart.niveau ?? 80) >= 100 ? 'neuf' : 'entame'} : {})});
   const [familles, setFamilles] = useState<string[]>([]);
@@ -303,7 +303,7 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
               <label htmlFor="prix">Votre prix</label>
               <div className="champ-prix"><input id="prix" name="prix" className="champ" inputMode="decimal" value={v.prix} onChange={(e) => set('prix')(e.target.value)} placeholder="0" /><span>€</span></div>
               {fourchette ? <p className="aide">Annonces actuelles de ce parfum : de {eur(fourchette[0])} à {eur(fourchette[1])}.</p> : null}
-              <p className="aide">{prixN >= 3 ? `Vous recevrez ${eur2(prixN)} : aucune commission.` : 'Vous recevez la totalité du prix : aucune commission.'} Vendre vos propres parfums de temps en temps n'est en général pas imposable : <a className="lien-souligne" href="/obligations-fiscales" target="_blank">vos obligations fiscales</a>.</p>
+              <p className="aide">{fondateur ? (prixN >= 3 ? `Vous recevrez ${eur2(prixN)} : vendeur fondateur, 0 % de commission à vie.` : 'Vendeur fondateur : 0 % de commission à vie.') : prixN >= 3 ? `Vous recevrez ${eur2(netVendeur(prixN))} (le prix, moins 5 % de commission : ${eur2(commission(prixN))}).` : 'Vous recevez le prix, moins 5 % de commission.'} Vendre vos propres parfums de temps en temps n'est en général pas imposable : <a className="lien-souligne" href="/obligations-fiscales" target="_blank">vos obligations fiscales</a>.</p>
               {cote && prixN > cote.haut * 1.15 ? <p className="aide aide-attention">C'est nettement au-dessus de la cote : l'annonce risque d'attendre. Les acheteurs comparent le prix au millilitre.</p> : null}
               {cote && prixN >= 3 && prixN < cote.bas * 0.6 ? <p className="aide aide-attention">C'est très en dessous de la cote : vous pourriez en demander plus. Un prix trop bas attire aussi l'attention de l'équipe.</p> : null}
               <p className="aide">Envoi en point relais, suivi : vous imprimez l'étiquette, vous avez 5 jours pour déposer le colis.</p>
@@ -327,8 +327,8 @@ export function FormVendre({maisons, pseudo, prix, occ = {}, demande = {}, depar
         <div id="apercu">
           <div className="touche">
             <span>Vous touchez</span>
-            <strong>{prixN >= 3 ? <Montant valeur={prixN} format={eur2} /> : '— €'}</strong>
-            <small>100 % du prix · 0 € de commission</small>
+            <strong>{prixN >= 3 ? <Montant valeur={netVendeur(prixN, fondateur)} format={eur2} /> : '— €'}</strong>
+            <small>{fondateur ? 'Vendeur fondateur · 0 % de commission' : `Commission 5 %${prixN >= 3 ? ` · ${eur2(commission(prixN))}` : ''}`}</small>
           </div>
           <div className="apercu-carte">
             <div className="apercu-photo">{apercus.face ? <img className="visuel" src={apercus.face} alt="" /> : <span className="visuel apercu-sans" />}{apercus.face ? null : <span className="apercu-vide">Votre photo de face</span>}</div>

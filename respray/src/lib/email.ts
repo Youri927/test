@@ -127,7 +127,7 @@ export function modele(m: Mail) {
         <td width="30" style="vertical-align:top"><img src="${abs('/email/symbole.png')}" width="22" height="22" alt="" style="display:block;opacity:.85"></td>
         <td style="font-size:12.5px;line-height:1.6;color:#6e6e73">
           <strong style="color:#1d1d1f">Le parfum de seconde main, sans le doute.</strong><br>
-          Vérifié avant d'être en ligne · 0 % de commission vendeur · 7 jours pour vérifier<br>
+          Vérifié avant d'être en ligne · Paiement bloqué · 7 jours pour vérifier<br>
           <a href="${SITE}/commandes" style="color:#6e6e73">Mes commandes</a> &nbsp;·&nbsp; <a href="${SITE}/activite" style="color:#6e6e73">Activité</a> &nbsp;·&nbsp; <a href="${SITE}/comment-ca-marche" style="color:#6e6e73">Comment ça marche</a> &nbsp;·&nbsp; <a href="${SITE}/cgu" style="color:#6e6e73">Conditions</a><br>
           <span style="color:#9a968f">${e(m.pied)}<br>${e(SOCIETE.nom)} · ${e(SOCIETE.siege)}</span>
         </td>
@@ -228,12 +228,12 @@ async function contexte(lien: string, membreId: number): Promise<Partial<Mail>> 
     const fait = c.verseeLe ? 5 : c.confirmeeLe ? 4 : c.livreeLe ? 3 : c.expedieeLe ? 2 : c.payeeLe ? 1 : 0;
     const fini = ['annulee', 'remboursee'].includes(c.statut);
     return {
-      carte: a ? {photo: ph ? `/photos/${ph.fichier}` : null, maison: a.maisonNom, nom: a.parfumNom, details: `${a.ml} ml · ${a.etat === 'neuf' ? 'neuf' : `reste ~${a.niveau} %`} · commande ${c.id}`, prix: eur(acheteur ? c.total : c.prix)} : null,
+      carte: a ? {photo: ph ? `/photos/${ph.fichier}` : null, maison: a.maisonNom, nom: a.parfumNom, details: `${a.ml} ml · ${a.etat === 'neuf' ? 'neuf' : `reste ~${a.niveau} %`} · commande ${c.id}`, prix: eur(acheteur ? c.total : c.prix - c.commission)} : null,
       suivi: !fini && c.mode === 'relais' ? {etapes: SUIVI_RELAIS, fait} : null,
       lignes: acheteur
         ? [['Parfum', eur2(c.prix)], ['Protection acheteur', c.protection ? eur2(c.protection) : 'offerte'], ['Livraison', eur2(c.envoi)], ...(c.assurance ? [['Envoi assuré', eur2(c.assurance)] as [string, string]] : []), ...(c.relais ? [['Point relais', `${c.relais.nom}, ${c.relais.cp}`] as [string, string]] : [])]
-        : [['Commission Respray', '0,00 €'], ...(c.mode === 'relais' && c.etiquette ? [['Suivi', c.etiquette] as [string, string]] : [])],
-      total: acheteur ? ['Payé', eur2(c.total)] : ['Pour vous', eur2(c.prix)],
+        : [['Parfum', eur2(c.prix)], ['Commission Respray', c.commission ? `− ${eur2(c.commission)}` : '0,00 €'], ...(c.mode === 'relais' && c.etiquette ? [['Suivi', c.etiquette] as [string, string]] : [])],
+      total: acheteur ? ['Payé', eur2(c.total)] : ['Pour vous', eur2(c.prix - c.commission)],
       note: fini ? undefined : acheteur ? 'Votre argent reste bloqué jusqu\'à ce que vous ayez vérifié le parfum : 7 jours après la livraison. S\'il n\'est pas conforme à l\'annonce, vous êtes remboursé.' : 'Vos 6 photos, vérifiées par l\'équipe, font foi en cas de désaccord : elles prouvent l\'état du flacon avant l\'envoi.',
     };
   }
@@ -278,17 +278,17 @@ export async function emailActivite(membreId: number, type: string, texte: strin
 /* ——— les aperçus (page équipe /equipe/emails) : chaque e-mail, avec l'exemple de démonstration ——— */
 export function apercus(): {nom: string; sujet: string; contenu: {html: string; texte: string}}[] {
   const carte = (prix: string): CarteMail => ({photo: '/demo/a101-face.webp', maison: 'Essential Parfums', nom: 'Bois Impérial', details: '100 ml · reste ~85 % · commande 12', prix});
-  const acheteur: Partial<Mail> = {carte: carte('97,60 €'), lignes: [['Parfum', '85,00 €'], ['Protection acheteur', '7,70 €'], ['Livraison', '4,90 €'], ['Point relais', 'Tabac Presse du Centre, 75011']], total: ['Payé', '97,60 €'], note: 'Votre argent reste bloqué jusqu\'à ce que vous ayez vérifié le parfum : 7 jours après la livraison. S\'il n\'est pas conforme à l\'annonce, vous êtes remboursé.'};
-  const vendeur: Partial<Mail> = {carte: carte('85 €'), lignes: [['Commission Respray', '0,00 €'], ['Suivi', 'MR48213977']], total: ['Pour vous', '85,00 €'], note: 'Vos 6 photos, vérifiées par l\'équipe, font foi en cas de désaccord : elles prouvent l\'état du flacon avant l\'envoi.'};
+  const acheteur: Partial<Mail> = {carte: carte('94,85 €'), lignes: [['Parfum', '85,00 €'], ['Protection acheteur', '4,95 €'], ['Livraison', '4,90 €'], ['Point relais', 'Tabac Presse du Centre, 75011']], total: ['Payé', '94,85 €'], note: 'Votre argent reste bloqué jusqu\'à ce que vous ayez vérifié le parfum : 7 jours après la livraison. S\'il n\'est pas conforme à l\'annonce, vous êtes remboursé.'};
+  const vendeur: Partial<Mail> = {carte: carte('80,75 €'), lignes: [['Parfum', '85,00 €'], ['Commission Respray', '− 4,25 €'], ['Suivi', 'MR48213977']], total: ['Pour vous', '80,75 €'], note: 'Vos 6 photos, vérifiées par l\'équipe, font foi en cas de désaccord : elles prouvent l\'état du flacon avant l\'envoi.'};
   const annonce: Partial<Mail> = {carte: {photo: '/demo/a101-face.webp', maison: 'Essential Parfums', nom: 'Bois Impérial', details: '100 ml · reste ~85 %', prix: '85 €'}};
   const exemples: [string, string, string, Partial<Mail>][] = [
     ['Achat payé', 'achat', 'Paiement reçu pour Bois Impérial. L\'argent reste bloqué jusqu\'à ce que vous ayez vérifié le parfum.', {...acheteur, suivi: {etapes: SUIVI_RELAIS, fait: 1}}],
-    ['Vente', 'vente', 'Vendu : Bois Impérial, 85 € pour vous. Imprimez l\'étiquette et déposez le colis en point relais sous 5 jours.', {...vendeur, suivi: {etapes: SUIVI_RELAIS, fait: 1}}],
+    ['Vente', 'vente', 'Vendu : Bois Impérial, 80,75 € pour vous. Imprimez l\'étiquette et déposez le colis en point relais sous 5 jours.', {...vendeur, suivi: {etapes: SUIVI_RELAIS, fait: 1}}],
     ['Colis en route', 'achat', 'Votre colis est parti (suivi MR48213977). Vous serez prévenu à son arrivée au point relais.', {...acheteur, suivi: {etapes: SUIVI_RELAIS, fait: 2}}],
     ['Colis arrivé', 'achat', 'Votre colis est arrivé chez Tabac Presse du Centre. Vous avez 7 jours pour vérifier le parfum : confirmez, ou signalez un problème.', {...acheteur, suivi: {etapes: SUIVI_RELAIS, fait: 3}}],
-    ['Versement', 'vente', '85 € versés pour la commande 12. Ils arrivent sur votre compte bancaire sous quelques jours.', {...vendeur, suivi: {etapes: SUIVI_RELAIS, fait: 5}, note: undefined}],
+    ['Versement', 'vente', '80,75 € versés pour la commande 12. Ils arrivent sur votre compte bancaire sous quelques jours.', {...vendeur, suivi: {etapes: SUIVI_RELAIS, fait: 5}, note: undefined}],
     ['Litige ouvert (vendeur)', 'vente', 'L\'acheteur signale un problème sur la commande 12 : Il en reste moins qu\'annoncé. L\'argent reste bloqué ; l\'équipe compare avec vos photos vérifiées et revient vers vous.', {...vendeur, suivi: {etapes: SUIVI_RELAIS, fait: 3}}],
-    ['Remboursement', 'achat', 'Litige de la commande 12 : vous êtes remboursé en entier. La photo du niveau reçue montre environ 30 %, contre 85 % sur la photo vérifiée.', {carte: acheteur.carte, lignes: acheteur.lignes, total: ['Remboursé', '97,60 €']}],
+    ['Remboursement', 'achat', 'Litige de la commande 12 : vous êtes remboursé en entier. La photo du niveau reçue montre environ 30 %, contre 85 % sur la photo vérifiée.', {carte: acheteur.carte, lignes: acheteur.lignes, total: ['Remboursé', '94,85 €']}],
     ['Annonce en ligne', 'annonce', 'Votre Bois Impérial est vérifié et en ligne.', annonce],
     ['Annonce refusée', 'annonce', 'Votre Bois Impérial n\'a pas été publié : La photo du dessous ne permet pas de lire le code lot.', annonce],
     ['Envie arrivée', 'envie', 'Il est arrivé : Bois Impérial (Essential Parfums), 100 ml, 85 €. Vérifié par l\'équipe.', {...annonce, note: 'Vérifiée par l\'équipe avant d\'être en ligne. Votre paiement reste bloqué, et vous avez 7 jours pour vérifier.'}],
@@ -305,7 +305,7 @@ export function apercus(): {nom: string; sujet: string; contenu: {html: string; 
     };
   });
   liste.unshift(
-    {nom: 'Bienvenue', sujet: 'Bienvenue sur Respray', contenu: modele({titre: 'Bienvenue, Lina', badge: 'Compte créé', ton: 'ok', texte: 'Votre compte Respray est prêt. Votre pseudo : @lina.', points: [['Vendre, sans commission', 'Six photos, l\'équipe vérifie l\'annonce, et vous touchez 100 % du prix.'], ['Acheter, sans le doute', 'Chaque annonce est vérifiée avant d\'être en ligne, et votre paiement reste bloqué.'], ['7 jours pour vérifier', 'Flacon en main : s\'il n\'est pas conforme à l\'annonce, vous êtes remboursé.']], bouton: 'Estimer mon placard', lien: '/placard', note: 'Respray vérifie chaque annonce avant de la publier : c\'est ce qui fait la différence.', pied: 'Vous recevez cet e-mail parce que vous venez de créer un compte sur Respray.'})},
+    {nom: 'Bienvenue', sujet: 'Bienvenue sur Respray', contenu: modele({titre: 'Bienvenue, Lina', badge: 'Compte créé', ton: 'ok', texte: 'Votre compte Respray est prêt. Votre pseudo : @lina.', points: [['Vendre en six photos', 'L\'équipe vérifie l\'annonce, et vous touchez votre prix moins 5 % de commission.'], ['Acheter, sans le doute', 'Chaque annonce est vérifiée avant d\'être en ligne, et votre paiement reste bloqué.'], ['7 jours pour vérifier', 'Flacon en main : s\'il n\'est pas conforme à l\'annonce, vous êtes remboursé.']], bouton: 'Estimer mon placard', lien: '/placard', note: 'Respray vérifie chaque annonce avant de la publier : c\'est ce qui fait la différence.', pied: 'Vous recevez cet e-mail parce que vous venez de créer un compte sur Respray.'})},
     {nom: 'Mot de passe oublié', sujet: 'Choisir un nouveau mot de passe', contenu: modele({titre: 'Un nouveau mot de passe', badge: 'Sécurité', ton: 'info', texte: 'Bonjour Lina,\n\nVous avez demandé à changer le mot de passe de votre compte Respray. Ce lien est valable une heure, une seule fois.', bouton: 'Choisir un nouveau mot de passe', lien: '/nouveau-mot-de-passe', pied: 'Vous n\'avez rien demandé ? Ignorez cet e-mail : votre mot de passe ne change pas.'})},
   );
   return liste;

@@ -13,7 +13,7 @@ export default async function Page({searchParams}: {searchParams: Promise<{retou
   return (
     <div className="env page page-etroite">
       <h1 className="titre-page">Créer un compte</h1>
-      <p className="chapo">Pour vendre sans commission, et acheter avec 7 jours pour vérifier.</p>
+      <p className="chapo">Pour vendre en six photos, et acheter avec 7 jours pour vérifier.</p>
       {code ? <p className="envie-ok">Vous êtes invité : la protection acheteur est offerte sur votre premier achat.</p> : null}
       {googleActif() ? <BoutonGoogle retour={retour} /> : null}
       <FormInscription retour={retour} parrain={code} />

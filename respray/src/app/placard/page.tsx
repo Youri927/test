@@ -10,7 +10,7 @@ import {FormPlacard, Partager} from '@/components/Placard';
 
 export const metadata = {
   title: 'Combien vaut votre placard ?',
-  description: 'Ajoutez les parfums que vous possédez : Respray estime ce qu\'ils valent d\'occasion, d\'après la cote. Vendez ensuite celui que vous voulez, en un geste et sans commission.',
+  description: 'Ajoutez les parfums que vous possédez : Respray estime ce qu\'ils valent d\'occasion, d\'après la cote. Vendez ensuite celui que vous voulez, en un geste.',
 };
 export const dynamic = 'force-dynamic';
 
@@ -24,7 +24,7 @@ export default async function Placard({searchParams}: {searchParams: Promise<{pr
       <div className="env page placard-accueil">
         <p className="surtitre">Le placard</p>
         <h1 className="titre-page">Combien valent les parfums qui dorment dans votre placard ?</h1>
-        <p className="chapo">Ajoutez ceux que vous avez, avec ce qu'il en reste. Respray estime leur valeur d'occasion d'après la cote, flacon par flacon. Vous gardez ceux que vous aimez ; les autres se vendent en un geste, sans commission.</p>
+        <p className="chapo">Ajoutez ceux que vous avez, avec ce qu'il en reste. Respray estime leur valeur d'occasion d'après la cote, flacon par flacon. Vous gardez ceux que vous aimez ; les autres se vendent en un geste.</p>
         <div className="boutons"><Link className="btn btn-noir btn-large" href="/inscription?retour=/placard">Estimer mon placard</Link><Link className="btn btn-large" href="/connexion?retour=/placard">J'ai déjà un compte</Link></div>
         <p className="aide">Gratuit. Rien n'est mis en vente sans que vous le demandiez.</p>
       </div>
@@ -47,7 +47,7 @@ export default async function Placard({searchParams}: {searchParams: Promise<{pr
             <>
               <p>Votre placard vaut environ</p>
               <strong>{eur(total)}</strong>
-              <p className="aide">{estimables} flacon{estimables > 1 ? 's' : ''} estimé{estimables > 1 ? 's' : ''} d'après la cote Respray{sansCote ? `, ${sansCote} pas encore coté${sansCote > 1 ? 's' : ''}` : ''}. C'est ce que vous toucheriez en {estimables > 1 ? 'les' : 'le'} vendant ici : 0 % de commission.</p>
+              <p className="aide">{estimables} flacon{estimables > 1 ? 's' : ''} estimé{estimables > 1 ? 's' : ''} d'après la cote Respray{sansCote ? `, ${sansCote} pas encore coté${sansCote > 1 ? 's' : ''}` : ''}. C'est ce que vous toucheriez en {estimables > 1 ? 'les' : 'le'} vendant ici : 5 % de commission seulement.</p>
               <div className="boutons"><Partager texte={`Mon placard de parfums vaut ${eur(total)} d'occasion. Et le vôtre ?`} url={`${site}/placard`} /></div>
             </>
           ) : (

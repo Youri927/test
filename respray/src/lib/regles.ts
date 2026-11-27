@@ -1,8 +1,15 @@
 /* Les règles de Respray, en un seul endroit : les frais, les photos demandées, les listes du formulaire de vente. */
 
-/* le vendeur ne paie rien ; l'acheteur paie 8 % + 1,50 € (le fixe couvre les frais Stripe par vendeur actif) ;
-   options : envoi assuré au-dessus de 150 €, mise en avant */
-export const protection = (prix: number) => Math.round((prix * 0.08 + 1.5) * 100) / 100;
+/* Les frais, répartis : l'acheteur paie une protection de 5 % + 0,70 € (comme sur Vinted), le vendeur une commission
+   de 5 % (deux fois moins que les sites spécialisés), les vendeurs fondateurs 0 % à vie.
+   Options : envoi assuré au-dessus de 150 €, mise en avant. */
+const arrondi = (n: number) => Math.round(n * 100) / 100;
+export const TAUX_PROTECTION = 0.05;
+export const FIXE_PROTECTION = 0.7;
+export const TAUX_COMMISSION = 0.05;
+export const protection = (prix: number) => arrondi(prix * TAUX_PROTECTION + FIXE_PROTECTION);
+export const commission = (prix: number, fondateur = false) => (fondateur ? 0 : arrondi(prix * TAUX_COMMISSION));
+export const netVendeur = (prix: number, fondateur = false) => arrondi(prix - commission(prix, fondateur));
 
 /* les vendeurs sont versés une fois par semaine, le lundi : toutes leurs ventes confirmées en un seul virement
    (chaque virement vers un compte bancaire est facturé par Stripe) */

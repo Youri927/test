@@ -9,7 +9,7 @@ import {exigerMembre, exigerEquipe, moi} from '@/lib/auth';
 import {stripe, centimes, cle} from '@/lib/stripe';
 import {relaisPres, simule, creerExpedition, expediteurValide, type Expediteur} from '@/lib/envoi';
 import {prixPour, protectionOfferte, montants, synchroniser, annuler, remiseEnMain, confirmer, ouvrirLitige, rembourserLitige, actualiserVersements, taches, deposee as marquerDeposee, livree as marquerLivree, type Commande} from '@/lib/commandes';
-import {MISES_EN_AVANT, SEUIL_ASSURANCE, COLIS, envoiPour, taillecolis} from '@/lib/regles';
+import {MISES_EN_AVANT, SEUIL_ASSURANCE, COLIS, envoiPour, taillecolis, commission} from '@/lib/regles';
 
 const site = () => process.env.SITE_URL || 'http://localhost:3100';
 const num = (f: FormData, k: string) => Number(f.get(k)) || 0;
@@ -29,7 +29,8 @@ export async function payer(f: FormData) {
   if (!reservee) redirect(`/annonces/${id}?erreur=reservee`);
   const {prix, offreId} = await prixPour(a, m.id);
   const mt = montants(prix, {offerte: await protectionOfferte(m), assurance: f.get('assurance') === 'on' && prix >= SEUIL_ASSURANCE, envoi: mode === 'main' ? 0 : envoiPour(a)});
-  const [c] = await db.insert(schema.commandes).values({annonceId: a.id, acheteurId: m.id, vendeurId: a.vendeurId, offreId, ...mt, mode, relais: relais ?? null}).returning();
+  const vend = await db.query.membres.findFirst({where: eq(schema.membres.id, a.vendeurId)});
+  const [c] = await db.insert(schema.commandes).values({annonceId: a.id, acheteurId: m.id, vendeurId: a.vendeurId, offreId, ...mt, commission: commission(prix, !!vend?.fondateur), mode, relais: relais ?? null}).returning();
   const lignes = [
     {nom: `${a.parfumNom}, ${a.maisonNom} (${a.ml} ml)`, montant: mt.prix},
     {nom: mt.protection ? 'Protection acheteur' : '', montant: mt.protection},
