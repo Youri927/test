@@ -603,3 +603,20 @@ a.pied-trustpilot span { color: #00b67a; }
 .bloc-trustpilot { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px; }
 .tp-marque { color: var(--texte-2); font-weight: 500; } .tp-marque span { color: #00b67a; }
 .pied-cols .pied-trustpilot { margin-left: 0; font-size: inherit; justify-self: start; }
+
+/* ——— l'inscription aux versements (formulaire de Respray) ——— */
+.form-versements { display: grid; gap: 14px; margin-top: 16px; }
+.form-versements fieldset { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; }
+.form-versements legend { margin-bottom: 6px; font-weight: 650; font-size: 16px; }
+.form-versements label { font-size: 14px; font-weight: 600; }
+.form-versements label small { font-weight: 400; color: var(--texte-2); }
+.fv-ligne { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.fv-ligne > div { display: grid; gap: 6px; }
+.fv-date { grid-template-columns: 80px minmax(0, 1fr) 100px; }
+.fv-ville { grid-template-columns: 120px minmax(0, 1fr); }
+.fv-iban { font-variant-numeric: tabular-nums; letter-spacing: .04em; text-transform: uppercase; }
+.fv-accord { align-items: flex-start; font-size: 14px; font-weight: 400 !important; line-height: 1.45; }
+.form-versements .btn-large { justify-self: start; }
+.fv-secu { font-size: 13px; }
+.fv-court { max-width: 420px; }
+@media (max-width: 560px) { .fv-ligne:not(.fv-date) { grid-template-columns: minmax(0, 1fr); } .fv-date { grid-template-columns: 64px minmax(0, 1fr) 84px; } }

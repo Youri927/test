@@ -41,26 +41,6 @@ export async function oublierCompte(membreId: number) {
   await db.update(schema.membres).set({stripeCompte: null, versementsOk: false}).where(eq(schema.membres.id, membreId));
 }
 
-/* la session de l'inscription intégrée : seul son « client secret » part au navigateur */
-export async function sessionInscription(m: Membre): Promise<string> {
-  const compte = await compteDe(m);
-  try {
-    const s = await stripe.accountSessions.create({
-      account: compte,
-      components: {
-        account_onboarding: {enabled: true, features: {external_account_collection: true}},
-        notification_banner: {enabled: true, features: {external_account_collection: true}},
-      },
-    });
-    return s.client_secret;
-  } catch (e) {
-    if (!m.stripeCompte || !compteInconnu(e)) throw e;
-    console.error(`Compte Stripe ${compte} inconnu (créé en mode test ?) : un nouveau compte est créé.`);
-    await oublierCompte(m.id);
-    return sessionInscription({...m, stripeCompte: null});
-  }
-}
-
 export {compteInconnu};
 
 /* prêt à recevoir de l'argent : seulement si la capacité « stripe_transfers » est active (pas sur un simple retour) */
@@ -69,3 +49,82 @@ export async function pretPourVersements(compte: string) {
   const statut = a.configuration?.recipient?.capabilities?.stripe_balance?.stripe_transfers?.status;
   return {ok: statut === 'active', statut: statut ?? 'inconnu', aFournir: (a.requirements?.entries ?? []).length};
 }
+
+/* ——— l'inscription « maison » des vendeurs particuliers ———
+   Le formulaire de Respray (FormVersements) envoie directement à Stripe, depuis le navigateur et avec la clé publique,
+   l'identité du vendeur et son acceptation des conditions de Stripe (un « jeton de compte »), puis son IBAN (un « jeton
+   bancaire »). Le serveur ne reçoit que ces jetons : il crée (ou met à jour) le compte et y attache l'IBAN.
+   Ces comptes ont dashboard « none » : c'est Respray qui recueille les informations (requirements_collector
+   « application »), sans aucun écran Stripe pour le vendeur. Les comptes créés avant avec le formulaire de Stripe
+   (dashboard « express ») ne peuvent pas changer de mode : ils sont remplacés par un nouveau compte. */
+
+export type AFournir = 'document' | 'identite' | 'adresse' | 'iban' | 'autre';
+
+/* ce que Stripe attend encore du vendeur, traduit pour le formulaire */
+export async function etatCompte(compte: string) {
+  const a = await stripe.v2.core.accounts.retrieve(compte, {include: ['configuration.recipient', 'requirements']});
+  const statut = a.configuration?.recipient?.capabilities?.stripe_balance?.stripe_transfers?.status ?? 'inconnu';
+  const entrees = (a.requirements?.entries ?? []).filter((e) => ['currently_due', 'past_due'].includes(e.minimum_deadline?.status ?? '') && e.awaiting_action_from !== 'stripe');
+  const manque = new Set<AFournir>();
+  for (const e of entrees) {
+    const d = (e.description ?? '').toLowerCase();
+    manque.add(/document|verification/.test(d) ? 'document' : /address/.test(d) ? 'adresse' : /bank|external_account|payout/.test(d) ? 'iban' : /name|birth|email|phone|individual/.test(d) ? 'identite' : 'autre');
+  }
+  return {ok: statut === 'active', statut, aFournir: [...manque], details: entrees.map((e) => e.description ?? '')};
+}
+
+async function compteParticulier(compte: string | null) {
+  if (!compte) return null;
+  const a = await stripe.v2.core.accounts.retrieve(compte, {include: ['defaults']}).catch(() => null);
+  return a?.defaults?.responsibilities?.requirements_collector === 'application' ? a.id : null;
+}
+
+export async function inscrireParticulier(m: Membre, jetonCompte: string, jetonBanque?: string) {
+  const site = process.env.SITE_URL?.startsWith('https://') ? process.env.SITE_URL : 'https://respray.fr';
+  let compte = await compteParticulier(m.stripeCompte);
+  if (compte) {
+    await stripe.v2.core.accounts.update(compte, {account_token: jetonCompte});
+  } else {
+    const a = await stripe.v2.core.accounts.create(
+      {
+        account_token: jetonCompte,
+        dashboard: 'none',
+        identity: {country: 'fr'},
+        defaults: {
+          currency: 'eur',
+          locales: ['fr-FR'],
+          responsibilities: {fees_collector: 'application', losses_collector: 'application'},
+          profile: {product_description: 'Revente de mes parfums personnels d\'occasion, en particulier, sur Respray', business_url: `${site}/vendeur/${encodeURIComponent(m.pseudo)}`},
+        },
+        configuration: {recipient: {capabilities: {stripe_balance: {stripe_transfers: {requested: true}}}}},
+        metadata: {membre: String(m.id)},
+      },
+      {idempotencyKey: `compte-particulier-${jetonCompte}`},
+    );
+    compte = a.id;
+    await db.update(schema.membres).set({stripeCompte: compte, versementsOk: false}).where(eq(schema.membres.id, m.id));
+  }
+  if (jetonBanque) await changerIban(compte, jetonBanque);
+  return compte;
+}
+
+/* le nouvel IBAN devient celui des versements ; les anciens sont retirés */
+export async function changerIban(compte: string, jetonBanque: string) {
+  const nouveau = await stripe.accounts.createExternalAccount(compte, {external_account: jetonBanque, default_for_currency: true});
+  const anciens = await stripe.accounts.listExternalAccounts(compte, {object: 'bank_account', limit: 20});
+  for (const b of anciens.data) if (b.id !== nouveau.id) await stripe.accounts.deleteExternalAccount(compte, b.id).catch(() => null);
+}
+
+/* l'IBAN enregistré, pour l'afficher (4 derniers chiffres seulement) */
+export async function ibanDe(compte: string) {
+  const l = await stripe.accounts.listExternalAccounts(compte, {object: 'bank_account', limit: 1}).catch(() => null);
+  const b = l?.data[0] as {last4?: string; bank_name?: string | null} | undefined;
+  return b ? {fin: b.last4 ?? '', banque: b.bank_name ?? ''} : null;
+}
+
+/* une pièce d'identité demandée par Stripe : le jeton porte les fichiers envoyés depuis le navigateur */
+export async function ajouterPiece(compte: string, jetonCompte: string) {
+  await stripe.v2.core.accounts.update(compte, {account_token: jetonCompte});
+}
+
+export {compteParticulier};

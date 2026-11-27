@@ -5,7 +5,8 @@ import {exigerMembre} from '@/lib/auth';
 import {actualiserVersements} from '@/lib/commandes';
 import {eur} from '@/lib/regles';
 import {relireVersements} from '@/app/actions/commandes';
-import {InscriptionVersements} from '@/components/InscriptionVersements';
+import {FormVersements, ChangerIban, EnvoyerPiece} from '@/components/FormVersements';
+import {compteParticulier, etatCompte, ibanDe} from '@/lib/connect';
 
 export const metadata = {title: 'Mes versements'};
 export const dynamic = 'force-dynamic';
@@ -15,7 +16,12 @@ export const dynamic = 'force-dynamic';
 export default async function Versements({searchParams}: {searchParams: Promise<{retour?: string; erreur?: string}>}) {
   const q = await searchParams;
   const m = await exigerMembre('/compte/versements');
-  const ok = m.stripeCompte ? await actualiserVersements(m.id).catch(() => m.versementsOk) : false;
+  // seuls comptent les comptes créés avec le formulaire de Respray ; un ancien compte (formulaire Stripe) est refait
+  const compte = await compteParticulier(m.stripeCompte).catch(() => null);
+  const ok = compte ? await actualiserVersements(m.id).catch(() => m.versementsOk) : false;
+  const etat = compte ? await etatCompte(compte).catch(() => null) : null;
+  const iban = compte && ok ? await ibanDe(compte) : null;
+  const titulaire = `${m.prenom} ${m.nom}`.trim() || m.pseudo;
   const ventes = await db.select().from(schema.commandes).where(and(eq(schema.commandes.vendeurId, m.id), inArray(schema.commandes.statut, ['payee', 'expediee', 'livree', 'litige', 'confirmee', 'versee'])));
   const somme = (st: string[]) => ventes.filter((c) => st.includes(c.statut)).reduce((s, c) => s + c.prix, 0);
   return (
@@ -32,16 +38,25 @@ export default async function Versements({searchParams}: {searchParams: Promise<
       {ok ? (
         <section className="action-bloc">
           <h2 className="h2">✓ Vos versements sont prêts</h2>
-          <p>Votre identité et votre IBAN sont vérifiés par Stripe. Chaque lundi, vos ventes confirmées vous sont versées automatiquement, puis arrivent sur votre compte bancaire sous quelques jours.</p>
-          <InscriptionVersements deja />
+          <p>Chaque lundi, vos ventes confirmées vous sont versées automatiquement{iban ? <> sur votre compte <strong>{iban.banque ? `${iban.banque} ` : ''}•••• {iban.fin}</strong></> : null}. L&apos;argent arrive sous quelques jours.</p>
+          <ChangerIban titulaire={titulaire} />
+        </section>
+      ) : compte && etat?.aFournir.includes('document') ? (
+        <section className="action-bloc">
+          <h2 className="h2">Une dernière vérification</h2>
+          <EnvoyerPiece />
+        </section>
+      ) : compte && etat && !etat.aFournir.length ? (
+        <section className="action-bloc">
+          <h2 className="h2">Vérification en cours</h2>
+          <p>Stripe vérifie vos informations : c&apos;est en général l&apos;affaire de quelques minutes. Vous serez prévenu dès que vos versements sont prêts.</p>
+          <form action={relireVersements}><button className="btn" type="submit">Actualiser</button></form>
         </section>
       ) : (
         <section className="action-bloc">
-          <h2 className="h2">{m.stripeCompte ? 'Terminez votre inscription' : 'Ajoutez votre IBAN pour être payé'}</h2>
-          <p>Notre partenaire de paiement, Stripe, vérifie votre identité et enregistre votre IBAN. Respray ne voit ni vos papiers ni vos coordonnées bancaires. Comptez 2 minutes, avec une pièce d'identité.</p>
-          <p className="aide">Stripe utilise les mêmes écrans pour tout le monde, d'où les mots « entreprise » et « informations professionnelles ». Vous n'avez pas besoin d'entreprise ni de SIRET : choisissez « Particulier ». Le « site web » demandé est votre page vendeur sur Respray, déjà remplie, comme l'activité.</p>
-          <InscriptionVersements deja={!!m.stripeCompte} />
-          {m.stripeCompte ? <form action={relireVersements}><p className="aide">Vous venez de terminer ? La vérification par Stripe peut prendre un instant. <button className="lien-bouton" type="submit">Actualiser</button></p></form> : null}
+          <h2 className="h2">{compte ? 'Il manque une information' : 'Ajoutez votre IBAN pour être payé'}</h2>
+          <p>{compte ? 'Stripe n\'a pas pu tout vérifier : vérifiez vos informations et enregistrez-les à nouveau.' : 'Pour vous verser l\'argent de vos ventes, il nous faut votre nom, votre date de naissance, votre adresse et votre IBAN. Comptez une minute.'}</p>
+          <FormVersements prenom={m.prenom} nom={m.nom} email={m.email} />
         </section>
       )}
     </div>
