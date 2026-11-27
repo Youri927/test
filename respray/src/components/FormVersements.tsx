@@ -60,6 +60,9 @@ async function auServeur(corps: unknown): Promise<Reponse> {
 
 const propre = (s: string) => s.replace(/\s+/g, '').toUpperCase();
 
+/* une étape terminée : la page change (souvent plus courte), on remonte en haut pour voir le nouvel état */
+const enHaut = () => window.scrollTo({top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+
 /* ——— l'inscription complète : identité, adresse, IBAN ——— */
 export function FormVersements({prenom = '', nom = '', email}: {prenom?: string; nom?: string; email: string}) {
   const router = useRouter();
@@ -99,6 +102,7 @@ export function FormVersements({prenom = '', nom = '', email}: {prenom?: string;
       const banque = await jetonIban(propre(v.iban), `${v.prenom.trim()} ${v.nom.trim()}`);
       await auServeur({action: 'inscrire', compte: compte.id, banque});
       router.refresh();
+      enHaut();
     } catch (x) {
       setErreur(traduire((x as Error).message));
       setDetail((x as Error).message);
@@ -164,6 +168,7 @@ export function ChangerIban({titulaire}: {titulaire: string}) {
       await auServeur({action: 'iban', banque: await jetonIban(propre(iban), titulaire)});
       setOuvert(false);
       router.refresh();
+      enHaut();
     } catch (x) {
       setErreur(traduire((x as Error).message));
     } finally {
@@ -198,6 +203,7 @@ export function EnvoyerPiece() {
       const jeton = await stripeV2('/v2/core/account_tokens', {identity: {individual: {documents: {primary_verification: {type: 'front_back', front_back: {front, ...(back ? {back} : {})}}}}}});
       await auServeur({action: 'piece', compte: jeton.id});
       router.refresh();
+      enHaut();
     } catch (x) {
       setErreur(traduire((x as Error).message));
     } finally {

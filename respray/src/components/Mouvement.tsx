@@ -104,9 +104,45 @@ function useCompteurs() {
   }, [chemin]);
 }
 
+/* Après l'envoi d'un formulaire (une étape qui se termine : étiquette, dépôt, avis, versements…), la page se met à
+   jour, souvent plus courte, et on se retrouve tout en bas. Si c'est le cas, on remonte en douceur vers le bloc où
+   l'on était (ou en haut de la page s'il a disparu). Rien ne bouge si l'on n'est pas coincé en bas de page, ni si la
+   page va vers une ancre précise. */
+function useApresEnvoi() {
+  useEffect(() => {
+    const envoi = (e: SubmitEvent) => {
+      const f = e.target as HTMLFormElement;
+      if ((f.getAttribute('method') || 'post').toLowerCase() === 'get') return;
+      const bloc = f.closest('section, article, .action-bloc') as HTMLElement | null;
+      const ancre = location.hash;
+      let fini = false;
+      const verifier = () => {
+        if (fini || f.isConnected) return;
+        fini = true;
+        o.disconnect();
+        // on laisse la page finir de se dessiner
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          if (location.hash && location.hash !== ancre) return;
+          const enBas = scrollY + innerHeight >= document.documentElement.scrollHeight - 4;
+          if (!enBas) return;
+          const cible = bloc?.isConnected ? bloc : null;
+          const y = cible ? cible.getBoundingClientRect().top + scrollY - 96 : 0;
+          if (y < scrollY - 20) scrollTo({top: Math.max(0, y), behavior: reduit() ? 'auto' : 'smooth'});
+        }));
+      };
+      const o = new MutationObserver(verifier);
+      o.observe(document.body, {childList: true, subtree: true});
+      setTimeout(() => { fini = true; o.disconnect(); }, 20000);
+    };
+    document.addEventListener('submit', envoi);
+    return () => document.removeEventListener('submit', envoi);
+  }, []);
+}
+
 export function Mouvement() {
   useEntete();
   useCompteurs();
+  useApresEnvoi();
   return <Suspense fallback={null}><Barre /></Suspense>;
 }
 
