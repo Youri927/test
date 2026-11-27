@@ -22,7 +22,7 @@ export default async function Versements({searchParams}: {searchParams: Promise<
     <div className="env page page-etroite">
       <nav className="fil" aria-label="Fil d'Ariane"><Link href="/compte">Mon compte</Link><span aria-hidden="true">›</span><span>Versements</span></nav>
       <h1 className="titre-page">Mes versements</h1>
-      <p className="chapo">Vous touchez 100 % du prix de vos ventes, sans commission. L'argent vous est versé quand l'acheteur a vérifié le parfum.</p>
+      <p className="chapo">Vous touchez 100 % du prix de vos ventes, sans commission. Vos ventes confirmées vous sont versées chaque lundi, en un seul virement.</p>
       <div className="verif-chiffres versements-chiffres">
         <div><strong>{eur(somme(['payee', 'expediee', 'livree', 'litige']))}</strong><span>en cours (colis en route ou en vérification)</span></div>
         <div className="ok"><strong>{eur(somme(['confirmee']))}</strong><span>prêts à être versés{ok ? '' : ', dès que votre IBAN est enregistré'}</span></div>
@@ -32,7 +32,7 @@ export default async function Versements({searchParams}: {searchParams: Promise<
       {ok ? (
         <section className="action-bloc">
           <h2 className="h2">✓ Vos versements sont prêts</h2>
-          <p>Votre identité et votre IBAN sont vérifiés par Stripe. Chaque vente confirmée vous est versée automatiquement, puis arrive sur votre compte bancaire sous quelques jours.</p>
+          <p>Votre identité et votre IBAN sont vérifiés par Stripe. Chaque lundi, vos ventes confirmées vous sont versées automatiquement, puis arrivent sur votre compte bancaire sous quelques jours.</p>
           <InscriptionVersements deja />
         </section>
       ) : (

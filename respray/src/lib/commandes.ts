@@ -11,7 +11,7 @@ import {notifier} from '@/lib/activite';
 import {noter} from '@/lib/journal';
 import {etiquetteSimulee, simule, suivre} from '@/lib/envoi';
 import {pretPourVersements} from '@/lib/connect';
-import {protection, ASSURANCE, SEUIL_ASSURANCE, eur} from '@/lib/regles';
+import {protection, ASSURANCE, SEUIL_ASSURANCE, eur, jourDeVersement, dateVersement} from '@/lib/regles';
 
 export type Commande = typeof schema.commandes.$inferSelect;
 const JOUR = 864e5;
@@ -125,7 +125,9 @@ export async function confirmer(c: Commande, comment: string) {
   await noter(null, 'commande_confirmee', ref(c), `commande ${c.id} confirmée : ${comment}`);
   const vend = await db.query.membres.findFirst({where: eq(schema.membres.id, c.vendeurId)});
   await notifier(c.acheteurId, 'achat', `Comment s'est passée votre commande avec @${vend?.pseudo} ? Un avis (deux clics) aide les prochains acheteurs, et le vendeur.`, `/commandes/${c.id}#avis`);
-  await verser((await db.query.commandes.findFirst({where: eq(schema.commandes.id, c.id)}))!);
+  // le versement part le lundi, avec les autres ventes confirmées du vendeur (tâches automatiques)
+  await notifier(c.vendeurId, 'vente', `Commande ${c.id} confirmée : ${eur(c.prix)} vous seront versés ${dateVersement()}, avec vos autres ventes de la semaine.`, `/commandes/${c.id}`);
+  if (jourDeVersement()) await actualiserVersements(c.vendeurId).catch(() => null);
 }
 
 export async function ouvrirLitige(c: Commande, raison: string, texte: string) {
@@ -170,7 +172,8 @@ export async function actualiserVersements(membreId: number) {
   if (!m?.stripeCompte) return false;
   const {ok} = await pretPourVersements(m.stripeCompte);
   if (ok !== m.versementsOk) await db.update(schema.membres).set({versementsOk: ok}).where(eq(schema.membres.id, m.id));
-  if (ok) for (const c of await db.select().from(schema.commandes).where(and(eq(schema.commandes.vendeurId, m.id), eq(schema.commandes.statut, 'confirmee')))) await verser(c);
+  // les versements partent le lundi seulement : un seul virement par semaine et par vendeur
+  if (ok && jourDeVersement()) for (const c of await db.select().from(schema.commandes).where(and(eq(schema.commandes.vendeurId, m.id), eq(schema.commandes.statut, 'confirmee')))) await verser(c);
   return ok;
 }
 
@@ -206,7 +209,7 @@ export async function taches() {
     await confirmer(c, `${DELAI_VERIF} jours sans problème signalé.`);
     fait.push(`commande ${c.id} confirmée automatiquement`);
   }
-  // versements en attente (le vendeur a peut-être ajouté son IBAN)
+  // le lundi : les ventes confirmées sont versées (et celles des vendeurs qui viennent d'ajouter leur IBAN)
   const vendeurs = await db.selectDistinct({id: schema.commandes.vendeurId}).from(schema.commandes).where(eq(schema.commandes.statut, 'confirmee'));
   for (const v of vendeurs) await actualiserVersements(v.id).catch(() => null);
   return fait;

@@ -1,7 +1,21 @@
 /* Les règles de Respray, en un seul endroit : les frais, les photos demandées, les listes du formulaire de vente. */
 
-/* le vendeur ne paie rien ; l'acheteur paie 8 % + 0,90 € ; options : envoi assuré au-dessus de 150 €, mise en avant */
-export const protection = (prix: number) => Math.round((prix * 0.08 + 0.9) * 100) / 100;
+/* le vendeur ne paie rien ; l'acheteur paie 8 % + 1,50 € (le fixe couvre les frais Stripe par vendeur actif) ;
+   options : envoi assuré au-dessus de 150 €, mise en avant */
+export const protection = (prix: number) => Math.round((prix * 0.08 + 1.5) * 100) / 100;
+
+/* les vendeurs sont versés une fois par semaine, le lundi : toutes leurs ventes confirmées en un seul virement
+   (chaque virement vers un compte bancaire est facturé par Stripe) */
+const JOUR_VERSEMENT = 1; // lundi
+const jourParis = (d: Date) => new Date(d.toLocaleString('en-US', {timeZone: 'Europe/Paris'}));
+export const jourDeVersement = (d = new Date()) => jourParis(d).getDay() === JOUR_VERSEMENT;
+export function prochainVersement(d = new Date()) {
+  const p = jourParis(d);
+  const ecart = (JOUR_VERSEMENT - p.getDay() + 7) % 7 || 7;
+  return new Date(d.getTime() + (jourDeVersement(d) ? 0 : ecart * 864e5));
+}
+const fmtJour = new Intl.DateTimeFormat('fr-FR', {weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Europe/Paris'});
+export const dateVersement = (d = new Date()) => (jourDeVersement(d) ? 'aujourd\'hui' : fmtJour.format(prochainVersement(d)));
 export const ENVOI = 4.9; // le prix d'envoi le plus courant (affiché comme « à partir de » dans les explications)
 
 /* L'envoi en point relais, selon la taille du colis. Ce qu'il coûte à Respray (Mondial Relay, Offre Start, France,

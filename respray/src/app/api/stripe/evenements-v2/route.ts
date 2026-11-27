@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       const avant = m.versementsOk;
       try {
         const ok = await actualiserVersements(m.id);
-        if (ok && !avant) await notifier(m.id, 'vente', 'Vos versements sont prêts : vos ventes confirmées vous sont versées automatiquement.', '/compte/versements');
+        if (ok && !avant) await notifier(m.id, 'vente', 'Vos versements sont prêts : vos ventes confirmées vous sont versées automatiquement chaque lundi.', '/compte/versements');
         if (!ok && avant) await notifier(m.id, 'vente', 'Stripe a besoin d\'informations pour continuer vos versements.', '/compte/versements');
       } catch (e) {
         console.error(`Événement ${n.type} :`, (e as Error).message);

@@ -33,7 +33,7 @@ const FAQ: [string, string][] = [
   ['Le vendeur ne dépose pas le colis ?', 'Il a 5 jours. Passé ce délai, la vente est annulée et vous êtes remboursé automatiquement, sans rien faire.'],
   ['Les coffrets et les échantillons ?', 'Un coffret est accepté s\'il est neuf, scellé et sous blister. Un échantillon acheté aussi, avec son volume exact. Un échantillon offert ou marqué « Ne peut être vendu » ne l\'est pas.'],
   ['Je peux négocier le prix ?', 'Oui : « Faire une offre » sur l\'annonce, à partir de 60 % du prix. Le vendeur a 48 heures pour accepter, refuser ou vous faire une contre-offre.'],
-  ['Quand le vendeur est-il payé ?', 'Dès que l\'acheteur confirme que tout est conforme, ou automatiquement 7 jours après la livraison. Le versement arrive sur son compte bancaire sous quelques jours.'],
+  ['Quand le vendeur est-il payé ?', 'Une fois la vente confirmée (par l\'acheteur, ou automatiquement 7 jours après la livraison), elle est versée le lundi suivant, avec ses autres ventes de la semaine, en un seul virement. L\'argent arrive sur son compte bancaire sous quelques jours.'],
 ];
 
 /* « Comment ça marche », reprise du prototype et alignée sur ce que fait le site : le parcours animé, les 6 photos, la
@@ -95,7 +95,7 @@ export default function CommentCaMarche() {
         <div data-revele><p className="surtitre">Les frais</p><h2 className="grand-titre">Le vendeur ne paie rien.</h2><p className="chapo">La protection payée par l&apos;acheteur finance ce qui rend la vente sûre : la vérification de chaque annonce par une personne, le paiement bloqué, le service client et les remboursements.</p>
           <table className="frais"><tbody>
             <tr><th scope="row">Vendre</th><td>Gratuit, sans commission</td></tr>
-            <tr><th scope="row">Protection acheteur</th><td>8 % du prix + 0,90 €</td></tr>
+            <tr><th scope="row">Protection acheteur</th><td>8 % du prix + 1,50 €</td></tr>
             <tr><th scope="row">Envoi suivi en point relais</th><td>{eur2(ENVOI)}<small> · {eur2(ENVOI_GRAND)} au-delà de 125 ml ou pour un coffret</small></td></tr>
             <tr><th scope="row">Remise en main propre</th><td>Gratuite</td></tr>
             <tr><th scope="row">Envoi assuré à la valeur réelle</th><td>{eur2(ASSURANCE)}, en option à partir de {eur2(SEUIL_ASSURANCE)}</td></tr>

@@ -40,7 +40,7 @@ const ETAPES: [string, string][] = [
   ['6 photos, depuis votre téléphone', 'Face, dessous avec le code lot, niveau, vue de dessus, tige, et votre pseudo sur un papier. Le formulaire vous guide.'],
   ['L\'équipe vérifie l\'annonce', 'Avant d\'être en ligne. C\'est ce qui rassure les acheteurs, et fait vendre plus vite.'],
   ['Vendu : envoi en point relais', 'Vous recevez l\'étiquette, vous déposez le colis bien emballé.'],
-  ['Payé, sans commission', 'Vous touchez 100 % du prix affiché, versé sur votre compte bancaire dès que l\'acheteur a vérifié le parfum.'],
+  ['Payé, sans commission', 'Vous touchez 100 % du prix affiché, versé chaque lundi sur votre compte bancaire, une fois que l\'acheteur a vérifié le parfum.'],
 ];
 
 function VendrePublic({retour}: {retour: string}) {

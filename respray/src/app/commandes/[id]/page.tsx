@@ -5,7 +5,7 @@ import {db, schema} from '@/db';
 import {exigerMembre} from '@/lib/auth';
 import {synchroniser, DELAI_VERIF} from '@/lib/commandes';
 import {simule} from '@/lib/envoi';
-import {eur, eur2} from '@/lib/regles';
+import {eur, eur2, dateVersement} from '@/lib/regles';
 import {deposer, simulerArrivee, recupere, annulerParVendeur, confirmerReception, signalerProbleme} from '@/app/actions/commandes';
 import {FormCode} from '@/components/Commande';
 import {Bouclier} from '@/components/Bouclier';
@@ -83,14 +83,14 @@ export default async function CommandePage({params, searchParams}: {params: Prom
       {vendeur && c.statut === 'payee' && c.mode === 'main' ? (
         <section className="action-bloc">
           <h2 className="h2">À vous : la remise en main propre</h2>
-          <p>Convenez d'un rendez-vous par message, dans un lieu public. L'acheteur vérifie le flacon, puis vous montre un code à 6 chiffres : saisissez-le ici. L'argent vous est versé aussitôt.</p>
+          <p>Convenez d'un rendez-vous par message, dans un lieu public. L'acheteur vérifie le flacon, puis vous montre un code à 6 chiffres : saisissez-le ici. La vente est confirmée, et versée le lundi suivant.</p>
           <FormCode id={c.id} />
         </section>
       ) : null}
       {vendeur && ['confirmee', 'livree', 'expediee', 'payee'].includes(c.statut) && !moiV?.versementsOk ? (
         <p className="brouillon">Pour recevoir vos {eur(c.prix)}, ajoutez votre IBAN : <Link className="lien-souligne" href="/compte/versements">configurer mes versements</Link> (2 minutes, vérifié par Stripe).</p>
       ) : null}
-      {vendeur && c.statut === 'livree' ? <p className="aide">Le colis est arrivé : l'acheteur a jusqu'au {jour.format(c.finVerif!)} pour vérifier. Sans problème signalé, l'argent vous est versé automatiquement.</p> : null}
+      {vendeur && c.statut === 'livree' ? <p className="aide">Le colis est arrivé : l'acheteur a jusqu'au {jour.format(c.finVerif!)} pour vérifier. Sans problème signalé, la vente est confirmée et versée le lundi suivant.</p> : null}
       {vendeur && c.statut === 'litige' ? <p className="p-alerte">L'acheteur signale un problème : « {c.litige?.raison} ». L'argent reste bloqué ; l'équipe compare avec vos photos vérifiées et vous écrit.</p> : null}
 
       {/* ——— ce que l'acheteur fait ——— */}
@@ -127,7 +127,7 @@ export default async function CommandePage({params, searchParams}: {params: Prom
         </section>
       ) : null}
       {acheteur && c.statut === 'litige' ? <p className="p-alerte">Problème signalé : « {c.litige?.raison} ». L'argent reste bloqué ; l'équipe compare avec les photos vérifiées de l'annonce et vous répond.</p> : null}
-      {['confirmee', 'versee'].includes(c.statut) ? <p className="offre-ok">{acheteur ? 'Commande terminée. Bonne découverte !' : c.statut === 'versee' ? `${eur(c.prix)} versés le ${jour.format(c.verseeLe!)}.` : `Commande confirmée : ${eur(c.prix)} vous seront versés dès que votre IBAN est enregistré.`}</p> : null}
+      {['confirmee', 'versee'].includes(c.statut) ? <p className="offre-ok">{acheteur ? 'Commande terminée. Bonne découverte !' : c.statut === 'versee' ? `${eur(c.prix)} versés le ${jour.format(c.verseeLe!)}.` : `Commande confirmée : ${eur(c.prix)} vous seront versés ${dateVersement()}${m.versementsOk ? '' : ', une fois votre IBAN enregistré'}.`}</p> : null}
       {/* l'avis : l'acheteur note le vendeur une fois la commande terminée (une fois par commande) */}
       {acheteur && ['confirmee', 'versee'].includes(c.statut) ? (
         <section className="action-bloc" id="avis">

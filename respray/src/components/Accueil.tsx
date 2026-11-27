@@ -79,7 +79,7 @@ const ANATOMIE = [
   {t: '6 photos imposées', d: 'Toujours les mêmes, jusqu\'à la tige du spray et une photo avec le pseudo du vendeur.'},
   {t: 'Vérifiée par l\'équipe', d: 'Avant d\'être en ligne, en quelques heures. Code lot, spray, tige, niveau, prix.'},
   {t: '7 jours pour vérifier', d: 'L\'argent reste bloqué jusqu\'à votre accord. Non conforme : remboursé.'},
-  {t: '0 % pour le vendeur', d: 'Il touche le prix affiché. L\'acheteur paie une protection de 8 % + 0,90 €.'},
+  {t: '0 % pour le vendeur', d: 'Il touche le prix affiché. L\'acheteur paie une protection de 8 % + 1,50 €.'},
 ];
 /* les étapes défilent une fois (1,3 s chacune) quand la carte est à l'écran ; un choix à la main met en pause 5 s */
 const DUREE_ANAT = 1300;
