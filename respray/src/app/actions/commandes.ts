@@ -9,7 +9,7 @@ import {exigerMembre, exigerEquipe, moi} from '@/lib/auth';
 import {stripe, centimes, cle} from '@/lib/stripe';
 import {relaisPres, simule, creerExpedition, expediteurValide, type Expediteur} from '@/lib/envoi';
 import {prixPour, protectionOfferte, montants, synchroniser, annuler, remiseEnMain, confirmer, ouvrirLitige, rembourserLitige, actualiserVersements, taches, deposee as marquerDeposee, livree as marquerLivree, type Commande} from '@/lib/commandes';
-import {MISES_EN_AVANT, SEUIL_ASSURANCE} from '@/lib/regles';
+import {MISES_EN_AVANT, SEUIL_ASSURANCE, COLIS, envoiPour, taillecolis} from '@/lib/regles';
 
 const site = () => process.env.SITE_URL || 'http://localhost:3100';
 const num = (f: FormData, k: string) => Number(f.get(k)) || 0;
@@ -28,7 +28,7 @@ export async function payer(f: FormData) {
   const [reservee] = await db.update(schema.annonces).set({statut: 'reservee'}).where(and(eq(schema.annonces.id, id), eq(schema.annonces.statut, 'publiee'))).returning();
   if (!reservee) redirect(`/annonces/${id}?erreur=reservee`);
   const {prix, offreId} = await prixPour(a, m.id);
-  const mt = montants(prix, {offerte: await protectionOfferte(m), assurance: f.get('assurance') === 'on' && prix >= SEUIL_ASSURANCE});
+  const mt = montants(prix, {offerte: await protectionOfferte(m), assurance: f.get('assurance') === 'on' && prix >= SEUIL_ASSURANCE, envoi: mode === 'main' ? 0 : envoiPour(a)});
   const [c] = await db.insert(schema.commandes).values({annonceId: a.id, acheteurId: m.id, vendeurId: a.vendeurId, offreId, ...mt, mode, relais: relais ?? null}).returning();
   const lignes = [
     {nom: `${a.parfumNom}, ${a.maisonNom} (${a.ml} ml)`, montant: mt.prix},
@@ -213,10 +213,11 @@ export async function obtenirEtiquette(f: FormData) {
   if (!expediteurValide(exp)) redirect(`/commandes/${id}/etiquette?erreur=adresse`);
   await db.update(schema.membres).set({expediteur: exp}).where(eq(schema.membres.id, m.id));
   const acheteur = await db.query.membres.findFirst({where: eq(schema.membres.id, c.acheteurId)});
+  const annonceC = await db.query.annonces.findFirst({where: eq(schema.annonces.id, c.annonceId)});
   let ok = false;
   let code = '';
   try {
-    const e = await creerExpedition(c.id, exp, {nom: `${acheteur?.prenom ?? ''} ${acheteur?.nom ?? ''}`.trim() || acheteur?.pseudo || 'Client', email: acheteur?.email ?? '', relais: c.relais}, c.assurance > 0);
+    const e = await creerExpedition(c.id, exp, {nom: `${acheteur?.prenom ?? ''} ${acheteur?.nom ?? ''}`.trim() || acheteur?.pseudo || 'Client', email: acheteur?.email ?? '', relais: c.relais}, c.assurance > 0, COLIS[annonceC ? taillecolis(annonceC) : 'grand'].poids);
     // seulement si personne ne l'a créée entre-temps (double clic)
     await db.update(schema.commandes).set({etiquette: e.numero, etiquettePdf: e.pdf}).where(and(eq(schema.commandes.id, c.id), isNull(schema.commandes.etiquette)));
     ok = true;

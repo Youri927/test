@@ -2,7 +2,25 @@
 
 /* le vendeur ne paie rien ; l'acheteur paie 8 % + 0,90 € ; options : envoi assuré au-dessus de 150 €, mise en avant */
 export const protection = (prix: number) => Math.round((prix * 0.08 + 0.9) * 100) / 100;
-export const ENVOI = 4.9;
+export const ENVOI = 4.9; // le prix d'envoi le plus courant (affiché comme « à partir de » dans les explications)
+
+/* L'envoi en point relais, selon la taille du colis. Ce qu'il coûte à Respray (Mondial Relay, Offre Start, France,
+   point relais, HT) : jusqu'à 500 g 3,42 € · 500 g à 1 kg 3,76 € · 1 à 2 kg 5,27 €. Le poids déclaré doit couvrir le
+   colis emballé (sinon Mondial Relay refacture l'écart) : on prend large selon la contenance. */
+export const COLIS = {
+  petit: {poids: 500, prix: 4.9, t: 'miniature, format voyage ou flacon de 30 ml au plus'},
+  moyen: {poids: 1000, prix: 4.9, t: 'flacon de 31 à 125 ml'},
+  grand: {poids: 2000, prix: 6.9, t: 'flacon de plus de 125 ml ou coffret'},
+} as const;
+export const ENVOI_GRAND = COLIS.grand.prix;
+export function taillecolis(a: {ml: number; details?: {format?: string} | null}): keyof typeof COLIS {
+  // le format est enregistré tel qu'affiché (« Coffret », « Format voyage »…) ou par sa clé (« coffret »)
+  const f = (a.details?.format ?? 'flacon').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  if (f.includes('coffret') || a.ml > 125) return 'grand';
+  if (/miniature|echantillon|voyage/.test(f) || a.ml <= 30) return 'petit';
+  return 'moyen';
+}
+export const envoiPour = (a: {ml: number; details?: {format?: string} | null}) => COLIS[taillecolis(a)].prix;
 export const ASSURANCE = 2.9;
 export const SEUIL_ASSURANCE = 150;
 export const MISES_EN_AVANT = [

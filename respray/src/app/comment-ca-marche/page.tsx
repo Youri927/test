@@ -1,6 +1,6 @@
 import {demo} from '@/lib/demo';
 import Link from 'next/link';
-import {PHOTOS, ENVOI, ASSURANCE, SEUIL_ASSURANCE, eur2} from '@/lib/regles';
+import {PHOTOS, ENVOI, ENVOI_GRAND, ASSURANCE, SEUIL_ASSURANCE, eur2} from '@/lib/regles';
 import {PhotoDemo, Ico} from '@/components/Visuels';
 import {Parcours, Verification, Simulateur} from '@/components/Fonctionnement';
 
@@ -96,7 +96,7 @@ export default function CommentCaMarche() {
           <table className="frais"><tbody>
             <tr><th scope="row">Vendre</th><td>Gratuit, sans commission</td></tr>
             <tr><th scope="row">Protection acheteur</th><td>8 % du prix + 0,90 €</td></tr>
-            <tr><th scope="row">Envoi suivi en point relais</th><td>{eur2(ENVOI)}</td></tr>
+            <tr><th scope="row">Envoi suivi en point relais</th><td>{eur2(ENVOI)}<small> · {eur2(ENVOI_GRAND)} au-delà de 125 ml ou pour un coffret</small></td></tr>
             <tr><th scope="row">Remise en main propre</th><td>Gratuite</td></tr>
             <tr><th scope="row">Envoi assuré à la valeur réelle</th><td>{eur2(ASSURANCE)}, en option à partir de {eur2(SEUIL_ASSURANCE)}</td></tr>
             <tr><th scope="row">Mettre une annonce en avant</th><td>1,99 € (3 jours) ou 4,99 € (7 jours), si le vendeur le veut</td></tr>

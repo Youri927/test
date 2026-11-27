@@ -6,7 +6,7 @@ import {db, schema} from '@/db';
 import {annonce} from '@/lib/annonces';
 import {moi} from '@/lib/auth';
 import {tousLesParfums, lienParfum} from '@/lib/catalogue';
-import {PHOTOS, CONTROLES, protection, ENVOI, eur, eur2, lien} from '@/lib/regles';
+import {PHOTOS, CONTROLES, protection, envoiPour, eur, eur2, lien} from '@/lib/regles';
 import {remise} from '@/lib/cote';
 import {proches} from '@/lib/odeur';
 import {senteurDe} from '@/lib/scento';
@@ -123,12 +123,12 @@ export default async function Annonce({params}: {params: Promise<{id: string}>})
           <dl className="total">
             <div><dt>Parfum</dt><dd>{eur2(prix)}</dd></div>
             <div><dt>Protection acheteur</dt><dd>{offerte ? <><s>{eur2(pr)}</s> offerte</> : eur2(pr)}</dd></div>
-            <div><dt>Livraison en point relais</dt><dd>{eur2(ENVOI)}</dd></div>
-            <div className="total-ligne"><dt>Total</dt><dd>{eur2(prix + (offerte ? 0 : pr) + ENVOI)}</dd></div>
+            <div><dt>Livraison en point relais</dt><dd>{eur2(envoiPour(a))}</dd></div>
+            <div className="total-ligne"><dt>Total</dt><dd>{eur2(prix + (offerte ? 0 : pr) + envoiPour(a))}</dd></div>
           </dl>
           {offerte ? <p className="aide">Vous êtes venu par un parrainage : la protection est offerte sur votre premier achat.</p> : null}
           {a.statut === 'publiee' && !moiVendeur ? (
-            <Link className="btn btn-noir btn-large" href={m ? `/acheter/${a.id}` : `/connexion?retour=/acheter/${a.id}`}>Acheter · {eur2(prix + (offerte ? 0 : pr) + ENVOI)}</Link>
+            <Link className="btn btn-noir btn-large" href={m ? `/acheter/${a.id}` : `/connexion?retour=/acheter/${a.id}`}>Acheter · {eur2(prix + (offerte ? 0 : pr) + envoiPour(a))}</Link>
           ) : a.statut === 'reservee' ? <p className="offre-envoyee">Un acheteur est en train de payer. Si le paiement n'aboutit pas, l'annonce revient dans quelques minutes.</p> : null}
           {moiVendeur ? (
             <p className="aide">C'est votre annonce · {nFavoris} favori{nFavoris > 1 ? 's' : ''}. <Link className="lien-souligne" href="/messages">Vos messages</Link> · <Link className="lien-souligne" href="/compte">proposer un prix aux personnes intéressées</Link></p>

@@ -4,7 +4,7 @@ import {annonce} from '@/lib/annonces';
 import {exigerMembre} from '@/lib/auth';
 import {prixPour, protectionOfferte, montants, DELAI_VERIF} from '@/lib/commandes';
 import {relaisPres, simule} from '@/lib/envoi';
-import {ASSURANCE, SEUIL_ASSURANCE, eur, eur2} from '@/lib/regles';
+import {ASSURANCE, SEUIL_ASSURANCE, envoiPour, eur, eur2} from '@/lib/regles';
 import {payer} from '@/app/actions/commandes';
 import {Bouclier} from '@/components/Bouclier';
 
@@ -21,8 +21,8 @@ export default async function Acheter({params, searchParams}: {params: Promise<{
   if (a.vendeurId === m.id || a.statut !== 'publiee') redirect(`/annonces/${id}`);
   const {prix} = await prixPour(a, m.id);
   const offerte = await protectionOfferte(m);
-  const mt = montants(prix, {offerte, assurance: false});
   const mode = q.mode === 'main' && a.mainPropre ? 'main' : 'relais';
+  const mt = montants(prix, {offerte, assurance: false, envoi: mode === 'main' ? 0 : envoiPour(a)});
   const cp = (q.cp || '').replace(/\D/g, '').slice(0, 5);
   const relais = await relaisPres(cp).catch(() => null);
   return (
@@ -82,7 +82,7 @@ export default async function Acheter({params, searchParams}: {params: Promise<{
           <dl className="total">
             <div><dt>Parfum</dt><dd>{eur2(mt.prix)}</dd></div>
             <div><dt>Protection acheteur</dt><dd>{offerte ? 'offerte' : eur2(mt.protection)}</dd></div>
-            <div><dt>Livraison en point relais</dt><dd>{eur2(mt.envoi)}</dd></div>
+            {mode === 'main' ? <div><dt>Remise en main propre</dt><dd>gratuite</dd></div> : <div><dt>Livraison en point relais</dt><dd>{eur2(mt.envoi)}</dd></div>}
             <div className="total-ligne"><dt>Total</dt><dd>{eur2(mt.total)}{mode === 'relais' && prix >= SEUIL_ASSURANCE ? <small> (+{eur2(ASSURANCE)} avec l'envoi assuré)</small> : null}</dd></div>
           </dl>
           <button className="btn btn-noir btn-large" type="submit">Payer {eur2(mt.total)}</button>

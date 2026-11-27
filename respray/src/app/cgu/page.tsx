@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import {PageLegale} from '@/components/PageLegale';
 import {SOCIETE, MEDIATEUR} from '@/lib/legal';
-import {ENVOI, ASSURANCE, SEUIL_ASSURANCE, MISES_EN_AVANT, eur2} from '@/lib/regles';
+import {ENVOI, ENVOI_GRAND, ASSURANCE, SEUIL_ASSURANCE, MISES_EN_AVANT, eur2} from '@/lib/regles';
 
 export const metadata = {title: 'Conditions générales d\'utilisation et de vente'};
 
@@ -35,7 +35,7 @@ export default function Cgu() {
         </>},
         {id: 'prix', t: 'Prix et frais', c: <>
           <p><strong>Pour le vendeur</strong> : publier une annonce est gratuit, et Respray ne prend aucune commission sur le prix de vente. En option, la mise en avant d'une annonce publiée ({avant}).</p>
-          <p><strong>Pour l'acheteur</strong>, en plus du prix du parfum : la protection acheteur (8 % du prix du parfum + 0,90 €), la livraison en point relais ({eur2(ENVOI)}), et en option, pour un parfum de {eur2(SEUIL_ASSURANCE)} ou plus, l'envoi assuré à la valeur du parfum ({eur2(ASSURANCE)}). Le total est affiché avant le paiement. Les prix sont indiqués toutes taxes comprises.</p>
+          <p><strong>Pour l'acheteur</strong>, en plus du prix du parfum : la protection acheteur (8 % du prix du parfum + 0,90 €), la livraison en point relais ({eur2(ENVOI)}, ou {eur2(ENVOI_GRAND)} pour un flacon de plus de 125 ml ou un coffret ; gratuite en remise en main propre), et en option, pour un parfum de {eur2(SEUIL_ASSURANCE)} ou plus, l'envoi assuré à la valeur du parfum ({eur2(ASSURANCE)}). Le total est affiché avant le paiement. Les prix sont indiqués toutes taxes comprises.</p>
           <p>Les frais de Respray rémunèrent un service exécuté dès le paiement (vérification, paiement sécurisé, protection, étiquette) : vous demandez expressément cette exécution immédiate et renoncez à votre droit de rétractation sur ces frais. Ils sont remboursés en même temps que le parfum dans les cas prévus aux articles 7 et 8.</p>
         </>},
         {id: 'paiement', t: 'Le paiement', c: <>

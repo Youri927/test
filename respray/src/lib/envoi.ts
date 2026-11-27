@@ -16,7 +16,7 @@ const URL_API = 'https://api.mondialrelay.com/Web_Services.asmx';
 // le mode de collecte : « REL », le vendeur dépose le colis dans le point relais de son choix (offre Start) ;
 // « CCC », Mondial Relay vient chercher les colis chez l'expéditeur (contrat de collecte). Réglable sans toucher au code.
 const MODE_COL = () => (process.env.MR_MODE_COLLECTE === 'CCC' ? 'CCC' : 'REL');
-const POIDS = () => Number(process.env.MR_POIDS_GRAMMES) || 1000; // un flacon emballé : moins d'un kilo
+const POIDS = () => Number(process.env.MR_POIDS_GRAMMES) || 2000; // la recherche de points relais : ceux qui acceptent nos plus gros colis ; le poids de chaque colis vient de la taille (regles.ts)
 
 /* ——— l'appel au web service ——— */
 type Champs = [string, string][];
@@ -99,7 +99,7 @@ const sans = (s: string, max: number) => echapper(s.normalize('NFD').replace(/[\
 const adresse = (a: {prenom?: string; nom: string; rue: string; cp: string; ville: string; tel?: string; email?: string}) =>
   `<Address><Title/><Firstname>${sans(a.prenom ?? '', 30)}</Firstname><Lastname>${sans(a.nom, 30)}</Lastname><Streetname>${sans(a.rue, 40)}</Streetname><HouseNo/><CountryCode>FR</CountryCode><PostCode>${a.cp}</PostCode><City>${sans(a.ville, 30)}</City><AddressAdd1/><AddressAdd2/><AddressAdd3/><PhoneNo/><MobileNo>${tel(a.tel ?? '')}</MobileNo><Email>${mail(a.email ?? '')}</Email></Address>`;
 
-export async function creerExpedition(commandeId: number, exp: Expediteur, dest: Destinataire, assuree: boolean): Promise<{numero: string; pdf: string}> {
+export async function creerExpedition(commandeId: number, exp: Expediteur, dest: Destinataire, assuree: boolean, poids = POIDS()): Promise<{numero: string; pdf: string}> {
   const [prenomDest, ...nomDest] = dest.nom.split(' ');
   const corps = `<?xml version="1.0" encoding="utf-8"?>
 <ShipmentCreationRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.example.org/Request">
@@ -109,7 +109,7 @@ export async function creerExpedition(commandeId: number, exp: Expediteur, dest:
 <OrderNo>RESPRAY${commandeId}</OrderNo><CustomerNo>C${commandeId}</CustomerNo><ParcelCount>1</ParcelCount>
 <DeliveryMode Mode="24R" Location="FR-${dest.relais.id}"/>
 <CollectionMode Mode="${MODE_COL()}" Location=""/>
-<Parcels><Parcel><Content>Parfum</Content><Weight Value="${POIDS()}" Unit="gr"/></Parcel></Parcels>
+<Parcels><Parcel><Content>Parfum</Content><Weight Value="${poids}" Unit="gr"/></Parcel></Parcels>
 <DeliveryInstruction/>
 <Sender>${adresse({nom: exp.nom, rue: exp.rue, cp: exp.cp, ville: exp.ville, tel: exp.tel})}</Sender>
 <Recipient>${adresse({prenom: prenomDest, nom: nomDest.join(' ') || prenomDest, rue: dest.relais.adresse, cp: dest.relais.cp, ville: dest.relais.ville, email: dest.email})}</Recipient>

@@ -11,7 +11,7 @@ import {notifier} from '@/lib/activite';
 import {noter} from '@/lib/journal';
 import {etiquetteSimulee, simule, suivre} from '@/lib/envoi';
 import {pretPourVersements} from '@/lib/connect';
-import {protection, ENVOI, ASSURANCE, SEUIL_ASSURANCE, eur} from '@/lib/regles';
+import {protection, ASSURANCE, SEUIL_ASSURANCE, eur} from '@/lib/regles';
 
 export type Commande = typeof schema.commandes.$inferSelect;
 const JOUR = 864e5;
@@ -31,10 +31,11 @@ export async function protectionOfferte(m: {id: number; parrainId: number | null
   return deja === 0;
 }
 
-export function montants(prix: number, {offerte, assurance}: {offerte: boolean; assurance: boolean}) {
+/* envoi : le prix de l'envoi pour ce colis (envoiPour), 0 en main propre */
+export function montants(prix: number, {offerte, assurance, envoi}: {offerte: boolean; assurance: boolean; envoi: number}) {
   const pr = offerte ? 0 : protection(prix);
-  const as = assurance && prix >= SEUIL_ASSURANCE ? ASSURANCE : 0;
-  return {prix, protection: pr, envoi: ENVOI, assurance: as, total: Math.round((prix + pr + ENVOI + as) * 100) / 100};
+  const as = assurance && envoi > 0 && prix >= SEUIL_ASSURANCE ? ASSURANCE : 0;
+  return {prix, protection: pr, envoi, assurance: as, total: Math.round((prix + pr + envoi + as) * 100) / 100};
 }
 
 const ref = (c: {id: number}) => `commande:${c.id}`;
