@@ -620,3 +620,4 @@ a.pied-trustpilot span { color: #00b67a; }
 .fv-secu { font-size: 13px; }
 .fv-court { max-width: 420px; }
 @media (max-width: 560px) { .fv-ligne:not(.fv-date) { grid-template-columns: minmax(0, 1fr); } .fv-date { grid-template-columns: 64px minmax(0, 1fr) 84px; } }
+.fv-detail { display: block; margin-top: 6px; font-size: 12px; font-weight: 400; opacity: .75; word-break: break-word; }

@@ -14,15 +14,16 @@ const CONDITIONS = 'https://stripe.com/fr/legal/connect-account';
 
 type Reponse = {ok?: boolean; aFournir?: string[]; erreur?: string; message?: string};
 
-/* les messages de Stripe, en clair pour un particulier */
+/* les messages de Stripe, en clair pour un particulier (mots entiers : « profile » ne doit pas passer pour « file ») ;
+   le message d'origine est gardé à part, affiché en petit, pour savoir exactement ce qui coince */
 function traduire(m: string) {
   const t = m.toLowerCase();
-  if (/iban|account_number|bank account|routing/.test(t)) return 'Cet IBAN n\'est pas valide : vérifiez-le (il commence par FR76 pour un compte français).';
-  if (/birth|age/.test(t)) return 'La date de naissance n\'est pas valide. Il faut avoir au moins 18 ans pour vendre.';
-  if (/postal|address|city/.test(t)) return 'L\'adresse n\'est pas complète ou pas valide.';
-  if (/phone/.test(t)) return 'Le numéro de téléphone n\'est pas valide.';
-  if (/file|document|image/.test(t)) return 'La photo de la pièce d\'identité n\'a pas pu être lue : envoyez une photo nette (JPG ou PNG) ou un PDF.';
-  return 'Stripe n\'a pas pu enregistrer ces informations. Vérifiez-les et réessayez ; si ça continue, écrivez-nous.';
+  if (/\biban\b|account_number|bank account|routing/.test(t)) return 'Cet IBAN n\'est pas valide : vérifiez-le (il commence par FR76 pour un compte français).';
+  if (/date_of_birth|\bbirth|\bage\b/.test(t)) return 'La date de naissance n\'est pas valide. Il faut avoir au moins 18 ans pour vendre.';
+  if (/postal_code|\baddress\b|\bcity\b/.test(t)) return 'L\'adresse n\'est pas complète ou pas valide.';
+  if (/\bphone\b/.test(t)) return 'Le numéro de téléphone n\'est pas valide.';
+  if (/\bfiles?\b|identity_document|\bimage\b/.test(t)) return 'La photo de la pièce d\'identité n\'a pas pu être lue : envoyez une photo nette (JPG ou PNG) ou un PDF.';
+  return 'Stripe n\'a pas pu enregistrer ces informations. Réessayez ; si ça continue, envoyez-nous le détail ci-dessous.';
 }
 
 async function stripeV2(chemin: string, corps: unknown) {
@@ -65,11 +66,13 @@ export function FormVersements({prenom = '', nom = '', email}: {prenom?: string;
   const [v, setV] = useState({prenom, nom, jour: '', mois: '', annee: '', rue: '', cp: '', ville: '', tel: '', iban: '', accord: false});
   const [enCours, setEnCours] = useState(false);
   const [erreur, setErreur] = useState('');
+  const [detail, setDetail] = useState('');
   const set = (k: keyof typeof v) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setV((x) => ({...x, [k]: e.target.type === 'checkbox' ? (e.target as HTMLInputElement).checked : e.target.value}));
 
   const envoyer = async (e: React.FormEvent) => {
     e.preventDefault();
     setErreur('');
+    setDetail('');
     const [j, mo, a] = [Number(v.jour), Number(v.mois), Number(v.annee)];
     const age = (Date.now() - new Date(a, mo - 1, j).getTime()) / (365.25 * 864e5);
     if (!j || !mo || !a || age < 18 || age > 120) return setErreur('La date de naissance n\'est pas valide. Il faut avoir au moins 18 ans pour vendre.');
@@ -98,6 +101,7 @@ export function FormVersements({prenom = '', nom = '', email}: {prenom?: string;
       router.refresh();
     } catch (x) {
       setErreur(traduire((x as Error).message));
+      setDetail((x as Error).message);
     } finally {
       setEnCours(false);
     }
@@ -136,7 +140,7 @@ export function FormVersements({prenom = '', nom = '', email}: {prenom?: string;
         <p className="aide">À votre nom. Vous le trouvez dans l&apos;application de votre banque (RIB).</p>
       </fieldset>
       <label className="choix fv-accord"><input type="checkbox" checked={v.accord} onChange={set('accord')} /> <span>J&apos;accepte que Stripe, le partenaire de paiement de Respray, gère mes versements, et j&apos;accepte <a className="lien-souligne" href={CONDITIONS} target="_blank" rel="noopener">ses conditions</a>.</span></label>
-      {erreur ? <p className="erreur" role="alert">{erreur}</p> : null}
+      {erreur ? <p className="erreur" role="alert">{erreur}{detail ? <small className="fv-detail">Détail : {detail}</small> : null}</p> : null}
       <button className="btn btn-noir btn-large" type="submit" disabled={enCours}>{enCours ? 'Enregistrement…' : 'Enregistrer'}</button>
       <p className="aide fv-secu">Vos informations partent directement chez Stripe, chiffrées. Respray ne conserve ni votre IBAN ni votre date de naissance : la loi impose ces vérifications à toute plateforme qui verse de l&apos;argent (comme Vinted ou Leboncoin).</p>
     </form>
