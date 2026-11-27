@@ -5,6 +5,7 @@ import {db, schema} from '@/db';
 import {publiees} from '@/lib/annonces';
 import {moi} from '@/lib/auth';
 import {remise} from '@/lib/cote';
+import {demo} from '@/lib/demo';
 import {Carte} from '@/components/Carte';
 import {FormAttente} from '@/components/FormulairesCompte';
 import {Bouclier} from '@/components/Bouclier';
@@ -45,10 +46,10 @@ export default async function Accueil() {
   const remises = annonces.map((a) => (a.parfum ? remise(a.parfum.formats, a)?.pct : undefined)).filter((x): x is number => x !== undefined);
   const moyenne = remises.length >= 3 ? Math.round(remises.reduce((s, x) => s + x, 0) / remises.length) : null;
   const pile = annonces.filter((a) => a.photos.face).slice(0, 3);
-  const pileSrc = pile.length === 3 ? pile.map((a) => `/photos/${a.photos.face}`) : ['/demo/pile-amouage.webp', '/demo/pile-kurkdjian.webp', '/demo/pile-vuitton.webp']; // tant qu'il y a moins de 3 annonces avec photo
+  const pileSrc = pile.length === 3 ? pile.map((a) => `/photos/${a.photos.face}`) : ['pile-amouage.webp', 'pile-kurkdjian.webp', 'pile-vuitton.webp'].map(demo); // tant qu'il y a moins de 3 annonces avec photo
 
   // les images du haut de l'accueil sont demandées en premier, avant le reste de la page
-  for (const src of [...pileSrc, '/demo/vendre.webp', '/demo/vendre-sombre.webp']) preload(src, {as: 'image', fetchPriority: 'high'});
+  for (const src of [...pileSrc, demo('vendre.webp'), demo('vendre-sombre.webp')]) preload(src, {as: 'image', fetchPriority: 'high'});
 
   return (
     <>

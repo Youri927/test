@@ -31,4 +31,8 @@ export const LEGENDES: Record<string, string> = {
   boite: 'la boîte',
   ticket: 'le ticket d\'achat',
 };
-export const demoSrc = (vue: string, id = DEMO.id) => (vue === 'ticket' ? '/demo/ticket.webp' : `/demo/${id}-${vue}.webp`);
+/* les images d'exemple sont gardées en cache par les navigateurs : quand on en change une, on augmente VERSION
+   pour que tout le monde voie la nouvelle tout de suite */
+const VERSION = 3;
+export const demo = (fichier: string) => `/demo/${fichier}?v=${VERSION}`;
+export const demoSrc = (vue: string, id = DEMO.id) => demo(vue === 'ticket' ? 'ticket.webp' : `${id}-${vue}.webp`);

@@ -1063,8 +1063,8 @@ a.bo-tuile:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -18px rg
   .porte-acheter { padding-bottom: 0; }
   .pile { position: relative; right: auto; bottom: auto; width: 100%; height: 250px; margin: 24px 0 -30px; }
   .pile-photo { width: 140px; }
-  .porte-vendre { min-height: 560px; }
-  .vaporise { height: 230px; right: 4%; }
+  .porte-vendre { min-height: 600px; }
+  .vaporise { height: 340px; right: 2%; }
   .ruban { grid-auto-columns: 200px; }
   .astuce { grid-template-columns: 96px minmax(0, 1fr); gap: 14px; padding: 12px; }
   .astuce-titre { font-size: 16px; }

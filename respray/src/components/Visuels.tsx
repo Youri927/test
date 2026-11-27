@@ -1,6 +1,6 @@
 /* Les visuels repris du prototype : une photo de l'exemple (avec le trait du niveau), et la porte « Vendre » où la brume
    part de la buse du flacon, en cône de points comme le symbole du logo. */
-import {DEMO, DEMO_PARFUM, LEGENDES, demoSrc} from '@/lib/demo';
+import {DEMO, DEMO_PARFUM, LEGENDES, demo, demoSrc} from '@/lib/demo';
 
 export function PhotoDemo({vue = 'face', id = DEMO.id, classe = ''}: {vue?: string; id?: string; classe?: string}) {
   const alt = `Exemple : ${DEMO_PARFUM.nom}, ${LEGENDES[vue]}`;
@@ -30,8 +30,8 @@ export function Vaporise() {
   }
   return (
     <div className="vaporise" aria-hidden="true">
-      <img className="v-clair" src="/demo/vendre.webp" alt="" width={600} height={800} fetchPriority="high" />
-      <img className="v-sombre" src="/demo/vendre-sombre.webp" alt="" width={600} height={800} fetchPriority="high" />
+      <img className="v-clair" src={demo('vendre.webp')} alt="" width={600} height={800} fetchPriority="high" />
+      <img className="v-sombre" src={demo('vendre-sombre.webp')} alt="" width={600} height={800} fetchPriority="high" />
       <svg className="brume" viewBox="0 0 600 800">{gouttes}</svg>
     </div>
   );

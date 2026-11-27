@@ -1,3 +1,4 @@
+import {demo} from '@/lib/demo';
 import Link from 'next/link';
 import {PHOTOS, ENVOI, ASSURANCE, SEUIL_ASSURANCE, eur2} from '@/lib/regles';
 import {PhotoDemo, Ico} from '@/components/Visuels';
@@ -59,7 +60,7 @@ export default function CommentCaMarche() {
         </div>
         <div data-revele>
           <aside className="astuce">
-            <img className="astuce-img" src="/demo/contrejour.webp" alt="Un flacon noir opaque, la lampe d'un téléphone collée derrière : le parfum fait une zone sombre et la limite du niveau se voit." width={600} height={750} loading="lazy" />
+            <img className="astuce-img" src={demo('contrejour.webp')} alt="Un flacon noir opaque, la lampe d'un téléphone collée derrière : le parfum fait une zone sombre et la limite du niveau se voit." width={600} height={750} loading="lazy" />
             <div><p className="surtitre">Flacon opaque ?</p><p className="astuce-titre">Le niveau se voit à contre-jour.</p><p>Dans une pièce peu éclairée, allumez la lampe d&apos;un téléphone et collez-la contre le dos du flacon. La lumière traverse le verre : le parfum fait une zone plus sombre, et la limite se voit nettement. Prenez la photo de face, à hauteur du niveau.</p></div>
           </aside>
         </div>
