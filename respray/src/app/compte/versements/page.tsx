@@ -39,6 +39,7 @@ export default async function Versements({searchParams}: {searchParams: Promise<
         <section className="action-bloc">
           <h2 className="h2">{m.stripeCompte ? 'Terminez votre inscription' : 'Ajoutez votre IBAN pour être payé'}</h2>
           <p>Notre partenaire de paiement, Stripe, vérifie votre identité et enregistre votre IBAN. Respray ne voit ni vos papiers ni vos coordonnées bancaires. Comptez 2 minutes, avec une pièce d'identité.</p>
+          <p className="aide">Stripe utilise les mêmes écrans pour tout le monde, d'où les mots « entreprise » et « informations professionnelles ». Vous n'avez pas besoin d'entreprise ni de SIRET : choisissez « Particulier », le site et l'activité sont déjà remplis par Respray.</p>
           <InscriptionVersements deja={!!m.stripeCompte} />
           {m.stripeCompte ? <form action={relireVersements}><p className="aide">Vous venez de terminer ? La vérification par Stripe peut prendre un instant. <button className="lien-bouton" type="submit">Actualiser</button></p></form> : null}
         </section>
